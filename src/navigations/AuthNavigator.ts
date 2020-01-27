@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 /* screens */
 import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer';
 import InitializeScreen from '../screens/InitializeScreen';
+import SignUpScreen from '../screens/SignUpScreen';
 
 export default createStackNavigator({
   AuthLoading: {
@@ -10,5 +11,8 @@ export default createStackNavigator({
   },
   Initialize: {
     screen: InitializeScreen,
+  },
+  SignUp: {
+    screen: SignUpScreen,
   },
 });
