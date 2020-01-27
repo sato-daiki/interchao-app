@@ -30,6 +30,7 @@
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.6",
     "expo": "~36.0.0",
+    "firebase": "^7.7.0",
     "g": "^2.0.1",
     "node-gyp": "^6.1.0",
     "react": "~16.9.0",
@@ -68,8 +69,10 @@
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-react-native": "^3.8.1",
+    "install": "^0.13.0",
     "lint-staged": "^10.0.2",
     "prettier": "^1.19.1",
+    "redux-devtools-extension": "^2.13.8",
     "typescript": "~3.6.3"
   },
   "private": true
