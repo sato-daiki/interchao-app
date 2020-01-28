@@ -4,6 +4,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer';
 import InitializeScreen from '../screens/InitializeScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import SignInScreen from '../screens/SignInScreen';
+import MyPageScreen from '../screens/MyPageScreen';
 
 export default createStackNavigator({
   AuthLoading: {
@@ -14,5 +16,11 @@ export default createStackNavigator({
   },
   SignUp: {
     screen: SignUpScreen,
+  },
+  SignIn: {
+    screen: SignInScreen,
+  },
+  MyPage: {
+    screen: MyPageScreen,
   },
 });
