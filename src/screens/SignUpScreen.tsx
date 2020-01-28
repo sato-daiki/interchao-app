@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { emailSignup } from '../utils/auth';
+import { emailSignup, goolgeSignUp } from '../utils/auth';
 
 type Props = {
   navigation: NavigationStackProp;
@@ -24,6 +24,10 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
 
   const onPressSignUp = (): void => {
     emailSignup(email, password);
+  };
+
+  const onPressGoolgeSignUp = async () => {
+    goolgeSignUp();
   };
 
   return (
@@ -49,6 +53,8 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
         returnKeyType="done"
       />
       <Button title="SignUp" onPress={onPressSignUp} />
+      <Button title="GoogleSignUp" onPress={onPressGoolgeSignUp} />
+
       <Text
         onPress={(): void => {
           navigation.navigate('SignIn');
