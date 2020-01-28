@@ -6,8 +6,7 @@ firebase.initializeApp({
   projectId: 'white-zebra-dev',
 });
 
-// const GoogleAuthProvider = firebase.auth.GoogleAuthProvider;
-// const FacebookAuthProvider = firebase.auth.FacebookAuthProvider;
+const { GoogleAuthProvider, FacebookAuthProvider } = firebase.auth;
 
-// export { FacebookAuthProvider, GoogleAuthProvider };
+export { FacebookAuthProvider, GoogleAuthProvider };
 export default firebase;

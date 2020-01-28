@@ -9,7 +9,7 @@ const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
   navigation,
 }): JSX.Element => {
   useEffect((): void => {
-    navigation.navigate('SignUp');
+    navigation.navigate('SignIn');
   });
   return <View />;
 };

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { emailSignup } from '../utils/auth';
+import { emailSignin, facebookSignin } from '../utils/auth';
 
 type Props = {
   navigation: NavigationStackProp;
 };
 
 /**
- * 概要：ログインしていないユーザの立ち上げ画面
+ * 概要：ログイン画面
  */
-const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
+const SignInScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -22,8 +22,12 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
     setPassword(textPassword);
   };
 
-  const onPressSignUp = (): void => {
-    emailSignup(email, password);
+  const onPressEmailSignIn = (): void => {
+    emailSignin(email, password);
+  };
+
+  const onPressFacebookSignIn = async (): Promise<void> => {
+    const user = await facebookSignin();
   };
 
   return (
@@ -48,16 +52,17 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
         secureTextEntry
         returnKeyType="done"
       />
-      <Button title="SignUp" onPress={onPressSignUp} />
+      <Button title="SignIn" onPress={onPressEmailSignIn} />
       <Text
         onPress={(): void => {
-          navigation.navigate('SignIn');
+          navigation.navigate('SignUp');
         }}
       >
-        SignIn
+        SignUp
       </Text>
+      <Button title="Facebook Login" onPress={onPressFacebookSignIn} />
     </View>
   );
 };
 
-export default SignUpScreen;
+export default SignInScreen;
