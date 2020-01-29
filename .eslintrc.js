@@ -21,6 +21,16 @@ module.exports = {
     // @envのimportは許可する
     'import/no-unresolved': [2, { ignore: ['@env', './images'] }],
     'import/prefer-default-export': [0],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
     // .js ファイルで jsx 記法を許可する ( ReactNative なら必須 )
     'react/jsx-filename-extension': [
       1,
