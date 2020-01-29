@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "975945165729",
+    "firebase_url": "https://white-zebra-dev.firebaseio.com",
+    "project_id": "white-zebra-dev",
+    "storage_bucket": "white-zebra-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975945165729:android:09253194bb3334d18fb9e0",
+        "android_client_info": {
+          "package_name": "app.white_zebra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "975945165729-rm991uf7b91ntlqpfkbd82em8k0v1519.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZuzphV_ejPyybVHC_KjmyvGBojreRcvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "975945165729-rm991uf7b91ntlqpfkbd82em8k0v1519.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "975945165729-hc3u7ndtcnd4fu6793jnarm8s3e6es2n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.white-zebra"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
