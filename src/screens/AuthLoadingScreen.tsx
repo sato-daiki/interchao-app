@@ -11,10 +11,10 @@ const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
 }): JSX.Element => {
   const goToNavigation = user => {
     if (user) {
-      navigation.navigate('YoroProfile');
+      navigation.navigate('SignUp');
       // navigation.navigate('MyPage');
     } else {
-      navigation.navigate('MyDiaryList');
+      navigation.navigate('SignUp');
     }
   };
 
