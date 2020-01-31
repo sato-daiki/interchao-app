@@ -1,5 +1,8 @@
 import * as Facebook from 'expo-facebook';
+import { Linking } from 'expo';
 import * as Google from 'expo-google-app-auth';
+import * as WebBrowser from 'expo-web-browser';
+import { useState } from 'react';
 import firebase, { FacebookAuthProvider } from '../configs/firebase';
 import facebook from '../configs/facebook';
 
@@ -31,6 +34,51 @@ export const emailSignin = (email: string, password: string): void => {
     .catch(error => {
       console.log(error.message);
     });
+};
+
+// メールでログイン
+export const phoneSignUp = async (): // phone: string,
+// password: string
+Promise<void> => {
+  const captchaUrl = `https://white-zebra-dev.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
+    ''
+  )}`;
+  const listener = ({ url }) => {
+    console.log('phoneSignUp');
+    console.log('url:', url);
+
+    WebBrowser.dismissBrowser();
+    const tokenEncoded = Linking.parse(url).queryParams.token;
+    console.log('tokenEncoded:', tokenEncoded);
+
+    if (tokenEncoded) {
+      const token = decodeURIComponent(tokenEncoded);
+      console.log('token:', token);
+
+      const captchaVerifier = {
+        type: 'recaptcha',
+        verify: () => Promise.resolve(token),
+      };
+      console.log('captchaVerifier:', captchaVerifier);
+
+      firebase
+        .auth()
+        .signInWithPhoneNumber('+81 70-2650-9668', captchaVerifier)
+        .then(confirmResult => {
+          setConfirmResult(confirmResult);
+          setMessage('Code has been sent!');
+        })
+        .catch(error => {
+          setMessage(`Sign In With Phone Number Error: ${error.message}`);
+        });
+    }
+  };
+  console.log('end');
+
+  Linking.addEventListener('url', listener);
+  WebBrowser.openBrowserAsync(captchaUrl).then(() => {
+    Linking.removeEventListener('url', listener);
+  });
 };
 
 // Facebookでのユーザ登録
