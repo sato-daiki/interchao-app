@@ -7,6 +7,7 @@ import SignUpScreen from '../screens/SignUpScreen';
 import SignInScreen from '../screens/SignInScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import YourProfileScreen from '../screens/YourProfileScreen';
+import VerificationCodeScreen from '../screens/VerificationCodeScreen';
 
 export default createStackNavigator({
   AuthLoading: {
@@ -20,6 +21,9 @@ export default createStackNavigator({
   },
   SignUp: {
     screen: SignUpScreen,
+  },
+  VerificationCode: {
+    screen: VerificationCodeScreen,
   },
   MyPage: {
     screen: MyPageScreen,

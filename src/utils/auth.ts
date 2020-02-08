@@ -1,15 +1,16 @@
 import * as Facebook from 'expo-facebook';
 import { Linking } from 'expo';
-import * as Google from 'expo-google-app-auth';
 import * as WebBrowser from 'expo-web-browser';
-import { useState } from 'react';
-import firebase, { FacebookAuthProvider } from '../configs/firebase';
-import facebook from '../configs/facebook';
-
-type UserCred = firebase.auth.UserCredential;
+import * as Google from 'expo-google-app-auth';
+import firebase, {
+  facebookConfig,
+  googleConfig,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+} from '../configs/firebase';
 
 // メールでのユーザ登録
-export const emailSignup = (email: string, password: string): void => {
+export const emailSignUp = (email: string, password: string): void => {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
@@ -23,69 +24,61 @@ export const emailSignup = (email: string, password: string): void => {
     });
 };
 
-// メールでログイン
-export const emailSignin = (email: string, password: string): void => {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(response => {
-      console.log('Login Success!');
-    })
-    .catch(error => {
-      console.log(error.message);
-    });
-};
+// // メールでログイン
+// export const emailSignin = (email: string, password: string): void => {
+//   firebase
+//     .auth()
+//     .signInWithEmailAndPassword(email, password)
+//     .then(response => {
+//       console.log('Login Success!');
+//     })
+//     .catch(error => {
+//       console.log(error.message);
+//     });
+// };
 
-// メールでログイン
-export const phoneSignUp = async (): // phone: string,
-// password: string
-Promise<void> => {
-  const captchaUrl = `https://white-zebra-dev.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
+// 電話番号で登録
+export const phoneSignUp = async (
+  phoneNumber: string
+): Promise<firebase.auth.ConfirmationResult | null> => {
+  const captchaUrl = `https://white-zebra-5096f.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
     ''
   )}`;
-  const listener = ({ url }) => {
-    console.log('phoneSignUp');
-    console.log('url:', url);
 
+  let token: string | null = null;
+  const listener = ({ url }): void => {
     WebBrowser.dismissBrowser();
     const tokenEncoded = Linking.parse(url).queryParams.token;
-    console.log('tokenEncoded:', tokenEncoded);
-
-    if (tokenEncoded) {
-      const token = decodeURIComponent(tokenEncoded);
-      console.log('token:', token);
-
-      const captchaVerifier = {
-        type: 'recaptcha',
-        verify: () => Promise.resolve(token),
-      };
-      console.log('captchaVerifier:', captchaVerifier);
-
-      firebase
-        .auth()
-        .signInWithPhoneNumber('+81 70-2650-9668', captchaVerifier)
-        .then(confirmResult => {
-          setConfirmResult(confirmResult);
-          setMessage('Code has been sent!');
-        })
-        .catch(error => {
-          setMessage(`Sign In With Phone Number Error: ${error.message}`);
-        });
-    }
+    if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
   };
-  console.log('end');
 
   Linking.addEventListener('url', listener);
-  WebBrowser.openBrowserAsync(captchaUrl).then(() => {
-    Linking.removeEventListener('url', listener);
-  });
+  await WebBrowser.openBrowserAsync(captchaUrl);
+  Linking.removeEventListener('url', listener);
+  if (token) {
+    // fake firebase.auth.ApplicationVerifier
+    const captchaVerifier = {
+      type: 'recaptcha',
+      verify: () => Promise.resolve(token),
+    };
+    try {
+      const confirmationResult = await firebase
+        .auth()
+        .signInWithPhoneNumber(phoneNumber, captchaVerifier);
+      return confirmationResult;
+    } catch (e) {
+      console.warn(e);
+      return null;
+    }
+  }
+  return null;
 };
 
 // Facebookでのユーザ登録
-export const facebookSignin = async (): Promise<UserCred | null> => {
-  await Facebook.initializeAsync(facebook.ApplicationKey, 'white-zebra');
+export const facebookSignUp = async () => {
+  await Facebook.initializeAsync(facebookConfig.ApplicationKey, 'white-zebra');
   const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-    facebook.ApplicationKey,
+    facebookConfig.ApplicationKey,
     {
       permissions: ['public_profile'],
     }
@@ -116,8 +109,7 @@ const isUserEqual = (
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < providerData.length; i++) {
       if (
-        providerData[i].providerId ===
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+        providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
         providerData[i].uid === googleUser.getBasicProfile().getId()
       ) {
         return true;
@@ -131,7 +123,7 @@ const onSignInGoolge = (googleUser: Google.LogInResult): void => {
   const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
     unsubscribe();
     if (!isUserEqual(googleUser, firebaseUser)) {
-      const credential = firebase.auth.GoogleAuthProvider.credential(
+      const credential = GoogleAuthProvider.credential(
         googleUser.idToken,
         googleUser.accessToken
       );
@@ -141,7 +133,7 @@ const onSignInGoolge = (googleUser: Google.LogInResult): void => {
         .then(() => {
           console.log('success');
         })
-        .catch(({ massage }) => alert('messgage', massage));
+        .catch(e => console.log('e', e));
     } else {
       console.log('User already signed-in Firebase.');
     }
@@ -152,10 +144,8 @@ export const goolgeSignUp = async () => {
   try {
     const result = await Google.logInAsync({
       behavior: 'web',
-      androidClientId:
-        '975945165729-l58crudfj4bqs737hi2a8m9use1asjrg.apps.googleusercontent.com',
-      iosClientId:
-        '975945165729-dlspp12h2bbol4ecvdm6g06gte1k0adr.apps.googleusercontent.com',
+      androidClientId: googleConfig.androidClientId,
+      iosClientId: googleConfig.iosClientId,
       scopes: ['profile', 'email'],
     });
 
