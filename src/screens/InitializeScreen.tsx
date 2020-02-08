@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Button } from 'react-native';
+import { NavigationStackProp } from 'react-navigation-stack';
 
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
