@@ -1,139 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, StyleSheet, TextInput, Button } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import * as WebBrowser from 'expo-web-browser';
-import { Linking } from 'expo';
-import { emailSignup, goolgeSignUp, phoneSignUp } from '../utils/auth';
-import firebase from '../configs/firebase';
+import {
+  emailSignUp,
+  goolgeSignUp,
+  phoneSignUp,
+  facebookSignUp,
+} from '../utils/auth';
 
-type Props = {
-  navigation: NavigationStackProp;
-};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+  },
+  textInput: {
+    fontSize: 14,
+    color: 'black',
+    width: '100%',
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    margin: 16,
+  },
+});
 
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
+const SignUpScreen: React.FC<{ navigation: NavigationStackProp }> = ({
+  navigation,
+}): JSX.Element => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [user, setUser] = useState(null);
-  const [message, setMessage] = useState('');
-  const [codeInput, setCodeInput] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('+81 70-2650-9668');
+  // const [user, setUser] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmResult, setConfirmResult] = useState(null);
 
-  const onChangedEmail = (textEmail: string): void => {
-    setEmail(textEmail);
-  };
-
-  const onChangedPassword = (textPassword: string): void => {
-    setPassword(textPassword);
-  };
-
-  const onPressSignUp = (): void => {
-    emailSignup(email, password);
-  };
-
-  const onPressGoolgeSignUp = async () => {
-    goolgeSignUp();
-  };
-
-  // const onPressPhoneSignUp = (): void => {
-  //   phoneSignUp();
+  // const onPressSignUp = (): void => {
+  //   emailSignUp(email, password);
   // };
 
-  const onPressPhoneSignUp = async (): void => {
-    const captchaUrl = `https://white-zebra-dev.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl(
-      ''
-    )}`;
+  const onPressGoolgeSignUp = async (): Promise<void> => {
+    await goolgeSignUp();
+  };
 
-    let token = null;
-    const listener = ({ url }) => {
-      WebBrowser.dismissBrowser();
-      const tokenEncoded = Linking.parse(url).queryParams.token;
-      if (tokenEncoded) token = decodeURIComponent(tokenEncoded);
-    };
-    Linking.addEventListener('url', listener);
-    await WebBrowser.openBrowserAsync(captchaUrl);
-    Linking.removeEventListener('url', listener);
-    if (token) {
-      // fake firebase.auth.ApplicationVerifier
-      const captchaVerifier = {
-        type: 'recaptcha',
-        verify: () => Promise.resolve(token),
-      };
-      try {
-        const confirmationResult = await firebase
-          .auth()
-          .signInWithPhoneNumber(phoneNumber, captchaVerifier);
-        setConfirmResult(confirmationResult);
-        setMessage('sucsecc');
-      } catch (e) {
-        console.warn(e);
-      }
+  const onPressPhoneSignUp = async (): Promise<void> => {
+    const result = await phoneSignUp(phoneNumber);
+    if (result) {
+      setConfirmResult(result);
+      navigation.navigate('VerificationCode', { confirmResult: result });
+    } else {
+      console.log('error');
     }
   };
 
-  const confirmCode = () => {
-    if (confirmResult && codeInput.length) {
-      confirmResult
-        .confirm(codeInput)
-        .then(user => {
-          setMessage('Code Confirmed!');
-        })
-        .catch(error => setMessage(`Code Confirm Error: ${error.message}`));
-    }
-  };
-
-  const renderVerificationCodeInput = () => {
-    return (
-      <View style={{ marginTop: 25, padding: 25 }}>
-        <Text>Enter verification code below:</Text>
-        <TextInput
-          autoFocus
-          style={{ height: 40, marginTop: 15, marginBottom: 15 }}
-          onChangeText={value => setCodeInput(value)}
-          placeholder="Code ... "
-          value={codeInput}
-        />
-        <Button title="Confirm Code" color="#841584" onPress={confirmCode} />
-      </View>
-    );
-  };
-
-  const renderPhoneNumberInput = () => {
-    return (
-      <View style={{ padding: 25 }}>
-        <TextInput
-          value={phoneNumber}
-          onChangeText={text => setPhoneNumber(text)}
-          editable
-          maxLength={50}
-          placeholder="Phone"
-          autoCapitalize="none"
-          keyboardType="phone-pad"
-          returnKeyType="done"
-        />
-        <TextInput
-          value={password}
-          onChangeText={onChangedPassword}
-          editable
-          maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
-          secureTextEntry
-          returnKeyType="done"
-        />
-        <Button title="PhoneSignUp" onPress={onPressPhoneSignUp} />
-      </View>
-    );
+  const onPressFacebookSignIn = async (): Promise<void> => {
+    const user = await facebookSignUp();
+    console.log(user);
   };
 
   return (
-    <View>
-      {/* <TextInput
+    <View style={styles.container}>
+      <TextInput
+        style={styles.textInput}
         value={email}
-        onChangeText={onChangedEmail}
+        onChangeText={(text: string): void => setEmail(text)}
         editable
         maxLength={50}
         placeholder="Email"
@@ -142,8 +74,9 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
         returnKeyType="done"
       />
       <TextInput
+        style={styles.textInput}
         value={password}
-        onChangeText={onChangedPassword}
+        onChangeText={(text: string): void => setPassword(text)}
         editable
         maxLength={20}
         placeholder="Password"
@@ -151,20 +84,27 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
         secureTextEntry
         returnKeyType="done"
       />
-      <Button title="SignUp" onPress={onPressSignUp} />
-    */}
+      <Button title="登録" onPress={(): void => emailSignUp(email, password)} />
 
-      {!user && !confirmResult && renderPhoneNumberInput()}
+      <TextInput
+        style={styles.textInput}
+        value={phoneNumber}
+        onChangeText={(text: string): void => setPhoneNumber(text)}
+        editable
+        maxLength={50}
+        placeholder="Phone"
+        autoCapitalize="none"
+        keyboardType="phone-pad"
+        returnKeyType="done"
+      />
+      <Button title="PhoneSignUp" onPress={onPressPhoneSignUp} />
 
-      {message ? (
-        <Text style={{ padding: 5, backgroundColor: '#000', color: '#fff' }}>
-          {message}
-        </Text>
-      ) : null}
-
-      {!user && confirmResult && renderVerificationCodeInput()}
+      <Button title="Facebook Login" onPress={onPressFacebookSignIn} />
 
       <Button title="GoogleSignUp" onPress={onPressGoolgeSignUp} />
+
+      {/* {!user && confirmResult && renderVerificationCodeInput()} */}
+      {/*
 
       <Text
         onPress={(): void => {
@@ -172,7 +112,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
         }}
       >
         SignIn
-      </Text>
+      </Text> */}
     </View>
   );
 };
