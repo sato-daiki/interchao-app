@@ -8,6 +8,8 @@ import SignInScreen from '../screens/SignInScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import YourProfileScreen from '../screens/YourProfileScreen';
 import VerificationCodeScreen from '../screens/VerificationCodeScreen';
+import ResendEmailScreen from '../screens/ResendEmailScreen';
+import InputUserNameScreen from '../screens/InputUserNameScreen';
 
 export default createStackNavigator({
   AuthLoading: {
@@ -25,10 +27,10 @@ export default createStackNavigator({
   VerificationCode: {
     screen: VerificationCodeScreen,
   },
-  MyPage: {
-    screen: MyPageScreen,
+  ResendEmail: {
+    screen: ResendEmailScreen,
   },
-  YoroProfile: {
-    screen: YourProfileScreen,
+  InputUserName: {
+    screen: InputUserNameScreen,
   },
 });

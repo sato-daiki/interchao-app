@@ -13,7 +13,7 @@ const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
     // if (user) {
     //   navigation.navigate('MyPage');
     // } else {
-    navigation.navigate('Initialize');
+    navigation.navigate('InputUserName');
     // }
   };
 
