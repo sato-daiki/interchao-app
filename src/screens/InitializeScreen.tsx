@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   },
   contaner: {
     flex: 1,
+    backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingHorizontal: 16,

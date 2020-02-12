@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button } from 'react-native';
+import { View, StyleSheet, TextInput, Button, Text } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import {
   emailSignUp,
@@ -7,21 +7,55 @@ import {
   phoneSignUp,
   facebookSignUp,
 } from '../utils/auth';
+import {
+  primaryColor,
+  fontSizeM,
+  fontSizeS,
+  offWhite,
+  borderLightColor,
+  subTextColor,
+} from '../styles/Common';
+import Space from '../components/atoms/Space';
+import SubmitButton from '../components/atoms/SubmitButton';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
+    backgroundColor: '#FFF',
+    paddingHorizontal: 16,
+    paddingVertical: 32,
+  },
+  label: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    paddingBottom: 6,
   },
   textInput: {
-    fontSize: 14,
-    color: 'black',
-    width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: 'black',
-    margin: 16,
+    fontSize: fontSizeM,
+    color: primaryColor,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: borderLightColor,
+    paddingHorizontal: 16,
+    height: 36,
+    textAlignVertical: 'top',
+    backgroundColor: offWhite,
+    borderRadius: 6,
+  },
+  lineContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  line: {
+    flex: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: borderLightColor,
+  },
+  subText: {
+    textAlign: 'center',
+    color: subTextColor,
+    fontSize: fontSizeS,
+    paddingHorizontal: 16,
   },
 });
 
@@ -57,62 +91,52 @@ const SignUpScreen: React.FC<{ navigation: NavigationStackProp }> = ({
 
   const onPressFacebookSignIn = async (): Promise<void> => {
     const user = await facebookSignUp();
-    console.log(user);
   };
 
   return (
     <View style={styles.container}>
+      <Text style={styles.label}>メールアドレス or 電話番号</Text>
       <TextInput
         style={styles.textInput}
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
-        editable
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         maxLength={50}
         placeholder="Email"
-        autoCapitalize="none"
         keyboardType="email-address"
         returnKeyType="done"
       />
+      <Space size={16} />
+      <Text style={styles.label}>パスワード（８ケタ以上）</Text>
       <TextInput
         style={styles.textInput}
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
-        editable
         maxLength={20}
         placeholder="Password"
         autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         secureTextEntry
         returnKeyType="done"
       />
-      <Button title="登録" onPress={(): void => emailSignUp(email, password)} />
-
-      <TextInput
-        style={styles.textInput}
-        value={phoneNumber}
-        onChangeText={(text: string): void => setPhoneNumber(text)}
-        editable
-        maxLength={50}
-        placeholder="Phone"
-        autoCapitalize="none"
-        keyboardType="phone-pad"
-        returnKeyType="done"
+      <Space size={32} />
+      <SubmitButton
+        title="登録"
+        onPress={(): void => emailSignUp(email, password)}
       />
-      <Button title="PhoneSignUp" onPress={onPressPhoneSignUp} />
-
-      <Button title="Facebook Login" onPress={onPressFacebookSignIn} />
-
-      <Button title="GoogleSignUp" onPress={onPressGoolgeSignUp} />
-
-      {/* {!user && confirmResult && renderVerificationCodeInput()} */}
-      {/*
-
-      <Text
-        onPress={(): void => {
-          navigation.navigate('SignIn');
-        }}
-      >
-        SignIn
-      </Text> */}
+      <Space size={32} />
+      <View style={styles.lineContainer}>
+        <View style={styles.line} />
+        <Text style={styles.subText}>or ソーシャルアカウントで登録</Text>
+        <View style={styles.line} />
+      </View>
+      <Space size={32} />
+      <SubmitButton title="Facebook Login" onPress={onPressFacebookSignIn} />
+      <Space size={16} />
+      <SubmitButton title="GoogleSignUp" onPress={onPressGoolgeSignUp} />
     </View>
   );
 };
