@@ -25,6 +25,30 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "extra": {
+      "production": {
+        "firebase": {
+          "authDomain": "white-zebra-5096f.firebaseapp.com",
+          "databaseURL": "https://white-zebra-5096f.firebaseio.com",
+          "projectId": "white-zebra-5096f",
+          "storageBucket": "white-zebra-5096f.appspot.com",
+          "messagingSenderId": "862039416371",
+          "appId": "1:862039416371:web:6d61bcf6228ac65c9a4d46",
+          "measurementId": "G-X65F72V219"
+        }
+      },
+      "development": {
+        "firebase": {
+          "authDomain": "white-zebra-dev.firebaseapp.com",
+          "databaseURL": "https://white-zebra-dev.firebaseio.com",
+          "projectId": "white-zebra-dev",
+          "storageBucket": "white-zebra-dev.appspot.com",
+          "messagingSenderId": "975945165729",
+          "appId": "1:975945165729:web:04f22216a1d13f908fb9e0",
+          "measurementId": "G-VV6Y43CCFX"
+        }
+      }
     }
   }
 }
