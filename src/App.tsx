@@ -1,5 +1,5 @@
 import React from 'react';
-import { YellowBox, StyleSheet } from 'react-native';
+import { YellowBox, StatusBar, StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import AppNavigator from './navigations/AppNavigator';
@@ -15,6 +15,7 @@ firebase.initializeApp(firebaseConfig);
 
 const App: React.SFC = () => (
   <Provider store={store}>
+    <StatusBar barStyle="dark-content" />
     <AppNavigator />
   </Provider>
 );
