@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { TextInput } from 'react-native-gesture-handler';
+import { User } from '../types/user';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
   fontSizeM,
@@ -12,6 +13,19 @@ import {
   subTextColor,
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
+import { emailSignUp, updateUser } from '../utils/auth';
+
+interface OwnProps {
+  navigation: NavigationStackProp;
+}
+
+export interface Props {
+  user: User;
+}
+
+export interface DispatchProps {
+  setUser: (user: User) => void;
+}
 
 const styles = StyleSheet.create({
   contaner: {
@@ -44,12 +58,32 @@ const styles = StyleSheet.create({
   },
 });
 
-const InputUserNameScreen: React.FC<{ navigation: NavigationStackProp }> = ({
+const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
+  user,
   navigation,
+  setUser,
 }): JSX.Element => {
-  const [userName, setUserName] = useState('ja');
+  const [userName, setUserName] = useState('');
 
-  const onPressRegist = (): void => {};
+  const onPressRegist = async (): Promise<void> => {
+    setUser({
+      ...user,
+      userName,
+    });
+
+    const { email, password } = user;
+    const newUser = await emailSignUp(email, password);
+    if (!newUser) {
+      return;
+    }
+
+    const res = await updateUser(newUser);
+    if (!res) {
+      return;
+    }
+
+    navigation.navigate('Home');
+  };
 
   return (
     <View style={styles.contaner}>

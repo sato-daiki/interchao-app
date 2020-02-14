@@ -2,6 +2,7 @@ import * as Facebook from 'expo-facebook';
 import { Linking } from 'expo';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-google-app-auth';
+import { User, auth } from 'firebase';
 import firebase, {
   facebookConfig,
   googleConfig,
@@ -10,17 +11,34 @@ import firebase, {
 } from '../configs/firebase';
 
 // メールでのユーザ登録
-export const emailSignUp = (email: string, password: string): void => {
-  firebase
+export const emailSignUp = async (
+  email: string,
+  password: string,
+  errorSet: (error: any) => void
+): Promise<auth.UserCredential | void> => {
+  return firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(user => {
+      console.log('emailSignUp', user);
       if (user) {
-        console.log('Success to Signup');
+        return user;
       }
     })
     .catch(error => {
+      errorSet(error);
+    });
+};
+
+export const updateUser = async (user: User): Promise<boolean> => {
+  return user
+    .updateProfile({
+      ...user,
+    })
+    .then((): boolean => true)
+    .catch((error): boolean => {
       console.log(error);
+      return false;
     });
 };
 
