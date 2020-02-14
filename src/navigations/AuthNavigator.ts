@@ -3,18 +3,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 /* screens */
 import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer';
 import InitializeScreen from '../screens/InitializeScreen';
-import SignUpScreen from '../screens/SignUpScreen';
+import SignUp from '../containers/SignUpScreenContainer';
+import SelectLanguage from '../containers/SelectLanguageScreenContainer';
 import SignInScreen from '../screens/SignInScreen';
-import MyPageScreen from '../screens/MyPageScreen';
-import YourProfileScreen from '../screens/YourProfileScreen';
 import VerificationCodeScreen from '../screens/VerificationCodeScreen';
 import ResendEmailScreen from '../screens/ResendEmailScreen';
-import InputUserNameScreen from '../screens/InputUserNameScreen';
+import InputUserName from '../containers/InputUserNameScreenContainer';
 
 export default createStackNavigator({
-  AuthLoading: {
-    screen: AuthLoadingScreenContainer,
-  },
   Initialize: {
     screen: InitializeScreen,
   },
@@ -22,7 +18,10 @@ export default createStackNavigator({
     screen: SignInScreen,
   },
   SignUp: {
-    screen: SignUpScreen,
+    screen: SignUp,
+  },
+  SelectLanguage: {
+    screen: SelectLanguage,
   },
   VerificationCode: {
     screen: VerificationCodeScreen,
@@ -31,6 +30,6 @@ export default createStackNavigator({
     screen: ResendEmailScreen,
   },
   InputUserName: {
-    screen: InputUserNameScreen,
+    screen: InputUserName,
   },
 });
