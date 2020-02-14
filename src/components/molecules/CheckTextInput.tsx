@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TextInputProps,
+  ActivityIndicator,
 } from 'react-native';
 // @ts-ignore
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  checkIcon: {
+  rightIcon: {
     position: 'absolute',
     right: 16,
     paddingTop: 2,
@@ -63,11 +64,33 @@ const styles = StyleSheet.create({
 });
 
 type Props = {
+  isLoading?: boolean;
+  isCheckOk?: boolean;
   errorMessage: string;
 } & TextInputProps;
 
 const CheckTextInput = (props: Props): JSX.Element => {
-  const { errorMessage, value } = props;
+  const { isCheckOk = false, isLoading = false, errorMessage } = props;
+
+  const rightIcon = (): ReactNode => {
+    if (isLoading) {
+      return (
+        <ActivityIndicator style={styles.rightIcon} size="small" color="gray" />
+      );
+    }
+    if (isCheckOk) {
+      return (
+        <MaterialCommunityIcons
+          style={styles.rightIcon}
+          size={24}
+          name="check-circle-outline"
+          color={green}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <View style={styles.row}>
@@ -81,14 +104,7 @@ const CheckTextInput = (props: Props): JSX.Element => {
           ]}
           {...props}
         />
-        {errorMessage.length === 0 && value && value.length > 0 ? (
-          <MaterialCommunityIcons
-            style={styles.checkIcon}
-            size={24}
-            name="check-circle-outline"
-            color={green}
-          />
-        ) : null}
+        {rightIcon()}
       </View>
       {errorMessage.length > 0 ? (
         <View style={styles.errorContainer}>
