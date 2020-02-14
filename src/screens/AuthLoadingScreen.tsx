@@ -10,11 +10,11 @@ const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
   navigation,
 }): JSX.Element => {
   const goToNavigation = user => {
-    // if (user) {
-    //   navigation.navigate('MyPage');
-    // } else {
-    navigation.navigate('InputUserName');
-    // }
+    if (user) {
+      navigation.navigate('MyPage');
+    } else {
+      navigation.navigate('SignUp');
+    }
   };
 
   const checkIfLoggedIn = () => {

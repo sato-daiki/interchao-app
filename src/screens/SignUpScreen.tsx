@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Text } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
+
+import { Space, SubmitButton, ErrorTextInput } from '../components/atoms';
 import {
   emailSignUp,
   goolgeSignUp,
   phoneSignUp,
   facebookSignUp,
 } from '../utils/auth';
+import { emailValidate } from '../utils/inputCheck';
 import {
   primaryColor,
   fontSizeM,
@@ -15,8 +18,19 @@ import {
   borderLightColor,
   subTextColor,
 } from '../styles/Common';
-import Space from '../components/atoms/Space';
-import SubmitButton from '../components/atoms/SubmitButton';
+import { User } from '../types/user';
+
+interface OwnProps {
+  navigation: NavigationStackProp;
+}
+
+export interface Props {
+  user: User;
+}
+
+export interface DispatchProps {
+  setUser: (user: User) => void;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -29,17 +43,6 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     paddingBottom: 6,
-  },
-  textInput: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: borderLightColor,
-    paddingHorizontal: 16,
-    height: 36,
-    textAlignVertical: 'top',
-    backgroundColor: offWhite,
-    borderRadius: 6,
   },
   lineContainer: {
     flexDirection: 'row',
@@ -62,11 +65,16 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const SignUpScreen: React.FC<{ navigation: NavigationStackProp }> = ({
+const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
+  user,
   navigation,
+  setUser,
 }): JSX.Element => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [errorEmail, setErrorEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
+
   // const [user, setUser] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmResult, setConfirmResult] = useState(null);
@@ -79,14 +87,60 @@ const SignUpScreen: React.FC<{ navigation: NavigationStackProp }> = ({
     await goolgeSignUp();
   };
 
-  const onPressPhoneSignUp = async (): Promise<void> => {
-    const result = await phoneSignUp(phoneNumber);
-    if (result) {
-      setConfirmResult(result);
-      navigation.navigate('VerificationCode', { confirmResult: result });
+  const onEndEditingEmail = (): void => {
+    if (email.length === 0) {
+      setErrorEmail('');
+    } else if (emailValidate(email)) {
+      setErrorEmail('メールアドレスの形式が正しくありません');
     } else {
-      console.log('error');
+      setErrorEmail('');
     }
+  };
+
+  const onEndEditingPassword = (): void => {
+    if (password.length > 0 && password.length < 6) {
+      setErrorPassword('パスワードは6桁以上で入力してください');
+    } else {
+      setErrorPassword('');
+    }
+  };
+
+  const clearErrorMessage = (): void => {
+    setErrorEmail('');
+    setErrorPassword('');
+  };
+
+  const errorSet = (error: any): void => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+
+    switch (errorCode) {
+      case 'auth/weak-password':
+        setErrorPassword('パスワードが弱いです');
+        break;
+      case 'auth/invalid-email':
+        setErrorEmail('メールアドレスの形式が正しくありません');
+        break;
+      case 'auth/email-already-in-use':
+        setErrorEmail('このメールアドレスはすでに登録されています');
+        break;
+      case 'auth/network-request-failed':
+        Alert.alert(
+          'エラー',
+          'ネットワークエラーです。電波のいい箇所で再度お試しください'
+        );
+        clearErrorMessage();
+        break;
+      default:
+        Alert.alert('エラー', 'エラーが発生しました。', error);
+        clearErrorMessage();
+    }
+  };
+
+  const onPressNext = async (): Promise<void> => {
+    clearErrorMessage();
+    const newUser = await emailSignUp(email, password, errorSet);
+    setUser(newUser);
   };
 
   const onPressFacebookSignIn = async (): Promise<void> => {
@@ -95,25 +149,26 @@ const SignUpScreen: React.FC<{ navigation: NavigationStackProp }> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>メールアドレス or 電話番号</Text>
-      <TextInput
-        style={styles.textInput}
+      <Text style={styles.label}>メールアドレス</Text>
+      <ErrorTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
+        onEndEditing={onEndEditingEmail}
         maxLength={50}
         placeholder="Email"
         keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         returnKeyType="done"
+        errorMessage={errorEmail}
       />
       <Space size={16} />
-      <Text style={styles.label}>パスワード（８ケタ以上）</Text>
-      <TextInput
-        style={styles.textInput}
+      <Text style={styles.label}>パスワード（６ケタ以上）</Text>
+      <ErrorTextInput
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
+        onEndEditing={onEndEditingPassword}
         maxLength={20}
         placeholder="Password"
         autoCapitalize="none"
@@ -121,16 +176,15 @@ const SignUpScreen: React.FC<{ navigation: NavigationStackProp }> = ({
         underlineColorAndroid="transparent"
         secureTextEntry
         returnKeyType="done"
+        errorMessage={errorPassword}
       />
+
       <Space size={32} />
-      <SubmitButton
-        title="登録"
-        onPress={(): void => emailSignUp(email, password)}
-      />
+      <SubmitButton title="次へ" onPress={onPressNext} />
       <Space size={32} />
       <View style={styles.lineContainer}>
         <View style={styles.line} />
-        <Text style={styles.subText}>or ソーシャルアカウントで登録</Text>
+        <Text style={styles.subText}>もしくは</Text>
         <View style={styles.line} />
       </View>
       <Space size={32} />

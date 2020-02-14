@@ -32,7 +32,7 @@ const MainTab = createBottomTabNavigator(
 );
 
 export default createStackNavigator({
-  MainTab: {
+  Home: {
     screen: MainTab,
   },
 });
