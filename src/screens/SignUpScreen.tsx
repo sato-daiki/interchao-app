@@ -2,19 +2,24 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 
-import { Space, SubmitButton, ErrorTextInput } from '../components/atoms';
+import { Space, SubmitButton } from '../components/atoms';
+import { CheckTextInput } from '../components/molecules';
 import {
   emailSignUp,
   goolgeSignUp,
   phoneSignUp,
   facebookSignUp,
 } from '../utils/auth';
-import { emailValidate } from '../utils/inputCheck';
+import {
+  emailValidate,
+  emaillExistCheck,
+  emailInputError,
+} from '../utils/inputCheck';
 import {
   primaryColor,
   fontSizeM,
   fontSizeS,
-  offWhite,
+  green,
   borderLightColor,
   subTextColor,
 } from '../styles/Common';
@@ -63,14 +68,20 @@ const styles = StyleSheet.create({
 });
 
 /**
- * 概要：ログインしていないユーザの立ち上げ画面
+ * 概要：アカウント登録画面
  */
 const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   user,
   navigation,
   setUser,
 }): JSX.Element => {
-  const [email, setEmail] = useState('');
+  const [isNextButtonLoading, setIsNextButtonLoading] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
+
+  const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
+  const [isPasswordCheckOk, setIsPasswordCheckOk] = useState(false);
+
+  const [email, setEmail] = useState('daiki0520daiki0520@yahoo.co.jp');
   const [errorEmail, setErrorEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
@@ -87,20 +98,40 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
     await goolgeSignUp();
   };
 
-  const onEndEditingEmail = (): void => {
+  const onEndEditingEmail = async (): Promise<void> | void => {
     if (email.length === 0) {
+      setIsEmailCheckOk(false);
       setErrorEmail('');
-    } else if (emailValidate(email)) {
+      return;
+    }
+
+    if (emailValidate(email)) {
+      setIsEmailCheckOk(false);
       setErrorEmail('メールアドレスの形式が正しくありません');
+      return;
+    }
+
+    setIsEmailLoading(true);
+    const res = await emaillExistCheck(email);
+    if (res) {
+      setIsEmailCheckOk(false);
+      setErrorEmail('このメールアドレスはすでに登録されています');
     } else {
+      setIsEmailCheckOk(true);
       setErrorEmail('');
     }
+    setIsEmailLoading(false);
   };
 
   const onEndEditingPassword = (): void => {
-    if (password.length > 0 && password.length < 6) {
+    if (password.length === 0) {
+      setIsPasswordCheckOk(false);
+      setErrorPassword('');
+    } else if (password.length > 0 && password.length < 6) {
+      setIsPasswordCheckOk(false);
       setErrorPassword('パスワードは6桁以上で入力してください');
     } else {
+      setIsPasswordCheckOk(true);
       setErrorPassword('');
     }
   };
@@ -111,36 +142,22 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   };
 
   const errorSet = (error: any): void => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-
-    switch (errorCode) {
-      case 'auth/weak-password':
-        setErrorPassword('パスワードが弱いです');
-        break;
-      case 'auth/invalid-email':
-        setErrorEmail('メールアドレスの形式が正しくありません');
-        break;
-      case 'auth/email-already-in-use':
-        setErrorEmail('このメールアドレスはすでに登録されています');
-        break;
-      case 'auth/network-request-failed':
-        Alert.alert(
-          'エラー',
-          'ネットワークエラーです。電波のいい箇所で再度お試しください'
-        );
-        clearErrorMessage();
-        break;
-      default:
-        Alert.alert('エラー', 'エラーが発生しました。', error);
-        clearErrorMessage();
-    }
+    emailInputError(error, setErrorPassword, setErrorEmail, clearErrorMessage);
   };
 
   const onPressNext = async (): Promise<void> => {
+    setIsNextButtonLoading(true);
     clearErrorMessage();
-    const newUser = await emailSignUp(email, password, errorSet);
-    setUser(newUser);
+    const firebaseUser = await emailSignUp(email, password, errorSet);
+    if (firebaseUser && firebaseUser.user) {
+      setUser({
+        id: firebaseUser.user.uid,
+        email: firebaseUser.user.email,
+      });
+    }
+
+    navigation.navigate('SelectLanguage');
+    setIsNextButtonLoading(false);
   };
 
   const onPressFacebookSignIn = async (): Promise<void> => {
@@ -150,7 +167,7 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>メールアドレス</Text>
-      <ErrorTextInput
+      <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
         onEndEditing={onEndEditingEmail}
@@ -161,11 +178,13 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
         autoCorrect={false}
         underlineColorAndroid="transparent"
         returnKeyType="done"
+        isLoading={isEmailLoading}
+        isCheckOk={isEmailCheckOk}
         errorMessage={errorEmail}
       />
       <Space size={16} />
       <Text style={styles.label}>パスワード（６ケタ以上）</Text>
-      <ErrorTextInput
+      <CheckTextInput
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
         onEndEditing={onEndEditingPassword}
@@ -176,11 +195,17 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
         underlineColorAndroid="transparent"
         secureTextEntry
         returnKeyType="done"
+        isCheckOk={isPasswordCheckOk}
         errorMessage={errorPassword}
       />
 
       <Space size={32} />
-      <SubmitButton title="次へ" onPress={onPressNext} />
+      <SubmitButton
+        title="次へ"
+        onPress={onPressNext}
+        isLoading={isNextButtonLoading}
+        disable={!(isEmailCheckOk && isPasswordCheckOk)}
+      />
       <Space size={32} />
       <View style={styles.lineContainer}>
         <View style={styles.line} />
