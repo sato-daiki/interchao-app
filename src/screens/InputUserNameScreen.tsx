@@ -14,6 +14,7 @@ import {
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
 import { emailSignUp, updateUser } from '../utils/auth';
+import { CheckTextInput } from '../components/molecules';
 
 interface OwnProps {
   navigation: NavigationStackProp;
@@ -45,17 +46,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 16,
   },
-  textInput: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: borderLightColor,
-    paddingHorizontal: 16,
-    height: 36,
-    textAlignVertical: 'top',
-    backgroundColor: offWhite,
-    borderRadius: 6,
-  },
 });
 
 const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
@@ -64,6 +54,11 @@ const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   setUser,
 }): JSX.Element => {
   const [userName, setUserName] = useState('');
+  const [isUserNameLoading, setIsUserNameLoading] = useState(false);
+  const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const onEndEditing = () => {};
 
   const onPressRegist = async (): Promise<void> => {
     setUser({
@@ -89,19 +84,21 @@ const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
     <View style={styles.contaner}>
       <Text style={styles.title}>ユーザーネームを入力してください</Text>
       <Text style={styles.subText}>このユーザネームはいつでも変更できます</Text>
-      <TextInput
-        style={styles.textInput}
+      <CheckTextInput
         value={userName}
         onChangeText={(text: string): void => setUserName(text)}
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
+        onEndEditing={onEndEditing}
         maxLength={50}
         placeholder="zebra"
         keyboardType="default"
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         returnKeyType="done"
+        isLoading={isUserNameLoading}
+        isCheckOk={isUserNameCheckOk}
+        errorMessage={errorMessage}
       />
-
       <Space size={32} />
       <SubmitButton title="登録" onPress={onPressRegist} />
     </View>
