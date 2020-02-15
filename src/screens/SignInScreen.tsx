@@ -1,61 +1,79 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { emailSignin, facebookSignin } from '../utils/auth';
+import { User } from '../types/user';
+import SignInUpForm from '../components/organisms/SignInUpForm';
 
-type Props = {
+interface OwnProps {
   navigation: NavigationStackProp;
-};
+}
+
+export interface Props {
+  user: User;
+}
+
+export interface DispatchProps {
+  setUser: (user: User) => void;
+}
 
 /**
  * 概要：ログイン画面
  */
-const SignInScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+const SignInScreen: React.FC<Props & DispatchProps & OwnProps> = ({
+  navigation,
+  setUser,
+}): JSX.Element => {
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
 
-  const onChangedEmail = (textEmail: string): void => {
-    setEmail(textEmail);
-  };
+  const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
+  const [isPasswordCheckOk, setIsPasswordCheckOk] = useState(false);
 
-  const onChangedPassword = (textPassword: string): void => {
-    setPassword(textPassword);
-  };
+  const [email, setEmail] = useState('daiki0520daiki0520@yahoo.co.jp');
+  const [errorEmail, setErrorEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
 
-  const onPressEmailSignIn = (): void => {
-    emailSignin(email, password);
-  };
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
 
-  const onPressFacebookSignIn = async (): Promise<void> => {
-    const user = await facebookSignin();
-  };
+  const onEndEditingEmail = async (): Promise<void> | void => {};
+
+  const onEndEditingPassword = (): void => {};
+
+  const clearErrorMessage = (): void => {};
+
+  const errorSet = (error: any): void => {};
+
+  const onPressSubmit = async (): Promise<void> => {};
+
+  const onPressFacebook = async (): Promise<void> => {};
+
+  const onPressGoolge = async (): Promise<void> => {};
+
+  const onPressForget = () => {};
 
   return (
-    <View>
-      <TextInput
-        value={email}
-        onChangeText={onChangedEmail}
-        editable
-        maxLength={50}
-        placeholder="Email"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        returnKeyType="done"
-      />
-      <TextInput
-        value={password}
-        onChangeText={onChangedPassword}
-        editable
-        maxLength={20}
-        placeholder="Password"
-        autoCapitalize="none"
-        secureTextEntry
-        returnKeyType="done"
-      />
-      <Button title="SignIn" onPress={onPressEmailSignIn} />
-      <Text onPress={(): boolean => navigation.navigate('SignUp')}>SignUp</Text>
-      <Button title="Facebook Login" onPress={onPressFacebookSignIn} />
-    </View>
+    <SignInUpForm
+      isSignUp={false}
+      isEmailLoading={isEmailLoading}
+      isSubmitLoading={isSubmitLoading}
+      isFacebookLoading={isFacebookLoading}
+      isGoogleLoading={isGoogleLoading}
+      isEmailCheckOk={isEmailCheckOk}
+      isPasswordCheckOk={isPasswordCheckOk}
+      email={email}
+      password={password}
+      errorEmail={errorEmail}
+      errorPassword={errorPassword}
+      onChangeTextEmail={(text: string): void => setEmail(text)}
+      onChangePassword={(text: string): void => setPassword(text)}
+      onEndEditingEmail={onEndEditingEmail}
+      onEndEditingPassword={onEndEditingPassword}
+      onPressSubmit={onPressSubmit}
+      onPressFacebook={onPressFacebook}
+      onPressGoolge={onPressGoolge}
+      onPressForget={onPressForget}
+    />
   );
 };
 

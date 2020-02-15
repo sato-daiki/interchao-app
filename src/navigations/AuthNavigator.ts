@@ -1,27 +1,26 @@
 import { createStackNavigator } from 'react-navigation-stack';
 
 /* screens */
-import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer';
 import InitializeScreen from '../screens/InitializeScreen';
-import SignUp from '../containers/SignUpScreenContainer';
-import SelectLanguage from '../containers/SelectLanguageScreenContainer';
-import SignInScreen from '../screens/SignInScreen';
+import SignUpScreenContainer from '../containers/SignUpScreenContainer';
+import SignInScreenContainer from '../containers/SignInScreenContainer';
+import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
 import VerificationCodeScreen from '../screens/VerificationCodeScreen';
 import ResendEmailScreen from '../screens/ResendEmailScreen';
-import InputUserName from '../containers/InputUserNameScreenContainer';
+import InputUserNameScreenContainer from '../containers/InputUserNameScreenContainer';
 
 export default createStackNavigator({
   Initialize: {
     screen: InitializeScreen,
   },
   SignIn: {
-    screen: SignInScreen,
+    screen: SignInScreenContainer,
   },
   SignUp: {
-    screen: SignUp,
+    screen: SignUpScreenContainer,
   },
   SelectLanguage: {
-    screen: SelectLanguage,
+    screen: SelectLanguageScreenContainer,
   },
   VerificationCode: {
     screen: VerificationCodeScreen,
@@ -30,6 +29,6 @@ export default createStackNavigator({
     screen: ResendEmailScreen,
   },
   InputUserName: {
-    screen: InputUserName,
+    screen: InputUserNameScreenContainer,
   },
 });
