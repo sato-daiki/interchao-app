@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select';
 import { NavigationStackProp } from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
-import { fontSizeM, primaryColor, fontSizeL } from '../styles/Common';
+import { primaryColor, fontSizeL } from '../styles/Common';
 import Space from '../components/atoms/Space';
-import { User, Language } from '../types/user';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { User } from '../types/user';
+import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 
 export interface Props {
   user: User;
@@ -30,12 +29,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 16,
   },
-
-  label: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    paddingBottom: 6,
-  },
 });
 
 /**
@@ -46,14 +39,13 @@ const SelectLanguageScreen: React.FC<Props & DispatchProps> = ({
   user,
   setUser,
 }): JSX.Element => {
-  const [learnLanguage, setLearnLanguage] = useState<Language>('ja');
-  const [nativeLanguage, setNativeLanguage] = useState<Language>('en');
+  const [isCheckedJa, setIsCheckedJa] = useState(false);
 
   const onPressNext = (): void => {
     setUser({
       ...user,
-      learnLanguage,
-      nativeLanguage,
+      learnLanguage: isCheckedJa ? 'ja' : 'en',
+      nativeLanguage: isCheckedJa ? 'en' : 'ja',
     });
     navigation.navigate('InputUserName');
   };
@@ -61,34 +53,30 @@ const SelectLanguageScreen: React.FC<Props & DispatchProps> = ({
   return (
     <View style={styles.contaner}>
       <Text style={styles.title}>言語を選択してください</Text>
-      <Text style={styles.label}>学びたい言語</Text>
-      <RNPickerSelect
-        onValueChange={value => setLearnLanguage(value)}
-        items={[
-          { label: '英語', value: 'en' },
-          { label: '日本語', value: 'ja' },
-        ]}
+      <LanguageRadioBox
+        label="学びたい言語"
+        checkedJa={isCheckedJa}
+        onPressJa={(): void => setIsCheckedJa(true)}
+        onPressEn={(): void => setIsCheckedJa(false)}
       />
       <Space size={16} />
-      <Text style={styles.label}>ネイティブ言語</Text>
-      <RNPickerSelect
-        onValueChange={value => setNativeLanguage(value)}
-        items={[
-          { label: '英語', value: 'en' },
-          { label: '日本語', value: 'ja' },
-        ]}
+      <LanguageRadioBox
+        label="ネイティブ言語"
+        checkedJa={!isCheckedJa}
+        onPressJa={(): void => setIsCheckedJa(false)}
+        onPressEn={(): void => setIsCheckedJa(true)}
       />
       <Space size={32} />
-      <SubmitButton title="登録" onPress={onPressNext} />
+      <SubmitButton title="次へ" onPress={onPressNext} />
     </View>
   );
 };
 
-SelectLanguageScreen.navigationOptions = () => {
-  return {
-    ...DefaultNavigationOptions,
-    title: '相談',
-  };
-};
+// SelectLanguageScreen.navigationOptions = () => {
+//   return {
+//     ...DefaultNavigationOptions,
+//     title: '相談',
+//   };
+// };
 
 export default SelectLanguageScreen;
