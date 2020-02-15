@@ -1,34 +1,14 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-
-import {
-  Space,
-  SubmitButton,
-  FacebookButton,
-  GoogleButton,
-} from '../components/atoms';
-import { CheckTextInput } from '../components/molecules';
-import {
-  emailSignUp,
-  goolgeSignUp,
-  phoneSignUp,
-  facebookSignUp,
-} from '../utils/auth';
+import { emailSignUp, goolgeSignUp, facebookSignUp } from '../utils/auth';
 import {
   emailValidate,
   emaillExistCheck,
   emailInputError,
 } from '../utils/inputCheck';
-import {
-  primaryColor,
-  fontSizeM,
-  fontSizeS,
-  green,
-  borderLightColor,
-  subTextColor,
-} from '../styles/Common';
+
 import { User } from '../types/user';
+import SignInUpForm from '../components/organisms/SignInUpForm';
 
 interface OwnProps {
   navigation: NavigationStackProp;
@@ -42,45 +22,14 @@ export interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    paddingHorizontal: 16,
-    paddingVertical: 32,
-  },
-  label: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    paddingBottom: 6,
-  },
-  lineContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  line: {
-    flex: 1,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-  },
-  subText: {
-    textAlign: 'center',
-    color: subTextColor,
-    fontSize: fontSizeS,
-    paddingHorizontal: 16,
-  },
-});
-
 /**
  * 概要：アカウント登録画面
  */
 const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
-  user,
   navigation,
   setUser,
 }): JSX.Element => {
-  const [isNextButtonLoading, setIsNextButtonLoading] = useState(false);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
   const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
@@ -91,16 +40,8 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
 
-  const [isGoogleButtonLoading, setIsGoogleButtonLoading] = useState(false);
-  const [isFacebookButtonLoading, setIsFacebookButtonLoading] = useState(false);
-
-  // const [user, setUser] = useState(null);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [confirmResult, setConfirmResult] = useState(null);
-
-  // const onPressSignUp = (): void => {
-  //   emailSignUp(email, password);
-  // };
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
 
   const onEndEditingEmail = async (): Promise<void> | void => {
     if (email.length === 0) {
@@ -149,8 +90,8 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
     emailInputError(error, setErrorPassword, setErrorEmail, clearErrorMessage);
   };
 
-  const onPressNext = async (): Promise<void> => {
-    setIsNextButtonLoading(true);
+  const onPressSubmit = async (): Promise<void> => {
+    setIsSubmitLoading(true);
     clearErrorMessage();
     const firebaseUser = await emailSignUp(email, password, errorSet);
     if (firebaseUser && firebaseUser.user) {
@@ -161,82 +102,42 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
     }
 
     navigation.navigate('SelectLanguage');
-    setIsNextButtonLoading(false);
+    setIsSubmitLoading(false);
   };
 
-  const onPressFacebookSignIn = async (): Promise<void> => {
-    setIsFacebookButtonLoading(true);
+  const onPressFacebook = async (): Promise<void> => {
+    setIsFacebookLoading(true);
     const user = await facebookSignUp();
-    setIsFacebookButtonLoading(false);
+    setIsFacebookLoading(false);
   };
 
-  const onPressGoolgeSignUp = async (): Promise<void> => {
-    setIsGoogleButtonLoading(true);
+  const onPressGoolge = async (): Promise<void> => {
+    setIsGoogleLoading(true);
     await goolgeSignUp();
-    setIsGoogleButtonLoading(false);
+    setIsGoogleLoading(false);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>メールアドレス</Text>
-      <CheckTextInput
-        value={email}
-        onChangeText={(text: string): void => setEmail(text)}
-        onEndEditing={onEndEditingEmail}
-        maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        isLoading={isEmailLoading}
-        isCheckOk={isEmailCheckOk}
-        errorMessage={errorEmail}
-      />
-      <Space size={16} />
-      <Text style={styles.label}>パスワード（６ケタ以上）</Text>
-      <CheckTextInput
-        value={password}
-        onChangeText={(text: string): void => setPassword(text)}
-        onEndEditing={onEndEditingPassword}
-        maxLength={20}
-        placeholder="Password"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        secureTextEntry
-        returnKeyType="done"
-        isCheckOk={isPasswordCheckOk}
-        errorMessage={errorPassword}
-      />
-
-      <Space size={32} />
-      <SubmitButton
-        title="次へ"
-        onPress={onPressNext}
-        isLoading={isNextButtonLoading}
-        disable={!(isEmailCheckOk && isPasswordCheckOk)}
-      />
-      <Space size={32} />
-      <View style={styles.lineContainer}>
-        <View style={styles.line} />
-        <Text style={styles.subText}>もしくは</Text>
-        <View style={styles.line} />
-      </View>
-      <Space size={32} />
-      <FacebookButton
-        title="Facebookで登録"
-        isLoading={isFacebookButtonLoading}
-        onPress={onPressFacebookSignIn}
-      />
-      <Space size={16} />
-      <GoogleButton
-        title="Googleで登録"
-        isLoading={isGoogleButtonLoading}
-        onPress={onPressGoolgeSignUp}
-      />
-    </View>
+    <SignInUpForm
+      isSignUp
+      isEmailLoading={isEmailLoading}
+      isSubmitLoading={isSubmitLoading}
+      isFacebookLoading={isFacebookLoading}
+      isGoogleLoading={isGoogleLoading}
+      isEmailCheckOk={isEmailCheckOk}
+      isPasswordCheckOk={isPasswordCheckOk}
+      email={email}
+      password={password}
+      errorEmail={errorEmail}
+      errorPassword={errorPassword}
+      onChangeTextEmail={(text: string): void => setEmail(text)}
+      onChangePassword={(text: string): void => setPassword(text)}
+      onEndEditingEmail={onEndEditingEmail}
+      onEndEditingPassword={onEndEditingPassword}
+      onPressSubmit={onPressSubmit}
+      onPressFacebook={onPressFacebook}
+      onPressGoolge={onPressGoolge}
+    />
   );
 };
 
