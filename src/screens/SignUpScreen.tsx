@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Text, Alert } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 
-import { Space, SubmitButton } from '../components/atoms';
+import {
+  Space,
+  SubmitButton,
+  FacebookButton,
+  GoogleButton,
+} from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
 import {
   emailSignUp,
@@ -86,6 +91,9 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
 
+  const [isGoogleButtonLoading, setIsGoogleButtonLoading] = useState(false);
+  const [isFacebookButtonLoading, setIsFacebookButtonLoading] = useState(false);
+
   // const [user, setUser] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [confirmResult, setConfirmResult] = useState(null);
@@ -93,10 +101,6 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   // const onPressSignUp = (): void => {
   //   emailSignUp(email, password);
   // };
-
-  const onPressGoolgeSignUp = async (): Promise<void> => {
-    await goolgeSignUp();
-  };
 
   const onEndEditingEmail = async (): Promise<void> | void => {
     if (email.length === 0) {
@@ -161,7 +165,15 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   };
 
   const onPressFacebookSignIn = async (): Promise<void> => {
+    setIsFacebookButtonLoading(true);
     const user = await facebookSignUp();
+    setIsFacebookButtonLoading(false);
+  };
+
+  const onPressGoolgeSignUp = async (): Promise<void> => {
+    setIsGoogleButtonLoading(true);
+    await goolgeSignUp();
+    setIsGoogleButtonLoading(false);
   };
 
   return (
@@ -213,9 +225,17 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
         <View style={styles.line} />
       </View>
       <Space size={32} />
-      <SubmitButton title="Facebook Login" onPress={onPressFacebookSignIn} />
+      <FacebookButton
+        title="Facebookで登録"
+        isLoading={isFacebookButtonLoading}
+        onPress={onPressFacebookSignIn}
+      />
       <Space size={16} />
-      <SubmitButton title="GoogleSignUp" onPress={onPressGoolgeSignUp} />
+      <GoogleButton
+        title="Googleで登録"
+        isLoading={isGoogleButtonLoading}
+        onPress={onPressGoolgeSignUp}
+      />
     </View>
   );
 };
