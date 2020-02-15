@@ -74,9 +74,7 @@ const CheckTextInput = (props: Props): JSX.Element => {
 
   const rightIcon = (): ReactNode => {
     if (isLoading) {
-      return (
-        <ActivityIndicator style={styles.rightIcon} size="small" color="gray" />
-      );
+      return <ActivityIndicator style={styles.rightIcon} size="small" />;
     }
     if (isCheckOk) {
       return (

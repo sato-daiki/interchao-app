@@ -53,13 +53,7 @@ const SignInScreen: React.FC<Props> = ({ navigation }: Props): JSX.Element => {
         returnKeyType="done"
       />
       <Button title="SignIn" onPress={onPressEmailSignIn} />
-      <Text
-        onPress={(): void => {
-          navigation.navigate('SignUp');
-        }}
-      >
-        SignUp
-      </Text>
+      <Text onPress={(): boolean => navigation.navigate('SignUp')}>SignUp</Text>
       <Button title="Facebook Login" onPress={onPressFacebookSignIn} />
     </View>
   );

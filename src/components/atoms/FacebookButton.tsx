@@ -1,54 +1,64 @@
 import React from 'react';
 import {
+  Image,
   TouchableOpacity,
   Text,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { mainColor, fontSizeM } from '../../styles/Common';
+import { FLogo } from '../../images';
+import { fontSizeM, facebook } from '../../styles/Common';
 
 interface Props {
-  isLoading?: boolean;
-  disable?: boolean;
   title: string;
+  isLoading?: boolean;
   onPress: () => void;
 }
 
 const styles = StyleSheet.create({
   contaner: {
     borderRadius: 22,
-    backgroundColor: mainColor,
     width: '100%',
+    borderWidth: 1,
+    borderColor: facebook,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   title: {
-    color: '#fff',
+    color: facebook,
     fontSize: fontSizeM,
     fontWeight: 'bold',
   },
+  logo: {
+    position: 'absolute',
+    left: 14,
+    width: 26,
+    height: 26,
+  },
 });
 
-const SubmitButton: React.FC<Props> = ({
+const FacebookButton: React.FC<Props> = ({
   isLoading = false,
-  disable = false,
   title,
   onPress,
 }: Props): JSX.Element => {
   return (
     <TouchableOpacity
       style={styles.contaner}
-      activeOpacity={isLoading || disable ? 1 : 0.2}
-      onPress={isLoading || disable ? undefined : onPress}
+      onPress={isLoading ? undefined : onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator size="small" />
       ) : (
-        <Text style={styles.title}>{title}</Text>
+        <>
+          <Image style={styles.logo} source={FLogo} />
+          <Text style={styles.title}>{title}</Text>
+        </>
       )}
     </TouchableOpacity>
   );
 };
 
-export default SubmitButton;
+export default FacebookButton;

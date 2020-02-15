@@ -1,54 +1,64 @@
 import React from 'react';
 import {
+  Image,
   TouchableOpacity,
   Text,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { mainColor, fontSizeM } from '../../styles/Common';
+import { GLogo } from '../../images';
+import { fontSizeM, primaryColor } from '../../styles/Common';
 
 interface Props {
-  isLoading?: boolean;
-  disable?: boolean;
   title: string;
+  isLoading?: boolean;
   onPress: () => void;
 }
 
 const styles = StyleSheet.create({
   contaner: {
     borderRadius: 22,
-    backgroundColor: mainColor,
     width: '100%',
+    borderWidth: 1,
+    borderColor: primaryColor,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   title: {
-    color: '#fff',
+    color: primaryColor,
     fontSize: fontSizeM,
     fontWeight: 'bold',
   },
+  logo: {
+    position: 'absolute',
+    left: 16,
+    width: 22,
+    height: 22,
+  },
 });
 
-const SubmitButton: React.FC<Props> = ({
+const GoogleButton: React.FC<Props> = ({
   isLoading = false,
-  disable = false,
   title,
   onPress,
 }: Props): JSX.Element => {
   return (
     <TouchableOpacity
       style={styles.contaner}
-      activeOpacity={isLoading || disable ? 1 : 0.2}
-      onPress={isLoading || disable ? undefined : onPress}
+      onPress={isLoading ? undefined : onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator size="small" />
       ) : (
-        <Text style={styles.title}>{title}</Text>
+        <>
+          <Image style={styles.logo} source={GLogo} />
+          <Text style={styles.title}>{title}</Text>
+        </>
       )}
     </TouchableOpacity>
   );
 };
 
-export default SubmitButton;
+export default GoogleButton;

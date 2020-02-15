@@ -6,6 +6,7 @@ export const mainColor = '#2D9CDB';
 export const offWhite = '#f6f6f6';
 export const linkBlue = '#2469BB';
 export const green = '#27AE60';
+export const facebook = '#1877f2';
 
 export const fontSizeS = 13;
 export const fontSizeM = 14;
