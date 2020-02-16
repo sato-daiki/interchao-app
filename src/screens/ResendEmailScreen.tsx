@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { TextInput, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
-import {
-  fontSizeM,
-  borderLightColor,
-  primaryColor,
-  offWhite,
-} from '../styles/Common';
+import { fontSizeM, primaryColor } from '../styles/Common';
 import Space from '../components/atoms/Space';
+import { CheckTextInput } from '../components/molecules';
 
 const styles = StyleSheet.create({
   contaner: {
@@ -22,23 +18,17 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 6,
   },
-  textInput: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: borderLightColor,
-    paddingHorizontal: 16,
-    height: 36,
-    textAlignVertical: 'top',
-    backgroundColor: offWhite,
-    borderRadius: 6,
-  },
 });
 
 const ResendEmailScreen: React.FC<{ navigation: NavigationStackProp }> = ({
   navigation,
 }): JSX.Element => {
   const [email, setEmail] = useState('');
+  const [isEmailLoading, setIsEmailLoading] = useState(false);
+  const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
+  const [errorEmail, setErrorEmail] = useState('');
+
+  const onEndEditingEmail = (): void => {};
 
   const onPressResend = (): void => {
     navigation.navigate('SignIn');
@@ -47,17 +37,20 @@ const ResendEmailScreen: React.FC<{ navigation: NavigationStackProp }> = ({
   return (
     <View style={styles.contaner}>
       <Text style={styles.label}>メールアドレス</Text>
-      <TextInput
-        style={styles.textInput}
+      <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
+        onEndEditing={onEndEditingEmail}
         maxLength={50}
         placeholder="Email"
         keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         returnKeyType="done"
+        isLoading={isEmailLoading}
+        isCheckOk={isEmailCheckOk}
+        errorMessage={errorEmail}
       />
       <Space size={32} />
       <SubmitButton title="確認メールの送信" onPress={onPressResend} />

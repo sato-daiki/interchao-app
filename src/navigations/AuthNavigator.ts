@@ -7,6 +7,7 @@ import SignInScreenContainer from '../containers/SignInScreenContainer';
 import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
 import VerificationCodeScreen from '../screens/VerificationCodeScreen';
 import ResendEmailScreen from '../screens/ResendEmailScreen';
+import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
 import InputUserNameScreenContainer from '../containers/InputUserNameScreenContainer';
 
 export default createStackNavigator({
@@ -22,13 +23,16 @@ export default createStackNavigator({
   SelectLanguage: {
     screen: SelectLanguageScreenContainer,
   },
+  InputUserName: {
+    screen: InputUserNameScreenContainer,
+  },
   VerificationCode: {
     screen: VerificationCodeScreen,
   },
   ResendEmail: {
     screen: ResendEmailScreen,
   },
-  InputUserName: {
-    screen: InputUserNameScreenContainer,
+  ConfirmEmail: {
+    screen: ConfirmEmailScreen,
   },
 });
