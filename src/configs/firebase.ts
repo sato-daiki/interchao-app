@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import '@firebase/firestore';
 import Constants from 'expo-constants';
 import {
   PRODUCTION_FIREBASE_API_KEY,
@@ -33,5 +34,4 @@ export const googleConfig = {
 };
 
 export const { FacebookAuthProvider, GoogleAuthProvider } = firebase.auth;
-
 export default firebase;

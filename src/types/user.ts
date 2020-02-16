@@ -4,8 +4,8 @@ export interface User {
   paid: boolean;
   confirmDiary: boolean;
   confirmReview: false;
-  email: string;
+  email: string | null;
   points: number;
-  createdAt: firestore.Timestamp;
-  updatedAt: firestore.Timestamp;
+  createdAt: firestore.FieldValue;
+  updatedAt: firestore.FieldValue;
 }
