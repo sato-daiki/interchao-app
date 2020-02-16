@@ -3,7 +3,6 @@ import { SafeAreaView, View, Text, StyleSheet } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
-import I18n from '../utils/I18n';
 
 const styles = StyleSheet.create({
   safeAreaView: {
