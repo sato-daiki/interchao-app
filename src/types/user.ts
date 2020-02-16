@@ -1,10 +1,11 @@
-export type Language = 'ja' | 'en';
+import { firestore } from 'firebase';
 
 export interface User {
-  id?: string;
-  email?: string | null;
-  password?: string;
-  learnLanguage?: Language;
-  nativeLanguage?: Language;
-  userName?: string;
+  paid: boolean;
+  confirmPost: boolean;
+  confirmReview: false;
+  email: string;
+  points: number;
+  createdAt: firestore.Timestamp;
+  updatedAt: firestore.Timestamp;
 }
