@@ -1,9 +1,9 @@
 import { firestore } from 'firebase';
 
-export type PostStatus = 'draft' | 'publish';
-export type CorrectionStatus = 'yet' | 'doing' | 'done';
+export type DiaryStatus = 'draft' | 'publish';
+export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
 
-interface DisplayProfile {
+export interface DisplayProfile {
   name: string;
   photoUrl: string;
   ref: string;
@@ -23,13 +23,13 @@ interface Correction {
   updatedAt: firestore.Timestamp;
 }
 
-export interface Post {
+export interface Diary {
   profile: DisplayProfile;
   correction: Correction;
   proCorrection: Correction;
   title: string;
   text: string;
-  postStatus: PostStatus;
+  diaryStatus: DiaryStatus;
   correctionStatus: CorrectionStatus;
   isReview: boolean;
   createdAt: firestore.Timestamp;
