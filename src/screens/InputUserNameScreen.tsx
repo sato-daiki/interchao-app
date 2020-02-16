@@ -13,7 +13,7 @@ import {
   subTextColor,
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
-import { emailSignUp, updateUser } from '../utils/auth';
+import { emailSignUp, updateUser, createNewProfile } from '../utils/auth';
 import { CheckTextInput } from '../components/molecules';
 
 interface OwnProps {
@@ -60,25 +60,7 @@ const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
 
   const onEndEditing = () => {};
 
-  const onPressRegist = async (): Promise<void> => {
-    setUser({
-      ...user,
-      userName,
-    });
-
-    const { email, password } = user;
-    const newUser = await emailSignUp(email, password);
-    if (!newUser) {
-      return;
-    }
-
-    const res = await updateUser(newUser);
-    if (!res) {
-      return;
-    }
-
-    navigation.navigate('Home');
-  };
+  const onPressRegist = async (): Promise<void> => {};
 
   return (
     <View style={styles.contaner}>

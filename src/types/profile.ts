@@ -10,6 +10,6 @@ export interface Profile {
   learnLanguage: Language;
   nativeLanguage: Language;
   introduction: string;
-  createdAt: firestore.Timestamp;
-  updatedAt: firestore.Timestamp;
+  createdAt: firestore.FieldValue;
+  updatedAt: firestore.FieldValue;
 }

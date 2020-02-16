@@ -2,7 +2,7 @@ import * as Facebook from 'expo-facebook';
 import { Linking } from 'expo';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-google-app-auth';
-import { User, auth } from 'firebase';
+import { User } from '../types';
 import firebase, {
   facebookConfig,
   googleConfig,
@@ -10,19 +10,51 @@ import firebase, {
   GoogleAuthProvider,
 } from '../configs/firebase';
 
+export const createNewUser = async (user: firebase.User): Promise<void> => {
+  await firebase
+    .firestore()
+    .collection('users')
+    .doc(user.uid)
+    .set({
+      paid: false,
+      confirmDiary: false,
+      confirmReview: false,
+      email: user.email,
+      points: 100,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+  await firebase
+    .firestore()
+    .collection('profiles')
+    .doc(user.uid)
+    .set({
+      name: 'daiki',
+      userName: 'daiki12345',
+      photoUrl:
+        'https://flickrtheblog.files.wordpress.com/2019/05/panda402x.png',
+      pro: false,
+      learnLanguage: 'en',
+      nativeLanguage: 'ja',
+      introduction: "hello I'm daiki",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+};
+
 // メールでのユーザ登録
 export const emailSignUp = async (
   email: string,
   password: string,
   errorSet: (error: any) => void
-): Promise<auth.UserCredential | void> => {
+): Promise<void> => {
   return firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      console.log('emailSignUp', user);
-      if (user) {
-        return user;
+    .then(credent => {
+      if (credent && credent.user) {
+        createNewUser(credent.user);
       }
     })
     .catch(error => {
