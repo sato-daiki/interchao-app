@@ -7,6 +7,7 @@ export const offWhite = '#f6f6f6';
 export const linkBlue = '#2469BB';
 export const green = '#27AE60';
 export const facebook = '#1877f2';
+export const softRed = '#da5353';
 
 export const fontSizeS = 13;
 export const fontSizeM = 14;
@@ -19,5 +20,4 @@ export const blue = '#A1CBED';
 export const purple = '#C0A9D1';
 export const lightGray = '#CCCCCC';
 export const midGray = '#7F7F7F';
-export const softRed = '#da5353';
 export const transparent = 'transparent';

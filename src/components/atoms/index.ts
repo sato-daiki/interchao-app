@@ -4,3 +4,6 @@ export { default as RadioBox } from './RadioBox';
 export { default as FacebookButton } from './FacebookButton';
 export { default as GoogleButton } from './GoogleButton';
 export { default as LoadingModal } from './LoadingModal';
+export { default as GrayHeader } from './GrayHeader';
+export { default as TotalStatus } from './TotalStatus';
+export { default as ProfileIconVertical } from './ProfileIconVertical';
