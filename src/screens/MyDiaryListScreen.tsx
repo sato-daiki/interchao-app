@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { GrayHeader } from '../components/atoms';
 import { diary } from '../utils/testdata';
 import { User, Diary } from '../types';
 import { DiaryListItem } from '../components/molecules';
+import firebase from '../configs/firebase';
 
 export interface Props {
   user: User;
@@ -20,24 +21,40 @@ const styles = StyleSheet.create({
   },
 });
 
-const diaries: Diary[] = [diary, diary];
-
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
 /**
  * 日記一覧
  */
 const MyDiaryListScreen: React.FC<Props & DispatchProps> = (): JSX.Element => {
-  const daiaryCount = diaries.length;
+  const [diaries, setDiaries] = useState();
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      const diariesRef = await firebase
+        .firestore()
+        .collection('diaries')
+        .get();
+      setDiaries(diariesRef.docs);
+    };
+    f();
+  });
+
+  // const daiaryCount = diaries.length;
 
   const onPressUser = useCallback(() => {}, []);
   const onPressItem = useCallback(() => {}, []);
 
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({
+      item,
+    }: {
+      item: firebase.firestore.QueryDocumentSnapshot<
+        firebase.firestore.DocumentData
+      >;
+    }): JSX.Element => {
       return (
         <DiaryListItem
-          item={item}
+          item={item.data()}
           onPressUser={onPressUser}
           onPressItem={onPressItem}
         />
@@ -52,9 +69,11 @@ const MyDiaryListScreen: React.FC<Props & DispatchProps> = (): JSX.Element => {
         data={diaries}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        ListHeaderComponent={
-          <GrayHeader title={`マイ日記一覧(${daiaryCount}件)`} />
-        }
+        ListHeaderComponent={(
+          <GrayHeader
+            title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`}
+          />
+        )}
       />
     </View>
   );

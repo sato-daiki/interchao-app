@@ -7,3 +7,4 @@ export { default as LoadingModal } from './LoadingModal';
 export { default as GrayHeader } from './GrayHeader';
 export { default as TotalStatus } from './TotalStatus';
 export { default as ProfileIconVertical } from './ProfileIconVertical';
+export { default as TextButtun } from './TextButtun';
