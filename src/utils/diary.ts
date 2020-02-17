@@ -6,6 +6,10 @@ interface Result {
   color: string;
 }
 
+export const getPostDay = (createdAt: firebase.firestore.Timestamp): string => {
+  const date = createdAt.toDate();
+  date.to;
+};
 // 日記一覧に出力するステータスの取得
 export const getDiaryStatus = (
   diaryStatus: DiaryStatus,

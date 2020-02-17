@@ -94,12 +94,6 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
     setIsSubmitLoading(true);
     clearErrorMessage();
     const firebaseUser = await emailSignUp(email, password, errorSet);
-    if (firebaseUser && firebaseUser.user) {
-      setUser({
-        id: firebaseUser.user.uid,
-        email: firebaseUser.user.email,
-      });
-    }
 
     navigation.navigate('SelectLanguage');
     setIsSubmitLoading(false);

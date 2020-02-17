@@ -7,9 +7,12 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MyDiaryListScreen from '../screens/MyDiaryListScreen';
 import YourDiaryListScreen from '../screens/YourDiaryListScreen';
 import { mainColor } from '../styles/Common';
+import PostDiaryScreen from '../screens/PostDiaryScreen';
 
 /* components */
-// import TabIcon from '../components/molecules/TabIcon';
+const ModalPostDiaryNavigator = createStackNavigator({
+  ModalPostDiary: { screen: PostDiaryScreen },
+});
 
 const MyDiaryTabStack = createStackNavigator(
   {
@@ -38,13 +41,15 @@ const MainTab = createBottomTabNavigator(
         ),
       },
     },
-    WriteDiary: {
-      screen: YourDiaryListScreen,
+    PostDiary: {
+      screen: PostDiaryScreen,
       navigationOptions: {
         tabBarLabel: '日記を書く',
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons name="pencil" size={25} color={tintColor} />
         ),
+        tabBarOnPress: ({ navigation }) =>
+          navigation.navigate('ModalPostDiary'),
       },
     },
     YourDiary: {
@@ -68,8 +73,15 @@ const MainTab = createBottomTabNavigator(
   }
 );
 
-export default createStackNavigator({
-  Home: {
-    screen: MainTab,
+export default createStackNavigator(
+  {
+    Home: {
+      screen: MainTab,
+    },
+    ModalPostDiary: { screen: ModalPostDiaryNavigator },
   },
-});
+  {
+    headerMode: 'none',
+    mode: 'modal',
+  }
+);
