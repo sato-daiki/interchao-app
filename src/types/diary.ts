@@ -9,13 +9,13 @@ export interface DisplayProfile {
   ref: string;
 }
 
-interface Commment {
+export interface Commment {
   startNum: number;
   sentence: string;
   detail: string;
 }
 
-interface Correction {
+export interface Correction {
   profile: DisplayProfile;
   commments: Commment[];
   summary: string;

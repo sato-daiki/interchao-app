@@ -5,9 +5,11 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 /* screens */
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MyDiaryListScreen from '../screens/MyDiaryListScreen';
-import YourDiaryListScreen from '../screens/YourDiaryListScreen';
+import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
+import TeachDiaryListScreen from '../screens/TeachDiaryListScreen';
+import DiaryDetailScreen from '../screens/DiaryDetailScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -19,10 +21,26 @@ const MyDiaryTabStack = createStackNavigator(
     MyDiaryList: {
       screen: MyDiaryListScreen,
     },
+    DraftDiaryList: {
+      screen: DraftDiaryListScreen,
+    },
+    DiaryDetail: {
+      screen: DiaryDetailScreen,
+    },
   },
   {
     initialRouteName: 'MyDiaryList',
-    headerLayoutPreset: 'center',
+  }
+);
+
+const TeachDiaryTabStack = createStackNavigator(
+  {
+    TeachDiaryList: {
+      screen: TeachDiaryListScreen,
+    },
+  },
+  {
+    initialRouteName: 'TeachDiaryList',
   }
 );
 
@@ -52,8 +70,8 @@ const MainTab = createBottomTabNavigator(
           navigation.navigate('ModalPostDiary'),
       },
     },
-    YourDiary: {
-      screen: YourDiaryListScreen,
+    TeachDiary: {
+      screen: TeachDiaryTabStack,
       navigationOptions: {
         tabBarLabel: 'みんなの日記',
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (

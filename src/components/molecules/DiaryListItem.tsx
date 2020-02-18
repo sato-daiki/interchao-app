@@ -9,15 +9,17 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { Diary } from '../../types';
 import { TotalStatus, ProfileIconVertical } from '../atoms';
 import { getDiaryStatus, getPostDay } from '../../utils/diary';
 import firebase from '../../configs/firebase';
 
+type ScreenName = 'my' | 'draft' | 'teach';
+
 interface Props {
+  screenName: ScreenName;
   item: firebase.firestore.DocumentData;
   onPressUser: () => void;
-  onPressItem: () => void;
+  onPressItem: (item: firebase.firestore.DocumentData) => void;
 }
 
 const styles = StyleSheet.create({
@@ -60,6 +62,7 @@ const styles = StyleSheet.create({
 });
 
 const DiaryListItem = ({
+  screenName,
   item,
   onPressUser,
   onPressItem,
@@ -76,11 +79,20 @@ const DiaryListItem = ({
 
   const { name, photoUrl } = profile;
 
-  const status = getDiaryStatus(diaryStatus, correctionStatus, isReview);
+  const status = getDiaryStatus(
+    screenName,
+    diaryStatus,
+    correctionStatus,
+    isReview
+  );
   const postDay = getPostDay(createdAt);
-  // const postDay = '2020-01-01';
+  // TODO 文字列数の調整
+
   return (
-    <TouchableOpacity style={styles.container} onPress={onPressItem}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={(): void => onPressItem(item)}
+    >
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
         {status ? (
