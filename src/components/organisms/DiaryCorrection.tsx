@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Space, SubmitButton, GrayHeader, CommentCard } from '../atoms';
+import { Space, GrayHeader, CommentCard } from '../atoms';
 import {
   primaryColor,
   fontSizeM,
@@ -10,12 +10,18 @@ import {
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Commment } from '../../types';
 import { getPostDay } from '../../utils/diary';
+import {
+  MyDiaryCorrectionFooter,
+  UserDiaryCorrectionFooter,
+} from '../molecules';
 
 interface Props {
+  isMyDiary: boolean;
   isReview: boolean;
   correction: Correction;
   onPressUser: () => void;
   onPressReview: () => void;
+  onPressCorrection: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -32,17 +38,6 @@ const styles = StyleSheet.create({
     color: subTextColor,
     fontSize: fontSizeM,
   },
-  promptText: {
-    paddingTop: 16,
-    textAlign: 'center',
-    color: primaryColor,
-    fontSize: fontSizeM,
-  },
-  finText: {
-    textAlign: 'center',
-    color: subTextColor,
-    fontSize: fontSizeM,
-  },
 });
 
 const keyExtractor = (item: Commment, index: number): string => String(index);
@@ -51,10 +46,12 @@ const keyExtractor = (item: Commment, index: number): string => String(index);
  * 概要：添削一覧
  */
 const DiaryCorrection: React.FC<Props> = ({
+  isMyDiary,
   isReview,
   correction,
   onPressUser,
   onPressReview,
+  onPressCorrection,
 }): JSX.Element => {
   const { profile, commments, summary, createdAt } = correction;
   const { name, photoUrl } = profile;
@@ -66,13 +63,16 @@ const DiaryCorrection: React.FC<Props> = ({
         <CommentCard title="総評" text={summary} borderColor={primaryColor} />
       ) : null}
       <Space size={32} />
-      {!isReview ? (
-        <>
-          <SubmitButton title="添削のレビューをする" onPress={onPressReview} />
-          <Text style={styles.promptText}>添削のお礼と評価をお願いします</Text>
-        </>
+      {isMyDiary ? (
+        <MyDiaryCorrectionFooter
+          isReview={isReview}
+          onPressReview={onPressReview}
+        />
       ) : (
-        <Text style={styles.finText}>この日記はレビュー済みです</Text>
+        <UserDiaryCorrectionFooter
+          isReview={isReview}
+          onPressCorrection={onPressCorrection}
+        />
       )}
     </>
   );

@@ -51,34 +51,16 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
     });
   }, [loading, ref]);
 
-  // useEffect(() => {
-  //   const f = async (): Promise<void> => {
-  //     const diariesRef = await firebase
-  //       .firestore()
-  //       .collection('diaries')
-  //       .get();
-  //     // TODO dataの取得方法考え直す
-  //     setDiaries(diariesRef.);
-  //   };
-  //   f();
-  // });
-
   const onPressUser = useCallback(() => {}, []);
   const onPressItem = useCallback(
     item => {
-      navigation.navigate('DiaryDetail', { item });
+      navigation.navigate('MyDiary', { item });
     },
     [navigation]
   );
 
   const renderItem = useCallback(
-    ({
-      item,
-    }: {
-      item: firebase.firestore.QueryDocumentSnapshot<
-        firebase.firestore.DocumentData
-      >;
-    }): JSX.Element => {
+    ({ item }: { item: Diary }): JSX.Element => {
       return (
         <DiaryListItem
           screenName="my"

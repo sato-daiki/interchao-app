@@ -9,7 +9,8 @@ import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
 import TeachDiaryListScreen from '../screens/TeachDiaryListScreen';
-import DiaryDetailScreen from '../screens/DiaryDetailScreen';
+import MyDiaryScreen from '../screens/MyDiaryScreen';
+import UserDiaryScreen from '../screens/UserDiaryScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -25,7 +26,7 @@ const MyDiaryTabStack = createStackNavigator(
       screen: DraftDiaryListScreen,
     },
     DiaryDetail: {
-      screen: DiaryDetailScreen,
+      screen: MyDiaryScreen,
     },
   },
   {
@@ -37,6 +38,9 @@ const TeachDiaryTabStack = createStackNavigator(
   {
     TeachDiaryList: {
       screen: TeachDiaryListScreen,
+    },
+    UserDiaryScreen: {
+      screen: UserDiaryScreen,
     },
   },
   {
