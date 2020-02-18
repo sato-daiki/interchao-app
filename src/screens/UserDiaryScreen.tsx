@@ -1,19 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useCallback } from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
-import { ScrollView } from 'react-native-gesture-handler';
-import { GrayHeader, TotalStatus } from '../components/atoms';
-import { User, Diary } from '../types';
-import { DiaryListItem, DiaryOriginal } from '../components/molecules';
-import firebase from '../configs/firebase';
+import { User } from '../types';
 import { getPostDay, getDiaryStatus } from '../utils/diary';
-import {
-  primaryColor,
-  fontSizeM,
-  subTextColor,
-  fontSizeS,
-} from '../styles/Common';
+
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
+import { DiaryOriginal } from '../components/molecules';
+import { ProfileIconHorizontal } from '../components/atoms';
 
 export interface Props {
   user: User;
@@ -29,17 +22,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingVertical: 8,
   },
+  profileIcon: {
+    paddingTop: 16,
+    paddingLeft: 16,
+  },
 });
 
 /**
  * 日記詳細
  */
-const DiaryDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const UserDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { item } = navigation.state.params!;
-  const [diary, setDiary] = useState(item);
-
-  console.log(diary);
-
   const {
     diaryStatus,
     correctionStatus,
@@ -47,21 +40,31 @@ const DiaryDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
     createdAt,
     title,
     text,
-    profile,
     correction,
-  } = diary;
-
-  // const { name, photoUrl } = profile;
+    profile,
+  } = item;
+  const { name, photoUrl } = profile;
 
   const onPressUser = useCallback(() => {}, []);
-  const onPressItem = useCallback(() => {}, []);
   const onPressReview = useCallback(() => {}, []);
 
   const postDay = getPostDay(createdAt);
-  const status = getDiaryStatus('my', diaryStatus, correctionStatus, isReview);
+  const status = getDiaryStatus(
+    'teach',
+    diaryStatus,
+    correctionStatus,
+    isReview
+  );
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.profileIcon}>
+        <ProfileIconHorizontal
+          name={name}
+          photoUrl={photoUrl}
+          onPress={onPressUser}
+        />
+      </View>
       <DiaryOriginal
         postDay={postDay}
         status={status}
@@ -80,4 +83,4 @@ const DiaryDetailScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 };
 
-export default DiaryDetailScreen;
+export default UserDiaryScreen;
