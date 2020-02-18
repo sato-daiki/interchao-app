@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { GrayHeader } from '../components/atoms';
-import { diary } from '../utils/testdata';
+import { NavigationActions } from 'react-navigation';
+import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import { firestore } from 'firebase';
+import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
 import { DiaryListItem } from '../components/molecules';
 import firebase from '../configs/firebase';
@@ -24,25 +26,50 @@ const styles = StyleSheet.create({
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
 /**
- * 日記一覧
+ * マイ日記一覧
  */
-const MyDiaryListScreen: React.FC<Props & DispatchProps> = (): JSX.Element => {
+const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [diaries, setDiaries] = useState();
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      const diariesRef = await firebase
-        .firestore()
-        .collection('diaries')
-        .get();
-      setDiaries(diariesRef.docs);
-    };
-    f();
-  });
+  const [loading, setLoading] = useState(true);
+  const ref = firestore().collection('diaries');
 
-  // const daiaryCount = diaries.length;
+  useEffect(() => {
+    return ref.onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        list.push({
+          id: doc.id,
+          ...data,
+        });
+      });
+
+      setDiaries(list);
+      if (loading) {
+        setLoading(false);
+      }
+    });
+  }, [loading, ref]);
+
+  // useEffect(() => {
+  //   const f = async (): Promise<void> => {
+  //     const diariesRef = await firebase
+  //       .firestore()
+  //       .collection('diaries')
+  //       .get();
+  //     // TODO dataの取得方法考え直す
+  //     setDiaries(diariesRef.);
+  //   };
+  //   f();
+  // });
 
   const onPressUser = useCallback(() => {}, []);
-  const onPressItem = useCallback(() => {}, []);
+  const onPressItem = useCallback(
+    item => {
+      navigation.navigate('DiaryDetail', { item });
+    },
+    [navigation]
+  );
 
   const renderItem = useCallback(
     ({
@@ -54,7 +81,8 @@ const MyDiaryListScreen: React.FC<Props & DispatchProps> = (): JSX.Element => {
     }): JSX.Element => {
       return (
         <DiaryListItem
-          item={item.data()}
+          screenName="my"
+          item={item}
           onPressUser={onPressUser}
           onPressItem={onPressItem}
         />
@@ -63,17 +91,18 @@ const MyDiaryListScreen: React.FC<Props & DispatchProps> = (): JSX.Element => {
     [onPressItem, onPressUser]
   );
 
+  const listHeaderComponent = (
+    <GrayHeader title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`} />
+  );
+
   return (
     <View style={styles.container}>
+      <LoadingModal visible={loading} />
       <FlatList
         data={diaries}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
-        ListHeaderComponent={(
-          <GrayHeader
-            title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`}
-          />
-        )}
+        ListHeaderComponent={listHeaderComponent}
       />
     </View>
   );
