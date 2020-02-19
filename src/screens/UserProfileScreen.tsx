@@ -23,7 +23,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 /**
  * ユーザページ
  */
-const UserPageScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [diaries, setDiaries] = useState([diary, diary]);
   const onPressUser = useCallback(() => {}, []);
   const onPressEdit = useCallback(() => {}, []);
@@ -76,4 +76,4 @@ const UserPageScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 };
 
-export default UserPageScreen;
+export default UserProfileScreen;
