@@ -3,7 +3,7 @@ import { Profile, User, Diary } from '../types';
 export const profile: Profile = {
   name: 'daiki sato',
   userName: 'daiki12345',
-  photoUrl: 'http:/aaaa',
+  photoUrl: 'https://flickrtheblog.files.wordpress.com/2019/05/panda402x.png',
   pro: true,
   learnLanguage: 'en',
   nativeLanguage: 'ja',

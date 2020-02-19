@@ -20,8 +20,8 @@ interface Props {
   isReview: boolean;
   correction: Correction;
   onPressUser: () => void;
-  onPressReview: () => void;
-  onPressCorrection: () => void;
+  onPressReview?: () => void;
+  onPressCorrection?: () => void;
 }
 
 const styles = StyleSheet.create({

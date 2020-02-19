@@ -3,3 +3,5 @@ export { default as DiaryListItem } from './DiaryListItem';
 export { default as DiaryOriginal } from './DiaryOriginal';
 export { default as MyDiaryCorrectionFooter } from './MyDiaryCorrectionFooter';
 export { default as UserDiaryCorrectionFooter } from './UserDiaryCorrectionFooter';
+export { default as ProfileHeader } from './ProfileHeader';
+export { default as EmptyDiary } from './EmptyDiary';
