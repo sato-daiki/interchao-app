@@ -12,8 +12,10 @@ import TeachDiaryListScreen from '../screens/TeachDiaryListScreen';
 import MyDiaryScreen from '../screens/MyDiaryScreen';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
 import MyPageScreen from '../screens/MyPageScreen';
-import UserPageScreen from '../screens/UserPageScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 import MyProfileEditScreen from '../screens/MyProfileEditScreen';
+import SettingScreen from '../screens/SettingScreen';
+import NoticeScreen from '../screens/NoticeScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -37,9 +39,15 @@ const MyDiaryTabStack = createStackNavigator(
     MyProfileEdit: {
       screen: MyProfileEditScreen,
     },
+    Setting: {
+      screen: SettingScreen,
+    },
+    Notice: {
+      screen: NoticeScreen,
+    },
   },
   {
-    initialRouteName: 'MyProfileEdit',
+    initialRouteName: 'Notice',
   }
 );
 
@@ -51,12 +59,12 @@ const TeachDiaryTabStack = createStackNavigator(
     UserDiaryScreen: {
       screen: UserDiaryScreen,
     },
-    UserPage: {
-      screen: UserPageScreen,
+    UserProfile: {
+      screen: UserProfileScreen,
     },
   },
   {
-    initialRouteName: 'UserPage',
+    initialRouteName: 'UserProfile',
   }
 );
 
