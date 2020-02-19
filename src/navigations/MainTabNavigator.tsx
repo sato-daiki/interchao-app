@@ -13,6 +13,7 @@ import MyDiaryScreen from '../screens/MyDiaryScreen';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
 import MyPageScreen from '../screens/MyPageScreen';
 import UserPageScreen from '../screens/UserPageScreen';
+import MyProfileEditScreen from '../screens/MyProfileEditScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -33,9 +34,12 @@ const MyDiaryTabStack = createStackNavigator(
     MyPage: {
       screen: MyPageScreen,
     },
+    MyProfileEdit: {
+      screen: MyProfileEditScreen,
+    },
   },
   {
-    initialRouteName: 'MyDiaryList',
+    initialRouteName: 'MyProfileEdit',
   }
 );
 
