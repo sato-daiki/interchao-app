@@ -29,7 +29,6 @@ const MyPageScreen: NavigationStackScreenComponent = ({ navigation }) => {
         introduction={introduction}
         onPressUser={onPressUser}
         onPressButton={onPressEdit}
-        buttonTitle="編集する"
       />
     </View>
   );

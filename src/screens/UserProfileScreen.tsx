@@ -63,7 +63,6 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         introduction={introduction}
         onPressUser={onPressUser}
         onPressButton={onPressEdit}
-        buttonTitle="お気に入りに追加"
       />
       <FlatList
         data={diaries}

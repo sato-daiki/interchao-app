@@ -16,6 +16,7 @@ import UserProfileScreen from '../screens/UserProfileScreen';
 import MyProfileEditScreen from '../screens/MyProfileEditScreen';
 import SettingScreen from '../screens/SettingScreen';
 import NoticeScreen from '../screens/NoticeScreen';
+import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -45,9 +46,12 @@ const MyDiaryTabStack = createStackNavigator(
     Notice: {
       screen: NoticeScreen,
     },
+    FavoriteUserList: {
+      screen: FavoriteUserListScreen,
+    },
   },
   {
-    initialRouteName: 'Notice',
+    initialRouteName: 'FavoriteUserList',
   }
 );
 
