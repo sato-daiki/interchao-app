@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SmallButton: React.FC<Props> = ({
+const SmallButtonWhite: React.FC<Props> = ({
   isLoading = false,
   disable = false,
   title,
@@ -44,7 +44,7 @@ const SmallButton: React.FC<Props> = ({
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator size="small" />
       ) : (
         <Text style={styles.title}>{title}</Text>
       )}
@@ -52,4 +52,4 @@ const SmallButton: React.FC<Props> = ({
   );
 };
 
-export default SmallButton;
+export default SmallButtonWhite;
