@@ -86,6 +86,7 @@ const DiaryListItem = ({
     isReview
   );
   const postDay = getPostDay(createdAt);
+
   // TODO 文字列数の調整
 
   return (

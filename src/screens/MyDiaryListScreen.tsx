@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { firestore } from 'firebase';
@@ -51,7 +51,10 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
     });
   }, [loading, ref]);
 
-  const onPressUser = useCallback(() => {}, []);
+  const onPressUser = useCallback(() => {
+    navigation.navigate('MyPage');
+  }, [navigation]);
+
   const onPressItem = useCallback(
     item => {
       navigation.navigate('MyDiary', { item });

@@ -2,6 +2,7 @@ export const primaryColor = '#2a2a2a';
 export const subTextColor = '#7F7F7F';
 export const borderColor = '#979797';
 export const borderLightColor = '#CCCCCC';
+export const imageLightColor = '#DDDDDD';
 export const mainColor = '#2D9CDB';
 export const offWhite = '#f6f6f6';
 export const linkBlue = '#2469BB';

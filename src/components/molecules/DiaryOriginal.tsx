@@ -1,17 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   fontSizeS,
   fontSizeM,
   primaryColor,
-  borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { TotalStatus, ProfileIconVertical } from '../atoms';
-import { getDiaryStatus, getPostDay } from '../../utils/diary';
-import firebase from '../../configs/firebase';
+import { TotalStatus } from '../atoms';
 
 interface Status {
   text: string;

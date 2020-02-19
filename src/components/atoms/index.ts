@@ -10,3 +10,4 @@ export { default as ProfileIconVertical } from './ProfileIconVertical';
 export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';
 export { default as TextButtun } from './TextButtun';
 export { default as CommentCard } from './CommentCard';
+export { default as SmallButton } from './SmallButton';
