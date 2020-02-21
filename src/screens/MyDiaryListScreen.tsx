@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Text } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { firestore } from 'firebase';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
 import { DiaryListItem } from '../components/molecules';
-import firebase from '../configs/firebase';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 
 export interface Props {
   user: User;
@@ -32,6 +33,15 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [diaries, setDiaries] = useState();
   const [loading, setLoading] = useState(true);
   const ref = firestore().collection('diaries');
+
+  const [isMenu, setIsMenu] = useState(false);
+  const openPanel = useCallback(() => {
+    setIsMenu(true);
+  }, []);
+
+  const closePanel = useCallback(() => {
+    setIsMenu(false);
+  }, []);
 
   useEffect(() => {
     return ref.onSnapshot(querySnapshot => {
@@ -62,6 +72,8 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
     [navigation]
   );
 
+  const onPressMenu = useCallback(() => {}, []);
+
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
       return (
@@ -77,11 +89,20 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 
   const listHeaderComponent = (
-    <GrayHeader title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`} />
+    <>
+      <MaterialCommunityIcons name="menu" size={18} onPress={onPressMenu} />
+      <GrayHeader title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`} />
+    </>
   );
 
   return (
     <View style={styles.container}>
+      <MyDiaryListMenu
+        navigation={navigation}
+        isMenu={isMenu}
+        closePanel={closePanel}
+      />
+
       <LoadingModal visible={loading} />
       <FlatList
         data={diaries}

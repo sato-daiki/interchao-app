@@ -55,7 +55,8 @@ const DiaryCorrection: React.FC<Props> = ({
 }): JSX.Element => {
   const { profile, commments, summary, createdAt } = correction;
   const { name, photoUrl } = profile;
-  const postDay = getPostDay(createdAt);
+  // const postDay = getPostDay(createdAt);
+  const postDay = '2019-01-01';
 
   const listFooterComponent = (
     <>

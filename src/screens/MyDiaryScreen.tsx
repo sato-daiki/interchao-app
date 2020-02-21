@@ -1,11 +1,13 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { User } from '../types';
 import { getPostDay, getDiaryStatus } from '../utils/diary';
 
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
 import { DiaryOriginal } from '../components/molecules';
+import ModalReview from '../components/organisms/ModalReview';
+import { diary, profile } from '../utils/testdata';
 
 export interface Props {
   user: User;
@@ -27,7 +29,9 @@ const styles = StyleSheet.create({
  * 日記詳細
  */
 const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
-  const { item } = navigation.state.params!;
+  const [visible, setVisible] = useState(false);
+  // const { item } = navigation.state.params!;
+  const item = diary;
   const {
     diaryStatus,
     correctionStatus,
@@ -38,30 +42,44 @@ const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
     correction,
   } = item;
 
-  const onPressUser = useCallback(() => {}, []);
-  const onPressReview = useCallback(() => {}, []);
+  const { name, photoUrl } = profile;
 
-  const postDay = getPostDay(createdAt);
+  const onPressUser = useCallback(() => {}, []);
+  const onPressReview = useCallback(() => {
+    setVisible(true);
+  }, []);
+
+  // const postDay = getPostDay(createdAt);
+  const postDay = '2018-01-01';
+
   const status = getDiaryStatus('my', diaryStatus, correctionStatus, isReview);
 
   return (
-    <ScrollView style={styles.container}>
-      <DiaryOriginal
-        postDay={postDay}
-        status={status}
-        title={title}
-        text={text}
+    <View style={styles.container}>
+      <ModalReview
+        name={name}
+        photoUrl={photoUrl}
+        visible={visible}
+        onPressClose={(): void => setVisible(!visible)}
       />
-      {correction ? (
-        <DiaryCorrection
-          isMyDiary
-          isReview={isReview}
-          correction={correction}
-          onPressUser={onPressUser}
-          onPressReview={onPressReview}
+      <ScrollView style={styles.container}>
+        <DiaryOriginal
+          postDay={postDay}
+          status={status}
+          title={title}
+          text={text}
         />
-      ) : null}
-    </ScrollView>
+        {correction ? (
+          <DiaryCorrection
+            isMyDiary
+            isReview={isReview}
+            correction={correction}
+            onPressUser={onPressUser}
+            onPressReview={onPressReview}
+          />
+        ) : null}
+      </ScrollView>
+    </View>
   );
 };
 
