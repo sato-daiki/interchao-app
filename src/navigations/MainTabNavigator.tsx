@@ -31,7 +31,7 @@ const MyDiaryTabStack = createStackNavigator(
     DraftDiaryList: {
       screen: DraftDiaryListScreen,
     },
-    DiaryDetail: {
+    MyDiary: {
       screen: MyDiaryScreen,
     },
     MyPage: {
@@ -51,7 +51,7 @@ const MyDiaryTabStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'FavoriteUserList',
+    initialRouteName: 'MyDiary',
   }
 );
 

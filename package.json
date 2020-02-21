@@ -48,6 +48,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.5.3",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "0.6.0",
@@ -61,7 +62,8 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rn-swipeable-panel": "^1.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

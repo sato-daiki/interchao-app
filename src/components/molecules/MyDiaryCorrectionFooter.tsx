@@ -28,14 +28,14 @@ const MyDiaryCorrectionFooter: React.FC<Props> = ({
   onPressReview,
 }): JSX.Element => {
   if (isReview) {
-    return (
-      <>
-        <SubmitButton title="添削のレビューをする" onPress={onPressReview} />
-        <Text style={styles.promptText}>添削のお礼と評価をお願いします</Text>
-      </>
-    );
+    return <Text style={styles.finText}>この日記はレビュー済みです</Text>;
   }
-  return <Text style={styles.finText}>この日記はレビュー済みです</Text>;
+  return (
+    <>
+      <SubmitButton title="添削のレビューをする" onPress={onPressReview} />
+      <Text style={styles.promptText}>添削のお礼と評価をお願いします</Text>
+    </>
+  );
 };
 
 export default MyDiaryCorrectionFooter;
