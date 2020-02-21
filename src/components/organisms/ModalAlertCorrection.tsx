@@ -1,13 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
   borderLightColor,
   fontSizeM,
+  fontSizeS,
+  subTextColor,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { SubmitButton, WhiteButton, Space } from '../atoms';
+import { SubmitButton, WhiteButton, Space, Checkbox } from '../atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +34,15 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkboxText: {
+    paddingLeft: 8,
+    fontSize: fontSizeS,
+    color: subTextColor,
+  },
 });
 
 interface Props {
@@ -39,28 +50,37 @@ interface Props {
   onPressClose: () => void;
 }
 
-const ModalLackPoint: React.FC<Props> = ({
+const ModalAlertCorrection: React.FC<Props> = ({
   visible,
   onPressClose,
 }: Props): JSX.Element | null => {
   const onPressSubmit = useCallback(() => {}, []);
+  const [checked, setChecked] = useState(false);
 
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>ポイント不足</Text>
+        <Text style={styles.title}>確認</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
-          ポイントが足りません。日記を書くに100ポイントが必要です。
+          添削は30分以内で行ってください。30分をすぎると添削は破棄されます。
           {'\n'}
           {'\n'}
-          日本語の日記を添削すると100ポイント、添削結果をレビューすると10ポイントが貰えます。
-          {'\n'}
-          {'\n'}
-          また、ポイントとは購入することもできます。
+          本サービスは、１日記につき、１添削で行っています。添削を始めると、ロックがかかり他の人は添削できなくなります。
         </Text>
         <Space size={32} />
-        <SubmitButton title="ポイントを購入する" onPress={onPressSubmit} />
+        <SubmitButton title="投稿する" onPress={onPressSubmit} />
+        <Space size={8} />
+        <View style={styles.row}>
+          <Checkbox
+            checked={checked}
+            color={subTextColor}
+            onPress={(): void => setChecked(!checked)}
+          />
+          <Text style={styles.checkboxText}>
+            以後、このメッセージを表示しない
+          </Text>
+        </View>
         <Space size={16} />
         <WhiteButton title="キャンセル" onPress={onPressClose} />
       </View>
@@ -68,4 +88,4 @@ const ModalLackPoint: React.FC<Props> = ({
   );
 };
 
-export default ModalLackPoint;
+export default ModalAlertCorrection;

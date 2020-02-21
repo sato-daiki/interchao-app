@@ -11,7 +11,7 @@ import {
   offWhite,
 } from '../styles/Common';
 import { TextButtun } from '../components/atoms';
-import { ModalLackPoint } from '../components/organisms';
+import { ModalAlertCorrection } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -97,7 +97,7 @@ const PostDiaryScreen: React.FC<Props & DispatchProps> = ({
 
   return (
     <View style={styles.container}>
-      <ModalLackPoint
+      <ModalAlertCorrection
         visible
         onPressClose={(): void => setIsModalAlert(false)}
       />
