@@ -11,6 +11,7 @@ import {
   offWhite,
 } from '../styles/Common';
 import { TextButtun } from '../components/atoms';
+import { ModalLackPoint } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -66,6 +67,7 @@ const PostDiaryScreen: React.FC<Props & DispatchProps> = ({
 }): JSX.Element => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [isModalAlert, setIsModalAlert] = useState(false);
 
   const onPressPreview = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -95,6 +97,10 @@ const PostDiaryScreen: React.FC<Props & DispatchProps> = ({
 
   return (
     <View style={styles.container}>
+      <ModalLackPoint
+        visible
+        onPressClose={(): void => setIsModalAlert(false)}
+      />
       <TextInput
         style={styles.titleInput}
         value={title}

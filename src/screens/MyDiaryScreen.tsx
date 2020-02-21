@@ -6,7 +6,8 @@ import { getPostDay, getDiaryStatus } from '../utils/diary';
 
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
 import { DiaryOriginal } from '../components/molecules';
-import ModalReview from '../components/organisms/ModalReview';
+import { ModalReview } from '../components/organisms';
+
 import { diary, profile } from '../utils/testdata';
 
 export interface Props {
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
  * 日記詳細
  */
 const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
-  const [visible, setVisible] = useState(false);
+  const [isModalReview, setIsModalReview] = useState(false);
   // const { item } = navigation.state.params!;
   const item = diary;
   const {
@@ -46,7 +47,7 @@ const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const onPressUser = useCallback(() => {}, []);
   const onPressReview = useCallback(() => {
-    setVisible(true);
+    setIsModalReview(true);
   }, []);
 
   // const postDay = getPostDay(createdAt);
@@ -59,8 +60,8 @@ const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <ModalReview
         name={name}
         photoUrl={photoUrl}
-        visible={visible}
-        onPressClose={(): void => setVisible(!visible)}
+        visible={isModalReview}
+        onPressClose={(): void => setIsModalReview(false)}
       />
       <ScrollView style={styles.container}>
         <DiaryOriginal

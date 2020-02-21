@@ -7,6 +7,7 @@ import {
   fontSizeL,
   borderLightColor,
   offWhite,
+  fontSizeM,
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
@@ -37,6 +38,11 @@ const styles = StyleSheet.create({
     height: 170,
     backgroundColor: offWhite,
   },
+  text: {
+    textAlign: 'center',
+    fontSize: fontSizeM,
+    color: primaryColor,
+  },
 });
 
 interface Props {
@@ -52,42 +58,59 @@ const ModalReview: React.FC<Props> = ({
   photoUrl,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const onPressUser = useCallback(() => {}, []);
-  const onPressFavorite = useCallback(() => {}, []);
-  const onPressSubmit = useCallback(() => {}, []);
   const [rating, setRating] = useState(3);
   const [review, setReview] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const onPressUser = useCallback(() => {}, []);
+  const onPressFavorite = useCallback(() => {}, []);
+
+  const onPressSubmit = useCallback(() => {
+    setIsSuccess(true);
+  }, []);
 
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
         <Text style={styles.title}>添削のお礼とレビュー</Text>
         <View style={styles.line} />
-        <UserListItem
-          name={name}
-          photoUrl={photoUrl}
-          onPressUser={onPressUser}
-          onPressButton={onPressFavorite}
-        />
-        <Space size={24} />
-        <Rating imageSize={40} startingValue={rating} />
-        <Space size={24} />
-        <TextInput
-          value={review}
-          onChangeText={(text: string): void => setReview(text)}
-          maxLength={200}
-          placeholder="任意"
-          multiline
-          numberOfLines={3}
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          style={styles.review}
-        />
-        <Space size={32} />
-        <SubmitButton title="送信する" onPress={onPressSubmit} />
-        <Space size={16} />
-        <WhiteButton title="キャンセル" onPress={onPressClose} />
+        {!isSuccess ? (
+          <>
+            <UserListItem
+              name={name}
+              photoUrl={photoUrl}
+              onPressUser={onPressUser}
+              onPressButton={onPressFavorite}
+            />
+            <Space size={24} />
+            <Rating imageSize={40} startingValue={rating} />
+            <Space size={24} />
+            <TextInput
+              value={review}
+              onChangeText={(text: string): void => setReview(text)}
+              maxLength={200}
+              placeholder="任意"
+              multiline
+              numberOfLines={3}
+              autoCapitalize="none"
+              autoCorrect={false}
+              underlineColorAndroid="transparent"
+              style={styles.review}
+            />
+            <Space size={32} />
+            <SubmitButton title="送信する" onPress={onPressSubmit} />
+            <Space size={16} />
+            <WhiteButton title="キャンセル" onPress={onPressClose} />
+          </>
+        ) : (
+          <>
+            <Text style={styles.text}>
+              レビューありがとうがとうございます。10ポイント獲得。
+            </Text>
+            <Space size={32} />
+            <WhiteButton title="閉じる" onPress={onPressClose} />
+          </>
+        )}
       </View>
     </Modal>
   );
