@@ -11,7 +11,7 @@ import {
   offWhite,
 } from '../styles/Common';
 import { TextButtun } from '../components/atoms';
-import { ModalAlertCorrection } from '../components/organisms';
+import { ModalUnBlock } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -97,10 +97,7 @@ const PostDiaryScreen: React.FC<Props & DispatchProps> = ({
 
   return (
     <View style={styles.container}>
-      <ModalAlertCorrection
-        visible
-        onPressClose={(): void => setIsModalAlert(false)}
-      />
+      <ModalUnBlock visible onPressClose={(): void => setIsModalAlert(false)} />
       <TextInput
         style={styles.titleInput}
         value={title}

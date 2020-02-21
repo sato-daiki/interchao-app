@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import { Rating } from 'react-native-elements';
-import { TextInput } from 'react-native-gesture-handler';
 import {
   primaryColor,
   fontSizeL,
@@ -22,7 +21,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontWeight: 'bold',
     marginVertical: 6,
-    paddingBottom: 24,
+    paddingBottom: 16,
     textAlign: 'center',
   },
   line: {
