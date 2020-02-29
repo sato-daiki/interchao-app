@@ -1,5 +1,4 @@
 export { default as CheckTextInput } from './CheckTextInput';
-export { default as DiaryListItem } from './DiaryListItem';
 export { default as DiaryOriginal } from './DiaryOriginal';
 export { default as MyDiaryCorrectionFooter } from './MyDiaryCorrectionFooter';
 export { default as UserDiaryCorrectionFooter } from './UserDiaryCorrectionFooter';
@@ -10,3 +9,4 @@ export { default as CheckItem } from './CheckItem';
 export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
 export { default as UserListItem } from './UserListItem';
 export { default as OnOffSmallButton } from './OnOffSmallButton';
+export { default as TotalStatus } from './TotalStatus';

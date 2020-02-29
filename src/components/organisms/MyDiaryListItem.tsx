@@ -9,11 +9,11 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { TotalStatus, ProfileIconVertical } from '../atoms';
-import { getDiaryStatus, getPostDay } from '../../utils/diary';
+import { ProfileIconVertical } from '../atoms';
+import { getPostDay } from '../../utils/diary';
 import firebase from '../../configs/firebase';
-
-type ScreenName = 'my' | 'draft' | 'teach';
+import { ScreenName } from '../../types';
+import TotalStatus from '../molecules/TotalStatus';
 
 interface Props {
   screenName: ScreenName;
@@ -61,30 +61,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiaryListItem = ({
+const MyDiaryListItem = ({
   screenName,
   item,
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const {
-    diaryStatus,
-    correctionStatus,
-    isReview,
-    createdAt,
-    title,
-    text,
-    profile,
-  } = item;
-
+  const { createdAt, title, text, profile } = item;
   const { name, photoUrl } = profile;
-
-  const status = getDiaryStatus(
-    screenName,
-    diaryStatus,
-    correctionStatus,
-    isReview
-  );
   const postDay = getPostDay(createdAt);
 
   // TODO 文字列数の調整
@@ -96,9 +80,7 @@ const DiaryListItem = ({
     >
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        {status ? (
-          <TotalStatus color={status.color} text={status.text} />
-        ) : null}
+        <TotalStatus screenName={screenName} diary={item} />
       </View>
       <View style={styles.main}>
         <View style={styles.content}>
@@ -117,4 +99,4 @@ const DiaryListItem = ({
   );
 };
 
-export default DiaryListItem;
+export default MyDiaryListItem;

@@ -24,6 +24,7 @@ export interface Correction {
 }
 
 export interface Diary {
+  id: string;
   profile: DisplayProfile;
   correction: Correction;
   proCorrection: Correction;
@@ -32,6 +33,10 @@ export interface Diary {
   diaryStatus: DiaryStatus;
   correctionStatus: CorrectionStatus;
   isReview: boolean;
+  isPro: boolean;
+  diaryStatusPro: DiaryStatus;
+  correctionStatusPro: CorrectionStatus;
+  isReviewPro: boolean;
   createdAt: firestore.Timestamp;
   updatedAt: firestore.Timestamp;
 }

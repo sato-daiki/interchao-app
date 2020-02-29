@@ -1,7 +1,6 @@
 import React from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { CardStyleInterpolators } from 'react-navigation-stack';
 import {
   fontSizeM,
   primaryColor,
@@ -10,6 +9,7 @@ import {
 } from '../../styles/Common';
 
 interface Props {
+  isBorrderTop?: boolean;
   title: string;
   onPress: () => void;
 }
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 6,
     borderBottomColor: borderLightColor,
+    borderTopColor: borderLightColor,
   },
   title: {
     color: primaryColor,
@@ -32,9 +33,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const OptionItem = ({ title, onPress }: Props): JSX.Element => {
+const OptionItem = ({
+  isBorrderTop = false,
+  title,
+  onPress,
+}: Props): JSX.Element => {
+  const borderTopWidth = isBorrderTop ? 0.5 : undefined;
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.container, { borderTopWidth }]}
+      onPress={onPress}
+    >
       <Text style={styles.title}>{title}</Text>
       <MaterialCommunityIcons
         size={28}

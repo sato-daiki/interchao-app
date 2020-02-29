@@ -6,7 +6,7 @@ import {
   primaryColor,
   subTextColor,
 } from '../../styles/Common';
-import { TotalStatus } from '../atoms';
+import TotalStatus from './TotalStatus';
 
 interface Status {
   text: string;
@@ -57,9 +57,9 @@ const DiaryOriginal = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        {status ? (
+        {/* {status ? (
           <TotalStatus color={status.color} text={status.text} />
-        ) : null}
+        ) : null} */}
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.text}>{text}</Text>
