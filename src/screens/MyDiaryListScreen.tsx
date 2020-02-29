@@ -5,7 +5,7 @@ import { firestore } from 'firebase';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
-import { DiaryListItem } from '../components/molecules';
+import MyDiaryListItem from '../components/organisms/MyDiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 
@@ -35,9 +35,6 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const ref = firestore().collection('diaries');
 
   const [isMenu, setIsMenu] = useState(false);
-  const openPanel = useCallback(() => {
-    setIsMenu(true);
-  }, []);
 
   const closePanel = useCallback(() => {
     setIsMenu(false);
@@ -45,7 +42,7 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   useEffect(() => {
     return ref.onSnapshot(querySnapshot => {
-      const list = [];
+      const list: Diary[] = [];
       querySnapshot.forEach(doc => {
         const data = doc.data();
         list.push({
@@ -54,7 +51,7 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
         });
       });
 
-      setDiaries(list);
+      // setDiaries(list);
       if (loading) {
         setLoading(false);
       }
@@ -77,7 +74,7 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
       return (
-        <DiaryListItem
+        <MyDiaryListItem
           screenName="my"
           item={item}
           onPressUser={onPressUser}

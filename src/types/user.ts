@@ -3,7 +3,7 @@ import { firestore } from 'firebase';
 export interface User {
   paid: boolean;
   confirmDiary: boolean;
-  confirmReview: false;
+  confirmReview: boolean;
   email: string | null;
   points: number;
   createdAt: firestore.FieldValue;

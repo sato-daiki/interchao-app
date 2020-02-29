@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import { fontSizeS } from '../../styles/Common';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Avatar as ElAvatar } from 'react-native-elements';
+import { MaterialIcons } from '@expo/vector-icons';
+import { imageLightColor, subTextColor, fontSizeS } from '../../styles/Common';
 
 interface Props {
   color: string;
@@ -23,11 +25,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const TotalStatus: React.FC<Props> = ({ color, text }: Props): JSX.Element => (
+const DiaryStatus = ({ color, text }: Props): JSX.Element => (
   <View style={styles.container}>
     <View style={[styles.circle, { backgroundColor: color }]} />
     <Text style={[styles.text, { color }]}>{text}</Text>
   </View>
 );
 
-export default TotalStatus;
+export default DiaryStatus;

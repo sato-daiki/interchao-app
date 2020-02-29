@@ -1,15 +1,13 @@
 import moment from 'moment';
 import 'moment/locale/ja';
 
-import { DiaryStatus, CorrectionStatus } from '../types';
+import { DiaryStatus, CorrectionStatus, ScreenName } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 
 interface Status {
   text: string;
   color: string;
 }
-
-type ScreenName = 'my' | 'draft' | 'teach';
 
 export const getPostDay = (createdAt: firebase.firestore.Timestamp): string => {
   if (!createdAt) {

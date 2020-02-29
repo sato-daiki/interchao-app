@@ -16,6 +16,7 @@ import UserProfileScreen from '../screens/UserProfileScreen';
 import MyProfileEditScreen from '../screens/MyProfileEditScreen';
 import SettingScreen from '../screens/SettingScreen';
 import NoticeScreen from '../screens/NoticeScreen';
+import PremiumScreen from '../screens/PremiumScreen';
 import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
 
 /* components */
@@ -46,12 +47,15 @@ const MyDiaryTabStack = createStackNavigator(
     Notice: {
       screen: NoticeScreen,
     },
+    Premium: {
+      screen: PremiumScreen,
+    },
     FavoriteUserList: {
       screen: FavoriteUserListScreen,
     },
   },
   {
-    initialRouteName: 'MyDiary',
+    initialRouteName: 'MyDiaryList',
   }
 );
 

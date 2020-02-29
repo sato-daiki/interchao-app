@@ -42,6 +42,10 @@ const styles = StyleSheet.create({
  * 設定画面ページ
  */
 const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  const onPressPremium = useCallback(() => {
+    navigation.navigate('Premium');
+  }, [navigation]);
+
   const onPressNotice = useCallback(() => {
     navigation.navigate('Notice');
   }, [navigation]);
@@ -63,6 +67,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>基本設定</Text>
+      <OptionItem title="プレミアムサービス" onPress={onPressPremium} />
       <OptionItem title="通知" onPress={onPressNotice} />
       <OptionItem
         title="お気に入りユーザ一覧"

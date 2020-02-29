@@ -22,6 +22,10 @@ const MyDiaryListMenu = ({
     navigation.navigate('ModalPostDiary');
   }, [navigation]);
 
+  const onPressModalPremium = useCallback(() => {
+    navigation.navigate('ModalPremium');
+  }, [navigation]);
+
   return (
     <SwipeablePanel
       fullWidth
@@ -31,6 +35,7 @@ const MyDiaryListMenu = ({
       onPressCloseButton={closePanel}
     >
       <OptionItem title="下書き一覧" onPress={onPressDraftList} />
+      <OptionItem title="プレミアム会員" onPress={onPressModalPremium} />
     </SwipeablePanel>
   );
 };
