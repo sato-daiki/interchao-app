@@ -28,14 +28,13 @@ export interface Diary {
   profile: DisplayProfile;
   correction: Correction;
   proCorrection: Correction;
+  premium: boolean;
   title: string;
   text: string;
   diaryStatus: DiaryStatus;
   correctionStatus: CorrectionStatus;
-  isReview: boolean;
-  isPro: boolean;
-  diaryStatusPro: DiaryStatus;
   correctionStatusPro: CorrectionStatus;
+  isReview: boolean;
   isReviewPro: boolean;
   createdAt: firestore.Timestamp;
   updatedAt: firestore.Timestamp;

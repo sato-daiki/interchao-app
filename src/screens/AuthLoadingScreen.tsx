@@ -1,29 +1,42 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import firebase from 'firebase';
+import firebase, { User } from 'firebase';
+import { getUser } from '../libs/user';
+import { getProfile } from '../libs/profile';
 
 /**
  * 概要：初期ローデンング
  */
 const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
+  setUser,
+  setProfile,
   navigation,
 }): JSX.Element => {
-  const goToNavigation = user => {
-    // if (user) {
-    //   navigation.navigate('MyPage');
-    // // } else {
-    navigation.navigate('Home');
-    // }
-  };
-
-  const checkIfLoggedIn = () => {
-    firebase.auth().onAuthStateChanged(goToNavigation);
+  const initNavigation = async (
+    authUser: firebase.User | null
+  ): Promise<void> => {
+    if (authUser) {
+      const user = await getUser(authUser.uid);
+      const profile = await getProfile(authUser.uid);
+      if (user && profile) {
+        // 初期登録が最後までできているユーザ
+        setUser({
+          ...user,
+        });
+        setProfile({
+          ...profile,
+        });
+        navigation.navigate('MyDiary');
+      }
+    } else {
+      navigation.navigate('AuthNavigator');
+    }
   };
 
   useEffect(() => {
-    checkIfLoggedIn();
-  });
+    firebase.auth().onAuthStateChanged(initNavigation);
+  }, []);
 
   return <View />;
 };

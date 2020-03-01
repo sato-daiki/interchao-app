@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Text } from 'react-native';
-import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import {
+  NavigationStackScreenComponent,
+  NavigationStackOptions,
+} from 'react-navigation-stack';
 import { firestore } from 'firebase';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { GrayHeader, LoadingModal } from '../components/atoms';
@@ -40,23 +43,23 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
     setIsMenu(false);
   }, []);
 
-  useEffect(() => {
-    return ref.onSnapshot(querySnapshot => {
-      const list: Diary[] = [];
-      querySnapshot.forEach(doc => {
-        const data = doc.data();
-        list.push({
-          id: doc.id,
-          ...data,
-        });
-      });
+  // useEffect(() => {
+  //   return ref.onSnapshot(querySnapshot => {
+  //     const list: Diary[] = [];
+  //     querySnapshot.forEach(doc => {
+  //       const data = doc.data();
+  //       list.push({
+  //         id: doc.id,
+  //         ...data,
+  //       });
+  //     });
 
-      // setDiaries(list);
-      if (loading) {
-        setLoading(false);
-      }
-    });
-  }, [loading, ref]);
+  //     // setDiaries(list);
+  //     if (loading) {
+  //       setLoading(false);
+  //     }
+  //   });
+  // }, [loading, ref]);
 
   const onPressUser = useCallback(() => {
     navigation.navigate('MyPage');

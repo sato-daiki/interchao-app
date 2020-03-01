@@ -13,7 +13,7 @@ export const profile: Profile = {
 };
 
 export const user: User = {
-  paid: false,
+  premium: false,
   confirmDiary: false,
   confirmReview: false,
   email: 'daiki0520daiki0520@yahoo.co.jp',

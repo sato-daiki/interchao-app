@@ -3,4 +3,5 @@ module.exports = {
   FLogo: require('./fLogo.png'),
   Email: require('./email.png'),
   Loading: require('./loading.gif'),
+  Zebbu: require('./zebbu.png'),
 };

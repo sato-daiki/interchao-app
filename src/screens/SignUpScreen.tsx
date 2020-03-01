@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { emailSignUp, goolgeSignUp, facebookSignUp } from '../utils/auth';
+import { emailSignUp, goolgeSignUp, facebookSignUp } from '../libs/auth';
 import {
   emailValidate,
   emaillExistCheck,
@@ -20,6 +20,7 @@ export interface Props {
 
 export interface DispatchProps {
   setUser: (user: User) => void;
+  setProfile;
 }
 
 /**
@@ -35,7 +36,7 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
   const [isPasswordCheckOk, setIsPasswordCheckOk] = useState(false);
 
-  const [email, setEmail] = useState('daiki0520daiki0520@yahoo.co.jp');
+  const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
@@ -93,15 +94,18 @@ const SignUpScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   const onPressSubmit = async (): Promise<void> => {
     setIsSubmitLoading(true);
     clearErrorMessage();
-    const firebaseUser = await emailSignUp(email, password, errorSet);
-
+    const newUser = await emailSignUp(email, password, errorSet);
+    if (newUser) {
+      setUser(newUser);
+    }
     navigation.navigate('SelectLanguage');
     setIsSubmitLoading(false);
   };
 
   const onPressFacebook = async (): Promise<void> => {
     setIsFacebookLoading(true);
-    const user = await facebookSignUp();
+    const newUser = await facebookSignUp();
+
     setIsFacebookLoading(false);
   };
 

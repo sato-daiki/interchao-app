@@ -15,3 +15,4 @@ export { default as SmallButtonBlue } from './SmallButtonBlue';
 export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as DiaryStatus } from './DiaryStatus';
+export { default as HeaderText } from './HeaderText';

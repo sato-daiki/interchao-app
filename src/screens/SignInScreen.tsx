@@ -28,7 +28,7 @@ const SignInScreen: React.FC<Props & DispatchProps & OwnProps> = ({
   const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
   const [isPasswordCheckOk, setIsPasswordCheckOk] = useState(false);
 
-  const [email, setEmail] = useState('daiki0520daiki0520@yahoo.co.jp');
+  const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
