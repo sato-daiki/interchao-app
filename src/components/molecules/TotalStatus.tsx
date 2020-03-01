@@ -34,8 +34,7 @@ const TotalStatus: React.FC<Props> = ({
     diaryStatus,
     correctionStatus,
     isReview,
-    isPro,
-    diaryStatusPro,
+    premium,
     correctionStatusPro,
     isReviewPro,
   } = diary;
@@ -49,12 +48,12 @@ const TotalStatus: React.FC<Props> = ({
 
   const statusPro = getDiaryStatus(
     screenName,
-    diaryStatusPro,
+    diaryStatus,
     correctionStatusPro,
     isReviewPro
   );
 
-  if (isPro) {
+  if (premium) {
     return (
       <View style={styles.container}>
         {statusPro ? (

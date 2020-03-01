@@ -22,4 +22,7 @@ export const DefaultNavigationOptions: NavigationStackOptions = {
   headerRightContainerStyle: {
     paddingHorizontal: 16,
   },
+  headerLeftContainerStyle: {
+    paddingHorizontal: 16,
+  },
 };

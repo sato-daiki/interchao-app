@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { TextInput } from 'react-native-gesture-handler';
 import { User } from '../types/user';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
   fontSizeM,
-  borderLightColor,
   primaryColor,
-  offWhite,
   fontSizeL,
   subTextColor,
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
-import { emailSignUp, updateUser, createNewProfile } from '../utils/auth';
 import { CheckTextInput } from '../components/molecules';
 
 interface OwnProps {

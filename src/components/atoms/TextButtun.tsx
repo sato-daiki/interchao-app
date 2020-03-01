@@ -8,6 +8,7 @@ import {
 import { mainColor, fontSizeM, borderLightColor } from '../../styles/Common';
 
 interface Props {
+  isBorrderTop?: boolean;
   isLoading?: boolean;
   disable?: boolean;
   title: string;
@@ -21,8 +22,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 36,
     backgroundColor: '#fff',
-    borderColor: borderLightColor,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: borderLightColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopColor: borderLightColor,
   },
   title: {
     color: mainColor,
@@ -31,14 +33,16 @@ const styles = StyleSheet.create({
 });
 
 const TextButtun: React.FC<Props> = ({
+  isBorrderTop = false,
   isLoading = false,
   disable = false,
   title,
   onPress,
 }: Props): JSX.Element => {
+  const borderTopWidth = isBorrderTop ? StyleSheet.hairlineWidth : undefined;
   return (
     <TouchableOpacity
-      style={styles.contaner}
+      style={[styles.contaner, { borderTopWidth }]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
     >

@@ -8,6 +8,7 @@ import MyDiaryListScreen from '../screens/MyDiaryListScreen';
 import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
+import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import TeachDiaryListScreen from '../screens/TeachDiaryListScreen';
 import MyDiaryScreen from '../screens/MyDiaryScreen';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
@@ -21,7 +22,7 @@ import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
-  ModalPostDiary: { screen: PostDiaryScreen },
+  ModalPostDiary: { screen: PostDiaryScreenContainer },
 });
 
 const MyDiaryTabStack = createStackNavigator(

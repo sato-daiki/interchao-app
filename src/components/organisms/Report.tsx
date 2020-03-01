@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingHorizontal: 16,
     paddingBottom: 16,
-    lineHeight: fontSizeM * 1.2,
+    lineHeight: fontSizeM * 1.3,
     color: primaryColor,
   },
   headerReported: {

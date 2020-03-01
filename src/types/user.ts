@@ -1,7 +1,8 @@
 import { firestore } from 'firebase';
 
 export interface User {
-  paid: boolean;
+  uid: string;
+  premium: boolean;
   confirmDiary: boolean;
   confirmReview: boolean;
   email: string | null;
