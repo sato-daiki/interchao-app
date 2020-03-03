@@ -27,7 +27,7 @@ const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
         setProfile({
           ...profile,
         });
-        navigation.navigate('MyDiary');
+        navigation.navigate('MainTabNavigator');
       }
     } else {
       navigation.navigate('AuthNavigator');

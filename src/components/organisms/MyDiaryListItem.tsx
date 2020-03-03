@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   fontSizeS,
@@ -12,12 +11,12 @@ import {
 import { ProfileIconVertical } from '../atoms';
 import { getPostDay } from '../../utils/diary';
 import firebase from '../../configs/firebase';
-import { ScreenName } from '../../types';
+import { ScreenName, Diary } from '../../types';
 import TotalStatus from '../molecules/TotalStatus';
 
 interface Props {
   screenName: ScreenName;
-  item: firebase.firestore.DocumentData;
+  item: Diary;
   onPressUser: () => void;
   onPressItem: (item: firebase.firestore.DocumentData) => void;
 }

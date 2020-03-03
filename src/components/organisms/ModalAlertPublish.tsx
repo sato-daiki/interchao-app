@@ -101,7 +101,7 @@ const ModalAlertPublish: React.FC<Props> = ({
         </View>
         <Space size={32} />
         <View style={styles.button}>
-          <SubmitButton title="送信する" onPress={onPressSubmit} />
+          <SubmitButton title="投稿する" onPress={onPressSubmit} />
           <Space size={16} />
           <WhiteButton title="キャンセル" onPress={onPressClose} />
         </View>

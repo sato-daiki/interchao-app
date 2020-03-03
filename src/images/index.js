@@ -4,4 +4,5 @@ module.exports = {
   Email: require('./email.png'),
   Loading: require('./loading.gif'),
   Zebbu: require('./zebbu.png'),
+  Logo: require('./logo.png'),
 };
