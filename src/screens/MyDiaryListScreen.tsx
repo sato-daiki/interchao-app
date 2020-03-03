@@ -1,29 +1,37 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Image } from 'react-native';
 import {
-  NavigationStackScreenComponent,
   NavigationStackOptions,
+  NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { firestore } from 'firebase';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
 import MyDiaryListItem from '../components/organisms/MyDiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
+import { Logo } from '../images';
+import { primaryColor } from '../styles/Common';
 
 export interface Props {
-  user: User;
+  currentUser: User;
 }
 
-export interface DispatchProps {
-  setUser: (user: User) => void;
-}
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  logo: {
+    width: 150,
+    height: 26,
   },
 });
 
@@ -32,34 +40,40 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 /**
  * マイ日記一覧
  */
-const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
-  const [diaries, setDiaries] = useState();
+const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
   const [loading, setLoading] = useState(true);
-  const ref = firestore().collection('diaries');
-
   const [isMenu, setIsMenu] = useState(false);
+  const [diaries, setDiaries] = useState();
 
-  const closePanel = useCallback(() => {
-    setIsMenu(false);
+  // 第二引数をなしにするのがポイント
+  useEffect(() => {
+    navigation.setParams({ onPressMenu: () => setIsMenu(true) });
   }, []);
 
-  // useEffect(() => {
-  //   return ref.onSnapshot(querySnapshot => {
-  //     const list: Diary[] = [];
-  //     querySnapshot.forEach(doc => {
-  //       const data = doc.data();
-  //       list.push({
-  //         id: doc.id,
-  //         ...data,
-  //       });
-  //     });
+  // 初期データの取得
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      const index = await Algolia.getDiaryIndex();
+      const res = await index.search('', {
+        filters: `profile.uid: ${currentUser.uid}`,
+        page: 0,
+        hitsPerPage: 20,
+      });
 
-  //     // setDiaries(list);
-  //     if (loading) {
-  //       setLoading(false);
-  //     }
-  //   });
-  // }, [loading, ref]);
+      if (res.hits.length === 0) {
+        // 検索結果0
+        setDiaries([]);
+      } else {
+        setDiaries(res.hits);
+      }
+      setLoading(false);
+    };
+    f();
+  }, []);
+
+  const onClose = useCallback(() => {
+    setIsMenu(false);
+  }, []);
 
   const onPressUser = useCallback(() => {
     navigation.navigate('MyPage');
@@ -71,8 +85,6 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
     },
     [navigation]
   );
-
-  const onPressMenu = useCallback(() => {}, []);
 
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
@@ -89,10 +101,7 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 
   const listHeaderComponent = (
-    <>
-      <MaterialCommunityIcons name="menu" size={18} onPress={onPressMenu} />
-      <GrayHeader title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`} />
-    </>
+    <GrayHeader title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`} />
   );
 
   return (
@@ -100,7 +109,7 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <MyDiaryListMenu
         navigation={navigation}
         isMenu={isMenu}
-        closePanel={closePanel}
+        onClose={onClose}
       />
 
       <LoadingModal visible={loading} />
@@ -112,6 +121,24 @@ const MyDiaryListScreen: NavigationStackScreenComponent = ({ navigation }) => {
       />
     </View>
   );
+};
+
+MyDiaryListScreen.navigationOptions = ({
+  navigation,
+}): NavigationStackOptions => {
+  const onPressMenu = navigation.getParam('onPressMenu');
+  return {
+    ...DefaultNavigationOptions,
+    headerTitle: (): JSX.Element => <Image source={Logo} style={styles.logo} />,
+    headerRight: (): JSX.Element => (
+      <MaterialCommunityIcons
+        size={28}
+        color={primaryColor}
+        name="dots-horizontal"
+        onPress={onPressMenu}
+      />
+    ),
+  };
 };
 
 export default MyDiaryListScreen;

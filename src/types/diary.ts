@@ -1,13 +1,13 @@
 import { firestore } from 'firebase';
 
+// algolia経由で取得するのでtimestamp型が他と異なる
+type Timestamp = {
+  _seconds: number;
+  _nanoseconds: number;
+};
+
 export type DiaryStatus = 'draft' | 'publish';
 export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
-
-export interface DisplayProfile {
-  name: string;
-  photoUrl: string;
-  ref: string;
-}
 
 export interface Commment {
   startNum: number;
@@ -23,19 +23,29 @@ export interface Correction {
   updatedAt: firestore.Timestamp;
 }
 
+// Profileのうち一部を抜粋したもの
+export interface DisplayProfile {
+  uid: string;
+  name: string;
+  userName: string;
+  photoUrl: string;
+  ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
+}
+
 export interface Diary {
-  id: string;
-  profile: DisplayProfile;
-  correction: Correction;
-  proCorrection: Correction;
+  id?: string;
   premium: boolean;
+  isPublic: boolean;
   title: string;
   text: string;
+  profile: DisplayProfile;
   diaryStatus: DiaryStatus;
+  correction?: Correction;
+  proCorrection?: Correction;
   correctionStatus: CorrectionStatus;
   correctionStatusPro: CorrectionStatus;
   isReview: boolean;
   isReviewPro: boolean;
-  createdAt: firestore.Timestamp;
-  updatedAt: firestore.Timestamp;
+  createdAt: Timestamp | firebase.firestore.FieldValue;
+  updatedAt: Timestamp | firebase.firestore.FieldValue;
 }

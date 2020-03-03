@@ -15,24 +15,18 @@ import {
 import { TextButtun, HeaderText, LoadingModal } from '../components/atoms';
 import { ModalAlertPublish } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { DiaryStatus, Profile } from '../types';
+import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 
 interface Props {
   currentUser: User;
   currentProfile: Profile;
 }
 
-type PostDiaryScreenType = React.ComponentType<
-  Props & NavigationStackScreenProps
-> & {
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
 };
-
-export interface DispatchProps {
-  setUser: (user: User) => void;
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -74,7 +68,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：日記投稿画面
  */
-const PostDiaryScreen: PostDiaryScreenType = ({
+const PostDiaryScreen: ScreenType = ({
   navigation,
   currentUser,
   currentProfile,
@@ -85,25 +79,32 @@ const PostDiaryScreen: PostDiaryScreenType = ({
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
 
+  // 第二引数をなしにするのがポイント
+  useEffect(() => {
+    navigation.setParams({ onPressPublic: () => setIsModalAlert(true) });
+  }, []);
+
   const post = async (diaryStatus: DiaryStatus): Promise<void> => {
     if (loading) return;
     setLoading(true);
-    const profile = {
+    const profile: DisplayProfile = {
+      uid: currentProfile.uid,
       name: currentProfile.name,
+      userName: currentProfile.userName,
       photoUrl: currentProfile.photoUrl,
       ref: firebase.firestore().doc(`profiles/${currentProfile.uid}`),
     };
 
-    const diary = {
-      profile,
+    const diary: Diary = {
+      premium: currentUser.premium || false,
+      isPublic,
       title,
       text,
-      isPublic,
+      profile,
       diaryStatus,
       correctionStatus: 'yet',
-      isReview: false,
-      premium: currentUser.premium || false,
       correctionStatusPro: 'yet',
+      isReview: false,
       isReviewPro: false,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -145,11 +146,6 @@ const PostDiaryScreen: PostDiaryScreenType = ({
   const onPressDraft = useCallback(() => {
     post('draft');
   }, [post]);
-
-  // 第二引数をなしにするのがポイント
-  useEffect(() => {
-    navigation.setParams({ onPressPublic: () => setIsModalAlert(true) });
-  }, []);
 
   return (
     <View style={styles.container}>

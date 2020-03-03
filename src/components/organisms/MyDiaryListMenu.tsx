@@ -7,7 +7,7 @@ import { OptionItem } from '../molecules';
 
 interface Props {
   isMenu: boolean;
-  closePanel: () => void;
+  onClose: () => void;
   navigation: NavigationStackProp;
 }
 
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({});
 
 const MyDiaryListMenu = ({
   isMenu,
-  closePanel,
+  onClose,
   navigation,
 }: Props): JSX.Element => {
   const onPressDraftList = useCallback(() => {
@@ -31,8 +31,8 @@ const MyDiaryListMenu = ({
       fullWidth
       closeOnTouchOutside
       isActive={isMenu}
-      onClose={closePanel}
-      onPressCloseButton={closePanel}
+      onClose={onClose}
+      onPressCloseButton={onClose}
     >
       <OptionItem title="下書き一覧" onPress={onPressDraftList} />
       <OptionItem title="プレミアム会員" onPress={onPressModalPremium} />

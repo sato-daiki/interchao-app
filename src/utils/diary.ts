@@ -9,12 +9,11 @@ interface Status {
   color: string;
 }
 
-export const getPostDay = (createdAt: firebase.firestore.Timestamp): string => {
-  if (!createdAt) {
+export const getPostDay = (timestamp: firebase.firestore.Timestamp): string => {
+  if (!timestamp) {
     return '';
   }
-  const target = moment(createdAt.toDate());
-  return target.format('Y-M-D');
+  return moment.unix(timestamp._seconds).format('Y-M-D');
 };
 // 日記一覧に出力するステータスの取得
 
