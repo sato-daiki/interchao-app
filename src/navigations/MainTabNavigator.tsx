@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 /* screens */
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MyDiaryListScreen from '../screens/MyDiaryListScreen';
+import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
 import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
@@ -28,7 +28,7 @@ const ModalPostDiaryNavigator = createStackNavigator({
 const MyDiaryTabStack = createStackNavigator(
   {
     MyDiaryList: {
-      screen: MyDiaryListScreen,
+      screen: MyDiaryListScreenContainer,
     },
     DraftDiaryList: {
       screen: DraftDiaryListScreen,

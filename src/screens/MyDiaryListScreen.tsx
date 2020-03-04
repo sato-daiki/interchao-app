@@ -1,10 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Image } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Image,
+  Alert,
+  RefreshControl,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useFocusEffect } from 'react-navigation-hooks';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
@@ -35,6 +43,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const HIT_PER_PAGE = 20;
+
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
 /**
@@ -42,6 +52,12 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
  */
 const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(0);
+  const [totalNum, setTotalNum] = useState(0);
+  const [readingNext, setReadingNext] = useState(false);
+  const [readAllResults, setReadAllResults] = useState(false);
+
   const [isMenu, setIsMenu] = useState(false);
   const [diaries, setDiaries] = useState();
 
@@ -50,26 +66,71 @@ const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
     navigation.setParams({ onPressMenu: () => setIsMenu(true) });
   }, []);
 
-  // 初期データの取得
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      const index = await Algolia.getDiaryIndex();
+  const getNewDiary = async (clean: boolean): Promise<void> => {
+    try {
+      const index = await Algolia.getDiaryIndex(clean);
       const res = await index.search('', {
         filters: `profile.uid: ${currentUser.uid}`,
         page: 0,
-        hitsPerPage: 20,
+        hitsPerPage: HIT_PER_PAGE,
       });
+      setDiaries(res.hits);
+      setTotalNum(res.nbHits);
+    } catch (err) {
+      setLoading(false);
+      setRefreshing(false);
+      Alert.alert(' エラー', 'ネットワークエラーです');
+    }
+  };
 
-      if (res.hits.length === 0) {
-        // 検索結果0
-        setDiaries([]);
-      } else {
-        setDiaries(res.hits);
-      }
+  // 初期データの取得
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      await getNewDiary(false);
       setLoading(false);
     };
     f();
   }, []);
+
+  const onRefresh = useCallback(() => {
+    const f = async (): Promise<void> => {
+      setRefreshing(true);
+      await getNewDiary(true);
+      setRefreshing(false);
+    };
+    f();
+  }, [getNewDiary]);
+
+  const loadNextPage = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!readingNext && !readAllResults) {
+        try {
+          const nextPage = page + 1;
+          setReadingNext(true);
+
+          const index = await Algolia.getDiaryIndex();
+          const res = await index.search('', {
+            filters: `profile.uid: ${currentUser.uid}`,
+            page: nextPage,
+            hitsPerPage: HIT_PER_PAGE,
+          });
+
+          if (res.hits.length === 0) {
+            setReadAllResults(true);
+            setReadingNext(false);
+          } else {
+            setDiaries([...diaries, ...res.hits]);
+            setPage(nextPage);
+            setReadingNext(false);
+          }
+        } catch (err) {
+          setReadingNext(false);
+          Alert.alert(' エラー', 'ネットワークエラーです');
+        }
+      }
+    };
+    f();
+  }, [currentUser]);
 
   const onClose = useCallback(() => {
     setIsMenu(false);
@@ -100,9 +161,11 @@ const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
     [onPressItem, onPressUser]
   );
 
-  const listHeaderComponent = (
-    <GrayHeader title={`マイ日記一覧(${diaries ? diaries.length : 0}件)`} />
-  );
+  const listHeaderComponent = useCallback(() => {
+    const title =
+      totalNum !== 0 ? `マイ日記一覧(${totalNum}件)` : 'マイ日記一覧';
+    return <GrayHeader title={title} />;
+  }, [totalNum]);
 
   return (
     <View style={styles.container}>
@@ -111,13 +174,17 @@ const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
         isMenu={isMenu}
         onClose={onClose}
       />
-
       <LoadingModal visible={loading} />
       <FlatList
         data={diaries}
         keyExtractor={keyExtractor}
+        refreshing={refreshing}
         renderItem={renderItem}
         ListHeaderComponent={listHeaderComponent}
+        onEndReached={loadNextPage}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

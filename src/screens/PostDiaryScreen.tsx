@@ -131,7 +131,9 @@ const PostDiaryScreen: ScreenType = ({
       if (diaryStatus === 'publish') {
         navigation.navigate('MyDiaryList');
       } else if (diaryStatus === 'draft') {
-        navigation.navigate('DraftDiaryList');
+        navigation.navigate('DraftDiaryList', {
+          reload: true,
+        });
       }
     } catch (err) {
       setLoading(false);

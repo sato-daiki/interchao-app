@@ -23,7 +23,10 @@ class Algolia {
     }
   }
 
-  public getDiaryIndex = async (): SearchIndex => {
+  public getDiaryIndex = async (clean = false): SearchIndex => {
+    if (clean) {
+      this.client.clearCache();
+    }
     if (this.isProd) {
       return this.client.initIndex('prod_diaries');
     }
