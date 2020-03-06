@@ -9,17 +9,13 @@ export const emailValidate = (email: string): boolean => {
 
 export const emaillExistCheck = async (email: string): Promise<boolean> => {
   const providers = await firebase.auth().fetchSignInMethodsForEmail(email);
-  console.log('providers,providers', providers);
   if (
     providers.findIndex(
       p => p === firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD
     ) !== -1
   ) {
-    console.log('登録');
     return true;
   }
-  console.log('not yet');
-
   return false;
 };
 

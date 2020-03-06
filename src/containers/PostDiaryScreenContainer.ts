@@ -5,8 +5,8 @@ import PostDiaryScreen from '../screens/PostDiaryScreen';
 
 const mapStateToProps = (state: State) => {
   return {
-    currentUser: state.rootReducer.user,
-    currentProfile: state.rootReducer.profile,
+    user: state.rootReducer.user,
+    profile: state.rootReducer.profile,
   };
 };
 

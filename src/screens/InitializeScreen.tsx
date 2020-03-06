@@ -6,7 +6,7 @@ import {
 } from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
-import { Zebbu } from '../images';
+import { LogoVercitacl } from '../images';
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   img: {
     width: 200,
-    height: 200,
+    height: 254,
   },
   contaner: {
     flex: 1,
@@ -51,14 +51,14 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
   };
 
   const onPressSignUp = (): void => {
-    navigation.navigate('SignUp');
+    navigation.navigate('SelectLanguage');
   };
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.contaner}>
         <View style={styles.imgContainer}>
-          <Image style={styles.img} source={Zebbu} />
+          <Image style={styles.img} source={LogoVercitacl} />
         </View>
         <View style={styles.footer}>
           <SubmitButton title="はじめる" onPress={onPressSignUp} />
@@ -75,7 +75,7 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
 };
 
 InitializeScreen.navigationOptions = (): NavigationStackOptions => ({
-  header: null,
+  headerShown: false,
 });
 
 export default InitializeScreen;

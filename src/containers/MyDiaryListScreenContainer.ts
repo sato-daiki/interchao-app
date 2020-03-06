@@ -4,7 +4,7 @@ import MyDiaryListScreen from '../screens/MyDiaryListScreen';
 
 const mapStateToProps = (state: State) => {
   return {
-    currentUser: state.rootReducer.user,
+    user: state.rootReducer.user,
   };
 };
 
