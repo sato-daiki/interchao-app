@@ -83,7 +83,7 @@ const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
   const post = async (diaryStatus: DiaryStatus): Promise<void> => {
     if (loading) return;
     setLoading(true);
-    const profile: DisplayProfile = {
+    const displayProfile: DisplayProfile = {
       uid: profile.uid,
       name: profile.name,
       userName: profile.userName,
@@ -96,7 +96,7 @@ const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
       isPublic,
       title,
       text,
-      profile,
+      profile: displayProfile,
       diaryStatus,
       correctionStatus: 'yet',
       correctionStatusPro: 'yet',

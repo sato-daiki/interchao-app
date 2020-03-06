@@ -32,19 +32,17 @@ const AuthLoadingScreen: ScreenType = ({
   const initNavigation = async (
     authUser: firebase.User | null
   ): Promise<void> => {
+    console.log('authUser', authUser);
     if (authUser) {
       const user = await getUser(authUser.uid);
       const profile = await getProfile(authUser.uid);
       if (user && profile) {
         // 初期登録が最後までできているユーザ
-        setUser({
-          ...user,
-        });
-        setProfile({
-          ...profile,
-        });
+        setUser(user);
+        setProfile(profile);
         navigation.navigate('MainTabNavigator');
       }
+      せ;
     } else {
       navigation.navigate('AuthNavigator');
     }

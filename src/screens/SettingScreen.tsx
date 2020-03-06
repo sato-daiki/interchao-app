@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import firebase from '../configs/firebase';
 import {
   subTextColor,
   fontSizeS,
@@ -64,6 +65,15 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const onPressLogout = useCallback(() => {}, []);
 
+  const onPressDelete = async () => {
+    // const f = async (): Promise<void> => {
+    await firebase.auth().currentUser.delete();
+    console.log('firebase.auth().currentUser', firebase.auth().currentUser);
+    // };
+    // f();
+    // }, []);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>基本設定</Text>
@@ -79,6 +89,9 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <Space size={16} />
       <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
         <Text style={styles.logout}>ログアウト</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.logoutButton} onPress={onPressDelete}>
+        <Text style={styles.logout}>退会</Text>
       </TouchableOpacity>
     </View>
   );

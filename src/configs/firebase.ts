@@ -4,9 +4,6 @@ import Constants from 'expo-constants';
 import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
-  FACEBOOK_APP_KEY,
-  GOOGLE_ANDROID_KEY,
-  GOOGLE_IOS_KEY,
 } from '@env';
 
 const isProduction = Constants.manifest.releaseChannel === 'production';
@@ -27,11 +24,4 @@ export const firebaseConfig = {
   measurementId: extraConfig.measurementId,
 };
 
-export const facebookConfig = { ApplicationKey: FACEBOOK_APP_KEY };
-export const googleConfig = {
-  androidClientId: GOOGLE_ANDROID_KEY,
-  iosClientId: GOOGLE_IOS_KEY,
-};
-
-export const { FacebookAuthProvider, GoogleAuthProvider } = firebase.auth;
 export default firebase;
