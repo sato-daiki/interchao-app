@@ -169,27 +169,20 @@ const SignUpScreen: ScreenType = ({
   const onPressSubmit = async (): Promise<void> => {
     setIsSubmitLoading(true);
     clearErrorMessage();
-    const firebaseUser = await emailSignUp(email, password, errorSet);
-
-    // userをfirestoreに初期登録
-    if (firebaseUser) {
+    try {
+      const credent = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      const credentUser = credent.user!;
       const userInfo = {
         premium: false,
         confirmDiary: false,
         confirmReview: false,
-        email: firebaseUser.email,
         points: 100,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
 
-      await firebase
-        .firestore()
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .set(userInfo);
-
-      // profileをfirestoreに初期登録
       const profileInfo = {
         name: '',
         userName: profile.userName,
@@ -202,18 +195,25 @@ const SignUpScreen: ScreenType = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
 
-      await firebase
-        .firestore()
-        .collection('profiles')
-        .doc(firebaseUser.uid)
-        .set(profileInfo);
+      const batch = firebase.firestore().batch();
+      batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
+      batch.set(
+        firebase.firestore().doc(`profiles/${credentUser.uid}`),
+        profileInfo
+      );
+      batch.commit();
 
       // reduxに登録
-      setUser({ uid: firebaseUser.uid, ...userInfo });
-      setProfile({ uid: firebaseUser.uid, ...profileInfo });
+      setUser({ uid: credentUser.uid, ...userInfo });
+      setProfile({ uid: credentUser.uid, ...profileInfo });
+
+      navigation.navigate('Home');
+      setIsSubmitLoading(false);
+    } catch (error) {
+      console.log('error', error);
+      errorSet(error);
+      setIsSubmitLoading(false);
     }
-    navigation.navigate('Home');
-    setIsSubmitLoading(false);
   };
 
   return (

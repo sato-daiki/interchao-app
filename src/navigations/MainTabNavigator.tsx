@@ -73,7 +73,7 @@ const TeachDiaryTabStack = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'UserProfile',
+    initialRouteName: 'TeachDiaryList',
   }
 );
 
