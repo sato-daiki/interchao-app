@@ -1,22 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { Space, SubmitButton, FacebookButton, GoogleButton } from '../atoms';
+import { Space, SubmitButton } from '../atoms';
 import { CheckTextInput } from '../molecules';
-import {
-  primaryColor,
-  fontSizeM,
-  fontSizeS,
-  borderLightColor,
-  subTextColor,
-  linkBlue,
-} from '../../styles/Common';
+import { primaryColor, fontSizeM, linkBlue } from '../../styles/Common';
 
 interface Props {
   isSignUp: boolean;
   isEmailLoading: boolean;
   isSubmitLoading: boolean;
-  isFacebookLoading: boolean;
-  isGoogleLoading: boolean;
   isEmailCheckOk: boolean;
   isPasswordCheckOk: boolean;
   email: string;
@@ -28,8 +19,6 @@ interface Props {
   onEndEditingEmail: () => void;
   onEndEditingPassword: () => void;
   onPressSubmit: () => void;
-  onPressFacebook: () => void;
-  onPressGoolge: () => void;
   onPressForget?: () => void;
 }
 
@@ -44,22 +33,6 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     paddingBottom: 6,
-  },
-  lineContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  line: {
-    flex: 1,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-  },
-  subText: {
-    textAlign: 'center',
-    color: subTextColor,
-    fontSize: fontSizeS,
-    paddingHorizontal: 16,
   },
   forgetText: {
     color: primaryColor,
@@ -78,8 +51,6 @@ const SignInUpForm: React.FC<Props> = ({
   isSignUp,
   isEmailLoading,
   isSubmitLoading,
-  isFacebookLoading,
-  isGoogleLoading,
   isEmailCheckOk,
   isPasswordCheckOk,
   email,
@@ -91,8 +62,6 @@ const SignInUpForm: React.FC<Props> = ({
   onEndEditingEmail,
   onEndEditingPassword,
   onPressSubmit,
-  onPressFacebook,
-  onPressGoolge,
   onPressForget,
 }): JSX.Element => {
   return (
@@ -147,24 +116,6 @@ const SignInUpForm: React.FC<Props> = ({
           </Text>
         </>
       )}
-      <Space size={32} />
-      <View style={styles.lineContainer}>
-        <View style={styles.line} />
-        <Text style={styles.subText}>もしくは</Text>
-        <View style={styles.line} />
-      </View>
-      <Space size={32} />
-      <FacebookButton
-        title={isSignUp ? 'Facebookで登録' : 'Facebookでログイン'}
-        isLoading={isFacebookLoading}
-        onPress={onPressFacebook}
-      />
-      <Space size={16} />
-      <GoogleButton
-        title={isSignUp ? 'Googleで登録' : 'Facebookでログイン'}
-        isLoading={isGoogleLoading}
-        onPress={onPressGoolge}
-      />
     </View>
   );
 };

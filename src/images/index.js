@@ -5,4 +5,5 @@ module.exports = {
   Loading: require('./loading.gif'),
   Zebbu: require('./zebbu.png'),
   Logo: require('./logo.png'),
+  LogoVercitacl: require('./logo_vertical.png'),
 };

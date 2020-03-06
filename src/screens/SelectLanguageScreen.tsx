@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { NavigationStackProp } from 'react-navigation-stack';
+import {
+  NavigationStackOptions,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { primaryColor, fontSizeL } from '../styles/Common';
 import Space from '../components/atoms/Space';
-import { User } from '../types/user';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { Profile } from '../types';
 
-export interface Props {
-  user: User;
-  navigation: NavigationStackProp;
+interface Props {
+  profile: Profile;
+  setProfile: (profile: Profile) => void;
 }
 
-export interface DispatchProps {
-  setUser: (user: User) => void;
-}
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   contaner: {
@@ -34,16 +40,16 @@ const styles = StyleSheet.create({
 /**
  * 概要：学びたい言語とネイティブの言語の登録
  */
-const SelectLanguageScreen: React.FC<Props & DispatchProps> = ({
+const SelectLanguageScreen: ScreenType = ({
   navigation,
-  user,
-  setUser,
+  profile,
+  setProfile,
 }): JSX.Element => {
   const [isCheckedJa, setIsCheckedJa] = useState(false);
 
   const onPressNext = (): void => {
-    setUser({
-      ...user,
+    setProfile({
+      ...profile,
       learnLanguage: isCheckedJa ? 'ja' : 'en',
       nativeLanguage: isCheckedJa ? 'en' : 'ja',
     });
@@ -72,11 +78,11 @@ const SelectLanguageScreen: React.FC<Props & DispatchProps> = ({
   );
 };
 
-// SelectLanguageScreen.navigationOptions = () => {
-//   return {
-//     ...DefaultNavigationOptions,
-//     title: '相談',
-//   };
-// };
+SelectLanguageScreen.navigationOptions = (): NavigationStackOptions => {
+  return {
+    ...DefaultNavigationOptions,
+    title: '言語の選択',
+  };
+};
 
 export default SelectLanguageScreen;

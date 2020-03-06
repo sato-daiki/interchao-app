@@ -23,7 +23,7 @@ import { Logo } from '../images';
 import { primaryColor } from '../styles/Common';
 
 export interface Props {
-  currentUser: User;
+  user: User;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -50,7 +50,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 /**
  * マイ日記一覧
  */
-const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
+const MyDiaryListScreen: ScreenType = ({ user, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
@@ -70,7 +70,7 @@ const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
     try {
       const index = await Algolia.getDiaryIndex(clean);
       const res = await index.search('', {
-        filters: `profile.uid: ${currentUser.uid}`,
+        filters: `profile.uid: ${user.uid}`,
         page: 0,
         hitsPerPage: HIT_PER_PAGE,
       });
@@ -110,7 +110,7 @@ const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.uid: ${currentUser.uid}`,
+            filters: `profile.uid: ${user.uid}`,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -130,7 +130,7 @@ const MyDiaryListScreen: ScreenType = ({ currentUser, navigation }) => {
       }
     };
     f();
-  }, [currentUser]);
+  }, [user]);
 
   const onClose = useCallback(() => {
     setIsMenu(false);

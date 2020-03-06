@@ -1,17 +1,14 @@
 import { connect } from 'react-redux';
-import { setUser } from '../stores/actions/user';
-import SelectLanguageScreen, {
-  Props,
-  DispatchProps,
-} from '../screens/SelectLanguageScreen';
+import { setProfile } from '../stores/actions/profile';
+import SelectLanguageScreen from '../screens/SelectLanguageScreen';
 import { State } from '../types/state';
 
-const mapStateToProps = (state: State): Props => ({
-  user: state.rootReducer.user,
+const mapStateToProps = (state: State) => ({
+  profile: state.rootReducer.profile,
 });
 
-const mapDispatchToProps: DispatchProps = {
-  setUser,
+const mapDispatchToProps = {
+  setProfile,
 };
 
 export default connect(

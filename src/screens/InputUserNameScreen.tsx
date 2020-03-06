@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { NavigationStackProp } from 'react-navigation-stack';
-import { User } from '../types/user';
+import {
+  NavigationStackScreenProps,
+  NavigationStackOptions,
+} from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
   fontSizeM,
@@ -11,18 +13,20 @@ import {
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
 import { CheckTextInput } from '../components/molecules';
+import { Profile } from '../types';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { checkUserName } from '../libs/auth';
 
-interface OwnProps {
-  navigation: NavigationStackProp;
+interface Props {
+  profile: Profile;
+  setProfile: (profile: Profile) => void;
 }
 
-export interface Props {
-  user: User;
-}
-
-export interface DispatchProps {
-  setUser: (user: User) => void;
-}
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   contaner: {
@@ -44,19 +48,49 @@ const styles = StyleSheet.create({
   },
 });
 
-const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
-  user,
+const InputUserNameScreen: ScreenType = ({
   navigation,
-  setUser,
+  profile,
+  setProfile,
 }): JSX.Element => {
   const [userName, setUserName] = useState('');
   const [isUserNameLoading, setIsUserNameLoading] = useState(false);
   const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const onEndEditing = () => {};
+  const onChangeText = useCallback(
+    text => {
+      const f = async (): Promise<void> => {
+        setIsUserNameLoading(true);
+        setUserName(text);
+        const duplicated = await checkUserName(text);
+        if (duplicated) {
+          setIsUserNameCheckOk(false);
+          setErrorMessage(
+            'すでにこのユーザーネームを使用しているユーザーがいます'
+          );
+        } else {
+          setIsUserNameCheckOk(true);
+          setErrorMessage('');
+        }
+        setIsUserNameLoading(false);
+      };
+      f();
+    },
+    [checkUserName]
+  );
 
-  const onPressRegist = async (): Promise<void> => {};
+  const onPressNext = async (): Promise<void> => {
+    const duplicated = await checkUserName(userName);
+    if (duplicated) {
+      return;
+    }
+    setProfile({
+      ...profile,
+      userName,
+    });
+    navigation.navigate('SignUp');
+  };
 
   return (
     <View style={styles.contaner}>
@@ -64,8 +98,7 @@ const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
       <Text style={styles.subText}>このユーザネームはいつでも変更できます</Text>
       <CheckTextInput
         value={userName}
-        onChangeText={(text: string): void => setUserName(text)}
-        onEndEditing={onEndEditing}
+        onChangeText={onChangeText}
         maxLength={50}
         placeholder="zebra"
         keyboardType="default"
@@ -78,9 +111,20 @@ const InputUserNameScreen: React.FC<Props & DispatchProps & OwnProps> = ({
         errorMessage={errorMessage}
       />
       <Space size={32} />
-      <SubmitButton title="登録" onPress={onPressRegist} />
+      <SubmitButton
+        disable={!isUserNameCheckOk}
+        title="次へ"
+        onPress={onPressNext}
+      />
     </View>
   );
+};
+
+InputUserNameScreen.navigationOptions = (): NavigationStackOptions => {
+  return {
+    ...DefaultNavigationOptions,
+    title: 'ユーザーネーム登録',
+  };
 };
 
 export default InputUserNameScreen;

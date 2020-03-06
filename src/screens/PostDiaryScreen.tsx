@@ -18,8 +18,8 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 
 interface Props {
-  currentUser: User;
-  currentProfile: Profile;
+  user: User;
+  profile: Profile;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -68,11 +68,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：日記投稿画面
  */
-const PostDiaryScreen: ScreenType = ({
-  navigation,
-  currentUser,
-  currentProfile,
-}) => {
+const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -88,15 +84,15 @@ const PostDiaryScreen: ScreenType = ({
     if (loading) return;
     setLoading(true);
     const profile: DisplayProfile = {
-      uid: currentProfile.uid,
-      name: currentProfile.name,
-      userName: currentProfile.userName,
-      photoUrl: currentProfile.photoUrl,
-      ref: firebase.firestore().doc(`profiles/${currentProfile.uid}`),
+      uid: profile.uid,
+      name: profile.name,
+      userName: profile.userName,
+      photoUrl: profile.photoUrl,
+      ref: firebase.firestore().doc(`profiles/${profile.uid}`),
     };
 
     const diary: Diary = {
-      premium: currentUser.premium || false,
+      premium: user.premium || false,
       isPublic,
       title,
       text,
@@ -114,14 +110,14 @@ const PostDiaryScreen: ScreenType = ({
       .firestore()
       .collection('diaries')
       .doc();
-    const refUser = firebase.firestore().doc(`users/${currentUser.uid}`);
+    const refUser = firebase.firestore().doc(`users/${user.uid}`);
 
     // トランザクション開始
     try {
       await firebase.firestore().runTransaction(async transaction => {
         transaction.set(refDiary, { ...diary });
         transaction.update(refUser, {
-          points: currentUser.points - 10,
+          points: user.points - 10,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
       });

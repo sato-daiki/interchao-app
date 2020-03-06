@@ -1,14 +1,30 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import { NavigationStackProp } from 'react-navigation-stack';
-import firebase, { User } from 'firebase';
+import {
+  NavigationStackOptions,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack';
+import firebase from 'firebase';
 import { getUser } from '../libs/user';
 import { getProfile } from '../libs/profile';
+import { initAnalytics } from '../utils/Analytics';
+import { Profile, User } from '../types';
+
+interface Props {
+  setUser: (user: User) => void;
+  setProfile: (profile: Profile) => void;
+}
+
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 /**
  * 概要：初期ローデンング
  */
-const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
+const AuthLoadingScreen: ScreenType = ({
   setUser,
   setProfile,
   navigation,
@@ -35,10 +51,18 @@ const AuthLoadingScreen: React.FC<{ navigation: NavigationStackProp }> = ({
   };
 
   useEffect(() => {
+    initAnalytics();
+  }, []);
+
+  useEffect(() => {
     firebase.auth().onAuthStateChanged(initNavigation);
   }, []);
 
   return <View />;
 };
+
+AuthLoadingScreen.navigationOptions = (): NavigationStackOptions => ({
+  headerShown: false,
+});
 
 export default AuthLoadingScreen;
