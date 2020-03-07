@@ -3,7 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 /* screens */
 import InitializeScreen from '../screens/InitializeScreen';
 import SignUpScreenContainer from '../containers/SignUpScreenContainer';
-import SignInScreenContainer from '../containers/SignInScreenContainer';
+import SignInScreen from '../screens/SignInScreen';
 import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
 import ResendEmailScreen from '../screens/ResendEmailScreen';
 import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
@@ -13,11 +13,11 @@ export default createStackNavigator({
   Initialize: {
     screen: InitializeScreen,
   },
-  SignIn: {
-    screen: SignInScreenContainer,
-  },
   SignUp: {
     screen: SignUpScreenContainer,
+  },
+  SignIn: {
+    screen: SignInScreen,
   },
   SelectLanguage: {
     screen: SelectLanguageScreenContainer,
