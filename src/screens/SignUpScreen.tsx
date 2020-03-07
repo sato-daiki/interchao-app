@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { anonymouslySignUp } from '../utils/auth';
-import {
-  emailValidate,
-  emaillExistCheck,
-  emailInputError,
-} from '../utils/InputCheck';
+import { emailValidate, emaillExistCheck } from '../utils/InputCheck';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
-import { Space, SubmitButton, HeaderText } from '../components/atoms';
-import { primaryColor, fontSizeM } from '../styles/Common';
+import {
+  Space,
+  SubmitButton,
+  HeaderText,
+  LoadingModal,
+} from '../components/atoms';
+import {
+  primaryColor,
+  fontSizeM,
+  subTextColor,
+  fontSizeL,
+} from '../styles/Common';
 import { setLogEvent, events } from '../utils/Analytics';
 
 interface Props {
   user: User;
   profile: Profile;
-  setUser: (user: User) => void;
-  setProfile: (profile: Profile) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -37,7 +40,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingHorizontal: 16,
-    paddingVertical: 32,
+    paddingTop: 32,
+  },
+  title: {
+    color: primaryColor,
+    fontSize: fontSizeL,
+    fontWeight: 'bold',
+    paddingBottom: 16,
+  },
+  subText: {
+    color: subTextColor,
+    fontSize: fontSizeM,
+    paddingBottom: 16,
   },
   label: {
     color: primaryColor,
@@ -49,12 +63,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({
-  navigation,
-  profile,
-  setUser,
-  setProfile,
-}): JSX.Element => {
+const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   const [isSubmitLoading, setIsSubmitLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -75,61 +84,83 @@ const SignUpScreen: ScreenType = ({
     setErrorPassword('');
   };
 
-  const errorSet = (error: any): void => {
-    emailInputError(error, setErrorPassword, setErrorEmail, clearErrorMessage);
+  const createUser = async (credentUser: firebase.User): Promise<void> => {
+    const userInfo = {
+      premium: false,
+      confirmDiary: false,
+      confirmReview: false,
+      points: 100,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    const profileInfo = {
+      name: '',
+      userName: profile.userName,
+      photoUrl: '',
+      pro: false,
+      learnLanguage: profile.learnLanguage,
+      nativeLanguage: profile.nativeLanguage,
+      introduction: '',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    };
+
+    const batch = firebase.firestore().batch();
+    batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
+    batch.set(
+      firebase.firestore().doc(`profiles/${credentUser.uid}`),
+      profileInfo
+    );
+    batch.commit();
   };
 
-  const onPressSkip = async (): Promise<void> => {
-    setIsSubmitLoading(true);
-    clearErrorMessage();
-    const firebaseUser = await anonymouslySignUp();
-
-    // userをfirestoreに初期登録
-    if (firebaseUser) {
-      const userInfo = {
-        premium: false,
-        confirmDiary: false,
-        confirmReview: false,
-        email: '',
-        points: 100,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-
-      await firebase
-        .firestore()
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .set(userInfo);
-
-      // profileをfirestoreに初期登録
-      const profileInfo = {
-        name: '',
-        userName: profile.userName,
-        photoUrl: '',
-        pro: false,
-        learnLanguage: profile.learnLanguage,
-        nativeLanguage: profile.nativeLanguage,
-        introduction: '',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-
-      await firebase
-        .firestore()
-        .collection('profiles')
-        .doc(firebaseUser.uid)
-        .set(profileInfo);
-
-      setLogEvent(events.CREATED_USER, { loginMethod: 'anonymously' });
-    }
-    navigation.navigate('Home');
-    setIsSubmitLoading(false);
-  };
+  const onPressSkip = useCallback(() => {
+    const f = async (): Promise<void> => {
+      setIsSubmitLoading(true);
+      clearErrorMessage();
+      try {
+        const credent = await firebase.auth().signInAnonymously();
+        if (credent.user) {
+          await createUser(credent.user);
+          setLogEvent(events.CREATED_USER, { loginMethod: 'anonymously' });
+        }
+      } catch (error) {
+        console.log(error);
+        Alert.alert('エラー', 'ネットワークエラーです');
+        setIsSubmitLoading(false);
+      }
+      setIsSubmitLoading(false);
+    };
+    f();
+  }, [clearErrorMessage, createUser]);
 
   useEffect(() => {
     navigation.setParams({ onPressSkip });
   }, []);
+
+  const onPressSubmit = useCallback(() => {
+    const f = async (): Promise<void> => {
+      setIsSubmitLoading(true);
+      clearErrorMessage();
+      try {
+        const credent = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password);
+        if (credent.user) {
+          await createUser(credent.user);
+
+          setLogEvent(events.CREATED_USER, { loginMethod: 'email' });
+          setIsSubmitLoading(false);
+        }
+      } catch (error) {
+        Alert.alert('エラー', 'ネットワークエラーです');
+        setIsSubmitLoading(false);
+      }
+      setIsSubmitLoading(false);
+    };
+    f();
+  }, [clearErrorMessage, createUser]);
 
   const onEndEditingEmail = async (): Promise<void> => {
     if (email.length === 0) {
@@ -169,56 +200,15 @@ const SignUpScreen: ScreenType = ({
     }
   };
 
-  const onPressSubmit = async (): Promise<void> => {
-    setIsSubmitLoading(true);
-    clearErrorMessage();
-    try {
-      const credent = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
-      const credentUser = credent.user!;
-      const userInfo = {
-        premium: false,
-        confirmDiary: false,
-        confirmReview: false,
-        points: 100,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-
-      const profileInfo = {
-        name: '',
-        userName: profile.userName,
-        photoUrl: '',
-        pro: false,
-        learnLanguage: profile.learnLanguage,
-        nativeLanguage: profile.nativeLanguage,
-        introduction: '',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-
-      const batch = firebase.firestore().batch();
-      batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
-      batch.set(
-        firebase.firestore().doc(`profiles/${credentUser.uid}`),
-        profileInfo
-      );
-      batch.commit();
-
-      setLogEvent(events.CREATED_USER, { loginMethod: 'email' });
-      // reduxに登録
-      // setUser({ uid: credentUser.uid, ...userInfo });
-      // setProfile({ uid: credentUser.uid, ...profileInfo });
-      // setIsSubmitLoading(false);
-    } catch (error) {
-      errorSet(error);
-      setIsSubmitLoading(false);
-    }
-  };
-
   return (
     <View style={styles.container}>
+      <LoadingModal visible={isSubmitLoading} />
+      <Text style={styles.title}>
+        メールアドレスとパスワードを入力してください
+      </Text>
+      <Text style={styles.subText}>
+        機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。
+      </Text>
       <Text style={styles.label}>メールアドレス</Text>
       <CheckTextInput
         value={email}
@@ -255,7 +245,6 @@ const SignUpScreen: ScreenType = ({
       <SubmitButton
         title="登録"
         onPress={onPressSubmit}
-        isLoading={isSubmitLoading}
         disable={!(isEmailCheckOk && isPasswordCheckOk)}
       />
       <Space size={16} />
