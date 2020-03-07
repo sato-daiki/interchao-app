@@ -34,10 +34,13 @@ const styles = StyleSheet.create({
   forgetText: {
     color: primaryColor,
     fontSize: fontSizeM,
-    textAlign: 'center',
   },
   linkText: {
     color: linkBlue,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
 });
 
@@ -86,7 +89,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
   }, [clearErrorMessage]);
 
   const onPressForget = useCallback(() => {
-    navigation.navigate('SignIn');
+    navigation.navigate('ForegetPassword');
   }, [navigation]);
 
   const onEndEditingEmail = useCallback(() => {
@@ -149,12 +152,12 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
         }
       />
       <Space size={16} />
-      <Text style={styles.forgetText}>
-        パスワードをお忘れの方は
+      <View style={styles.row}>
+        <Text style={styles.forgetText}>パスワードをお忘れの方は</Text>
         <TouchableOpacity onPress={onPressForget}>
           <Text style={styles.linkText}>こちら</Text>
         </TouchableOpacity>
-      </Text>
+      </View>
     </View>
   );
 };

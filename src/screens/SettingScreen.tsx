@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import {
   NavigationStackScreenComponent,
@@ -48,12 +48,18 @@ const styles = StyleSheet.create({
  * 設定画面ページ
  */
 const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  const { currentUser } = firebase.auth();
+
   const onPressPremium = useCallback(() => {
     navigation.navigate('Premium');
   }, [navigation]);
 
   const onPressNotice = useCallback(() => {
     navigation.navigate('Notice');
+  }, [navigation]);
+
+  const onPressEmailEdit = useCallback(() => {
+    navigation.navigate('Email');
   }, [navigation]);
 
   const onPressFavoriteUserList = useCallback(() => {
@@ -83,7 +89,14 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const onPressLogout = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
-        await firebase.auth().signOut();
+        if (currentUser && currentUser.email) {
+          await firebase.auth().signOut();
+        } else {
+          Alert.alert(
+            '',
+            'メールアドレスが登録されていないため、ログアウトできません。'
+          );
+        }
         setLogEvent(events.SIGN_OUT);
       } catch (error) {
         Alert.alert(' エラー', 'ネットワークエラーです');
@@ -97,6 +110,23 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <Text style={styles.title}>基本設定</Text>
       <OptionItem title="プレミアムサービス" onPress={onPressPremium} />
       <OptionItem title="通知" onPress={onPressNotice} />
+      {currentUser && currentUser.email ? (
+        <>
+          <OptionItem
+            title="メールアドレスの変更"
+            onPress={(): boolean => navigation.navigate('EditEmail')}
+          />
+          <OptionItem
+            title="パスワードの変更"
+            onPress={(): boolean => navigation.navigate('EditPassword')}
+          />
+        </>
+      ) : (
+        <OptionItem
+          title="メールアドレス/パスワードの登録"
+          onPress={(): boolean => navigation.navigate('RegisterEmailPassword')}
+        />
+      )}
       <OptionItem
         title="お気に入りユーザ一覧"
         onPress={onPressFavoriteUserList}

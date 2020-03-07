@@ -19,6 +19,9 @@ import SettingScreen from '../screens/SettingScreen';
 import NoticeScreen from '../screens/NoticeScreen';
 import PremiumScreen from '../screens/PremiumScreen';
 import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
+import EditEmailScreen from '../screens/EditEmailScreen';
+import EditPasswordScreen from '../screens/EditPasswordScreen';
+import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -53,6 +56,15 @@ const MyDiaryTabStack = createStackNavigator(
     },
     FavoriteUserList: {
       screen: FavoriteUserListScreen,
+    },
+    EditEmail: {
+      screen: EditEmailScreen,
+    },
+    EditPassword: {
+      screen: EditPasswordScreen,
+    },
+    RegisterEmailPassword: {
+      screen: RegisterEmailPasswordScreen,
     },
   },
   {

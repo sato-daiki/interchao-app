@@ -61,6 +61,42 @@ export const emailInputError = (
       clearErrorMessage();
       break;
     default:
+      Alert.alert('エラー', `エラーが発生しました。${errorMessage}`);
+      clearErrorMessage();
+  }
+};
+
+export const passwordInputError = (
+  error: any,
+  setErrorCurrentPassword: (message: string) => void,
+  setErrorNewPassword: (message: string) => void,
+  clearErrorMessage: () => void
+): void => {
+  const errorCode = error.code;
+  const errorMessage = error.message;
+
+  switch (errorCode) {
+    case 'auth/weak-password':
+      setErrorNewPassword('パスワードは6桁以上で入力してください');
+      break;
+    case 'auth/wrong-password':
+      setErrorCurrentPassword('パスワードが違います');
+      break;
+    case 'auth/network-request-failed':
+      Alert.alert(
+        'エラー',
+        'ネットワークエラーです。電波のいい箇所で再度お試しください'
+      );
+      clearErrorMessage();
+      break;
+    case 'auth/too-many-requests':
+      Alert.alert(
+        'エラー',
+        'エラーの数が一定数を超えました。時間をおいてから再度お試しください'
+      );
+      clearErrorMessage();
+      break;
+    default:
       Alert.alert('エラー', 'エラーが発生しました。', errorMessage);
       clearErrorMessage();
   }
