@@ -1,5 +1,5 @@
 import { User } from '../types';
-import firebase from '../configs/firebase';
+import firebase from '../constants/firebase';
 
 // ユーザ情報取得
 export const getUser = async (uid: string): Promise<User | null> => {

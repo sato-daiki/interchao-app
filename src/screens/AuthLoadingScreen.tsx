@@ -5,9 +5,9 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import firebase from 'firebase';
-import { getUser } from '../libs/user';
-import { getProfile } from '../libs/profile';
-import { initAnalytics } from '../utils/Analytics';
+import { getUser } from '../utils/user';
+import { getProfile } from '../utils/profile';
+import { initAnalytics, setAnalyticsUser } from '../utils/Analytics';
 import { Profile, User } from '../types';
 
 interface Props {
@@ -29,28 +29,33 @@ const AuthLoadingScreen: ScreenType = ({
   setProfile,
   navigation,
 }): JSX.Element => {
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
   const initNavigation = async (
     authUser: firebase.User | null
   ): Promise<void> => {
     console.log('authUser', authUser);
     if (authUser) {
+      // 登録済のユーザ
       const user = await getUser(authUser.uid);
       const profile = await getProfile(authUser.uid);
       if (user && profile) {
-        // 初期登録が最後までできているユーザ
+        // reduxの登録
         setUser(user);
         setProfile(profile);
+
+        // Amplitudeに登録
+        setAnalyticsUser(user, profile);
         navigation.navigate('MainTabNavigator');
+      } else {
+        // TODO: ここに入る場合エラーどうするか
       }
-      せ;
     } else {
       navigation.navigate('AuthNavigator');
     }
   };
-
-  useEffect(() => {
-    initAnalytics();
-  }, []);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(initNavigation);

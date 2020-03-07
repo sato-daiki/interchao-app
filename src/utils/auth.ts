@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 import { Profile } from '../types';
-import firebase from '../configs/firebase';
+import firebase from '../constants/firebase';
 
 // 匿名でのユーザ登録
 export const anonymouslySignUp = async (): Promise<

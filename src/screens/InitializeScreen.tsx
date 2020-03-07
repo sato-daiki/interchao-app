@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 import {
   NavigationStackScreenComponent,
@@ -7,6 +7,7 @@ import {
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
 import { LogoVercitacl } from '../images';
+import { setLogEvent, events } from '../utils/Analytics';
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -46,6 +47,10 @@ const styles = StyleSheet.create({
  * 概要：ログインしていないユーザの立ち上げ画面
  */
 const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
+  useEffect((): void => {
+    setLogEvent(events.OPENED_INITIALIZE);
+  }, []);
+
   const onPressSignIn = (): void => {
     navigation.navigate('SignIn');
   };

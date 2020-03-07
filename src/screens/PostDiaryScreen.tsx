@@ -4,7 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import firebase from '../configs/firebase';
+import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import {
   fontSizeM,
@@ -16,6 +16,7 @@ import { TextButtun, HeaderText, LoadingModal } from '../components/atoms';
 import { ModalAlertPublish } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
+import { setLogEvent, events } from '../utils/Analytics';
 
 interface Props {
   user: User;
@@ -138,10 +139,12 @@ const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
   };
 
   const onPressSubmit = useCallback(() => {
+    setLogEvent(events.POST_DIARY, { publish: 'publish' });
     post('publish');
   }, [post]);
 
   const onPressDraft = useCallback(() => {
+    setLogEvent(events.POST_DIARY, { publish: 'draft' });
     post('draft');
   }, [post]);
 

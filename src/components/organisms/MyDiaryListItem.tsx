@@ -10,7 +10,7 @@ import {
 } from '../../styles/Common';
 import { ProfileIconVertical } from '../atoms';
 import { getPostDay } from '../../utils/diary';
-import firebase from '../../configs/firebase';
+import firebase from '../../constants/firebase';
 import { ScreenName, Diary } from '../../types';
 import TotalStatus from '../molecules/TotalStatus';
 
