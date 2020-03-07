@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Alert, CameraRoll } from 'react-native';
-import openBrowserSafely from '../constants/SafeWebBrowser';
+import openBrowserSafely from '../constants/safeWebBrowser';
 import { SERVICE_NAME } from '../constants';
 
 export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatus> => {
@@ -18,7 +18,8 @@ export const openAlert = () => {
       {
         text: '設定方法',
         onPress: () => {
-          openBrowserSafely('https://maricuru.com/helps/13');
+          //  TODO
+          openBrowserSafely('');
         },
       },
       { text: 'OK' },

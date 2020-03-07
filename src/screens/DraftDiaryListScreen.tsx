@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { GrayHeader } from '../components/atoms';
 import { User, Diary } from '../types';
 import { DiaryListItem } from '../components/molecules';
-import firebase from '../configs/firebase';
+import firebase from '../constants/firebase';
 
 export interface Props {
   user: User;

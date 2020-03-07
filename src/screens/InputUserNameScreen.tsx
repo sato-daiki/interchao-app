@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   NavigationStackScreenProps,
@@ -15,7 +15,8 @@ import Space from '../components/atoms/Space';
 import { CheckTextInput } from '../components/molecules';
 import { Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { checkUserName } from '../libs/auth';
+import { checkUserName } from '../utils/auth';
+import { setLogEvent, events } from '../utils/Analytics';
 
 interface Props {
   profile: Profile;
@@ -57,6 +58,10 @@ const InputUserNameScreen: ScreenType = ({
   const [isUserNameLoading, setIsUserNameLoading] = useState(false);
   const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect((): void => {
+    setLogEvent(events.OPENED_INPUT_USER_NAME);
+  }, []);
 
   const onChangeText = useCallback(
     text => {

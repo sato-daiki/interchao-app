@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     backgroundColor: offWhite,
     borderRadius: 6,
-    borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: borderLightColor,
   },
   error: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   NavigationStackOptions,
@@ -10,6 +10,7 @@ import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Profile } from '../types';
+import { setLogEvent, events } from '../utils/Analytics';
 
 interface Props {
   profile: Profile;
@@ -46,6 +47,10 @@ const SelectLanguageScreen: ScreenType = ({
   setProfile,
 }): JSX.Element => {
   const [isCheckedJa, setIsCheckedJa] = useState(false);
+
+  useEffect((): void => {
+    setLogEvent(events.OPENED_SELECT_LANGUAGE);
+  }, []);
 
   const onPressNext = (): void => {
     setProfile({

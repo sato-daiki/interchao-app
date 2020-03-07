@@ -12,7 +12,7 @@ import {
 } from '../../styles/Common';
 import { TotalStatus, ProfileIconVertical } from '.';
 import { getDiaryStatus, getPostDay } from '../../utils/diary';
-import firebase from '../../configs/firebase';
+import firebase from '../../constants/firebase';
 import { Commment } from '../../types';
 
 interface Props {

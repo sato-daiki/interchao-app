@@ -4,19 +4,20 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { emailSignUp, anonymouslySignUp } from '../libs/auth';
+import { anonymouslySignUp } from '../utils/auth';
 import {
   emailValidate,
   emaillExistCheck,
   emailInputError,
-} from '../utils/inputCheck';
-import firebase from '../configs/firebase';
+} from '../utils/InputCheck';
+import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, HeaderText } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
+import { setLogEvent, events } from '../utils/Analytics';
 
 interface Props {
   user: User;
@@ -64,6 +65,10 @@ const SignUpScreen: ScreenType = ({
   const [errorEmail, setErrorEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
+
+  useEffect((): void => {
+    setLogEvent(events.OPENED_SIGN_UP);
+  }, []);
 
   const clearErrorMessage = (): void => {
     setErrorEmail('');
@@ -116,9 +121,7 @@ const SignUpScreen: ScreenType = ({
         .doc(firebaseUser.uid)
         .set(profileInfo);
 
-      // reduxに登録
-      setUser({ uid: firebaseUser.uid, ...userInfo });
-      setProfile({ uid: firebaseUser.uid, ...profileInfo });
+      setLogEvent(events.CREATED_USER, { loginMethod: 'anonymously' });
     }
     navigation.navigate('Home');
     setIsSubmitLoading(false);
@@ -203,14 +206,12 @@ const SignUpScreen: ScreenType = ({
       );
       batch.commit();
 
+      setLogEvent(events.CREATED_USER, { loginMethod: 'email' });
       // reduxに登録
-      setUser({ uid: credentUser.uid, ...userInfo });
-      setProfile({ uid: credentUser.uid, ...profileInfo });
-
-      navigation.navigate('Home');
-      setIsSubmitLoading(false);
+      // setUser({ uid: credentUser.uid, ...userInfo });
+      // setProfile({ uid: credentUser.uid, ...profileInfo });
+      // setIsSubmitLoading(false);
     } catch (error) {
-      console.log('error', error);
       errorSet(error);
       setIsSubmitLoading(false);
     }

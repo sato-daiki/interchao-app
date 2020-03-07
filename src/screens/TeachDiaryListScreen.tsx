@@ -10,7 +10,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { GrayHeader } from '../components/atoms';
 import { User, Diary } from '../types';
 // import { DiaryListItem } from '../components/molecules';
-import firebase from '../configs/firebase';
+import firebase from '../constants/firebase';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor } from '../styles/Common';
 

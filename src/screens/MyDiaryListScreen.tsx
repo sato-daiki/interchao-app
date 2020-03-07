@@ -12,7 +12,6 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { useFocusEffect } from 'react-navigation-hooks';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';

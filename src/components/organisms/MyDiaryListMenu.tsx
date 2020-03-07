@@ -18,6 +18,10 @@ const MyDiaryListMenu = ({
   onClose,
   navigation,
 }: Props): JSX.Element => {
+  const onPressMyPage = useCallback(() => {
+    navigation.navigate('MyPage');
+  }, [navigation]);
+
   const onPressDraftList = useCallback(() => {
     navigation.navigate('ModalPostDiary');
   }, [navigation]);
@@ -28,12 +32,14 @@ const MyDiaryListMenu = ({
 
   return (
     <SwipeablePanel
+      openLarge
       fullWidth
       closeOnTouchOutside
       isActive={isMenu}
       onClose={onClose}
       onPressCloseButton={onClose}
     >
+      <OptionItem title="マイページ" onPress={onPressMyPage} />
       <OptionItem title="下書き一覧" onPress={onPressDraftList} />
       <OptionItem title="プレミアム会員" onPress={onPressModalPremium} />
     </SwipeablePanel>

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
-import firebase from '../configs/firebase';
+import firebase from '../constants/firebase';
 import {
   subTextColor,
   fontSizeS,
