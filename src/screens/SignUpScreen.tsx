@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { emailValidate, emaillExistCheck } from '../utils/InputCheck';
+import {
+  emailInputError,
+  emailValidate,
+  emaillExistCheck,
+} from '../utils/InputCheck';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { Profile } from '../types';
@@ -64,7 +68,7 @@ const styles = StyleSheet.create({
  * 概要：アカウント登録画面
  */
 const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
-  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
   const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
@@ -117,7 +121,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
   const onPressSkip = useCallback(() => {
     const f = async (): Promise<void> => {
-      setIsSubmitLoading(true);
+      setIsLoading(true);
       clearErrorMessage();
       try {
         const credent = await firebase.auth().signInAnonymously();
@@ -126,11 +130,15 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
           setLogEvent(events.CREATED_USER, { loginMethod: 'anonymously' });
         }
       } catch (error) {
-        console.log(error);
-        Alert.alert('エラー', 'ネットワークエラーです');
-        setIsSubmitLoading(false);
+        emailInputError(
+          error,
+          setErrorPassword,
+          setErrorEmail,
+          clearErrorMessage
+        );
+        setIsLoading(false);
       }
-      setIsSubmitLoading(false);
+      setIsLoading(false);
     };
     f();
   }, [clearErrorMessage, createUser]);
@@ -141,7 +149,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
-      setIsSubmitLoading(true);
+      setIsLoading(true);
       clearErrorMessage();
       try {
         const credent = await firebase
@@ -151,43 +159,52 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
           await createUser(credent.user);
 
           setLogEvent(events.CREATED_USER, { loginMethod: 'email' });
-          setIsSubmitLoading(false);
+          setIsLoading(false);
         }
       } catch (error) {
-        Alert.alert('エラー', 'ネットワークエラーです');
-        setIsSubmitLoading(false);
+        emailInputError(
+          error,
+          setErrorPassword,
+          setErrorEmail,
+          clearErrorMessage
+        );
+        setIsLoading(false);
       }
-      setIsSubmitLoading(false);
+      setIsLoading(false);
     };
     f();
   }, [clearErrorMessage, createUser]);
 
-  const onEndEditingEmail = async (): Promise<void> => {
-    if (email.length === 0) {
-      setIsEmailCheckOk(false);
-      setErrorEmail('');
-      return;
-    }
+  const onEndEditingEmail = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (email.length === 0) {
+        setIsEmailCheckOk(false);
+        setErrorEmail('');
+        return;
+      }
 
-    if (emailValidate(email)) {
-      setIsEmailCheckOk(false);
-      setErrorEmail('メールアドレスの形式が正しくありません');
-      return;
-    }
+      if (emailValidate(email)) {
+        setIsEmailCheckOk(false);
+        setErrorEmail('メールアドレスの形式が正しくありません');
+        return;
+      }
 
-    setIsEmailLoading(true);
-    const res = await emaillExistCheck(email);
-    if (res) {
-      setIsEmailCheckOk(false);
-      setErrorEmail('このメールアドレスはすでに登録されています');
-    } else {
-      setIsEmailCheckOk(true);
-      setErrorEmail('');
-    }
-    setIsEmailLoading(false);
-  };
+      setIsEmailLoading(true);
+      const res = await emaillExistCheck(email);
 
-  const onEndEditingPassword = (): void => {
+      if (res) {
+        setIsEmailCheckOk(false);
+        setErrorEmail('このメールアドレスはすでに登録されています');
+      } else {
+        setIsEmailCheckOk(true);
+        setErrorEmail('');
+      }
+      setIsEmailLoading(false);
+    };
+    f();
+  }, [email, setIsEmailCheckOk, setErrorEmail, setIsEmailLoading]);
+
+  const onEndEditingPassword = useCallback(() => {
     if (password.length === 0) {
       setIsPasswordCheckOk(false);
       setErrorPassword('');
@@ -198,11 +215,11 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       setIsPasswordCheckOk(true);
       setErrorPassword('');
     }
-  };
+  }, [password, setIsPasswordCheckOk, setErrorPassword]);
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={isSubmitLoading} />
+      <LoadingModal visible={isLoading} />
       <Text style={styles.title}>
         メールアドレスとパスワードを入力してください
       </Text>

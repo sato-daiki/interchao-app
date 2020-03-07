@@ -11,8 +11,6 @@ import {
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 // @ts-ignore
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
-import { Value } from 'react-native-reanimated';
 import {
   errorColor,
   fontSizeS,

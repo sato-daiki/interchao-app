@@ -1,5 +1,12 @@
-import React, { useEffect } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useCallback } from 'react';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {
   NavigationStackScreenComponent,
   NavigationStackOptions,
@@ -33,13 +40,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 32,
   },
+  row: {
+    flexDirection: 'row',
+    paddingTop: 16,
+    alignItems: 'center',
+  },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
-    paddingTop: 16,
   },
   linkText: {
     color: linkBlue,
+    fontSize: fontSizeM,
   },
 });
 
@@ -51,13 +63,13 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
     setLogEvent(events.OPENED_INITIALIZE);
   }, []);
 
-  const onPressSignIn = (): void => {
+  const onPressSignIn = useCallback((): void => {
     navigation.navigate('SignIn');
-  };
+  }, [navigation]);
 
-  const onPressSignUp = (): void => {
+  const onPressSignUp = useCallback((): void => {
     navigation.navigate('SelectLanguage');
-  };
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -67,12 +79,12 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
         </View>
         <View style={styles.footer}>
           <SubmitButton title="はじめる" onPress={onPressSignUp} />
-          <Text style={styles.text}>
-            アカウントをお持ちの方は
-            <Text style={styles.linkText} onPress={onPressSignIn}>
-              こちら
-            </Text>
-          </Text>
+          <View style={styles.row}>
+            <Text style={styles.text}>アカウントをお持ちの方は</Text>
+            <TouchableOpacity onPress={onPressSignIn}>
+              <Text style={styles.linkText}>こちら</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>

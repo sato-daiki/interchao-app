@@ -1,80 +1,169 @@
-import React, { useState } from 'react';
-import { NavigationStackProp } from 'react-navigation-stack';
-import { User } from '../types/user';
-import SignInUpForm from '../components/organisms/SignInUpForm';
+import React, { useState, useCallback, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import {
+  NavigationStackOptions,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { LoadingModal, Space, SubmitButton } from '../components/atoms';
+import { CheckTextInput } from '../components/molecules';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
+import firebase from '../constants/firebase';
+import { emailInputError, emailValidate } from '../utils/InputCheck';
+import { setLogEvent, events } from '../utils/Analytics';
 
-interface OwnProps {
-  navigation: NavigationStackProp;
-}
+type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
-export interface Props {
-  user: User;
-}
-
-export interface DispatchProps {
-  setUser: (user: User) => void;
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    paddingHorizontal: 16,
+    paddingTop: 32,
+  },
+  label: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    paddingBottom: 6,
+  },
+  forgetText: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    textAlign: 'center',
+  },
+  linkText: {
+    color: linkBlue,
+  },
+});
 
 /**
  * 概要：ログイン画面
  */
-const SignInScreen: React.FC<Props & DispatchProps & OwnProps> = ({
-  navigation,
-  setUser,
-}): JSX.Element => {
-  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
-  const [isEmailLoading, setIsEmailLoading] = useState(false);
-
-  const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);
-  const [isPasswordCheckOk, setIsPasswordCheckOk] = useState(false);
-
+const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
 
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
+  useEffect((): void => {
+    setLogEvent(events.OPENED_SIGN_IN);
+  }, []);
 
-  const onEndEditingEmail = async (): Promise<void> | void => {};
+  const clearErrorMessage = (): void => {
+    setErrorEmail('');
+    setErrorPassword('');
+  };
 
-  const onEndEditingPassword = (): void => {};
+  const onPressLogin = useCallback(() => {
+    const f = async (): Promise<void> => {
+      setIsLoading(true);
+      clearErrorMessage();
+      try {
+        const credent = await firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password);
+        if (credent.user) {
+          setLogEvent(events.SIGN_IN);
+        }
+      } catch (error) {
+        emailInputError(
+          error,
+          setErrorPassword,
+          setErrorEmail,
+          clearErrorMessage
+        );
+        setIsLoading(false);
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, [clearErrorMessage]);
 
-  const clearErrorMessage = (): void => {};
+  const onPressForget = useCallback(() => {
+    navigation.navigate('SignIn');
+  }, [navigation]);
 
-  const errorSet = (error: any): void => {};
+  const onEndEditingEmail = useCallback(() => {
+    if (email.length === 0) {
+      setErrorEmail('');
+      return;
+    }
 
-  const onPressSubmit = async (): Promise<void> => {};
+    if (emailValidate(email)) {
+      setErrorEmail('メールアドレスの形式が正しくありません');
+    }
+    setErrorEmail('');
+  }, [email, setErrorEmail]);
 
-  const onPressFacebook = async (): Promise<void> => {};
-
-  const onPressGoolge = async (): Promise<void> => {};
-
-  const onPressForget = () => {};
+  const onEndEditingPassword = useCallback(() => {
+    setErrorPassword('');
+  }, [setErrorPassword]);
 
   return (
-    <SignInUpForm
-      isSignUp={false}
-      isEmailLoading={isEmailLoading}
-      isSubmitLoading={isSubmitLoading}
-      isFacebookLoading={isFacebookLoading}
-      isGoogleLoading={isGoogleLoading}
-      isEmailCheckOk={isEmailCheckOk}
-      isPasswordCheckOk={isPasswordCheckOk}
-      email={email}
-      password={password}
-      errorEmail={errorEmail}
-      errorPassword={errorPassword}
-      onChangeTextEmail={(text: string): void => setEmail(text)}
-      onChangePassword={(text: string): void => setPassword(text)}
-      onEndEditingEmail={onEndEditingEmail}
-      onEndEditingPassword={onEndEditingPassword}
-      onPressSubmit={onPressSubmit}
-      onPressFacebook={onPressFacebook}
-      onPressGoolge={onPressGoolge}
-      onPressForget={onPressForget}
-    />
+    <View style={styles.container}>
+      <LoadingModal visible={isLoading} />
+      <Text style={styles.label}>メールアドレス</Text>
+      <CheckTextInput
+        value={email}
+        onChangeText={(text: string): void => setEmail(text)}
+        onEndEditing={onEndEditingEmail}
+        maxLength={50}
+        placeholder="Email"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
+        returnKeyType="done"
+        errorMessage={errorEmail}
+      />
+      <Space size={16} />
+      <Text style={styles.label}>パスワード</Text>
+      <CheckTextInput
+        value={password}
+        onChangeText={(text: string): void => setPassword(text)}
+        onEndEditing={onEndEditingPassword}
+        maxLength={20}
+        placeholder="Password"
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
+        secureTextEntry
+        returnKeyType="done"
+        errorMessage={errorPassword}
+      />
+      <Space size={32} />
+      <SubmitButton
+        title="ログイン"
+        onPress={onPressLogin}
+        disable={
+          errorEmail !== '' ||
+          errorPassword !== '' ||
+          email === '' ||
+          password === ''
+        }
+      />
+      <Space size={16} />
+      <Text style={styles.forgetText}>
+        パスワードをお忘れの方は
+        <TouchableOpacity onPress={onPressForget}>
+          <Text style={styles.linkText}>こちら</Text>
+        </TouchableOpacity>
+      </Text>
+    </View>
   );
+};
+
+SignInScreen.navigationOptions = (): NavigationStackOptions => {
+  return {
+    ...DefaultNavigationOptions,
+    title: 'ログイン',
+  };
 };
 
 export default SignInScreen;

@@ -1,6 +1,9 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import {
+  NavigationStackScreenComponent,
+  NavigationStackOptions,
+} from 'react-navigation-stack';
 import firebase from '../constants/firebase';
 import {
   subTextColor,
@@ -12,6 +15,8 @@ import {
 } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
 import { Space } from '../components/atoms';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { setLogEvent, events } from '../utils/Analytics';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,16 +68,29 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
     navigation.navigate('Management');
   }, [navigation]);
 
-  const onPressLogout = useCallback(() => {}, []);
+  const onPressDelete = useCallback(() => {
+    const f = async (): Promise<void> => {
+      try {
+        await firebase.auth().currentUser!.delete();
+        setLogEvent(events.DELETED_USER);
+      } catch (error) {
+        Alert.alert(' エラー', 'ネットワークエラーです');
+      }
+    };
+    f();
+  }, []);
 
-  const onPressDelete = async () => {
-    // const f = async (): Promise<void> => {
-    await firebase.auth().currentUser.delete();
-    console.log('firebase.auth().currentUser', firebase.auth().currentUser);
-    // };
-    // f();
-    // }, []);
-  };
+  const onPressLogout = useCallback(() => {
+    const f = async (): Promise<void> => {
+      try {
+        await firebase.auth().signOut();
+        setLogEvent(events.SIGN_OUT);
+      } catch (error) {
+        Alert.alert(' エラー', 'ネットワークエラーです');
+      }
+    };
+    f();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -95,6 +113,13 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       </TouchableOpacity>
     </View>
   );
+};
+
+SettingScreen.navigationOptions = (): NavigationStackOptions => {
+  return {
+    ...DefaultNavigationOptions,
+    title: '設定',
+  };
 };
 
 export default SettingScreen;

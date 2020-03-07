@@ -27,10 +27,18 @@ export const emailInputError = (
 ): void => {
   const errorCode = error.code;
   const errorMessage = error.message;
+  console.log(errorCode);
+  console.log(errorMessage);
 
   switch (errorCode) {
     case 'auth/weak-password':
       setErrorPassword('パスワードは6桁以上で入力してください');
+      break;
+    case 'auth/wrong-password':
+      setErrorPassword('パスワードが違います');
+      break;
+    case 'auth/user-not-found':
+      setErrorEmail('メールアドレスが存在しません');
       break;
     case 'auth/invalid-email':
       setErrorEmail('メールアドレスの形式が正しくありません');
@@ -42,6 +50,13 @@ export const emailInputError = (
       Alert.alert(
         'エラー',
         'ネットワークエラーです。電波のいい箇所で再度お試しください'
+      );
+      clearErrorMessage();
+      break;
+    case 'auth/too-many-requests':
+      Alert.alert(
+        'エラー',
+        'エラーの数が一定数を超えました。時間をおいてから再度お試しください'
       );
       clearErrorMessage();
       break;
