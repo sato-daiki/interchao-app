@@ -8,6 +8,7 @@ import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenCon
 import ResendEmailScreen from '../screens/ResendEmailScreen';
 import ConfirmEmailScreen from '../screens/ConfirmEmailScreen';
 import InputUserNameScreenContainer from '../containers/InputUserNameScreenContainer';
+import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 
 export default createStackNavigator({
   Initialize: {
@@ -30,5 +31,8 @@ export default createStackNavigator({
   },
   ConfirmEmail: {
     screen: ConfirmEmailScreen,
+  },
+  ForegetPassword: {
+    screen: ForegetPasswordScreen,
   },
 });
