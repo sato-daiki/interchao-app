@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 /* screens */
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
 import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 import { mainColor } from '../styles/Common';
