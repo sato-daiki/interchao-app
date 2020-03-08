@@ -10,7 +10,7 @@ import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Profile } from '../types';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 interface Props {
   profile: Profile;
@@ -49,7 +49,7 @@ const SelectLanguageScreen: ScreenType = ({
   const [isCheckedJa, setIsCheckedJa] = useState(false);
 
   useEffect((): void => {
-    setLogEvent(events.OPENED_SELECT_LANGUAGE);
+    track(events.OPENED_SELECT_LANGUAGE);
   }, []);
 
   const onPressNext = (): void => {

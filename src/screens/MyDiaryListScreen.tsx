@@ -24,6 +24,10 @@ import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 
 export interface Props {
   user: User;
+  diaries: Diary[];
+  diaryTotalNum: number;
+  setDiaries: (diaries: Diary[]) => void;
+  setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -50,16 +54,21 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 /**
  * マイ日記一覧
  */
-const MyDiaryListScreen: ScreenType = ({ user, navigation }) => {
+const MyDiaryListScreen: ScreenType = ({
+  user,
+  diaries,
+  diaryTotalNum,
+  setDiaries,
+  setDiaryTotalNum,
+  navigation,
+}) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
-  const [totalNum, setTotalNum] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
 
   const [isMenu, setIsMenu] = useState(false);
-  const [diaries, setDiaries] = useState();
 
   // 第二引数をなしにするのがポイント
   useEffect(() => {
@@ -69,13 +78,27 @@ const MyDiaryListScreen: ScreenType = ({ user, navigation }) => {
   const getNewDiary = async (clean: boolean): Promise<void> => {
     try {
       const index = await Algolia.getDiaryIndex(clean);
+      await index.setSettings({
+        ranking: [
+          'desc(createdAt._seconds)',
+          'typo',
+          'geo',
+          'words',
+          'filters',
+          'proximity',
+          'attribute',
+          'exact',
+          'custom',
+        ],
+      });
       const res = await index.search('', {
         filters: `profile.uid: ${user.uid}`,
         page: 0,
         hitsPerPage: HIT_PER_PAGE,
       });
+
       setDiaries(res.hits);
-      setTotalNum(res.nbHits);
+      setDiaryTotalNum(res.nbHits);
     } catch (err) {
       setLoading(false);
       setRefreshing(false);
@@ -163,9 +186,9 @@ const MyDiaryListScreen: ScreenType = ({ user, navigation }) => {
 
   const listHeaderComponent = useCallback(() => {
     const title =
-      totalNum !== 0 ? `マイ日記一覧(${totalNum}件)` : 'マイ日記一覧';
+      diaryTotalNum !== 0 ? `マイ日記一覧(${diaryTotalNum}件)` : 'マイ日記一覧';
     return <GrayHeader title={title} />;
-  }, [totalNum]);
+  }, [diaryTotalNum]);
 
   const displayEmptyComponent =
     !loading && !refreshing && diaries && diaries.length < 1;

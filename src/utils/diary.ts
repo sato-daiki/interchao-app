@@ -1,7 +1,7 @@
 import moment from 'moment';
 import 'moment/locale/ja';
 
-import { DiaryStatus, CorrectionStatus, ScreenName } from '../types';
+import { DiaryStatus, CorrectionStatus, ScreenName, Timestamp } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 
 interface Status {
@@ -9,11 +9,13 @@ interface Status {
   color: string;
 }
 
-export const getPostDay = (timestamp: firebase.firestore.Timestamp): string => {
+export const getPostDay = (
+  timestamp: Timestamp | firebase.firestore.FieldValue
+): string => {
   if (!timestamp) {
     return '';
   }
-  return moment.unix(timestamp._seconds).format('Y-M-D');
+  return moment(timestamp).format('Y-M-D');
 };
 // 日記一覧に出力するステータスの取得
 

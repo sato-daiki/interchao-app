@@ -16,7 +16,7 @@ import { CheckTextInput } from '../components/molecules';
 import { Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { checkUserName } from '../utils/auth';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 interface Props {
   profile: Profile;
@@ -60,7 +60,7 @@ const InputUserNameScreen: ScreenType = ({
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect((): void => {
-    setLogEvent(events.OPENED_INPUT_USER_NAME);
+    track(events.OPENED_INPUT_USER_NAME);
   }, []);
 
   const onChangeText = useCallback(

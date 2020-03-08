@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { persistReducer } from 'redux-persist';
 import user from './user';
 import profile from './profile';
+import diaryList from './diaryList';
 
 const rootPersistConfig = {
   key: 'root',
@@ -10,6 +11,6 @@ const rootPersistConfig = {
   whitelist: ['user'],
 };
 
-const rootReducer = combineReducers({ user, profile });
+const rootReducer = combineReducers({ user, profile, diaryList });
 
 export default persistReducer(rootPersistConfig, rootReducer);

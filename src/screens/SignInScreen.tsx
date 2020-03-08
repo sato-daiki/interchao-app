@@ -11,7 +11,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
 import { emailInputError, emailValidate } from '../utils/InputCheck';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -55,7 +55,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
   const [errorPassword, setErrorPassword] = useState('');
 
   useEffect((): void => {
-    setLogEvent(events.OPENED_SIGN_IN);
+    track(events.OPENED_SIGN_IN);
   }, []);
 
   const clearErrorMessage = (): void => {
@@ -72,7 +72,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
           .auth()
           .signInWithEmailAndPassword(email, password);
         if (credent.user) {
-          setLogEvent(events.SIGN_IN);
+          track(events.SIGN_IN);
         }
       } catch (error) {
         emailInputError(

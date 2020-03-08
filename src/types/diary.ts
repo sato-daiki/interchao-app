@@ -1,7 +1,7 @@
 import { firestore } from 'firebase';
 
 // algolia経由で取得するのでtimestamp型が他と異なる
-type Timestamp = {
+export type Timestamp = {
   _seconds: number;
   _nanoseconds: number;
 };

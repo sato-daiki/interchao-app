@@ -14,7 +14,7 @@ import {
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
 import { LogoVercitacl } from '../images';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
  */
 const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
   useEffect((): void => {
-    setLogEvent(events.OPENED_INITIALIZE);
+    track(events.OPENED_INITIALIZE);
   }, []);
 
   const onPressSignIn = useCallback((): void => {
