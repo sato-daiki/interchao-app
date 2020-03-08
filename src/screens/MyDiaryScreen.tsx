@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { User } from '../types';
-import { getPostDay, getDiaryStatus } from '../utils/diary';
+import { getPostDay, getMyDiaryStatus } from '../utils/diary';
 
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
 import { DiaryOriginal } from '../components/molecules';
@@ -53,7 +53,7 @@ const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
   // const postDay = getPostDay(createdAt);
   const postDay = '2018-01-01';
 
-  const status = getDiaryStatus('my', diaryStatus, correctionStatus, isReview);
+  const status = getMyDiaryStatus(diaryStatus, correctionStatus, isReview);
 
   return (
     <View style={styles.container}>

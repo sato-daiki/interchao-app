@@ -1,17 +1,36 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
-import { GrayHeader } from '../components/atoms';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Alert,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
+import {
+  NavigationStackOptions,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack';
+import Algolia from '../utils/Algolia';
+import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
-import { DiaryListItem } from '../components/molecules';
-import firebase from '../constants/firebase';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import DraftListItem from '../components/organisms/DraftListItem';
+import { EmptyDraftDiaryList } from '../components/molecules';
 
 export interface Props {
   user: User;
+  draftDiaries: Diary[];
+  draftDiaryTotalNum: number;
+  setDraftDiaries: (draftDiaries: Diary[]) => void;
+  setDiaryTotalNum: (draftDiaryTotalNum: number) => void;
 }
 
-export interface DispatchProps {
-  setUser: (user: User) => void;
-}
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -20,63 +39,177 @@ const styles = StyleSheet.create({
   },
 });
 
+const HIT_PER_PAGE = 20;
+
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
 /**
  * 下書き一覧
  */
-const DraftDiaryListScreen: React.FC<Props &
-  DispatchProps> = (): JSX.Element => {
-  const [diaries, setDiaries] = useState();
+const DraftDiaryListScreen: ScreenType = ({
+  user,
+  draftDiaries,
+  draftDiaryTotalNum,
+  setDraftDiaries,
+  setDiaryTotalNum,
+  navigation,
+}) => {
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [page, setPage] = useState(0);
+  const [readingNext, setReadingNext] = useState(false);
+  const [readAllResults, setReadAllResults] = useState(false);
+
+  const getNewDraftDiary = useCallback(
+    (clean: boolean) => {
+      const f = async (): Promise<void> => {
+        try {
+          const index = await Algolia.getDiaryIndex(clean);
+          await index.setSettings({
+            ranking: [
+              'desc(createdAt._seconds)',
+              'typo',
+              'geo',
+              'words',
+              'filters',
+              'proximity',
+              'attribute',
+              'exact',
+              'custom',
+            ],
+          });
+          const res = await index.search('', {
+            filters: `profile.uid: ${user.uid} AND `,
+            page: 0,
+            hitsPerPage: HIT_PER_PAGE,
+          });
+
+          setDraftDiaries(res.hits);
+          setDiaryTotalNum(res.nbHits);
+        } catch (err) {
+          setLoading(false);
+          setRefreshing(false);
+          Alert.alert(' エラー', 'ネットワークエラーです');
+        }
+        setLoading(false);
+      };
+      f();
+    },
+    [setDraftDiaries, setDiaryTotalNum, user.uid]
+  );
+
+  // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      const diariesRef = await firebase
-        .firestore()
-        .collection('diaries')
-        .get();
-      // TODO dataの取得方法考え直す
-      setDiaries(diariesRef.docs);
+      await getNewDraftDiary(false);
     };
     f();
-  });
+  }, [getNewDraftDiary]);
 
-  const onPressUser = useCallback(() => {}, []);
-  const onPressItem = useCallback(() => {}, []);
+  const onRefresh = useCallback(() => {
+    const f = async (): Promise<void> => {
+      setRefreshing(true);
+      await getNewDraftDiary(true);
+      setRefreshing(false);
+    };
+    f();
+  }, [getNewDraftDiary]);
+
+  const loadNextPage = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!readingNext && !readAllResults) {
+        try {
+          const nextPage = page + 1;
+          setReadingNext(true);
+
+          const index = await Algolia.getDiaryIndex();
+          const res = await index.search('', {
+            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
+            page: nextPage,
+            hitsPerPage: HIT_PER_PAGE,
+          });
+
+          if (res.hits.length === 0) {
+            setReadAllResults(true);
+            setReadingNext(false);
+          } else {
+            setDraftDiaries([...draftDiaries, ...res.hits]);
+            setPage(nextPage);
+            setReadingNext(false);
+          }
+        } catch (err) {
+          setReadingNext(false);
+          Alert.alert(' エラー', 'ネットワークエラーです');
+        }
+      }
+    };
+    f();
+  }, [
+    draftDiaries,
+    page,
+    readAllResults,
+    readingNext,
+    setDraftDiaries,
+    user.uid,
+  ]);
+
+  const onPressItem = useCallback(
+    item => {
+      // navigation.navigate('MyDiary', { item });
+    },
+    [navigation]
+  );
 
   const renderItem = useCallback(
-    ({
-      item,
-    }: {
-      item: firebase.firestore.QueryDocumentSnapshot<
-        firebase.firestore.DocumentData
-      >;
-    }): JSX.Element => {
-      return (
-        <DiaryListItem
-          item={item.data()}
-          onPressUser={onPressUser}
-          onPressItem={onPressItem}
-        />
-      );
+    ({ item }: { item: Diary }): JSX.Element => {
+      return <DraftListItem item={item} onPressItem={onPressItem} />;
     },
-    [onPressItem, onPressUser]
+    [onPressItem]
   );
 
-  const listHeaderComponent = (
-    <GrayHeader title={`下書き一覧(${diaries ? diaries.length : 0}件)`} />
-  );
+  const listHeaderComponent = useCallback(() => {
+    const title =
+      draftDiaryTotalNum !== 0
+        ? `下書き一覧(${draftDiaryTotalNum}件)`
+        : '下書き一覧';
+    return <GrayHeader title={title} />;
+  }, [draftDiaryTotalNum]);
+
+  const displayEmptyComponent =
+    !loading && !refreshing && draftDiaries.length < 1;
+  if (displayEmptyComponent) {
+    return <EmptyDraftDiaryList />;
+  }
+
+  const listFooterComponent =
+    loading && !refreshing && draftDiaries.length > 0 ? (
+      <ActivityIndicator />
+    ) : null;
 
   return (
     <View style={styles.container}>
+      <LoadingModal visible={loading} />
       <FlatList
-        screenName="draft"
-        data={diaries}
+        data={draftDiaries}
         keyExtractor={keyExtractor}
+        refreshing={refreshing}
         renderItem={renderItem}
         ListHeaderComponent={listHeaderComponent}
+        ListFooterComponent={listFooterComponent}
+        onEndReached={loadNextPage}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );
+};
+
+DraftDiaryListScreen.navigationOptions = (): NavigationStackOptions => {
+  return {
+    ...DefaultNavigationOptions,
+    title: '下書き',
+  };
 };
 
 export default DraftDiaryListScreen;

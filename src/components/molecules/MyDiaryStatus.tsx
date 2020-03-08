@@ -1,18 +1,12 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { fontSizeS, subTextColor } from '../../styles/Common';
-import { Diary, ScreenName } from '../../types';
-import { getDiaryStatus } from '../../utils/diary';
+import { Diary } from '../../types';
+import { getMyDiaryStatus } from '../../utils/diary';
 import DiaryStatus from '../atoms/DiaryStatus';
 
 interface Props {
   diary: Diary;
-  screenName: ScreenName;
-}
-
-interface PrmStatus {
-  text: string;
-  color: string;
 }
 
 const styles = StyleSheet.create({
@@ -26,10 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const TotalStatus: React.FC<Props> = ({
-  diary,
-  screenName,
-}: Props): JSX.Element => {
+const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
   const {
     diaryStatus,
     correctionStatus,
@@ -39,15 +30,9 @@ const TotalStatus: React.FC<Props> = ({
     isReviewPro,
   } = diary;
 
-  const status = getDiaryStatus(
-    screenName,
-    diaryStatus,
-    correctionStatus,
-    isReview
-  );
+  const status = getMyDiaryStatus(diaryStatus, correctionStatus, isReview);
 
-  const statusPro = getDiaryStatus(
-    screenName,
+  const statusPro = getMyDiaryStatus(
     diaryStatus,
     correctionStatusPro,
     isReviewPro
@@ -77,4 +62,4 @@ const TotalStatus: React.FC<Props> = ({
   );
 };
 
-export default TotalStatus;
+export default MyDiaryStatus;
