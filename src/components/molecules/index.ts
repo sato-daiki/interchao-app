@@ -9,5 +9,6 @@ export { default as CheckItem } from './CheckItem';
 export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
 export { default as UserListItem } from './UserListItem';
 export { default as OnOffSmallButton } from './OnOffSmallButton';
-export { default as TotalStatus } from './TotalStatus';
+export { default as MyDiaryStatus } from './MyDiaryStatus';
 export { default as ProfileIcons } from './ProfileIcons';
+export { default as EmptyDraftDiaryList } from './EmptyDraftDiaryList';

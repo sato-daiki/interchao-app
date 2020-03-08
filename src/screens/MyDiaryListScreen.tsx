@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 2;
+const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
@@ -106,6 +106,7 @@ const MyDiaryListScreen: ScreenType = ({
           setRefreshing(false);
           Alert.alert(' エラー', 'ネットワークエラーです');
         }
+        setLoading(false);
       };
       f();
     },
@@ -116,7 +117,6 @@ const MyDiaryListScreen: ScreenType = ({
   useEffect(() => {
     const f = async (): Promise<void> => {
       await getNewDiary(false);
-      setLoading(false);
     };
     f();
   }, [getNewDiary]);
@@ -139,7 +139,7 @@ const MyDiaryListScreen: ScreenType = ({
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.uid: ${user.uid}`,
+            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -181,7 +181,6 @@ const MyDiaryListScreen: ScreenType = ({
     ({ item }: { item: Diary }): JSX.Element => {
       return (
         <MyDiaryListItem
-          screenName="my"
           item={item}
           onPressUser={onPressUser}
           onPressItem={onPressItem}
@@ -197,8 +196,7 @@ const MyDiaryListScreen: ScreenType = ({
     return <GrayHeader title={title} />;
   }, [diaryTotalNum]);
 
-  const displayEmptyComponent =
-    !loading && !refreshing && diaries && diaries.length < 1;
+  const displayEmptyComponent = !loading && !refreshing && diaries.length < 1;
   if (displayEmptyComponent) {
     return <EmptyMyDiaryList />;
   }

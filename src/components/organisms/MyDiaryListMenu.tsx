@@ -23,7 +23,7 @@ const MyDiaryListMenu = ({
   }, [navigation]);
 
   const onPressDraftList = useCallback(() => {
-    navigation.navigate('ModalPostDiary');
+    navigation.navigate('DraftDiaryList');
   }, [navigation]);
 
   const onPressModalPremium = useCallback(() => {

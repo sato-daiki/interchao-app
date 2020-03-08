@@ -4,6 +4,7 @@ import { persistReducer } from 'redux-persist';
 import user from './user';
 import profile from './profile';
 import diaryList from './diaryList';
+import draftDiaryList from './draftDiaryList';
 
 const rootPersistConfig = {
   key: 'root',
@@ -11,6 +12,11 @@ const rootPersistConfig = {
   whitelist: ['user'],
 };
 
-const rootReducer = combineReducers({ user, profile, diaryList });
+const rootReducer = combineReducers({
+  user,
+  profile,
+  diaryList,
+  draftDiaryList,
+});
 
 export default persistReducer(rootPersistConfig, rootReducer);

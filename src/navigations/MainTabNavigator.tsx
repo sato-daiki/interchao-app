@@ -5,7 +5,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
-import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
+import DraftDiaryListScreenContainer from '../containers/DraftDiaryListScreenContainer';
 import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
@@ -34,7 +34,7 @@ const MyDiaryTabStack = createStackNavigator(
       screen: MyDiaryListScreenContainer,
     },
     DraftDiaryList: {
-      screen: DraftDiaryListScreen,
+      screen: DraftDiaryListScreenContainer,
     },
     MyDiary: {
       screen: MyDiaryScreen,

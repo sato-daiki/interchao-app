@@ -22,9 +22,12 @@ interface Props {
   user: User;
   profile: Profile;
   diaryTotalNum: number;
+  draftDiaryTotalNum: number;
   setPoints: (points: number) => void;
   addDiary: (diary: Diary) => void;
+  addDraftDiary: (diary: Diary) => void;
   setDiaryTotalNum: (diaryTotalNum: number) => void;
+  setDraftDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -78,9 +81,12 @@ const PostDiaryScreen: ScreenType = ({
   user,
   profile,
   diaryTotalNum,
+  draftDiaryTotalNum,
   setPoints,
   addDiary,
+  addDraftDiary,
   setDiaryTotalNum,
+  setDraftDiaryTotalNum,
 }) => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
@@ -93,9 +99,7 @@ const PostDiaryScreen: ScreenType = ({
     navigation.setParams({ onPressPublic: () => setIsModalAlert(true) });
   }, []);
 
-  const post = async (diaryStatus: DiaryStatus): Promise<void> => {
-    if (loading) return;
-    setLoading(true);
+  const getDiary = (diaryStatus: DiaryStatus): Diary => {
     const displayProfile: DisplayProfile = {
       uid: profile.uid,
       name: profile.name,
@@ -104,7 +108,7 @@ const PostDiaryScreen: ScreenType = ({
       ref: firebase.firestore().doc(`profiles/${profile.uid}`),
     };
 
-    const diary: Diary = {
+    return {
       premium: user.premium || false,
       isPublic,
       title,
@@ -118,54 +122,75 @@ const PostDiaryScreen: ScreenType = ({
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     };
-
-    const refDiary = firebase
-      .firestore()
-      .collection('diaries')
-      .doc();
-    const refUser = firebase.firestore().doc(`users/${user.uid}`);
-
-    // トランザクション開始
-    try {
-      const points = user.points - 10;
-      await firebase.firestore().runTransaction(async transaction => {
-        transaction.set(refDiary, { ...diary });
-        transaction.update(refUser, {
-          points,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      });
-
-      // reduxに追加
-      addDiary({
-        ...diary,
-      });
-      setDiaryTotalNum(diaryTotalNum + 1);
-      setPoints(points);
-
-      track(events.CREATED_DIARY, { diaryStatus });
-      setLoading(false);
-      setIsModalAlert(false);
-      if (diaryStatus === 'publish') {
-        navigation.navigate('MyDiaryList');
-      } else if (diaryStatus === 'draft') {
-        navigation.navigate('DraftDiaryList', {
-          reload: true,
-        });
-      }
-    } catch (err) {
-      setLoading(false);
-      Alert.alert('ネットワークエラーです');
-    }
   };
 
+  const refDiary = firebase
+    .firestore()
+    .collection('diaries')
+    .doc();
+  const refUser = firebase.firestore().doc(`users/${user.uid}`);
+
   const onPressSubmit = useCallback(() => {
-    post('publish');
-  }, [post]);
+    const f = async (): Promise<void> => {
+      if (loading) return;
+      // トランザクション開始
+      try {
+        setLoading(true);
+        const diary = getDiary('publish');
+        const points = user.points - 10;
+        await firebase.firestore().runTransaction(async transaction => {
+          transaction.set(refDiary, { ...diary });
+          transaction.update(refUser, {
+            points,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        });
+
+        track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+
+        // reduxに追加
+        addDiary(diary);
+        setDiaryTotalNum(diaryTotalNum + 1);
+        setPoints(points);
+
+        navigation.navigate('MyDiaryList');
+        setLoading(false);
+        setIsModalAlert(false);
+      } catch (err) {
+        setLoading(false);
+        Alert.alert('ネットワークエラーです');
+      }
+    };
+    f();
+  }, [getDiary]);
 
   const onPressDraft = useCallback(() => {
-    post('draft');
-  }, [post]);
+    const f = async (): Promise<void> => {
+      if (loading) return;
+      // トランザクション開始
+      try {
+        setLoading(true);
+        const diary = getDiary('draft');
+        await firebase.firestore().runTransaction(async transaction => {
+          transaction.set(refDiary, { ...diary });
+        });
+
+        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+
+        // reduxに追加
+        addDraftDiary(diary);
+        setDraftDiaryTotalNum(draftDiaryTotalNum + 1);
+
+        navigation.navigate('DraftDiaryList');
+        setLoading(false);
+        setIsModalAlert(false);
+      } catch (err) {
+        setLoading(false);
+        Alert.alert('ネットワークエラーです');
+      }
+    };
+    f();
+  }, [getDiary]);
 
   return (
     <View style={styles.container}>

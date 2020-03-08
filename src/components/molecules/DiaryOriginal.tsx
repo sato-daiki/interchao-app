@@ -6,7 +6,7 @@ import {
   primaryColor,
   subTextColor,
 } from '../../styles/Common';
-import TotalStatus from './TotalStatus';
+// import TotalStatus from './TotalStatus';
 
 interface Status {
   text: string;
