@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { fontSizeS, primaryColor } from '../../styles/Common';
+import { fontSizeS, primaryColor, borderLightColor } from '../../styles/Common';
+import { Zebbu } from '../../images';
 
 interface Props {
   name: string;
@@ -19,6 +20,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginRight: 4,
   },
+  iconEmpty: {
+    borderColor: borderLightColor,
+    borderWidth: 0.5,
+  },
   name: {
     fontSize: fontSizeS,
     color: primaryColor,
@@ -32,7 +37,11 @@ const ProfileIconHorizontal: React.FC<Props> = ({
 }: Props): JSX.Element => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image style={styles.icon} source={{ uri: photoUrl }} />
+      {photoUrl ? (
+        <Image style={styles.icon} source={{ uri: photoUrl }} />
+      ) : (
+        <Image style={[styles.icon, styles.iconEmpty]} source={Zebbu} />
+      )}
       <Text style={styles.name}>{name}</Text>
     </TouchableOpacity>
   );

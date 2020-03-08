@@ -26,7 +26,7 @@ import {
   subTextColor,
   fontSizeL,
 } from '../styles/Common';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 interface Props {
   user: User;
@@ -80,7 +80,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   const [errorPassword, setErrorPassword] = useState('');
 
   useEffect((): void => {
-    setLogEvent(events.OPENED_SIGN_UP);
+    track(events.OPENED_SIGN_UP);
   }, []);
 
   const clearErrorMessage = (): void => {
@@ -127,7 +127,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         const credent = await firebase.auth().signInAnonymously();
         if (credent.user) {
           await createUser(credent.user);
-          setLogEvent(events.CREATED_USER, { loginMethod: 'anonymously' });
+          track(events.CREATED_USER, { loginMethod: 'anonymously' });
         }
       } catch (error) {
         emailInputError(
@@ -158,7 +158,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         if (credent.user) {
           await createUser(credent.user);
 
-          setLogEvent(events.CREATED_USER, { loginMethod: 'email' });
+          track(events.CREATED_USER, { loginMethod: 'email' });
           setIsLoading(false);
         }
       } catch (error) {

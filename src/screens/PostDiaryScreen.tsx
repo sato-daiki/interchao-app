@@ -16,11 +16,15 @@ import { TextButtun, HeaderText, LoadingModal } from '../components/atoms';
 import { ModalAlertPublish } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 interface Props {
   user: User;
   profile: Profile;
+  diaryTotalNum: number;
+  setPoints: (points: number) => void;
+  addDiary: (diary: Diary) => void;
+  setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -69,7 +73,15 @@ const styles = StyleSheet.create({
 /**
  * 概要：日記投稿画面
  */
-const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
+const PostDiaryScreen: ScreenType = ({
+  navigation,
+  user,
+  profile,
+  diaryTotalNum,
+  setPoints,
+  addDiary,
+  setDiaryTotalNum,
+}) => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -115,14 +127,23 @@ const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
 
     // トランザクション開始
     try {
+      const points = user.points - 10;
       await firebase.firestore().runTransaction(async transaction => {
         transaction.set(refDiary, { ...diary });
         transaction.update(refUser, {
-          points: user.points - 10,
+          points,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
       });
 
+      // reduxに追加
+      addDiary({
+        ...diary,
+      });
+      setDiaryTotalNum(diaryTotalNum + 1);
+      setPoints(points);
+
+      track(events.CREATED_DIARY, { diaryStatus });
       setLoading(false);
       setIsModalAlert(false);
       if (diaryStatus === 'publish') {
@@ -139,12 +160,10 @@ const PostDiaryScreen: ScreenType = ({ navigation, user, profile }) => {
   };
 
   const onPressSubmit = useCallback(() => {
-    setLogEvent(events.POST_DIARY, { publish: 'publish' });
     post('publish');
   }, [post]);
 
   const onPressDraft = useCallback(() => {
-    setLogEvent(events.POST_DIARY, { publish: 'draft' });
     post('draft');
   }, [post]);
 

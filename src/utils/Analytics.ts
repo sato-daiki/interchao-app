@@ -38,7 +38,7 @@ export const setAnalyticsUser = (user: User, profile: Profile): void => {
   Amplitude.setUserProperties(userProperties);
 };
 
-export const setLogEvent = (eventName: string, properties?: any): void => {
+export const track = (eventName: string, properties?: any): void => {
   try {
     if (properties) {
       Amplitude.logEventWithProperties(eventName, properties);

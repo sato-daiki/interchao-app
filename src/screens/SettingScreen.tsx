@@ -16,7 +16,7 @@ import {
 import { OptionItem } from '../components/molecules';
 import { Space } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { setLogEvent, events } from '../utils/Analytics';
+import { track, events } from '../utils/Analytics';
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +80,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
     const f = async (): Promise<void> => {
       try {
         await firebase.auth().currentUser!.delete();
-        setLogEvent(events.DELETED_USER);
+        track(events.DELETED_USER);
       } catch (error) {
         console.log(error);
         Alert.alert(' エラー', 'ネットワークエラーです');
@@ -100,7 +100,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
             'メールアドレスが登録されていないため、ログアウトできません。'
           );
         }
-        setLogEvent(events.SIGN_OUT);
+        track(events.SIGN_OUT);
       } catch (error) {
         Alert.alert(' エラー', 'ネットワークエラーです');
       }

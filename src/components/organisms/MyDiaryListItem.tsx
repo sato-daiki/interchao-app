@@ -70,8 +70,6 @@ const MyDiaryListItem = ({
   const { name, photoUrl } = profile;
   const postDay = getPostDay(createdAt);
 
-  // TODO 文字列数の調整
-
   return (
     <TouchableOpacity
       style={styles.container}
