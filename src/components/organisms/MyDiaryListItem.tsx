@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   fontSizeS,
@@ -8,16 +8,15 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { ProfileIconVertical } from '../atoms';
 import { getPostDay } from '../../utils/diary';
 import firebase from '../../constants/firebase';
 import { ScreenName, Diary } from '../../types';
-import TotalStatus from '../molecules/TotalStatus';
+import { TotalStatus, ProfileIcons } from '../molecules';
 
 interface Props {
   screenName: ScreenName;
   item: Diary;
-  onPressUser: () => void;
+  onPressUser: (uid: string) => void;
   onPressItem: (item: firebase.firestore.DocumentData) => void;
 }
 
@@ -38,25 +37,26 @@ const styles = StyleSheet.create({
     color: subTextColor,
     fontSize: fontSizeS,
   },
-  main: {
-    flexDirection: 'row',
-  },
-  content: {
-    flexDirection: 'column',
-    flex: 1,
-  },
   title: {
     color: primaryColor,
     fontWeight: 'bold',
     fontSize: fontSizeM,
     paddingBottom: 8,
   },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
+    textAlign: 'left',
+    flex: 1,
   },
   icon: {
-    paddingTop: 20,
+    paddingLeft: 6,
   },
 });
 
@@ -66,8 +66,23 @@ const MyDiaryListItem = ({
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text, profile } = item;
-  const { name, photoUrl } = profile;
+  const { createdAt, title, text /* correction, proCorrection */ } = item;
+  const proCorrection = {
+    profile: {
+      uid: 'aaa',
+      name: 'dd',
+      userName: 'eee',
+      photoUrl: '',
+    },
+  };
+  const correction = {
+    profile: {
+      uid: 'aaa',
+      name: 'dd',
+      userName: 'eee',
+      photoUrl: '',
+    },
+  };
   const postDay = getPostDay(createdAt);
 
   return (
@@ -79,18 +94,23 @@ const MyDiaryListItem = ({
         <Text style={styles.postDayText}>{postDay}</Text>
         <TotalStatus screenName={screenName} diary={item} />
       </View>
-      <View style={styles.main}>
-        <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{text}</Text>
-        </View>
-        <View style={styles.icon}>
-          <ProfileIconVertical
-            name={name}
-            photoUrl={photoUrl}
-            onPress={onPressUser}
-          />
-        </View>
+      <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
+        {title}
+      </Text>
+
+      <View style={styles.content}>
+        <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
+          {text}
+        </Text>
+        {correction || proCorrection ? (
+          <View style={styles.icon}>
+            <ProfileIcons
+              correction={correction}
+              proCorrection={proCorrection}
+              onPressUser={onPressUser}
+            />
+          </View>
+        ) : null}
       </View>
     </TouchableOpacity>
   );

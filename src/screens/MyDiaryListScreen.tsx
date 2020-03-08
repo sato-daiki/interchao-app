@@ -159,9 +159,13 @@ const MyDiaryListScreen: ScreenType = ({
     setIsMenu(false);
   }, []);
 
-  const onPressUser = useCallback(() => {
-    navigation.navigate('MyPage');
-  }, [navigation]);
+  const onPressUser = useCallback(
+    (uid: string) => {
+      console.log(uid);
+      // navigation.navigate('MyPage');
+    },
+    [navigation]
+  );
 
   const onPressItem = useCallback(
     item => {
