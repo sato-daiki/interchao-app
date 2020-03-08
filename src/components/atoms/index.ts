@@ -4,6 +4,7 @@ export { default as WhiteButton } from './WhiteButton';
 export { default as RadioBox } from './RadioBox';
 export { default as LoadingModal } from './LoadingModal';
 export { default as GrayHeader } from './GrayHeader';
+export { default as ProfileIcon } from './ProfileIcon';
 export { default as ProfileIconVertical } from './ProfileIconVertical';
 export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';
 export { default as TextButtun } from './TextButtun';

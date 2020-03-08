@@ -10,3 +10,4 @@ export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
 export { default as UserListItem } from './UserListItem';
 export { default as OnOffSmallButton } from './OnOffSmallButton';
 export { default as TotalStatus } from './TotalStatus';
+export { default as ProfileIcons } from './ProfileIcons';

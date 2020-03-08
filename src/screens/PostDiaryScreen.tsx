@@ -182,7 +182,7 @@ const PostDiaryScreen: ScreenType = ({
         value={title}
         onChangeText={(txt): void => setTitle(txt)}
         placeholder="Title"
-        maxLength={32}
+        maxLength={100}
         autoCapitalize="none"
         keyboardType="default"
       />
@@ -191,7 +191,6 @@ const PostDiaryScreen: ScreenType = ({
         value={text}
         onChangeText={(txt): void => setText(txt)}
         placeholder="本文"
-        maxLength={100}
         underlineColorAndroid="transparent"
         multiline
         autoCapitalize="none"
