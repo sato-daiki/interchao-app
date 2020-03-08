@@ -1,11 +1,5 @@
-import { Platform } from 'react-native';
 import { NavigationStackOptions } from 'react-navigation-stack';
-import {
-  primaryColor,
-  mainColor,
-  fontSizeL,
-  subTextColor,
-} from '../styles/Common';
+import { primaryColor, fontSizeL } from '../styles/Common';
 
 // eslint-disable-next-line import/prefer-default-export
 export const DefaultNavigationOptions: NavigationStackOptions = {
@@ -18,7 +12,7 @@ export const DefaultNavigationOptions: NavigationStackOptions = {
     fontSize: fontSizeL,
   },
   headerBackTitleStyle: { display: 'none' },
-  headerTintColor: mainColor,
+  headerTintColor: primaryColor,
   headerRightContainerStyle: {
     paddingHorizontal: 16,
   },

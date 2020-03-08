@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 });
 
 const UserListItem = ({
-  name,
+  userName,
   photoUrl,
   onPressUser,
   onPressButton,
@@ -27,7 +27,7 @@ const UserListItem = ({
   return (
     <View style={styles.container}>
       <ProfileIconHorizontal
-        name={name}
+        userName={userName}
         photoUrl={photoUrl}
         onPress={onPressUser}
       />

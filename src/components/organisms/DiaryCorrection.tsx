@@ -54,7 +54,7 @@ const DiaryCorrection: React.FC<Props> = ({
   onPressCorrection,
 }): JSX.Element => {
   const { profile, commments, summary, createdAt } = correction;
-  const { name, photoUrl } = profile;
+  const { userName, photoUrl } = profile;
   // const postDay = getPostDay(createdAt);
   const postDay = '2019-01-01';
 
@@ -95,7 +95,7 @@ const DiaryCorrection: React.FC<Props> = ({
       <View style={styles.main}>
         <View style={styles.header}>
           <ProfileIconHorizontal
-            name={name}
+            userName={userName}
             photoUrl={photoUrl}
             onPress={onPressUser}
           />

@@ -1,3 +1,7 @@
+import {
+  ThunkAction as OrgThunkAction,
+  ThunkDispatch as OrgThunkDispatch,
+} from 'redux-thunk';
 import { User } from './user';
 import { Profile } from './profile';
 import { DiaryListState } from '../stores/reducers/diaryList';
@@ -33,3 +37,6 @@ export type Actions =
   | SetDraftDiariesAction
   | SetDraftDiaryTotalNumAction
   | AddDraftDiaryAction;
+
+export type ThunkAction<R> = OrgThunkAction<R, State, undefined, Actions>;
+export type ThunkDispatch = OrgThunkDispatch<State, undefined, Actions>;
