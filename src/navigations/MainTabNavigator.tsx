@@ -12,9 +12,9 @@ import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import TeachDiaryListScreen from '../screens/TeachDiaryListScreen';
 import MyDiaryScreen from '../screens/MyDiaryScreen';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
-import MyPageScreen from '../screens/MyPageScreen';
+import MyPageScreenContainer from '../containers/MyPageScreenContainer';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import MyProfileEditScreen from '../screens/MyProfileEditScreen';
+import MyProfileEditScreenContainer from '../containers/MyProfileEditScreenContainer';
 import SettingScreen from '../screens/SettingScreen';
 import NoticeScreen from '../screens/NoticeScreen';
 import PremiumScreen from '../screens/PremiumScreen';
@@ -26,6 +26,10 @@ import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen'
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
   ModalPostDiary: { screen: PostDiaryScreenContainer },
+});
+
+const ModalMyProfileEditNavigator = createStackNavigator({
+  MyProfileEdit: { screen: MyProfileEditScreenContainer },
 });
 
 const MyDiaryTabStack = createStackNavigator(
@@ -40,10 +44,7 @@ const MyDiaryTabStack = createStackNavigator(
       screen: MyDiaryScreen,
     },
     MyPage: {
-      screen: MyPageScreen,
-    },
-    MyProfileEdit: {
-      screen: MyProfileEditScreen,
+      screen: MyPageScreenContainer,
     },
     Setting: {
       screen: SettingScreen,
@@ -142,6 +143,9 @@ export default createStackNavigator(
       screen: MainTab,
     },
     ModalPostDiary: { screen: ModalPostDiaryNavigator },
+    MoealMyProfileEdit: {
+      screen: ModalMyProfileEditNavigator,
+    },
   },
   {
     headerMode: 'none',

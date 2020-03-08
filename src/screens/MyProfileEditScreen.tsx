@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { NavigationStackScreenComponent } from 'react-navigation-stack';
+import {
+  NavigationStackOptions,
+  NavigationStackScreenProps,
+} from 'react-navigation-stack';
 import { TextInput } from 'react-native-gesture-handler';
-import { profile } from '../utils/testdata';
 import { ProfileHeader } from '../components/molecules';
 import {
   borderLightColor,
@@ -11,8 +13,21 @@ import {
   offWhite,
 } from '../styles/Common';
 import { openCameraRoll } from '../utils/CameraRoll';
+import firebase from '../constants/firebase';
+import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { Profile } from '../types';
 
-import { LoadingModal, Avatar } from '../components/atoms';
+interface Props {
+  profile: Profile;
+  setProfile: (profile: Profile) => {};
+}
+
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -52,24 +67,47 @@ const styles = StyleSheet.create({
 /**
  * マイページ編集画面
  */
-const MyProfileEditScreen: NavigationStackScreenComponent = ({
+const MyProfileEditScreen: ScreenType = ({
+  profile,
+  setProfile,
   navigation,
 }) => {
-  const [name, setName] = useState('');
-  const [userName, setUserName] = useState('');
-  const [introduction, setIntroduction] = useState('');
+  const [name, setName] = useState(profile.name);
+  const [userName, setUserName] = useState(profile.userName);
+  const [introduction, setIntroduction] = useState(profile.introduction);
   const [photoUrl, setPhotoUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const onPressSubmit = useCallback(() => {
+    const f = async (): Promise<void> => {
+      const ref = firebase
+        .firestore()
+        .collection('profiles')
+        .doc(profile.uid);
+
+      const profileInfo = {
+        name,
+        userName,
+        introduction,
+        photoUrl,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+      await ref.update(profileInfo);
+      setProfile({
+        ...profile,
+        ...profileInfo,
+      });
+      navigation.navigate('MyPage');
+    };
+    f();
+  }, [profile, setProfile, navigation, name, userName, introduction, photoUrl]);
+
   useEffect(() => {
-    setName(profile.name);
-    setUserName(profile.userName);
-    setUserName(profile.introduction);
-    setPhotoUrl(profile.photoUrl);
+    navigation.setParams({ onPressSubmit });
   }, []);
 
   const pickImage = useCallback(() => {
-    const f = async () => {
+    const f = async (): Promise<void> => {
       const result: any = await openCameraRoll({
         allowsEditing: true,
         aspect: [1, 1],
@@ -129,6 +167,25 @@ const MyProfileEditScreen: NavigationStackScreenComponent = ({
       />
     </View>
   );
+};
+
+MyProfileEditScreen.navigationOptions = ({
+  navigation,
+}): NavigationStackOptions => {
+  const onPressSubmit = navigation.getParam('onPressSubmit');
+  return {
+    ...DefaultNavigationOptions,
+    title: 'プロフィール変更',
+    headerLeft: (): JSX.Element => (
+      <HeaderText
+        title="閉じる"
+        onPress={(): boolean => navigation.goBack(null)}
+      />
+    ),
+    headerRight: (): JSX.Element => (
+      <HeaderText title="完了" onPress={onPressSubmit} />
+    ),
+  };
 };
 
 export default MyProfileEditScreen;

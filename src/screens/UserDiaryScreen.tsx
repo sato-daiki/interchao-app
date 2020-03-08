@@ -43,7 +43,7 @@ const UserDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
     correction,
     profile,
   } = item;
-  const { name, photoUrl } = profile;
+  const { userName, photoUrl } = profile;
 
   const onPressUser = useCallback(() => {}, []);
   const onPressReview = useCallback(() => {}, []);
@@ -60,7 +60,7 @@ const UserDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.profileIcon}>
         <ProfileIconHorizontal
-          name={name}
+          userName={userName}
           photoUrl={photoUrl}
           onPress={onPressUser}
         />

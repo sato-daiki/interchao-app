@@ -4,9 +4,9 @@ import { fontSizeS, primaryColor, borderLightColor } from '../../styles/Common';
 import { Zebbu } from '../../images';
 
 interface Props {
-  name: string;
+  userName: string;
   photoUrl: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -24,25 +24,25 @@ const styles = StyleSheet.create({
     borderColor: borderLightColor,
     borderWidth: 0.5,
   },
-  name: {
+  userName: {
     fontSize: fontSizeS,
     color: primaryColor,
   },
 });
 
 const ProfileIconHorizontal: React.FC<Props> = ({
-  name,
+  userName,
   photoUrl,
   onPress,
 }: Props): JSX.Element => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={onPress || undefined}>
       {photoUrl ? (
         <Image style={styles.icon} source={{ uri: photoUrl }} />
       ) : (
         <Image style={[styles.icon, styles.iconEmpty]} source={Zebbu} />
       )}
-      <Text style={styles.name}>{name}</Text>
+      <Text style={styles.userName}>{userName}</Text>
     </TouchableOpacity>
   );
 };

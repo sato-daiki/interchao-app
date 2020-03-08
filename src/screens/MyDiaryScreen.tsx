@@ -8,8 +8,6 @@ import DiaryCorrection from '../components/organisms/DiaryCorrection';
 import { DiaryOriginal } from '../components/molecules';
 import { ModalReview } from '../components/organisms';
 
-import { diary, profile } from '../utils/testdata';
-
 export interface Props {
   user: User;
 }
@@ -31,8 +29,7 @@ const styles = StyleSheet.create({
  */
 const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [isModalReview, setIsModalReview] = useState(false);
-  // const { item } = navigation.state.params!;
-  const item = diary;
+  const { item } = navigation.state.params!;
   const {
     diaryStatus,
     correctionStatus,
@@ -43,16 +40,14 @@ const MyDiaryScreen: NavigationStackScreenComponent = ({ navigation }) => {
     correction,
   } = item;
 
-  const { name, photoUrl } = profile;
+  const { name, photoUrl } = correction.profile;
 
   const onPressUser = useCallback(() => {}, []);
   const onPressReview = useCallback(() => {
     setIsModalReview(true);
   }, []);
 
-  // const postDay = getPostDay(createdAt);
-  const postDay = '2018-01-01';
-
+  const postDay = getPostDay(createdAt);
   const status = getMyDiaryStatus(diaryStatus, correctionStatus, isReview);
 
   return (
