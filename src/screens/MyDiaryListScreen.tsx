@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 20;
+const HIT_PER_PAGE = 2;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
@@ -75,36 +75,42 @@ const MyDiaryListScreen: ScreenType = ({
     navigation.setParams({ onPressMenu: () => setIsMenu(true) });
   }, []);
 
-  const getNewDiary = async (clean: boolean): Promise<void> => {
-    try {
-      const index = await Algolia.getDiaryIndex(clean);
-      await index.setSettings({
-        ranking: [
-          'desc(createdAt._seconds)',
-          'typo',
-          'geo',
-          'words',
-          'filters',
-          'proximity',
-          'attribute',
-          'exact',
-          'custom',
-        ],
-      });
-      const res = await index.search('', {
-        filters: `profile.uid: ${user.uid}`,
-        page: 0,
-        hitsPerPage: HIT_PER_PAGE,
-      });
+  const getNewDiary = useCallback(
+    (clean: boolean) => {
+      const f = async (): Promise<void> => {
+        try {
+          const index = await Algolia.getDiaryIndex(clean);
+          await index.setSettings({
+            ranking: [
+              'desc(createdAt._seconds)',
+              'typo',
+              'geo',
+              'words',
+              'filters',
+              'proximity',
+              'attribute',
+              'exact',
+              'custom',
+            ],
+          });
+          const res = await index.search('', {
+            filters: `profile.uid: ${user.uid}`,
+            page: 0,
+            hitsPerPage: HIT_PER_PAGE,
+          });
 
-      setDiaries(res.hits);
-      setDiaryTotalNum(res.nbHits);
-    } catch (err) {
-      setLoading(false);
-      setRefreshing(false);
-      Alert.alert(' エラー', 'ネットワークエラーです');
-    }
-  };
+          setDiaries(res.hits);
+          setDiaryTotalNum(res.nbHits);
+        } catch (err) {
+          setLoading(false);
+          setRefreshing(false);
+          Alert.alert(' エラー', 'ネットワークエラーです');
+        }
+      };
+      f();
+    },
+    [setDiaries, setDiaryTotalNum, user.uid]
+  );
 
   // 初期データの取得
   useEffect(() => {
@@ -113,7 +119,7 @@ const MyDiaryListScreen: ScreenType = ({
       setLoading(false);
     };
     f();
-  }, []);
+  }, [getNewDiary]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -153,19 +159,16 @@ const MyDiaryListScreen: ScreenType = ({
       }
     };
     f();
-  }, [user]);
+  }, [diaries, page, readAllResults, readingNext, setDiaries, user.uid]);
 
   const onClose = useCallback(() => {
     setIsMenu(false);
   }, []);
 
-  const onPressUser = useCallback(
-    (uid: string) => {
-      console.log(uid);
-      // navigation.navigate('MyPage');
-    },
-    [navigation]
-  );
+  const onPressUser = useCallback((uid: string) => {
+    console.log(uid);
+    // navigation.navigate('MyPage');
+  }, []);
 
   const onPressItem = useCallback(
     item => {

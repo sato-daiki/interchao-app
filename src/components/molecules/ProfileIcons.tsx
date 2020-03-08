@@ -1,7 +1,5 @@
 import React from 'react';
-import { Image, TouchableOpacity, StyleSheet, View } from 'react-native';
-import { borderLightColor } from '../../styles/Common';
-import { Zebbu } from '../../images';
+import { StyleSheet, View } from 'react-native';
 import { ProfileIcon } from '../atoms';
 import { Correction } from '../../types';
 
@@ -55,14 +53,14 @@ const ProfileIcons: React.FC<Props> = ({
       <View style={styles.right}>
         <ProfileIcon
           size={24}
-          photoUrl={proCorrection.profile.photoUrl}
-          onPress={(): void => onPressUser(proCorrection.profile.uid)}
+          photoUrl={proCorrection!.profile.photoUrl}
+          onPress={(): void => onPressUser(proCorrection!.profile.uid)}
         />
       </View>
       <ProfileIcon
         size={24}
-        photoUrl={proCorrection.profile.photoUrl}
-        onPress={(): void => onPressUser(proCorrection.profile.uid)}
+        photoUrl={proCorrection!.profile.photoUrl}
+        onPress={(): void => onPressUser(proCorrection!.profile.uid)}
       />
     </View>
   );
