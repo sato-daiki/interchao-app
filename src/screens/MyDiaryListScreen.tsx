@@ -20,6 +20,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import { Logo } from '../images';
 import { primaryColor } from '../styles/Common';
+import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 
 export interface Props {
   user: User;
@@ -165,6 +166,12 @@ const MyDiaryListScreen: ScreenType = ({ user, navigation }) => {
       totalNum !== 0 ? `マイ日記一覧(${totalNum}件)` : 'マイ日記一覧';
     return <GrayHeader title={title} />;
   }, [totalNum]);
+
+  const displayEmptyComponent =
+    !loading && !refreshing && diaries && diaries.length < 1;
+  if (displayEmptyComponent) {
+    return <EmptyMyDiaryList />;
+  }
 
   return (
     <View style={styles.container}>

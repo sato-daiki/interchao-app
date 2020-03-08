@@ -75,11 +75,14 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, [navigation]);
 
   const onPressDelete = useCallback(() => {
+    // TODO
+    // ログインさせる必要がある。画面も違うところに用意する
     const f = async (): Promise<void> => {
       try {
         await firebase.auth().currentUser!.delete();
         setLogEvent(events.DELETED_USER);
       } catch (error) {
+        console.log(error);
         Alert.alert(' エラー', 'ネットワークエラーです');
       }
     };
