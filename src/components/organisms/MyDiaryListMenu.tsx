@@ -20,15 +20,18 @@ const MyDiaryListMenu = ({
 }: Props): JSX.Element => {
   const onPressMyPage = useCallback(() => {
     navigation.navigate('MyPage');
-  }, [navigation]);
+    onClose();
+  }, [navigation, onClose]);
 
   const onPressDraftList = useCallback(() => {
     navigation.navigate('DraftDiaryList');
-  }, [navigation]);
+    onClose();
+  }, [navigation, onClose]);
 
   const onPressModalPremium = useCallback(() => {
     navigation.navigate('ModalPremium');
-  }, [navigation]);
+    onClose();
+  }, [navigation, onClose]);
 
   return (
     <SwipeablePanel

@@ -139,7 +139,7 @@ const MyDiaryListScreen: ScreenType = ({
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
+            filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
