@@ -1,5 +1,8 @@
 import { connect } from 'react-redux';
-import { setDiaries, setDiaryTotalNum } from '../stores/actions/draftDiaryList';
+import {
+  setDraftDiaries,
+  setDraftDiaryTotalNum,
+} from '../stores/actions/draftDiaryList';
 import { State } from '../types/state';
 import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 
@@ -13,8 +16,8 @@ const mapStateToProps = (state: State) => {
 };
 
 const mapDispatchToProps = {
-  setDiaries,
-  setDiaryTotalNum,
+  setDraftDiaries,
+  setDraftDiaryTotalNum,
 };
 
 export default connect(

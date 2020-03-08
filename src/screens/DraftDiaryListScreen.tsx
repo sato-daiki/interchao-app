@@ -23,7 +23,7 @@ export interface Props {
   draftDiaries: Diary[];
   draftDiaryTotalNum: number;
   setDraftDiaries: (draftDiaries: Diary[]) => void;
-  setDiaryTotalNum: (draftDiaryTotalNum: number) => void;
+  setDraftDiaryTotalNum: (draftDiaryTotalNum: number) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -51,7 +51,7 @@ const DraftDiaryListScreen: ScreenType = ({
   draftDiaries,
   draftDiaryTotalNum,
   setDraftDiaries,
-  setDiaryTotalNum,
+  setDraftDiaryTotalNum,
   navigation,
 }) => {
   const [loading, setLoading] = useState(true);
@@ -79,23 +79,25 @@ const DraftDiaryListScreen: ScreenType = ({
             ],
           });
           const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND `,
+            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
             page: 0,
             hitsPerPage: HIT_PER_PAGE,
           });
 
           setDraftDiaries(res.hits);
-          setDiaryTotalNum(res.nbHits);
+          setDraftDiaryTotalNum(res.nbHits);
         } catch (err) {
           setLoading(false);
           setRefreshing(false);
+          console.log(err);
+
           Alert.alert(' エラー', 'ネットワークエラーです');
         }
         setLoading(false);
       };
       f();
     },
-    [setDraftDiaries, setDiaryTotalNum, user.uid]
+    [setDraftDiaries, setDraftDiaryTotalNum, user.uid]
   );
 
   // 初期データの取得
