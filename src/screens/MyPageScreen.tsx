@@ -59,7 +59,7 @@ const MyPageScreen: ScreenType = ({ navigation, profile }) => {
   }, []);
 
   const onPressEdit = useCallback(() => {
-    navigation.navigate('MyProfileEdit');
+    navigation.navigate('EditMyProfile');
   }, [navigation]);
 
   return (

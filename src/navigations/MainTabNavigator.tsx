@@ -14,7 +14,7 @@ import MyDiaryScreen from '../screens/MyDiaryScreen';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
 import MyPageScreenContainer from '../containers/MyPageScreenContainer';
 import UserProfileScreen from '../screens/UserProfileScreen';
-import MyProfileEditScreenContainer from '../containers/MyProfileEditScreenContainer';
+import EditMyProfileScreenContainer from '../containers/EditMyProfileScreenContainer';
 import SettingScreen from '../screens/SettingScreen';
 import NoticeScreen from '../screens/NoticeScreen';
 import PremiumScreen from '../screens/PremiumScreen';
@@ -22,15 +22,22 @@ import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
 import EditEmailScreen from '../screens/EditEmailScreen';
 import EditPasswordScreen from '../screens/EditPasswordScreen';
 import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen';
+import EditUserNameScreenContainer from '../containers/EditUserNameScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
   ModalPostDiary: { screen: PostDiaryScreenContainer },
 });
 
-const ModalMyProfileEditNavigator = createStackNavigator({
-  MyProfileEdit: { screen: MyProfileEditScreenContainer },
-});
+const ModalEditMyProfileNavigator = createStackNavigator(
+  {
+    EditMyProfile: { screen: EditMyProfileScreenContainer },
+    EditUserName: { screen: EditUserNameScreenContainer },
+  },
+  {
+    initialRouteName: 'EditMyProfile',
+  }
+);
 
 const MyDiaryTabStack = createStackNavigator(
   {
@@ -143,8 +150,8 @@ export default createStackNavigator(
       screen: MainTab,
     },
     ModalPostDiary: { screen: ModalPostDiaryNavigator },
-    MoealMyProfileEdit: {
-      screen: ModalMyProfileEditNavigator,
+    MoealEditMyProfile: {
+      screen: ModalEditMyProfileNavigator,
     },
   },
   {

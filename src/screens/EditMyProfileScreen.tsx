@@ -4,14 +4,8 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { TextInput } from 'react-native-gesture-handler';
-import { ProfileHeader } from '../components/molecules';
-import {
-  borderLightColor,
-  primaryColor,
-  fontSizeM,
-  offWhite,
-} from '../styles/Common';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { borderLightColor, primaryColor, fontSizeM } from '../styles/Common';
 import { openCameraRoll } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';
 import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
@@ -33,7 +27,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingVertical: 8,
+    paddingTop: 32,
   },
   avatar: {
     alignItems: 'center',
@@ -67,7 +61,7 @@ const styles = StyleSheet.create({
 /**
  * マイページ編集画面
  */
-const MyProfileEditScreen: ScreenType = ({
+const EditMyProfileScreen: ScreenType = ({
   profile,
   setProfile,
   navigation,
@@ -119,6 +113,14 @@ const MyProfileEditScreen: ScreenType = ({
     f();
   }, []);
 
+  const onPressUserName = useCallback(() => {
+    // 次ページのuserNameは最終更新でないためstateで渡す
+    navigation.navigate('EditUserName', {
+      userName,
+      setUserName: (text: string): void => setUserName(text),
+    });
+  }, [navigation, userName]);
+
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -139,20 +141,14 @@ const MyProfileEditScreen: ScreenType = ({
           style={styles.textInput}
         />
       </View>
-      <View style={styles.row}>
+      <TouchableOpacity
+        style={styles.row}
+        activeOpacity={1}
+        onPress={onPressUserName}
+      >
         <Text style={styles.label}>ユーザネーム</Text>
-        <TextInput
-          value={userName}
-          onChangeText={(text: string): void => setUserName(text)}
-          maxLength={50}
-          placeholder="zebra"
-          keyboardType="default"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          style={styles.textInput}
-        />
-      </View>
+        <Text>{userName}</Text>
+      </TouchableOpacity>
       <TextInput
         value={introduction}
         onChangeText={(text: string): void => setIntroduction(text)}
@@ -169,7 +165,7 @@ const MyProfileEditScreen: ScreenType = ({
   );
 };
 
-MyProfileEditScreen.navigationOptions = ({
+EditMyProfileScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const onPressSubmit = navigation.getParam('onPressSubmit');
@@ -188,4 +184,4 @@ MyProfileEditScreen.navigationOptions = ({
   };
 };
 
-export default MyProfileEditScreen;
+export default EditMyProfileScreen;
