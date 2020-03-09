@@ -10,7 +10,7 @@ import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import TeachDiaryListScreen from '../screens/TeachDiaryListScreen';
-import MyDiaryScreen from '../screens/MyDiaryScreen';
+import MyDiaryScreenContainer from '../containers/MyDiaryScreenContainer';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
 import MyPageScreenContainer from '../containers/MyPageScreenContainer';
 import UserProfileScreen from '../screens/UserProfileScreen';
@@ -48,7 +48,7 @@ const MyDiaryTabStack = createStackNavigator(
       screen: DraftDiaryListScreenContainer,
     },
     MyDiary: {
-      screen: MyDiaryScreen,
+      screen: MyDiaryScreenContainer,
     },
     MyPage: {
       screen: MyPageScreenContainer,

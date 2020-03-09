@@ -33,3 +33,13 @@ export const addDiary = (diary: Diary): AddDiaryAction => ({
   type: Types.ADD_DIARY,
   diary,
 });
+
+export interface DeleteDiaryAction extends Action {
+  type: Types.DELETE_DIARY;
+  objectID: string;
+}
+
+export const deleteDiary = (objectID: string): DeleteDiaryAction => ({
+  type: Types.DELETE_DIARY,
+  objectID,
+});

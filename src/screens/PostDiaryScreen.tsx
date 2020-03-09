@@ -124,32 +124,30 @@ const PostDiaryScreen: ScreenType = ({
     };
   };
 
-  const refDiary = firebase
-    .firestore()
-    .collection('diaries')
-    .doc();
-  const refUser = firebase.firestore().doc(`users/${user.uid}`);
-
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (loading) return;
-      // トランザクション開始
       try {
         setLoading(true);
         const diary = getDiary('publish');
         const points = user.points - 10;
-        await firebase.firestore().runTransaction(async transaction => {
-          transaction.set(refDiary, { ...diary });
-          transaction.update(refUser, {
-            points,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        });
+        const diaryDoc = await firebase
+          .firestore()
+          .collection('diaries')
+          .add(diary);
 
+        const refUser = firebase.firestore().doc(`users/${user.uid}`);
+        await refUser.update({
+          points,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
         track(events.CREATED_DIARY, { diaryStatus: 'publish' });
 
         // reduxに追加
-        addDiary(diary);
+        addDiary({
+          objectID: diaryDoc.id,
+          ...diary,
+        });
         setDiaryTotalNum(diaryTotalNum + 1);
         setPoints(points);
 
@@ -167,18 +165,21 @@ const PostDiaryScreen: ScreenType = ({
   const onPressDraft = useCallback(() => {
     const f = async (): Promise<void> => {
       if (loading) return;
-      // トランザクション開始
       try {
         setLoading(true);
         const diary = getDiary('draft');
-        await firebase.firestore().runTransaction(async transaction => {
-          transaction.set(refDiary, { ...diary });
-        });
+        const diaryDoc = await firebase
+          .firestore()
+          .collection('diaries')
+          .add(diary);
 
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
 
         // reduxに追加
-        addDraftDiary(diary);
+        addDiary({
+          objectID: diaryDoc.id,
+          ...diary,
+        });
         setDraftDiaryTotalNum(draftDiaryTotalNum + 1);
 
         navigation.navigate('DraftDiaryList');

@@ -33,7 +33,7 @@ export interface DisplayProfile {
 }
 
 export interface Diary {
-  id?: string;
+  objectID?: string;
   premium: boolean;
   isPublic: boolean;
   title: string;

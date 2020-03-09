@@ -6,19 +6,9 @@ import {
   primaryColor,
   subTextColor,
 } from '../../styles/Common';
-// import TotalStatus from './TotalStatus';
-
-interface Status {
-  text: string;
-  color: string;
-}
-
-interface Props {
-  postDay: string;
-  status: Status | null;
-  title: string;
-  text: string;
-}
+import { MyDiaryStatus } from '.';
+import { Diary } from '../../types';
+import { getPostDay } from '../../utils/diary';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,19 +37,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiaryOriginal = ({
-  postDay,
-  status,
-  title,
-  text,
-}: Props): JSX.Element => {
+const DiaryOriginal = ({ diary }: { diary: Diary }): JSX.Element => {
+  const { createdAt, title, text } = diary;
+  const postDay = getPostDay(createdAt);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        {/* {status ? (
-          <TotalStatus color={status.color} text={status.text} />
-        ) : null} */}
+        <MyDiaryStatus diary={diary} />
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.text}>{text}</Text>

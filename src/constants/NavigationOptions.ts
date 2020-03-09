@@ -10,6 +10,8 @@ export const DefaultNavigationOptions: NavigationStackOptions = {
     fontWeight: '700',
     color: primaryColor,
     fontSize: fontSizeL,
+    marginHorizontal: 32,
+    alignSelf: 'center',
   },
   headerBackTitleStyle: { display: 'none' },
   headerTintColor: primaryColor,
