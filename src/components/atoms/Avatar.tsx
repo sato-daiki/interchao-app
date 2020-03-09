@@ -4,9 +4,6 @@ import { Avatar as ElAvatar } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 import { imageLightColor, subTextColor } from '../../styles/Common';
 
-const AVATAR_SIZE = 96;
-const DUMMY_AVATAR_ICON_SIZE = 80;
-
 const styles = StyleSheet.create({
   container: {},
   avatarContainer: {
@@ -18,9 +15,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    width: 96,
-    height: 96,
+    width: 80,
+    height: 80,
     borderRadius: 48,
+    color: '#fff',
+    // backgroundColor: 'transparent',
   },
 });
 

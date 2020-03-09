@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import MyProfileEditScreen from '../screens/MyProfileEditScreen';
+import EditMyProfileScreen from '../screens/EditMyProfileScreen';
 import { setProfile } from '../stores/actions/profile';
 import { State } from '../types/state';
 
@@ -14,4 +14,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MyProfileEditScreen);
+)(EditMyProfileScreen);

@@ -1,22 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
-  NavigationStackScreenProps,
   NavigationStackOptions,
+  NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import SubmitButton from '../components/atoms/SubmitButton';
-import {
-  fontSizeM,
-  primaryColor,
-  fontSizeL,
-  subTextColor,
-} from '../styles/Common';
-import Space from '../components/atoms/Space';
-import { CheckTextInput } from '../components/molecules';
-import { Profile } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { checkUserName } from '../utils/auth';
-import { track, events } from '../utils/Analytics';
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { CheckTextInput } from '../components/molecules';
+import { HeaderText } from '../components/atoms';
+import { primaryColor, fontSizeM } from '../styles/Common';
+import { Profile } from '../types';
 
 interface Props {
   profile: Profile;
@@ -36,32 +29,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 32,
   },
-  title: {
+  label: {
     color: primaryColor,
-    fontSize: fontSizeL,
-    fontWeight: 'bold',
-    paddingBottom: 16,
-  },
-  subText: {
-    color: subTextColor,
     fontSize: fontSizeM,
-    paddingBottom: 16,
+    paddingBottom: 6,
   },
 });
 
-const InputUserNameScreen: ScreenType = ({
+const EditUserNameScreen: ScreenType = ({
   navigation,
   profile,
-  setProfile,
 }): JSX.Element => {
-  const [userName, setUserName] = useState('');
+  const [userName, setUserName] = useState(navigation.state.params!.userName);
   const [isUserNameLoading, setIsUserNameLoading] = useState(false);
   const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect((): void => {
-    track(events.OPENED_INPUT_USER_NAME);
-  }, []);
+  const onPressSubmit = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (profile.userName !== userName) {
+        const duplicated = await checkUserName(userName);
+        if (duplicated) {
+          // 変更があった時かつ、他のユーザと重複している場合
+          return;
+        }
+      }
+      navigation.state.params!.setUserName(userName);
+      navigation.goBack(null);
+    };
+    f();
+  }, [navigation, profile.userName, userName]);
+
+  // 第二引数をなしにするのがポイント
+  useEffect(() => {
+    navigation.setParams({ onPressSubmit });
+  }, [userName]);
 
   const onChangeText = useCallback(
     text => {
@@ -69,7 +71,7 @@ const InputUserNameScreen: ScreenType = ({
         setIsUserNameLoading(true);
         setUserName(text);
         const duplicated = await checkUserName(text);
-        if (duplicated) {
+        if (duplicated && text === profile.userName) {
           setIsUserNameCheckOk(false);
           setErrorMessage(
             'すでにこのユーザーネームを使用しているユーザーがいます'
@@ -82,25 +84,11 @@ const InputUserNameScreen: ScreenType = ({
       };
       f();
     },
-    [checkUserName, setUserName]
+    [setUserName, userName]
   );
-
-  const onPressNext = async (): Promise<void> => {
-    const duplicated = await checkUserName(userName);
-    if (duplicated) {
-      return;
-    }
-    setProfile({
-      ...profile,
-      userName,
-    });
-    navigation.navigate('SignUp');
-  };
-
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>ユーザーネームを入力してください</Text>
-      <Text style={styles.subText}>このユーザネームはいつでも変更できます</Text>
+      <Text style={styles.label}>ユーザーネーム</Text>
       <CheckTextInput
         value={userName}
         onChangeText={onChangeText}
@@ -115,21 +103,21 @@ const InputUserNameScreen: ScreenType = ({
         isCheckOk={isUserNameCheckOk}
         errorMessage={errorMessage}
       />
-      <Space size={32} />
-      <SubmitButton
-        disable={!isUserNameCheckOk}
-        title="次へ"
-        onPress={onPressNext}
-      />
     </View>
   );
 };
 
-InputUserNameScreen.navigationOptions = (): NavigationStackOptions => {
+EditUserNameScreen.navigationOptions = ({
+  navigation,
+}): NavigationStackOptions => {
+  const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
-    title: 'ユーザーネーム登録',
+    title: 'ユーザーネーム',
+    headerRight: (): JSX.Element => (
+      <HeaderText title="完了" onPress={onPressSubmit} />
+    ),
   };
 };
 
-export default InputUserNameScreen;
+export default EditUserNameScreen;

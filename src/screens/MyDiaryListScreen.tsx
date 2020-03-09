@@ -197,10 +197,6 @@ const MyDiaryListScreen: ScreenType = ({
   }, [diaryTotalNum]);
 
   const displayEmptyComponent = !loading && !refreshing && diaries.length < 1;
-  if (displayEmptyComponent) {
-    return <EmptyMyDiaryList />;
-  }
-
   return (
     <View style={styles.container}>
       <MyDiaryListMenu
@@ -209,17 +205,21 @@ const MyDiaryListScreen: ScreenType = ({
         onClose={onClose}
       />
       <LoadingModal visible={loading} />
-      <FlatList
-        data={diaries}
-        keyExtractor={keyExtractor}
-        refreshing={refreshing}
-        renderItem={renderItem}
-        ListHeaderComponent={listHeaderComponent}
-        onEndReached={loadNextPage}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      {displayEmptyComponent ? (
+        <EmptyMyDiaryList />
+      ) : (
+        <FlatList
+          data={diaries}
+          keyExtractor={keyExtractor}
+          refreshing={refreshing}
+          renderItem={renderItem}
+          ListHeaderComponent={listHeaderComponent}
+          onEndReached={loadNextPage}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
     </View>
   );
 };
