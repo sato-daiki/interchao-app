@@ -116,7 +116,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       firebase.firestore().doc(`profiles/${credentUser.uid}`),
       profileInfo
     );
-    batch.commit();
+    const aa = batch.commit();
   };
 
   const onPressSkip = useCallback(() => {
