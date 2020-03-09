@@ -65,19 +65,7 @@ const DraftDiaryListScreen: ScreenType = ({
       const f = async (): Promise<void> => {
         try {
           const index = await Algolia.getDiaryIndex(clean);
-          await index.setSettings({
-            ranking: [
-              'desc(createdAt._seconds)',
-              'typo',
-              'geo',
-              'words',
-              'filters',
-              'proximity',
-              'attribute',
-              'exact',
-              'custom',
-            ],
-          });
+          await Algolia.setSettings(index);
           const res = await index.search('', {
             filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
             page: 0,
@@ -89,8 +77,6 @@ const DraftDiaryListScreen: ScreenType = ({
         } catch (err) {
           setLoading(false);
           setRefreshing(false);
-          console.log(err);
-
           Alert.alert(' エラー', 'ネットワークエラーです');
         }
         setLoading(false);

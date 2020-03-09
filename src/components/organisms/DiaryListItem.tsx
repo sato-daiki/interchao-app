@@ -11,9 +11,10 @@ import {
 import { getPostDay } from '../../utils/diary';
 import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
-import { MyDiaryStatus, ProfileIcons } from '../molecules';
+import { MyDiaryStatus, ProfileIcons, UserDiaryStatus } from '../molecules';
 
 interface Props {
+  mine?: boolean;
   item: Diary;
   onPressUser: (uid: string) => void;
   onPressItem: (item: firebase.firestore.DocumentData) => void;
@@ -59,7 +60,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyDiaryListItem = ({
+const DiaryListItem = ({
+  mine = false,
   item,
   onPressUser,
   onPressItem,
@@ -90,7 +92,11 @@ const MyDiaryListItem = ({
     >
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        <MyDiaryStatus diary={item} />
+        {mine ? (
+          <MyDiaryStatus diary={item} />
+        ) : (
+          <UserDiaryStatus diary={item} />
+        )}
       </View>
       <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
         {title}
@@ -114,4 +120,4 @@ const MyDiaryListItem = ({
   );
 };
 
-export default MyDiaryListItem;
+export default DiaryListItem;

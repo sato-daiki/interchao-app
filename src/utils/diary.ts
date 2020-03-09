@@ -19,9 +19,9 @@ export const getPostDay = (
 };
 
 // 日記一覧に出力するステータスの取得
-export const getTeachDiaryStatus = (
+export const getUserDiaryStatus = (
   correctionStatus: CorrectionStatus
-): Result | null => {
+): Status | null => {
   if (correctionStatus === 'yet') {
     return { text: '未添削', color: mainColor };
   }
