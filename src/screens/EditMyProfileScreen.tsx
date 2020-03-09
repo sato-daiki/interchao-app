@@ -86,7 +86,10 @@ const EditMyProfileScreen: ScreenType = ({
         photoUrl,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
-      await ref.update(profileInfo);
+      await ref.update({
+        ...profileInfo,
+      });
+
       setProfile({
         ...profile,
         ...profileInfo,
@@ -98,7 +101,7 @@ const EditMyProfileScreen: ScreenType = ({
 
   useEffect(() => {
     navigation.setParams({ onPressSubmit });
-  }, []);
+  }, [name, userName, introduction, photoUrl]);
 
   const pickImage = useCallback(() => {
     const f = async (): Promise<void> => {

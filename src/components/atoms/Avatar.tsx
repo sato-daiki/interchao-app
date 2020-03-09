@@ -6,6 +6,11 @@ import { imageLightColor, subTextColor } from '../../styles/Common';
 
 const styles = StyleSheet.create({
   container: {},
+  icon: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+  },
   avatarContainer: {
     backgroundColor: imageLightColor,
     width: 96,
@@ -14,12 +19,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: {
-    width: 80,
-    height: 80,
-    borderRadius: 48,
+  dummyAvatarIcon: {
     color: '#fff',
-    // backgroundColor: 'transparent',
+    backgroundColor: 'transparent',
   },
 });
 
@@ -37,7 +39,7 @@ const Avatar = ({ photoUrl = '', pickImage }: Props): JSX.Element => (
         <MaterialIcons
           name="person"
           size={80}
-          style={styles.icon}
+          style={styles.dummyAvatarIcon}
           onPress={pickImage}
           color={subTextColor}
         />
