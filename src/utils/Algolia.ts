@@ -32,6 +32,22 @@ class Algolia {
     }
     return this.client.initIndex('dev_diaries');
   };
+
+  public setSettings = async (index: SearchIndex): Promise<void> => {
+    await index.setSettings({
+      ranking: [
+        'desc(createdAt._seconds)',
+        'typo',
+        'geo',
+        'words',
+        'filters',
+        'proximity',
+        'attribute',
+        'exact',
+        'custom',
+      ],
+    });
+  };
 }
 
 let instance: Algolia | null = null;

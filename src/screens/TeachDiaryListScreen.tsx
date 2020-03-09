@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { firestore } from 'firebase';
 import {
   NavigationStackScreenComponent,
@@ -102,6 +102,15 @@ const TeachDiaryListScreen: NavigationStackScreenComponent = ({
 
   return (
     <View style={styles.container}>
+      <Text
+        onPress={() => {
+          navigation.navigate('UserProfile', {
+            uid: 'OkzFW24kvWMkZcgjBPiN4Ja77412',
+          });
+        }}
+      >
+        UserDiaryScreenへ
+      </Text>
       {/* <FlatList
         data={diaries}
         keyExtractor={keyExtractor}

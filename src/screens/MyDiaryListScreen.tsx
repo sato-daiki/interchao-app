@@ -15,7 +15,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
-import MyDiaryListItem from '../components/organisms/MyDiaryListItem';
+import DiaryListItem from '../components/organisms/DiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import { Logo } from '../images';
@@ -80,21 +80,9 @@ const MyDiaryListScreen: ScreenType = ({
       const f = async (): Promise<void> => {
         try {
           const index = await Algolia.getDiaryIndex(clean);
-          await index.setSettings({
-            ranking: [
-              'desc(createdAt._seconds)',
-              'typo',
-              'geo',
-              'words',
-              'filters',
-              'proximity',
-              'attribute',
-              'exact',
-              'custom',
-            ],
-          });
+          await Algolia.setSettings(index);
           const res = await index.search('', {
-            filters: `profile.uid: ${user.uid}`,
+            filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
             page: 0,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -180,7 +168,8 @@ const MyDiaryListScreen: ScreenType = ({
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
       return (
-        <MyDiaryListItem
+        <DiaryListItem
+          mine
           item={item}
           onPressUser={onPressUser}
           onPressItem={onPressItem}

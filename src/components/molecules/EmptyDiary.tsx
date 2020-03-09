@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { fontSizeM, subTextColor, imageLightColor } from '../../styles/Common';
+import { fontSizeM, subTextColor } from '../../styles/Common';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,21 +13,17 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 32,
   },
-  icon: {
-    paddingBottom: 8,
-  },
 });
 
 const EmptyDiary = (): JSX.Element => {
   return (
     <View style={styles.container}>
       <MaterialCommunityIcons
-        size={70}
-        style={styles.icon}
-        color={imageLightColor}
-        name="book-open-page-variant"
+        name="book-open-variant"
+        size={50}
+        color={subTextColor}
       />
-      <Text style={styles.text}>式場の閲覧履歴はありません</Text>
+      <Text style={styles.text}>日記がまだ投稿されていません。</Text>
     </View>
   );
 };

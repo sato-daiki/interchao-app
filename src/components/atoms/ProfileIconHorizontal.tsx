@@ -36,7 +36,11 @@ const ProfileIconHorizontal: React.FC<Props> = ({
   onPress,
 }: Props): JSX.Element => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress || undefined}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress || undefined}
+      activeOpacity={onPress ? 0.2 : 1}
+    >
       {photoUrl ? (
         <Image style={styles.icon} source={{ uri: photoUrl }} />
       ) : (
