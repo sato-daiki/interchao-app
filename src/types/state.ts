@@ -12,6 +12,7 @@ import {
   SetDiariesAction,
   SetDiaryTotalNumAction,
   AddDiaryAction,
+  EditDiaryAction,
   DeleteDiaryAction,
 } from '../stores/actions/diaryList';
 import {
@@ -36,6 +37,7 @@ export type Actions =
   | SetDiaryTotalNumAction
   | AddDiaryAction
   | DeleteDiaryAction
+  | EditDiaryAction
   | SetDraftDiariesAction
   | SetDraftDiaryTotalNumAction
   | AddDraftDiaryAction;

@@ -159,8 +159,8 @@ const MyDiaryListScreen: ScreenType = ({
   }, []);
 
   const onPressItem = useCallback(
-    item => {
-      navigation.navigate('MyDiary', { item });
+    (item: Diary) => {
+      navigation.navigate('MyDiary', { objectID: item.objectID });
     },
     [navigation]
   );

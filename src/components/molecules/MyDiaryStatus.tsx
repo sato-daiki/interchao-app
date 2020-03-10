@@ -43,14 +43,14 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
     isReviewPro
   );
 
-  const publicIcon = isPublic ? (
+  const publicIcon = isPublic ? null : (
     <MaterialCommunityIcons
       style={styles.icon}
       size={14}
       color={subTextColor}
       name="lock"
     />
-  ) : null;
+  );
 
   if (premium) {
     return (
