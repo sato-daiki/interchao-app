@@ -7,10 +7,7 @@ import {
   TextInputProps,
   ActivityIndicator,
 } from 'react-native';
-// @ts-ignore
-import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
-// @ts-ignore
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   errorColor,
   fontSizeS,
@@ -103,7 +100,7 @@ const CheckTextInput = (props: Props): JSX.Element => {
       </View>
       {errorMessage.length > 0 ? (
         <View style={styles.errorContainer}>
-          <FontAwesomeIcon
+          <FontAwesome
             size={fontSizeM}
             name="exclamation-circle"
             color={errorColor}

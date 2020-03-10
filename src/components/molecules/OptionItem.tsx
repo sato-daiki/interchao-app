@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   fontSizeM,

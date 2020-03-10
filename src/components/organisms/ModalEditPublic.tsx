@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import {
   primaryColor,
@@ -27,20 +27,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
     marginBottom: 24,
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingHorizontal: 16,
-    paddingBottom: 24,
-  },
-  subTitle: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    fontWeight: 'bold',
-    paddingHorizontal: 16,
-    paddingBottom: 8,
   },
   description: {
     fontSize: fontSizeM,
@@ -72,41 +58,39 @@ interface Props {
   visible: boolean;
   isLoading: boolean;
   isPublic: boolean;
-  onValueChangePublic: () => void;
-  onPressSubmit: () => void;
+  onPressSubmit: (changedIsPublic: boolean) => void;
   onPressClose: () => void;
 }
 
-const ModalAlertPublish: React.FC<Props> = ({
+const ModalEditPublic: React.FC<Props> = ({
   visible,
   isLoading,
   isPublic,
-  onValueChangePublic,
   onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
+  const [changedIsPublic, setChangedIsPublic] = useState(isPublic);
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>確認</Text>
+        <Text style={styles.title}>公開設定を変更する</Text>
         <View style={styles.line} />
-        <Text style={styles.text}>
-          一度投稿すると、編集ができません。よろしいですか？
-        </Text>
-        <Text style={styles.subTitle}>公開設定</Text>
         <Text style={styles.description}>
           InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると、TwitterやFacebookで添削結果を投稿することができます。また、他の学習者の手助けになります。
         </Text>
         <View style={styles.row}>
           <Text style={styles.label}>Webで公開</Text>
-          <Switch onValueChange={onValueChangePublic} value={isPublic} />
+          <Switch
+            onValueChange={(): void => setChangedIsPublic(!changedIsPublic)}
+            value={changedIsPublic}
+          />
         </View>
         <Space size={32} />
         <View style={styles.button}>
           <SubmitButton
             isLoading={isLoading}
-            title="投稿する"
-            onPress={onPressSubmit}
+            title="更新する"
+            onPress={(): void => onPressSubmit(changedIsPublic)}
           />
           <Space size={16} />
           <WhiteButton title="キャンセル" onPress={onPressClose} />
@@ -116,4 +100,4 @@ const ModalAlertPublish: React.FC<Props> = ({
   );
 };
 
-export default ModalAlertPublish;
+export default ModalEditPublic;

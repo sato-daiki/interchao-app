@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';

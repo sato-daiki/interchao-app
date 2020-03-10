@@ -4,7 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   connectActionSheet,
   useActionSheet,
@@ -16,6 +16,7 @@ import { DiaryOriginal } from '../components/molecules';
 import { ModalReview, ModalConfirm } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor } from '../styles/Common';
+import ModalEditPublic from '../components/organisms/ModalEditPublic';
 
 interface Props {
   deleteDiary: (objectID: string) => void;
@@ -40,16 +41,18 @@ const styles = StyleSheet.create({
  */
 const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
   const { showActionSheetWithOptions } = useActionSheet();
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalReview, setIsModalReview] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
-  const [isModalEdit, setIsModalEdit] = useState(false);
+  const [isModalPublic, setIsModalPublic] = useState(false);
   const { item }: { item: Diary } = navigation.state.params!;
+  const { isReview, correction, proCorrection, isPublic } = item;
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
   }, []);
-  const onPressEditPublicMenu = useCallback(() => {
-    setIsModalEdit(true);
+  const onPressPublicMenu = useCallback(() => {
+    setIsModalPublic(true);
   }, []);
 
   const onPressMore = useCallback(() => {
@@ -66,13 +69,13 @@ const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
             onPressDeleteMenu();
             break;
           case 1:
-            onPressEditPublicMenu();
+            onPressPublicMenu();
             break;
           default:
         }
       }
     );
-  }, [onPressDeleteMenu, onPressEditPublicMenu, showActionSheetWithOptions]);
+  }, [onPressDeleteMenu, onPressPublicMenu, showActionSheetWithOptions]);
 
   useEffect(() => {
     navigation.setParams({
@@ -86,37 +89,66 @@ const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
     setIsModalReview(true);
   }, []);
 
+  const onPressSubmitPublic = useCallback(
+    (changedIsPublic: boolean) => {
+      const f = async (): Promise<void> => {
+        setIsLoading(true);
+        await firebase
+          .firestore()
+          .collection('diaries')
+          .doc(item.objectID)
+          .update({
+            isPublic: changedIsPublic,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+        setIsModalPublic(false);
+        setIsLoading(false);
+      };
+      f();
+    },
+    [item.objectID]
+  );
+
   const onPressDelete = useCallback(() => {
     const f = async (): Promise<void> => {
       if (!item.objectID) return;
+      setIsLoading(true);
       await firebase
         .firestore()
         .collection('diaries')
         .doc(item.objectID)
         .delete();
       setIsModalDelete(false);
-
       // reduxの設定
       deleteDiary(item.objectID);
       navigation.goBack();
+      setIsLoading(false);
     };
     f();
   }, [item.objectID]);
 
-  // const { item } = navigation.state.params!;
-  const { isReview, correction } = item;
   return (
     <View style={styles.container}>
       <ModalConfirm
         visible={isModalDelete}
+        isLoading={isLoading}
         title="確認"
         message="本当に削除してよろしいでしょうか？"
         mainButtonText="削除する"
         onPressMain={onPressDelete}
         onPressClose={(): void => setIsModalDelete(false)}
       />
+      <ModalEditPublic
+        visible={isModalPublic}
+        isLoading={isLoading}
+        isPublic={isPublic}
+        onPressSubmit={onPressSubmitPublic}
+        onPressClose={(): void => setIsModalPublic(false)}
+      />
       {correction ? (
         <ModalReview
+          isLoading={isLoading}
           name={correction.profile.name}
           photoUrl={correction.profile.photoUrl}
           visible={isModalReview}
@@ -130,6 +162,15 @@ const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
             isMyDiary
             isReview={isReview}
             correction={correction}
+            onPressUser={onPressUser}
+            onPressReview={onPressReview}
+          />
+        ) : null}
+        {proCorrection ? (
+          <DiaryCorrection
+            isMyDiary
+            isReview={isReview}
+            correction={proCorrection}
             onPressUser={onPressUser}
             onPressReview={onPressReview}
           />

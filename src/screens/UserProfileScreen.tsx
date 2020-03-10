@@ -8,7 +8,7 @@ import {
   Alert,
   RefreshControl,
 } from 'react-native';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   NavigationStackScreenComponent,
   NavigationStackOptions,

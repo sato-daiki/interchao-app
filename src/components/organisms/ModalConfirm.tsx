@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  isLoading?: boolean;
   title: string;
   message: string;
   mainButtonText: string;
@@ -46,6 +47,7 @@ interface Props {
 
 const ModalConfirm: React.FC<Props> = ({
   visible,
+  isLoading = false,
   title,
   message,
   mainButtonText,
@@ -60,7 +62,11 @@ const ModalConfirm: React.FC<Props> = ({
         <View style={styles.line} />
         <Text style={styles.text}>{message}</Text>
         <Space size={32} />
-        <SubmitButton title={mainButtonText} onPress={onPressMain} />
+        <SubmitButton
+          isLoading={isLoading}
+          title={mainButtonText}
+          onPress={onPressMain}
+        />
         <Space size={16} />
         <WhiteButton title={cancelButtonText} onPress={onPressClose} />
       </View>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeS, subTextColor } from '../../styles/Common';
 import { Diary } from '../../types';
 import { getMyDiaryStatus } from '../../utils/diary';
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -18,10 +19,14 @@ const styles = StyleSheet.create({
     fontSize: fontSizeS,
     color: subTextColor,
   },
+  icon: {
+    paddingRight: 8,
+  },
 });
 
 const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
   const {
+    isPublic,
     diaryStatus,
     correctionStatus,
     isReview,
@@ -38,9 +43,19 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
     isReviewPro
   );
 
+  const publicIcon = isPublic ? (
+    <MaterialCommunityIcons
+      style={styles.icon}
+      size={14}
+      color={subTextColor}
+      name="lock"
+    />
+  ) : null;
+
   if (premium) {
     return (
-      <View style={styles.container}>
+      <View style={styles.row}>
+        {publicIcon}
         {statusPro ? (
           <DiaryStatus color={statusPro.color} text={statusPro.text} />
         ) : (
@@ -56,7 +71,8 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.row}>
+      {publicIcon}
       {status ? <DiaryStatus color={status.color} text={status.text} /> : null}
     </View>
   );
