@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  isLoading: boolean;
   name: string;
   photoUrl: string;
   onPressClose: () => void;
@@ -53,6 +54,7 @@ interface Props {
 
 const ModalReview: React.FC<Props> = ({
   visible,
+  isLoading,
   name,
   photoUrl,
   onPressClose,
@@ -97,7 +99,11 @@ const ModalReview: React.FC<Props> = ({
               style={styles.review}
             />
             <Space size={32} />
-            <SubmitButton title="送信する" onPress={onPressSubmit} />
+            <SubmitButton
+              isLoading={isLoading}
+              title="送信する"
+              onPress={onPressSubmit}
+            />
             <Space size={16} />
             <WhiteButton title="キャンセル" onPress={onPressClose} />
           </>

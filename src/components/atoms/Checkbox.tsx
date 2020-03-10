@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { mainColor } from '../../styles/Common';
 
 interface Props {

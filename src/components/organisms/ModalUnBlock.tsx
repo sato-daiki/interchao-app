@@ -36,12 +36,14 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  isLoading: boolean;
   userName: string;
   onPressClose: () => void;
 }
 
 const ModalUnBlock: React.FC<Props> = ({
   visible,
+  isLoading,
   userName,
   onPressClose,
 }: Props): JSX.Element | null => {
@@ -66,7 +68,11 @@ const ModalUnBlock: React.FC<Props> = ({
               ブロックを解除すると、この人はあなたの日記を見たり、フォローできるようになります。ブロックが解除されたことは、相手に通知されません。
             </Text>
             <Space size={32} />
-            <SubmitButton title="ブロックを解除" onPress={onPressSubmit} />
+            <SubmitButton
+              isLoading={isLoading}
+              title="ブロックを解除"
+              onPress={onPressSubmit}
+            />
             <Space size={16} />
             <WhiteButton title="キャンセル" onPress={onPressClose} />
           </>

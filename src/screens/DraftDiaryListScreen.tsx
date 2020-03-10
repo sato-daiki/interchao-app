@@ -54,7 +54,7 @@ const DraftDiaryListScreen: ScreenType = ({
   setDraftDiaryTotalNum,
   navigation,
 }) => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
@@ -75,11 +75,11 @@ const DraftDiaryListScreen: ScreenType = ({
           setDraftDiaries(res.hits);
           setDraftDiaryTotalNum(res.nbHits);
         } catch (err) {
-          setLoading(false);
+          setIsLoading(false);
           setRefreshing(false);
           Alert.alert(' エラー', 'ネットワークエラーです');
         }
-        setLoading(false);
+        setIsLoading(false);
       };
       f();
     },
@@ -164,19 +164,19 @@ const DraftDiaryListScreen: ScreenType = ({
   }, [draftDiaryTotalNum]);
 
   const displayEmptyComponent =
-    !loading && !refreshing && draftDiaries.length < 1;
+    !isLoading && !refreshing && draftDiaries.length < 1;
   if (displayEmptyComponent) {
     return <EmptyDraftDiaryList />;
   }
 
   const listFooterComponent =
-    loading && !refreshing && draftDiaries.length > 0 ? (
+    isLoading && !refreshing && draftDiaries.length > 0 ? (
       <ActivityIndicator />
     ) : null;
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={loading} />
+      <LoadingModal visible={isLoading} />
       <FlatList
         data={draftDiaries}
         keyExtractor={keyExtractor}

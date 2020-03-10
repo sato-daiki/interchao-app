@@ -11,7 +11,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
@@ -62,7 +62,7 @@ const MyDiaryListScreen: ScreenType = ({
   setDiaryTotalNum,
   navigation,
 }) => {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
@@ -90,11 +90,11 @@ const MyDiaryListScreen: ScreenType = ({
           setDiaries(res.hits);
           setDiaryTotalNum(res.nbHits);
         } catch (err) {
-          setLoading(false);
+          setIsLoading(false);
           setRefreshing(false);
           Alert.alert(' エラー', 'ネットワークエラーです');
         }
-        setLoading(false);
+        setIsLoading(false);
       };
       f();
     },
@@ -185,7 +185,7 @@ const MyDiaryListScreen: ScreenType = ({
     return <GrayHeader title={title} />;
   }, [diaryTotalNum]);
 
-  const displayEmptyComponent = !loading && !refreshing && diaries.length < 1;
+  const displayEmptyComponent = !isLoading && !refreshing && diaries.length < 1;
   return (
     <View style={styles.container}>
       <MyDiaryListMenu
@@ -193,7 +193,7 @@ const MyDiaryListScreen: ScreenType = ({
         isMenu={isMenu}
         onClose={onClose}
       />
-      <LoadingModal visible={loading} />
+      <LoadingModal visible={isLoading} />
       {displayEmptyComponent ? (
         <EmptyMyDiaryList />
       ) : (

@@ -47,11 +47,13 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  isLoading: boolean;
   onPressClose: () => void;
 }
 
 const ModalAlertCorrection: React.FC<Props> = ({
   visible,
+  isLoading,
   onPressClose,
 }: Props): JSX.Element | null => {
   const onPressSubmit = useCallback(() => {}, []);
@@ -69,7 +71,11 @@ const ModalAlertCorrection: React.FC<Props> = ({
           本サービスは、１日記につき、１添削で行っています。添削を始めると、ロックがかかり他の人は添削できなくなります。
         </Text>
         <Space size={32} />
-        <SubmitButton title="投稿する" onPress={onPressSubmit} />
+        <SubmitButton
+          isLoading={isLoading}
+          title="投稿する"
+          onPress={onPressSubmit}
+        />
         <Space size={8} />
         <View style={styles.row}>
           <Checkbox

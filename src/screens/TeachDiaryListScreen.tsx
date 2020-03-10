@@ -6,7 +6,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { GrayHeader } from '../components/atoms';
 import { User, Diary } from '../types';
 // import { DiaryListItem } from '../components/molecules';
@@ -49,7 +49,7 @@ const TeachDiaryListScreen: NavigationStackScreenComponent = ({
   const deleteQueryBatch = () => {};
 
   // const [diaries, setDiaries] = useState();
-  // const [loading, setLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   // const ref = firestore().collection('diaries');
 
   // useEffect(() => {
@@ -64,11 +64,11 @@ const TeachDiaryListScreen: NavigationStackScreenComponent = ({
   //     });
 
   //     setDiaries(list);
-  //     if (loading) {
-  //       setLoading(false);
+  //     if (isLoading) {
+  //       setIsLoading(false);
   //     }
   //   });
-  // }, [loading, ref]);
+  // }, [isLoading, ref]);
 
   // const onPressUser = useCallback(() => {}, []);
   // const onPressItem = useCallback(

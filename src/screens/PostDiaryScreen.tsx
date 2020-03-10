@@ -88,7 +88,7 @@ const PostDiaryScreen: ScreenType = ({
   setDiaryTotalNum,
   setDraftDiaryTotalNum,
 }) => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [isModalAlert, setIsModalAlert] = useState(false);
@@ -126,9 +126,9 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (loading) return;
+      if (isLoading) return;
       try {
-        setLoading(true);
+        setIsLoading(true);
         const diary = getDiary('publish');
         const points = user.points - 10;
         const diaryDoc = await firebase
@@ -152,10 +152,10 @@ const PostDiaryScreen: ScreenType = ({
         setPoints(points);
 
         navigation.navigate('MyDiaryList');
-        setLoading(false);
+        setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
-        setLoading(false);
+        setIsLoading(false);
         Alert.alert('ネットワークエラーです');
       }
     };
@@ -164,9 +164,9 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressDraft = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (loading) return;
+      if (isLoading) return;
       try {
-        setLoading(true);
+        setIsLoading(true);
         const diary = getDiary('draft');
         const diaryDoc = await firebase
           .firestore()
@@ -183,10 +183,10 @@ const PostDiaryScreen: ScreenType = ({
         setDraftDiaryTotalNum(draftDiaryTotalNum + 1);
 
         navigation.navigate('DraftDiaryList');
-        setLoading(false);
+        setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
-        setLoading(false);
+        setIsLoading(false);
         Alert.alert('ネットワークエラーです');
       }
     };
@@ -195,9 +195,10 @@ const PostDiaryScreen: ScreenType = ({
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={loading} />
+      <LoadingModal visible={isLoading} />
       <ModalAlertPublish
         visible={isModalAlert}
+        isLoading={isLoading}
         isPublic={isPublic}
         onValueChangePublic={(): void => setIsPublic(!isPublic)}
         onPressSubmit={onPressSubmit}

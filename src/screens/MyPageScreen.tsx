@@ -4,7 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
