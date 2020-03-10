@@ -34,6 +34,22 @@ export const addDiary = (diary: Diary): AddDiaryAction => ({
   diary,
 });
 
+export interface EditDiaryAction extends Action {
+  type: Types.EDIT_DIARY;
+  payload: {
+    objectID: string;
+    diary: Diary;
+  };
+}
+
+export const editDiary = (objectID: string, diary: Diary): EditDiaryAction => ({
+  type: Types.EDIT_DIARY,
+  payload: {
+    objectID,
+    diary,
+  },
+});
+
 export interface DeleteDiaryAction extends Action {
   type: Types.DELETE_DIARY;
   objectID: string;

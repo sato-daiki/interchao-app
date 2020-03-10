@@ -19,6 +19,8 @@ import { primaryColor } from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
 
 interface Props {
+  diary: Diary;
+  editDiary: (objectID: string, diary: Diary) => void;
   deleteDiary: (objectID: string) => void;
 }
 
@@ -39,14 +41,18 @@ const styles = StyleSheet.create({
 /**
  * 日記詳細
  */
-const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
+const MyDiaryScreen: ScreenType = ({
+  navigation,
+  diary,
+  editDiary,
+  deleteDiary,
+}) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalReview, setIsModalReview] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [isModalPublic, setIsModalPublic] = useState(false);
-  const { item }: { item: Diary } = navigation.state.params!;
-  const { isReview, correction, proCorrection, isPublic } = item;
+  const { isReview, correction, proCorrection, isPublic } = diary;
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
@@ -80,9 +86,9 @@ const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
   useEffect(() => {
     navigation.setParams({
       onPressMore,
-      title: item.title,
+      title: diary.title,
     });
-  }, [item.title, onPressMore]);
+  }, [diary.title, onPressMore]);
 
   const onPressUser = useCallback(() => {}, []);
   const onPressReview = useCallback(() => {
@@ -96,37 +102,41 @@ const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
         await firebase
           .firestore()
           .collection('diaries')
-          .doc(item.objectID)
+          .doc(diary.objectID)
           .update({
             isPublic: changedIsPublic,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
-
+        editDiary(diary.objectID!, {
+          ...diary,
+          isPublic: changedIsPublic,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
         setIsModalPublic(false);
         setIsLoading(false);
       };
       f();
     },
-    [item.objectID]
+    [diary.objectID, editDiary]
   );
 
   const onPressDelete = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!item.objectID) return;
+      if (!diary.objectID) return;
       setIsLoading(true);
       await firebase
         .firestore()
         .collection('diaries')
-        .doc(item.objectID)
+        .doc(diary.objectID)
         .delete();
       setIsModalDelete(false);
       // reduxの設定
-      deleteDiary(item.objectID);
+      deleteDiary(diary.objectID);
       navigation.goBack();
       setIsLoading(false);
     };
     f();
-  }, [item.objectID]);
+  }, [diary.objectID]);
 
   return (
     <View style={styles.container}>
@@ -156,7 +166,7 @@ const MyDiaryScreen: ScreenType = ({ navigation, deleteDiary }) => {
         />
       ) : null}
       <ScrollView style={styles.container}>
-        <DiaryOriginal diary={item} />
+        <DiaryOriginal diary={diary} />
         {correction ? (
           <DiaryCorrection
             isMyDiary

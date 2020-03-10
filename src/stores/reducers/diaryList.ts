@@ -13,7 +13,30 @@ const initialState: DiaryListState = {
   diaryTotalNum: 0,
 };
 
-const removeDiary = (
+const editDiary = (
+  state: DiaryListState,
+  payload: {
+    objectID: string;
+    diary: Diary;
+  }
+): DiaryListState => {
+  const { objectID, diary } = payload;
+  const newDiaries = state.diaries.map(item => {
+    if (item.objectID !== objectID) {
+      return item;
+    }
+    return {
+      ...item,
+      ...diary,
+    };
+  });
+  return {
+    ...state,
+    diaries: newDiaries,
+  };
+};
+
+const deleteDiary = (
   state: DiaryListState,
   action: DeleteDiaryAction
 ): DiaryListState => {
@@ -43,8 +66,10 @@ const diaryList = (state = initialState, action: Actions) => {
         diaries: [action.diary, ...state.diaries],
         diaryTotalNum: state.diaryTotalNum + 1,
       };
+    case Types.EDIT_DIARY:
+      return editDiary(state, action.payload);
     case Types.DELETE_DIARY:
-      return removeDiary(state, action);
+      return deleteDiary(state, action);
     default:
       return state;
   }
