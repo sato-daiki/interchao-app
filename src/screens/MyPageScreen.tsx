@@ -9,6 +9,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import { ProfileIconHorizontal, SmallButtonWhite } from '../components/atoms';
+import { ProfileLanguage } from '../components/molecules';
 
 export interface Props {
   profile: Profile;
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
+    paddingBottom: 16,
   },
 });
 
@@ -50,7 +52,14 @@ const styles = StyleSheet.create({
  * マイページ
  */
 const MyPageScreen: ScreenType = ({ navigation, profile }) => {
-  const { userName, name, photoUrl, introduction } = profile;
+  const {
+    userName,
+    name,
+    photoUrl,
+    introduction,
+    nativeLanguage,
+    learnLanguage,
+  } = profile;
 
   useEffect(() => {
     navigation.setParams({
@@ -70,6 +79,10 @@ const MyPageScreen: ScreenType = ({ navigation, profile }) => {
       </View>
       {name ? <Text style={styles.name}>{name}</Text> : null}
       <Text style={styles.introduction}>{introduction}</Text>
+      <ProfileLanguage
+        nativeLanguage={nativeLanguage}
+        learnLanguage={learnLanguage}
+      />
     </View>
   );
 };
