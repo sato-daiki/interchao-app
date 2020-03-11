@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     paddingHorizontal: 16,
     paddingBottom: 24,
+    lineHeight: fontSizeM * 1.3,
   },
   subTitle: {
     fontSize: fontSizeM,
@@ -66,6 +67,11 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 16,
   },
+  subText: {
+    color: subTextColor,
+    fontSize: fontSizeM,
+    textAlign: 'center',
+  },
 });
 
 interface Props {
@@ -91,11 +97,13 @@ const ModalAlertPublish: React.FC<Props> = ({
         <Text style={styles.title}>確認</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
-          一度投稿すると、編集ができません。よろしいですか？
+          10ポイントを使い日記を投稿します。
+          {'\n'}
+          一度投稿すると、編集ができません。
         </Text>
         <Text style={styles.subTitle}>公開設定</Text>
         <Text style={styles.description}>
-          InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると、TwitterやFacebookで添削結果を投稿することができます。また、他の学習者の手助けになります。
+          InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。
         </Text>
         <View style={styles.row}>
           <Text style={styles.label}>Webで公開</Text>

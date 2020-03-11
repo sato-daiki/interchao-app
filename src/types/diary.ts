@@ -1,4 +1,5 @@
 import { firestore } from 'firebase';
+import { Language } from './profile';
 
 // algolia経由で取得するのでtimestamp型が他と異なる
 export type Timestamp = {
@@ -29,6 +30,9 @@ export interface DisplayProfile {
   name: string;
   userName: string;
   photoUrl: string;
+  learnLanguage: Language;
+  nativeLanguage: Language;
+  nati: string;
   ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
 }
 

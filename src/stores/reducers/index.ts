@@ -5,6 +5,7 @@ import user from './user';
 import profile from './profile';
 import diaryList from './diaryList';
 import draftDiaryList from './draftDiaryList';
+import teachDiaryList from './teachDiaryList';
 
 const rootPersistConfig = {
   key: 'root',
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   profile,
   diaryList,
   draftDiaryList,
+  teachDiaryList,
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

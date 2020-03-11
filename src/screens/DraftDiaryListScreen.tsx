@@ -16,7 +16,7 @@ import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
-import { EmptyDraftDiaryList } from '../components/molecules';
+import { EmptyList } from '../components/molecules';
 
 export interface Props {
   user: User;
@@ -141,12 +141,9 @@ const DraftDiaryListScreen: ScreenType = ({
     user.uid,
   ]);
 
-  const onPressItem = useCallback(
-    item => {
-      // navigation.navigate('MyDiary', { item });
-    },
-    [navigation]
-  );
+  const onPressItem = useCallback(item => {
+    // navigation.navigate('MyDiary', { item });
+  }, []);
 
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
@@ -166,7 +163,12 @@ const DraftDiaryListScreen: ScreenType = ({
   const displayEmptyComponent =
     !isLoading && !refreshing && draftDiaries.length < 1;
   if (displayEmptyComponent) {
-    return <EmptyDraftDiaryList />;
+    return (
+      <EmptyList
+        message="下書き一覧はありません"
+        iconName="book-open-variant"
+      />
+    );
   }
 
   const listFooterComponent =
