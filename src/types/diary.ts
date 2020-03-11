@@ -27,12 +27,10 @@ export interface Correction {
 // Profileのうち一部を抜粋したもの
 export interface DisplayProfile {
   uid: string;
-  name: string;
   userName: string;
   photoUrl: string;
   learnLanguage: Language;
   nativeLanguage: Language;
-  nati: string;
   ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
 }
 

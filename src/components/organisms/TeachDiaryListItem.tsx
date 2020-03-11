@@ -11,7 +11,8 @@ import {
 import { getPostDay } from '../../utils/diary';
 import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
-import { MyDiaryStatus, ProfileIcons, UserDiaryStatus } from '../molecules';
+import { UserDiaryStatus } from '../molecules';
+import { ProfileIcon } from '../atoms';
 
 interface Props {
   mine?: boolean;
@@ -26,6 +27,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  main: {
+    paddingLeft: 12,
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -33,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 4,
   },
-  postDayText: {
+  userName: {
     color: subTextColor,
     fontSize: fontSizeS,
   },
@@ -43,46 +50,30 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 8,
   },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
     textAlign: 'left',
     flex: 1,
+    paddingBottom: 4,
   },
-  icon: {
-    paddingLeft: 6,
+  content: {
+    flexDirection: 'column',
+  },
+  postDay: {
+    color: subTextColor,
+    fontSize: fontSizeS,
   },
 });
 
 const TeachDiaryListItem = ({
-  mine = false,
   item,
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text /* correction, proCorrection */ } = item;
-  const proCorrection = {
-    profile: {
-      uid: 'aaa',
-      name: 'dd',
-      userName: 'eee',
-      photoUrl: '',
-    },
-  };
-  const correction = {
-    profile: {
-      uid: 'aaa',
-      name: 'dd',
-      userName: 'eee',
-      photoUrl: '',
-    },
-  };
+  const { createdAt, title, text, profile } = item;
+  const { photoUrl, uid, userName } = profile;
   const postDay = getPostDay(createdAt);
 
   return (
@@ -90,31 +81,21 @@ const TeachDiaryListItem = ({
       style={styles.container}
       onPress={(): void => onPressItem(item)}
     >
-      <View style={styles.header}>
-        <Text style={styles.postDayText}>{postDay}</Text>
-        {mine ? (
-          <MyDiaryStatus diary={item} />
-        ) : (
+      <ProfileIcon photoUrl={photoUrl} onPress={(): void => onPressUser(uid)} />
+      <View style={styles.main}>
+        <View style={styles.header}>
+          <Text style={styles.userName}>{userName}</Text>
           <UserDiaryStatus diary={item} />
-        )}
-      </View>
-      <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-        {title}
-      </Text>
-
-      <View style={styles.content}>
-        <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
-          {text}
-        </Text>
-        {correction || proCorrection ? (
-          <View style={styles.icon}>
-            <ProfileIcons
-              correction={correction}
-              proCorrection={proCorrection}
-              onPressUser={onPressUser}
-            />
-          </View>
-        ) : null}
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
+            {title}
+          </Text>
+          <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
+            {text}
+          </Text>
+          <Text style={styles.postDay}>{postDay}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );

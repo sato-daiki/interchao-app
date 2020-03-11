@@ -62,7 +62,7 @@ const TeachDiaryListScreen: ScreenType = ({
           const index = await Algolia.getDiaryIndex(clean);
           await Algolia.setSettings(index);
           const res = await index.search('', {
-            filters: `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish`,
+            // filters: `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish`,
             page: 0,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -190,6 +190,7 @@ TeachDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   return {
+    headerTitle: (): JSX.Element => <View />,
     ...DefaultNavigationOptions,
   };
 };

@@ -102,9 +102,10 @@ const PostDiaryScreen: ScreenType = ({
   const getDiary = (diaryStatus: DiaryStatus): Diary => {
     const displayProfile: DisplayProfile = {
       uid: profile.uid,
-      name: profile.name,
       userName: profile.userName,
       photoUrl: profile.photoUrl,
+      learnLanguage: profile.learnLanguage,
+      nativeLanguage: profile.nativeLanguage,
       ref: firebase.firestore().doc(`profiles/${profile.uid}`),
     };
 
