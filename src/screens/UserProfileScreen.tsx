@@ -17,7 +17,7 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
-import { EmptyDiary } from '../components/molecules';
+import { EmptyDiary, ProfileLanguage } from '../components/molecules';
 import { GrayHeader, ProfileIconHorizontal, Space } from '../components/atoms';
 import { Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -220,6 +220,10 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
               </>
             ) : null}
             <Text style={styles.introduction}>{profile.introduction}</Text>
+            <ProfileLanguage
+              nativeLanguage={profile.nativeLanguage}
+              learnLanguage={profile.learnLanguage}
+            />
           </>
         )}
       </View>

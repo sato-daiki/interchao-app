@@ -13,3 +13,4 @@ export { default as MyDiaryStatus } from './MyDiaryStatus';
 export { default as UserDiaryStatus } from './UserDiaryStatus';
 export { default as ProfileIcons } from './ProfileIcons';
 export { default as EmptyList } from './EmptyList';
+export { default as ProfileLanguage } from './ProfileLanguage';

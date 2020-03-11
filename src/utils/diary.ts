@@ -1,7 +1,7 @@
 import moment from 'moment';
 import 'moment/locale/ja';
 
-import { DiaryStatus, CorrectionStatus, Timestamp } from '../types';
+import { DiaryStatus, CorrectionStatus, Timestamp, Language } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 
 interface Status {
@@ -52,4 +52,15 @@ export const getMyDiaryStatus = (
     }
   }
   return null;
+};
+
+export const getlanguage = (language: Language): string => {
+  switch (language) {
+    case 'ja':
+      return '日本語';
+    case 'en':
+      return '英語';
+    default:
+      return '';
+  }
 };
