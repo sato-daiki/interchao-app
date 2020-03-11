@@ -6,6 +6,7 @@ import { User } from './user';
 import { Profile } from './profile';
 import { DiaryListState } from '../stores/reducers/diaryList';
 import { DraftDiaryListState } from '../stores/reducers/draftDiaryList';
+import { TeachDiaryListState } from '../stores/reducers/teachDiaryList';
 import { SetUserAction } from '../stores/actions/user';
 import { SetProfileAction } from '../stores/actions/profile';
 import {
@@ -20,6 +21,10 @@ import {
   SetDraftDiaryTotalNumAction,
   AddDraftDiaryAction,
 } from '../stores/actions/draftDiaryList';
+import {
+  SetTeachDiariesAction,
+  EditTeachDiaryAction,
+} from '../stores/actions/teachDiaryList';
 
 export interface State {
   rootReducer: {
@@ -27,6 +32,7 @@ export interface State {
     profile: Profile;
     diaryList: DiaryListState;
     draftDiaryList: DraftDiaryListState;
+    teachDiaryList: TeachDiaryListState;
   };
 }
 
@@ -40,7 +46,9 @@ export type Actions =
   | EditDiaryAction
   | SetDraftDiariesAction
   | SetDraftDiaryTotalNumAction
-  | AddDraftDiaryAction;
+  | AddDraftDiaryAction
+  | SetTeachDiariesAction
+  | EditTeachDiaryAction;
 
 export type ThunkAction<R> = OrgThunkAction<R, State, undefined, Actions>;
 export type ThunkDispatch = OrgThunkDispatch<State, undefined, Actions>;

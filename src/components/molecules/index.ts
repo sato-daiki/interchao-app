@@ -12,4 +12,4 @@ export { default as OnOffSmallButton } from './OnOffSmallButton';
 export { default as MyDiaryStatus } from './MyDiaryStatus';
 export { default as UserDiaryStatus } from './UserDiaryStatus';
 export { default as ProfileIcons } from './ProfileIcons';
-export { default as EmptyDraftDiaryList } from './EmptyDraftDiaryList';
+export { default as EmptyList } from './EmptyList';
