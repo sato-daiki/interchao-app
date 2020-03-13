@@ -35,3 +35,32 @@ export const addDraftDiary = (draftDiary: Diary): AddDraftDiaryAction => ({
   type: Types.ADD_DRAFT_DIARY,
   draftDiary,
 });
+
+export interface EditDraftDiaryAction extends Action {
+  type: Types.EDIT_DRAFT_DIARY;
+  payload: {
+    objectID: string;
+    draftDiary: Diary;
+  };
+}
+
+export const editDraftDiary = (
+  objectID: string,
+  draftDiary: Diary
+): EditDraftDiaryAction => ({
+  type: Types.EDIT_DRAFT_DIARY,
+  payload: {
+    objectID,
+    draftDiary,
+  },
+});
+
+export interface DeleteDraftDiaryAction extends Action {
+  type: Types.DELETE_DRAFT_DIARY;
+  objectID: string;
+}
+
+export const deleteDraftDiary = (objectID: string): DeleteDraftDiaryAction => ({
+  type: Types.DELETE_DRAFT_DIARY,
+  objectID,
+});

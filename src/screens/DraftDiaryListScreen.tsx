@@ -89,7 +89,7 @@ const DraftDiaryListScreen: ScreenType = ({
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      await getNewDraftDiary(false);
+      await getNewDraftDiary(true);
     };
     f();
   }, [getNewDraftDiary]);
@@ -142,7 +142,7 @@ const DraftDiaryListScreen: ScreenType = ({
   ]);
 
   const onPressItem = useCallback(item => {
-    // navigation.navigate('MyDiary', { item });
+    navigation.navigate('PostDraftDiary', { item });
   }, []);
 
   const renderItem = useCallback(

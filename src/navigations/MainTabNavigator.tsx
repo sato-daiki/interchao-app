@@ -23,10 +23,15 @@ import EditEmailScreen from '../screens/EditEmailScreen';
 import EditPasswordScreen from '../screens/EditPasswordScreen';
 import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen';
 import EditUserNameScreenContainer from '../containers/EditUserNameScreenContainer';
+import PostDraftDiaryScreenContainer from '../containers/PostDraftDiaryScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
   ModalPostDiary: { screen: PostDiaryScreenContainer },
+});
+
+const ModalPostDraftDiaryNavigator = createStackNavigator({
+  PostDraftDiary: { screen: PostDraftDiaryScreenContainer },
 });
 
 const ModalEditMyProfileNavigator = createStackNavigator(
@@ -150,8 +155,11 @@ export default createStackNavigator(
       screen: MainTab,
     },
     ModalPostDiary: { screen: ModalPostDiaryNavigator },
-    MoealEditMyProfile: {
+    ModalEditMyProfile: {
       screen: ModalEditMyProfileNavigator,
+    },
+    ModalPostDraftDiary: {
+      screen: ModalPostDraftDiaryNavigator,
     },
   },
   {

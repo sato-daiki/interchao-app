@@ -20,23 +20,20 @@ module.exports = {
   },
   rules: {
     // @envのimportは許可する
-    'import/no-unresolved': [2, { ignore: ['@env', './images'] }],
+    'import/no-unresolved': [2, {ignore: ['@env', './images']}],
     'import/prefer-default-export': [0],
-    "import/extensions": [
-      "error",
-      "ignorePackages",
+    'import/extensions': [
+      'error',
+      'ignorePackages',
       {
-        "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
-      }
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
     ],
     // .js ファイルで jsx 記法を許可する ( ReactNative なら必須 )
-    'react/jsx-filename-extension': [
-      1,
-      { extensions: ['.js', '.jsx', '.tsx'] },
-    ],
+    'react/jsx-filename-extension': [1, {extensions: ['.js', '.jsx', '.tsx']}],
     'react-native/no-unused-styles': 2,
     'react-native/no-inline-styles': 2,
     '@typescript-eslint/explicit-function-return-type': [
@@ -50,7 +47,7 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
-      node: { extensions: ['.js', '.ts', '.tsx'] },
+      node: {extensions: ['.js', '.ts', '.tsx']},
     },
   },
   overrides: [
