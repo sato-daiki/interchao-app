@@ -11,20 +11,12 @@ export const getUser = async (uid: string): Promise<User | null> => {
       .get();
     const data = doc.data();
     if (data) {
-      const {
-        premium,
-        confirmDiary,
-        confirmReview,
-        points,
-        createdAt,
-        updatedAt,
-      } = data;
+      const { premium, confirmCorrection, points, createdAt, updatedAt } = data;
 
       return {
         uid,
         premium,
-        confirmDiary,
-        confirmReview,
+        confirmCorrection,
         points,
         createdAt,
         updatedAt,

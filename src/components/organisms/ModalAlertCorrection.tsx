@@ -48,15 +48,16 @@ const styles = StyleSheet.create({
 interface Props {
   visible: boolean;
   isLoading: boolean;
+  onPressSubmit: (checked: boolean) => void;
   onPressClose: () => void;
 }
 
 const ModalAlertCorrection: React.FC<Props> = ({
   visible,
   isLoading,
+  onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const onPressSubmit = useCallback(() => {}, []);
   const [checked, setChecked] = useState(false);
 
   return (
@@ -73,21 +74,20 @@ const ModalAlertCorrection: React.FC<Props> = ({
         <Space size={32} />
         <SubmitButton
           isLoading={isLoading}
-          title="投稿する"
-          onPress={onPressSubmit}
+          title="添削を始める"
+          onPress={(): void => onPressSubmit(checked)}
         />
-        <Space size={8} />
+        <Space size={12} />
         <View style={styles.row}>
           <Checkbox
             checked={checked}
-            color={subTextColor}
             onPress={(): void => setChecked(!checked)}
           />
           <Text style={styles.checkboxText}>
             以後、このメッセージを表示しない
           </Text>
         </View>
-        <Space size={16} />
+        <Space size={24} />
         <WhiteButton title="キャンセル" onPress={onPressClose} />
       </View>
     </Modal>

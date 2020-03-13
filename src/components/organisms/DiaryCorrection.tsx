@@ -46,12 +46,10 @@ const keyExtractor = (item: Commment, index: number): string => String(index);
  * 概要：添削一覧
  */
 const DiaryCorrection: React.FC<Props> = ({
-  isMyDiary,
   isReview,
   correction,
   onPressUser,
   onPressReview,
-  onPressCorrection,
 }): JSX.Element => {
   const { profile, commments, summary, createdAt } = correction;
   const { userName, photoUrl } = profile;
@@ -62,17 +60,10 @@ const DiaryCorrection: React.FC<Props> = ({
         <CommentCard title="総評" text={summary} borderColor={primaryColor} />
       ) : null}
       <Space size={32} />
-      {isMyDiary ? (
-        <MyDiaryCorrectionFooter
-          isReview={isReview}
-          onPressReview={onPressReview}
-        />
-      ) : (
-        <UserDiaryCorrectionFooter
-          isReview={isReview}
-          onPressCorrection={onPressCorrection}
-        />
-      )}
+      <MyDiaryCorrectionFooter
+        isReview={isReview}
+        onPressReview={onPressReview}
+      />
     </>
   );
 

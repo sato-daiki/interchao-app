@@ -11,7 +11,7 @@ import PostDiaryScreen from '../screens/PostDiaryScreen';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import TeachDiaryListScreenContainer from '../containers/TeachDiaryListScreenContainer';
 import MyDiaryScreenContainer from '../containers/MyDiaryScreenContainer';
-import UserDiaryScreen from '../screens/UserDiaryScreen';
+import TeachDiaryScreenContainer from '../containers/TeachDiaryScreenContainer';
 import MyPageScreenContainer from '../containers/MyPageScreenContainer';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import EditMyProfileScreenContainer from '../containers/EditMyProfileScreenContainer';
@@ -85,8 +85,8 @@ const TeachDiaryTabStack = createStackNavigator(
     TeachDiaryList: {
       screen: TeachDiaryListScreenContainer,
     },
-    UserDiaryScreen: {
-      screen: UserDiaryScreen,
+    TeachDiary: {
+      screen: TeachDiaryScreenContainer,
     },
     UserProfile: {
       screen: UserProfileScreen,
