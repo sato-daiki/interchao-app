@@ -20,6 +20,8 @@ import {
   SetDraftDiariesAction,
   SetDraftDiaryTotalNumAction,
   AddDraftDiaryAction,
+  EditDraftDiaryAction,
+  DeleteDraftDiaryAction,
 } from '../stores/actions/draftDiaryList';
 import {
   SetTeachDiariesAction,
@@ -42,11 +44,13 @@ export type Actions =
   | SetDiariesAction
   | SetDiaryTotalNumAction
   | AddDiaryAction
-  | DeleteDiaryAction
   | EditDiaryAction
+  | DeleteDiaryAction
   | SetDraftDiariesAction
   | SetDraftDiaryTotalNumAction
+  | DeleteDraftDiaryAction
   | AddDraftDiaryAction
+  | EditDraftDiaryAction
   | SetTeachDiariesAction
   | EditTeachDiaryAction;
 

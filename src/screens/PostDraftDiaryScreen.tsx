@@ -6,6 +6,7 @@ import {
 } from 'react-navigation-stack';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
+
 import { HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
@@ -17,7 +18,8 @@ interface Props {
   profile: Profile;
   setPoints: (points: number) => void;
   addDiary: (diary: Diary) => void;
-  addDraftDiary: (diary: Diary) => void;
+  deleteDraftDiary: (objectID: string) => void;
+  setDraftDiary: (objectID: string, draftDiary: Diary) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -29,20 +31,31 @@ type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
 /**
  * 概要：日記投稿画面
  */
-const PostDiaryScreen: ScreenType = ({
+const PostDraftDiaryScreen: ScreenType = ({
   navigation,
   user,
   profile,
   setPoints,
   addDiary,
-  addDraftDiary,
+  deleteDraftDiary,
+  setDraftDiary,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isModalCancel, setIsModalCancel] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [isPublic, setIsPublic] = useState(false);
+
+  useEffect(() => {
+    const { params = {} } = navigation.state;
+    const { item } = params;
+    if (item) {
+      setTitle(item.title);
+      setText(item.text);
+    }
+    setIsLoading(false);
+  }, []);
 
   const onPressClose = useCallback((): void => {
     if (title.length > 0 || text.length > 0) {
@@ -50,7 +63,7 @@ const PostDiaryScreen: ScreenType = ({
     } else {
       navigation.goBack(null);
     }
-  }, [text.length, title.length]);
+  }, [navigation, text.length, title.length]);
 
   useEffect(() => {
     navigation.setParams({
@@ -60,7 +73,7 @@ const PostDiaryScreen: ScreenType = ({
   }, [text, title]);
 
   const getDiary = useCallback(
-    (diaryStatus: DiaryStatus): Diary => {
+    (diaryStatus: DiaryStatus) => {
       const displayProfile: DisplayProfile = {
         uid: profile.uid,
         userName: profile.userName,
@@ -77,11 +90,6 @@ const PostDiaryScreen: ScreenType = ({
         text,
         profile: displayProfile,
         diaryStatus,
-        correctionStatus: 'yet',
-        correctionStatusPro: 'yet',
-        isReview: false,
-        isReviewPro: false,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
@@ -102,13 +110,14 @@ const PostDiaryScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       if (isLoading) return;
       try {
+        const { params = {} } = navigation.state;
+        const { item }: { item: Diary } = params;
+        const points = user.points - 10;
+
         setIsLoading(true);
         const diary = getDiary('publish');
-        const points = user.points - 10;
-        const diaryDoc = await firebase
-          .firestore()
-          .collection('diaries')
-          .add(diary);
+        const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
+        await refDiary.update(diary);
 
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
         await refUser.update({
@@ -119,9 +128,14 @@ const PostDiaryScreen: ScreenType = ({
 
         // reduxに追加
         addDiary({
-          objectID: diaryDoc.id,
-          ...diary,
+          ...item,
+          isPublic,
+          title,
+          text,
+          diaryStatus: 'publish',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
+        deleteDraftDiary(item.objectID!);
         setPoints(points);
 
         navigation.navigate('MyDiaryList');
@@ -135,10 +149,14 @@ const PostDiaryScreen: ScreenType = ({
     f();
   }, [
     addDiary,
+    deleteDraftDiary,
     getDiary,
     isLoading,
+    isPublic,
     navigation,
     setPoints,
+    text,
+    title,
     user.points,
     user.uid,
   ]);
@@ -147,21 +165,23 @@ const PostDiaryScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       if (isLoading) return;
       try {
+        const { params = {} } = navigation.state;
+        const { item }: { item: Diary } = params;
+
         setIsLoading(true);
         const diary = getDiary('draft');
-        const diaryDoc = await firebase
-          .firestore()
-          .collection('diaries')
-          .add(diary);
+        const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
+        await refDiary.update(diary);
 
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
 
         // reduxに追加
-        addDraftDiary({
-          objectID: diaryDoc.id,
-          ...diary,
+        setDraftDiary(item.objectID, {
+          ...item,
+          title,
+          text,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
-
         navigation.navigate('DraftDiaryList');
         setIsLoading(false);
         setIsModalAlert(false);
@@ -171,7 +191,7 @@ const PostDiaryScreen: ScreenType = ({
       }
     };
     f();
-  }, [addDraftDiary, getDiary, isLoading, navigation]);
+  }, [getDiary, isLoading, navigation, setDraftDiary, text, title]);
 
   const onPressNotSave = useCallback((): void => {
     navigation.goBack(null);
@@ -197,14 +217,14 @@ const PostDiaryScreen: ScreenType = ({
   );
 };
 
-PostDiaryScreen.navigationOptions = ({
+PostDraftDiaryScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const onPressClose = navigation.getParam('onPressClose');
   const onPressPublic = navigation.getParam('onPressPublic');
   return {
     ...DefaultNavigationOptions,
-    title: '新規日記',
+    title: '下書日記',
     headerLeft: (): JSX.Element => (
       <HeaderText title="閉じる" onPress={onPressClose} />
     ),
@@ -214,4 +234,4 @@ PostDiaryScreen.navigationOptions = ({
   };
 };
 
-export default PostDiaryScreen;
+export default PostDraftDiaryScreen;
