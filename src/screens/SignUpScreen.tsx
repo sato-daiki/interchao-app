@@ -91,8 +91,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   const createUser = async (credentUser: firebase.User): Promise<void> => {
     const userInfo = {
       premium: false,
-      confirmDiary: false,
-      confirmReview: false,
+      confirmCorrection: false,
       points: 100,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),

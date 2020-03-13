@@ -4,7 +4,6 @@ import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { FlatList } from 'react-native-gesture-handler';
 import { borderLightColor } from '../styles/Common';
 import { EmptyFavoriteUser, UserListItem } from '../components/molecules';
-import { profile } from '../utils/testdata';
 import { Profile } from '../types';
 
 const styles = StyleSheet.create({
@@ -28,7 +27,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 const FavoriteUserListScreen: NavigationStackScreenComponent = ({
   navigation,
 }) => {
-  const [profiles, setProfiles] = useState([profile, profile]);
+  const [profiles, setProfiles] = useState();
 
   const onPressUser = useCallback(() => {}, []);
   const onPressFavorite = useCallback(() => {}, []);

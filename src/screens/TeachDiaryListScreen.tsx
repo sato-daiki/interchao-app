@@ -76,7 +76,7 @@ const TeachDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [profile.nativeLanguage, setTeachDiaries]
+    [setTeachDiaries]
   );
 
   // 初期データの取得
@@ -137,7 +137,7 @@ const TeachDiaryListScreen: ScreenType = ({
   const onPressUser = useCallback(() => {}, []);
   const onPressItem = useCallback(
     item => {
-      navigation.navigate('UserDiary', { objectID: item.objectID });
+      navigation.navigate('TeachDiary', { objectID: item.objectID });
     },
     [navigation]
   );
