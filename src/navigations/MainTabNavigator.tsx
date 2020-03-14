@@ -24,6 +24,9 @@ import EditPasswordScreen from '../screens/EditPasswordScreen';
 import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen';
 import EditUserNameScreenContainer from '../containers/EditUserNameScreenContainer';
 import PostDraftDiaryScreenContainer from '../containers/PostDraftDiaryScreenContainer';
+import CorrectingScreenContainer from '../containers/CorrectingScreenContainer';
+import DeleteAcountScreen from '../screens/DeleteAcountScreen';
+import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -32,6 +35,10 @@ const ModalPostDiaryNavigator = createStackNavigator({
 
 const ModalPostDraftDiaryNavigator = createStackNavigator({
   PostDraftDiary: { screen: PostDraftDiaryScreenContainer },
+});
+
+const ModalCorrectingNavigator = createStackNavigator({
+  Correcting: { screen: CorrectingScreenContainer },
 });
 
 const ModalEditMyProfileNavigator = createStackNavigator(
@@ -78,6 +85,12 @@ const MyDiaryTabStack = createStackNavigator(
     },
     RegisterEmailPassword: {
       screen: RegisterEmailPasswordScreen,
+    },
+    DeleteAcount: {
+      screen: DeleteAcountScreen,
+    },
+    ForegetPassword: {
+      screen: ForegetPasswordScreen,
     },
   },
   {
@@ -160,6 +173,9 @@ export default createStackNavigator(
     },
     ModalPostDraftDiary: {
       screen: ModalPostDraftDiaryNavigator,
+    },
+    ModalCorrecting: {
+      screen: ModalCorrectingNavigator,
     },
   },
   {

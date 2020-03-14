@@ -12,7 +12,7 @@ import {
 import firebase from '../constants/firebase';
 import { Diary } from '../types';
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
-import { DiaryOriginal } from '../components/molecules';
+import { MyDiaryOriginal } from '../components/molecules';
 import { ModalReview, ModalConfirm } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor } from '../styles/Common';
@@ -166,7 +166,7 @@ const MyDiaryScreen: ScreenType = ({
         />
       ) : null}
       <ScrollView style={styles.container}>
-        <DiaryOriginal diary={diary} />
+        <MyDiaryOriginal diary={diary} />
         {correction ? (
           <DiaryCorrection
             isMyDiary
