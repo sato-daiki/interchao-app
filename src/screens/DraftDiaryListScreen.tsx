@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,17 +6,20 @@ import {
   Alert,
   RefreshControl,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
 import { User, Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
+import { subTextColor } from '../styles/Common';
 
 export interface Props {
   user: User;
@@ -24,6 +27,7 @@ export interface Props {
   draftDiaryTotalNum: number;
   setDraftDiaries: (draftDiaries: Diary[]) => void;
   setDraftDiaryTotalNum: (draftDiaryTotalNum: number) => void;
+  deleteDraftDiary: (objectID: string) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -40,6 +44,7 @@ const styles = StyleSheet.create({
 });
 
 const HIT_PER_PAGE = 20;
+const EDIT_WIDTH = 48;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
@@ -51,14 +56,32 @@ const DraftDiaryListScreen: ScreenType = ({
   draftDiaries,
   draftDiaryTotalNum,
   setDraftDiaries,
+  deleteDraftDiary,
   setDraftDiaryTotalNum,
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [x, setX] = useState(new Animated.Value(-EDIT_WIDTH));
+  const elRefs = useRef([]);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
+
+  const onPressEdit = useCallback(() => {
+    setIsEditing(!isEditing);
+    Animated.spring(x, {
+      toValue: isEditing ? -EDIT_WIDTH : 0,
+    }).start();
+  }, [isEditing, x]);
+
+  useEffect(() => {
+    navigation.setParams({
+      isEditing,
+      onPressEdit,
+    });
+  }, [onPressEdit, isEditing]);
 
   const getNewDraftDiary = useCallback(
     (clean: boolean) => {
@@ -141,15 +164,50 @@ const DraftDiaryListScreen: ScreenType = ({
     user.uid,
   ]);
 
-  const onPressItem = useCallback(item => {
-    navigation.navigate('PostDraftDiary', { item });
+  const onPressItem = useCallback(
+    item => {
+      // setX(new Animated.Value(0));
+      navigation.navigate('PostDraftDiary', { item });
+    },
+    [navigation]
+  );
+
+  const closeMinus = useCallback(() => {
+    Animated.spring(x, {
+      toValue: -EDIT_WIDTH,
+    }).start();
   }, []);
+
+  const onPressDelete = useCallback(
+    (objectID: string) => {
+      const f = async (): Promise<void> => {
+        setIsLoading(true);
+        await firebase
+          .firestore()
+          .collection('diaries')
+          .doc(objectID)
+          .delete();
+        deleteDraftDiary(objectID);
+        setIsLoading(false);
+      };
+      f();
+    },
+    [deleteDraftDiary]
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
-      return <DraftListItem item={item} onPressItem={onPressItem} />;
+      return (
+        <DraftListItem
+          x={x}
+          item={item}
+          onPressItem={onPressItem}
+          closeMinus={closeMinus}
+          onPressDelete={(): void => onPressDelete(item.objectID)}
+        />
+      );
     },
-    [onPressItem]
+    [closeMinus, onPressDelete, onPressItem, x]
   );
 
   const listHeaderComponent = useCallback(() => {
@@ -195,10 +253,18 @@ const DraftDiaryListScreen: ScreenType = ({
   );
 };
 
-DraftDiaryListScreen.navigationOptions = (): NavigationStackOptions => {
+DraftDiaryListScreen.navigationOptions = ({
+  navigation,
+}): NavigationStackOptions => {
+  const isEditing = navigation.getParam('isEditing');
+  const onPressEdit = navigation.getParam('onPressEdit');
+
   return {
     ...DefaultNavigationOptions,
     title: '下書き',
+    headerRight: (): JSX.Element => (
+      <HeaderText title={isEditing ? '完了' : '編集'} onPress={onPressEdit} />
+    ),
   };
 };
 
