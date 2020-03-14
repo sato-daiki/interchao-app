@@ -16,6 +16,7 @@ import { Diary, Profile } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { EmptyList } from '../components/molecules';
+import firebase from '../constants/firebase';
 
 export interface Props {
   profile: Profile;
@@ -50,19 +51,57 @@ const TeachDiaryListScreen: ScreenType = ({
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [blockUsers, setBlockUsers] = useState([]);
+
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
 
+  const getExceptUser = (users: string[]): string => {
+    if (users.length === 0) return '';
+    let fillterText = '';
+    for (const user of users) {
+      fillterText += ` AND NOT profile.uid: ${user}`;
+    }
+    return fillterText;
+  };
+
   const getNewDiary = useCallback(
     (clean: boolean) => {
       const f = async (): Promise<void> => {
         try {
+          // ブロック一覧を取得する
+          const { currentUser } = firebase.auth();
+          const blockerSnap = await firebase
+            .firestore()
+            .collection('blockUsers')
+            .where('blocker', '==', currentUser?.uid)
+            .get();
+
+          let users: string[] = [];
+          blockerSnap.forEach(doc => {
+            users.push(doc.data().blockee);
+          });
+
+          const blockeeSnap = await firebase
+            .firestore()
+            .collection('blockUsers')
+            .where('blockee', '==', currentUser?.uid)
+            .get();
+
+          blockeeSnap.forEach(doc => {
+            users.push(doc.data().blocker);
+          });
+          setBlockUsers(users);
+          const fillterText = getExceptUser(users);
+
           const index = await Algolia.getDiaryIndex(clean);
           await Algolia.setSettings(index);
+
+          const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish ${fillterText}`;
           const res = await index.search('', {
-            // filters: `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish`,
+            filters,
             page: 0,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -103,9 +142,12 @@ const TeachDiaryListScreen: ScreenType = ({
           const nextPage = page + 1;
           setReadingNext(true);
 
+          const fillterText = getExceptUser(blockUsers);
+          const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish ${fillterText}`;
+
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish`,
+            filters,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
