@@ -9,7 +9,7 @@ import firebase from '../constants/firebase';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
-import { primaryColor, fontSizeM, fontSizeL } from '../styles/Common';
+import { primaryColor, fontSizeM, fontSizeL, linkBlue } from '../styles/Common';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -24,16 +24,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 32,
   },
-  title: {
-    color: primaryColor,
-    fontSize: fontSizeL,
-    fontWeight: 'bold',
-    paddingBottom: 16,
-  },
   label: {
     color: primaryColor,
     fontSize: fontSizeM,
     paddingBottom: 6,
+  },
+  forgetText: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    textAlign: 'center',
+  },
+  linkText: {
+    color: linkBlue,
   },
 });
 
@@ -129,6 +131,17 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         }
       />
       <Space size={16} />
+      <Text style={styles.forgetText}>
+        パスワードをお忘れの方は
+        <Text
+          style={styles.linkText}
+          onPress={() => {
+            navigation.navigate('ForegetPassword');
+          }}
+        >
+          こちら
+        </Text>
+      </Text>
     </View>
   );
 };

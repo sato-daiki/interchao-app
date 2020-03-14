@@ -12,7 +12,8 @@ export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
 
 export interface Commment {
   startNum: number;
-  sentence: string;
+  origin: string;
+  after: string;
   detail: string;
 }
 

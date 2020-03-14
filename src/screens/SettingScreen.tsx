@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 import {
   NavigationStackScreenComponent,
@@ -58,10 +58,6 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
     navigation.navigate('Notice');
   }, [navigation]);
 
-  const onPressEmailEdit = useCallback(() => {
-    navigation.navigate('Email');
-  }, [navigation]);
-
   const onPressFavoriteUserList = useCallback(() => {
     navigation.navigate('FavoriteUserList');
   }, [navigation]);
@@ -75,19 +71,8 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, [navigation]);
 
   const onPressDelete = useCallback(() => {
-    // TODO
-    // ログインさせる必要がある。画面も違うところに用意する
-    const f = async (): Promise<void> => {
-      try {
-        await firebase.auth().currentUser!.delete();
-        track(events.DELETED_USER);
-      } catch (error) {
-        console.log(error);
-        Alert.alert(' エラー', 'ネットワークエラーです');
-      }
-    };
-    f();
-  }, []);
+    navigation.navigate('DeleteAcount');
+  }, [navigation]);
 
   const onPressLogout = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -137,12 +122,10 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <Space size={16} />
       <OptionItem title="プライバシーポリシー" onPress={onPressPrivacy} />
       <OptionItem title="運営" onPress={onPressManagement} />
+      <OptionItem title="退会について" onPress={onPressDelete} />
       <Space size={16} />
       <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
         <Text style={styles.logout}>ログアウト</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutButton} onPress={onPressDelete}>
-        <Text style={styles.logout}>退会</Text>
       </TouchableOpacity>
     </View>
   );

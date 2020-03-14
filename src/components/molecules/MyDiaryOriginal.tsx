@@ -34,10 +34,11 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     paddingBottom: 32,
+    lineHeight: fontSizeM * 1.3,
   },
 });
 
-const DiaryOriginal = ({ diary }: { diary: Diary }): JSX.Element => {
+const MyDiaryOriginal = ({ diary }: { diary: Diary }): JSX.Element => {
   const { createdAt, title, text } = diary;
   const postDay = getPostDay(createdAt);
 
@@ -53,4 +54,4 @@ const DiaryOriginal = ({ diary }: { diary: Diary }): JSX.Element => {
   );
 };
 
-export default DiaryOriginal;
+export default MyDiaryOriginal;
