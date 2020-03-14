@@ -36,23 +36,21 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  isSuccess: boolean;
   isLoading: boolean;
   userName: string;
+  onPressSubmit: () => void;
   onPressClose: () => void;
 }
 
 const ModalBlock: React.FC<Props> = ({
   visible,
+  isSuccess,
   isLoading,
   userName,
+  onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const onPressSubmit = useCallback(() => {
-    setIsSuccess(true);
-  }, []);
-
   const title = !isSuccess
     ? `${userName}をブロックしますか？`
     : `${userName}をブロックしました`;

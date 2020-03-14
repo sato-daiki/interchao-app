@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 interface Props {
   visible: boolean;
   isLoading: boolean;
-  name: string;
+  userName: string;
   photoUrl: string;
   onPressClose: () => void;
 }
@@ -55,7 +55,7 @@ interface Props {
 const ModalReview: React.FC<Props> = ({
   visible,
   isLoading,
-  name,
+  userName,
   photoUrl,
   onPressClose,
 }: Props): JSX.Element | null => {
@@ -63,7 +63,6 @@ const ModalReview: React.FC<Props> = ({
   const [review, setReview] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const onPressUser = useCallback(() => {}, []);
   const onPressFavorite = useCallback(() => {}, []);
 
   const onPressSubmit = useCallback(() => {
@@ -78,9 +77,8 @@ const ModalReview: React.FC<Props> = ({
         {!isSuccess ? (
           <>
             <UserListItem
-              name={name}
+              userName={userName}
               photoUrl={photoUrl}
-              onPressUser={onPressUser}
               onPressButton={onPressFavorite}
             />
             <Space size={24} />

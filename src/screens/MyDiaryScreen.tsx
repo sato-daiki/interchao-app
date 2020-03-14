@@ -90,7 +90,6 @@ const MyDiaryScreen: ScreenType = ({
     });
   }, [diary.title, onPressMore]);
 
-  const onPressUser = useCallback(() => {}, []);
   const onPressReview = useCallback(() => {
     setIsModalReview(true);
   }, []);
@@ -172,7 +171,9 @@ const MyDiaryScreen: ScreenType = ({
             isMyDiary
             isReview={isReview}
             correction={correction}
-            onPressUser={onPressUser}
+            onPressUser={(uid): void => {
+              navigation.navigate('UserProfile', { uid });
+            }}
             onPressReview={onPressReview}
           />
         ) : null}
@@ -181,7 +182,9 @@ const MyDiaryScreen: ScreenType = ({
             isMyDiary
             isReview={isReview}
             correction={proCorrection}
-            onPressUser={onPressUser}
+            onPressUser={(uid): void => {
+              navigation.navigate('UserProfile', { uid });
+            }}
             onPressReview={onPressReview}
           />
         ) : null}

@@ -4,9 +4,9 @@ import OnOffSmallButton from './OnOffSmallButton';
 import { ProfileIconHorizontal } from '../atoms';
 
 interface Props {
-  name: string;
+  userName: string;
   photoUrl: string;
-  onPressUser: () => void;
+  onPressUser?: () => void;
   onPressButton: () => void;
 }
 

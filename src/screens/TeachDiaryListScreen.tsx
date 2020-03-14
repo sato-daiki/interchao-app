@@ -134,7 +134,6 @@ const TeachDiaryListScreen: ScreenType = ({
     teachDiaries,
   ]);
 
-  const onPressUser = useCallback(() => {}, []);
   const onPressItem = useCallback(
     item => {
       navigation.navigate('TeachDiary', { objectID: item.objectID });
@@ -147,12 +146,14 @@ const TeachDiaryListScreen: ScreenType = ({
       return (
         <TeachDiaryListItem
           item={item}
-          onPressUser={onPressUser}
+          onPressUser={(uid: string): void => {
+            navigation.navigate('UserProfile', { uid });
+          }}
           onPressItem={onPressItem}
         />
       );
     },
-    [onPressItem, onPressUser]
+    [onPressItem]
   );
 
   const listHeaderComponent = (

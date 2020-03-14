@@ -17,6 +17,7 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
+import firebase from '../constants/firebase';
 import { EmptyDiary, ProfileLanguage } from '../components/molecules';
 import { GrayHeader, ProfileIconHorizontal, Space } from '../components/atoms';
 import { Diary } from '../types';
@@ -26,6 +27,7 @@ import Report from '../components/organisms/Report';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
+import { ModalBlock } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,7 +61,10 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
  */
 const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { showActionSheetWithOptions } = useActionSheet();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isBlockSuccess, setIsBlockSuccess] = useState(false);
   const [isReport, setIsReport] = useState(false);
+  const [isModalBlock, setIsModalBlock] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingDiary, setLoadingDiary] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -113,7 +118,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       await Promise.all([getNewProfile(), getNewDiary(false)]);
     };
     f();
-  }, [getProfile, getNewDiary]);
+  }, [getNewDiary, getNewProfile]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -154,16 +159,14 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       }
     };
     f();
-  }, [diaries, page, readAllResults, readingNext, setDiaries]);
-
-  const onPressUser = useCallback(() => {}, []);
+  }, [diaries, page, readAllResults, readingNext]);
 
   const closePanel = useCallback(() => {
     setIsReport(false);
   }, []);
 
   const onPressBlock = useCallback(() => {
-    navigation.navigate('Block');
+    setIsModalBlock(true);
   }, [navigation]);
 
   const onPressReport = useCallback(() => {
@@ -201,6 +204,26 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   useEffect(() => {
     navigation.setParams({ onPressMore });
   }, []);
+
+  const onPressBlockSubmit = useCallback((): void => {
+    const f = async (): Promise<void> => {
+      const { currentUser } = firebase.auth();
+      if (!currentUser || !profile) {
+        return;
+      }
+      setIsLoading(true);
+      await firebase
+        .firestore()
+        .collection(`blockUsers`)
+        .add({
+          blocker: currentUser.uid,
+          blockee: profile.uid,
+        });
+      setIsBlockSuccess(true);
+      setIsLoading(false);
+    };
+    f();
+  }, [profile]);
 
   const listHeaderComponent = (
     <>
@@ -250,16 +273,26 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       return (
         <DiaryListItem
           item={item}
-          onPressUser={onPressUser}
+          onPressUser={(uid: string): void => {
+            navigation.navigate('UserProfile', { uid });
+          }}
           onPressItem={onPressItem}
         />
       );
     },
-    [onPressItem, onPressUser]
+    [onPressItem]
   );
 
   return (
     <View style={styles.container}>
+      <ModalBlock
+        visible={isModalBlock}
+        isSuccess={isBlockSuccess}
+        isLoading={isLoading}
+        userName={profile ? profile.userName : ''}
+        onPressSubmit={onPressBlockSubmit}
+        onPressClose={(): void => setIsModalBlock(false)}
+      />
       <Report isReport={isReport} closePanel={closePanel} />
       <FlatList
         data={diaries}

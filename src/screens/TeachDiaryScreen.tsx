@@ -150,7 +150,9 @@ const TeachDiaryScreen: ScreenType = ({
     }
   }, [confirmCorrection, onPressSubmitCorrection]);
 
-  const onPressUser = useCallback(() => {}, []);
+  const onPressUser = useCallback((uid: string): void => {
+    navigation.navigate('UserProfile', { uid });
+  }, []);
 
   const renderDiaryCorrection = (): ReactNode => {
     if (correctionStatus === 'yet') {
@@ -194,7 +196,7 @@ const TeachDiaryScreen: ScreenType = ({
   };
 
   const { createdAt, title, text, profile } = teachDiary;
-  const { userName, photoUrl } = profile;
+  const { userName, photoUrl, uid } = profile;
   const postDay = getPostDay(createdAt);
   return (
     <View style={styles.container}>
@@ -210,7 +212,7 @@ const TeachDiaryScreen: ScreenType = ({
           <ProfileIconHorizontal
             userName={userName}
             photoUrl={photoUrl}
-            onPress={onPressUser}
+            onPress={(): void => onPressUser(uid)}
           />
           <Space size={8} />
           <View style={styles.header}>

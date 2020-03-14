@@ -153,11 +153,6 @@ const MyDiaryListScreen: ScreenType = ({
     setIsMenu(false);
   }, []);
 
-  const onPressUser = useCallback((uid: string) => {
-    console.log(uid);
-    // navigation.navigate('MyPage');
-  }, []);
-
   const onPressItem = useCallback(
     (item: Diary) => {
       navigation.navigate('MyDiary', { objectID: item.objectID });
@@ -171,12 +166,14 @@ const MyDiaryListScreen: ScreenType = ({
         <DiaryListItem
           mine
           item={item}
-          onPressUser={onPressUser}
+          onPressUser={(uid: string): void => {
+            navigation.navigate('UserProfile', { uid });
+          }}
           onPressItem={onPressItem}
         />
       );
     },
-    [onPressItem, onPressUser]
+    [onPressItem]
   );
 
   const listHeaderComponent = useCallback(() => {

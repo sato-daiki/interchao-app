@@ -10,16 +10,13 @@ import {
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Commment } from '../../types';
 import { getPostDay } from '../../utils/diary';
-import {
-  MyDiaryCorrectionFooter,
-  UserDiaryCorrectionFooter,
-} from '../molecules';
+import { MyDiaryCorrectionFooter } from '../molecules';
 
 interface Props {
   isMyDiary: boolean;
   isReview: boolean;
   correction: Correction;
-  onPressUser: () => void;
+  onPressUser: (uid: string) => void;
   onPressReview?: () => void;
   onPressCorrection?: () => void;
 }
@@ -52,7 +49,7 @@ const DiaryCorrection: React.FC<Props> = ({
   onPressReview,
 }): JSX.Element => {
   const { profile, commments, summary, createdAt } = correction;
-  const { userName, photoUrl } = profile;
+  const { userName, photoUrl, uid } = profile;
   const postDay = getPostDay(createdAt);
   const listFooterComponent = (
     <>
@@ -86,7 +83,7 @@ const DiaryCorrection: React.FC<Props> = ({
           <ProfileIconHorizontal
             userName={userName}
             photoUrl={photoUrl}
-            onPress={onPressUser}
+            onPress={(): void => onPressUser(uid)}
           />
           <Text style={styles.daytext}>{postDay}</Text>
         </View>

@@ -9,7 +9,6 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import { getPostDay } from '../../utils/diary';
-import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
 import { MyDiaryStatus, ProfileIcons, UserDiaryStatus } from '../molecules';
 
@@ -17,7 +16,7 @@ interface Props {
   mine?: boolean;
   item: Diary;
   onPressUser: (uid: string) => void;
-  onPressItem: (item: firebase.firestore.DocumentData) => void;
+  onPressItem: (item: Diary) => void;
 }
 
 const styles = StyleSheet.create({

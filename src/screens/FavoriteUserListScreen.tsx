@@ -28,25 +28,25 @@ const FavoriteUserListScreen: NavigationStackScreenComponent = ({
   navigation,
 }) => {
   const [profiles, setProfiles] = useState();
-
-  const onPressUser = useCallback(() => {}, []);
   const onPressFavorite = useCallback(() => {}, []);
 
   const renderItem = useCallback(
     ({ item }: { item: Profile }): JSX.Element => {
-      const { name, photoUrl } = item;
+      const { userName, photoUrl } = item;
       return (
         <View style={styles.item}>
           <UserListItem
-            name={name}
+            userName={userName}
             photoUrl={photoUrl}
-            onPressUser={onPressUser}
+            onPressUser={(): void => {
+              navigation.navigate('UserProfile', { uid: item.uid });
+            }}
             onPressButton={onPressFavorite}
           />
         </View>
       );
     },
-    [onPressFavorite, onPressUser]
+    [onPressFavorite]
   );
 
   return (
