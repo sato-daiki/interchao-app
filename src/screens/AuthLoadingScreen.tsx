@@ -36,7 +36,7 @@ const AuthLoadingScreen: ScreenType = ({
   const initNavigation = async (
     authUser: firebase.User | null
   ): Promise<void> => {
-    console.log('authUser', authUser);
+    // console.log('authUser', authUser);
     if (authUser) {
       // 登録済のユーザ
       const user = await getUser(authUser.uid);

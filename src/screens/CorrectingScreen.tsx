@@ -87,9 +87,7 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
     navigation.setParams({ onPressSubmit });
   }, []);
 
-  const onLongPress = () => {
-    console.log('onLongPress');
-  };
+  const onLongPress = () => {};
 
   const onPressUser = () => {};
 
