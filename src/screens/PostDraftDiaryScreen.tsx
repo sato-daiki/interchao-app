@@ -224,7 +224,7 @@ PostDraftDiaryScreen.navigationOptions = ({
   const onPressPublic = navigation.getParam('onPressPublic');
   return {
     ...DefaultNavigationOptions,
-    title: '下書日記',
+    title: '下書を編集',
     headerLeft: (): JSX.Element => (
       <HeaderText title="閉じる" onPress={onPressClose} />
     ),
