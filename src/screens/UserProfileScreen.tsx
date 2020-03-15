@@ -20,14 +20,15 @@ import {
 import firebase from '../constants/firebase';
 import { EmptyDiary, ProfileLanguage } from '../components/molecules';
 import { GrayHeader, ProfileIconHorizontal, Space } from '../components/atoms';
-import { Diary } from '../types';
+import { Diary, Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import Report from '../components/organisms/Report';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
-import { ModalBlock } from '../components/organisms';
+import { ModalBlock, ModalConfirm } from '../components/organisms';
+import { checkBlockee, checkBlocker } from '../utils/blockUser';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,15 +66,17 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [isBlockSuccess, setIsBlockSuccess] = useState(false);
   const [isReport, setIsReport] = useState(false);
   const [isModalBlock, setIsModalBlock] = useState(false);
+  const [isModalDeleted, setIsModalDeleted] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingDiary, setLoadingDiary] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
-  const [profile, setProfile] = useState();
-  const [diaries, setDiaries] = useState();
+  const [profile, setProfile] = useState<Profile | null>();
+  const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
   const [diaryTotalNum, setDiaryTotalNum] = useState(0);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -115,6 +118,22 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
+      const { currentUser } = firebase.auth();
+      const { params } = navigation.state;
+      if (!currentUser || !params) return;
+
+      // ブロックされているかのチェック
+      const resBlockee = await checkBlockee(currentUser.uid, params.uid);
+      if (resBlockee) {
+        setIsModalDeleted(true);
+        setLoadingProfile(false);
+        setLoadingDiary(false);
+        return;
+      }
+
+      // ブロックしているかのチェック
+      const resBlocker = await checkBlocker(currentUser.uid, params.uid);
+      setIsBlocked(resBlocker);
       await Promise.all([getNewProfile(), getNewDiary(false)]);
     };
     f();
@@ -181,7 +200,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 
   const onPressMore = useCallback(() => {
-    const options = ['ブロック', '報告する', 'キャンセル'];
+    const options = [
+      isBlocked ? 'ブロック' : 'ブロックを解除する',
+      '報告する',
+      'キャンセル',
+    ];
     showActionSheetWithOptions(
       {
         options,
@@ -221,42 +244,78 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         });
       setIsBlockSuccess(true);
       setIsLoading(false);
+      setIsBlocked(true);
     };
     f();
   }, [profile]);
 
-  const listHeaderComponent = (
-    <>
-      <View style={styles.profileContainer}>
-        {loadingProfile ? (
-          <ActivityIndicator />
-        ) : (
-          <>
-            <ProfileIconHorizontal
-              userName={profile.userName}
-              photoUrl={profile.photoUrl}
-            />
-            {profile.name ? (
-              <>
-                <Space size={16} />
-                <Text style={styles.name}>{profile.name}</Text>
-              </>
-            ) : null}
-            <Text style={styles.introduction}>{profile.introduction}</Text>
-            <ProfileLanguage
-              nativeLanguage={profile.nativeLanguage}
-              learnLanguage={profile.learnLanguage}
-            />
-          </>
-        )}
-      </View>
-      <GrayHeader
-        title={
-          diaryTotalNum !== 0 ? `日記一覧(${diaryTotalNum}件)` : '日記一覧'
-        }
-      />
-    </>
-  );
+  const onPressUnblockSubmit = useCallback((): void => {
+    const f = async (): Promise<void> => {
+      const { currentUser } = firebase.auth();
+      if (!currentUser || !profile) {
+        return;
+      }
+      setIsLoading(true);
+      // １データしか存在しない
+      const users = await firebase
+        .firestore()
+        .collection(`blockUsers`)
+        .where('blocker', '==', currentUser.uid)
+        .where('blockee', '==', profile.uid)
+        .get();
+
+      const batch = firebase.firestore().batch();
+      users.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+      setIsBlockSuccess(true);
+      setIsLoading(false);
+      setIsBlocked(false);
+    };
+    f();
+  }, [profile]);
+
+  const onPressCloseDeleted = useCallback(() => {
+    setIsModalDeleted(false);
+    navigation.goBack();
+  }, [navigation]);
+
+  const listHeaderComponent = (): JSX.Element | null => {
+    if (!profile) return null;
+    return (
+      <>
+        <View style={styles.profileContainer}>
+          {loadingProfile ? (
+            <ActivityIndicator />
+          ) : (
+            <>
+              <ProfileIconHorizontal
+                userName={profile.userName}
+                photoUrl={profile.photoUrl}
+              />
+              {profile.name ? (
+                <>
+                  <Space size={16} />
+                  <Text style={styles.name}>{profile.name}</Text>
+                </>
+              ) : null}
+              <Text style={styles.introduction}>{profile.introduction}</Text>
+              <ProfileLanguage
+                nativeLanguage={profile.nativeLanguage}
+                learnLanguage={profile.learnLanguage}
+              />
+            </>
+          )}
+        </View>
+        <GrayHeader
+          title={
+            diaryTotalNum !== 0 ? `日記一覧(${diaryTotalNum}件)` : '日記一覧'
+          }
+        />
+      </>
+    );
+  };
 
   const listEmptyComponent = loadingDiary || refreshing ? null : <EmptyDiary />;
 
@@ -285,12 +344,20 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <ModalConfirm
+        visible={isModalDeleted}
+        title="エラー"
+        message="このページは開けません。対象のユーザは削除された可能性があります。"
+        cancelButtonText="閉じる"
+        onPressClose={onPressCloseDeleted}
+      />
       <ModalBlock
         visible={isModalBlock}
+        isBlocked={isBlocked}
         isSuccess={isBlockSuccess}
         isLoading={isLoading}
         userName={profile ? profile.userName : ''}
-        onPressSubmit={onPressBlockSubmit}
+        onPressSubmit={!isBlocked ? onPressBlockSubmit : onPressUnblockSubmit}
         onPressClose={(): void => setIsModalBlock(false)}
       />
       <Report isReport={isReport} closePanel={closePanel} />

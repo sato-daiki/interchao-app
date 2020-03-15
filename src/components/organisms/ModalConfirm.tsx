@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
     color: primaryColor,
   },
 });
@@ -39,9 +40,9 @@ interface Props {
   isLoading?: boolean;
   title: string;
   message: string;
-  mainButtonText: string;
+  mainButtonText?: string;
   cancelButtonText?: string;
-  onPressMain: () => void;
+  onPressMain?: () => void;
   onPressClose: () => void;
 }
 
@@ -50,7 +51,7 @@ const ModalConfirm: React.FC<Props> = ({
   isLoading = false,
   title,
   message,
-  mainButtonText,
+  mainButtonText = '',
   cancelButtonText = 'キャンセル',
   onPressMain,
   onPressClose,
@@ -62,12 +63,16 @@ const ModalConfirm: React.FC<Props> = ({
         <View style={styles.line} />
         <Text style={styles.text}>{message}</Text>
         <Space size={32} />
-        <SubmitButton
-          isLoading={isLoading}
-          title={mainButtonText}
-          onPress={onPressMain}
-        />
-        <Space size={16} />
+        {onPressMain ? (
+          <>
+            <SubmitButton
+              isLoading={isLoading}
+              title={mainButtonText}
+              onPress={onPressMain}
+            />
+            <Space size={16} />
+          </>
+        ) : null}
         <WhiteButton title={cancelButtonText} onPress={onPressClose} />
       </View>
     </Modal>

@@ -41,3 +41,17 @@ export const getProfile = async (uid: string): Promise<Profile | null> => {
   }
   return null;
 };
+
+// ユーザー名の重複チェック
+export const checkUserName = async (userName: string): Promise<boolean> => {
+  const docs = await firebase
+    .firestore()
+    .collection('profiles')
+    .where('userName', '==', userName)
+    .get();
+
+  if (docs.empty) {
+    return false;
+  }
+  return true;
+};
