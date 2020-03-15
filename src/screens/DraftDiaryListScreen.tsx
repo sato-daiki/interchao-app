@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  createRef,
+} from 'react';
 import {
   View,
   StyleSheet,
@@ -12,6 +18,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
@@ -48,6 +55,15 @@ const EDIT_WIDTH = 48;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
+const getIsEditMode = (
+  isEditing: boolean,
+  preOpendIndex: number | undefined
+): boolean => {
+  if (isEditing === true || preOpendIndex !== undefined) {
+    return true;
+  }
+  return false;
+};
 /**
  * 下書き一覧
  */
@@ -63,25 +79,39 @@ const DraftDiaryListScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [x, setX] = useState(new Animated.Value(-EDIT_WIDTH));
-  const elRefs = useRef([]);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
+  const [preOpendIndex, setPreOpenIndex] = useState<number | undefined>();
+  const elRefs = useRef([]);
 
   const onPressEdit = useCallback(() => {
-    setIsEditing(!isEditing);
+    const isEditMode = getIsEditMode(isEditing, preOpendIndex);
+    if (!isEditMode) {
+      setIsEditing(true);
+      Animated.spring(x, {
+        toValue: 0,
+      }).start();
+      return;
+    }
+
+    if (preOpendIndex !== undefined) {
+      elRefs.current[preOpendIndex].close();
+    }
+    setIsEditing(false);
     Animated.spring(x, {
-      toValue: isEditing ? -EDIT_WIDTH : 0,
+      toValue: -EDIT_WIDTH,
     }).start();
-  }, [isEditing, x]);
+  }, [isEditing, preOpendIndex, x]);
 
   useEffect(() => {
     navigation.setParams({
+      preOpendIndex,
       isEditing,
       onPressEdit,
     });
-  }, [onPressEdit, isEditing]);
+  }, [preOpendIndex, isEditing, onPressEdit]);
 
   const getNewDraftDiary = useCallback(
     (clean: boolean) => {
@@ -172,12 +202,6 @@ const DraftDiaryListScreen: ScreenType = ({
     [navigation]
   );
 
-  const closeMinus = useCallback(() => {
-    Animated.spring(x, {
-      toValue: -EDIT_WIDTH,
-    }).start();
-  }, []);
-
   const onPressDelete = useCallback(
     (objectID: string) => {
       const f = async (): Promise<void> => {
@@ -195,19 +219,72 @@ const DraftDiaryListScreen: ScreenType = ({
     [deleteDraftDiary]
   );
 
+  useEffect(() => {
+    elRefs.current = elRefs.current.slice(0, draftDiaries.length);
+  }, [draftDiaries.length]);
+
+  const onSwipeableClose = useCallback(
+    index => {
+      if (index === preOpendIndex) {
+        // 手で閉じた場合
+        setPreOpenIndex(undefined);
+      }
+    },
+    [preOpendIndex]
+  );
+
+  const onSwipeableOpen = useCallback(
+    (index: number): void => {
+      if (preOpendIndex !== undefined && index !== preOpendIndex) {
+        elRefs.current[preOpendIndex].close();
+        setPreOpenIndex(index);
+        return;
+      }
+      if (index === preOpendIndex) {
+        // 同じところを開いた場合は更新しない
+        return;
+      }
+      // 初回の時にここに入る
+      setPreOpenIndex(index);
+    },
+    [preOpendIndex, elRefs]
+  );
+
+  const onPressMinus = useCallback(
+    index => {
+      console.log('onPressMinus', index);
+      elRefs.current[index].openRight();
+      //   Animated.spring(x, {
+      //     toValue: -EDIT_WIDTH,
+      //   }).start();
+    },
+    [x]
+  );
+
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item, index }: { item: Diary; index: number }): JSX.Element => {
       return (
         <DraftListItem
+          setRef={el => {
+            elRefs.current[index] = el;
+          }}
           x={x}
           item={item}
           onPressItem={onPressItem}
-          closeMinus={closeMinus}
+          onPressMinus={(): void => onPressMinus(index)}
           onPressDelete={(): void => onPressDelete(item.objectID)}
+          onSwipeableOpen={(): void => onSwipeableOpen(index)}
+          onSwipeableClose={(): void => onSwipeableClose(index)}
         />
       );
     },
-    [closeMinus, onPressDelete, onPressItem, x]
+    [
+      onPressDelete,
+      onSwipeableOpen,
+      onSwipeableClose,
+      onPressItem,
+      onPressMinus,
+    ]
   );
 
   const listHeaderComponent = useCallback(() => {
@@ -257,13 +334,17 @@ DraftDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const isEditing = navigation.getParam('isEditing');
+  const preOpendIndex = navigation.getParam('preOpendIndex');
   const onPressEdit = navigation.getParam('onPressEdit');
 
   return {
     ...DefaultNavigationOptions,
     title: '下書き',
     headerRight: (): JSX.Element => (
-      <HeaderText title={isEditing ? '完了' : '編集'} onPress={onPressEdit} />
+      <HeaderText
+        title={getIsEditMode(isEditing, preOpendIndex) ? '完了' : '編集'}
+        onPress={onPressEdit}
+      />
     ),
   };
 };

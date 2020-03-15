@@ -199,7 +199,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const onPressMore = useCallback(() => {
     const options = [
-      isBlocked ? 'ブロック' : 'ブロックを解除する',
+      !isBlocked ? 'ブロック' : 'ブロックを解除する',
       '報告する',
       'キャンセル',
     ];
