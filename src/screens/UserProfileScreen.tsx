@@ -64,6 +64,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isBlockSuccess, setIsBlockSuccess] = useState(false);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
   const [isReport, setIsReport] = useState(false);
   const [isModalBlock, setIsModalBlock] = useState(false);
   const [isModalDeleted, setIsModalDeleted] = useState(false);
@@ -180,15 +181,12 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     f();
   }, [diaries, page, readAllResults, readingNext]);
 
-  const closePanel = useCallback(() => {
-    setIsReport(false);
-  }, []);
-
   const onPressBlock = useCallback(() => {
     setIsModalBlock(true);
   }, [navigation]);
 
   const onPressReport = useCallback(() => {
+    setIsReportSuccess(false);
     setIsReport(true);
   }, []);
 
@@ -241,6 +239,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         .add({
           blocker: currentUser.uid,
           blockee: profile.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
       setIsBlockSuccess(true);
       setIsLoading(false);
@@ -280,6 +280,32 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     setIsModalDeleted(false);
     navigation.goBack();
   }, [navigation]);
+
+  const onReportSubmit = useCallback(
+    (reason: string) => {
+      const f = async (): Promise<void> => {
+        const { currentUser } = firebase.auth();
+        if (!currentUser || !profile) {
+          return;
+        }
+        setIsLoading(true);
+        await firebase
+          .firestore()
+          .collection(`reports`)
+          .add({
+            uid: currentUser.uid,
+            targetUid: profile.uid,
+            reason,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        setIsLoading(false);
+        setIsReportSuccess(true);
+      };
+      f();
+    },
+    [profile]
+  );
 
   const listHeaderComponent = (): JSX.Element | null => {
     if (!profile) return null;
@@ -360,7 +386,13 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onPressSubmit={!isBlocked ? onPressBlockSubmit : onPressUnblockSubmit}
         onPressClose={(): void => setIsModalBlock(false)}
       />
-      <Report isReport={isReport} closePanel={closePanel} />
+      <Report
+        isReport={isReport}
+        isSuccess={isReportSuccess}
+        isLoading={isLoading}
+        onReportSubmit={onReportSubmit}
+        onReportClose={(): void => setIsReport(false)}
+      />
       <FlatList
         data={diaries}
         keyExtractor={keyExtractor}

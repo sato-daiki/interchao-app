@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import SwipeablePanel from 'rn-swipeable-panel';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -9,10 +9,14 @@ import {
   green,
 } from '../../styles/Common';
 import { OptionItem } from '../molecules';
+import { LoadingModal } from '../atoms';
 
 interface Props {
   isReport: boolean;
-  closePanel: () => void;
+  isSuccess: boolean;
+  isLoading: boolean;
+  onReportSubmit: (reason: string) => void;
+  onReportClose: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -50,19 +54,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const Report = ({ isReport, closePanel }: Props): JSX.Element => {
-  const [reported, setReported] = useState(false);
-
-  const onPressSpam = useCallback(() => {
-    setReported(true);
-  }, []);
-
-  const onPressInappropriate = useCallback(() => {
-    setReported(true);
-  }, []);
-
+const Report = ({
+  isReport,
+  isSuccess,
+  isLoading,
+  onReportSubmit,
+  onReportClose,
+}: Props): JSX.Element => {
   const reportMenu = (
     <>
+      <LoadingModal visible={isLoading} />
       <View style={styles.header}>
         <Text style={styles.title}>報告</Text>
       </View>
@@ -70,8 +71,15 @@ const Report = ({ isReport, closePanel }: Props): JSX.Element => {
       <Text style={styles.description}>
         どのアクションを実行しても、相手に通知されることはありません。差し迫った危険に直面する人がいた場合は、今すぐ地域の警察または消防機関に緊急通報してください。
       </Text>
-      <OptionItem isBorrderTop title="スパムである" onPress={onPressSpam} />
-      <OptionItem title="不適切である" onPress={onPressInappropriate} />
+      <OptionItem
+        isBorrderTop
+        title="スパムである"
+        onPress={(): void => onReportSubmit('spam')}
+      />
+      <OptionItem
+        title="不適切である"
+        onPress={(): void => onReportSubmit('inappropriate')}
+      />
     </>
   );
 
@@ -93,10 +101,10 @@ const Report = ({ isReport, closePanel }: Props): JSX.Element => {
       fullWidth
       closeOnTouchOutside
       isActive={isReport}
-      onClose={closePanel}
-      onPressCloseButton={closePanel}
+      onClose={onReportClose}
+      onPressCloseButton={onReportClose}
     >
-      {!reported ? reportMenu : reportedText}
+      {!isSuccess ? reportMenu : reportedText}
     </SwipeablePanel>
   );
 };
