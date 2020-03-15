@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
-import { TouchableOpacity, RectButton } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {
@@ -12,7 +12,6 @@ import {
   softRed,
 } from '../../styles/Common';
 import { getPostDay } from '../../utils/diary';
-import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
 import { DiaryStatus } from '../atoms';
 
@@ -20,14 +19,15 @@ const { width } = Dimensions.get('window');
 const EDIT_WIDTH = 48;
 
 interface Props {
+  setRef: (ref: Swipeable) => void;
   x: Animated.Value;
-  ref: any;
+  isEditing: boolean;
   item: Diary;
-  onPressItem: (item: firebase.firestore.DocumentData) => void;
+  onPressItem: (item: Diary) => void;
   onPressMinus: () => void;
   onPressDelete: () => void;
-  setRef: (ref: Swipeable) => void;
-  closeRow: () => void;
+  onSwipeableOpen: () => void;
+  onSwipeableClose: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -88,36 +88,33 @@ const styles = StyleSheet.create({
 });
 
 const DraftListItem = ({
-  x,
-  // ref,
   setRef,
-  onSwipeableOpen,
-  onSwipeableClose,
+  x,
+  isEditing,
   item,
   onPressItem,
   onPressMinus,
   onPressDelete,
+  onSwipeableOpen,
+  onSwipeableClose,
 }: Props): JSX.Element => {
   const { createdAt, title, text } = item;
-  // const swipeRef = useRef(ref);
-
   const postDay = getPostDay(createdAt);
 
-  // const onPress = (): void => {
-  //   onPressDelete();
-  //   ref.current.close();
-  // };
-
-  const renderRightActions = (progress, dragX) => {
+  const renderRightActions = (progress, dragX): JSX.Element => {
     const trans = dragX.interpolate({
       inputRange: [-100, 0],
       outputRange: [1, 0],
       extrapolate: 'clamp',
     });
     return (
-      <View style={styles.rightAction}>
-        {/* <TouchableOpacity style={styles.deleteButton} onPress={onPress}> */}
-        <TouchableOpacity style={styles.deleteButton} onPress={undefined}>
+      <View
+        style={[
+          styles.rightAction,
+          { paddingLeft: isEditing ? EDIT_WIDTH : undefined },
+        ]}
+      >
+        <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
           <Animated.Text
             style={[styles.deleteText, { transform: [{ translateX: trans }] }]}
           >
