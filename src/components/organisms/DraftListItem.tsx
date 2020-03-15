@@ -21,10 +21,13 @@ const EDIT_WIDTH = 48;
 
 interface Props {
   x: Animated.Value;
+  ref: any;
   item: Diary;
   onPressItem: (item: firebase.firestore.DocumentData) => void;
   onPressMinus: () => void;
   onPressDelete: () => void;
+  setRef: (ref: Swipeable) => void;
+  closeRow: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -86,25 +89,24 @@ const styles = StyleSheet.create({
 
 const DraftListItem = ({
   x,
+  // ref,
+  setRef,
+  onSwipeableOpen,
+  onSwipeableClose,
   item,
   onPressItem,
-  closeMinus,
+  onPressMinus,
   onPressDelete,
 }: Props): JSX.Element => {
   const { createdAt, title, text } = item;
-  const swipeRef = useRef(null);
+  // const swipeRef = useRef(ref);
 
   const postDay = getPostDay(createdAt);
 
-  const onPress = (): void => {
-    onPressDelete();
-    swipeRef.current.close();
-  };
-
-  const onPressMinus = (): void => {
-    closeMinus();
-    swipeRef.current.openRight();
-  };
+  // const onPress = (): void => {
+  //   onPressDelete();
+  //   ref.current.close();
+  // };
 
   const renderRightActions = (progress, dragX) => {
     const trans = dragX.interpolate({
@@ -114,7 +116,8 @@ const DraftListItem = ({
     });
     return (
       <View style={styles.rightAction}>
-        <TouchableOpacity style={styles.deleteButton} onPress={onPress}>
+        {/* <TouchableOpacity style={styles.deleteButton} onPress={onPress}> */}
+        <TouchableOpacity style={styles.deleteButton} onPress={undefined}>
           <Animated.Text
             style={[styles.deleteText, { transform: [{ translateX: trans }] }]}
           >
@@ -126,7 +129,14 @@ const DraftListItem = ({
   };
 
   return (
-    <Swipeable ref={swipeRef} renderRightActions={renderRightActions}>
+    <Swipeable
+      ref={(ref: Swipeable): void => {
+        setRef(ref);
+      }}
+      onSwipeableOpen={onSwipeableOpen}
+      onSwipeableClose={onSwipeableClose}
+      renderRightActions={renderRightActions}
+    >
       <Animated.View
         style={[styles.container, { transform: [{ translateX: x }] }]}
       >
