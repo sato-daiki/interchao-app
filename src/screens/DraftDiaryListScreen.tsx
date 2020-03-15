@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  createRef,
-} from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,7 +12,6 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
@@ -26,7 +19,6 @@ import { User, Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
-import { subTextColor } from '../styles/Common';
 
 export interface Props {
   user: User;
@@ -78,7 +70,7 @@ const DraftDiaryListScreen: ScreenType = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [x, setX] = useState(new Animated.Value(-EDIT_WIDTH));
+  const [x] = useState(new Animated.Value(-EDIT_WIDTH));
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
@@ -196,15 +188,15 @@ const DraftDiaryListScreen: ScreenType = ({
 
   const onPressItem = useCallback(
     item => {
-      // setX(new Animated.Value(0));
       navigation.navigate('PostDraftDiary', { item });
     },
     [navigation]
   );
 
   const onPressDelete = useCallback(
-    (objectID: string) => {
+    (objectID?: string, index: number) => {
       const f = async (): Promise<void> => {
+        if (!objectID) return;
         setIsLoading(true);
         await firebase
           .firestore()
@@ -212,11 +204,16 @@ const DraftDiaryListScreen: ScreenType = ({
           .doc(objectID)
           .delete();
         deleteDraftDiary(objectID);
+
+        setPreOpenIndex(undefined);
+        if (elRefs.current[index]) {
+          elRefs.current[index].close();
+        }
         setIsLoading(false);
       };
       f();
     },
-    [deleteDraftDiary]
+    [deleteDraftDiary, setPreOpenIndex]
   );
 
   useEffect(() => {
@@ -250,29 +247,23 @@ const DraftDiaryListScreen: ScreenType = ({
     [preOpendIndex, elRefs]
   );
 
-  const onPressMinus = useCallback(
-    index => {
-      console.log('onPressMinus', index);
-      elRefs.current[index].openRight();
-      //   Animated.spring(x, {
-      //     toValue: -EDIT_WIDTH,
-      //   }).start();
-    },
-    [x]
-  );
+  const onPressMinus = useCallback(index => {
+    elRefs.current[index].openRight();
+  }, []);
 
   const renderItem = useCallback(
     ({ item, index }: { item: Diary; index: number }): JSX.Element => {
       return (
         <DraftListItem
-          setRef={el => {
+          setRef={(el): void => {
             elRefs.current[index] = el;
           }}
           x={x}
+          isEditing={isEditing}
           item={item}
           onPressItem={onPressItem}
           onPressMinus={(): void => onPressMinus(index)}
-          onPressDelete={(): void => onPressDelete(item.objectID)}
+          onPressDelete={(): void => onPressDelete(item.objectID, index)}
           onSwipeableOpen={(): void => onSwipeableOpen(index)}
           onSwipeableClose={(): void => onSwipeableClose(index)}
         />
