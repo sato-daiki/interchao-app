@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Image,
   Alert,
   RefreshControl,
 } from 'react-native';
@@ -18,9 +17,9 @@ import { User, Diary } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
-import { Logo } from '../images';
 import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
+import SearchBarButton from '../components/molecules/SearchBarButton';
 
 export interface Props {
   user: User;
@@ -40,10 +39,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-  },
-  logo: {
-    width: 150,
-    height: 26,
   },
 });
 
@@ -70,9 +65,16 @@ const MyDiaryListScreen: ScreenType = ({
 
   const [isMenu, setIsMenu] = useState(false);
 
+  const onPressSearch = useCallback(() => {
+    navigation.navigate('MyDiarySearch');
+  }, [navigation]);
+
   // 第二引数をなしにするのがポイント
   useEffect(() => {
-    navigation.setParams({ onPressMenu: () => setIsMenu(true) });
+    navigation.setParams({
+      onPressMenu: () => setIsMenu(true),
+      onPressSearch,
+    });
   }, []);
 
   const getNewDiary = useCallback(
@@ -214,9 +216,17 @@ MyDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const onPressMenu = navigation.getParam('onPressMenu');
+  const onPressSearch = navigation.getParam('onPressSearch');
   return {
     ...DefaultNavigationOptions,
-    headerTitle: (): JSX.Element => <Image source={Logo} style={styles.logo} />,
+    headerTitleStyle: { textAlign: 'left', width: 50 },
+    headerTitle: (): JSX.Element => (
+      <SearchBarButton
+        displaySearchIcon
+        title="マイ日記を探す"
+        onPress={onPressSearch}
+      />
+    ),
     headerRight: (): JSX.Element => (
       <MaterialCommunityIcons
         size={28}
