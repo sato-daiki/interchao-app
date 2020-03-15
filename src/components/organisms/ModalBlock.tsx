@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   primaryColor,
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  isBlocked: boolean;
   isSuccess: boolean;
   isLoading: boolean;
   userName: string;
@@ -45,15 +46,23 @@ interface Props {
 
 const ModalBlock: React.FC<Props> = ({
   visible,
+  isBlocked,
   isSuccess,
   isLoading,
   userName,
   onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const title = !isSuccess
-    ? `${userName}をブロックしますか？`
-    : `${userName}をブロックしました`;
+  let title = '';
+  if (!isBlocked) {
+    title = !isSuccess
+      ? `${userName}をブロックしますか？`
+      : `${userName}をブロックしました`;
+  } else {
+    title = !isSuccess
+      ? `${userName}のブロックを解除しますか？`
+      : `${userName}のブロックを解除しました`;
+  }
 
   return (
     <Modal visible={visible}>
@@ -63,12 +72,14 @@ const ModalBlock: React.FC<Props> = ({
         {!isSuccess ? (
           <>
             <Text style={styles.text}>
-              ブロックした人はあなたのプロフィールや日記を見られなくなります。ブロックしたことは、相手に通知されません。
+              {!isBlocked
+                ? 'ブロックした人はあなたのプロフィールや日記を見られなくなります。ブロックしたことは、相手に通知されません。'
+                : 'ブロックを解除すると、この人はあなたの日記を見たり、フォローできるようになります。ブロックが解除されたことは、相手に通知されません。'}
             </Text>
             <Space size={32} />
             <SubmitButton
               isLoading={isLoading}
-              title="ブロックする"
+              title={!isBlocked ? 'ブロックする' : 'ブロックを解除'}
               onPress={onPressSubmit}
             />
             <Space size={16} />
@@ -77,7 +88,9 @@ const ModalBlock: React.FC<Props> = ({
         ) : (
           <>
             <Text style={styles.text}>
-              ブロックした相手のプロフィールから、いつでもブロックを解除できます。
+              {!isBlocked
+                ? 'ブロックした相手のプロフィールから、いつでもブロックを解除できます。'
+                : '相手のプロフィールからいつでもブロックができます。'}
             </Text>
             <Space size={32} />
             <WhiteButton title="閉じる" onPress={onPressClose} />

@@ -4,7 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { checkUserName } from '../utils/auth';
+import { checkUserName } from '../utils/profile';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { HeaderText } from '../components/atoms';

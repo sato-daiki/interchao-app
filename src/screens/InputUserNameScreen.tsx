@@ -15,7 +15,7 @@ import Space from '../components/atoms/Space';
 import { CheckTextInput } from '../components/molecules';
 import { Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { checkUserName } from '../utils/auth';
+import { checkUserName } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 
 interface Props {
