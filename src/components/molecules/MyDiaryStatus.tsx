@@ -5,6 +5,7 @@ import { fontSizeS, subTextColor } from '../../styles/Common';
 import { Diary } from '../../types';
 import { getMyDiaryStatus } from '../../utils/diary';
 import DiaryStatus from '../atoms/DiaryStatus';
+import { Space } from '../atoms';
 
 interface Props {
   diary: Diary;
@@ -19,8 +20,8 @@ const styles = StyleSheet.create({
     fontSize: fontSizeS,
     color: subTextColor,
   },
-  icon: {
-    paddingRight: 8,
+  padding: {
+    paddingLeft: 8,
   },
 });
 
@@ -44,18 +45,14 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
   );
 
   const publicIcon = isPublic ? null : (
-    <MaterialCommunityIcons
-      style={styles.icon}
-      size={14}
-      color={subTextColor}
-      name="lock"
-    />
+    <MaterialCommunityIcons size={14} color={subTextColor} name="lock" />
   );
 
   if (premium) {
     return (
       <View style={styles.row}>
         {publicIcon}
+        <View style={styles.padding} />
         {statusPro ? (
           <DiaryStatus color={statusPro.color} text={statusPro.text} />
         ) : (
@@ -73,7 +70,12 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
   return (
     <View style={styles.row}>
       {publicIcon}
-      {status ? <DiaryStatus color={status.color} text={status.text} /> : null}
+      {status ? (
+        <>
+          <View style={styles.padding} />
+          <DiaryStatus color={status.color} text={status.text} />
+        </>
+      ) : null}
     </View>
   );
 };
