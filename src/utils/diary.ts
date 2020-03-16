@@ -64,3 +64,13 @@ export const getlanguage = (language: Language): string => {
       return '';
   }
 };
+
+export const getExceptUser = (uids: string[]): string => {
+  if (!uids) return '';
+
+  let fillterText = '';
+  for (let i = 0; i < uids.length; i += 1) {
+    fillterText += ` AND NOT profile.uid: ${uids[i]}`;
+  }
+  return fillterText;
+};

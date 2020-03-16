@@ -28,6 +28,7 @@ import CorrectingScreenContainer from '../containers/CorrectingScreenContainer';
 import DeleteAcountScreen from '../screens/DeleteAcountScreen';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
+import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -106,6 +107,9 @@ const TeachDiaryTabStack = createStackNavigator(
   {
     TeachDiaryList: {
       screen: TeachDiaryListScreenContainer,
+    },
+    TeachDiarySearch: {
+      screen: TeachDiarySearchScreenContainer,
     },
     TeachDiary: {
       screen: TeachDiaryScreenContainer,

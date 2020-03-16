@@ -26,9 +26,6 @@ const styles = StyleSheet.create({
 
 const searchClient = algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
 
-/**
- * マイ日記一覧
- */
 const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
   const { currentUser } = firebase.auth();
   const [isEmpty, setIsEmpty] = useState(true);
