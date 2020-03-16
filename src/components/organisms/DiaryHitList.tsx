@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { connectInfiniteHits } from 'react-instantsearch-native';
-import DiaryListItem from './DiaryListItem';
 import { Diary } from '../../types';
-import Highlight from './Highlight';
 import SearchMyDiaryList from './SearchMyDiaryList';
-// import Highlight from './Highlight';
+import { GrayHeader } from '../atoms';
+import { EmptyList } from '../molecules';
 
 interface Props {
   onPressUser: (uid: string) => void;
@@ -19,6 +18,21 @@ const DiaryHitList: React.FC<Props & any> = ({
   hasMore,
   refine,
 }) => {
+  const listEmptyComponent = useCallback(
+    () => (
+      <EmptyList
+        iconName="book-open-variant"
+        message="検索条件の日記がありません"
+      />
+    ),
+    []
+  );
+
+  const listHeaderComponent = useCallback(
+    () => <GrayHeader title="検索結果" />,
+    []
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
       return (
@@ -37,6 +51,8 @@ const DiaryHitList: React.FC<Props & any> = ({
       keyExtractor={(item: Diary): string => item.objectID!}
       onEndReached={(): void => hasMore && refine()}
       renderItem={renderItem}
+      ListHeaderComponent={listHeaderComponent}
+      ListEmptyComponent={listEmptyComponent}
     />
   );
 };

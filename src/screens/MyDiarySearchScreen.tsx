@@ -57,9 +57,12 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
         searchClient={searchClient}
         indexName={__DEV__ ? 'dev_diaries' : 'prod_diaries'}
       >
-        <SearchBar placeholder="タイトルと本文で検索" />
-        <Space size={70} />
-
+        <SearchBar
+          placeholder="タイトルと本文で検索"
+          onPressClose={(): void => {
+            navigation.goBack();
+          }}
+        />
         <DiaryHitList onPressUser={onPressUser} onPressItem={onPressItem} />
       </InstantSearch>
     </SafeAreaView>
