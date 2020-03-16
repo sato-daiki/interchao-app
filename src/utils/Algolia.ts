@@ -1,8 +1,4 @@
-import algoliasearch, {
-  SearchClient,
-  SearchIndex,
-  QueryParameters,
-} from 'algoliasearch';
+import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import {
   ALGOLIA_API_KEY, // APPLICATION_ID
   ALGOLIA_ADMIN_API_KEY,
