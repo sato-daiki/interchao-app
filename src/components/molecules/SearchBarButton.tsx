@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
 interface Props {
   title?: string;
   onPress: () => void;
-  displaySearchIcon?: boolean;
 }
 
 const SearchBarButton: React.FC<Props> = ({ title, onPress }) => {

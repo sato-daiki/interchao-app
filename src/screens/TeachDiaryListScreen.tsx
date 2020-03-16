@@ -18,6 +18,8 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
+import SearchBarButton from '../components/molecules/SearchBarButton';
+import { getExceptUser } from '../utils/diary';
 
 export interface Props {
   profile: Profile;
@@ -59,13 +61,15 @@ const TeachDiaryListScreen: ScreenType = ({
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
 
-  const getExceptUser = (uids: string[]): string => {
-    let fillterText = '';
-    for (let i = 0; i < uids.length; i += 1) {
-      fillterText += ` AND NOT profile.uid: ${uids[i]}`;
-    }
-    return fillterText;
-  };
+  const onPressSearch = useCallback(() => {
+    navigation.navigate('TeachDiarySearch');
+  }, [navigation]);
+
+  useEffect(() => {
+    navigation.setParams({
+      onPressSearch,
+    });
+  }, []);
 
   const getNewDiary = useCallback(
     (clean: boolean) => {
@@ -80,6 +84,7 @@ const TeachDiaryListScreen: ScreenType = ({
 
           const index = await Algolia.getDiaryIndex(clean);
           await Algolia.setSettings(index);
+
           const fillterUids = getExceptUser(uids);
           const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish ${fillterUids}`;
           const res = await index.search('', {
@@ -94,6 +99,7 @@ const TeachDiaryListScreen: ScreenType = ({
           // reduxで保持
           setTeachDiaries(res.hits);
         } catch (err) {
+          console.log(err);
           setIsLoading(false);
           setRefreshing(false);
           Alert.alert(' エラー', 'ネットワークエラーです');
@@ -219,9 +225,12 @@ const TeachDiaryListScreen: ScreenType = ({
 TeachDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
+  const onPressSearch = navigation.getParam('onPressSearch');
   return {
-    headerTitle: (): JSX.Element => <View />,
     ...DefaultNavigationOptions,
+    headerTitle: (): JSX.Element => (
+      <SearchBarButton title="みんなの日記を探す" onPress={onPressSearch} />
+    ),
   };
 };
 

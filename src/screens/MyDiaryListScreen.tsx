@@ -219,13 +219,8 @@ MyDiaryListScreen.navigationOptions = ({
   const onPressSearch = navigation.getParam('onPressSearch');
   return {
     ...DefaultNavigationOptions,
-    headerTitleStyle: { textAlign: 'left', width: 50 },
     headerTitle: (): JSX.Element => (
-      <SearchBarButton
-        displaySearchIcon
-        title="マイ日記を探す"
-        onPress={onPressSearch}
-      />
+      <SearchBarButton title="マイ日記を探す" onPress={onPressSearch} />
     ),
     headerRight: (): JSX.Element => (
       <MaterialCommunityIcons
