@@ -31,9 +31,13 @@ const Highlight: React.FC<Props & any> = ({
     hit,
     highlightProperty: '_highlightResult',
   });
-  const highligtedHit = parsedHit.map((part: any) => {
+  const highligtedHit = parsedHit.map((part: any, index: number) => {
     if (part.isHighlighted) {
-      return <Text style={styles.text}>{part.value}</Text>;
+      return (
+        <Text key={index} style={styles.text}>
+          {part.value}
+        </Text>
+      );
     }
     return part.value;
   });
