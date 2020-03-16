@@ -7,30 +7,34 @@ import { GrayHeader } from '../atoms';
 import { EmptyList } from '../molecules';
 
 interface Props {
-  onPressUser: (uid: string) => void;
+  isEmpty: boolean;
   onPressItem: (objectID: string) => void;
+  hits: Diary[];
+  hasMore: boolean;
+  refine: any;
 }
 
 const DiaryHitList: React.FC<Props & any> = ({
-  onPressUser,
+  isEmpty,
   onPressItem,
   hits,
   hasMore,
   refine,
-}) => {
+}: Props) => {
   const listEmptyComponent = useCallback(
-    () => (
-      <EmptyList
-        iconName="book-open-variant"
-        message="検索条件の日記がありません"
-      />
-    ),
-    []
+    () =>
+      isEmpty ? null : (
+        <EmptyList
+          iconName="book-open-variant"
+          message="検索条件の日記がありません"
+        />
+      ),
+    [isEmpty]
   );
 
   const listHeaderComponent = useCallback(
-    () => <GrayHeader title="検索結果" />,
-    []
+    () => (isEmpty ? null : <GrayHeader title="検索結果" />),
+    [isEmpty]
   );
 
   const renderItem = useCallback(
@@ -38,18 +42,24 @@ const DiaryHitList: React.FC<Props & any> = ({
       return (
         <SearchMyDiaryList
           item={item}
-          onPressItem={(): void => onPressItem(item.objectID)}
+          onPressItem={(): void => onPressItem(item.objectID!)}
         />
       );
     },
-    [onPressItem, onPressUser]
+    [onPressItem]
   );
+
+  const onEndReached = useCallback((): void => {
+    if (hasMore) {
+      refine();
+    }
+  }, [hasMore, refine]);
 
   return (
     <FlatList
-      data={hits}
+      data={isEmpty ? [] : hits}
       keyExtractor={(item: Diary): string => item.objectID!}
-      onEndReached={(): void => hasMore && refine()}
+      onEndReached={onEndReached}
       renderItem={renderItem}
       ListHeaderComponent={listHeaderComponent}
       ListEmptyComponent={listEmptyComponent}

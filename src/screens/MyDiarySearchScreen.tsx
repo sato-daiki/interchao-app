@@ -1,22 +1,15 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { InstantSearch } from 'react-instantsearch-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, SafeAreaView } from 'react-native';
+import { InstantSearch, Configure } from 'react-instantsearch-native';
 import algoliasearch from 'algoliasearch';
-import {
-  ALGOLIA_API_KEY, // APPLICATION_ID
-  ALGOLIA_ADMIN_API_KEY,
-} from '@env';
-import { View, StyleSheet, StatusBar, Text, SafeAreaView } from 'react-native';
+import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '@env';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { Diary } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import SearchBar, {
-  Props as SearchBarProps,
-} from '../components/organisms/SearchBar';
+import firebase from '../constants/firebase';
+import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
-import { Space } from '../components/atoms';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -37,12 +30,8 @@ const searchClient = algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
  * マイ日記一覧
  */
 const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
-  const onPressUser = useCallback(
-    (uid: string): void => {
-      navigation.navigate('UserProfile', { uid });
-    },
-    [navigation]
-  );
+  const { currentUser } = firebase.auth();
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const onPressItem = useCallback(
     (objectID: string) => {
@@ -57,13 +46,17 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
         searchClient={searchClient}
         indexName={__DEV__ ? 'dev_diaries' : 'prod_diaries'}
       >
+        <Configure
+          filters={`profile.uid:${currentUser!.uid} AND diaryStatus: publish`}
+        />
         <SearchBar
           placeholder="タイトルと本文で検索"
+          setIsEmpty={setIsEmpty}
           onPressClose={(): void => {
             navigation.goBack();
           }}
         />
-        <DiaryHitList onPressUser={onPressUser} onPressItem={onPressItem} />
+        <DiaryHitList isEmpty={isEmpty} onPressItem={onPressItem} />
       </InstantSearch>
     </SafeAreaView>
   );

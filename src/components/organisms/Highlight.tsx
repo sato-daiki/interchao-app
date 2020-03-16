@@ -5,6 +5,7 @@ import { Diary } from '../../types';
 import { softRed } from '../../styles/Common';
 
 interface Props {
+  highlight: any;
   attribute: string;
   hit: Diary;
   numberOfLines: number;
@@ -30,13 +31,9 @@ const Highlight: React.FC<Props & any> = ({
     hit,
     highlightProperty: '_highlightResult',
   });
-  const highligtedHit = parsedHit.map((part, idx) => {
+  const highligtedHit = parsedHit.map((part: any) => {
     if (part.isHighlighted) {
-      return (
-        <Text key={idx} style={styles.text}>
-          {part.value}
-        </Text>
-      );
+      return <Text style={styles.text}>{part.value}</Text>;
     }
     return part.value;
   });
