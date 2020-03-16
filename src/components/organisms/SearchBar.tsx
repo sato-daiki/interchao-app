@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
 import { connectSearchBox } from 'react-instantsearch-native';
 import {
   subTextColor,
@@ -37,15 +37,31 @@ const styles = StyleSheet.create({
 
 interface Props {
   placeholder?: string;
+  setIsEmpty: (isEmpty: boolean) => void;
   onPressClose: () => void;
+  refine: any;
+  currentRefinement: string;
 }
 
 const SearchBar: React.FC<Props & any> = ({
   placeholder,
+  setIsEmpty,
   onPressClose,
   refine,
   currentRefinement,
 }) => {
+  const onChangeText = useCallback(
+    (text: string): void => {
+      if (!text) {
+        setIsEmpty(true);
+      } else {
+        setIsEmpty(false);
+      }
+      refine(text);
+    },
+    [refine, setIsEmpty]
+  );
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -59,7 +75,7 @@ const SearchBar: React.FC<Props & any> = ({
         autoFocus
         numberOfLines={1}
         value={currentRefinement}
-        onChangeText={refine}
+        onChangeText={onChangeText}
       />
       <HeaderText title="キャンセル" onPress={onPressClose} />
     </View>
