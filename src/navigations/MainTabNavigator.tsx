@@ -27,6 +27,7 @@ import PostDraftDiaryScreenContainer from '../containers/PostDraftDiaryScreenCon
 import CorrectingScreenContainer from '../containers/CorrectingScreenContainer';
 import DeleteAcountScreen from '../screens/DeleteAcountScreen';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
+import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -55,6 +56,9 @@ const MyDiaryTabStack = createStackNavigator(
   {
     MyDiaryList: {
       screen: MyDiaryListScreenContainer,
+    },
+    MyDiarySearch: {
+      screen: MyDiarySerchScreen,
     },
     DraftDiaryList: {
       screen: DraftDiaryListScreenContainer,
