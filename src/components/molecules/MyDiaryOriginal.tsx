@@ -9,6 +9,7 @@ import {
 import { MyDiaryStatus } from '.';
 import { Diary } from '../../types';
 import { getPostDay } from '../../utils/diary';
+import CorrectionText from '../organisms/CorrectionText';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +50,7 @@ const MyDiaryOriginal = ({ diary }: { diary: Diary }): JSX.Element => {
         <MyDiaryStatus diary={diary} />
       </View>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.text}>{text}</Text>
+      <CorrectionText text={text} />
     </View>
   );
 };

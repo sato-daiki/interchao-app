@@ -9,6 +9,8 @@ export const linkBlue = '#2469BB';
 export const green = '#27AE60';
 export const facebook = '#1877f2';
 export const softRed = '#da5353';
+export const selectedBlue = 'rgba(37,122,253,0.2)';
+export const pinBlue = 'rgb(37,122,253)';
 
 export const fontSizeS = 13;
 export const fontSizeM = 14;

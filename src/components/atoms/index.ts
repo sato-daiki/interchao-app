@@ -15,3 +15,5 @@ export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as DiaryStatus } from './DiaryStatus';
 export { default as HeaderText } from './HeaderText';
+export { default as SelectedPicTop } from './SelectedPicTop';
+export { default as SelectedPicBottom } from './SelectedPicBottom';
