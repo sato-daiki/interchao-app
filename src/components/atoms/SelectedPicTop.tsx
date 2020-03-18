@@ -3,14 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
-  PanGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 import { pinBlue } from '../../styles/Common';
 
 interface Props {
   isStart: boolean;
   onGestureEvent: (event: PanGestureHandlerGestureEvent) => void;
-  // onHandlerStateChange: (event: PanGestureHandlerStateChangeEvent) => void;
 }
 
 const styles = StyleSheet.create({
@@ -38,13 +36,9 @@ const styles = StyleSheet.create({
 const SelectedPicTop: React.FC<Props> = ({
   isStart,
   onGestureEvent,
-}: // onHandlerStateChange,
-Props): JSX.Element => {
+}: Props): JSX.Element => {
   return (
-    <PanGestureHandler
-      onGestureEvent={onGestureEvent}
-      // onHandlerStateChange={onHandlerStateChange}
-    >
+    <PanGestureHandler onGestureEvent={onGestureEvent}>
       {isStart ? (
         <View style={styles.container}>
           <View style={styles.cicleTop} />
