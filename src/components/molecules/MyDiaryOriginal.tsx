@@ -31,12 +31,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 16,
   },
-  text: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    paddingBottom: 32,
-    lineHeight: fontSizeM * 1.3,
-  },
 });
 
 const MyDiaryOriginal = ({ diary }: { diary: Diary }): JSX.Element => {

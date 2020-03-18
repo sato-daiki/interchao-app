@@ -1,11 +1,21 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import {
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent,
+  PanGestureHandlerStateChangeEvent,
+} from 'react-native-gesture-handler';
 import { pinBlue } from '../../styles/Common';
+
+interface Props {
+  isEnd: boolean;
+  onGestureEvent: (event: PanGestureHandlerGestureEvent) => void;
+  onHandlerStateChange: (event: PanGestureHandlerStateChangeEvent) => void;
+}
 
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    // alignContent: 'flex-end',
     zIndex: 1,
     right: -7,
     bottom: -7,
@@ -24,12 +34,25 @@ const styles = StyleSheet.create({
   },
 });
 
-const SelectedPicBottom: React.FC = (): JSX.Element => {
+const SelectedPicBottom: React.FC<Props> = ({
+  isEnd,
+  onGestureEvent,
+  onHandlerStateChange,
+}: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
-      <View style={styles.stick} />
-      <View style={styles.cicleBottom} />
-    </View>
+    <PanGestureHandler
+      onGestureEvent={onGestureEvent}
+      // onHandlerStateChange={onHandlerStateChange}
+    >
+      {isEnd ? (
+        <View style={styles.container}>
+          <View style={styles.stick} />
+          <View style={styles.cicleBottom} />
+        </View>
+      ) : (
+        <View />
+      )}
+    </PanGestureHandler>
   );
 };
 
