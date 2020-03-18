@@ -1,34 +1,8 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  ReactNode,
-} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableWithoutFeedback,
-  Vibration,
-  PanResponderInstance,
-  LayoutChangeEvent,
-  LayoutRectangle,
-} from 'react-native';
-import {
-  PanGestureHandlerGestureEvent,
-  State,
-  PanGestureHandlerStateChangeEvent,
-  GestureHandlerStateChangeNativeEvent,
-} from 'react-native-gesture-handler';
-import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
-import SelectedPicTop from '../atoms/SelectedPicTop';
-import { SelectedPicBottom } from '../atoms';
+import React, { useCallback, useState, ReactNode } from 'react';
+import { View, StyleSheet, Vibration, Text } from 'react-native';
+import { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
 import Word from './Word';
 
-// const { width } = Dimensions.get('window');
-const LONG_PRESS_TIMEOUT = 500;
 const VIBRATION_DURATION = 500;
 const PADDING = 16;
 const HEIGHT = 150;
@@ -54,9 +28,6 @@ export interface Position {
 
 const CorrectionText: React.FC<Props & any> = ({ text }) => {
   const [startIndex, setStartIndex] = useState<number>();
-  const [isStartActive, setIsStartActive] = useState(false);
-  const [isEndActive, setIsEndActive] = useState(false);
-
   const [endIndex, setEndIndex] = useState<number>();
   const [positions, setPositions] = useState<Position[]>([]);
 
@@ -77,10 +48,7 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
 
   const findCellIndex = useCallback(
     (absoluteX: number, absoluteY: number): Position | undefined => {
-      positions.sort((a, b) => {
-        return a.id - b.id;
-      });
-
+      console.log(absoluteX, absoluteY);
       const resPosition = positions.find(
         p =>
           p.x + PADDING <= absoluteX &&
@@ -93,30 +61,7 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
     [positions]
   );
 
-  // const onHandlerStateChangeTop = (
-  //   event: PanGestureHandlerStateChangeEvent
-  // ): void => {
-  //   if (event.nativeEvent.state === State.ACTIVE) {
-  //     setIsStartActive(true);
-  //   } else if (event.nativeEvent.state === State.END) {
-  //     setIsStartActive(false);
-  //   }
-  // };
-
-  // const onHandlerStateChangeEnd = (
-  //   event: PanGestureHandlerStateChangeEvent
-  // ): void => {
-  //   if (event.nativeEvent.state === State.ACTIVE) {
-  //     setIsEndActive(true);
-  //   } else if (event.nativeEvent.state === State.END) {
-  //     setIsEndActive(false);
-  //   }
-  // };
-
   const onGestureEventTop = (event: PanGestureHandlerGestureEvent): void => {
-    // console.log('onGestureEventTop');
-    // console.log('position', positons.length);
-
     const { absoluteX, absoluteY } = event.nativeEvent;
     const resPosition = findCellIndex(absoluteX, absoluteY);
     if (resPosition && endIndex && resPosition.id <= endIndex) {
@@ -150,7 +95,40 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
     }
   );
 
-  return <View style={styles.container}>{renderText}</View>;
+  return (
+    <>
+      <View style={styles.container}>{renderText}</View>
+      <Text
+        onPress={() => {
+          positions.sort((a, b) => {
+            return a.id - b.id;
+          });
+          for (let i = 0; i < positions.length; i += 1) {
+            console.log('index', positions[i].id);
+            console.log('x', positions[i].x);
+            console.log('y', positions[i].y);
+            console.log('width', positions[i].width);
+            console.log('height', positions[i].height);
+
+            console.log('p.x + PADDING', positions[i].x + PADDING);
+            console.log(
+              ' p.x + PADDING + p.width',
+              positions[i].x + PADDING + positions[i].width
+            );
+            console.log(' p.y + HEIGHT', positions[i].y + HEIGHT);
+            console.log(
+              'p.y + p.height + HEIGHT',
+              positions[i].y + HEIGHT + positions[i].height
+            );
+
+            console.log('---------');
+          }
+        }}
+      >
+        text
+      </Text>
+    </>
+  );
 };
 
 export default CorrectionText;
