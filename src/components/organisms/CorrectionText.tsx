@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  ReactNode,
+} from 'react';
 import {
   View,
   Text,
@@ -19,29 +25,18 @@ import {
 import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
 import SelectedPicTop from '../atoms/SelectedPicTop';
 import { SelectedPicBottom } from '../atoms';
-// import Word from './Word';
+import Word from './Word';
 
 // const { width } = Dimensions.get('window');
 const LONG_PRESS_TIMEOUT = 500;
 const VIBRATION_DURATION = 500;
 const PADDING = 16;
+const HEIGHT = 150;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  text: {
-    flexDirection: 'row',
-    marginRight: 4,
-  },
-  word: {
-    backgroundColor: '#fff',
-  },
-  wordText: {
-    lineHeight: fontSizeM * 1.3,
-    fontSize: fontSizeM,
-    color: primaryColor,
   },
 });
 
@@ -49,10 +44,10 @@ interface Props {
   text: string;
 }
 
-interface Position {
+export interface Position {
   id: number;
-  fx: number;
-  py: number;
+  x: number;
+  y: number;
   width: number;
   height: number;
 }
@@ -63,8 +58,8 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
   const [isEndActive, setIsEndActive] = useState(false);
 
   const [endIndex, setEndIndex] = useState<number>();
-  // const [positons, setPositons] = useState<Position[]>([]);
-  const positons: Position[] = [];
+  const [positions, setPositions] = useState<Position[]>([]);
+
   const getWords = (allText: string): string[] => {
     return allText.split(' ');
   };
@@ -76,34 +71,27 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
     Vibration.vibrate(VIBRATION_DURATION);
   }, []);
 
-  const addPostion = useCallback(
-    (id: number, fx: number, py: number, width: number, height: number) => {
-      positons.push({
-        id,
-        py,
-        fx,
-        width,
-        height,
-      });
-      // console.log(positons);
-    },
-    [positons]
-  );
+  const addPosition = (position: Position): void => {
+    setPositions([...positions, position]);
+  };
 
-  const findCellIndex = useCallback((absoluteX: number, absoluteY: number):
-    | Position
-    | undefined => {
-    // positons.sort((a, b) => {
-    //   return a.id - b.id;
-    // });
-    console.log(positons.length);
-    console.log('absoluteX', absoluteX);
-    console.log('absoluteY', absoluteY);
-    const resPosition = positons.find(
-      p => p.fx + PADDING <= absoluteX && p.fx + PADDING + p.width >= absoluteX
-    );
-    return resPosition;
-  }, []);
+  const findCellIndex = useCallback(
+    (absoluteX: number, absoluteY: number): Position | undefined => {
+      positions.sort((a, b) => {
+        return a.id - b.id;
+      });
+
+      const resPosition = positions.find(
+        p =>
+          p.x + PADDING <= absoluteX &&
+          p.x + PADDING + p.width >= absoluteX &&
+          p.y + HEIGHT <= absoluteY &&
+          p.y + p.height + HEIGHT >= absoluteY
+      );
+      return resPosition;
+    },
+    [positions]
+  );
 
   // const onHandlerStateChangeTop = (
   //   event: PanGestureHandlerStateChangeEvent
@@ -126,12 +114,12 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
   // };
 
   const onGestureEventTop = (event: PanGestureHandlerGestureEvent): void => {
-    console.log('onGestureEventTop');
-    console.log('position', positons.length);
+    // console.log('onGestureEventTop');
+    // console.log('position', positons.length);
 
     const { absoluteX, absoluteY } = event.nativeEvent;
     const resPosition = findCellIndex(absoluteX, absoluteY);
-    if (resPosition) {
+    if (resPosition && endIndex && resPosition.id <= endIndex) {
       setStartIndex(resPosition.id);
     }
   };
@@ -139,78 +127,28 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
   const onGestureEventEnd = (event: PanGestureHandlerGestureEvent): void => {
     const { absoluteX, absoluteY } = event.nativeEvent;
     const resPosition = findCellIndex(absoluteX, absoluteY);
-    if (resPosition) {
+    if (resPosition && startIndex && resPosition.id >= startIndex) {
+      // 後ろのピンが前のピンより手前にはいけないようにする
       setEndIndex(resPosition.id);
     }
   };
 
-  const elRefs = useRef<View[]>([]);
-  useEffect(() => {
-    elRefs.current = elRefs.current.slice(0, words.length);
-  }, [words.length]);
-
-  const onLayout = useCallback(
-    index => {
-      elRefs.current[index].measure((fx, fy, width, height, px, py) => {
-        // console.log('index', index);
-        // console.log('fx', fx);
-        // console.log('fy', fy);
-        // console.log('width', width);
-        // console.log('height', height);
-        // console.log('px', px);
-        // console.log('py', py);
-        // console.log('measure', index);
-        addPostion(index, fx, py, width, height);
-      });
-    },
-    [addPostion]
-  );
-
-  const renderText = words.map((word: string, index: number) => {
-    const isStart = index === startIndex;
-    const isEnd = index === endIndex;
-    const isActive = !!(
-      startIndex !== undefined &&
-      endIndex !== undefined &&
-      index >= startIndex &&
-      index <= endIndex
-    );
-
-    const styleWord = isActive ? { backgroundColor: selectedBlue } : {};
-
-    return (
-      <View
-        ref={(view): void => {
-          if (!view) return;
-          elRefs.current[index] = view;
-        }}
-        key={index}
-        style={styles.text}
-        onLayout={(): void => onLayout(index)}
-      >
-        <SelectedPicTop
-          isStart={isStart}
-          onGestureEvent={onGestureEventTop}
-          // onHandlerStateChange={onHandlerStateChangeTop}
+  const renderText = words.map(
+    (word: string, index: number): ReactNode => {
+      return (
+        <Word
+          index={index}
+          text={word}
+          startIndex={startIndex}
+          endIndex={endIndex}
+          onLongPress={onLongPress}
+          onGestureEventTop={onGestureEventTop}
+          onGestureEventEnd={onGestureEventEnd}
+          addPosition={addPosition}
         />
-        <TouchableWithoutFeedback
-          onLongPress={(): void => onLongPress(index)}
-          delayLongPress={LONG_PRESS_TIMEOUT}
-        >
-          <View style={[styles.word, styleWord]}>
-            <Text style={styles.wordText}>{word}</Text>
-          </View>
-        </TouchableWithoutFeedback>
-        {isEnd ? (
-          <SelectedPicBottom
-            isEnd={isEnd}
-            onGestureEvent={onGestureEventEnd}
-            // onHandlerStateChange={onHandlerStateChangeEnd}
-          />
-        ) : null}
-      </View>
-    );
-  });
+      );
+    }
+  );
 
   return <View style={styles.container}>{renderText}</View>;
 };
