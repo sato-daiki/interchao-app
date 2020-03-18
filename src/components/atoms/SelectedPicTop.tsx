@@ -10,7 +10,7 @@ import { pinBlue } from '../../styles/Common';
 interface Props {
   isStart: boolean;
   onGestureEvent: (event: PanGestureHandlerGestureEvent) => void;
-  onHandlerStateChange: (event: PanGestureHandlerStateChangeEvent) => void;
+  // onHandlerStateChange: (event: PanGestureHandlerStateChangeEvent) => void;
 }
 
 const styles = StyleSheet.create({
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
 const SelectedPicTop: React.FC<Props> = ({
   isStart,
   onGestureEvent,
-  onHandlerStateChange,
-}: Props): JSX.Element => {
+}: // onHandlerStateChange,
+Props): JSX.Element => {
   return (
     <PanGestureHandler
       onGestureEvent={onGestureEvent}
