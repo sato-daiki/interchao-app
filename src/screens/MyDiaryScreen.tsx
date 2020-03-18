@@ -116,7 +116,7 @@ const MyDiaryScreen: ScreenType = ({
       };
       f();
     },
-    [diary.objectID, editDiary]
+    [diary, editDiary]
   );
 
   const onPressDelete = useCallback(() => {
@@ -135,7 +135,7 @@ const MyDiaryScreen: ScreenType = ({
       setIsLoading(false);
     };
     f();
-  }, [diary.objectID]);
+  }, [deleteDiary, diary.objectID, navigation]);
 
   return (
     <View style={styles.container}>
@@ -164,31 +164,31 @@ const MyDiaryScreen: ScreenType = ({
           onPressClose={(): void => setIsModalReview(false)}
         />
       ) : null}
-      <ScrollView style={styles.container}>
-        <MyDiaryOriginal diary={diary} />
-        {correction ? (
-          <DiaryCorrection
-            isMyDiary
-            isReview={isReview}
-            correction={correction}
-            onPressUser={(uid): void => {
-              navigation.navigate('UserProfile', { uid });
-            }}
-            onPressReview={onPressReview}
-          />
-        ) : null}
-        {proCorrection ? (
-          <DiaryCorrection
-            isMyDiary
-            isReview={isReview}
-            correction={proCorrection}
-            onPressUser={(uid): void => {
-              navigation.navigate('UserProfile', { uid });
-            }}
-            onPressReview={onPressReview}
-          />
-        ) : null}
-      </ScrollView>
+      {/* <View style={styles.container}> */}
+      <MyDiaryOriginal diary={diary} />
+      {correction ? (
+        <DiaryCorrection
+          isMyDiary
+          isReview={isReview}
+          correction={correction}
+          onPressUser={(uid): void => {
+            navigation.navigate('UserProfile', { uid });
+          }}
+          onPressReview={onPressReview}
+        />
+      ) : null}
+      {proCorrection ? (
+        <DiaryCorrection
+          isMyDiary
+          isReview={isReview}
+          correction={proCorrection}
+          onPressUser={(uid): void => {
+            navigation.navigate('UserProfile', { uid });
+          }}
+          onPressReview={onPressReview}
+        />
+      ) : null}
+      {/* </View> */}
     </View>
   );
 };
