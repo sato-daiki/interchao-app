@@ -1,11 +1,16 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  LayoutChangeEvent,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import {
-  offWhite,
   fontSizeS,
   subTextColor,
   primaryColor,
@@ -20,6 +25,8 @@ import {
   Space,
 } from '../components/atoms';
 import { getPostDay } from '../utils/diary';
+import CorrectionText from '../components/organisms/CorrectionText';
+import { User, Diary } from '../types';
 
 interface Props {
   user: User;
@@ -58,42 +65,24 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 16,
   },
-  textInput: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    paddingBottom: 32,
-    lineHeight: fontSizeM * 1.3,
-  },
 });
 
 /**
  * 添削中
  */
 const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
-  const originalText =
-    'British Foreign Secretary Dominic Raab. AAA EEE CCC DDD';
-
-  const { createdAt, title, profile } = teachDiary;
+  const { createdAt, title, profile, text } = teachDiary;
   const { userName, photoUrl } = profile;
   const [isLoading, setIsLoading] = useState(false);
-  const [text, setText] = useState(originalText);
   const postDay = getPostDay(createdAt);
 
-  const onPressClose = useCallback(() => {}, []);
   const onPressSubmit = useCallback(() => {}, []);
 
   useEffect(() => {
-    navigation.setParams({ onPressClose });
     navigation.setParams({ onPressSubmit });
   }, []);
 
-  const onLongPress = () => {};
-
   const onPressUser = () => {};
-
-  const onChangeText = useCallback((txt: string) => {
-    setText(txt);
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -110,15 +99,8 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
           <UserDiaryStatus diary={teachDiary} />
         </View>
         <Text style={styles.title}>{title}</Text>
-        <TextInput
-          style={styles.textInput}
-          value={text}
-          multiline
-          selectTextOnFocus
-          onChangeText={onChangeText}
-          // selection={{ start: 0, end: 1 }}
-        />
       </View>
+      <CorrectionText text="A Japanese man was sentenced on Thursday to 16 years in prison for physical abuse that led to the death of his 10-year-old daughter. Yuichiro Kurihara, 42, was found guilty of causing the death of his daughter Mia in January last year by depriving her of sleep and nutrition at their family home in Noda, Chiba Prefecture, with the court defining the abuse as inconceivably insidious and appalling." />
     </View>
   );
 };
@@ -126,13 +108,15 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
 CorrectingScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
-  const onPressClose = navigation.getParam('onPressClose');
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
     title: '添削する',
     headerLeft: (): JSX.Element => (
-      <HeaderText title="閉じる" onPress={onPressClose} />
+      <HeaderText
+        title="閉じる"
+        onPress={(): boolean => navigation.goBack(null)}
+      />
     ),
     headerRight: (): JSX.Element => (
       <HeaderText title="完了" onPress={onPressSubmit} />

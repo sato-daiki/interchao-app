@@ -1,16 +1,22 @@
 import React, { useCallback, useState, ReactNode } from 'react';
-import { View, StyleSheet, Vibration, Text } from 'react-native';
-import { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
-import Word from './Word';
+import { View, StyleSheet, Vibration, LayoutChangeEvent } from 'react-native';
+import {
+  PanGestureHandlerGestureEvent,
+  State,
+  LongPressGestureHandlerStateChangeEvent,
+} from 'react-native-gesture-handler';
+import Word, { Position } from './Word';
+import { fontSizeM } from '../../styles/Common';
 
 const VIBRATION_DURATION = 500;
-const PADDING = 16;
-const HEIGHT = 150;
+const LINE_HEIGHT = fontSizeM * 1.7;
+const LINE_SPACE = fontSizeM * 1.7 - fontSizeM;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingHorizontal: 16,
   },
 });
 
@@ -18,15 +24,15 @@ interface Props {
   text: string;
 }
 
-export interface Position {
-  id: number;
+interface Origin {
+  index: number;
   x: number;
   y: number;
-  width: number;
-  height: number;
+  line: number;
 }
 
 const CorrectionText: React.FC<Props & any> = ({ text }) => {
+  const [startOrigin, setStartOrigin] = useState<Origin>();
   const [startIndex, setStartIndex] = useState<number>();
   const [endIndex, setEndIndex] = useState<number>();
   const [positions, setPositions] = useState<Position[]>([]);
@@ -34,40 +40,83 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
   const getWords = (allText: string): string[] => {
     return allText.split(' ');
   };
+
   const words = getWords(text);
 
-  const onLongPress = useCallback((index: number) => {
-    setStartIndex(index);
-    setEndIndex(index);
-    Vibration.vibrate(VIBRATION_DURATION);
-  }, []);
-
-  const addPosition = (position: Position): void => {
-    setPositions([...positions, position]);
-  };
-
-  const findCellIndex = useCallback(
-    (absoluteX: number, absoluteY: number): Position | undefined => {
-      console.log(absoluteX, absoluteY);
-      const resPosition = positions.find(
-        p =>
-          p.x + PADDING <= absoluteX &&
-          p.x + PADDING + p.width >= absoluteX &&
-          p.y + HEIGHT <= absoluteY &&
-          p.y + p.height + HEIGHT >= absoluteY
-      );
-      return resPosition;
+  const onLongPress = useCallback(
+    (index: number, event: LongPressGestureHandlerStateChangeEvent) => {
+      if (event.nativeEvent.state === State.ACTIVE) {
+        const x = event.nativeEvent.absoluteX - event.nativeEvent.x;
+        const y = event.nativeEvent.absoluteY - event.nativeEvent.y;
+        const targetPosition = positions.find(element => element.id === index);
+        if (!targetPosition) return;
+        setStartIndex(index);
+        setEndIndex(index);
+        setStartOrigin({
+          index,
+          x,
+          y,
+          line: targetPosition.line,
+        });
+        Vibration.vibrate(VIBRATION_DURATION);
+        positions.sort((a, b) => {
+          return a.id - b.id;
+        });
+      }
     },
     [positions]
   );
 
-  const onGestureEventTop = (event: PanGestureHandlerGestureEvent): void => {
-    const { absoluteX, absoluteY } = event.nativeEvent;
-    const resPosition = findCellIndex(absoluteX, absoluteY);
-    if (resPosition && endIndex && resPosition.id <= endIndex) {
-      setStartIndex(resPosition.id);
-    }
+  const onLayout = (index: number, event: LayoutChangeEvent): void => {
+    const { x, y, width } = event.nativeEvent.layout;
+    setPositions([
+      ...positions,
+      {
+        id: index,
+        startX: x,
+        endX: x + width - 4,
+        line: Math.floor(y / LINE_HEIGHT) + 1,
+      },
+    ]);
   };
+
+  const findCellIndex = useCallback(
+    (absoluteX: number, absoluteY: number): Position | undefined => {
+      if (!startOrigin) return undefined;
+      const moveY = startOrigin.y - absoluteY;
+      let moveLine = 0;
+      if (moveY > LINE_SPACE) {
+        // 上に動いた時
+        if (moveY < LINE_HEIGHT + LINE_SPACE) {
+          moveLine = 1;
+        } else {
+          moveLine = Math.floor(moveY / LINE_HEIGHT) + 1;
+        }
+      } else if (moveY < -LINE_HEIGHT) {
+        // 下に動いた時
+        moveLine = Math.floor(moveY / LINE_HEIGHT) + 1;
+      }
+      const resPosition = positions.find(
+        p =>
+          p.startX <= absoluteX &&
+          p.endX >= absoluteX &&
+          p.line === startOrigin.line - moveLine
+      );
+      return resPosition;
+    },
+    [positions, startOrigin]
+  );
+
+  const onGestureEventTop = useCallback(
+    (event: PanGestureHandlerGestureEvent): void => {
+      const { absoluteX, absoluteY } = event.nativeEvent;
+      const resPosition = findCellIndex(absoluteX, absoluteY);
+      if (resPosition && endIndex && resPosition.id <= endIndex) {
+        setStartIndex(resPosition.id);
+      }
+    },
+    [findCellIndex]
+  );
 
   const onGestureEventEnd = (event: PanGestureHandlerGestureEvent): void => {
     const { absoluteX, absoluteY } = event.nativeEvent;
@@ -89,46 +138,13 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
           onLongPress={onLongPress}
           onGestureEventTop={onGestureEventTop}
           onGestureEventEnd={onGestureEventEnd}
-          addPosition={addPosition}
+          onLayout={onLayout}
         />
       );
     }
   );
 
-  return (
-    <>
-      <View style={styles.container}>{renderText}</View>
-      <Text
-        onPress={() => {
-          positions.sort((a, b) => {
-            return a.id - b.id;
-          });
-          for (let i = 0; i < positions.length; i += 1) {
-            console.log('index', positions[i].id);
-            console.log('x', positions[i].x);
-            console.log('y', positions[i].y);
-            console.log('width', positions[i].width);
-            console.log('height', positions[i].height);
-
-            console.log('p.x + PADDING', positions[i].x + PADDING);
-            console.log(
-              ' p.x + PADDING + p.width',
-              positions[i].x + PADDING + positions[i].width
-            );
-            console.log(' p.y + HEIGHT', positions[i].y + HEIGHT);
-            console.log(
-              'p.y + p.height + HEIGHT',
-              positions[i].y + HEIGHT + positions[i].height
-            );
-
-            console.log('---------');
-          }
-        }}
-      >
-        text
-      </Text>
-    </>
-  );
+  return <View style={styles.container}>{renderText}</View>;
 };
 
 export default CorrectionText;
