@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { fontSizeM, primaryColor } from '../../styles/Common';
-import { Word, LINE_HEIGHT } from '../organisms/CorrectionText';
+import { LINE_HEIGHT, Word } from '../../screens/CorrectingScreen';
 
 interface Props {
   onPress: () => void;
