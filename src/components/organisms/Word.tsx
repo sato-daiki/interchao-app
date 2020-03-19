@@ -1,19 +1,14 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  LayoutChangeEvent,
-} from 'react-native';
+import { View, Text, StyleSheet, LayoutChangeEvent } from 'react-native';
 
-import { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler';
+import {
+  PanGestureHandlerGestureEvent,
+  LongPressGestureHandler,
+  LongPressGestureHandlerStateChangeEvent,
+} from 'react-native-gesture-handler';
 import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
 import SelectedPicTop from '../atoms/SelectedPicTop';
 import { SelectedPicBottom } from '../atoms';
-import { Position } from './CorrectionText';
-
-const LONG_PRESS_TIMEOUT = 500;
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +18,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   wordText: {
-    lineHeight: fontSizeM * 1.3,
+    lineHeight: fontSizeM * 1.7,
     fontSize: fontSizeM,
     color: primaryColor,
   },
@@ -32,15 +27,31 @@ const styles = StyleSheet.create({
   },
 });
 
+export interface OriginAbsolute {
+  index: number;
+  x: number;
+  y: number;
+}
+
+export interface Position {
+  id: number;
+  startX: number;
+  endX: number;
+  line: number;
+}
+
 interface Props {
   index: number;
   text: string;
   startIndex?: number;
   endIndex?: number;
-  onLongPress: (index: number) => void;
+  onLongPress: (
+    index: number,
+    event: LongPressGestureHandlerStateChangeEvent
+  ) => void;
   onGestureEventTop: (event: PanGestureHandlerGestureEvent) => void;
   onGestureEventEnd: (event: PanGestureHandlerGestureEvent) => void;
-  addPosition: (position: Position) => void;
+  onLayout: (index: number, event: LayoutChangeEvent) => void;
 }
 
 const Word: React.FC<Props> = ({
@@ -51,18 +62,8 @@ const Word: React.FC<Props> = ({
   onLongPress,
   onGestureEventTop,
   onGestureEventEnd,
-  addPosition,
+  onLayout,
 }) => {
-  const onLayout = (event: LayoutChangeEvent): void => {
-    addPosition({
-      id: index,
-      x: event.nativeEvent.layout.x,
-      y: event.nativeEvent.layout.y,
-      width: event.nativeEvent.layout.width,
-      height: event.nativeEvent.layout.height,
-    });
-  };
-
   const isStart = index === startIndex;
   const isEnd = index === endIndex;
   const isActive = !!(
@@ -79,17 +80,22 @@ const Word: React.FC<Props> = ({
     isActive && !isEnd ? { backgroundColor: selectedBlue } : {};
 
   return (
-    <View key={index} style={styles.container} onLayout={onLayout}>
+    <View
+      key={index}
+      style={styles.container}
+      onLayout={(event: LayoutChangeEvent): void => onLayout(index, event)}
+    >
       <View style={[styles.textContainer, textBackground]}>
         <SelectedPicTop isStart={isStart} onGestureEvent={onGestureEventTop} />
-        <TouchableWithoutFeedback
-          onLongPress={(): void => onLongPress(index)}
-          delayLongPress={LONG_PRESS_TIMEOUT}
+        <LongPressGestureHandler
+          onHandlerStateChange={(
+            event: LongPressGestureHandlerStateChangeEvent
+          ): void => onLongPress(index, event)}
         >
           <View>
             <Text style={styles.wordText}>{text}</Text>
           </View>
-        </TouchableWithoutFeedback>
+        </LongPressGestureHandler>
         <SelectedPicBottom isEnd={isEnd} onGestureEvent={onGestureEventEnd} />
       </View>
       <View style={[styles.space, spaceBackground]} />

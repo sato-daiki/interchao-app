@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -12,11 +12,17 @@ import {
 import firebase from '../constants/firebase';
 import { Diary } from '../types';
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
-import { MyDiaryOriginal } from '../components/molecules';
+import { MyDiaryStatus } from '../components/molecules';
 import { ModalReview, ModalConfirm } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { primaryColor } from '../styles/Common';
+import {
+  primaryColor,
+  subTextColor,
+  fontSizeM,
+  fontSizeS,
+} from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
+import { getPostDay } from '../utils/diary';
 
 interface Props {
   diary: Diary;
@@ -36,6 +42,30 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingVertical: 8,
   },
+  diaryOriginal: {
+    paddingHorizontal: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 4,
+  },
+  postDayText: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+  },
+  title: {
+    color: primaryColor,
+    fontWeight: 'bold',
+    fontSize: fontSizeM,
+    paddingBottom: 16,
+  },
+  text: {
+    lineHeight: fontSizeM * 1.3,
+    fontSize: fontSizeM,
+    color: primaryColor,
+  },
 });
 
 /**
@@ -52,7 +82,15 @@ const MyDiaryScreen: ScreenType = ({
   const [isModalReview, setIsModalReview] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [isModalPublic, setIsModalPublic] = useState(false);
-  const { isReview, correction, proCorrection, isPublic } = diary;
+  const {
+    createdAt,
+    title,
+    text,
+    isReview,
+    correction,
+    proCorrection,
+    isPublic,
+  } = diary;
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
@@ -137,6 +175,7 @@ const MyDiaryScreen: ScreenType = ({
     f();
   }, [deleteDiary, diary.objectID, navigation]);
 
+  const postDay = getPostDay(createdAt);
   return (
     <View style={styles.container}>
       <ModalConfirm
@@ -164,8 +203,14 @@ const MyDiaryScreen: ScreenType = ({
           onPressClose={(): void => setIsModalReview(false)}
         />
       ) : null}
-      {/* <View style={styles.container}> */}
-      <MyDiaryOriginal diary={diary} />
+      <View style={styles.diaryOriginal}>
+        <View style={styles.header}>
+          <Text style={styles.postDayText}>{postDay}</Text>
+          <MyDiaryStatus diary={diary} />
+        </View>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.text}>{text}</Text>
+      </View>
       {correction ? (
         <DiaryCorrection
           isMyDiary
@@ -188,7 +233,6 @@ const MyDiaryScreen: ScreenType = ({
           onPressReview={onPressReview}
         />
       ) : null}
-      {/* </View> */}
     </View>
   );
 };
