@@ -5,12 +5,12 @@ import {
   State,
   LongPressGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
-import Word, { Position } from './Word';
 import { fontSizeM } from '../../styles/Common';
+import { CorrectionWord, CorrectionMenu } from '../molecules';
 
 const VIBRATION_DURATION = 500;
-const LINE_HEIGHT = fontSizeM * 1.7;
-const LINE_SPACE = fontSizeM * 1.7 - fontSizeM;
+export const LINE_HEIGHT = fontSizeM * 1.7;
+const LINE_SPACE = LINE_HEIGHT - fontSizeM;
 
 const styles = StyleSheet.create({
   container: {
@@ -24,17 +24,31 @@ interface Props {
   text: string;
 }
 
-interface Origin {
+interface Position {
   index: number;
-  x: number;
+  startX: number;
+  endX: number;
+  line: number;
+}
+
+export interface Word {
+  index: number;
+  startX: number;
+  endX: number;
+  line: number;
+}
+
+interface Origin {
   y: number;
   line: number;
 }
 
 const CorrectionText: React.FC<Props & any> = ({ text }) => {
-  const [startOrigin, setStartOrigin] = useState<Origin>();
-  const [startIndex, setStartIndex] = useState<number>();
-  const [endIndex, setEndIndex] = useState<number>();
+  const [isModalComment, setIsModalComment] = useState(false);
+
+  const [origin, setOrigin] = useState<Origin>();
+  const [startWord, setStartWord] = useState<Word>();
+  const [endWord, setEndWord] = useState<Word>();
   const [positions, setPositions] = useState<Position[]>([]);
 
   const getWords = (allText: string): string[] => {
@@ -46,25 +60,33 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
   const onLongPress = useCallback(
     (index: number, event: LongPressGestureHandlerStateChangeEvent) => {
       if (event.nativeEvent.state === State.ACTIVE) {
-        const x = event.nativeEvent.absoluteX - event.nativeEvent.x;
+        // const x = event.nativeEvent.absoluteX - event.nativeEvent.x;
         const y = event.nativeEvent.absoluteY - event.nativeEvent.y;
-        const targetPosition = positions.find(element => element.id === index);
+        const targetPosition = positions.find(
+          element => element.index === index
+        );
         if (!targetPosition) return;
-        setStartIndex(index);
-        setEndIndex(index);
-        setStartOrigin({
+        const indexInfo = {
           index,
-          x,
+          startX: targetPosition.startX,
+          endX: targetPosition.endX,
+          line: targetPosition.line,
+        };
+        setStartWord(indexInfo);
+        setEndWord(indexInfo);
+        setOrigin({
           y,
           line: targetPosition.line,
         });
         Vibration.vibrate(VIBRATION_DURATION);
         positions.sort((a, b) => {
-          return a.id - b.id;
+          return a.index - b.index;
         });
+      } else if (event.nativeEvent.state === State.END) {
+        setIsModalComment(true);
       }
     },
-    [positions]
+    [positions, setStartWord]
   );
 
   const onLayout = (index: number, event: LayoutChangeEvent): void => {
@@ -72,7 +94,7 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
     setPositions([
       ...positions,
       {
-        id: index,
+        index,
         startX: x,
         endX: x + width - 4,
         line: Math.floor(y / LINE_HEIGHT) + 1,
@@ -82,8 +104,8 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
 
   const findCellIndex = useCallback(
     (absoluteX: number, absoluteY: number): Position | undefined => {
-      if (!startOrigin) return undefined;
-      const moveY = startOrigin.y - absoluteY;
+      if (!origin) return undefined;
+      const moveY = origin.y - absoluteY;
       let moveLine = 0;
       if (moveY > LINE_SPACE) {
         // 上に動いた時
@@ -100,19 +122,24 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
         p =>
           p.startX <= absoluteX &&
           p.endX >= absoluteX &&
-          p.line === startOrigin.line - moveLine
+          p.line === origin.line - moveLine
       );
       return resPosition;
     },
-    [positions, startOrigin]
+    [positions, origin]
   );
 
   const onGestureEventTop = useCallback(
     (event: PanGestureHandlerGestureEvent): void => {
       const { absoluteX, absoluteY } = event.nativeEvent;
       const resPosition = findCellIndex(absoluteX, absoluteY);
-      if (resPosition && endIndex && resPosition.id <= endIndex) {
-        setStartIndex(resPosition.id);
+      if (resPosition && endWord && resPosition.index <= endWord.index) {
+        setStartWord({
+          index: resPosition.index,
+          startX: resPosition.startX,
+          endX: resPosition.endX,
+          line: resPosition.line,
+        });
       }
     },
     [findCellIndex]
@@ -121,20 +148,27 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
   const onGestureEventEnd = (event: PanGestureHandlerGestureEvent): void => {
     const { absoluteX, absoluteY } = event.nativeEvent;
     const resPosition = findCellIndex(absoluteX, absoluteY);
-    if (resPosition && startIndex && resPosition.id >= startIndex) {
+    if (resPosition && startWord && resPosition.index >= startWord.index) {
       // 後ろのピンが前のピンより手前にはいけないようにする
-      setEndIndex(resPosition.id);
+      setEndWord({
+        index: resPosition.index,
+        startX: resPosition.startX,
+        endX: resPosition.endX,
+        line: resPosition.line,
+      });
     }
   };
+
+  const onPressComment = useCallback(() => {}, []);
 
   const renderText = words.map(
     (word: string, index: number): ReactNode => {
       return (
-        <Word
+        <CorrectionWord
           index={index}
           text={word}
-          startIndex={startIndex}
-          endIndex={endIndex}
+          startWord={startWord}
+          endWord={endWord}
           onLongPress={onLongPress}
           onGestureEventTop={onGestureEventTop}
           onGestureEventEnd={onGestureEventEnd}
@@ -144,7 +178,18 @@ const CorrectionText: React.FC<Props & any> = ({ text }) => {
     }
   );
 
-  return <View style={styles.container}>{renderText}</View>;
+  return (
+    <View style={styles.container}>
+      {isModalComment ? (
+        <CorrectionMenu
+          startWord={startWord!}
+          endWord={endWord!}
+          onPress={onPressComment}
+        />
+      ) : null}
+      {renderText}
+    </View>
+  );
 };
 
 export default CorrectionText;

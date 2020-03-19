@@ -12,3 +12,5 @@ export { default as UserDiaryStatus } from './UserDiaryStatus';
 export { default as ProfileIcons } from './ProfileIcons';
 export { default as EmptyList } from './EmptyList';
 export { default as ProfileLanguage } from './ProfileLanguage';
+export { default as CorrectionWord } from './CorrectionWord';
+export { default as CorrectionMenu } from './CorrectionMenu';
