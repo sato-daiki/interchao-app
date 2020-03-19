@@ -9,6 +9,7 @@ import {
 import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
 import SelectedPicTop from '../atoms/SelectedPicTop';
 import { SelectedPicBottom } from '../atoms';
+import { Word, LINE_HEIGHT } from '../organisms/CorrectionText';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,7 +19,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   wordText: {
-    lineHeight: fontSizeM * 1.7,
     fontSize: fontSizeM,
     color: primaryColor,
   },
@@ -27,24 +27,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface OriginAbsolute {
-  index: number;
-  x: number;
-  y: number;
-}
-
-export interface Position {
-  id: number;
-  startX: number;
-  endX: number;
-  line: number;
-}
-
 interface Props {
   index: number;
   text: string;
-  startIndex?: number;
-  endIndex?: number;
+  startWord?: Word;
+  endWord?: Word;
   onLongPress: (
     index: number,
     event: LongPressGestureHandlerStateChangeEvent
@@ -54,23 +41,23 @@ interface Props {
   onLayout: (index: number, event: LayoutChangeEvent) => void;
 }
 
-const Word: React.FC<Props> = ({
+const CorrectionWord: React.FC<Props> = ({
   index,
   text,
-  startIndex,
-  endIndex,
+  startWord,
+  endWord,
   onLongPress,
   onGestureEventTop,
   onGestureEventEnd,
   onLayout,
 }) => {
-  const isStart = index === startIndex;
-  const isEnd = index === endIndex;
+  const isStart = !!startWord && index === startWord.index;
+  const isEnd = !!endWord && index === endWord.index;
   const isActive = !!(
-    startIndex !== undefined &&
-    endIndex !== undefined &&
-    index >= startIndex &&
-    index <= endIndex
+    startWord &&
+    endWord &&
+    index >= startWord.index &&
+    index <= endWord.index
   );
 
   const textBackground = isActive ? { backgroundColor: selectedBlue } : {};
@@ -93,7 +80,9 @@ const Word: React.FC<Props> = ({
           ): void => onLongPress(index, event)}
         >
           <View>
-            <Text style={styles.wordText}>{text}</Text>
+            <Text style={[styles.wordText, { lineHeight: LINE_HEIGHT }]}>
+              {text}
+            </Text>
           </View>
         </LongPressGestureHandler>
         <SelectedPicBottom isEnd={isEnd} onGestureEvent={onGestureEventEnd} />
@@ -103,4 +92,4 @@ const Word: React.FC<Props> = ({
   );
 };
 
-export default Word;
+export default CorrectionWord;
