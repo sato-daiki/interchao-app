@@ -9,7 +9,7 @@ import {
 import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
 import SelectedPicTop from '../atoms/SelectedPicTop';
 import { SelectedPicBottom } from '../atoms';
-import { Word, LINE_HEIGHT } from '../organisms/CorrectionText';
+import { Word, LINE_HEIGHT } from '../../screens/CorrectingScreen';
 
 const styles = StyleSheet.create({
   container: {
