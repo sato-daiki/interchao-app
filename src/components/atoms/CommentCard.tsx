@@ -1,20 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   fontSizeM,
   primaryColor,
   borderLightColor,
   mainColor,
   subTextColor,
-  fontSizeS,
 } from '../../styles/Common';
-import { Space } from '.';
 
 interface Props {
   index: number;
   original: string;
   fix: string;
   detail: string;
+  isEdit: boolean;
+  onPressMore?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -33,6 +35,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 5,
     borderColor: mainColor,
+  },
+  icon: {
+    position: 'absolute',
+    top: 8,
+    right: 12,
+    zIndex: 1,
   },
   label: {
     color: subTextColor,
@@ -76,10 +84,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const CommentCard = ({ index, original, fix, detail }: Props): JSX.Element => {
+const CommentCard = ({
+  index,
+  original,
+  fix,
+  detail,
+  isEdit = false,
+  onPressMore,
+}: Props): JSX.Element => {
   const indexText = `${index + 1}.`;
   return (
     <View style={styles.container}>
+      {isEdit ? (
+        <View style={styles.icon}>
+          <TouchableOpacity onPress={onPressMore}>
+            <MaterialCommunityIcons
+              size={28}
+              color={primaryColor}
+              name="dots-horizontal"
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <Text style={styles.label}>原文</Text>
       <View style={styles.originalContainer}>
         <Text style={styles.index}>{indexText}</Text>

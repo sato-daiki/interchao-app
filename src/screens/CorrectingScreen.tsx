@@ -9,6 +9,10 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {
+  connectActionSheet,
+  useActionSheet,
+} from '@expo/react-native-action-sheet';
+import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
@@ -31,6 +35,7 @@ import {
   LoadingModal,
   ProfileIconHorizontal,
   Space,
+  CommentCard,
 } from '../components/atoms';
 import { User, Diary, Comment, Profile } from '../types';
 import { getPostDay, getDisplayProfile } from '../utils/diary';
@@ -96,12 +101,19 @@ const CorrectingScreen: ScreenType = ({
   teachDiary,
   currentProfile,
 }) => {
+  const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalComment, setIsModalComment] = useState(false);
   const [longPressWord, setLongPressWord] = useState<LongPressWord>();
   const [startWord, setStartWord] = useState<ActiveWord>();
   const [endWord, setEndWord] = useState<ActiveWord>();
   const [initialWords, setInitialWords] = useState<InitialWord[]>([]);
+
+  const [isModalComment, setIsModalComment] = useState(false); // コメントするのメニューのon/offフラグ
+
+  /* コメント関連 */
+  const [original, setOriginal] = useState(''); // 新規追加時の修正文
+  const [isCommentInput, setIsCommentInput] = useState(false); // 新規追加のon/offフラグ
+
   const [comments, setComments] = useState<Comment[]>([]);
   const [summary, setSummary] = useState('');
 
@@ -120,8 +132,6 @@ const CorrectingScreen: ScreenType = ({
         createdAt: timestamp,
         updatedAt: timestamp,
       };
-
-      console.log('comments', comments);
 
       await firebase
         .firestore()
@@ -276,45 +286,29 @@ const CorrectingScreen: ScreenType = ({
       return a.index - b.index;
     });
     if (!startWord || !endWord) return;
-    let original = '';
+    let newOriginal = '';
     for (let i = startWord.index; i <= endWord.index; i += 1) {
-      original += `${initialWords[i].word} `;
+      newOriginal += `${initialWords[i].word} `;
     }
 
-    const newInitialWords = initialWords.map(item => {
-      if (item.index >= startWord.index && item.index <= endWord.index) {
-        return {
-          ...item,
-          isComment: true,
-        };
-      }
-      return item;
-    });
-    setInitialWords(newInitialWords);
+    // const newInitialWords = initialWords.map(item => {
+    //   if (item.index >= startWord.index && item.index <= endWord.index) {
+    //     return {
+    //       ...item,
+    //       isComment: true,
+    //     };
+    //   }
+    //   return item;
+    // });
+    // setInitialWords(newInitialWords);
 
-    setComments([
-      {
-        id: `${startWord.index.toString()}-${endWord.index.toString()}`,
-        startWordIndex: startWord.index,
-        endWordIndex: endWord.index,
-        original,
-        fix: original,
-        detail: 'eeeeeeeeeee eeeeeeeee e',
-      },
-      ...comments,
-    ]);
+    // 新規コメントを初期化して表示する
+    setIsCommentInput(true);
+    setOriginal(newOriginal);
+
+    // コメントするのメニューを非表示にする
     setIsModalComment(false);
   }, [initialWords, startWord, endWord, comments]);
-
-  const onPressDelete = useCallback(
-    (id: string) => {
-      const newComments = comments.filter(item => item.id !== id);
-      setComments(newComments);
-      setStartWord(undefined);
-      setEndWord(undefined);
-    },
-    [comments]
-  );
 
   const onPressCard = useCallback(
     (startWordIndex: number, endWordIndex: number): void => {
@@ -327,17 +321,133 @@ const CorrectingScreen: ScreenType = ({
     [getPositionInfo]
   );
 
+  /**
+   * コメント編集画面で完了ボタン押下時
+   */
+  const onPressSubmitEditComment = useCallback(
+    (id: string, fix: string, detail: string): void => {
+      const newComments = comments.map(item => {
+        if (item.id !== id) {
+          return item;
+        }
+        return {
+          ...item,
+          fix,
+          detail,
+        };
+      }, []);
+
+      setComments(newComments);
+    },
+    [comments]
+  );
+
+  /**
+   * コメントのメニューアイコンをクリック後、編集するボタンをクリック
+   */
+  const onPressCommentEdit = useCallback(
+    (item: Comment) => {
+      navigation.navigate('EditCorrectionComment', {
+        item,
+        onPressSubmit: onPressSubmitEditComment,
+      });
+    },
+    [navigation]
+  );
+
+  /**
+   * コメントのメニューアイコンをクリック後、削除するボタンをクリック
+   */
+  const onPressCommentDelete = useCallback(
+    (id: string) => {
+      const newComments = comments.filter(item => item.id !== id);
+      setComments(newComments);
+    },
+    [comments]
+  );
+
+  /**
+   * コメントのメニューアイコンをクリック
+   */
+  const onPressMore = useCallback(
+    (item: Comment) => {
+      const options = ['編集する', 'コメントを削除する', 'キャンセル'];
+      showActionSheetWithOptions(
+        {
+          options,
+          destructiveButtonIndex: 1,
+          cancelButtonIndex: 2,
+        },
+        index => {
+          switch (index) {
+            case 0:
+              onPressCommentEdit(item);
+              break;
+            case 1:
+              onPressCommentDelete(item.id);
+              break;
+            default:
+          }
+        }
+      );
+    },
+    [onPressCommentEdit, onPressCommentDelete, showActionSheetWithOptions]
+  );
+
+  /**
+   * 新規追加のコメントを追加する
+   */
+  const onPressSubmitComment = useCallback(
+    (fix: string, detail: string): void => {
+      if (!startWord || !endWord) return;
+      const newComments = [
+        ...comments,
+        {
+          id: `${startWord.index.toString()}-${endWord.index.toString()}`,
+          startWordIndex: startWord.index,
+          endWordIndex: endWord.index,
+          original,
+          fix,
+          detail,
+        },
+      ];
+      newComments.sort((a, b) => {
+        return a.startWordIndex - b.startWordIndex;
+      });
+      setComments(newComments);
+
+      setStartWord(undefined);
+      setEndWord(undefined);
+      setOriginal('');
+      setIsCommentInput(false);
+    },
+    [comments, original, startWord, endWord]
+  );
+
+  /**
+   * 新規追加のコメントを閉じる
+   */
+  const onPressCloseComment = useCallback((): void => {
+    setStartWord(undefined);
+    setEndWord(undefined);
+    setOriginal('');
+    setIsCommentInput(false);
+  }, []);
+
   const renderItem = useCallback(
-    ({ item }: { item: Comment }): JSX.Element => {
+    ({ item, index }: { item: Comment; index: number }): JSX.Element => {
       return (
-        <CommentInputCard
-          item={item}
-          onPressCard={onPressCard}
-          onPressDelete={onPressDelete}
+        <CommentCard
+          index={index}
+          original={item.original}
+          fix={item.fix}
+          detail={item.detail}
+          isEdit
+          onPressMore={(): void => onPressMore(item)}
         />
       );
     },
-    [onPressCard, onPressDelete]
+    [onPressMore]
   );
 
   return (
@@ -365,6 +475,15 @@ const CorrectingScreen: ScreenType = ({
         onPressComment={onPressComment}
       />
       <View style={styles.correctMain}>
+        {/* 新規でコメント追加 */}
+        {isCommentInput ? (
+          <CommentInputCard
+            original={original}
+            onPressSubmit={onPressSubmitComment}
+            onPressClose={onPressCloseComment}
+          />
+        ) : null}
+        {/* 追加後のコメント一覧 */}
         <FlatList
           data={comments}
           keyExtractor={keyExtractor}
@@ -395,4 +514,4 @@ CorrectingScreen.navigationOptions = ({
   };
 };
 
-export default CorrectingScreen;
+export default connectActionSheet(CorrectingScreen);

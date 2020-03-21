@@ -29,6 +29,7 @@ import DeleteAcountScreen from '../screens/DeleteAcountScreen';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
+import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -41,6 +42,7 @@ const ModalPostDraftDiaryNavigator = createStackNavigator({
 
 const ModalCorrectingNavigator = createStackNavigator({
   Correcting: { screen: CorrectingScreenContainer },
+  EditCorrectionComment: { screen: EditCorrectionCommentScreen },
 });
 
 const ModalEditMyProfileNavigator = createStackNavigator(
