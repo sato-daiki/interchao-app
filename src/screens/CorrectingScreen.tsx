@@ -17,6 +17,7 @@ import {
   LongPressGestureHandlerStateChangeEvent,
   State,
 } from 'react-native-gesture-handler';
+import firebase from '../constants/firebase';
 import {
   fontSizeS,
   subTextColor,
@@ -31,8 +32,8 @@ import {
   ProfileIconHorizontal,
   Space,
 } from '../components/atoms';
-import { User, Diary, Comment } from '../types';
-import { getPostDay } from '../utils/diary';
+import { User, Diary, Comment, Profile } from '../types';
+import { getPostDay, getDisplayProfile } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
@@ -43,6 +44,7 @@ const LINE_SPACE = LINE_HEIGHT - fontSizeM;
 
 interface Props {
   user: User;
+  currentProfile: Profile;
   teachDiary: Diary;
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
@@ -89,7 +91,11 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
 /**
  * 添削中
  */
-const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
+const CorrectingScreen: ScreenType = ({
+  navigation,
+  teachDiary,
+  currentProfile,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalComment, setIsModalComment] = useState(false);
   const [longPressWord, setLongPressWord] = useState<LongPressWord>();
@@ -97,14 +103,42 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
   const [endWord, setEndWord] = useState<ActiveWord>();
   const [initialWords, setInitialWords] = useState<InitialWord[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [summary, setSummary] = useState('');
 
   const { createdAt, title, profile, text } = teachDiary;
   const { userName, photoUrl } = profile;
 
-  const onPressSubmit = useCallback(() => {}, []);
+  const onPressSubmit = useCallback(() => {
+    const f = async (): Promise<void> => {
+      setIsLoading(true);
+      const displayProfile = getDisplayProfile(currentProfile);
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const correction = {
+        profile: displayProfile,
+        comments,
+        summary,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      };
+
+      console.log('comments', comments);
+
+      await firebase
+        .firestore()
+        .collection('diaries')
+        .doc(teachDiary.objectID)
+        .update({
+          correction,
+          correctionStatus: 'unread',
+          updatedAt: timestamp,
+        });
+    };
+    f();
+  }, [currentProfile, comments, summary]);
+
   useEffect(() => {
     navigation.setParams({ onPressSubmit });
-  }, []);
+  }, [comments, summary]);
 
   const getPositionInfo = useCallback(
     (index: number): ActiveWord | undefined => {
@@ -242,9 +276,9 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
       return a.index - b.index;
     });
     if (!startWord || !endWord) return;
-    let origin = '';
+    let original = '';
     for (let i = startWord.index; i <= endWord.index; i += 1) {
-      origin += `${initialWords[i].word} `;
+      original += `${initialWords[i].word} `;
     }
 
     const newInitialWords = initialWords.map(item => {
@@ -263,9 +297,9 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
         id: `${startWord.index.toString()}-${endWord.index.toString()}`,
         startWordIndex: startWord.index,
         endWordIndex: endWord.index,
-        origin,
-        after: '',
-        detail: '',
+        original,
+        fix: original,
+        detail: 'eeeeeeeeeee eeeeeeeee e',
       },
       ...comments,
     ]);

@@ -1,17 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  mainColor,
-} from '../../styles/Common';
+import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 
 interface Props {
-  index: number;
-  original: string;
-  fix: string;
-  detail: string;
+  summary: string;
 }
 
 const styles = StyleSheet.create({
@@ -29,18 +21,13 @@ const styles = StyleSheet.create({
     elevation: 9,
     shadowOpacity: 0.4,
     shadowRadius: 5,
-    borderColor: mainColor,
+    borderColor: primaryColor,
   },
-  origin: {
+  title: {
     fontSize: fontSizeM,
     fontWeight: 'bold',
     color: primaryColor,
     paddingBottom: 16,
-  },
-  index: {
-    borderWidth: 1,
-    borderColor: primaryColor,
-    borderRadius: 4,
   },
   line: {
     alignSelf: 'center',
@@ -56,18 +43,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const CommentCard = ({ index, original, fix, detail }: Props): JSX.Element => {
+const SummaryCard = ({ summary }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
-      <Text style={styles.original}>
-        <Text style={styles.index}>{index}</Text>
-        {original}
-      </Text>
+      <Text style={styles.title}>総評</Text>
       <View style={styles.line} />
-      <Text style={styles.fix}>{fix}</Text>
-      <Text style={styles.detail}>{detail}</Text>
+      <Text style={styles.text}>{summary}</Text>
     </View>
   );
 };
 
-export default CommentCard;
+export default SummaryCard;

@@ -14,8 +14,8 @@ export interface Comment {
   id: string;
   startWordIndex: number;
   endWordIndex: number;
-  origin: string;
-  after: string;
+  original: string;
+  fix: string;
   detail: string;
 }
 
@@ -45,8 +45,8 @@ export interface Diary {
   text: string;
   profile: DisplayProfile;
   diaryStatus: DiaryStatus;
-  correction?: Correction;
-  proCorrection?: Correction;
+  correction: Correction | null;
+  proCorrection: Correction | null;
   correctionStatus: CorrectionStatus;
   correctionStatusPro: CorrectionStatus;
   isReview: boolean;

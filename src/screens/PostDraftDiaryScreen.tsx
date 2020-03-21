@@ -12,6 +12,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
+import { getDisplayProfile } from '../utils/diary';
 
 interface Props {
   user: User;
@@ -74,15 +75,7 @@ const PostDraftDiaryScreen: ScreenType = ({
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus) => {
-      const displayProfile: DisplayProfile = {
-        uid: profile.uid,
-        userName: profile.userName,
-        photoUrl: profile.photoUrl,
-        learnLanguage: profile.learnLanguage,
-        nativeLanguage: profile.nativeLanguage,
-        ref: firebase.firestore().doc(`profiles/${profile.uid}`),
-      };
-
+      const displayProfile = getDisplayProfile(profile);
       return {
         premium: user.premium || false,
         isPublic,
