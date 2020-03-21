@@ -1,31 +1,25 @@
 import React, { ReactNode } from 'react';
-import {
-  View,
-  StyleSheet,
-  LayoutChangeEvent,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { View, StyleSheet, LayoutChangeEvent } from 'react-native';
 import {
   PanGestureHandlerGestureEvent,
   LongPressGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 import { CorrectionWord, CorrectionMenu } from '../molecules';
-import { Word } from '../../screens/CorrectingScreen';
+import { ActiveWord } from '../../types/correcting';
 
 interface Props {
   text: string;
   isModalComment: boolean;
-  startWord?: Word;
-  endWord?: Word;
+  startWord?: ActiveWord;
+  endWord?: ActiveWord;
   onLongPress: (
     index: number,
     event: LongPressGestureHandlerStateChangeEvent
   ) => void;
   onGestureEventTop: (event: PanGestureHandlerGestureEvent) => void;
   onGestureEventEnd: (event: PanGestureHandlerGestureEvent) => void;
-  onLayout: (index: number, event: LayoutChangeEvent) => void;
+  onLayout: (index: number, word: string, event: LayoutChangeEvent) => void;
   onPressComment: () => void;
-  clear: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -33,8 +27,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     paddingHorizontal: 16,
-    backgroundColor: 'red',
-    flex: 1,
   },
 });
 
@@ -48,7 +40,6 @@ const CorrectionText: React.FC<Props> = ({
   onGestureEventEnd,
   onLayout,
   onPressComment,
-  clear,
 }) => {
   const getWords = (allText: string): string[] => {
     return allText.split(' ');
@@ -60,8 +51,9 @@ const CorrectionText: React.FC<Props> = ({
     (word: string, index: number): ReactNode => {
       return (
         <CorrectionWord
+          key={index}
           index={index}
-          text={word}
+          word={word}
           startWord={startWord}
           endWord={endWord}
           onLongPress={onLongPress}
@@ -74,18 +66,16 @@ const CorrectionText: React.FC<Props> = ({
   );
 
   return (
-    <TouchableWithoutFeedback onPress={clear}>
-      <View style={styles.container}>
-        {isModalComment && startWord && endWord ? (
-          <CorrectionMenu
-            startWord={startWord}
-            endWord={endWord}
-            onPress={onPressComment}
-          />
-        ) : null}
-        {renderText}
-      </View>
-    </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      {isModalComment && startWord && endWord ? (
+        <CorrectionMenu
+          startWord={startWord}
+          endWord={endWord}
+          onPress={onPressComment}
+        />
+      ) : null}
+      {renderText}
+    </View>
   );
 };
 
