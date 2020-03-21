@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Space, GrayHeader, CommentCard } from '../atoms';
+import { Space, GrayHeader, CommentCard, SummaryCard } from '../atoms';
 import {
   primaryColor,
   fontSizeM,
@@ -43,6 +43,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  * 概要：添削一覧
  */
 const DiaryCorrection: React.FC<Props> = ({
+  isMyDiary,
   isReview,
   correction,
   onPressUser,
@@ -53,9 +54,7 @@ const DiaryCorrection: React.FC<Props> = ({
   const postDay = getPostDay(createdAt);
   const listFooterComponent = (
     <>
-      {summary ? (
-        <CommentCard title="総評" text={summary} borderColor={primaryColor} />
-      ) : null}
+      <SummaryCard summary={summary} />
       <Space size={32} />
       <MyDiaryCorrectionFooter
         isReview={isReview}
@@ -64,13 +63,21 @@ const DiaryCorrection: React.FC<Props> = ({
     </>
   );
 
-  const renderItem = useCallback(({ item }: { item: Comment }): JSX.Element => {
-    const { sentence, detail } = item;
+  const renderItem = useCallback(
+    ({ item, index }: { item: Comment; index: number }): JSX.Element => {
+      const { original, fix, detail } = item;
 
-    return (
-      <CommentCard title={sentence} text={detail} borderColor={mainColor} />
-    );
-  }, []);
+      return (
+        <CommentCard
+          index={index}
+          original={original}
+          fix={fix}
+          detail={detail}
+        />
+      );
+    },
+    []
+  );
 
   return (
     <>

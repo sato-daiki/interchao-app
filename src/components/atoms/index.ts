@@ -17,3 +17,4 @@ export { default as DiaryStatus } from './DiaryStatus';
 export { default as HeaderText } from './HeaderText';
 export { default as SelectedPicTop } from './SelectedPicTop';
 export { default as SelectedPicBottom } from './SelectedPicBottom';
+export { default as SummaryCard } from './SummaryCard';

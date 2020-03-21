@@ -77,6 +77,8 @@ const PostDiaryScreen: ScreenType = ({
         text,
         profile: displayProfile,
         diaryStatus,
+        correction: null,
+        proCorrection: null,
         correctionStatus: 'yet',
         correctionStatusPro: 'yet',
         isReview: false,

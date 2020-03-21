@@ -86,7 +86,7 @@ const CommentInputCard: React.FC<Props> = ({
   onPressCard,
   onPressDelete,
 }) => {
-  const { origin, id, startWordIndex, endWordIndex } = item;
+  const { original, id, startWordIndex, endWordIndex } = item;
   return (
     <TouchableWithoutFeedback
       onPress={(): void => onPressCard(startWordIndex, endWordIndex)}
@@ -102,7 +102,7 @@ const CommentInputCard: React.FC<Props> = ({
           </TouchableOpacity>
         </View>
         <Text style={styles.label}>原文</Text>
-        <Text style={styles.title}>{origin}</Text>
+        <Text style={styles.title}>{original}</Text>
         <View style={styles.line} />
         <Text style={styles.label}>修正文</Text>
         <TextInput
@@ -111,7 +111,7 @@ const CommentInputCard: React.FC<Props> = ({
           autoCorrect={false}
           underlineColorAndroid="transparent"
           style={styles.textInput}
-          defaultValue={origin}
+          defaultValue={original}
           multiline
         />
         <Space size={16} />

@@ -1,8 +1,15 @@
 import moment from 'moment';
 import 'moment/locale/ja';
-
-import { DiaryStatus, CorrectionStatus, Timestamp, Language } from '../types';
+import {
+  DiaryStatus,
+  CorrectionStatus,
+  Timestamp,
+  Language,
+  Profile,
+  DisplayProfile,
+} from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
+import firebase from '../constants/firebase';
 
 interface Status {
   text: string;
@@ -73,4 +80,15 @@ export const getExceptUser = (uids: string[]): string => {
     fillterText += ` AND NOT profile.uid: ${uids[i]}`;
   }
   return fillterText;
+};
+
+export const getDisplayProfile = (profile: Profile): DisplayProfile => {
+  return {
+    uid: profile.uid,
+    userName: profile.userName,
+    photoUrl: profile.photoUrl,
+    learnLanguage: profile.learnLanguage,
+    nativeLanguage: profile.nativeLanguage,
+    ref: firebase.firestore().doc(`profiles/${profile.uid}`),
+  };
 };
