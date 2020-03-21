@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
-import { Rating } from 'react-native-elements';
+import { AirbnbRating } from 'react-native-ratings';
 import {
   primaryColor,
   fontSizeL,
@@ -47,27 +47,25 @@ const styles = StyleSheet.create({
 interface Props {
   visible: boolean;
   isLoading: boolean;
+  isSuccess: boolean;
   userName: string;
   photoUrl: string;
+  onPressSubmit: (rating: number, comment: string) => void;
   onPressClose: () => void;
 }
 
 const ModalReview: React.FC<Props> = ({
   visible,
   isLoading,
+  isSuccess,
   userName,
   photoUrl,
+  onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const [rating, setRating] = useState(3);
-  const [review, setReview] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
-
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
   const onPressFavorite = useCallback(() => {}, []);
-
-  const onPressSubmit = useCallback(() => {
-    setIsSuccess(true);
-  }, []);
 
   return (
     <Modal visible={visible}>
@@ -82,13 +80,17 @@ const ModalReview: React.FC<Props> = ({
               onPressButton={onPressFavorite}
             />
             <Space size={24} />
-            <Rating imageSize={40} startingValue={rating} />
+            <AirbnbRating
+              showRating={false}
+              defaultRating={0}
+              onFinishRating={(num: number): void => setRating(num)}
+            />
             <Space size={24} />
             <TextInput
-              value={review}
-              onChangeText={(text: string): void => setReview(text)}
+              value={comment}
+              onChangeText={(text: string): void => setComment(text)}
               maxLength={200}
-              placeholder="任意"
+              placeholder="コメント（任意）"
               multiline
               numberOfLines={3}
               autoCapitalize="none"
@@ -100,7 +102,7 @@ const ModalReview: React.FC<Props> = ({
             <SubmitButton
               isLoading={isLoading}
               title="送信する"
-              onPress={onPressSubmit}
+              onPress={(): void => onPressSubmit(rating, comment)}
             />
             <Space size={16} />
             <WhiteButton title="キャンセル" onPress={onPressClose} />

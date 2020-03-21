@@ -9,6 +9,7 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
+import { ScrollView } from 'react-native-gesture-handler';
 import firebase from '../constants/firebase';
 import { Diary } from '../types';
 import DiaryCorrection from '../components/organisms/DiaryCorrection';
@@ -23,6 +24,7 @@ import {
 } from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
 import { getPostDay } from '../utils/diary';
+import user from '../stores/reducers/user';
 
 interface Props {
   diary: Diary;
@@ -44,6 +46,7 @@ const styles = StyleSheet.create({
   },
   diaryOriginal: {
     paddingHorizontal: 16,
+    paddingBottom: 32,
   },
   header: {
     flexDirection: 'row',
@@ -66,6 +69,9 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
   },
+  scrollView: {
+    flex: 1,
+  },
 });
 
 /**
@@ -79,7 +85,9 @@ const MyDiaryScreen: ScreenType = ({
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessReview, setiISuccessReview] = useState(false);
   const [isModalReview, setIsModalReview] = useState(false);
+  const [isModalReviewPro, setIsModalReviewPro] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [isModalPublic, setIsModalPublic] = useState(false);
   const {
@@ -128,10 +136,6 @@ const MyDiaryScreen: ScreenType = ({
     });
   }, [diary.title, onPressMore]);
 
-  const onPressReview = useCallback(() => {
-    setIsModalReview(true);
-  }, []);
-
   const onPressSubmitPublic = useCallback(
     (changedIsPublic: boolean) => {
       const f = async (): Promise<void> => {
@@ -175,6 +179,42 @@ const MyDiaryScreen: ScreenType = ({
     f();
   }, [deleteDiary, diary.objectID, navigation]);
 
+  const onPressSubmitReview = useCallback(
+    (rating: number, comment: string): void => {
+      const f = async (): Promise<void> => {
+        if (!diary.objectID) return;
+        setIsLoading(true);
+        const refDiary = firebase.firestore().doc(`diaries/${diary.objectID}`);
+        await refDiary.update({
+          isReview: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        const { currentUser } = firebase.auth();
+        if (!currentUser || !diary.correction) {
+          return;
+        }
+        await firebase
+          .firestore()
+          .collection(`reviews`)
+          .add({
+            reviewer: currentUser.uid,
+            reviewee: diary.correction.profile.uid,
+            rating,
+            comment,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+        navigation.goBack();
+        setIsLoading(false);
+        setiISuccessReview(true);
+      };
+      f();
+    },
+    []
+  );
+
   const postDay = getPostDay(createdAt);
   return (
     <View style={styles.container}>
@@ -197,42 +237,56 @@ const MyDiaryScreen: ScreenType = ({
       {correction ? (
         <ModalReview
           isLoading={isLoading}
-          name={correction.profile.name}
+          isSuccess={isSuccessReview}
+          userName={correction.profile.userName}
           photoUrl={correction.profile.photoUrl}
           visible={isModalReview}
+          onPressSubmit={onPressSubmitReview}
           onPressClose={(): void => setIsModalReview(false)}
         />
       ) : null}
-      <View style={styles.diaryOriginal}>
-        <View style={styles.header}>
-          <Text style={styles.postDayText}>{postDay}</Text>
-          <MyDiaryStatus diary={diary} />
-        </View>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.text}>{text}</Text>
-      </View>
-      {correction ? (
-        <DiaryCorrection
-          isMyDiary
-          isReview={isReview}
-          correction={correction}
-          onPressUser={(uid): void => {
-            navigation.navigate('UserProfile', { uid });
-          }}
-          onPressReview={onPressReview}
-        />
-      ) : null}
       {proCorrection ? (
-        <DiaryCorrection
-          isMyDiary
-          isReview={isReview}
-          correction={proCorrection}
-          onPressUser={(uid): void => {
-            navigation.navigate('UserProfile', { uid });
-          }}
-          onPressReview={onPressReview}
+        <ModalReview
+          isLoading={isLoading}
+          userName={proCorrection.profile.userName}
+          photoUrl={proCorrection.profile.photoUrl}
+          visible={isModalReviewPro}
+          onPressClose={(): void => setIsModalReviewPro(false)}
         />
       ) : null}
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.diaryOriginal}>
+          <View style={styles.header}>
+            <Text style={styles.postDayText}>{postDay}</Text>
+            <MyDiaryStatus diary={diary} />
+          </View>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.text}>{text}</Text>
+        </View>
+
+        {correction ? (
+          <DiaryCorrection
+            isMyDiary
+            isReview={isReview}
+            correction={correction}
+            onPressUser={(uid): void => {
+              navigation.navigate('UserProfile', { uid });
+            }}
+            onPressReview={(): void => setIsModalReview(true)}
+          />
+        ) : null}
+        {proCorrection ? (
+          <DiaryCorrection
+            isMyDiary
+            isReview={isReview}
+            correction={proCorrection}
+            onPressUser={(uid): void => {
+              navigation.navigate('UserProfile', { uid });
+            }}
+            onPressReview={(): void => setIsModalReviewPro(true)}
+          />
+        ) : null}
+      </ScrollView>
     </View>
   );
 };
