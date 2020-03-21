@@ -8,7 +8,7 @@ import {
   mainColor,
 } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
-import { Correction, Commment } from '../../types';
+import { Correction, Comment } from '../../types';
 import { getPostDay } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
 
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const keyExtractor = (item: Commment, index: number): string => String(index);
+const keyExtractor = (item: Comment, index: number): string => String(index);
 
 /**
  * 概要：添削一覧
@@ -48,7 +48,7 @@ const DiaryCorrection: React.FC<Props> = ({
   onPressUser,
   onPressReview,
 }): JSX.Element => {
-  const { profile, commments, summary, createdAt } = correction;
+  const { profile, comments, summary, createdAt } = correction;
   const { userName, photoUrl, uid } = profile;
   const postDay = getPostDay(createdAt);
   const listFooterComponent = (
@@ -64,16 +64,13 @@ const DiaryCorrection: React.FC<Props> = ({
     </>
   );
 
-  const renderItem = useCallback(
-    ({ item }: { item: Commment }): JSX.Element => {
-      const { sentence, detail } = item;
+  const renderItem = useCallback(({ item }: { item: Comment }): JSX.Element => {
+    const { sentence, detail } = item;
 
-      return (
-        <CommentCard title={sentence} text={detail} borderColor={mainColor} />
-      );
-    },
-    []
-  );
+    return (
+      <CommentCard title={sentence} text={detail} borderColor={mainColor} />
+    );
+  }, []);
 
   return (
     <>
@@ -88,7 +85,7 @@ const DiaryCorrection: React.FC<Props> = ({
           <Text style={styles.daytext}>{postDay}</Text>
         </View>
         <FlatList
-          data={commments}
+          data={comments}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ListFooterComponent={listFooterComponent}

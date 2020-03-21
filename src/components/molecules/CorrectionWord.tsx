@@ -9,7 +9,7 @@ import {
 import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
 import SelectedPicTop from '../atoms/SelectedPicTop';
 import { SelectedPicBottom } from '../atoms';
-import { Word, LINE_HEIGHT } from '../../screens/CorrectingScreen';
+import { ActiveWord } from '../../types/correcting';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   wordText: {
     fontSize: fontSizeM,
     color: primaryColor,
+    lineHeight: fontSizeM * 1.7,
   },
   space: {
     paddingLeft: 4,
@@ -29,21 +30,21 @@ const styles = StyleSheet.create({
 
 interface Props {
   index: number;
-  text: string;
-  startWord?: Word;
-  endWord?: Word;
+  word: string;
+  startWord?: ActiveWord;
+  endWord?: ActiveWord;
   onLongPress: (
     index: number,
     event: LongPressGestureHandlerStateChangeEvent
   ) => void;
   onGestureEventTop: (event: PanGestureHandlerGestureEvent) => void;
   onGestureEventEnd: (event: PanGestureHandlerGestureEvent) => void;
-  onLayout: (index: number, event: LayoutChangeEvent) => void;
+  onLayout: (index: number, word: string, event: LayoutChangeEvent) => void;
 }
 
 const CorrectionWord: React.FC<Props> = ({
   index,
-  text,
+  word,
   startWord,
   endWord,
   onLongPress,
@@ -61,6 +62,12 @@ const CorrectionWord: React.FC<Props> = ({
   );
 
   const textBackground = isActive ? { backgroundColor: selectedBlue } : {};
+  // const textUnderline = isActive
+  //   ? {
+  //       borderBottomWidth: 1,
+  //       borderBottomColor: primaryColor,
+  //     }
+  //   : {};
 
   // 最後のだけspace部分のbackgroundColor色を白にする
   const spaceBackground =
@@ -70,7 +77,9 @@ const CorrectionWord: React.FC<Props> = ({
     <View
       key={index}
       style={styles.container}
-      onLayout={(event: LayoutChangeEvent): void => onLayout(index, event)}
+      onLayout={(event: LayoutChangeEvent): void => {
+        onLayout(index, word, event);
+      }}
     >
       <View style={[styles.textContainer, textBackground]}>
         <SelectedPicTop isStart={isStart} onGestureEvent={onGestureEventTop} />
@@ -80,9 +89,7 @@ const CorrectionWord: React.FC<Props> = ({
           ): void => onLongPress(index, event)}
         >
           <View>
-            <Text style={[styles.wordText, { lineHeight: LINE_HEIGHT }]}>
-              {text}
-            </Text>
+            <Text style={styles.wordText}>{word}</Text>
           </View>
         </LongPressGestureHandler>
         <SelectedPicBottom isEnd={isEnd} onGestureEvent={onGestureEventEnd} />

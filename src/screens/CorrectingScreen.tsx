@@ -5,6 +5,8 @@ import {
   Text,
   LayoutChangeEvent,
   Vibration,
+  FlatList,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -29,37 +31,20 @@ import {
   ProfileIconHorizontal,
   Space,
 } from '../components/atoms';
+import { User, Diary, Comment } from '../types';
 import { getPostDay } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
-import { User, Diary } from '../types';
+import CommentInputCard from '../components/organisms/CommentInputCard';
+import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
 
 const VIBRATION_DURATION = 500;
-export const LINE_HEIGHT = fontSizeM * 1.7;
+const LINE_HEIGHT = fontSizeM * 1.7;
 const LINE_SPACE = LINE_HEIGHT - fontSizeM;
 
 interface Props {
   user: User;
   teachDiary: Diary;
   editTeachDiary: (objectID: string, diary: Diary) => void;
-}
-
-interface Position {
-  index: number;
-  startX: number;
-  endX: number;
-  line: number;
-}
-
-export interface Word {
-  index: number;
-  startX: number;
-  endX: number;
-  line: number;
-}
-
-interface Origin {
-  y: number;
-  line: number;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -93,7 +78,13 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 16,
   },
+  correctMain: {
+    paddingHorizontal: 16,
+    paddingTop: 32,
+  },
 });
+
+const keyExtractor = (item: Comment, index: number): string => String(index);
 
 /**
  * 添削中
@@ -101,10 +92,11 @@ const styles = StyleSheet.create({
 const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalComment, setIsModalComment] = useState(false);
-  const [origin, setOrigin] = useState<Origin>();
-  const [startWord, setStartWord] = useState<Word>();
-  const [endWord, setEndWord] = useState<Word>();
-  const [positions, setPositions] = useState<Position[]>([]);
+  const [longPressWord, setLongPressWord] = useState<LongPressWord>();
+  const [startWord, setStartWord] = useState<ActiveWord>();
+  const [endWord, setEndWord] = useState<ActiveWord>();
+  const [initialWords, setInitialWords] = useState<InitialWord[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   const { createdAt, title, profile, text } = teachDiary;
   const { userName, photoUrl } = profile;
@@ -114,44 +106,55 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
     navigation.setParams({ onPressSubmit });
   }, []);
 
+  const getPositionInfo = useCallback(
+    (index: number): ActiveWord | undefined => {
+      const targetPosition = initialWords.find(
+        element => element.index === index
+      );
+      if (!targetPosition) return undefined;
+      return {
+        index,
+        startX: targetPosition.startX,
+        endX: targetPosition.endX,
+        line: targetPosition.line,
+      };
+    },
+    [initialWords]
+  );
+
   const onLongPress = useCallback(
     (index: number, event: LongPressGestureHandlerStateChangeEvent) => {
       if (event.nativeEvent.state === State.ACTIVE) {
-        // const x = event.nativeEvent.absoluteX - event.nativeEvent.x;
         const y = event.nativeEvent.absoluteY - event.nativeEvent.y;
-        const targetPosition = positions.find(
-          element => element.index === index
-        );
-        if (!targetPosition) return;
-        const indexInfo = {
-          index,
-          startX: targetPosition.startX,
-          endX: targetPosition.endX,
-          line: targetPosition.line,
-        };
+        const indexInfo = getPositionInfo(index);
+        if (!indexInfo) return undefined;
+
         setStartWord(indexInfo);
         setEndWord(indexInfo);
-        setOrigin({
+        setLongPressWord({
           y,
-          line: targetPosition.line,
+          line: indexInfo.line,
         });
         Vibration.vibrate(VIBRATION_DURATION);
-        positions.sort((a, b) => {
-          return a.index - b.index;
-        });
       } else if (event.nativeEvent.state === State.END) {
         setIsModalComment(true);
       }
     },
-    [positions, setStartWord]
+    [getPositionInfo]
   );
 
-  const onLayout = (index: number, event: LayoutChangeEvent): void => {
+  const onLayout = (
+    index: number,
+    word: string,
+    event: LayoutChangeEvent
+  ): void => {
     const { x, y, width } = event.nativeEvent.layout;
-    setPositions([
-      ...positions,
+    setInitialWords([
+      ...initialWords,
       {
         index,
+        isComment: false,
+        word,
         startX: x,
         endX: x + width - 4,
         line: Math.floor(y / LINE_HEIGHT) + 1,
@@ -160,9 +163,9 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
   };
 
   const findCellIndex = useCallback(
-    (absoluteX: number, absoluteY: number): Position | undefined => {
-      if (!origin) return undefined;
-      const moveY = origin.y - absoluteY;
+    (absoluteX: number, absoluteY: number): InitialWord | undefined => {
+      if (!longPressWord) return undefined;
+      const moveY = longPressWord.y - absoluteY;
       let moveLine = 0;
       if (moveY > LINE_SPACE) {
         // 上に動いた時
@@ -175,15 +178,15 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
         // 下に動いた時
         moveLine = Math.floor(moveY / LINE_HEIGHT) + 1;
       }
-      const resPosition = positions.find(
+      const resPosition = initialWords.find(
         p =>
           p.startX <= absoluteX &&
           p.endX >= absoluteX &&
-          p.line === origin.line - moveLine
+          p.line === longPressWord.line - moveLine
       );
       return resPosition;
     },
-    [positions, origin]
+    [initialWords, longPressWord]
   );
 
   const onGestureEventTop = useCallback(
@@ -199,7 +202,7 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
         });
       }
     },
-    [findCellIndex]
+    [endWord, findCellIndex]
   );
 
   const onGestureEventEnd = (event: PanGestureHandlerGestureEvent): void => {
@@ -216,15 +219,95 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
     }
   };
 
-  const onPressComment = (): void => {};
-
   const clear = (): void => {
     setStartWord(undefined);
     setEndWord(undefined);
-    setOrigin(undefined);
+    setLongPressWord(undefined);
   };
 
+  const getInitialWord = (i: number): InitialWord[] => {
+    return initialWords.map(item => {
+      if (item.index !== i) {
+        return item;
+      }
+      return {
+        ...item,
+        isComment: true,
+      };
+    });
+  };
+
+  const onPressComment = useCallback((): void => {
+    initialWords.sort((a, b) => {
+      return a.index - b.index;
+    });
+    if (!startWord || !endWord) return;
+    let origin = '';
+    for (let i = startWord.index; i <= endWord.index; i += 1) {
+      origin += `${initialWords[i].word} `;
+    }
+
+    const newInitialWords = initialWords.map(item => {
+      if (item.index >= startWord.index && item.index <= endWord.index) {
+        return {
+          ...item,
+          isComment: true,
+        };
+      }
+      return item;
+    });
+    setInitialWords(newInitialWords);
+
+    setComments([
+      {
+        id: `${startWord.index.toString()}-${endWord.index.toString()}`,
+        startWordIndex: startWord.index,
+        endWordIndex: endWord.index,
+        origin,
+        after: '',
+        detail: '',
+      },
+      ...comments,
+    ]);
+    setIsModalComment(false);
+  }, [initialWords, startWord, endWord, comments]);
+
+  const onPressDelete = useCallback(
+    (id: string) => {
+      const newComments = comments.filter(item => item.id !== id);
+      setComments(newComments);
+      setStartWord(undefined);
+      setEndWord(undefined);
+    },
+    [comments]
+  );
+
+  const onPressCard = useCallback(
+    (startWordIndex: number, endWordIndex: number): void => {
+      const startWardInfo = getPositionInfo(startWordIndex);
+      const endWordInfo = getPositionInfo(endWordIndex);
+      setStartWord(startWardInfo);
+      setEndWord(endWordInfo);
+      console.log('onPressCard', startWardInfo, endWordInfo);
+    },
+    [getPositionInfo]
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: Comment }): JSX.Element => {
+      return (
+        <CommentInputCard
+          item={item}
+          onPressCard={onPressCard}
+          onPressDelete={onPressDelete}
+        />
+      );
+    },
+    [onPressCard, onPressDelete]
+  );
+
   return (
+    // <TouchableWithoutFeedback onPress={clear}>
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
       <View style={styles.main}>
@@ -237,7 +320,7 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
         <Text style={styles.title}>{title}</Text>
       </View>
       <CorrectionText
-        text={text}
+        text="Wow guys that really solved a problem i had.. useeffect doesn't imitate componentDidUpdate even after using prop as the last parameter , i used Hammeds solution with useDidUpdate and i just added a prevprops var . seems to be working fine so far."
         isModalComment={isModalComment}
         startWord={startWord}
         endWord={endWord}
@@ -246,9 +329,16 @@ const CorrectingScreen: ScreenType = ({ navigation, teachDiary }) => {
         onGestureEventEnd={onGestureEventEnd}
         onLayout={onLayout}
         onPressComment={onPressComment}
-        clear={clear}
       />
+      <View style={styles.correctMain}>
+        <FlatList
+          data={comments}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+        />
+      </View>
     </View>
+    // </TouchableWithoutFeedback>
   );
 };
 

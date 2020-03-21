@@ -1,19 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import {
-  fontSizeS,
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  subTextColor,
-  mainColor,
-} from '../../styles/Common';
-import { TotalStatus, ProfileIconVertical } from '.';
-import { getDiaryStatus, getPostDay } from '../../utils/diary';
-import firebase from '../../constants/firebase';
-import { Commment } from '../../types';
+import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 
 interface Props {
   title: string;

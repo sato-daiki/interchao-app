@@ -10,8 +10,10 @@ export type Timestamp = {
 export type DiaryStatus = 'draft' | 'publish';
 export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
 
-export interface Commment {
-  startNum: number;
+export interface Comment {
+  id: string;
+  startWordIndex: number;
+  endWordIndex: number;
   origin: string;
   after: string;
   detail: string;
@@ -19,7 +21,7 @@ export interface Commment {
 
 export interface Correction {
   profile: DisplayProfile;
-  commments: Commment[];
+  comments: Comment[];
   summary: string;
   createdAt: firestore.Timestamp;
   updatedAt: firestore.Timestamp;

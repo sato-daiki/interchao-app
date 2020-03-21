@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { fontSizeM, primaryColor } from '../../styles/Common';
-import { LINE_HEIGHT, Word } from '../../screens/CorrectingScreen';
+import { ActiveWord } from '../../types/correcting';
 
 interface Props {
   onPress: () => void;
-  startWord: Word;
-  endWord: Word;
+  startWord: ActiveWord;
+  endWord: ActiveWord;
 }
 
 const styles = StyleSheet.create({
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
+const LINE_HEIGHT = fontSizeM * 1.7;
 const STR_LENGTH = 50;
 const START_Y = -LINE_HEIGHT - 16;
 
