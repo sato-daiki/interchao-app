@@ -9,7 +9,7 @@ import { User } from '../types/user';
 
 import { HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
+import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
 import { getDisplayProfile } from '../utils/diary';

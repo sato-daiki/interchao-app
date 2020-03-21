@@ -1,8 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Avatar as ElAvatar } from 'react-native-elements';
-import { MaterialIcons } from '@expo/vector-icons';
-import { imageLightColor, subTextColor, fontSizeS } from '../../styles/Common';
+import { View, StyleSheet, Text } from 'react-native';
+import { fontSizeS } from '../../styles/Common';
 
 interface Props {
   color: string;

@@ -20,19 +20,19 @@ const styles = StyleSheet.create({
 
 interface Props {
   isReview: boolean;
-  onPressReview: () => void;
+  onPress: () => void;
 }
 
 const MyDiaryCorrectionFooter: React.FC<Props> = ({
   isReview,
-  onPressReview,
+  onPress,
 }): JSX.Element => {
   if (isReview) {
     return <Text style={styles.finText}>この日記はレビュー済みです</Text>;
   }
   return (
     <>
-      <SubmitButton title="添削のレビューをする" onPress={onPressReview} />
+      <SubmitButton title="添削のレビューをする" onPress={onPress} />
       <Text style={styles.promptText}>添削のお礼と評価をお願いします</Text>
     </>
   );

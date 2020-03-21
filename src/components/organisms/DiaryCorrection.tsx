@@ -17,7 +17,7 @@ interface Props {
   isReview: boolean;
   correction: Correction;
   onPressUser: (uid: string) => void;
-  onPressReview?: () => void;
+  onPressReview: () => void;
   onPressCorrection?: () => void;
 }
 
@@ -43,7 +43,6 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  * 概要：添削一覧
  */
 const DiaryCorrection: React.FC<Props> = ({
-  isMyDiary,
   isReview,
   correction,
   onPressUser,
@@ -56,17 +55,13 @@ const DiaryCorrection: React.FC<Props> = ({
     <>
       <SummaryCard summary={summary} />
       <Space size={32} />
-      <MyDiaryCorrectionFooter
-        isReview={isReview}
-        onPressReview={onPressReview}
-      />
+      <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
     </>
   );
 
   const renderItem = useCallback(
     ({ item, index }: { item: Comment; index: number }): JSX.Element => {
       const { original, fix, detail } = item;
-
       return (
         <CommentCard
           index={index}
@@ -96,6 +91,7 @@ const DiaryCorrection: React.FC<Props> = ({
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ListFooterComponent={listFooterComponent}
+          scrollEnabled={false}
         />
       </View>
     </>

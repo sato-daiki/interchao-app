@@ -5,7 +5,10 @@ import {
   primaryColor,
   borderLightColor,
   mainColor,
+  subTextColor,
+  fontSizeS,
 } from '../../styles/Common';
+import { Space } from '.';
 
 interface Props {
   index: number;
@@ -31,40 +34,62 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     borderColor: mainColor,
   },
-  origin: {
+  label: {
+    color: subTextColor,
     fontSize: fontSizeM,
-    fontWeight: 'bold',
+    paddingBottom: 4,
+  },
+  originalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  original: {
+    fontSize: fontSizeM,
     color: primaryColor,
-    paddingBottom: 16,
+    lineHeight: fontSizeM * 1.3,
+    paddingLeft: 4,
+    fontWeight: 'bold',
   },
   index: {
-    borderWidth: 1,
-    borderColor: primaryColor,
-    borderRadius: 4,
+    fontSize: fontSizeM,
+    color: primaryColor,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   line: {
     alignSelf: 'center',
     width: '100%',
-    marginHorizontal: 16,
+    margin: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
   },
-  text: {
-    paddingTop: 16,
+  fix: {
+    fontSize: fontSizeM,
+    fontWeight: 'bold',
+    color: primaryColor,
+    lineHeight: fontSizeM * 1.3,
+  },
+  detail: {
     fontSize: fontSizeM,
     color: primaryColor,
+    lineHeight: fontSizeM * 1.3,
   },
 });
 
 const CommentCard = ({ index, original, fix, detail }: Props): JSX.Element => {
+  const indexText = `${index + 1}.`;
   return (
     <View style={styles.container}>
-      <Text style={styles.original}>
-        <Text style={styles.index}>{index}</Text>
-        {original}
-      </Text>
+      <Text style={styles.label}>原文</Text>
+      <View style={styles.originalContainer}>
+        <Text style={styles.index}>{indexText}</Text>
+        <Text style={styles.original}>{original}</Text>
+      </View>
       <View style={styles.line} />
+      <Text style={styles.label}>修正文</Text>
       <Text style={styles.fix}>{fix}</Text>
+      <View style={styles.line} />
+      <Text style={styles.label}>コメント</Text>
       <Text style={styles.detail}>{detail}</Text>
     </View>
   );

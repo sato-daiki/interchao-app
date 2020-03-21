@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Avatar as ElAvatar } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 import { imageLightColor, subTextColor } from '../../styles/Common';
 
