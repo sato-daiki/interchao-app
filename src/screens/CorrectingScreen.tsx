@@ -335,8 +335,7 @@ const CorrectingScreen: ScreenType = ({
           fix,
           detail,
         };
-      }, []);
-
+      });
       setComments(newComments);
     },
     [comments]
@@ -349,7 +348,7 @@ const CorrectingScreen: ScreenType = ({
     (item: Comment) => {
       navigation.navigate('EditCorrectionComment', {
         item,
-        onPressSubmit: onPressSubmitEditComment,
+        onPressSubmitEditComment,
       });
     },
     [navigation]

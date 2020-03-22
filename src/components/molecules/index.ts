@@ -14,4 +14,4 @@ export { default as EmptyList } from './EmptyList';
 export { default as ProfileLanguage } from './ProfileLanguage';
 export { default as CorrectionWord } from './CorrectionWord';
 export { default as CorrectionMenu } from './CorrectionMenu';
-export { default as CommentInputCard } from './CommentInputCard';
+export { default as CommentInput } from './CommentInput';

@@ -75,6 +75,7 @@ const CommentInput: React.FC<Props> = ({
         value={fix}
         onChangeText={onChangeTextFix}
         multiline
+        clearButtonMode="always"
       />
       <Space size={16} />
       <Text style={styles.label}>コメント</Text>
@@ -85,6 +86,7 @@ const CommentInput: React.FC<Props> = ({
         value={detail}
         onChangeText={onChangeTextDetail}
         multiline
+        clearButtonMode="always"
       />
     </>
   );
