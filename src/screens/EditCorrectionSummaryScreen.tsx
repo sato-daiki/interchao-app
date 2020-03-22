@@ -72,17 +72,24 @@ const styles = StyleSheet.create({
 });
 
 const EditCorrectionSummaryScreen: ScreenType = ({ navigation }) => {
-  const [summary, setSummary] = useState(navigation.state.params!.summary); // 新規追加時の修正文
-  const onPressSubmit = useCallback((): void => {
-    navigation.state.params!.onPressSubmit(summary);
-    navigation.goBack(null);
-  }, [summary]);
+  const [summary, setSummary] = useState(''); // 新規追加時の修正文
+
+  useEffect(() => {
+    if (navigation.state.params) {
+      setSummary(navigation.state.params.summary);
+    }
+  }, []);
+
+  const onPressSubmit = useCallback((text): void => {
+    navigation.state.params.onPressSubmit(text);
+    navigation.goBack();
+  }, []);
 
   useEffect(() => {
     navigation.setParams({
-      onPressSubmit,
+      onPressSubmit: () => onPressSubmit(summary),
     });
-  }, [onPressSubmit]);
+  }, [summary]);
 
   return (
     <View style={styles.container}>
