@@ -47,16 +47,19 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
   const [fix, setFix] = useState(item.fix); // 新規追加時の修正文
   const [detail, setDetail] = useState(item.detail); // 新規追加時のコメント
 
-  const onPressSubmit = useCallback((): void => {
-    navigation.state.params!.onPressSubmit(item.id, fix, detail);
-    navigation.goBack(null);
-  }, [item.id, fix, detail]);
+  const onPressSubmit = useCallback(
+    (prmFix: string, prmDetail: string): void => {
+      navigation.state.params!.onPressSubmit(item.id, prmFix, prmDetail);
+      navigation.goBack(null);
+    },
+    [item.id]
+  );
 
   useEffect(() => {
     navigation.setParams({
-      onPressSubmit,
+      onPressSubmit: () => onPressSubmit(fix, detail),
     });
-  }, [onPressSubmit]);
+  }, [fix, detail]);
 
   return (
     <View style={styles.container}>
