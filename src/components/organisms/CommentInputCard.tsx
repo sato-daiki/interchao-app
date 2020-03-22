@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { fontSizeM, mainColor } from '../../styles/Common';
+import { View, StyleSheet } from 'react-native';
+import { mainColor } from '../../styles/Common';
 import { Space } from '../atoms';
 import CommentInput from '../molecules/CommentInput';
+import { CommentButton } from '../molecules';
 
 interface Props {
   original: string;
@@ -27,19 +27,6 @@ const styles = StyleSheet.create({
     elevation: 9,
     shadowOpacity: 0.4,
     shadowRadius: 5,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  cancel: {
-    fontSize: fontSizeM,
-    color: mainColor,
-  },
-  add: {
-    fontSize: fontSizeM,
-    color: mainColor,
-    fontWeight: 'bold',
   },
 });
 
@@ -76,14 +63,7 @@ const CommentInputCard: React.FC<Props> = ({
         onChangeTextDetail={(text: string): void => setDetail(text)}
       />
       <Space size={16} />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onPressCancel}>
-          <Text style={styles.cancel}>キャンセル</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressAdd}>
-          <Text style={styles.add}>追加</Text>
-        </TouchableOpacity>
-      </View>
+      <CommentButton onPressAdd={onPressAdd} onPressCancel={onPressCancel} />
     </View>
   );
 };

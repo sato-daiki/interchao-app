@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 
 interface Props {
   summary: string;
+  isEdit?: boolean;
+  onPressMore?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -22,6 +25,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 5,
     borderColor: primaryColor,
+  },
+  icon: {
+    position: 'absolute',
+    top: 8,
+    right: 12,
+    zIndex: 1,
   },
   title: {
     fontSize: fontSizeM,
@@ -43,9 +52,27 @@ const styles = StyleSheet.create({
   },
 });
 
-const SummaryCard = ({ summary }: Props): JSX.Element => {
+const SummaryCard = ({
+  summary,
+  isEdit = false,
+  onPressMore,
+}: Props): JSX.Element | null => {
+  if (!summary || summary.length === 0) {
+    return null;
+  }
   return (
     <View style={styles.container}>
+      {isEdit ? (
+        <View style={styles.icon}>
+          <TouchableOpacity onPress={onPressMore}>
+            <MaterialCommunityIcons
+              size={28}
+              color={primaryColor}
+              name="dots-horizontal"
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
       <Text style={styles.title}>総評</Text>
       <View style={styles.line} />
       <Text style={styles.text}>{summary}</Text>

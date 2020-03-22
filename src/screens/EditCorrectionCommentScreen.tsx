@@ -48,7 +48,7 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
   const [detail, setDetail] = useState(item.detail); // 新規追加時のコメント
 
   const onPressSubmit = useCallback((): void => {
-    navigation.state.params!.onPressSubmitEditComment(item.id, fix, detail);
+    navigation.state.params!.onPressSubmit(item.id, fix, detail);
     navigation.goBack(null);
   }, [item.id, fix, detail]);
 
