@@ -177,7 +177,7 @@ const CorrectingScreen: ScreenType = ({
         });
     };
     f();
-  }, [currentProfile, comments, summary]);
+  }, [currentProfile, comments, summary, teachDiary.objectID]);
 
   /**
    * 総評ボタンを押下した時の処理
@@ -189,16 +189,19 @@ const CorrectingScreen: ScreenType = ({
   /**
    * 右上のボタンが押下された時の処理
    */
-  const onPressRightButton = useCallback((state: RightButtonState): void => {
-    if (state === 'done') {
-      onPressDone();
-    } else if (state === 'summary') {
-      onPressSummary();
-    }
-  }, []);
+  const onPressRightButton = useCallback(
+    (state: RightButtonState): void => {
+      if (state === 'done') {
+        onPressDone();
+      } else if (state === 'summary') {
+        onPressSummary();
+      }
+    },
+    [onPressDone, onPressSummary]
+  );
 
   /**
-   * ヘッダーように初期値設定
+   * ヘッダーに初期値設定
    */
   useEffect(() => {
     navigation.setParams({
@@ -339,17 +342,12 @@ const CorrectingScreen: ScreenType = ({
     });
   };
 
-  const onPressSubmitEditSummary = useCallback((prmSummary: string): void => {
-    console.log('prmSummary', prmSummary);
-    // setSummary('');
-  }, []);
-
   const onPressSummaryEdit = useCallback((): void => {
     navigation.navigate('EditCorrectionSummary', {
       summary,
-      onPressSubmit: onPressSubmitEditSummary,
+      onPressSubmit: (prmSummary: string): void => setSummary(prmSummary),
     });
-  }, [navigation]);
+  }, [navigation, summary]);
 
   /**
    * 総評のメニューアイコンをクリック
@@ -382,7 +380,6 @@ const CorrectingScreen: ScreenType = ({
   const onPressSubmitSummary = useCallback((summaryText: string): void => {
     setSummary(summaryText);
     setIsSummary(false);
-    navigation.goBack(null);
   }, []);
 
   /**
@@ -415,7 +412,7 @@ const CorrectingScreen: ScreenType = ({
 
     // コメントするのメニューを非表示にする
     setIsModalComment(false);
-  }, [initialWords, startWord, endWord, comments]);
+  }, [initialWords, startWord, endWord]);
 
   // const onPressCard = useCallback(
   //   (startWordIndex: number, endWordIndex: number): void => {
@@ -458,7 +455,7 @@ const CorrectingScreen: ScreenType = ({
         onPressSubmit: onPressSubmitEditComment,
       });
     },
-    [navigation]
+    [navigation, onPressSubmitEditComment]
   );
 
   /**
