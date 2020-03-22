@@ -20,6 +20,7 @@ import {
   PanGestureHandlerGestureEvent,
   LongPressGestureHandlerStateChangeEvent,
   State,
+  ScrollView,
 } from 'react-native-gesture-handler';
 import firebase from '../constants/firebase';
 import {
@@ -36,16 +37,21 @@ import {
   ProfileIconHorizontal,
   Space,
   CommentCard,
+  GrayHeader,
+  SummaryCard,
 } from '../components/atoms';
 import { User, Diary, Comment, Profile } from '../types';
 import { getPostDay, getDisplayProfile } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
+import SummaryInputCard from '../components/organisms/SummaryInputCard';
 
 const VIBRATION_DURATION = 500;
 const LINE_HEIGHT = fontSizeM * 1.7;
 const LINE_SPACE = LINE_HEIGHT - fontSizeM;
+
+type RightButtonState = 'summary' | 'done' | 'nothing';
 
 interface Props {
   user: User;
@@ -85,13 +91,35 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 16,
   },
-  correctMain: {
+  commentCard: {
     paddingHorizontal: 16,
-    paddingTop: 32,
   },
 });
 
 const keyExtractor = (item: Comment, index: number): string => String(index);
+
+const getRightButtonState = (
+  isSummary: boolean,
+  summary = ''
+): RightButtonState => {
+  if (summary.length > 0 && !isSummary) {
+    return 'done';
+  }
+  if (!isSummary) {
+    return 'summary';
+  }
+  return 'nothing';
+};
+
+const getRightButtonTitle = (state: RightButtonState): string => {
+  if (state === 'summary') {
+    return 'まとめを書く';
+  }
+  if (state === 'done') {
+    return '完了';
+  }
+  return '';
+};
 
 /**
  * 添削中
@@ -112,15 +140,20 @@ const CorrectingScreen: ScreenType = ({
 
   /* コメント関連 */
   const [original, setOriginal] = useState(''); // 新規追加時の修正文
-  const [isCommentInput, setIsCommentInput] = useState(false); // 新規追加のon/offフラグ
+  const [isCommentInput, setIsCommentInput] = useState(false); // コメントの追加のon/offフラグ
+  const [comments, setComments] = useState<Comment[]>([]); //　コメントをlistデータ
 
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [summary, setSummary] = useState('');
+  /* 総評関連 */
+  const [summary, setSummary] = useState(''); // 総評
+  const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
 
   const { createdAt, title, profile, text } = teachDiary;
   const { userName, photoUrl } = profile;
 
-  const onPressSubmit = useCallback(() => {
+  /**
+   * 完了ボタンを押下した時の処理
+   */
+  const onPressDone = useCallback(() => {
     const f = async (): Promise<void> => {
       setIsLoading(true);
       const displayProfile = getDisplayProfile(currentProfile);
@@ -146,9 +179,34 @@ const CorrectingScreen: ScreenType = ({
     f();
   }, [currentProfile, comments, summary]);
 
+  /**
+   * 総評ボタンを押下した時の処理
+   */
+  const onPressSummary = useCallback(() => {
+    setIsSummary(true);
+  }, []);
+
+  /**
+   * 右上のボタンが押下された時の処理
+   */
+  const onPressRightButton = useCallback((state: RightButtonState): void => {
+    if (state === 'done') {
+      onPressDone();
+    } else if (state === 'summary') {
+      onPressSummary();
+    }
+  }, []);
+
+  /**
+   * ヘッダーように初期値設定
+   */
   useEffect(() => {
-    navigation.setParams({ onPressSubmit });
-  }, [comments, summary]);
+    navigation.setParams({
+      isSummary,
+      summary,
+      onPressRightButton,
+    });
+  }, [comments, isSummary, summary]);
 
   const getPositionInfo = useCallback(
     (index: number): ActiveWord | undefined => {
@@ -281,6 +339,55 @@ const CorrectingScreen: ScreenType = ({
     });
   };
 
+  const onPressSubmitEditSummary = useCallback((prmSummary: string): void => {
+    console.log('prmSummary', prmSummary);
+    // setSummary('');
+  }, []);
+
+  const onPressSummaryEdit = useCallback((): void => {
+    navigation.navigate('EditCorrectionSummary', {
+      summary,
+      onPressSubmit: onPressSubmitEditSummary,
+    });
+  }, [navigation]);
+
+  /**
+   * 総評のメニューアイコンをクリック
+   */
+  const onPressMoreSummary = useCallback(() => {
+    const options = ['編集する', 'まとめを削除する', 'キャンセル'];
+    showActionSheetWithOptions(
+      {
+        options,
+        destructiveButtonIndex: 1,
+        cancelButtonIndex: 2,
+      },
+      index => {
+        switch (index) {
+          case 0:
+            onPressSummaryEdit();
+            break;
+          case 1:
+            setSummary('');
+            break;
+          default:
+        }
+      }
+    );
+  }, [showActionSheetWithOptions, setSummary, onPressSummaryEdit]);
+
+  /**
+   * 総評を追加する
+   */
+  const onPressSubmitSummary = useCallback((summaryText: string): void => {
+    setSummary(summaryText);
+    setIsSummary(false);
+    navigation.goBack(null);
+  }, []);
+
+  /**
+   * コメントするボタンを押下した後の処理
+   */
   const onPressComment = useCallback((): void => {
     initialWords.sort((a, b) => {
       return a.index - b.index;
@@ -310,16 +417,16 @@ const CorrectingScreen: ScreenType = ({
     setIsModalComment(false);
   }, [initialWords, startWord, endWord, comments]);
 
-  const onPressCard = useCallback(
-    (startWordIndex: number, endWordIndex: number): void => {
-      const startWardInfo = getPositionInfo(startWordIndex);
-      const endWordInfo = getPositionInfo(endWordIndex);
-      setStartWord(startWardInfo);
-      setEndWord(endWordInfo);
-      console.log('onPressCard', startWardInfo, endWordInfo);
-    },
-    [getPositionInfo]
-  );
+  // const onPressCard = useCallback(
+  //   (startWordIndex: number, endWordIndex: number): void => {
+  //     const startWardInfo = getPositionInfo(startWordIndex);
+  //     const endWordInfo = getPositionInfo(endWordIndex);
+  //     setStartWord(startWardInfo);
+  //     setEndWord(endWordInfo);
+  //     console.log('onPressCard', startWardInfo, endWordInfo);
+  //   },
+  //   [getPositionInfo]
+  // );
 
   /**
    * コメント編集画面で完了ボタン押下時
@@ -348,7 +455,7 @@ const CorrectingScreen: ScreenType = ({
     (item: Comment) => {
       navigation.navigate('EditCorrectionComment', {
         item,
-        onPressSubmitEditComment,
+        onPressSubmit: onPressSubmitEditComment,
       });
     },
     [navigation]
@@ -368,7 +475,7 @@ const CorrectingScreen: ScreenType = ({
   /**
    * コメントのメニューアイコンをクリック
    */
-  const onPressMore = useCallback(
+  const onPressMoreComment = useCallback(
     (item: Comment) => {
       const options = ['編集する', 'コメントを削除する', 'キャンセル'];
       showActionSheetWithOptions(
@@ -433,20 +540,33 @@ const CorrectingScreen: ScreenType = ({
     setIsCommentInput(false);
   }, []);
 
+  const listHeaderComponent = useCallback(
+    () =>
+      comments.length > 0 ? (
+        <>
+          <GrayHeader title="コメント一覧" />
+          <Space size={16} />
+        </>
+      ) : null,
+    [comments]
+  );
+
   const renderItem = useCallback(
     ({ item, index }: { item: Comment; index: number }): JSX.Element => {
       return (
-        <CommentCard
-          index={index}
-          original={item.original}
-          fix={item.fix}
-          detail={item.detail}
-          isEdit
-          onPressMore={(): void => onPressMore(item)}
-        />
+        <View style={styles.commentCard}>
+          <CommentCard
+            index={index}
+            original={item.original}
+            fix={item.fix}
+            detail={item.detail}
+            isEdit
+            onPressMore={(): void => onPressMoreComment(item)}
+          />
+        </View>
       );
     },
-    [onPressMore]
+    [onPressMoreComment]
   );
 
   return (
@@ -473,20 +593,39 @@ const CorrectingScreen: ScreenType = ({
         onLayout={onLayout}
         onPressComment={onPressComment}
       />
-      <View style={styles.correctMain}>
-        {/* 新規でコメント追加 */}
-        {isCommentInput ? (
+      <Space size={32} />
+      {/* 新規でコメント追加 */}
+      {isCommentInput ? (
+        <View style={styles.commentCard}>
           <CommentInputCard
             original={original}
             onPressSubmit={onPressSubmitComment}
             onPressClose={onPressCloseComment}
           />
-        ) : null}
-        {/* 追加後のコメント一覧 */}
-        <FlatList
-          data={comments}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
+        </View>
+      ) : null}
+      {/* 総評の追加 */}
+      {isSummary ? (
+        <View style={styles.commentCard}>
+          <SummaryInputCard
+            onPressSubmit={onPressSubmitSummary}
+            onPressClose={(): void => setIsSummary(false)}
+          />
+        </View>
+      ) : null}
+      {/* 追加後のコメント一覧 */}
+      <FlatList
+        ListHeaderComponent={listHeaderComponent}
+        data={comments}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+      />
+      {/* 総評 */}
+      <View style={styles.commentCard}>
+        <SummaryCard
+          summary={summary}
+          isEdit
+          onPressMore={onPressMoreSummary}
         />
       </View>
     </View>
@@ -497,7 +636,13 @@ const CorrectingScreen: ScreenType = ({
 CorrectingScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
-  const onPressSubmit = navigation.getParam('onPressSubmit');
+  const isSummary = navigation.getParam('isSummary');
+  const summary = navigation.getParam('summary');
+  const onPressRightButton = navigation.getParam('onPressRightButton');
+
+  const state = getRightButtonState(isSummary, summary);
+  const title = getRightButtonTitle(state);
+
   return {
     ...DefaultNavigationOptions,
     title: '添削する',
@@ -508,7 +653,10 @@ CorrectingScreen.navigationOptions = ({
       />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title="完了" onPress={onPressSubmit} />
+      <HeaderText
+        title={title}
+        onPress={(): void => onPressRightButton(state)}
+      />
     ),
   };
 };
