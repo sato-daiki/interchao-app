@@ -133,8 +133,8 @@ const TeachDiaryScreen: ScreenType = ({
         // });
 
         navigation.navigate('Correcting', { objectID: teachDiary.objectID });
-        // setIsLoading(false);
-        // setIsModalCorrection(false);
+        setIsLoading(false);
+        setIsModalCorrection(false);
       };
       f();
     },

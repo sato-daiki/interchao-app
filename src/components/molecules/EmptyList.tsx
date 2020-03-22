@@ -7,13 +7,13 @@ import { Space } from '../atoms';
 interface Props {
   message: string;
   iconName: string;
+  paddingTop?: number;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingTop: 64,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -32,9 +32,10 @@ const styles = StyleSheet.create({
 const EmptyList: React.FC<Props> = ({
   message,
   iconName,
+  paddingTop = 64,
 }: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop }]}>
       <View style={styles.emptyUpper}>
         <MaterialCommunityIcons
           name={iconName}
