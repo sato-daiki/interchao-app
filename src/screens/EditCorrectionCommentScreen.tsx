@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   NavigationStackOptions,
@@ -17,6 +17,11 @@ type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+  },
+  card: {
     padding: 16,
     borderWidth: 1,
     borderRadius: 8,
@@ -42,22 +47,28 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
   const [fix, setFix] = useState(item.fix); // 新規追加時の修正文
   const [detail, setDetail] = useState(item.detail); // 新規追加時のコメント
 
+  const onPressSubmit = useCallback((): void => {
+    navigation.state.params!.onPressSubmitEditComment(item.id, fix, detail);
+    navigation.goBack(null);
+  }, [item.id, fix, detail]);
+
   useEffect(() => {
-    const { onPressSubmit } = navigation.state.params!;
     navigation.setParams({
-      onPressSubmit: () => onPressSubmit(item.id, fix, detail),
+      onPressSubmit,
     });
-  }, [fix, detail, item.id]);
+  }, [onPressSubmit]);
 
   return (
-    <View style={[styles.container]}>
-      <CommentInput
-        original={item.original}
-        fix={fix}
-        detail={detail}
-        onChangeTextFix={(text: string): void => setFix(text)}
-        onChangeTextDetail={(text: string): void => setDetail(text)}
-      />
+    <View style={styles.container}>
+      <View style={styles.card}>
+        <CommentInput
+          original={item.original}
+          fix={fix}
+          detail={detail}
+          onChangeTextFix={(text: string): void => setFix(text)}
+          onChangeTextDetail={(text: string): void => setDetail(text)}
+        />
+      </View>
     </View>
   );
 };
