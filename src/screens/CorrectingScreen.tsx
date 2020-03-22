@@ -6,7 +6,6 @@ import {
   LayoutChangeEvent,
   Vibration,
   FlatList,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import {
   connectActionSheet,
@@ -29,7 +28,7 @@ import {
   primaryColor,
   fontSizeM,
 } from '../styles/Common';
-import { UserDiaryStatus } from '../components/molecules';
+import { UserDiaryStatus, EmptyList } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
   HeaderText,
@@ -146,8 +145,7 @@ const CorrectingScreen: ScreenType = ({
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // 総評
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
-
-  const { createdAt, title, profile, text } = teachDiary;
+  const { createdAt, title, profile } = teachDiary;
   const { userName, photoUrl } = profile;
 
   /**
@@ -175,9 +173,10 @@ const CorrectingScreen: ScreenType = ({
           correctionStatus: 'unread',
           updatedAt: timestamp,
         });
+      navigation.goBack(null);
     };
     f();
-  }, [currentProfile, comments, summary, teachDiary.objectID]);
+  }, [currentProfile, comments, summary, teachDiary.objectID, navigation]);
 
   /**
    * 総評ボタンを押下した時の処理
@@ -209,7 +208,7 @@ const CorrectingScreen: ScreenType = ({
       summary,
       onPressRightButton,
     });
-  }, [comments, isSummary, summary]);
+  }, [isSummary, comments, summary]);
 
   const getPositionInfo = useCallback(
     (index: number): ActiveWord | undefined => {
@@ -342,6 +341,9 @@ const CorrectingScreen: ScreenType = ({
     });
   };
 
+  /**
+   * まとめを編集する画面で確定ボタンを押した後の処理
+   */
   const onPressSummaryEdit = useCallback((): void => {
     navigation.navigate('EditCorrectionSummary', {
       summary,
@@ -350,7 +352,7 @@ const CorrectingScreen: ScreenType = ({
   }, [navigation, summary]);
 
   /**
-   * 総評のメニューアイコンをクリック
+   * まとめのメニューアイコンをクリック
    */
   const onPressMoreSummary = useCallback(() => {
     const options = ['編集する', 'まとめを削除する', 'キャンセル'];
@@ -395,16 +397,16 @@ const CorrectingScreen: ScreenType = ({
       newOriginal += `${initialWords[i].word} `;
     }
 
-    // const newInitialWords = initialWords.map(item => {
-    //   if (item.index >= startWord.index && item.index <= endWord.index) {
-    //     return {
-    //       ...item,
-    //       isComment: true,
-    //     };
-    //   }
-    //   return item;
-    // });
-    // setInitialWords(newInitialWords);
+    const newInitialWords = initialWords.map(item => {
+      if (item.index >= startWord.index && item.index <= endWord.index) {
+        return {
+          ...item,
+          isComment: true,
+        };
+      }
+      return item;
+    });
+    setInitialWords(newInitialWords);
 
     // 新規コメントを初期化して表示する
     setIsCommentInput(true);
@@ -537,16 +539,21 @@ const CorrectingScreen: ScreenType = ({
     setIsCommentInput(false);
   }, []);
 
-  const listHeaderComponent = useCallback(
-    () =>
-      comments.length > 0 ? (
-        <>
-          <GrayHeader title="コメント一覧" />
-          <Space size={16} />
-        </>
-      ) : null,
-    [comments]
+  const listEmptyComponent = isCommentInput ? null : (
+    <EmptyList
+      iconName="cursor-pointer"
+      message="文章をタップして添削を始めましょう"
+      paddingTop={0}
+    />
   );
+
+  const listHeaderComponent =
+    comments.length > 0 ? (
+      <>
+        <GrayHeader title="コメント一覧" />
+        <Space size={16} />
+      </>
+    ) : null;
 
   const renderItem = useCallback(
     ({ item, index }: { item: Comment; index: number }): JSX.Element => {
@@ -567,8 +574,7 @@ const CorrectingScreen: ScreenType = ({
   );
 
   return (
-    // <TouchableWithoutFeedback onPress={clear}>
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <LoadingModal visible={isLoading} />
       <View style={styles.main}>
         <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
@@ -612,11 +618,13 @@ const CorrectingScreen: ScreenType = ({
       ) : null}
       {/* 追加後のコメント一覧 */}
       <FlatList
-        ListHeaderComponent={listHeaderComponent}
         data={comments}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        ListHeaderComponent={listHeaderComponent}
+        ListEmptyComponent={listEmptyComponent}
       />
+
       {/* 総評 */}
       <View style={styles.commentCard}>
         <SummaryCard
@@ -625,8 +633,7 @@ const CorrectingScreen: ScreenType = ({
           onPressMore={onPressMoreSummary}
         />
       </View>
-    </View>
-    // </TouchableWithoutFeedback>
+    </ScrollView>
   );
 };
 
