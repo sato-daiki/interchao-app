@@ -17,3 +17,4 @@ export { default as CorrectionMenu } from './CorrectionMenu';
 export { default as CommentInput } from './CommentInput';
 export { default as CommentButton } from './CommentButton';
 export { default as ClearTextInput } from './ClearTextInput';
+export { default as CorrectionFooterButton } from './CorrectionFooterButton';

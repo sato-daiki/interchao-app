@@ -5,10 +5,11 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { mainColor, fontSizeM, borderLightColor } from '../../styles/Common';
+import { mainColor, fontSizeM, subTextColor } from '../../styles/Common';
 
 interface Props {
   isBorrderTop?: boolean;
+  isBorrderBottom?: boolean;
   isLoading?: boolean;
   disable?: boolean;
   title: string;
@@ -22,9 +23,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 36,
     backgroundColor: '#fff',
-    borderBottomColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderTopColor: borderLightColor,
+    borderBottomColor: subTextColor,
+    borderTopColor: subTextColor,
   },
   title: {
     color: mainColor,
@@ -34,15 +34,20 @@ const styles = StyleSheet.create({
 
 const TextButtun: React.FC<Props> = ({
   isBorrderTop = false,
+  isBorrderBottom = false,
   isLoading = false,
   disable = false,
   title,
   onPress,
 }: Props): JSX.Element => {
   const borderTopWidth = isBorrderTop ? StyleSheet.hairlineWidth : undefined;
+  const borderBottomWidth = isBorrderBottom
+    ? StyleSheet.hairlineWidth
+    : undefined;
+
   return (
     <TouchableOpacity
-      style={[styles.contaner, { borderTopWidth }]}
+      style={[styles.contaner, { borderTopWidth, borderBottomWidth }]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
     >
