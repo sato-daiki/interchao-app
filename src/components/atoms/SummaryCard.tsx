@@ -73,7 +73,7 @@ const SummaryCard = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      <Text style={styles.title}>総評</Text>
+      <Text style={styles.title}>まとめ</Text>
       <View style={styles.line} />
       <Text style={styles.text}>{summary}</Text>
     </View>

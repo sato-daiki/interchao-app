@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   fontSizeM,
   primaryColor,
@@ -8,6 +8,7 @@ import {
   offWhite,
 } from '../../styles/Common';
 import { Space } from '../atoms';
+import { ClearTextInput } from '.';
 
 interface Props {
   original: string;
@@ -15,6 +16,8 @@ interface Props {
   detail: string;
   onChangeTextFix: (fix: string) => void;
   onChangeTextDetail: (detail: string) => void;
+  onPressClearFix: () => void;
+  onPressClearDetail: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -39,9 +42,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   textInput: {
-    lineHeight: fontSizeM * 1.3,
-    fontSize: fontSizeM,
-    color: primaryColor,
     paddingHorizontal: 8,
     paddingVertical: 14,
     textAlignVertical: 'top',
@@ -58,6 +58,8 @@ const CommentInput: React.FC<Props> = ({
   detail,
   onChangeTextFix,
   onChangeTextDetail,
+  onPressClearFix,
+  onPressClearDetail,
 }) => {
   return (
     <>
@@ -65,28 +67,19 @@ const CommentInput: React.FC<Props> = ({
       <Text style={styles.title}>{original}</Text>
       <View style={styles.line} />
       <Text style={styles.label}>修正文</Text>
-      <TextInput
-        style={styles.textInput}
+      <ClearTextInput
         autoFocus
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        defaultValue={original}
         value={fix}
+        defaultValue={original}
         onChangeText={onChangeTextFix}
-        multiline
-        clearButtonMode="always"
+        onPressClear={onPressClearFix}
       />
       <Space size={16} />
       <Text style={styles.label}>コメント</Text>
-      <TextInput
-        style={styles.textInput}
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
+      <ClearTextInput
         value={detail}
         onChangeText={onChangeTextDetail}
-        multiline
-        clearButtonMode="always"
+        onPressClear={onPressClearDetail}
       />
     </>
   );

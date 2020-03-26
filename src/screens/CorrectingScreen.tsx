@@ -11,6 +11,7 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
+
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -40,12 +41,13 @@ import {
   SummaryCard,
 } from '../components/atoms';
 import { User, Diary, CommentInfo, Profile } from '../types';
-import { getPostDay, getDisplayProfile } from '../utils/diary';
+import { getPostDate, getDisplayProfile } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
+import { getUuid } from '../utils/common';
 
 const VIBRATION_DURATION = 500;
 const LINE_HEIGHT = fontSizeM * 1.7;
@@ -145,9 +147,9 @@ const CorrectingScreen: ScreenType = ({
   const [comments, setComments] = useState<CommentInfo[]>([]); // コメントをlistデータ
 
   /* 総評関連 */
-  const [summary, setSummary] = useState(''); // 総評
+  const [summary, setSummary] = useState(''); // まとめ
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
-  const { createdAt, title, profile } = teachDiary;
+  const { createdAt, title, text, profile } = teachDiary;
   const { userName, photoUrl } = profile;
 
   /**
@@ -379,6 +381,7 @@ const CorrectingScreen: ScreenType = ({
       return a.index - b.index;
     });
     if (!startWord || !endWord) return;
+
     let newOriginal = '';
     for (let i = startWord.index; i <= endWord.index; i += 1) {
       newOriginal += `${initialWords[i].word} `;
@@ -484,7 +487,7 @@ const CorrectingScreen: ScreenType = ({
       const newComments = [
         ...comments,
         {
-          id: `${startWord.index.toString()}-${endWord.index.toString()}`,
+          id: getUuid(),
           startWord,
           endWord,
           original,
@@ -515,11 +518,14 @@ const CorrectingScreen: ScreenType = ({
   }, []);
 
   const listEmptyComponent = isCommentInput ? null : (
-    <EmptyList
-      iconName="cursor-pointer"
-      message="文章をタップして添削を始めましょう"
-      paddingTop={0}
-    />
+    <>
+      <EmptyList
+        iconName="cursor-pointer"
+        message="文章をタップして添削を始めましょう"
+        paddingTop={0}
+      />
+      <Space size={32} />
+    </>
   );
 
   const listHeaderComponent =
@@ -555,14 +561,14 @@ const CorrectingScreen: ScreenType = ({
         <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
         <Space size={8} />
         <View style={styles.header}>
-          <Text style={styles.postDayText}>{getPostDay(createdAt)}</Text>
+          <Text style={styles.postDayText}>{getPostDate(createdAt)}</Text>
           <UserDiaryStatus diary={teachDiary} />
         </View>
         <Text style={styles.title}>{title}</Text>
       </View>
       <View>
         <CorrectionText
-          text="Wow guys that really solved a problem i had.. useeffect doesn't imitate componentDidUpdate even after using prop as the last parameter , i used Hammeds solution with useDidUpdate and i just added a prevprops var . seems to be working fine so far."
+          text={text}
           isModalComment={isModalComment}
           startWord={startWord}
           endWord={endWord}
@@ -604,7 +610,7 @@ const CorrectingScreen: ScreenType = ({
         ListEmptyComponent={listEmptyComponent}
       />
 
-      {/* 総評 */}
+      {/* まとめ */}
       <View style={styles.commentCard}>
         <SummaryCard
           summary={summary}

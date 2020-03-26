@@ -16,7 +16,7 @@ import {
   ProfileIconHorizontal,
   Space,
 } from '../components/atoms';
-import { getPostDay } from '../utils/diary';
+import { getPostDate } from '../utils/diary';
 import {
   subTextColor,
   fontSizeS,
@@ -181,7 +181,7 @@ const TeachDiaryScreen: ScreenType = ({
 
   const { createdAt, title, text, profile } = teachDiary;
   const { userName, photoUrl, uid } = profile;
-  const postDay = getPostDay(createdAt);
+  const postDate = getPostDate(createdAt);
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -200,7 +200,7 @@ const TeachDiaryScreen: ScreenType = ({
           />
           <Space size={8} />
           <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDay}</Text>
+            <Text style={styles.postDayText}>{postDate}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
           <Text style={styles.title}>{title}</Text>

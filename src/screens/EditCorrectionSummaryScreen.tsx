@@ -7,7 +7,6 @@ import {
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { HeaderText } from '../components/atoms';
 import {
-  mainColor,
   fontSizeM,
   borderLightColor,
   primaryColor,
@@ -94,7 +93,7 @@ const EditCorrectionSummaryScreen: ScreenType = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>総評</Text>
+        <Text style={styles.title}>まとめ</Text>
         <View style={styles.line} />
         <TextInput
           style={styles.textInput}

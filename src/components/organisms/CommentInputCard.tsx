@@ -35,7 +35,7 @@ const CommentInputCard: React.FC<Props> = ({
   onPressSubmit,
   onPressClose,
 }) => {
-  const [fix, setFix] = useState(''); // 新規追加時の修正文
+  const [fix, setFix] = useState(original); // 新規追加時の修正文
   const [detail, setDetail] = useState(''); // 新規追加時のコメント
 
   const clear = useCallback(() => {
@@ -61,6 +61,8 @@ const CommentInputCard: React.FC<Props> = ({
         detail={detail}
         onChangeTextFix={(text: string): void => setFix(text)}
         onChangeTextDetail={(text: string): void => setDetail(text)}
+        onPressClearFix={(): void => setFix('')}
+        onPressClearDetail={(): void => setDetail('')}
       />
       <Space size={16} />
       <CommentButton onPressAdd={onPressAdd} onPressCancel={onPressCancel} />
