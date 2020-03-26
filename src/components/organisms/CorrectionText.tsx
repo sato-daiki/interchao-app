@@ -5,7 +5,7 @@ import {
   LongPressGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 import { CorrectionWord, CorrectionMenu } from '../molecules';
-import { ActiveWord } from '../../types/correcting';
+import { ActiveWord, InitialWord } from '../../types/correcting';
 
 interface Props {
   text: string;
@@ -20,6 +20,7 @@ interface Props {
   onGestureEventEnd: (event: PanGestureHandlerGestureEvent) => void;
   onLayout: (index: number, word: string, event: LayoutChangeEvent) => void;
   onPressComment: () => void;
+  initialWords: InitialWord[];
 }
 
 const styles = StyleSheet.create({
@@ -40,6 +41,7 @@ const CorrectionText: React.FC<Props> = ({
   onGestureEventEnd,
   onLayout,
   onPressComment,
+  initialWords,
 }) => {
   const getWords = (allText: string): string[] => {
     return allText.split(' ');

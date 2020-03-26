@@ -65,23 +65,7 @@ const DiaryListItem = ({
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text /* correction, proCorrection */ } = item;
-  const proCorrection = {
-    profile: {
-      uid: 'aaa',
-      name: 'dd',
-      userName: 'eee',
-      photoUrl: '',
-    },
-  };
-  const correction = {
-    profile: {
-      uid: 'aaa',
-      name: 'dd',
-      userName: 'eee',
-      photoUrl: '',
-    },
-  };
+  const { createdAt, title, text, correction, proCorrection } = item;
   const postDay = getPostDay(createdAt);
 
   return (

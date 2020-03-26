@@ -4,8 +4,8 @@ import { ProfileIcon } from '../atoms';
 import { Correction } from '../../types';
 
 interface Props {
-  correction?: Correction;
-  proCorrection?: Correction;
+  correction: Correction | null;
+  proCorrection: Correction | null;
   onPressUser: (uid: string) => void;
 }
 

@@ -6,7 +6,7 @@ import {
 } from 'react-navigation-stack';
 import firebase from '../constants/firebase';
 import { Diary, User } from '../types';
-import DiaryCorrection from '../components/organisms/DiaryCorrection';
+import TeachDiaryCorrection from '../components/organisms/TeachDiaryCorrection';
 import { TeachDiaryOriginal, UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -167,30 +167,14 @@ const TeachDiaryScreen: ScreenType = ({
       );
     }
     if (correction) {
-      return (
-        <DiaryCorrection
-          isMyDiary
-          isReview={isReview}
-          correction={correction}
-          onPressUser={onPressUser}
-          onPressCorrection={onPressCorrection}
-        />
-      );
+      return <TeachDiaryCorrection correction={correction} />;
     }
     return null;
   };
 
   const renderProDiaryCorrection = (): ReactNode => {
     if (proCorrection) {
-      return (
-        <DiaryCorrection
-          isMyDiary
-          isReview={isReview}
-          correction={proCorrection}
-          onPressUser={onPressUser}
-          onPressCorrection={onPressCorrection}
-        />
-      );
+      return <TeachDiaryCorrection correction={proCorrection} />;
     }
     return null;
   };

@@ -12,7 +12,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import firebase from '../constants/firebase';
 import { Diary } from '../types';
-import DiaryCorrection from '../components/organisms/DiaryCorrection';
+import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
 import { MyDiaryStatus } from '../components/molecules';
 import { ModalReview, ModalConfirm } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -24,7 +24,6 @@ import {
 } from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
 import { getPostDay } from '../utils/diary';
-import user from '../stores/reducers/user';
 
 interface Props {
   diary: Diary;
@@ -248,9 +247,11 @@ const MyDiaryScreen: ScreenType = ({
       {proCorrection ? (
         <ModalReview
           isLoading={isLoading}
+          isSuccess={isSuccessReview}
           userName={proCorrection.profile.userName}
           photoUrl={proCorrection.profile.photoUrl}
           visible={isModalReviewPro}
+          onPressSubmit={onPressSubmitReview}
           onPressClose={(): void => setIsModalReviewPro(false)}
         />
       ) : null}
@@ -265,8 +266,7 @@ const MyDiaryScreen: ScreenType = ({
         </View>
 
         {correction ? (
-          <DiaryCorrection
-            isMyDiary
+          <MyDiaryCorrection
             isReview={isReview}
             correction={correction}
             onPressUser={(uid): void => {
@@ -276,8 +276,7 @@ const MyDiaryScreen: ScreenType = ({
           />
         ) : null}
         {proCorrection ? (
-          <DiaryCorrection
-            isMyDiary
+          <MyDiaryCorrection
             isReview={isReview}
             correction={proCorrection}
             onPressUser={(uid): void => {

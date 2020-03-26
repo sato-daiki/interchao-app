@@ -15,7 +15,7 @@ interface Props {
   original: string;
   fix: string;
   detail: string;
-  isEdit: boolean;
+  isEdit?: boolean;
   onPressMore?: () => void;
 }
 
