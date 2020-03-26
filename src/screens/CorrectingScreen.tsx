@@ -6,6 +6,7 @@ import {
   LayoutChangeEvent,
   Vibration,
   FlatList,
+  Alert,
 } from 'react-native';
 import {
   connectActionSheet,
@@ -29,7 +30,11 @@ import {
   primaryColor,
   fontSizeM,
 } from '../styles/Common';
-import { UserDiaryStatus, EmptyList } from '../components/molecules';
+import {
+  UserDiaryStatus,
+  EmptyList,
+  CorrectionFooterButton,
+} from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
   HeaderText,
@@ -48,6 +53,7 @@ import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 import { getUuid } from '../utils/common';
+import { ModalConfirm } from '../components/organisms';
 
 const VIBRATION_DURATION = 500;
 const LINE_HEIGHT = fontSizeM * 1.7;
@@ -73,6 +79,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingVertical: 16,
+  },
+  scrollView: {
+    flex: 1,
   },
   main: {
     paddingHorizontal: 16,
@@ -101,20 +110,7 @@ const styles = StyleSheet.create({
 const keyExtractor = (item: CommentInfo, index: number): string =>
   String(index);
 
-const getRightButtonState = (
-  isSummary: boolean,
-  summary = ''
-): RightButtonState => {
-  if (summary.length > 0 && !isSummary) {
-    return 'done';
-  }
-  if (!isSummary) {
-    return 'summary';
-  }
-  return 'nothing';
-};
-
-const getRightButtonTitle = (state: RightButtonState): string => {
+const getStateButtonTitle = (state: RightButtonState): string => {
   if (state === 'summary') {
     return 'まとめを書く';
   }
@@ -140,6 +136,10 @@ const CorrectingScreen: ScreenType = ({
   const [initialWords, setInitialWords] = useState<InitialWord[]>([]);
 
   const [isModalComment, setIsModalComment] = useState(false); // コメントするのメニューのon/offフラグ
+
+  /* 右上と画面下のボタン関連 */
+  const [state, setState] = useState<RightButtonState>('nothing'); // 状態推移
+  const [buttonTitle, setButtonTitle] = useState(''); // ボタン
 
   /* コメント関連 */
   const [original, setOriginal] = useState(''); // 新規追加時の修正文
@@ -190,29 +190,68 @@ const CorrectingScreen: ScreenType = ({
   }, []);
 
   /**
-   * 右上のボタンが押下された時の処理
+   * 右上or画面下のボタンが押下された時の処理
    */
-  const onPressRightButton = useCallback(
-    (state: RightButtonState): void => {
-      if (state === 'done') {
-        onPressDone();
-      } else if (state === 'summary') {
-        onPressSummary();
-      }
-    },
-    [onPressDone, onPressSummary]
-  );
+  const onPressSubmitButton = useCallback((): void => {
+    console.log('onPressSubmitButton');
+    if (state === 'done') {
+      onPressDone();
+    } else if (state === 'summary') {
+      onPressSummary();
+    }
+  }, [onPressDone, onPressSummary, state]);
+
+  /**
+   * 左上の閉じるボタンが押下された時の処理
+   */
+  const onPressClose = useCallback(() => {
+    Alert.alert(
+      '確認',
+      '編集中の添削は全て削除されますが、よろしいでしょうか？',
+      [
+        {
+          text: 'キャンセル',
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: (): void => {
+            navigation.goBack(null);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  }, []);
+
+  /**
+   * 添削の状態を変更させていく
+   */
+  useEffect(() => {
+    let newState = 'nothing' as RightButtonState;
+    const isComments = comments.length > 0;
+    if (summary.length > 0 && !isSummary && isComments) {
+      newState = 'done';
+    }
+    if (!isSummary && !isCommentInput && isComments) {
+      newState = 'summary';
+    }
+
+    const newButtonTitle = getStateButtonTitle(newState);
+    setState(newState);
+    setButtonTitle(newButtonTitle);
+  }, [isSummary, isCommentInput, summary, comments.length]);
 
   /**
    * ヘッダーに初期値設定
    */
   useEffect(() => {
     navigation.setParams({
-      isSummary,
-      summary,
-      onPressRightButton,
+      buttonTitle,
+      onPressClose,
+      onPressSubmitButton,
     });
-  }, [isSummary, comments, summary]);
+  }, [buttonTitle]);
 
   const getPositionInfo = useCallback(
     (index: number): ActiveWord | undefined => {
@@ -377,6 +416,15 @@ const CorrectingScreen: ScreenType = ({
    * コメントするボタンを押下した後の処理
    */
   const onPressComment = useCallback((): void => {
+    if (isSummary) {
+      Alert.alert('', 'まとめが編集中です');
+      setStartWord(undefined);
+      setEndWord(undefined);
+      setOriginal('');
+      setIsCommentInput(false);
+      return;
+    }
+
     initialWords.sort((a, b) => {
       return a.index - b.index;
     });
@@ -404,7 +452,7 @@ const CorrectingScreen: ScreenType = ({
 
     // コメントするのメニューを非表示にする
     setIsModalComment(false);
-  }, [initialWords, startWord, endWord]);
+  }, [initialWords, startWord, endWord, isSummary]);
 
   /**
    * コメント編集画面で完了ボタン押下時
@@ -555,97 +603,95 @@ const CorrectingScreen: ScreenType = ({
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <View style={styles.main}>
-        <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
-        <Space size={8} />
-        <View style={styles.header}>
-          <Text style={styles.postDayText}>{getPostDate(createdAt)}</Text>
-          <UserDiaryStatus diary={teachDiary} />
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <LoadingModal visible={isLoading} />
+        <View style={styles.main}>
+          <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
+          <Space size={8} />
+          <View style={styles.header}>
+            <Text style={styles.postDayText}>{getPostDate(createdAt)}</Text>
+            <UserDiaryStatus diary={teachDiary} />
+          </View>
+          <Text style={styles.title}>{title}</Text>
         </View>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-      <View>
-        <CorrectionText
-          text={text}
-          isModalComment={isModalComment}
-          startWord={startWord}
-          endWord={endWord}
-          onLongPress={onLongPress}
-          onGestureEventTop={onGestureEventTop}
-          onGestureEventEnd={onGestureEventEnd}
-          onLayout={onLayout}
-          onPressComment={onPressComment}
-          initialWords={initialWords}
+        <View>
+          <CorrectionText
+            text={text}
+            isModalComment={isModalComment}
+            startWord={startWord}
+            endWord={endWord}
+            onLongPress={onLongPress}
+            onGestureEventTop={onGestureEventTop}
+            onGestureEventEnd={onGestureEventEnd}
+            onLayout={onLayout}
+            onPressComment={onPressComment}
+            initialWords={initialWords}
+          />
+          <CorrectionUnderline comments={comments} />
+        </View>
+        <Space size={32} />
+        {/* 新規でコメント追加 */}
+        {isCommentInput ? (
+          <View style={styles.commentCard}>
+            <CommentInputCard
+              original={original}
+              onPressSubmit={onPressSubmitComment}
+              onPressClose={onPressCloseComment}
+            />
+          </View>
+        ) : null}
+        {/* 総評の追加 */}
+        {isSummary ? (
+          <View style={styles.commentCard}>
+            <SummaryInputCard
+              onPressSubmit={onPressSubmitSummary}
+              onPressClose={(): void => setIsSummary(false)}
+            />
+          </View>
+        ) : null}
+        {/* 追加後のコメント一覧 */}
+        <FlatList
+          data={comments}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ListHeaderComponent={listHeaderComponent}
+          ListEmptyComponent={listEmptyComponent}
         />
-        <CorrectionUnderline comments={comments} />
-      </View>
-      <Space size={32} />
-      {/* 新規でコメント追加 */}
-      {isCommentInput ? (
-        <View style={styles.commentCard}>
-          <CommentInputCard
-            original={original}
-            onPressSubmit={onPressSubmitComment}
-            onPressClose={onPressCloseComment}
-          />
-        </View>
-      ) : null}
-      {/* 総評の追加 */}
-      {isSummary ? (
-        <View style={styles.commentCard}>
-          <SummaryInputCard
-            onPressSubmit={onPressSubmitSummary}
-            onPressClose={(): void => setIsSummary(false)}
-          />
-        </View>
-      ) : null}
-      {/* 追加後のコメント一覧 */}
-      <FlatList
-        data={comments}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        ListHeaderComponent={listHeaderComponent}
-        ListEmptyComponent={listEmptyComponent}
-      />
 
-      {/* まとめ */}
-      <View style={styles.commentCard}>
-        <SummaryCard
-          summary={summary}
-          isEdit
-          onPressMore={onPressMoreSummary}
-        />
-      </View>
-    </ScrollView>
+        {/* まとめ */}
+        <View style={styles.commentCard}>
+          <SummaryCard
+            summary={summary}
+            isEdit
+            onPressMore={onPressMoreSummary}
+          />
+        </View>
+      </ScrollView>
+      <CorrectionFooterButton
+        nextActionText={buttonTitle}
+        onPressNextAction={onPressSubmitButton}
+        onPressHowTo={() => console.log('')}
+      />
+    </View>
   );
 };
 
 CorrectingScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
-  const isSummary = navigation.getParam('isSummary');
-  const summary = navigation.getParam('summary');
-  const onPressRightButton = navigation.getParam('onPressRightButton');
-
-  const state = getRightButtonState(isSummary, summary);
-  const title = getRightButtonTitle(state);
+  const buttonTitle = navigation.getParam('buttonTitle');
+  const onPressSubmitButton = navigation.getParam('onPressSubmitButton');
+  const onPressClose = navigation.getParam('onPressClose');
 
   return {
     ...DefaultNavigationOptions,
     title: '添削する',
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        title="閉じる"
-        onPress={(): boolean => navigation.goBack(null)}
-      />
+      <HeaderText title="閉じる" onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText
-        title={title}
-        onPress={(): void => onPressRightButton(state)}
-      />
+      <HeaderText title={buttonTitle} onPress={onPressSubmitButton} />
     ),
   };
 };
