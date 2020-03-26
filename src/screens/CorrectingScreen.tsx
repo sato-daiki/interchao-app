@@ -39,12 +39,13 @@ import {
   GrayHeader,
   SummaryCard,
 } from '../components/atoms';
-import { User, Diary, Comment, Profile } from '../types';
+import { User, Diary, CommentInfo, Profile } from '../types';
 import { getPostDay, getDisplayProfile } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
+import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 
 const VIBRATION_DURATION = 500;
 const LINE_HEIGHT = fontSizeM * 1.7;
@@ -95,7 +96,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const keyExtractor = (item: Comment, index: number): string => String(index);
+const keyExtractor = (item: CommentInfo, index: number): string =>
+  String(index);
 
 const getRightButtonState = (
   isSummary: boolean,
@@ -140,7 +142,7 @@ const CorrectingScreen: ScreenType = ({
   /* コメント関連 */
   const [original, setOriginal] = useState(''); // 新規追加時の修正文
   const [isCommentInput, setIsCommentInput] = useState(false); // コメントの追加のon/offフラグ
-  const [comments, setComments] = useState<Comment[]>([]); //　コメントをlistデータ
+  const [comments, setComments] = useState<CommentInfo[]>([]); // コメントをlistデータ
 
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // 総評
@@ -220,6 +222,7 @@ const CorrectingScreen: ScreenType = ({
         index,
         startX: targetPosition.startX,
         endX: targetPosition.endX,
+        width: targetPosition.width,
         line: targetPosition.line,
       };
     },
@@ -257,10 +260,10 @@ const CorrectingScreen: ScreenType = ({
       ...initialWords,
       {
         index,
-        isComment: false,
         word,
         startX: x,
         endX: x + width - 4,
+        width,
         line: Math.floor(y / LINE_HEIGHT) + 1,
       },
     ]);
@@ -302,6 +305,7 @@ const CorrectingScreen: ScreenType = ({
           index: resPosition.index,
           startX: resPosition.startX,
           endX: resPosition.endX,
+          width: resPosition.width,
           line: resPosition.line,
         });
       }
@@ -318,27 +322,10 @@ const CorrectingScreen: ScreenType = ({
         index: resPosition.index,
         startX: resPosition.startX,
         endX: resPosition.endX,
+        width: resPosition.width,
         line: resPosition.line,
       });
     }
-  };
-
-  const clear = (): void => {
-    setStartWord(undefined);
-    setEndWord(undefined);
-    setLongPressWord(undefined);
-  };
-
-  const getInitialWord = (i: number): InitialWord[] => {
-    return initialWords.map(item => {
-      if (item.index !== i) {
-        return item;
-      }
-      return {
-        ...item,
-        isComment: true,
-      };
-    });
   };
 
   /**
@@ -416,17 +403,6 @@ const CorrectingScreen: ScreenType = ({
     setIsModalComment(false);
   }, [initialWords, startWord, endWord]);
 
-  // const onPressCard = useCallback(
-  //   (startWordIndex: number, endWordIndex: number): void => {
-  //     const startWardInfo = getPositionInfo(startWordIndex);
-  //     const endWordInfo = getPositionInfo(endWordIndex);
-  //     setStartWord(startWardInfo);
-  //     setEndWord(endWordInfo);
-  //     console.log('onPressCard', startWardInfo, endWordInfo);
-  //   },
-  //   [getPositionInfo]
-  // );
-
   /**
    * コメント編集画面で完了ボタン押下時
    */
@@ -451,7 +427,7 @@ const CorrectingScreen: ScreenType = ({
    * コメントのメニューアイコンをクリック後、編集するボタンをクリック
    */
   const onPressCommentEdit = useCallback(
-    (item: Comment) => {
+    (item: CommentInfo) => {
       navigation.navigate('EditCorrectionComment', {
         item,
         onPressSubmit: onPressSubmitEditComment,
@@ -475,7 +451,7 @@ const CorrectingScreen: ScreenType = ({
    * コメントのメニューアイコンをクリック
    */
   const onPressMoreComment = useCallback(
-    (item: Comment) => {
+    (item: CommentInfo) => {
       const options = ['編集する', 'コメントを削除する', 'キャンセル'];
       showActionSheetWithOptions(
         {
@@ -509,18 +485,17 @@ const CorrectingScreen: ScreenType = ({
         ...comments,
         {
           id: `${startWord.index.toString()}-${endWord.index.toString()}`,
-          startWordIndex: startWord.index,
-          endWordIndex: endWord.index,
+          startWord,
+          endWord,
           original,
           fix,
           detail,
         },
       ];
       newComments.sort((a, b) => {
-        return a.startWordIndex - b.startWordIndex;
+        return a.startWord.index - b.startWord.index;
       });
       setComments(newComments);
-
       setStartWord(undefined);
       setEndWord(undefined);
       setOriginal('');
@@ -556,7 +531,7 @@ const CorrectingScreen: ScreenType = ({
     ) : null;
 
   const renderItem = useCallback(
-    ({ item, index }: { item: Comment; index: number }): JSX.Element => {
+    ({ item, index }: { item: CommentInfo; index: number }): JSX.Element => {
       return (
         <View style={styles.commentCard}>
           <CommentCard
@@ -585,17 +560,21 @@ const CorrectingScreen: ScreenType = ({
         </View>
         <Text style={styles.title}>{title}</Text>
       </View>
-      <CorrectionText
-        text="Wow guys that really solved a problem i had.. useeffect doesn't imitate componentDidUpdate even after using prop as the last parameter , i used Hammeds solution with useDidUpdate and i just added a prevprops var . seems to be working fine so far."
-        isModalComment={isModalComment}
-        startWord={startWord}
-        endWord={endWord}
-        onLongPress={onLongPress}
-        onGestureEventTop={onGestureEventTop}
-        onGestureEventEnd={onGestureEventEnd}
-        onLayout={onLayout}
-        onPressComment={onPressComment}
-      />
+      <View>
+        <CorrectionText
+          text="Wow guys that really solved a problem i had.. useeffect doesn't imitate componentDidUpdate even after using prop as the last parameter , i used Hammeds solution with useDidUpdate and i just added a prevprops var . seems to be working fine so far."
+          isModalComment={isModalComment}
+          startWord={startWord}
+          endWord={endWord}
+          onLongPress={onLongPress}
+          onGestureEventTop={onGestureEventTop}
+          onGestureEventEnd={onGestureEventEnd}
+          onLayout={onLayout}
+          onPressComment={onPressComment}
+          initialWords={initialWords}
+        />
+        <CorrectionUnderline comments={comments} />
+      </View>
       <Space size={32} />
       {/* 新規でコメント追加 */}
       {isCommentInput ? (

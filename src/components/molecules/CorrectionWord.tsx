@@ -62,12 +62,6 @@ const CorrectionWord: React.FC<Props> = ({
   );
 
   const textBackground = isActive ? { backgroundColor: selectedBlue } : {};
-  // const textUnderline = isActive
-  //   ? {
-  //       borderBottomWidth: 1,
-  //       borderBottomColor: primaryColor,
-  //     }
-  //   : {};
 
   // 最後のだけspace部分のbackgroundColor色を白にする
   const spaceBackground =

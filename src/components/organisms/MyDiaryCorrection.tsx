@@ -1,24 +1,17 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Space, GrayHeader, CommentCard, SummaryCard } from '../atoms';
-import {
-  primaryColor,
-  fontSizeM,
-  subTextColor,
-  mainColor,
-} from '../../styles/Common';
+import { fontSizeM, subTextColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
 import { getPostDay } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
 
 interface Props {
-  isMyDiary: boolean;
   isReview: boolean;
   correction: Correction;
   onPressUser: (uid: string) => void;
   onPressReview: () => void;
-  onPressCorrection?: () => void;
 }
 
 const styles = StyleSheet.create({

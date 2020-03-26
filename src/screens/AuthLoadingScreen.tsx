@@ -51,6 +51,7 @@ const AuthLoadingScreen: ScreenType = ({
         navigation.navigate('MainTabNavigator');
       } else {
         // TODO: ここに入る場合エラーどうするか
+        navigation.navigate('AuthNavigator');
       }
     } else {
       navigation.navigate('AuthNavigator');
