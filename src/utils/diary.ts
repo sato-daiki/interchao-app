@@ -25,6 +25,16 @@ export const getPostDay = (
   return moment(timestamp).format('Y-M-D');
 };
 
+export const getPostDate = (
+  timestamp: Timestamp | firebase.firestore.FieldValue
+): string => {
+  if (!timestamp || !timestamp._seconds) {
+    return '';
+  }
+
+  return moment.unix(timestamp._seconds).format('Y-M-D H:m');
+};
+
 // 日記一覧に出力するステータスの取得
 export const getUserDiaryStatus = (
   correctionStatus: CorrectionStatus

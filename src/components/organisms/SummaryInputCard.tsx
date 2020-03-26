@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
 });
 
 const SummaryInputCard: React.FC<Props> = ({ onPressSubmit, onPressClose }) => {
-  const [summary, setSummary] = useState(''); // 総評の続き
+  const [summary, setSummary] = useState(''); // まとめの続き
 
   const onPressCancel = useCallback(() => {
     onPressClose();
@@ -75,7 +75,7 @@ const SummaryInputCard: React.FC<Props> = ({ onPressSubmit, onPressClose }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>総評</Text>
+      <Text style={styles.title}>まとめ</Text>
       <View style={styles.line} />
       <TextInput
         style={styles.textInput}

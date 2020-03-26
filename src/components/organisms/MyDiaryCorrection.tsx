@@ -4,7 +4,7 @@ import { Space, GrayHeader, CommentCard, SummaryCard } from '../atoms';
 import { fontSizeM, subTextColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
-import { getPostDay } from '../../utils/diary';
+import { getPostDate } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
 
 interface Props {
@@ -43,7 +43,7 @@ const DiaryCorrection: React.FC<Props> = ({
 }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
   const { userName, photoUrl, uid } = profile;
-  const postDay = getPostDay(createdAt);
+  const postDate = getPostDate(createdAt);
   const listFooterComponent = (
     <>
       <SummaryCard summary={summary} />
@@ -77,7 +77,7 @@ const DiaryCorrection: React.FC<Props> = ({
             photoUrl={photoUrl}
             onPress={(): void => onPressUser(uid)}
           />
-          <Text style={styles.daytext}>{postDay}</Text>
+          <Text style={styles.daytext}>{postDate}</Text>
         </View>
         <FlatList
           data={comments}

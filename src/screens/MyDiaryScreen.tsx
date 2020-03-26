@@ -23,7 +23,7 @@ import {
   fontSizeS,
 } from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
-import { getPostDay } from '../utils/diary';
+import { getPostDate } from '../utils/diary';
 
 interface Props {
   diary: Diary;
@@ -214,7 +214,7 @@ const MyDiaryScreen: ScreenType = ({
     []
   );
 
-  const postDay = getPostDay(createdAt);
+  const postDate = getPostDate(createdAt);
   return (
     <View style={styles.container}>
       <ModalConfirm
@@ -258,7 +258,7 @@ const MyDiaryScreen: ScreenType = ({
       <ScrollView style={styles.scrollView}>
         <View style={styles.diaryOriginal}>
           <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDay}</Text>
+            <Text style={styles.postDayText}>{postDate}</Text>
             <MyDiaryStatus diary={diary} />
           </View>
           <Text style={styles.title}>{title}</Text>
