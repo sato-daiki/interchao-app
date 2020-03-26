@@ -193,7 +193,6 @@ const CorrectingScreen: ScreenType = ({
    * 右上or画面下のボタンが押下された時の処理
    */
   const onPressSubmitButton = useCallback((): void => {
-    console.log('onPressSubmitButton');
     if (state === 'done') {
       onPressDone();
     } else if (state === 'summary') {
@@ -232,15 +231,14 @@ const CorrectingScreen: ScreenType = ({
     const isComments = comments.length > 0;
     if (summary.length > 0 && !isSummary && isComments) {
       newState = 'done';
-    }
-    if (!isSummary && !isCommentInput && isComments) {
+    } else if (!isSummary && !isCommentInput && isComments) {
       newState = 'summary';
     }
 
     const newButtonTitle = getStateButtonTitle(newState);
     setState(newState);
     setButtonTitle(newButtonTitle);
-  }, [isSummary, isCommentInput, summary, comments.length]);
+  }, [isSummary, isCommentInput, summary.length, comments.length]);
 
   /**
    * ヘッダーに初期値設定
