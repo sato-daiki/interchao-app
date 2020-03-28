@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
-  errorColor,
+  softRed,
   fontSizeS,
   fontSizeM,
   primaryColor,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     paddingTop: 2,
   },
   errorBorder: {
-    borderColor: errorColor,
+    borderColor: softRed,
     borderBottomWidth: 2,
     borderWidth: 2,
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     borderColor: borderLightColor,
   },
   error: {
-    color: errorColor,
+    color: softRed,
     fontSize: fontSizeS,
     marginLeft: 6,
   },
@@ -103,7 +103,7 @@ const CheckTextInput = (props: Props): JSX.Element => {
           <FontAwesome
             size={fontSizeM}
             name="exclamation-circle"
-            color={errorColor}
+            color={softRed}
           />
           <Text style={styles.error}>{errorMessage}</Text>
         </View>

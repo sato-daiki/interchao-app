@@ -1,10 +1,9 @@
 import { firestore } from 'firebase';
 
-export interface Review {
-  reviewerUid: string;
-  revieweeUid: string;
-  rating: number;
-  comment: string;
+export interface UserReview {
+  uid: string;
+  reviewNum: number;
+  score: number;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;
 }

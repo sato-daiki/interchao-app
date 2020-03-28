@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   FlatList,
-  Text,
   ActivityIndicator,
   Alert,
   RefreshControl,
@@ -18,38 +17,25 @@ import {
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import firebase from '../constants/firebase';
-import { EmptyDiary, ProfileLanguage } from '../components/molecules';
-import { GrayHeader, ProfileIconHorizontal, Space } from '../components/atoms';
-import { Diary, Profile } from '../types';
+import { EmptyDiary } from '../components/molecules';
+import { Space } from '../components/atoms';
+import { Diary, Profile, UserReview } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { primaryColor, fontSizeM } from '../styles/Common';
+import { primaryColor } from '../styles/Common';
 import Report from '../components/organisms/Report';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import { ModalBlock, ModalConfirm } from '../components/organisms';
 import { checkBlockee, checkBlocker } from '../utils/blockUser';
+import { getUserReview } from '../utils/userReview';
+import UserProfileHeader from '../components/organisms/UserProfileHeader';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
     paddingVertical: 16,
-  },
-  profileContainer: {
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-  },
-  name: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    fontWeight: 'bold',
-    paddingBottom: 8,
-  },
-  introduction: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    lineHeight: fontSizeM * 1.3,
   },
 });
 
@@ -75,6 +61,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [profile, setProfile] = useState<Profile | null>();
+  const [userReview, setUserReview] = useState<UserReview | null>();
   const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
   const [diaryTotalNum, setDiaryTotalNum] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
@@ -83,7 +70,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     const f = async (): Promise<void> => {
       const { uid } = navigation.state.params!;
       const newProfile = await getProfile(uid);
+      const newUserReivew = await getUserReview(uid);
       setProfile(newProfile);
+      setUserReview(newUserReivew);
       setLoadingProfile(false);
     };
     f();
@@ -237,8 +226,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         .firestore()
         .collection(`blockUsers`)
         .add({
-          blocker: currentUser.uid,
-          blockee: profile.uid,
+          blockerUid: currentUser.uid,
+          blockeeUid: profile.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
@@ -260,8 +249,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       const users = await firebase
         .firestore()
         .collection(`blockUsers`)
-        .where('blocker', '==', currentUser.uid)
-        .where('blockee', '==', profile.uid)
+        .where('blockerUid', '==', currentUser.uid)
+        .where('blockeeUid', '==', profile.uid)
         .get();
 
       const batch = firebase.firestore().batch();
@@ -310,36 +299,12 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const listHeaderComponent = (): JSX.Element | null => {
     if (!profile) return null;
     return (
-      <>
-        <View style={styles.profileContainer}>
-          {loadingProfile ? (
-            <ActivityIndicator />
-          ) : (
-            <>
-              <ProfileIconHorizontal
-                userName={profile.userName}
-                photoUrl={profile.photoUrl}
-              />
-              {profile.name ? (
-                <>
-                  <Space size={16} />
-                  <Text style={styles.name}>{profile.name}</Text>
-                </>
-              ) : null}
-              <Text style={styles.introduction}>{profile.introduction}</Text>
-              <ProfileLanguage
-                nativeLanguage={profile.nativeLanguage}
-                learnLanguage={profile.learnLanguage}
-              />
-            </>
-          )}
-        </View>
-        <GrayHeader
-          title={
-            diaryTotalNum !== 0 ? `日記一覧(${diaryTotalNum}件)` : '日記一覧'
-          }
-        />
-      </>
+      <UserProfileHeader
+        loadingProfile={loadingProfile}
+        profile={profile}
+        userReview={userReview}
+        diaryTotalNum={diaryTotalNum}
+      />
     );
   };
 

@@ -8,11 +8,11 @@ export const getBlockers = async (uid: string): Promise<string[]> => {
   const docs = await firebase
     .firestore()
     .collection('blockUsers')
-    .where('blocker', '==', uid)
+    .where('blockerUid', '==', uid)
     .get();
   const uids: string[] = [];
   docs.forEach(doc => {
-    uids.push(doc.data().blockee);
+    uids.push(doc.data().blockeeUid);
   });
   return uids;
 };
@@ -25,11 +25,11 @@ export const getBlockees = async (uid: string): Promise<string[]> => {
   const docs = await firebase
     .firestore()
     .collection('blockUsers')
-    .where('blockee', '==', uid)
+    .where('blockeeUid', '==', uid)
     .get();
   const uids: string[] = [];
   docs.forEach(doc => {
-    uids.push(doc.data().blocker);
+    uids.push(doc.data().blockerUid);
   });
   return uids;
 };
@@ -46,8 +46,8 @@ export const checkBlockee = async (
   const docs = await firebase
     .firestore()
     .collection('blockUsers')
-    .where('blockee', '==', currenctUid)
-    .where('blocker', '==', targetUid)
+    .where('blockeeUid', '==', currenctUid)
+    .where('blockerUid', '==', targetUid)
     .get();
   if (docs.empty) {
     return false;
@@ -67,8 +67,8 @@ export const checkBlocker = async (
   const docs = await firebase
     .firestore()
     .collection('blockUsers')
-    .where('blockee', '==', targetUid)
-    .where('blocker', '==', currenctUid)
+    .where('blockeeUid', '==', targetUid)
+    .where('blockerUid', '==', currenctUid)
     .get();
   if (docs.empty) {
     return false;
