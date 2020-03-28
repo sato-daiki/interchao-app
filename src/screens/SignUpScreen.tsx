@@ -11,7 +11,7 @@ import {
 } from '../utils/InputCheck';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
-import { Profile } from '../types';
+import { Profile, UserReview } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import {
@@ -88,14 +88,16 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
     setErrorPassword('');
   };
 
+  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+
   const createUser = async (credentUser: firebase.User): Promise<void> => {
     const userInfo = {
       premium: false,
       confirmCorrection: false,
       points: 100,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    };
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    } as User;
 
     const profileInfo = {
       name: '',
@@ -105,9 +107,17 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       learnLanguage: profile.learnLanguage,
       nativeLanguage: profile.nativeLanguage,
       introduction: '',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    };
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    } as Profile;
+
+    const userReviewInfo = {
+      ratingSum: 0,
+      reviewNum: 0,
+      score: 0,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    } as UserReview;
 
     const batch = firebase.firestore().batch();
     batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
@@ -115,7 +125,11 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       firebase.firestore().doc(`profiles/${credentUser.uid}`),
       profileInfo
     );
-    const aa = batch.commit();
+    batch.set(
+      firebase.firestore().doc(`userReviews/${credentUser.uid}`),
+      userReviewInfo
+    );
+    batch.commit();
   };
 
   const onPressSkip = useCallback(() => {

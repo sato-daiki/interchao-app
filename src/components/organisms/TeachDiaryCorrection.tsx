@@ -31,7 +31,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
 /**
  * 概要：添削一覧
  */
-const DiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
+const TeachDiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
   const { userName, photoUrl } = profile;
 
@@ -74,4 +74,4 @@ const DiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
   );
 };
 
-export default DiaryCorrection;
+export default TeachDiaryCorrection;

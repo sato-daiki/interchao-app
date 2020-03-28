@@ -11,9 +11,6 @@ export type DiaryStatus = 'draft' | 'publish';
 export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
 
 export interface Comment {
-  id: string;
-  startWordIndex: number;
-  endWordIndex: number;
   original: string;
   fix: string;
   detail: string;

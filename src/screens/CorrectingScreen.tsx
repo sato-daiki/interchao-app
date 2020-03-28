@@ -45,8 +45,8 @@ import {
   GrayHeader,
   SummaryCard,
 } from '../components/atoms';
-import { User, Diary, CommentInfo, Profile } from '../types';
-import { getPostDate, getDisplayProfile } from '../utils/diary';
+import { User, Diary, InfoComment, Profile } from '../types';
+import { getPostDate, getDisplayProfile, getComments } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const keyExtractor = (item: CommentInfo, index: number): string =>
+const keyExtractor = (item: InfoComment, index: number): string =>
   String(index);
 
 const getStateButtonTitle = (state: RightButtonState): string => {
@@ -143,7 +143,7 @@ const CorrectingScreen: ScreenType = ({
   /* コメント関連 */
   const [original, setOriginal] = useState(''); // 新規追加時の修正文
   const [isCommentInput, setIsCommentInput] = useState(false); // コメントの追加のon/offフラグ
-  const [comments, setComments] = useState<CommentInfo[]>([]); // コメントをlistデータ
+  const [infoComments, setInfoComments] = useState<InfoComment[]>([]); // コメントをlistデータ
 
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
@@ -158,6 +158,8 @@ const CorrectingScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       setIsLoading(true);
       const displayProfile = getDisplayProfile(currentProfile);
+      const comments = getComments(infoComments);
+
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const correction = {
         profile: displayProfile,
@@ -177,9 +179,10 @@ const CorrectingScreen: ScreenType = ({
           updatedAt: timestamp,
         });
       navigation.goBack(null);
+      setIsLoading(false);
     };
     f();
-  }, [currentProfile, comments, summary, teachDiary.objectID, navigation]);
+  }, [currentProfile, infoComments, summary, teachDiary.objectID, navigation]);
 
   /**
    * 総評ボタンを押下した時の処理
@@ -227,7 +230,7 @@ const CorrectingScreen: ScreenType = ({
    */
   useEffect(() => {
     let newState = 'nothing' as RightButtonState;
-    const isComments = comments.length > 0;
+    const isComments = infoComments.length > 0;
     if (summary.length > 0 && !isSummary && isComments) {
       newState = 'done';
     } else if (!isSummary && !isCommentInput && isComments) {
@@ -237,7 +240,7 @@ const CorrectingScreen: ScreenType = ({
     const newButtonTitle = getStateButtonTitle(newState);
     setState(newState);
     setButtonTitle(newButtonTitle);
-  }, [isSummary, isCommentInput, summary.length, comments.length]);
+  }, [isSummary, isCommentInput, summary.length, infoComments.length]);
 
   /**
    * ヘッダーに初期値設定
@@ -456,7 +459,7 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressSubmitEditComment = useCallback(
     (id: string, fix: string, detail: string): void => {
-      const newComments = comments.map(item => {
+      const newInfoComments = infoComments.map(item => {
         if (item.id !== id) {
           return item;
         }
@@ -466,16 +469,16 @@ const CorrectingScreen: ScreenType = ({
           detail,
         };
       });
-      setComments(newComments);
+      setInfoComments(newInfoComments);
     },
-    [comments]
+    [infoComments]
   );
 
   /**
    * コメントのメニューアイコンをクリック後、編集するボタンをクリック
    */
   const onPressCommentEdit = useCallback(
-    (item: CommentInfo) => {
+    (item: InfoComment) => {
       navigation.navigate('EditCorrectionComment', {
         item,
         onPressSubmit: onPressSubmitEditComment,
@@ -489,17 +492,17 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressCommentDelete = useCallback(
     (id: string) => {
-      const newComments = comments.filter(item => item.id !== id);
-      setComments(newComments);
+      const newComments = infoComments.filter(item => item.id !== id);
+      setInfoComments(newComments);
     },
-    [comments]
+    [infoComments]
   );
 
   /**
    * コメントのメニューアイコンをクリック
    */
   const onPressMoreComment = useCallback(
-    (item: CommentInfo) => {
+    (item: InfoComment) => {
       const options = ['編集する', 'コメントを削除する', 'キャンセル'];
       showActionSheetWithOptions(
         {
@@ -528,28 +531,32 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressSubmitComment = useCallback(
     (fix: string, detail: string): void => {
-      if (!startWord || !endWord) return;
-      const newComments = [
-        ...comments,
-        {
-          id: getUuid(),
-          startWord,
-          endWord,
-          original,
-          fix,
-          detail,
-        },
-      ];
-      newComments.sort((a, b) => {
-        return a.startWord.index - b.startWord.index;
-      });
-      setComments(newComments);
-      setStartWord(undefined);
-      setEndWord(undefined);
-      setOriginal('');
-      setIsCommentInput(false);
+      const f = async (): Promise<void> => {
+        if (!startWord || !endWord) return;
+        const uuid = await getUuid();
+        const newInfoComments = [
+          ...infoComments,
+          {
+            id: uuid,
+            startWord,
+            endWord,
+            original,
+            fix,
+            detail,
+          },
+        ];
+        newInfoComments.sort((a, b) => {
+          return a.startWord.index - b.startWord.index;
+        });
+        setInfoComments(newInfoComments);
+        setStartWord(undefined);
+        setEndWord(undefined);
+        setOriginal('');
+        setIsCommentInput(false);
+      };
+      f();
     },
-    [comments, original, startWord, endWord]
+    [infoComments, original, startWord, endWord]
   );
 
   /**
@@ -574,7 +581,7 @@ const CorrectingScreen: ScreenType = ({
   );
 
   const listHeaderComponent =
-    comments.length > 0 ? (
+    infoComments.length > 0 ? (
       <>
         <GrayHeader title="コメント一覧" />
         <Space size={16} />
@@ -582,7 +589,7 @@ const CorrectingScreen: ScreenType = ({
     ) : null;
 
   const renderItem = useCallback(
-    ({ item, index }: { item: CommentInfo; index: number }): JSX.Element => {
+    ({ item, index }: { item: InfoComment; index: number }): JSX.Element => {
       return (
         <View style={styles.commentCard}>
           <CommentCard
@@ -625,7 +632,7 @@ const CorrectingScreen: ScreenType = ({
             onPressComment={onPressComment}
             initialWords={initialWords}
           />
-          <CorrectionUnderline comments={comments} />
+          <CorrectionUnderline infoComments={infoComments} />
         </View>
         <Space size={32} />
         {/* 新規でコメント追加 */}
@@ -649,7 +656,7 @@ const CorrectingScreen: ScreenType = ({
         ) : null}
         {/* 追加後のコメント一覧 */}
         <FlatList
-          data={comments}
+          data={infoComments}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           ListHeaderComponent={listHeaderComponent}

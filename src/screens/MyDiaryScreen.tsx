@@ -205,6 +205,21 @@ const MyDiaryScreen: ScreenType = ({
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
 
+        await firebase
+          .firestore()
+          .collection('diaries')
+          .doc(diary.objectID)
+          .update({
+            isReview: true,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+        editDiary(diary.objectID, {
+          ...diary,
+          isReview: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
         navigation.goBack();
         setIsLoading(false);
         setiISuccessReview(true);
