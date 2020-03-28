@@ -53,7 +53,6 @@ import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 import { getUuid } from '../utils/common';
-import { ModalConfirm } from '../components/organisms';
 
 const VIBRATION_DURATION = 500;
 const LINE_HEIGHT = fontSizeM * 1.7;

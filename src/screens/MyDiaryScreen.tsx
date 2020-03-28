@@ -197,8 +197,8 @@ const MyDiaryScreen: ScreenType = ({
           .firestore()
           .collection(`reviews`)
           .add({
-            reviewer: currentUser.uid,
-            reviewee: diary.correction.profile.uid,
+            reviewerUid: currentUser.uid,
+            revieweeUid: diary.correction.profile.uid,
             rating,
             comment,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
