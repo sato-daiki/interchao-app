@@ -7,6 +7,8 @@ import {
   Language,
   Profile,
   DisplayProfile,
+  Comment,
+  InfoComment,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -101,4 +103,12 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
     nativeLanguage: profile.nativeLanguage,
     ref: firebase.firestore().doc(`profiles/${profile.uid}`),
   };
+};
+
+export const getComments = (infoComments: InfoComment[]): Comment[] => {
+  return infoComments.map(c => ({
+    original: c.original,
+    fix: c.fix,
+    detail: c.detail,
+  }));
 };

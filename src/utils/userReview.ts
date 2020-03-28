@@ -11,11 +11,12 @@ export const getUserReview = async (
       .get();
     const data = doc.data();
     if (data) {
-      const { score, reviewNum, createdAt, updatedAt } = data;
+      const { score, ratingSum, reviewNum, createdAt, updatedAt } = data;
       return {
         uid,
-        score,
+        ratingSum,
         reviewNum,
+        score,
         createdAt,
         updatedAt,
       };

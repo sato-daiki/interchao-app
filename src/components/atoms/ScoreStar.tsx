@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
 });
 
 const ScoreStar: React.FC<Props> = ({
-  score = 3,
-  reviewNum = 4,
+  score,
+  reviewNum,
 }: Props): JSX.Element => {
   if (reviewNum === 0) {
     return <></>;

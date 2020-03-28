@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { CommentInfo } from '../../types';
+import { InfoComment } from '../../types';
 import { primaryColor, fontSizeM } from '../../styles/Common';
 
 const { width } = Dimensions.get('window');
@@ -9,7 +9,7 @@ const END_WIDTH = width - 32;
 const LINE_HEIGHT = fontSizeM * 1.7;
 
 interface Props {
-  comments: CommentInfo[];
+  infoComments: InfoComment[];
 }
 
 const styles = StyleSheet.create({
@@ -22,10 +22,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const CorrectionUnderline: React.FC<Props> = ({ comments }) => {
-  const renderLine = comments.map(
-    (comment: CommentInfo, index: number): ReactNode => {
-      const { startWord, endWord } = comment;
+const CorrectionUnderline: React.FC<Props> = ({ infoComments }) => {
+  const renderLine = infoComments.map(
+    (infoComment: InfoComment, index: number): ReactNode => {
+      const { startWord, endWord } = infoComment;
       if (startWord.line === endWord.line) {
         // 同一の行だった場合
         const lineStyle = {

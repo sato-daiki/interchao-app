@@ -54,7 +54,7 @@ const CorrectionText: React.FC<Props> = ({
     (word: string, index: number): ReactNode => {
       return (
         <CorrectionWord
-          key={getUuid()}
+          // key={getUuid()}
           index={index}
           word={word}
           startWord={startWord}

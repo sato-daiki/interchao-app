@@ -35,7 +35,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
 /**
  * 概要：添削一覧
  */
-const DiaryCorrection: React.FC<Props> = ({
+const MyDiaryCorrection: React.FC<Props> = ({
   isReview,
   correction,
   onPressUser,
@@ -91,4 +91,4 @@ const DiaryCorrection: React.FC<Props> = ({
   );
 };
 
-export default DiaryCorrection;
+export default MyDiaryCorrection;

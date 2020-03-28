@@ -20,7 +20,7 @@ export interface LongPressWord {
   line: number;
 }
 
-export interface CommentInfo {
+export interface InfoComment {
   id: string;
   startWord: ActiveWord;
   endWord: ActiveWord;
