@@ -114,7 +114,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
     const userReviewInfo = {
       ratingSum: 0,
       reviewNum: 0,
-      score: 0,
+      score: 0.0,
       createdAt: timestamp,
       updatedAt: timestamp,
     } as UserReview;

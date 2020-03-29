@@ -5,9 +5,9 @@ import {
   StyleSheet,
   TextInputProps,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   fontSizeM,
   primaryColor,

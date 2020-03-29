@@ -7,6 +7,7 @@ import {
   Vibration,
   FlatList,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {
   connectActionSheet,
@@ -21,7 +22,6 @@ import {
   PanGestureHandlerGestureEvent,
   LongPressGestureHandlerStateChangeEvent,
   State,
-  ScrollView,
 } from 'react-native-gesture-handler';
 import firebase from '../constants/firebase';
 import {

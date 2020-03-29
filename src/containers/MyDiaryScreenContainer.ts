@@ -9,10 +9,13 @@ interface OwnProps {
 
 const mapStateToProps = (state: State, ownProps: OwnProps) => {
   const { diaries } = state.rootReducer.diaryList;
+  const { profile } = state.rootReducer;
+
   const objectID = ownProps.navigation.getParam('objectID');
   const diary = diaries.find(d => d.objectID === objectID);
   return {
     diary,
+    profile,
   };
 };
 

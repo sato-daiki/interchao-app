@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { mainColor, primaryColor, fontSizeM } from '../../styles/Common';
 import { RadioBox } from '../atoms';
 

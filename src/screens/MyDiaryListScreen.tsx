@@ -5,6 +5,7 @@ import {
   FlatList,
   Alert,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -222,12 +223,13 @@ MyDiaryListScreen.navigationOptions = ({
       <SearchBarButton title="マイ日記を探す" onPress={onPressSearch} />
     ),
     headerRight: (): JSX.Element => (
-      <MaterialCommunityIcons
-        size={28}
-        color={primaryColor}
-        name="dots-horizontal"
-        onPress={onPressMenu}
-      />
+      <TouchableOpacity onPress={onPressMenu}>
+        <MaterialCommunityIcons
+          size={28}
+          color={primaryColor}
+          name="dots-horizontal"
+        />
+      </TouchableOpacity>
     ),
   };
 };

@@ -1,6 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {

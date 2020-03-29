@@ -31,6 +31,7 @@ import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
 import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
+import ReviewListScreen from '../screens/ReviewListScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -101,6 +102,12 @@ const MyDiaryTabStack = createStackNavigator(
     ForegetPassword: {
       screen: ForegetPasswordScreen,
     },
+    UserProfile: {
+      screen: UserProfileScreen,
+    },
+    ReviewList: {
+      screen: ReviewListScreen,
+    },
   },
   {
     initialRouteName: 'MyDiaryList',
@@ -120,6 +127,9 @@ const TeachDiaryTabStack = createStackNavigator(
     },
     UserProfile: {
       screen: UserProfileScreen,
+    },
+    ReviewList: {
+      screen: ReviewListScreen,
     },
   },
   {

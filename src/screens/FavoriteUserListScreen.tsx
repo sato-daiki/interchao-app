@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
-import { FlatList } from 'react-native-gesture-handler';
 import { borderLightColor } from '../styles/Common';
 import { EmptyFavoriteUser, UserListItem } from '../components/molecules';
 import { Profile } from '../types';
