@@ -1,22 +1,20 @@
 import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
 import SwipeablePanel from 'rn-swipeable-panel';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 import { OptionItem } from '../molecules';
 
 interface Props {
   isMenu: boolean;
+  uid: string;
   onClose: () => void;
   navigation: NavigationStackProp;
 }
 
-const styles = StyleSheet.create({});
-
 const MyDiaryListMenu = ({
-  isMenu,
-  onClose,
   navigation,
+  isMenu,
+  uid,
+  onClose,
 }: Props): JSX.Element => {
   const onPressMyPage = useCallback(() => {
     navigation.navigate('MyPage');
@@ -33,6 +31,11 @@ const MyDiaryListMenu = ({
     onClose();
   }, [navigation, onClose]);
 
+  const onPressReviewList = useCallback(() => {
+    navigation.navigate('ReviewList', { uid });
+    onClose();
+  }, [navigation, onClose]);
+
   return (
     <SwipeablePanel
       openLarge
@@ -44,6 +47,7 @@ const MyDiaryListMenu = ({
     >
       <OptionItem title="マイページ" onPress={onPressMyPage} />
       <OptionItem title="下書き一覧" onPress={onPressDraftList} />
+      <OptionItem title="レビュー一覧" onPress={onPressReviewList} />
       <OptionItem title="プレミアム会員" onPress={onPressModalPremium} />
     </SwipeablePanel>
   );
