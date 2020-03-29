@@ -4,7 +4,7 @@ import { GrayHeader, CommentCard, SummaryCard } from '../atoms';
 import { fontSizeM, subTextColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
-import { getPostDate } from '../../utils/diary';
+import { getAlgoliaDate } from '../../utils/diary';
 
 interface Props {
   correction: Correction;
@@ -35,7 +35,7 @@ const TeachDiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
   const { userName, photoUrl } = profile;
 
-  const postDate = getPostDate(createdAt);
+  const postDate = getAlgoliaDate(createdAt);
 
   const listFooterComponent = <SummaryCard summary={summary} />;
 

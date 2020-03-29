@@ -7,7 +7,7 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { getPostDay } from '../../utils/diary';
+import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
 import { MyDiaryStatus, ProfileIcons, UserDiaryStatus } from '../molecules';
 
@@ -65,7 +65,7 @@ const DiaryListItem = ({
   onPressItem,
 }: Props): JSX.Element => {
   const { createdAt, title, text, correction, proCorrection } = item;
-  const postDay = getPostDay(createdAt);
+  const postDay = getAlgoliaDay(createdAt);
 
   return (
     <TouchableOpacity

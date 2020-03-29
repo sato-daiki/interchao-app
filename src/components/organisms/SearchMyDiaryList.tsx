@@ -7,7 +7,7 @@ import {
   primaryColor,
   fontSizeM,
 } from '../../styles/Common';
-import { getPostDay } from '../../utils/diary';
+import { getAlgoliaDay } from '../../utils/diary';
 import { MyDiaryStatus } from '../molecules';
 import { Diary } from '../../types';
 import Highlight from './Highlight';
@@ -59,7 +59,7 @@ const SearchMyDiaryList: React.FC<Props> = ({
   onPressItem,
 }): JSX.Element => {
   const { createdAt } = item;
-  const postDay = getPostDay(createdAt);
+  const postDay = getAlgoliaDay(createdAt);
 
   return (
     <TouchableOpacity

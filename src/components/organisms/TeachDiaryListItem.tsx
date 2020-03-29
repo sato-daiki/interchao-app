@@ -7,7 +7,7 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { getPostDay } from '../../utils/diary';
+import { getAlgoliaDay } from '../../utils/diary';
 import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
 import { UserDiaryStatus } from '../molecules';
@@ -73,7 +73,7 @@ const TeachDiaryListItem = ({
 }: Props): JSX.Element => {
   const { createdAt, title, text, profile } = item;
   const { photoUrl, uid, userName } = profile;
-  const postDay = getPostDay(createdAt);
+  const postDay = getAlgoliaDay(createdAt);
 
   return (
     <TouchableOpacity

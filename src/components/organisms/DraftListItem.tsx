@@ -17,7 +17,7 @@ import {
   subTextColor,
   softRed,
 } from '../../styles/Common';
-import { getPostDay } from '../../utils/diary';
+import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
 import { DiaryStatus } from '../atoms';
 
@@ -105,7 +105,7 @@ const DraftListItem = ({
   onSwipeableClose,
 }: Props): JSX.Element => {
   const { createdAt, title, text } = item;
-  const postDay = getPostDay(createdAt);
+  const postDay = getAlgoliaDay(createdAt);
 
   const renderRightActions = (progress, dragX): JSX.Element => {
     const trans = dragX.interpolate({

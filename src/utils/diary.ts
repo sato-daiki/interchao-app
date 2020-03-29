@@ -18,9 +18,8 @@ interface Status {
   color: string;
 }
 
-export const getPostDay = (
-  timestamp: Timestamp | firebase.firestore.FieldValue
-): string => {
+/** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
+export const getAlgoliaDay = (timestamp: Timestamp): string => {
   if (!timestamp) {
     return '';
   }
@@ -34,13 +33,12 @@ export const getDay = (timestamp: firebase.firestore.Timestamp): string => {
   return moment(timestamp.toDate()).format('Y-M-D');
 };
 
-export const getPostDate = (
-  timestamp: Timestamp | firebase.firestore.FieldValue
-): string => {
+export const getAlgoliaDate = (timestamp: Timestamp): string => {
+  // eslint-disable-next-line no-underscore-dangle
   if (!timestamp || !timestamp._seconds) {
     return '';
   }
-
+  // eslint-disable-next-line no-underscore-dangle
   return moment.unix(timestamp._seconds).format('Y-M-D H:m');
 };
 

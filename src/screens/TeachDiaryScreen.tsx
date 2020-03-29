@@ -16,7 +16,7 @@ import {
   ProfileIconHorizontal,
   Space,
 } from '../components/atoms';
-import { getPostDate } from '../utils/diary';
+import { getAlgoliaDate } from '../utils/diary';
 import {
   subTextColor,
   fontSizeS,
@@ -181,7 +181,7 @@ const TeachDiaryScreen: ScreenType = ({
 
   const { createdAt, title, text, profile } = teachDiary;
   const { userName, photoUrl, uid } = profile;
-  const postDate = getPostDate(createdAt);
+  const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />

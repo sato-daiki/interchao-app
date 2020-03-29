@@ -89,7 +89,7 @@ const ModalReview: React.FC<Props> = ({
             <TextInput
               value={comment}
               onChangeText={(text: string): void => setComment(text)}
-              maxLength={200}
+              maxLength={140}
               placeholder="コメント（任意）"
               multiline
               numberOfLines={3}
