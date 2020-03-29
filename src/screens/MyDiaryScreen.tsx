@@ -1,5 +1,11 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -9,9 +15,8 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
-import { ScrollView } from 'react-native-gesture-handler';
 import firebase from '../constants/firebase';
-import { Diary } from '../types';
+import { Diary, Review, Profile } from '../types';
 import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
 import { MyDiaryStatus } from '../components/molecules';
 import { ModalReview, ModalConfirm } from '../components/organisms';
@@ -27,6 +32,7 @@ import { getPostDate } from '../utils/diary';
 
 interface Props {
   diary: Diary;
+  profile: Profile;
   editDiary: (objectID: string, diary: Diary) => void;
   deleteDiary: (objectID: string) => void;
 }
@@ -79,6 +85,7 @@ const styles = StyleSheet.create({
 const MyDiaryScreen: ScreenType = ({
   navigation,
   diary,
+  profile,
   editDiary,
   deleteDiary,
 }) => {
@@ -193,17 +200,24 @@ const MyDiaryScreen: ScreenType = ({
         if (!currentUser || !diary.correction) {
           return;
         }
+
+        const newReview = {
+          reviewer: {
+            uid: profile.uid,
+            userName: profile.userName,
+            photoUrl: profile.photoUrl,
+          },
+          revieweeUid: diary.correction.profile.uid,
+          rating,
+          comment,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as Review;
+
         await firebase
           .firestore()
           .collection(`reviews`)
-          .add({
-            reviewerUid: currentUser.uid,
-            revieweeUid: diary.correction.profile.uid,
-            rating,
-            comment,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          .add(newReview);
 
         await firebase
           .firestore()
@@ -312,12 +326,13 @@ MyDiaryScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     ...DefaultNavigationOptions,
     title,
     headerRight: (): JSX.Element => (
-      <MaterialCommunityIcons
-        size={28}
-        color={primaryColor}
-        name="dots-horizontal"
-        onPress={onPressMore}
-      />
+      <TouchableOpacity onPress={onPressMore}>
+        <MaterialCommunityIcons
+          size={28}
+          color={primaryColor}
+          name="dots-horizontal"
+        />
+      </TouchableOpacity>
     ),
   };
 };

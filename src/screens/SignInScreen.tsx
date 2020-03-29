@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LoadingModal, Space, SubmitButton } from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';

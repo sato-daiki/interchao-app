@@ -1,10 +1,15 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { borderLightColor, primaryColor, fontSizeM } from '../styles/Common';
 import { openCameraRoll } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';

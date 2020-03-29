@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -7,9 +7,15 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM } from '../styles/Common';
-import { Profile } from '../types';
-import { ProfileIconHorizontal, SmallButtonWhite } from '../components/atoms';
+import { Profile, UserReview } from '../types';
+import {
+  ProfileIconHorizontal,
+  SmallButtonWhite,
+  Space,
+  ScoreStar,
+} from '../components/atoms';
 import { ProfileLanguage } from '../components/molecules';
+import { getUserReview } from '../utils/userReview';
 
 export interface Props {
   profile: Profile;
@@ -52,7 +58,10 @@ const styles = StyleSheet.create({
  * マイページ
  */
 const MyPageScreen: ScreenType = ({ navigation, profile }) => {
+  const [userReview, setUserReview] = useState<UserReview | null>();
+
   const {
+    uid,
     userName,
     name,
     photoUrl,
@@ -62,10 +71,15 @@ const MyPageScreen: ScreenType = ({ navigation, profile }) => {
   } = profile;
 
   useEffect(() => {
-    navigation.setParams({
-      onPressSetting: () => navigation.navigate('Setting'),
-    });
-  }, []);
+    const f = async (): Promise<void> => {
+      navigation.setParams({
+        onPressSetting: () => navigation.navigate('Setting'),
+      });
+      const newUserReivew = await getUserReview(uid);
+      setUserReview(newUserReivew);
+    };
+    f();
+  }, [uid]);
 
   const onPressEdit = useCallback(() => {
     navigation.navigate('EditMyProfile');
@@ -78,6 +92,10 @@ const MyPageScreen: ScreenType = ({ navigation, profile }) => {
         <SmallButtonWhite title="編集する" onPress={onPressEdit} />
       </View>
       {name ? <Text style={styles.name}>{name}</Text> : null}
+      {userReview ? (
+        <ScoreStar score={userReview.score} reviewNum={userReview.reviewNum} />
+      ) : null}
+      <Space size={8} />
       <Text style={styles.introduction}>{introduction}</Text>
       <ProfileLanguage
         nativeLanguage={nativeLanguage}
@@ -93,12 +111,14 @@ MyPageScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     ...DefaultNavigationOptions,
     title: 'マイページ',
     headerRight: (): JSX.Element => (
-      <MaterialCommunityIcons
-        size={28}
-        color={primaryColor}
-        name="settings"
-        onPress={onPressSetting}
-      />
+      <TouchableOpacity onPress={onPressSetting}>
+        <MaterialCommunityIcons
+          size={28}
+          color={primaryColor}
+          name="settings"
+          onPress={onPressSetting}
+        />
+      </TouchableOpacity>
     ),
   };
 };

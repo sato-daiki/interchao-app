@@ -34,9 +34,6 @@ const ScoreStar: React.FC<Props> = ({
   score,
   reviewNum,
 }: Props): JSX.Element => {
-  if (reviewNum === 0) {
-    return <></>;
-  }
   return (
     <View style={styles.container}>
       <Text style={styles.score}>{score}</Text>

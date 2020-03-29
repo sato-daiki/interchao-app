@@ -27,6 +27,13 @@ export const getPostDay = (
   return moment(timestamp).format('Y-M-D');
 };
 
+export const getDay = (timestamp: firebase.firestore.Timestamp): string => {
+  if (!timestamp) {
+    return '';
+  }
+  return moment(timestamp.toDate()).format('Y-M-D');
+};
+
 export const getPostDate = (
   timestamp: Timestamp | firebase.firestore.FieldValue
 ): string => {

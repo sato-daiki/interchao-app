@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
   StyleSheet,
-  View,
+  TouchableOpacity,
   FlatList,
   ActivityIndicator,
   Alert,
   RefreshControl,
+  ScrollView,
+  Text,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -17,11 +19,11 @@ import {
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import firebase from '../constants/firebase';
-import { EmptyDiary } from '../components/molecules';
-import { Space } from '../components/atoms';
-import { Diary, Profile, UserReview } from '../types';
+import { EmptyDiary, EmptyReview } from '../components/molecules';
+import { Space, GrayHeader } from '../components/atoms';
+import { Diary, Profile, UserReview, Review } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { primaryColor } from '../styles/Common';
+import { primaryColor, linkBlue, fontSizeM } from '../styles/Common';
 import Report from '../components/organisms/Report';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
@@ -30,6 +32,8 @@ import { ModalBlock, ModalConfirm } from '../components/organisms';
 import { checkBlockee, checkBlocker } from '../utils/blockUser';
 import { getUserReview } from '../utils/userReview';
 import UserProfileHeader from '../components/organisms/UserProfileHeader';
+import { getTopReviews, getReviewNum } from '../utils/review';
+import ReviewListItem from '../components/organisms/ReviewListItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,11 +41,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingVertical: 16,
   },
+  moreRead: {
+    marginTop: 16,
+    marginBottom: 32,
+    paddingRight: 16,
+  },
+  moreReadText: {
+    color: linkBlue,
+    fontSize: fontSizeM,
+    textAlign: 'right',
+  },
 });
 
 const HIT_PER_PAGE = 20;
 
-const keyExtractor = (item: Diary, index: number): string => String(index);
+const keyExtractor = (item: Diary | Review, index: number): string =>
+  String(index);
 
 /**
  * ユーザページ
@@ -56,6 +71,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [isModalDeleted, setIsModalDeleted] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingDiary, setLoadingDiary] = useState(true);
+  const [loadingReview, setLoadingReview] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
@@ -65,6 +81,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
   const [diaryTotalNum, setDiaryTotalNum] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [topReviews, setTopReviews] = useState<Review[]>([]);
+  const [reviewNum, setReviewNum] = useState<number>();
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -105,6 +123,18 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     [setDiaries, setDiaryTotalNum]
   );
 
+  const getNewReview = useCallback(() => {
+    const f = async (): Promise<void> => {
+      const { uid } = navigation.state.params!;
+      const newReivews = await getTopReviews(uid);
+      const newReviewNum = await getReviewNum(uid);
+      setTopReviews(newReivews);
+      setReviewNum(newReviewNum);
+      setLoadingReview(false);
+    };
+    f();
+  }, []);
+
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -124,10 +154,12 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       // ブロックしているかのチェック
       const resBlocker = await checkBlocker(currentUser.uid, params.uid);
       setIsBlocked(resBlocker);
-      await Promise.all([getNewProfile(), getNewDiary(false)]);
+
+      // データを取得していく
+      await Promise.all([getNewProfile(), getNewDiary(false), getNewReview()]);
     };
     f();
-  }, [getNewDiary, getNewProfile]);
+  }, [getNewDiary, getNewProfile, getNewReview]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -179,13 +211,6 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     setIsReport(true);
   }, []);
 
-  const onPressItem = useCallback(
-    item => {
-      navigation.navigate('UserDiary', { item });
-    },
-    [navigation]
-  );
-
   const onPressMore = useCallback(() => {
     const options = [
       !isBlocked ? 'ブロック' : 'ブロックを解除する',
@@ -214,6 +239,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   useEffect(() => {
     navigation.setParams({ onPressMore });
   }, []);
+
+  const onPressMoreReview = useCallback((): void => {
+    if (!profile) return;
+    navigation.navigate('ReviewList', { uid: profile.uid });
+  }, [profile]);
 
   const onPressBlockSubmit = useCallback((): void => {
     const f = async (): Promise<void> => {
@@ -296,45 +326,73 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     [profile]
   );
 
-  const listHeaderComponent = (): JSX.Element | null => {
-    if (!profile) return null;
-    return (
-      <UserProfileHeader
-        loadingProfile={loadingProfile}
-        profile={profile}
-        userReview={userReview}
-        diaryTotalNum={diaryTotalNum}
-      />
-    );
-  };
+  const listEmptyDiaryComponent =
+    loadingDiary || refreshing ? null : <EmptyDiary />;
 
-  const listEmptyComponent = loadingDiary || refreshing ? null : <EmptyDiary />;
+  const listEmptyReviewComponent =
+    loadingReview || refreshing ? null : <EmptyReview />;
 
-  const listFooterComponent =
+  const listHeaderDiaryComponent = (
+    <GrayHeader
+      title={diaryTotalNum !== 0 ? `日記一覧(${diaryTotalNum}件)` : '日記一覧'}
+    />
+  );
+
+  const listHeaderReviewComponent = <GrayHeader title="トップレビュー" />;
+
+  const listFooterDiaryComponent =
     loadingDiary && !refreshing ? (
       <>
         <Space size={16} />
         <ActivityIndicator />
+        <Space size={16} />
       </>
     ) : null;
 
-  const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+  const listFooterReviewComponent =
+    loadingReview && !refreshing ? (
+      <>
+        <Space size={16} />
+        <ActivityIndicator />
+        <Space size={16} />
+      </>
+    ) : null;
+
+  const renderDiary = useCallback(({ item }: { item: Diary }): JSX.Element => {
+    return (
+      <DiaryListItem
+        item={item}
+        onPressUser={(uid: string): void => {
+          navigation.navigate('UserProfile', { uid });
+        }}
+        onPressItem={(): void => {
+          navigation.navigate('UserDiary', { item });
+        }}
+      />
+    );
+  }, []);
+
+  const renderReview = useCallback(
+    ({ item }: { item: Review }): JSX.Element => {
       return (
-        <DiaryListItem
+        <ReviewListItem
           item={item}
           onPressUser={(uid: string): void => {
             navigation.navigate('UserProfile', { uid });
           }}
-          onPressItem={onPressItem}
         />
       );
     },
-    [onPressItem]
+    []
   );
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <ModalConfirm
         visible={isModalDeleted}
         title="エラー"
@@ -358,19 +416,36 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onReportSubmit={onReportSubmit}
         onReportClose={(): void => setIsReport(false)}
       />
+      {profile && !loadingProfile ? (
+        <UserProfileHeader profile={profile} userReview={userReview} />
+      ) : (
+        <ActivityIndicator />
+      )}
+      <FlatList
+        data={topReviews}
+        keyExtractor={keyExtractor}
+        renderItem={renderReview}
+        ListHeaderComponent={listHeaderReviewComponent}
+        ListEmptyComponent={listEmptyReviewComponent}
+        ListFooterComponent={listFooterReviewComponent}
+      />
+      {!!reviewNum && reviewNum > 3 ? (
+        <TouchableOpacity style={styles.moreRead} onPress={onPressMoreReview}>
+          <Text style={styles.moreReadText}>
+            {`${reviewNum}件のレビューを全部見る`}
+          </Text>
+        </TouchableOpacity>
+      ) : null}
       <FlatList
         data={diaries}
         keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        ListHeaderComponent={listHeaderComponent}
-        ListEmptyComponent={listEmptyComponent}
-        ListFooterComponent={listFooterComponent}
+        renderItem={renderDiary}
+        ListHeaderComponent={listHeaderDiaryComponent}
+        ListEmptyComponent={listEmptyDiaryComponent}
+        ListFooterComponent={listFooterDiaryComponent}
         onEndReached={loadNextPage}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -382,12 +457,13 @@ UserProfileScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: 'プロフィール',
     headerRight: (): JSX.Element => (
-      <MaterialCommunityIcons
-        size={28}
-        color={primaryColor}
-        name="dots-horizontal"
-        onPress={onPressMore}
-      />
+      <TouchableOpacity onPress={onPressMore}>
+        <MaterialCommunityIcons
+          size={28}
+          color={primaryColor}
+          name="dots-horizontal"
+        />
+      </TouchableOpacity>
     ),
   };
 };

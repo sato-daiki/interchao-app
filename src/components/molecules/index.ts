@@ -9,6 +9,7 @@ export { default as CorrectionWord } from './CorrectionWord';
 export { default as EmptyDiary } from './EmptyDiary';
 export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
 export { default as EmptyList } from './EmptyList';
+export { default as EmptyReview } from './EmptyReview';
 export { default as MyDiaryCorrectionFooter } from './MyDiaryCorrectionFooter';
 export { default as MyDiaryStatus } from './MyDiaryStatus';
 export { default as OnOffSmallButton } from './OnOffSmallButton';
