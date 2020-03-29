@@ -1,4 +1,3 @@
-import { firestore } from 'firebase';
 import { Language } from './profile';
 
 // algolia経由で取得するのでtimestamp型が他と異なる
@@ -20,8 +19,8 @@ export interface Correction {
   profile: DisplayProfile;
   comments: Comment[];
   summary: string;
-  createdAt: firestore.Timestamp;
-  updatedAt: firestore.Timestamp;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 // Profileのうち一部を抜粋したもの
@@ -48,6 +47,6 @@ export interface Diary {
   correctionStatusPro: CorrectionStatus;
   isReview: boolean;
   isReviewPro: boolean;
-  createdAt: Timestamp | firebase.firestore.FieldValue;
-  updatedAt: Timestamp | firebase.firestore.FieldValue;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }

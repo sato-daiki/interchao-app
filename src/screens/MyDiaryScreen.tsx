@@ -28,7 +28,7 @@ import {
   fontSizeS,
 } from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
-import { getPostDate } from '../utils/diary';
+import { getAlgoliaDate } from '../utils/diary';
 
 interface Props {
   diary: Diary;
@@ -243,7 +243,7 @@ const MyDiaryScreen: ScreenType = ({
     []
   );
 
-  const postDate = getPostDate(createdAt);
+  const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
       <ModalConfirm

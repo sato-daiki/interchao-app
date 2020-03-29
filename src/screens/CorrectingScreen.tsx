@@ -46,7 +46,7 @@ import {
   SummaryCard,
 } from '../components/atoms';
 import { User, Diary, InfoComment, Profile } from '../types';
-import { getPostDate, getDisplayProfile, getComments } from '../utils/diary';
+import { getAlgoliaDate, getDisplayProfile, getComments } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
@@ -614,7 +614,7 @@ const CorrectingScreen: ScreenType = ({
           <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
           <Space size={8} />
           <View style={styles.header}>
-            <Text style={styles.postDayText}>{getPostDate(createdAt)}</Text>
+            <Text style={styles.postDayText}>{getAlgoliaDate(createdAt)}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
           <Text style={styles.title}>{title}</Text>
