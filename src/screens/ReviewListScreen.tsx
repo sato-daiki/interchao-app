@@ -54,8 +54,11 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
       const { uid } = navigation.state.params;
       const newReviews = await getReviews(uid, null, HIT_PER_PAGE);
       setReviews(newReviews);
-      const { createdAt } = newReviews[newReviews.length - 1];
-      setLastVisible(createdAt);
+      if (newReviews.length > 0) {
+        const { createdAt } = newReviews[newReviews.length - 1];
+        setLastVisible(createdAt);
+        setReadAllResults(true);
+      }
       setIsLoading(false);
     };
     f();

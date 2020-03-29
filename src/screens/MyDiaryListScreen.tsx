@@ -190,6 +190,7 @@ const MyDiaryListScreen: ScreenType = ({
       <MyDiaryListMenu
         navigation={navigation}
         isMenu={isMenu}
+        uid={user.uid}
         onClose={onClose}
       />
       <LoadingModal visible={isLoading} />
