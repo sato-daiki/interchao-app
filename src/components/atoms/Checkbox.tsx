@@ -13,7 +13,7 @@ const Checkbox: React.FC<Props> = ({
   color = mainColor,
   onPress,
 }: Props): JSX.Element => {
-  if (checked) {
+  if (!checked) {
     return (
       <MaterialCommunityIcons
         size={28}

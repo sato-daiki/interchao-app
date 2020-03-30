@@ -16,6 +16,8 @@ export const getUser = async (uid: string): Promise<User | null> => {
         confirmCorrection,
         points,
         expoPushToken,
+        notificationCorrection,
+        notificationReview,
         createdAt,
         updatedAt,
       } = data;
@@ -26,6 +28,8 @@ export const getUser = async (uid: string): Promise<User | null> => {
         confirmCorrection,
         points,
         expoPushToken,
+        notificationCorrection,
+        notificationReview,
         createdAt,
         updatedAt,
       };
