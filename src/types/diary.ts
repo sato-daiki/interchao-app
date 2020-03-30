@@ -9,20 +9,6 @@ export type Timestamp = {
 export type DiaryStatus = 'draft' | 'publish';
 export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
 
-export interface Comment {
-  original: string;
-  fix: string;
-  detail: string;
-}
-
-export interface Correction {
-  profile: DisplayProfile;
-  comments: Comment[];
-  summary: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-}
-
 // Profileのうち一部を抜粋したもの
 export interface DisplayProfile {
   uid: string;
@@ -41,8 +27,6 @@ export interface Diary {
   text: string;
   profile: DisplayProfile;
   diaryStatus: DiaryStatus;
-  correction: Correction | null;
-  proCorrection: Correction | null;
   correctionStatus: CorrectionStatus;
   correctionStatusPro: CorrectionStatus;
   isReview: boolean;

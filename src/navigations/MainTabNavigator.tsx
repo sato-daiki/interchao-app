@@ -16,7 +16,7 @@ import MyPageScreenContainer from '../containers/MyPageScreenContainer';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import EditMyProfileScreenContainer from '../containers/EditMyProfileScreenContainer';
 import SettingScreen from '../screens/SettingScreen';
-import NoticeScreen from '../screens/NoticeScreen';
+import NoticeScreenContainer from '../containers/NoticeScreenContainer';
 import PremiumScreen from '../screens/PremiumScreen';
 import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
 import EditEmailScreen from '../screens/EditEmailScreen';
@@ -79,7 +79,7 @@ const MyDiaryTabStack = createStackNavigator(
       screen: SettingScreen,
     },
     Notice: {
-      screen: NoticeScreen,
+      screen: NoticeScreenContainer,
     },
     Premium: {
       screen: PremiumScreen,

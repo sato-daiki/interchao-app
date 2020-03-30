@@ -96,6 +96,8 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       confirmCorrection: false,
       points: 100,
       expoPushToken: null,
+      notificationCorrection: true,
+      notificationReview: true,
       createdAt: timestamp,
       updatedAt: timestamp,
     } as User;
