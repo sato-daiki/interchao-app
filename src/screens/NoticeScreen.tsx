@@ -20,7 +20,6 @@ const NoticeScreen: NavigationStackScreenComponent = ({ navigation }) => {
     <View style={styles.container}>
       <CheckItem checked title="マイ日記の添削が完了" onPress={() => {}} />
       <CheckItem title="添削した日記レビューが完了" onPress={() => {}} />
-      <CheckItem checked title="運営からのお知らせ" onPress={() => {}} />
     </View>
   );
 };
