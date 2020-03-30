@@ -21,6 +21,7 @@ import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
+import { registerForPushNotificationsAsync } from '../utils/Notification';
 
 export interface Props {
   user: User;
@@ -75,6 +76,8 @@ const MyDiaryListScreen: ScreenType = ({
       onPressMenu: () => setIsMenu(true),
       onPressSearch,
     });
+    // push通知の設定
+    registerForPushNotificationsAsync(user.uid);
   }, []);
 
   const getNewDiary = useCallback(

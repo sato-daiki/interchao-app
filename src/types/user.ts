@@ -5,6 +5,7 @@ export interface User {
   premium: boolean;
   confirmCorrection: boolean;
   points: number;
+  expoPushToken: string | null;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;
 }
