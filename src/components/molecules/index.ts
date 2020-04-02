@@ -19,3 +19,4 @@ export { default as ProfileIcons } from './ProfileIcons';
 export { default as ProfileLanguage } from './ProfileLanguage';
 export { default as UserDiaryStatus } from './UserDiaryStatus';
 export { default as UserListItem } from './UserListItem';
+export { default as TabIcon } from './TabIcon';

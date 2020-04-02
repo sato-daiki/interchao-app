@@ -32,6 +32,7 @@ import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScree
 import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
 import ReviewListScreen from '../screens/ReviewListScreen';
+import { TabIcon } from '../components/molecules';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -144,10 +145,11 @@ const MainTab = createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: 'マイ日記',
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-          <MaterialCommunityIcons
+          <TabIcon
             name="book-open"
             size={25}
             color={tintColor}
+            badgeMode="myDiary"
           />
         ),
       },
