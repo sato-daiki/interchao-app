@@ -24,9 +24,9 @@ const styles = StyleSheet.create({
 });
 
 const getBadgeStatus = (badgeMode: string, user: User): number => {
-  const { unreadCorrection = 0 } = user;
-  if (badgeMode === 'myDiary' && unreadCorrection > 0) {
-    return unreadCorrection;
+  const { unreadCorrectionNum = 0 } = user;
+  if (badgeMode === 'myDiary' && unreadCorrectionNum > 0) {
+    return unreadCorrectionNum;
   }
   return 0;
 };

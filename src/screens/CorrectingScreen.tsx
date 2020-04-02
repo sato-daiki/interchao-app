@@ -23,6 +23,7 @@ import {
   LongPressGestureHandlerStateChangeEvent,
   State,
 } from 'react-native-gesture-handler';
+import * as Haptics from 'expo-haptics';
 import firebase from '../constants/firebase';
 import {
   fontSizeS,
@@ -272,21 +273,30 @@ const CorrectingScreen: ScreenType = ({
 
   const onLongPress = useCallback(
     (index: number, event: LongPressGestureHandlerStateChangeEvent) => {
-      if (event.nativeEvent.state === State.ACTIVE) {
-        const y = event.nativeEvent.absoluteY - event.nativeEvent.y;
-        const indexInfo = getPositionInfo(index);
-        if (!indexInfo) return undefined;
+      const f = async () => {
+        if (event.nativeEvent.state === State.ACTIVE) {
+          const y = event.nativeEvent.absoluteY - event.nativeEvent.y;
+          const indexInfo = getPositionInfo(index);
+          if (!indexInfo) return undefined;
 
-        setStartWord(indexInfo);
-        setEndWord(indexInfo);
-        setLongPressWord({
-          y,
-          line: indexInfo.line,
-        });
-        Vibration.vibrate(VIBRATION_DURATION);
-      } else if (event.nativeEvent.state === State.END) {
-        setIsModalComment(true);
-      }
+          setStartWord(indexInfo);
+          setEndWord(indexInfo);
+          setLongPressWord({
+            y,
+            line: indexInfo.line,
+          });
+          const options = {
+            enableVibrateFallback: true,
+            ignoreAndroidSystemSettings: false,
+          };
+          await Haptics.selectionAsync();
+          // ReactNativeHapticFeedback.trigger('impactLight', options);
+          // Vibration.vibrate([1], true);
+        } else if (event.nativeEvent.state === State.END) {
+          setIsModalComment(true);
+        }
+      };
+      f();
     },
     [getPositionInfo]
   );

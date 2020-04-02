@@ -6,7 +6,7 @@ export interface User {
   confirmCorrection: boolean;
   points: number;
   expoPushToken: string | null;
-  unreadCorrection: number;
+  unreadCorrectionNum: number;
   notificationCorrection: boolean;
   notificationReview: boolean;
   createdAt: firestore.FieldValue;
