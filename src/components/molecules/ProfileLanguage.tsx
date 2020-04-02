@@ -37,7 +37,7 @@ const ProfileLanguage: React.FC<Props> = ({
       <View style={styles.languageContainer}>
         <MaterialCommunityIcons size={14} color={subTextColor} name="pencil" />
         <Text style={styles.label}>勉強中の言語</Text>
-        <Text style={styles.language}>{getlanguage(nativeLanguage)}</Text>
+        <Text style={styles.language}>{getlanguage(learnLanguage)}</Text>
       </View>
       <View style={styles.languageContainer}>
         <MaterialCommunityIcons
@@ -46,7 +46,7 @@ const ProfileLanguage: React.FC<Props> = ({
           name="spellcheck"
         />
         <Text style={styles.label}>ネイティブの言語</Text>
-        <Text style={styles.language}>{getlanguage(learnLanguage)}</Text>
+        <Text style={styles.language}>{getlanguage(nativeLanguage)}</Text>
       </View>
     </>
   );

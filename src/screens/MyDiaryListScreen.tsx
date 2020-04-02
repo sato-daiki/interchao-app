@@ -22,11 +22,15 @@ import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import { registerForPushNotificationsAsync } from '../utils/Notification';
+import { updateUnread } from '../utils/diary';
+import firebase from '../constants/firebase';
 
 export interface Props {
   user: User;
   diaries: Diary[];
   diaryTotalNum: number;
+  editDiary: (objectID: string, diary: Diary) => void;
+  setUser: (user: User) => void;
   setDiaries: (diaries: Diary[]) => void;
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
@@ -54,6 +58,8 @@ const MyDiaryListScreen: ScreenType = ({
   user,
   diaries,
   diaryTotalNum,
+  editDiary,
+  setUser,
   setDiaries,
   setDiaryTotalNum,
   navigation,
@@ -160,9 +166,29 @@ const MyDiaryListScreen: ScreenType = ({
 
   const onPressItem = useCallback(
     (item: Diary) => {
-      navigation.navigate('MyDiary', { objectID: item.objectID });
+      const f = async (): Promise<void> => {
+        if (!item.objectID) return;
+        if (item.correctionStatus === 'unread') {
+          const newUnreadCorrectionNum = user.unreadCorrectionNum - 1;
+          console.log('newUnreadCorrectionNum', newUnreadCorrectionNum);
+          // // DBを更新
+          await updateUnread(item.objectID, user.uid, newUnreadCorrectionNum);
+          // reduxを更新
+          editDiary(item.objectID, {
+            ...item,
+            correctionStatus: 'done',
+          });
+          setUser({
+            ...user,
+            unreadCorrectionNum: newUnreadCorrectionNum,
+          });
+        }
+
+        // navigation.navigate('MyDiary', { objectID: item.objectID });
+      };
+      f();
     },
-    [navigation]
+    [navigation, user, user.uid, user.unreadCorrectionNum]
   );
 
   const renderItem = useCallback(

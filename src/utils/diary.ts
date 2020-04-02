@@ -9,6 +9,7 @@ import {
   DisplayProfile,
   Comment,
   InfoComment,
+  Diary,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -116,4 +117,26 @@ export const getComments = (infoComments: InfoComment[]): Comment[] => {
     fix: c.fix,
     detail: c.detail,
   }));
+};
+
+export const updateUnread = async (
+  objectID: string,
+  uid: string,
+  newUnreadCorrectionNum: number
+): Promise<void> => {
+  await await firebase
+    .firestore()
+    .doc(`diaries/${objectID}`)
+    .update({
+      correctionStatus: 'done',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+  await await firebase
+    .firestore()
+    .doc(`users/${uid}`)
+    .update({
+      unreadCorrectionNum: newUnreadCorrectionNum,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 };
