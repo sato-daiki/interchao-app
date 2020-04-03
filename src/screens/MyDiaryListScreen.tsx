@@ -84,6 +84,7 @@ const MyDiaryListScreen: ScreenType = ({
     });
     // push通知の設定
     registerForPushNotificationsAsync(user.uid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getNewDiary = useCallback(
@@ -170,8 +171,7 @@ const MyDiaryListScreen: ScreenType = ({
         if (!item.objectID) return;
         if (item.correctionStatus === 'unread') {
           const newUnreadCorrectionNum = user.unreadCorrectionNum - 1;
-          console.log('newUnreadCorrectionNum', newUnreadCorrectionNum);
-          // // DBを更新
+          // DBを更新
           await updateUnread(item.objectID, user.uid, newUnreadCorrectionNum);
           // reduxを更新
           editDiary(item.objectID, {
@@ -183,12 +183,11 @@ const MyDiaryListScreen: ScreenType = ({
             unreadCorrectionNum: newUnreadCorrectionNum,
           });
         }
-
-        // navigation.navigate('MyDiary', { objectID: item.objectID });
+        navigation.navigate('MyDiary', { objectID: item.objectID });
       };
       f();
     },
-    [navigation, user, user.uid, user.unreadCorrectionNum]
+    [editDiary, navigation, setUser, user]
   );
 
   const renderItem = useCallback(
@@ -204,7 +203,7 @@ const MyDiaryListScreen: ScreenType = ({
         />
       );
     },
-    [onPressItem]
+    [navigation, onPressItem]
   );
 
   const listHeaderComponent = useCallback(() => {
