@@ -23,7 +23,6 @@ import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import { registerForPushNotificationsAsync } from '../utils/Notification';
 import { updateUnread } from '../utils/diary';
-import firebase from '../constants/firebase';
 
 export interface Props {
   user: User;
@@ -99,8 +98,9 @@ const MyDiaryListScreen: ScreenType = ({
             hitsPerPage: HIT_PER_PAGE,
           });
 
-          setDiaries(res.hits);
-          setDiaryTotalNum(res.nbHits);
+          const { hits, nbHits } = res;
+          setDiaries(hits as Diary[]);
+          setDiaryTotalNum(nbHits);
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
@@ -143,12 +143,13 @@ const MyDiaryListScreen: ScreenType = ({
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
+          const { hits } = res;
 
-          if (res.hits.length === 0) {
+          if (hits.length === 0) {
             setReadAllResults(true);
             setReadingNext(false);
           } else {
-            setDiaries([...diaries, ...res.hits]);
+            setDiaries([...diaries, ...(hits as Diary[])]);
             setPage(nextPage);
             setReadingNext(false);
           }
@@ -170,6 +171,9 @@ const MyDiaryListScreen: ScreenType = ({
       const f = async (): Promise<void> => {
         if (!item.objectID) return;
         if (item.correctionStatus === 'unread') {
+          if (isLoading) return;
+          setIsLoading(true);
+          // 未読の場合
           const newUnreadCorrectionNum = user.unreadCorrectionNum - 1;
           // DBを更新
           await updateUnread(item.objectID, user.uid, newUnreadCorrectionNum);
@@ -182,12 +186,13 @@ const MyDiaryListScreen: ScreenType = ({
             ...user,
             unreadCorrectionNum: newUnreadCorrectionNum,
           });
+          setIsLoading(false);
         }
         navigation.navigate('MyDiary', { objectID: item.objectID });
       };
       f();
     },
-    [editDiary, navigation, setUser, user]
+    [editDiary, isLoading, navigation, setUser, user]
   );
 
   const renderItem = useCallback(
