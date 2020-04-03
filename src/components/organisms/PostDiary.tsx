@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   StyleSheet,
-  View,
   TextInput,
   Dimensions,
   SafeAreaView,
-  KeyboardAvoidingView,
+  View,
 } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LoadingModal, TextButtun } from '../atoms';
 import { ModalAlertPublish } from '.';
 import ModalDiaryCancel from './ModalDiaryCancel';
@@ -16,11 +16,11 @@ import {
   primaryColor,
   borderLightColor,
   offWhite,
+  mainColor,
 } from '../../styles/Common';
 
 const { height } = Dimensions.get('window');
 const defaultHeight = height - 520;
-const maxHeight = height - 200;
 
 interface Props {
   isLoading: boolean;
@@ -42,7 +42,7 @@ interface Props {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: offWhite,
   },
   titleInput: {
     fontSize: fontSizeM,
@@ -62,6 +62,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
+    backgroundColor: '#fff',
+  },
+  icon: {
+    alignItems: 'flex-end',
+    paddingRight: 16,
+    paddingTop: 4,
+  },
+  keyboardAwareScrollView: {
+    flex: 1,
   },
 });
 
@@ -81,6 +90,8 @@ const PostDiary = ({
   onPressDraft,
   onPressNotSave,
 }: Props): JSX.Element => {
+  const [isForce, setIsForce] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -99,27 +110,45 @@ const PostDiary = ({
         onPressNotSave={onPressNotSave}
         onPressClose={onPressCloseModalCancel}
       />
-      <TextInput
-        style={styles.titleInput}
-        value={title}
-        onChangeText={onChangeTextTitle}
-        placeholder="Title"
-        maxLength={100}
-        autoCapitalize="none"
-        keyboardType="default"
-      />
-      <KeyboardAwareScrollView style={styles.container}>
+      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+        <TextInput
+          style={styles.titleInput}
+          value={title}
+          onChangeText={onChangeTextTitle}
+          placeholder="Title"
+          maxLength={100}
+          autoCapitalize="none"
+          keyboardType="default"
+        />
         <TextInput
           style={styles.textInput}
           value={text}
           onChangeText={onChangeTextText}
+          onFocus={(): void => setIsForce(true)}
+          onEndEditing={(): void => setIsForce(false)}
           placeholder="本文"
           underlineColorAndroid="transparent"
           multiline
           autoCapitalize="none"
           keyboardType="default"
         />
+        {/* keybordアイコン自体はクリックしても意味がない */}
+        {isForce ? (
+          <View style={styles.icon}>
+            <MaterialCommunityIcons
+              size={28}
+              color={mainColor}
+              name="keyboard-close"
+            />
+          </View>
+        ) : null}
       </KeyboardAwareScrollView>
+      <TextButtun
+        isBorrderTop
+        isBorrderBottom
+        title="下書き"
+        onPress={onPressDraft}
+      />
     </SafeAreaView>
   );
 };
