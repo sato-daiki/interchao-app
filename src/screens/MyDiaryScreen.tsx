@@ -16,10 +16,10 @@ import {
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import firebase from '../constants/firebase';
-import { Diary, Review, Profile } from '../types';
+import { Diary, Profile } from '../types';
 import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
 import { MyDiaryStatus } from '../components/molecules';
-import { ModalReview, ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
   primaryColor,
@@ -29,6 +29,8 @@ import {
 } from '../styles/Common';
 import ModalEditPublic from '../components/organisms/ModalEditPublic';
 import { getAlgoliaDate } from '../utils/diary';
+import { Correction } from '../types/correction';
+import { getCorrection } from '../utils/corrections';
 
 interface Props {
   diary: Diary;
@@ -85,26 +87,16 @@ const styles = StyleSheet.create({
 const MyDiaryScreen: ScreenType = ({
   navigation,
   diary,
-  profile,
   editDiary,
   deleteDiary,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSuccessReview, setiISuccessReview] = useState(false);
-  const [isModalReview, setIsModalReview] = useState(false);
-  const [isModalReviewPro, setIsModalReviewPro] = useState(false);
+  const [correction, setCorrection] = useState<Correction>();
+  const [proCorrection, setProCorrection] = useState<Correction>();
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [isModalPublic, setIsModalPublic] = useState(false);
-  const {
-    createdAt,
-    title,
-    text,
-    isReview,
-    correction,
-    proCorrection,
-    isPublic,
-  } = diary;
+  const { createdAt, title, text, isReview, isPublic } = diary;
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
@@ -140,11 +132,34 @@ const MyDiaryScreen: ScreenType = ({
       onPressMore,
       title: diary.title,
     });
-  }, [diary.title, onPressMore]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diary.title]);
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      // 添削がある場合データを取得
+      if (diary.correction) {
+        const newCorrection = await getCorrection(diary.correction.id);
+        if (newCorrection) {
+          setCorrection(newCorrection);
+        }
+      }
+      if (diary.proCorrection) {
+        const newProCorrection = await getCorrection(diary.proCorrection.id);
+        if (newProCorrection) {
+          setProCorrection(newProCorrection);
+        }
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, [diary.correction, diary.proCorrection]);
 
   const onPressSubmitPublic = useCallback(
     (changedIsPublic: boolean) => {
       const f = async (): Promise<void> => {
+        if (!diary.objectID) return;
+        if (isLoading) return;
         setIsLoading(true);
         await firebase
           .firestore()
@@ -154,17 +169,16 @@ const MyDiaryScreen: ScreenType = ({
             isPublic: changedIsPublic,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
-        editDiary(diary.objectID!, {
+        editDiary(diary.objectID, {
           ...diary,
           isPublic: changedIsPublic,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         setIsModalPublic(false);
         setIsLoading(false);
       };
       f();
     },
-    [diary, editDiary]
+    [diary, editDiary, isLoading]
   );
 
   const onPressDelete = useCallback(() => {
@@ -185,64 +199,6 @@ const MyDiaryScreen: ScreenType = ({
     f();
   }, [deleteDiary, diary.objectID, navigation]);
 
-  const onPressSubmitReview = useCallback(
-    (rating: number, comment: string): void => {
-      const f = async (): Promise<void> => {
-        if (!diary.objectID) return;
-        setIsLoading(true);
-        const refDiary = firebase.firestore().doc(`diaries/${diary.objectID}`);
-        await refDiary.update({
-          isReview: true,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        const { currentUser } = firebase.auth();
-        if (!currentUser || !diary.correction) {
-          return;
-        }
-
-        const newReview = {
-          reviewer: {
-            uid: profile.uid,
-            userName: profile.userName,
-            photoUrl: profile.photoUrl,
-          },
-          revieweeUid: diary.correction.profile.uid,
-          rating,
-          comment,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        } as Review;
-
-        await firebase
-          .firestore()
-          .collection(`reviews`)
-          .add(newReview);
-
-        await firebase
-          .firestore()
-          .collection('diaries')
-          .doc(diary.objectID)
-          .update({
-            isReview: true,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-
-        editDiary(diary.objectID, {
-          ...diary,
-          isReview: true,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        navigation.goBack();
-        setIsLoading(false);
-        setiISuccessReview(true);
-      };
-      f();
-    },
-    []
-  );
-
   const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
@@ -262,28 +218,6 @@ const MyDiaryScreen: ScreenType = ({
         onPressSubmit={onPressSubmitPublic}
         onPressClose={(): void => setIsModalPublic(false)}
       />
-      {correction ? (
-        <ModalReview
-          isLoading={isLoading}
-          isSuccess={isSuccessReview}
-          userName={correction.profile.userName}
-          photoUrl={correction.profile.photoUrl}
-          visible={isModalReview}
-          onPressSubmit={onPressSubmitReview}
-          onPressClose={(): void => setIsModalReview(false)}
-        />
-      ) : null}
-      {proCorrection ? (
-        <ModalReview
-          isLoading={isLoading}
-          isSuccess={isSuccessReview}
-          userName={proCorrection.profile.userName}
-          photoUrl={proCorrection.profile.photoUrl}
-          visible={isModalReviewPro}
-          onPressSubmit={onPressSubmitReview}
-          onPressClose={(): void => setIsModalReviewPro(false)}
-        />
-      ) : null}
       <ScrollView style={styles.scrollView}>
         <View style={styles.diaryOriginal}>
           <View style={styles.header}>
@@ -301,7 +235,9 @@ const MyDiaryScreen: ScreenType = ({
             onPressUser={(uid): void => {
               navigation.navigate('UserProfile', { uid });
             }}
-            onPressReview={(): void => setIsModalReview(true)}
+            onPressReview={(): void => {
+              navigation.navigate('Review');
+            }}
           />
         ) : null}
         {proCorrection ? (
@@ -311,7 +247,9 @@ const MyDiaryScreen: ScreenType = ({
             onPressUser={(uid): void => {
               navigation.navigate('UserProfile', { uid });
             }}
-            onPressReview={(): void => setIsModalReviewPro(true)}
+            onPressReview={(): void => {
+              navigation.navigate('Review');
+            }}
           />
         ) : null}
       </ScrollView>
