@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { setProfile } from '../stores/actions/profile';
+import { setPoints } from '../stores/actions/user';
 import CorrectingScreen from '../screens/CorrectingScreen';
 import { State } from '../types/state';
+import { editTeachDiary } from '../stores/actions/teachDiaryList';
 
 interface OwnProps {
   navigation: NavigationStackProp;
@@ -22,7 +23,8 @@ const mapStateToProps = (state: State, ownProps: OwnProps) => {
 };
 
 const mapDispatchToProps = {
-  setProfile,
+  setPoints,
+  editTeachDiary,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CorrectingScreen);
