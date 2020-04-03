@@ -110,7 +110,7 @@ const PostDiaryScreen: ScreenType = ({
       try {
         setIsLoading(true);
         const diary = getDiary('publish');
-        const points = user.points - 10;
+        const newPoints = user.points - 10;
         const diaryDoc = await firebase
           .firestore()
           .collection('diaries')
@@ -118,7 +118,7 @@ const PostDiaryScreen: ScreenType = ({
 
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
         await refUser.update({
-          points,
+          points: newPoints,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         track(events.CREATED_DIARY, { diaryStatus: 'publish' });
@@ -128,14 +128,14 @@ const PostDiaryScreen: ScreenType = ({
           objectID: diaryDoc.id,
           ...diary,
         });
-        setPoints(points);
+        setPoints(newPoints);
 
         navigation.navigate('MyDiaryList');
         setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
         setIsLoading(false);
-        Alert.alert('ネットワークエラーです');
+        Alert.alert('ネットワークエラーです', err);
       }
     };
     f();
