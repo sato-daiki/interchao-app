@@ -82,7 +82,7 @@ const InputUserNameScreen: ScreenType = ({
       };
       f();
     },
-    [checkUserName, setUserName]
+    [setUserName]
   );
 
   const onPressNext = async (): Promise<void> => {

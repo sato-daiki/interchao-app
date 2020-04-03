@@ -83,58 +83,60 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
     track(events.OPENED_SIGN_UP);
   }, []);
 
-  const clearErrorMessage = (): void => {
+  const clearErrorMessage = useCallback((): void => {
     setErrorEmail('');
     setErrorPassword('');
-  };
+  }, []);
 
-  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  const createUser = useCallback(
+    async (credentUser: firebase.User): Promise<void> => {
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+      const userInfo = {
+        premium: false,
+        confirmCorrection: false,
+        points: 100,
+        expoPushToken: null,
+        unreadCorrectionNum: 0,
+        notificationCorrection: true,
+        notificationReview: true,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      } as User;
 
-  const createUser = async (credentUser: firebase.User): Promise<void> => {
-    const userInfo = {
-      premium: false,
-      confirmCorrection: false,
-      points: 100,
-      expoPushToken: null,
-      unreadCorrectionNum: 0,
-      notificationCorrection: true,
-      notificationReview: true,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    } as User;
+      const profileInfo = {
+        name: '',
+        userName: profile.userName,
+        photoUrl: '',
+        pro: false,
+        learnLanguage: profile.learnLanguage,
+        nativeLanguage: profile.nativeLanguage,
+        introduction: '',
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      } as Profile;
 
-    const profileInfo = {
-      name: '',
-      userName: profile.userName,
-      photoUrl: '',
-      pro: false,
-      learnLanguage: profile.learnLanguage,
-      nativeLanguage: profile.nativeLanguage,
-      introduction: '',
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    } as Profile;
+      const userReviewInfo = {
+        ratingSum: 0,
+        reviewNum: 0,
+        score: 0.0,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      } as UserReview;
 
-    const userReviewInfo = {
-      ratingSum: 0,
-      reviewNum: 0,
-      score: 0.0,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-    } as UserReview;
-
-    const batch = firebase.firestore().batch();
-    batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
-    batch.set(
-      firebase.firestore().doc(`profiles/${credentUser.uid}`),
-      profileInfo
-    );
-    batch.set(
-      firebase.firestore().doc(`userReviews/${credentUser.uid}`),
-      userReviewInfo
-    );
-    batch.commit();
-  };
+      const batch = firebase.firestore().batch();
+      batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
+      batch.set(
+        firebase.firestore().doc(`profiles/${credentUser.uid}`),
+        profileInfo
+      );
+      batch.set(
+        firebase.firestore().doc(`userReviews/${credentUser.uid}`),
+        userReviewInfo
+      );
+      batch.commit();
+    },
+    [profile.learnLanguage, profile.nativeLanguage, profile.userName]
+  );
 
   const onPressSkip = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -162,7 +164,8 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
   useEffect(() => {
     navigation.setParams({ onPressSkip });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onPressSkip]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -190,7 +193,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       setIsLoading(false);
     };
     f();
-  }, [clearErrorMessage, createUser]);
+  }, [clearErrorMessage, createUser, email, password]);
 
   const onEndEditingEmail = useCallback(() => {
     const f = async (): Promise<void> => {
