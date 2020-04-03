@@ -54,7 +54,7 @@ const TeachDiaryListScreen: ScreenType = ({
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [blockUids, setBlockUids] = useState();
+  const [blockUids, setBlockUids] = useState<string>([]);
 
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
@@ -69,6 +69,7 @@ const TeachDiaryListScreen: ScreenType = ({
     navigation.setParams({
       onPressSearch,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getNewDiary = useCallback(
@@ -97,9 +98,8 @@ const TeachDiaryListScreen: ScreenType = ({
           setBlockUids(uids);
 
           // reduxで保持
-          setTeachDiaries(res.hits);
+          setTeachDiaries(res.hits as Diary[]);
         } catch (err) {
-          console.log(err);
           setIsLoading(false);
           setRefreshing(false);
           Alert.alert(' エラー', 'ネットワークエラーです');
@@ -108,7 +108,7 @@ const TeachDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [setTeachDiaries]
+    [profile.nativeLanguage, setTeachDiaries]
   );
 
   // 初期データの取得
@@ -149,7 +149,7 @@ const TeachDiaryListScreen: ScreenType = ({
             setReadAllResults(true);
             setReadingNext(false);
           } else {
-            setTeachDiaries([...teachDiaries, ...res.hits]);
+            setTeachDiaries([...teachDiaries, ...(res.hits as Diary[])]);
             setPage(nextPage);
             setReadingNext(false);
           }
@@ -161,6 +161,7 @@ const TeachDiaryListScreen: ScreenType = ({
     };
     f();
   }, [
+    blockUids,
     page,
     profile.nativeLanguage,
     readAllResults,
@@ -188,7 +189,7 @@ const TeachDiaryListScreen: ScreenType = ({
         />
       );
     },
-    [onPressItem]
+    [navigation, onPressItem]
   );
 
   const listHeaderComponent = (

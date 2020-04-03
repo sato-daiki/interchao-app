@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, ReactNode } from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import { StyleSheet, ScrollView, View, Text, Alert } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -7,7 +7,7 @@ import {
 import firebase from '../constants/firebase';
 import { Diary, User } from '../types';
 import TeachDiaryCorrection from '../components/organisms/TeachDiaryCorrection';
-import { TeachDiaryOriginal, UserDiaryStatus } from '../components/molecules';
+import { UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
@@ -23,11 +23,15 @@ import {
   primaryColor,
   fontSizeM,
 } from '../styles/Common';
+import { getCorrection } from '../utils/corrections';
+import { Correction } from '../types/correction';
+import Algolia from '../utils/Algolia';
 
 interface Props {
   user: User;
   teachDiary: Diary;
   editTeachDiary: (objectID: string, diary: Diary) => void;
+  setUser: (user: User) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -80,57 +84,95 @@ const TeachDiaryScreen: ScreenType = ({
   navigation,
   teachDiary,
   editTeachDiary,
+  setUser,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [correction, setCorrection] = useState<Correction>();
+  const [proCorrection, setProCorrection] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
-  const {
-    isReview,
-    correction,
-    correctionStatus,
-    proCorrection,
-    isPublic,
-  } = teachDiary;
+  const { correctionStatus, correctionStatusPro } = teachDiary;
   const { confirmCorrection } = user;
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      // 添削がある場合データを取得
+      if (teachDiary.correction) {
+        const newCorrection = await getCorrection(teachDiary.correction.id);
+        if (newCorrection) {
+          setCorrection(newCorrection);
+        }
+      }
+      if (teachDiary.proCorrection) {
+        const newProCorrection = await getCorrection(
+          teachDiary.proCorrection.id
+        );
+        if (newProCorrection) {
+          setProCorrection(newProCorrection);
+        }
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, [teachDiary.correction, teachDiary.proCorrection]);
 
   useEffect(() => {
     navigation.setParams({
       title: teachDiary.title,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onPressSubmitCorrection = useCallback(
     checked => {
       const f = async (): Promise<void> => {
-        // setIsLoading(true);
-        // if (checked) {
-        //   // TODO: 添削中かどうかのチェック
+        if (!teachDiary.objectID) return;
+        if (isLoading) return;
+        setIsLoading(true);
 
-        //   // 以後添削モーダルを表示しないようにする
-        //   const userRef = firebase
-        //     .firestore()
-        //     .collection('users')
-        //     .doc(user.uid);
-        //   await userRef.update({
-        //     confirmCorrection: true,
-        //     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        //   });
-        // }
+        // 他の人が添削を開始していないかチェックする
+        const index = await Algolia.getDiaryIndex(true);
+        await Algolia.setSettings(index);
+        const res = await index.search('', {
+          filters: `objectID: ${teachDiary.objectID} AND correctionStatus: yet`,
+          page: 0,
+          hitsPerPage: 1,
+        });
+
+        if (res.nbHits !== 1) {
+          Alert.alert(
+            'エラー',
+            'この日記は他の人が添削を始めました。他の日記を再度検索ください'
+          );
+          setIsLoading(false);
+          return;
+        }
+
+        // 以後メッセージを表示しないにチェックが入っている時の処理
+        if (checked) {
+          const userRef = firebase.firestore().doc(`users/${user.uid}`);
+          await userRef.update({
+            confirmCorrection: true,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          setUser({
+            ...user,
+            confirmCorrection: true,
+          });
+        }
 
         // // 日記のステータスを添削中に変更する
-        // const diaryRef = firebase
-        //   .firestore()
-        //   .collection('diaries')
-        //   .doc(teachDiary.objectID);
-        // await diaryRef.update({
-        //   correctionStatus: 'doing',
-        //   updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        // });
+        const diaryRef = firebase
+          .firestore()
+          .doc(`diaries/${teachDiary.objectID}`);
+        await diaryRef.update({
+          correctionStatus: 'doing',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
 
-        // editTeachDiary(teachDiary.objectID!, {
-        //   ...teachDiary,
-        //   correctionStatus: 'doing',
-        //   updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        // });
+        editTeachDiary(teachDiary.objectID, {
+          ...teachDiary,
+          correctionStatus: 'doing',
+        });
 
         navigation.navigate('Correcting', { objectID: teachDiary.objectID });
         setIsLoading(false);
@@ -138,7 +180,7 @@ const TeachDiaryScreen: ScreenType = ({
       };
       f();
     },
-    [editTeachDiary, navigation, teachDiary, user.uid]
+    [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]
   );
 
   const onPressCorrection = useCallback(() => {
@@ -150,9 +192,12 @@ const TeachDiaryScreen: ScreenType = ({
     }
   }, [confirmCorrection, onPressSubmitCorrection]);
 
-  const onPressUser = useCallback((uid: string): void => {
-    navigation.navigate('UserProfile', { uid });
-  }, []);
+  const onPressUser = useCallback(
+    (uid: string): void => {
+      navigation.navigate('UserProfile', { uid });
+    },
+    [navigation]
+  );
 
   const renderDiaryCorrection = (): ReactNode => {
     if (correctionStatus === 'yet') {
@@ -161,7 +206,7 @@ const TeachDiaryScreen: ScreenType = ({
           <SubmitButton
             isLoading={isLoading}
             title="添削する"
-            onPress={(): void => setIsModalCorrection(true)}
+            onPress={onPressCorrection}
           />
         </View>
       );
@@ -172,12 +217,24 @@ const TeachDiaryScreen: ScreenType = ({
     return null;
   };
 
-  const renderProDiaryCorrection = (): ReactNode => {
-    if (proCorrection) {
-      return <TeachDiaryCorrection correction={proCorrection} />;
-    }
-    return null;
-  };
+  // Proの実装は後回し
+  // const renderProDiaryCorrection = (): ReactNode => {
+  //   if (correctionStatusPro === 'yet') {
+  //     return (
+  //       <View style={styles.correctionButton}>
+  //         <SubmitButton
+  //           isLoading={isLoading}
+  //           title="添削する"
+  //           onPress={onPressCorrection}
+  //         />
+  //       </View>
+  //     );
+  //   }
+  //   if (proCorrection) {
+  //     return <TeachDiaryCorrection correction={proCorrection} />;
+  //   }
+  //   return null;
+  // };
 
   const { createdAt, title, text, profile } = teachDiary;
   const { userName, photoUrl, uid } = profile;
@@ -207,7 +264,7 @@ const TeachDiaryScreen: ScreenType = ({
           <Text style={styles.text}>{text}</Text>
         </View>
         {renderDiaryCorrection()}
-        {renderProDiaryCorrection()}
+        {/* {renderProDiaryCorrection()} */}
       </ScrollView>
     </View>
   );

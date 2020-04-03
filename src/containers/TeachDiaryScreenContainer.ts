@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { NavigationStackProp } from 'react-navigation-stack';
 import TeachDiaryScreen from '../screens/TeachDiaryScreen';
 import { editTeachDiary } from '../stores/actions/teachDiaryList';
+import { setUser } from '../stores/actions/user';
 
 interface OwnProps {
   navigation: NavigationStackProp;
@@ -21,6 +22,7 @@ const mapStateToProps = (state: State, ownProps: OwnProps) => {
 
 const mapDispatchToProps = {
   editTeachDiary,
+  setUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TeachDiaryScreen);
