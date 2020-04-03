@@ -23,7 +23,6 @@ import {
   LongPressGestureHandlerStateChangeEvent,
   State,
 } from 'react-native-gesture-handler';
-import * as Haptics from 'expo-haptics';
 import firebase from '../constants/firebase';
 import {
   fontSizeS,
@@ -65,6 +64,7 @@ interface Props {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
+  setPoints: (points: number) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
 
@@ -125,8 +125,11 @@ const getStateButtonTitle = (state: RightButtonState): string => {
  */
 const CorrectingScreen: ScreenType = ({
   navigation,
-  teachDiary,
+  user,
   currentProfile,
+  teachDiary,
+  setPoints,
+  editTeachDiary,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
@@ -157,33 +160,71 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressDone = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (!teachDiary.objectID) return;
+      if (isLoading) return;
       setIsLoading(true);
       const displayProfile = getDisplayProfile(currentProfile);
       const comments = getComments(infoComments);
-
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
-      const correction = {
-        profile: displayProfile,
-        comments,
-        summary,
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
 
-      await firebase
+      const correctionsDoc = await firebase
         .firestore()
-        .collection('diaries')
-        .doc(teachDiary.objectID)
-        .update({
-          correction,
+        .collection('corrections')
+        .add({
+          objectID: teachDiary.objectID,
+          profile: displayProfile,
           correctionStatus: 'unread',
+          comments,
+          summary,
+          createdAt: timestamp,
           updatedAt: timestamp,
         });
+
+      // 日記のステータスを未読に変更する
+      const newCorrection = {
+        id: correctionsDoc.id,
+        profile: displayProfile,
+      };
+      const diaryRef = firebase
+        .firestore()
+        .doc(`diaries/${teachDiary.objectID}`);
+      await diaryRef.update({
+        correctionStatus: 'unread',
+        correction: newCorrection,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // ポイントを増やす
+      const newPoints = user.points + 10;
+      const userRef = firebase.firestore().doc(`users/${user.uid}`);
+      await userRef.update({
+        points: newPoints,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // reduxに追加
+      editTeachDiary(teachDiary.objectID, {
+        ...teachDiary,
+        correctionStatus: 'unread',
+      });
+      setPoints(newPoints);
+
       navigation.goBack(null);
       setIsLoading(false);
     };
     f();
-  }, [currentProfile, infoComments, summary, teachDiary.objectID, navigation]);
+  }, [
+    teachDiary,
+    isLoading,
+    currentProfile,
+    infoComments,
+    summary,
+    user.points,
+    user.uid,
+    editTeachDiary,
+    setPoints,
+    navigation,
+  ]);
 
   /**
    * 総評ボタンを押下した時の処理
@@ -204,6 +245,28 @@ const CorrectingScreen: ScreenType = ({
   }, [onPressDone, onPressSummary, state]);
 
   /**
+   * 閉じる処理
+   */
+  const close = async (): Promise<void> => {
+    if (isLoading) return;
+    if (!teachDiary.objectID) return;
+    setIsLoading(true);
+    // 日記のステータスを添削中に変更する
+    const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
+    await diaryRef.update({
+      correctionStatus: 'yet',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    editTeachDiary(teachDiary.objectID, {
+      ...teachDiary,
+      correctionStatus: 'yet',
+    });
+    setIsLoading(false);
+    navigation.goBack(null);
+  };
+
+  /**
    * 左上の閉じるボタンが押下された時の処理
    */
   const onPressClose = useCallback(() => {
@@ -217,13 +280,14 @@ const CorrectingScreen: ScreenType = ({
         },
         {
           text: 'OK',
-          onPress: (): void => {
-            navigation.goBack(null);
+          onPress: async (): Promise<void> => {
+            await close();
           },
         },
       ],
       { cancelable: true }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
@@ -252,6 +316,7 @@ const CorrectingScreen: ScreenType = ({
       onPressClose,
       onPressSubmitButton,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buttonTitle]);
 
   const getPositionInfo = useCallback(
@@ -273,7 +338,7 @@ const CorrectingScreen: ScreenType = ({
 
   const onLongPress = useCallback(
     (index: number, event: LongPressGestureHandlerStateChangeEvent) => {
-      const f = async () => {
+      const f = async (): Promise<void> => {
         if (event.nativeEvent.state === State.ACTIVE) {
           const y = event.nativeEvent.absoluteY - event.nativeEvent.y;
           const indexInfo = getPositionInfo(index);
@@ -285,13 +350,6 @@ const CorrectingScreen: ScreenType = ({
             y,
             line: indexInfo.line,
           });
-          const options = {
-            enableVibrateFallback: true,
-            ignoreAndroidSystemSettings: false,
-          };
-          await Haptics.selectionAsync();
-          // ReactNativeHapticFeedback.trigger('impactLight', options);
-          // Vibration.vibrate([1], true);
         } else if (event.nativeEvent.state === State.END) {
           setIsModalComment(true);
         }
