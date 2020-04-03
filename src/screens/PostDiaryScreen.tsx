@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -45,11 +45,13 @@ const PostDiaryScreen: ScreenType = ({
   const [isPublic, setIsPublic] = useState(false);
 
   const onPressClose = useCallback((): void => {
+    Keyboard.dismiss();
     if (title.length > 0 || text.length > 0) {
       setIsModalCancel(true);
     } else {
       navigation.goBack(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text.length, title.length]);
 
   useEffect(() => {
@@ -57,6 +59,7 @@ const PostDiaryScreen: ScreenType = ({
       onPressClose,
       onPressPublic: () => setIsModalAlert(true),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, title]);
 
   const getDiary = useCallback(
@@ -102,6 +105,7 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
+      Keyboard.dismiss();
       if (isLoading) return;
       try {
         setIsLoading(true);

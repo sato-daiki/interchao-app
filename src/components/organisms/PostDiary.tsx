@@ -1,5 +1,13 @@
-import React from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  Dimensions,
+  SafeAreaView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { LoadingModal, TextButtun } from '../atoms';
 import { ModalAlertPublish } from '.';
 import ModalDiaryCancel from './ModalDiaryCancel';
@@ -9,6 +17,10 @@ import {
   borderLightColor,
   offWhite,
 } from '../../styles/Common';
+
+const { height } = Dimensions.get('window');
+const defaultHeight = height - 520;
+const maxHeight = height - 200;
 
 interface Props {
   isLoading: boolean;
@@ -46,21 +58,10 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.7,
     textAlignVertical: 'top',
+    height: defaultHeight,
     flex: 1,
-    backgroundColor: '#fff',
     borderColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    height: 124,
-    width: '100%',
-    backgroundColor: offWhite,
-    justifyContent: 'flex-end',
-  },
-  footerButton: {
-    paddingBottom: 32,
   },
 });
 
@@ -81,7 +82,7 @@ const PostDiary = ({
   onPressNotSave,
 }: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
       <ModalAlertPublish
         visible={isModalAlert}
@@ -107,22 +108,19 @@ const PostDiary = ({
         autoCapitalize="none"
         keyboardType="default"
       />
-      <TextInput
-        style={styles.textInput}
-        value={text}
-        onChangeText={onChangeTextText}
-        placeholder="本文"
-        underlineColorAndroid="transparent"
-        multiline
-        autoCapitalize="none"
-        keyboardType="default"
-      />
-      <View style={styles.footer}>
-        <View style={styles.footerButton}>
-          <TextButtun isBorrderTop title="下書き" onPress={onPressDraft} />
-        </View>
-      </View>
-    </View>
+      <KeyboardAwareScrollView style={styles.container}>
+        <TextInput
+          style={styles.textInput}
+          value={text}
+          onChangeText={onChangeTextText}
+          placeholder="本文"
+          underlineColorAndroid="transparent"
+          multiline
+          autoCapitalize="none"
+          keyboardType="default"
+        />
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
