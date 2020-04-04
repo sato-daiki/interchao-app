@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, ReactNode } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Alert, Keyboard } from 'react-native';
 import {
   NavigationStackOptions,
@@ -187,14 +187,6 @@ const PostDiaryScreen: ScreenType = ({
     navigation.goBack(null);
   }, [navigation]);
 
-  const onPressSubmitModalLack = useCallback((): void => {
-    setIsModalLack(false);
-  }, []);
-
-  const onPressCloseModalLack = useCallback((): void => {
-    navigation.navigate('TeachDiaryList');
-  }, [navigation]);
-
   return (
     <PostDiary
       isLoading={isLoading}
@@ -204,8 +196,10 @@ const PostDiaryScreen: ScreenType = ({
       isPublic={isPublic}
       title={title}
       text={text}
-      onPressSubmitModalLack={onPressSubmitModalLack}
-      onPressCloseModalLack={onPressCloseModalLack}
+      onPressSubmitModalLack={(): void => setIsModalLack(false)}
+      onPressCloseModalLack={(): void => {
+        navigation.navigate('TeachDiaryList');
+      }}
       onValueChangePublic={(): void => setIsPublic(!isPublic)}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
@@ -229,10 +223,10 @@ PostDiaryScreen.navigationOptions = ({
   return {
     ...DefaultNavigationOptions,
     title: '新規日記',
-    headerLeft: (): ReactNode => (
+    headerLeft: (): JSX.Element => (
       <HeaderText title="閉じる" onPress={onPressClose} />
     ),
-    headerRight: (): ReactNode => {
+    headerRight: (): JSX.Element => {
       if (points >= 10) {
         return <HeaderText title="投稿" onPress={onPressPublic} />;
       }
