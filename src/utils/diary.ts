@@ -1,5 +1,6 @@
 import moment from 'moment';
 import 'moment/locale/ja';
+import { Alert } from 'react-native';
 import {
   DiaryStatus,
   CorrectionStatus,
@@ -9,7 +10,6 @@ import {
   DisplayProfile,
   Comment,
   InfoComment,
-  Diary,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -139,4 +139,40 @@ export const updateUnread = async (
       unreadCorrectionNum: newUnreadCorrectionNum,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
+};
+
+export const getUsePoints = (
+  length: number,
+  learnLanguage: Language
+): number => {
+  if (learnLanguage === 'en') {
+    return Math.ceil(length / 600) * 10;
+  }
+  return Math.ceil(length / 200) * 10;
+};
+
+export const checkBeforePost = (
+  title: string,
+  text: string,
+  points: number,
+  learnLanguage: Language
+): boolean => {
+  if (!title) {
+    Alert.alert('', 'タイトルが入力されていません');
+    return false;
+  }
+  if (!text) {
+    Alert.alert('', '本文が入力されていません');
+    return false;
+  }
+  const usePoint = getUsePoints(text.length, learnLanguage);
+  if (usePoint > points) {
+    Alert.alert(
+      'ポイント不足',
+      `文字数${text.length}の日記を投稿するには${usePoint}ポイントが必要です。ポイントは日本語の日記を添削することで溜めることができます。`
+    );
+    return false;
+  }
+
+  return true;
 };

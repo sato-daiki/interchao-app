@@ -22,7 +22,7 @@ import {
   fontSizeS,
 } from '../../styles/Common';
 import { Points } from '../../images';
-import { getUsePoint } from '../../utils/diary';
+import { getUsePoints } from '../../utils/diary';
 import { Language } from '../../types';
 
 const { height } = Dimensions.get('window');
@@ -140,7 +140,7 @@ const PostDiary = ({
   onPressNotSave,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
-  const usePoints = getUsePoint(text.length, learnLanguage);
+  const usePoints = getUsePoints(text.length, learnLanguage);
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />

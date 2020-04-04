@@ -11,7 +11,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
-import { checkBeforePost, getUsePoint } from '../utils/diary';
+import { checkBeforePost, getUsePoints } from '../utils/diary';
 
 interface Props {
   user: User;
@@ -159,7 +159,7 @@ const PostDiaryScreen: ScreenType = ({
       try {
         setIsLoading(true);
         const diary = getDiary('publish');
-        const usePoints = getUsePoint(text.length, profile.learnLanguage);
+        const usePoints = getUsePoints(text.length, profile.learnLanguage);
         const newPoints = user.points - usePoints;
         const diaryDoc = await firebase
           .firestore()
