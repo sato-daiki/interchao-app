@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -33,7 +34,7 @@ import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
 
 interface Props {
-  diary: Diary;
+  diary?: Diary;
   profile: Profile;
   editDiary: (objectID: string, diary: Diary) => void;
   deleteDiary: (objectID: string) => void;
@@ -96,7 +97,6 @@ const MyDiaryScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [isModalPublic, setIsModalPublic] = useState(false);
-  const { createdAt, title, text, isReview, isPublic } = diary;
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
@@ -130,13 +130,14 @@ const MyDiaryScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({
       onPressMore,
-      title: diary.title,
+      title: diary ? diary.title : '',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diary.title]);
+  }, [diary]);
 
   useEffect(() => {
     const f = async (): Promise<void> => {
+      if (!diary) return;
       // 添削がある場合データを取得
       if (diary.correction) {
         const newCorrection = await getCorrection(diary.correction.id);
@@ -153,12 +154,12 @@ const MyDiaryScreen: ScreenType = ({
       setIsLoading(false);
     };
     f();
-  }, [diary.correction, diary.proCorrection]);
+  }, [diary]);
 
   const onPressSubmitPublic = useCallback(
     (changedIsPublic: boolean) => {
       const f = async (): Promise<void> => {
-        if (!diary.objectID) return;
+        if (!diary || !diary.objectID) return;
         if (isLoading) return;
         setIsLoading(true);
         await firebase
@@ -183,7 +184,7 @@ const MyDiaryScreen: ScreenType = ({
 
   const onPressDelete = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!diary.objectID) return;
+      if (!diary || !diary.objectID) return;
       setIsLoading(true);
       await firebase
         .firestore()
@@ -197,8 +198,14 @@ const MyDiaryScreen: ScreenType = ({
       setIsLoading(false);
     };
     f();
-  }, [deleteDiary, diary.objectID, navigation]);
+  }, [deleteDiary, diary, navigation]);
 
+  if (!diary) {
+    Alert.alert('エラー', 'ページが開けません。エラーが発生しました');
+    return null;
+  }
+
+  const { createdAt, title, text, isReview, isPublic } = diary;
   const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
@@ -236,7 +243,7 @@ const MyDiaryScreen: ScreenType = ({
               navigation.navigate('UserProfile', { uid });
             }}
             onPressReview={(): void => {
-              navigation.navigate('Review');
+              navigation.navigate('Review', { objectID: diary.objectID });
             }}
           />
         ) : null}
