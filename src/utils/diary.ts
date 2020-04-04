@@ -52,7 +52,7 @@ export const getUserDiaryStatus = (
   }
 
   if (correctionStatus === 'doing') {
-    return { text: '添削中', color: softRed };
+    return { text: '添削中', color: subTextColor };
   }
 
   return null;
