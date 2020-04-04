@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   primaryColor,
@@ -36,33 +36,33 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  onPressSubmit: () => void;
   onPressClose: () => void;
 }
 
 const ModalLackPoint: React.FC<Props> = ({
   visible,
+  onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const onPressSubmit = useCallback(() => {}, []);
-
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
         <Text style={styles.title}>ポイント不足</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
-          ポイントが足りません。日記を書くに100ポイントが必要です。
+          ポイントが足りません。日記を投稿するには10ポイントが必要です。
           {'\n'}
           {'\n'}
-          日本語の日記を添削すると100ポイント、添削結果をレビューすると10ポイントが貰えます。
+          日本語の日記を添削すると10ポイントが貰えます。
           {'\n'}
           {'\n'}
-          また、ポイントとは購入することもできます。
+          下書き保存はポイントの消費なしでできます。
         </Text>
         <Space size={32} />
-        <SubmitButton title="ポイントを購入する" onPress={onPressSubmit} />
+        <SubmitButton title="続ける" onPress={onPressSubmit} />
         <Space size={16} />
-        <WhiteButton title="キャンセル" onPress={onPressClose} />
+        <WhiteButton title="添削する日記を探す" onPress={onPressClose} />
       </View>
     </Modal>
   );

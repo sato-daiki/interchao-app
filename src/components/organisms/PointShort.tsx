@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LoadingModal, TextButtun } from '../atoms';
-import { ModalAlertPublish, ModalLackPoint } from '.';
+import { ModalAlertPublish } from '.';
 import ModalDiaryCancel from './ModalDiaryCancel';
 import {
   fontSizeM,
@@ -24,14 +24,11 @@ const defaultHeight = height - 520;
 
 interface Props {
   isLoading: boolean;
-  isModalLack: boolean;
   isModalAlert: boolean;
   isModalCancel: boolean;
   isPublic: boolean;
   title: string;
   text: string;
-  onPressSubmitModalLack: () => void;
-  onPressCloseModalLack: () => void;
   onValueChangePublic: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
@@ -77,17 +74,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiary = ({
+const PointShort = ({
   isLoading,
-  isModalLack,
   isModalAlert,
   isModalCancel,
   isPublic,
   title,
   text,
   onValueChangePublic,
-  onPressSubmitModalLack,
-  onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
   onChangeTextTitle,
@@ -101,11 +95,6 @@ const PostDiary = ({
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <ModalLackPoint
-        visible={isModalLack}
-        onPressSubmit={onPressSubmitModalLack}
-        onPressClose={onPressCloseModalLack}
-      />
       <ModalAlertPublish
         visible={isModalAlert}
         isLoading={isLoading}
@@ -157,11 +146,11 @@ const PostDiary = ({
       <TextButtun
         isBorrderTop
         isBorrderBottom
-        title="下書き保存"
+        title="下書き"
         onPress={onPressDraft}
       />
     </SafeAreaView>
   );
 };
 
-export default PostDiary;
+export default PointShort;
