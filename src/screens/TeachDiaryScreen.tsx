@@ -86,7 +86,7 @@ const TeachDiaryScreen: ScreenType = ({
   editTeachDiary,
   setUser,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [correction, setCorrection] = useState<Correction>();
   const [proCorrection, setProCorrection] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);

@@ -32,6 +32,7 @@ import ModalEditPublic from '../components/organisms/ModalEditPublic';
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
+import { LoadingModal } from '../components/atoms';
 
 interface Props {
   diary?: Diary;
@@ -139,18 +140,19 @@ const MyDiaryScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       if (!diary) return;
       // 添削がある場合データを取得
+
       if (diary.correction) {
         const newCorrection = await getCorrection(diary.correction.id);
         if (newCorrection) {
           setCorrection(newCorrection);
         }
       }
-      if (diary.proCorrection) {
-        const newProCorrection = await getCorrection(diary.proCorrection.id);
-        if (newProCorrection) {
-          setProCorrection(newProCorrection);
-        }
-      }
+      // if (diary.proCorrection) {
+      //   const newProCorrection = await getCorrection(diary.proCorrection.id);
+      //   if (newProCorrection) {
+      //     setProCorrection(newProCorrection);
+      //   }
+      // }
       setIsLoading(false);
     };
     f();
@@ -209,6 +211,7 @@ const MyDiaryScreen: ScreenType = ({
   const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
+      <LoadingModal visible={isLoading} />
       <ModalConfirm
         visible={isModalDelete}
         isLoading={isLoading}
