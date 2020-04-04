@@ -10,6 +10,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { borderLightColor, primaryColor, fontSizeM } from '../styles/Common';
 import { openCameraRoll } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';
@@ -31,8 +32,11 @@ type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: '#fff',
     paddingTop: 32,
+  },
+  keyboardAwareScrollView: {
+    flex: 1,
   },
   avatar: {
     alignItems: 'center',
@@ -79,6 +83,8 @@ const EditMyProfileScreen: ScreenType = ({
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (isLoading) return;
+      setIsLoading(true);
       const ref = firebase
         .firestore()
         .collection('profiles')
@@ -94,7 +100,7 @@ const EditMyProfileScreen: ScreenType = ({
       await ref.update({
         ...profileInfo,
       });
-
+      setIsLoading(false);
       setProfile({
         ...profile,
         ...profileInfo,
@@ -102,10 +108,20 @@ const EditMyProfileScreen: ScreenType = ({
       navigation.navigate('MyPage');
     };
     f();
-  }, [profile, setProfile, navigation, name, userName, introduction, photoUrl]);
+  }, [
+    isLoading,
+    profile,
+    name,
+    userName,
+    introduction,
+    photoUrl,
+    setProfile,
+    navigation,
+  ]);
 
   useEffect(() => {
     navigation.setParams({ onPressSubmit });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, userName, introduction, photoUrl]);
 
   const pickImage = useCallback(() => {
@@ -131,44 +147,46 @@ const EditMyProfileScreen: ScreenType = ({
 
   return (
     <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <View style={styles.avatar}>
-        <Avatar photoUrl={photoUrl} pickImage={pickImage} />
-      </View>
-      <View style={styles.row}>
-        <Text style={styles.label}>名前</Text>
+      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+        <LoadingModal visible={isLoading} />
+        <View style={styles.avatar}>
+          <Avatar photoUrl={photoUrl} pickImage={pickImage} />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>名前</Text>
+          <TextInput
+            value={name}
+            onChangeText={(text: string): void => setName(text)}
+            maxLength={50}
+            placeholder="zebra"
+            keyboardType="default"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            style={styles.textInput}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.row}
+          activeOpacity={1}
+          onPress={onPressUserName}
+        >
+          <Text style={styles.label}>ユーザネーム</Text>
+          <Text>{userName}</Text>
+        </TouchableOpacity>
         <TextInput
-          value={name}
-          onChangeText={(text: string): void => setName(text)}
-          maxLength={50}
-          placeholder="zebra"
-          keyboardType="default"
+          value={introduction}
+          onChangeText={(text: string): void => setIntroduction(text)}
+          maxLength={200}
+          placeholder="自己紹介(200字以内)"
+          multiline
+          numberOfLines={3}
           autoCapitalize="none"
           autoCorrect={false}
           underlineColorAndroid="transparent"
-          style={styles.textInput}
+          style={styles.introduction}
         />
-      </View>
-      <TouchableOpacity
-        style={styles.row}
-        activeOpacity={1}
-        onPress={onPressUserName}
-      >
-        <Text style={styles.label}>ユーザネーム</Text>
-        <Text>{userName}</Text>
-      </TouchableOpacity>
-      <TextInput
-        value={introduction}
-        onChangeText={(text: string): void => setIntroduction(text)}
-        maxLength={200}
-        placeholder="自己紹介(200字以内)"
-        multiline
-        numberOfLines={3}
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        style={styles.introduction}
-      />
+      </KeyboardAwareScrollView>
     </View>
   );
 };
