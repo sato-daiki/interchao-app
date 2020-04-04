@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -12,7 +12,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
-import { getDisplayProfile } from '../utils/diary';
+import { getDisplayProfile, checkBeforePost } from '../utils/diary';
 
 interface Props {
   user: User;
@@ -78,7 +78,8 @@ const PostDraftDiaryScreen: ScreenType = ({
 
   const onPressDraft = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (isLoading) return;
+      Keyboard.dismiss();
+      if (isLoading || isModalLack) return;
       try {
         const { params = {} } = navigation.state;
         const { item } = params;
@@ -106,9 +107,18 @@ const PostDraftDiaryScreen: ScreenType = ({
       }
     };
     f();
-  }, [editDraftDiary, getDiary, isLoading, navigation, text, title]);
+  }, [
+    editDraftDiary,
+    getDiary,
+    isLoading,
+    isModalLack,
+    navigation,
+    text,
+    title,
+  ]);
 
   const onPressClose = useCallback((): void => {
+    Keyboard.dismiss();
     if (title.length > 0 || text.length > 0) {
       setIsModalCancel(true);
     } else {
@@ -116,20 +126,34 @@ const PostDraftDiaryScreen: ScreenType = ({
     }
   }, [navigation, text.length, title.length]);
 
+  const onPressPublic = useCallback((): void => {
+    const res = checkBeforePost(title, text);
+    if (!res) {
+      return;
+    }
+    setIsModalAlert(true);
+  }, [text, title]);
+
   useEffect(() => {
     navigation.setParams({
-      point: user.points,
+      points: user.points,
       onPressClose,
       onPressDraft,
-      onPressPublic: () => setIsModalAlert(true),
+      onPressPublic,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
+      Keyboard.dismiss();
       if (isLoading) return;
       try {
+        const res = checkBeforePost(title, text);
+        if (!res) {
+          return;
+        }
+
         const { params = {} } = navigation.state;
         const { item }: { item: Diary } = params;
         const points = user.points - 10;
@@ -194,6 +218,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       isPublic={isPublic}
       title={title}
       text={text}
+      points={user.points}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');

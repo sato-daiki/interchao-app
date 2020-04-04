@@ -18,4 +18,6 @@ export { default as Space } from './Space';
 export { default as SubmitButton } from './SubmitButton';
 export { default as SummaryCard } from './SummaryCard';
 export { default as TextButtun } from './TextButtun';
+export { default as UserPoints } from './UserPoints';
+export { default as UserPointsBig } from './UserPointsBig';
 export { default as WhiteButton } from './WhiteButton';

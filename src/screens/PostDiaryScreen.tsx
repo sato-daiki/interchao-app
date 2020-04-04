@@ -11,6 +11,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
+import { checkBeforePost } from '../utils/diary';
 
 interface Props {
   user: User;
@@ -89,7 +90,8 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressDraft = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (isLoading) return;
+      Keyboard.dismiss();
+      if (isLoading || isModalLack) return;
       try {
         setIsLoading(true);
         const diary = getDiary('draft');
@@ -115,7 +117,7 @@ const PostDiaryScreen: ScreenType = ({
       }
     };
     f();
-  }, [addDraftDiary, getDiary, isLoading, navigation]);
+  }, [addDraftDiary, getDiary, isLoading, isModalLack, navigation]);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
@@ -127,19 +129,27 @@ const PostDiaryScreen: ScreenType = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text.length, title.length]);
 
+  const onPressPublic = useCallback((): void => {
+    Keyboard.dismiss();
+    const res = checkBeforePost(title, text);
+    if (!res) {
+      return;
+    }
+    setIsModalAlert(true);
+  }, [text, title]);
+
   useEffect(() => {
     navigation.setParams({
-      point: user.points,
+      points: user.points,
       onPressClose,
       onPressDraft,
-      onPressPublic: () => setIsModalAlert(true),
+      onPressPublic,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
-      Keyboard.dismiss();
       if (isLoading) return;
       try {
         setIsLoading(true);
@@ -196,6 +206,7 @@ const PostDiaryScreen: ScreenType = ({
       isPublic={isPublic}
       title={title}
       text={text}
+      points={user.points}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');

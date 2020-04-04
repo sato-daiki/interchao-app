@@ -8,7 +8,7 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { SubmitButton, WhiteButton, Space } from '../atoms';
+import { SubmitButton, WhiteButton, Space, UserPointsBig } from '../atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,10 +67,9 @@ const styles = StyleSheet.create({
   button: {
     paddingHorizontal: 16,
   },
-  subText: {
-    color: subTextColor,
-    fontSize: fontSizeM,
-    textAlign: 'center',
+  points: {
+    alignItems: 'center',
+    paddingBottom: 16,
   },
 });
 
@@ -78,6 +77,7 @@ interface Props {
   visible: boolean;
   isLoading: boolean;
   isPublic: boolean;
+  points: number;
   onValueChangePublic: () => void;
   onPressSubmit: () => void;
   onPressClose: () => void;
@@ -87,6 +87,7 @@ const ModalAlertPublish: React.FC<Props> = ({
   visible,
   isLoading,
   isPublic,
+  points,
   onValueChangePublic,
   onPressSubmit,
   onPressClose,
@@ -101,6 +102,9 @@ const ModalAlertPublish: React.FC<Props> = ({
           {'\n'}
           一度投稿すると、編集ができません。
         </Text>
+        <View style={styles.points}>
+          <UserPointsBig points={points} />
+        </View>
         <Text style={styles.subTitle}>公開設定</Text>
         <Text style={styles.description}>
           InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。
