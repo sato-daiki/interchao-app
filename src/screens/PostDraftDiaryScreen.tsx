@@ -15,7 +15,7 @@ import PostDiary from '../components/organisms/PostDiary';
 import {
   getDisplayProfile,
   checkBeforePost,
-  getUsePoint,
+  getUsePoints,
 } from '../utils/diary';
 
 interface Props {
@@ -160,7 +160,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       try {
         const { params = {} } = navigation.state;
         const { item }: { item: Diary } = params;
-        const usePoints = getUsePoint(text.length, profile.learnLanguage);
+        const usePoints = getUsePoints(text.length, profile.learnLanguage);
         const newPoints = user.points - usePoints;
 
         setIsLoading(true);

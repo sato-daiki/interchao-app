@@ -7,7 +7,7 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { WhiteButton, Space, UserPointsBig } from '../atoms';
+import { Space, UserPointsBig, SubmitButton } from '../atoms';
 import { GetPoints } from '../../images';
 
 const styles = StyleSheet.create({
@@ -44,12 +44,14 @@ const styles = StyleSheet.create({
 interface Props {
   visible: boolean;
   points: number;
+  getPoints: number;
   onPressClose: () => void;
 }
 
 const ModalCorrectingDone: React.FC<Props> = ({
   visible,
   points,
+  getPoints,
   onPressClose,
 }: Props): JSX.Element | null => {
   return (
@@ -60,12 +62,14 @@ const ModalCorrectingDone: React.FC<Props> = ({
         <Image style={styles.img} source={GetPoints} />
         <Space size={32} />
         <Text style={styles.text}>
-          添削ありがとうございます。10ポイント獲得。
+          添削ありがとうございます。
+          {getPoints}
+          ポイント獲得。
         </Text>
         <Space size={24} />
         <UserPointsBig points={points} />
         <Space size={32} />
-        <WhiteButton title="閉じる" onPress={onPressClose} />
+        <SubmitButton title="閉じる" onPress={onPressClose} />
       </View>
     </Modal>
   );

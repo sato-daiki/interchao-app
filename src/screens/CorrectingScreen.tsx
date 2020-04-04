@@ -44,7 +44,12 @@ import {
   SummaryCard,
 } from '../components/atoms';
 import { User, Diary, InfoComment, Profile } from '../types';
-import { getAlgoliaDate, getDisplayProfile, getComments } from '../utils/diary';
+import {
+  getAlgoliaDate,
+  getDisplayProfile,
+  getComments,
+  getUsePoints,
+} from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
@@ -194,7 +199,11 @@ const CorrectingScreen: ScreenType = ({
       });
 
       // ポイントを増やす
-      const newPoints = user.points + 10;
+      const getPoints = getUsePoints(
+        teachDiary.text.length,
+        teachDiary.profile.learnLanguage
+      );
+      const newPoints = user.points + getPoints;
       const userRef = firebase.firestore().doc(`users/${user.uid}`);
       await userRef.update({
         points: newPoints,
@@ -638,7 +647,7 @@ const CorrectingScreen: ScreenType = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('teachDiary');
+    navigation.navigate('TeachDiaryList');
     setIsModalDone(false);
   }, [navigation]);
 
@@ -679,10 +688,15 @@ const CorrectingScreen: ScreenType = ({
     [onPressMoreComment]
   );
 
+  const getPoints = getUsePoints(
+    teachDiary.text.length,
+    teachDiary.profile.learnLanguage
+  );
   return (
     <View style={styles.container}>
       <ModalCorrectingDone
         visible={isModalDone}
+        getPoints={getPoints}
         points={user.points}
         onPressClose={onPressCloseDone}
       />
