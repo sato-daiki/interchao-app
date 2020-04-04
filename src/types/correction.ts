@@ -1,3 +1,5 @@
+import { DisplayProfile } from './diary';
+
 export interface Comment {
   original: string;
   fix: string;
@@ -5,9 +7,11 @@ export interface Comment {
 }
 
 export interface Correction {
+  objectID: string;
+  pro: string;
   profile: DisplayProfile;
   comments: Comment[];
   summary: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: firebase.firestore.FieldValue;
+  updatedAt: firebase.firestore.FieldValue;
 }
