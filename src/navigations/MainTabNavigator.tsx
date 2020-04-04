@@ -8,6 +8,7 @@ import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer
 import DraftDiaryListScreenContainer from '../containers/DraftDiaryListScreenContainer';
 import { mainColor } from '../styles/Common';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
+import ReviewScreenContainer from '../containers/ReviewScreenContainer';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import TeachDiaryListScreenContainer from '../containers/TeachDiaryListScreenContainer';
 import MyDiaryScreenContainer from '../containers/MyDiaryScreenContainer';
@@ -41,6 +42,10 @@ const ModalPostDiaryNavigator = createStackNavigator({
 
 const ModalPostDraftDiaryNavigator = createStackNavigator({
   PostDraftDiary: { screen: PostDraftDiaryScreenContainer },
+});
+
+const ModalReviewNavigator = createStackNavigator({
+  Review: { screen: ReviewScreenContainer },
 });
 
 const ModalCorrectingNavigator = createStackNavigator({
@@ -200,6 +205,9 @@ export default createStackNavigator(
     },
     ModalCorrecting: {
       screen: ModalCorrectingNavigator,
+    },
+    ModalReview: {
+      screen: ModalReviewNavigator,
     },
   },
   {
