@@ -9,6 +9,12 @@ export type Timestamp = {
 export type DiaryStatus = 'draft' | 'publish';
 export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
 
+// Correctionのうち一部を抜粋したもの
+export interface DisplaCorrection {
+  id: string;
+  profile: DisplayProfile;
+}
+
 // Profileのうち一部を抜粋したもの
 export interface DisplayProfile {
   uid: string;
@@ -27,10 +33,12 @@ export interface Diary {
   text: string;
   profile: DisplayProfile;
   diaryStatus: DiaryStatus;
+  correction: DisplaCorrection | null;
+  proCorrection: DisplaCorrection | null;
   correctionStatus: CorrectionStatus;
   correctionStatusPro: CorrectionStatus;
   isReview: boolean;
   isReviewPro: boolean;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: Timestamp | firebase.firestore.FieldValue;
+  updatedAt: Timestamp | firebase.firestore.FieldValue;
 }
