@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { NavigationStackProp } from 'react-navigation-stack';
 import MyDiaryScreen from '../screens/MyDiaryScreen';
+import { State } from '../types/state';
 import { deleteDiary, editDiary } from '../stores/actions/diaryList';
 
 interface OwnProps {
