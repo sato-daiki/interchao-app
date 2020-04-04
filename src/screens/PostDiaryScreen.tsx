@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, ReactNode } from 'react';
 import { Alert, Keyboard } from 'react-native';
 import {
   NavigationStackOptions,
@@ -38,29 +38,13 @@ const PostDiaryScreen: ScreenType = ({
   addDraftDiary,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  // ポイントが足りない時アラートをだす
+  const [isModalLack, setIsModalLack] = useState(user.points < 10);
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isModalCancel, setIsModalCancel] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [isPublic, setIsPublic] = useState(false);
-
-  const onPressClose = useCallback((): void => {
-    Keyboard.dismiss();
-    if (title.length > 0 || text.length > 0) {
-      setIsModalCancel(true);
-    } else {
-      navigation.goBack(null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text.length, title.length]);
-
-  useEffect(() => {
-    navigation.setParams({
-      onPressClose,
-      onPressPublic: () => setIsModalAlert(true),
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, title]);
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
@@ -102,6 +86,56 @@ const PostDiaryScreen: ScreenType = ({
       user.premium,
     ]
   );
+
+  const onPressDraft = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (isLoading) return;
+      try {
+        setIsLoading(true);
+        const diary = getDiary('draft');
+        const diaryDoc = await firebase
+          .firestore()
+          .collection('diaries')
+          .add(diary);
+
+        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+
+        // reduxに追加
+        addDraftDiary({
+          objectID: diaryDoc.id,
+          ...diary,
+        });
+
+        navigation.navigate('DraftDiaryList');
+        setIsLoading(false);
+        setIsModalAlert(false);
+      } catch (err) {
+        setIsLoading(false);
+        Alert.alert('ネットワークエラーです');
+      }
+    };
+    f();
+  }, [addDraftDiary, getDiary, isLoading, navigation]);
+
+  const onPressClose = useCallback((): void => {
+    Keyboard.dismiss();
+    if (title.length > 0 || text.length > 0) {
+      setIsModalCancel(true);
+    } else {
+      navigation.goBack(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text.length, title.length]);
+
+  useEffect(() => {
+    navigation.setParams({
+      point: user.points,
+      onPressClose,
+      onPressDraft,
+      onPressPublic: () => setIsModalAlert(true),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.points, text, title]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -149,48 +183,29 @@ const PostDiaryScreen: ScreenType = ({
     user.uid,
   ]);
 
-  const onPressDraft = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isLoading) return;
-      try {
-        setIsLoading(true);
-        const diary = getDiary('draft');
-        const diaryDoc = await firebase
-          .firestore()
-          .collection('diaries')
-          .add(diary);
-
-        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
-
-        // reduxに追加
-        addDraftDiary({
-          objectID: diaryDoc.id,
-          ...diary,
-        });
-
-        navigation.navigate('DraftDiaryList');
-        setIsLoading(false);
-        setIsModalAlert(false);
-      } catch (err) {
-        setIsLoading(false);
-        Alert.alert('ネットワークエラーです');
-      }
-    };
-    f();
-  }, [addDraftDiary, getDiary, isLoading, navigation]);
-
   const onPressNotSave = useCallback((): void => {
     navigation.goBack(null);
+  }, [navigation]);
+
+  const onPressSubmitModalLack = useCallback((): void => {
+    setIsModalLack(false);
+  }, []);
+
+  const onPressCloseModalLack = useCallback((): void => {
+    navigation.navigate('TeachDiary');
   }, [navigation]);
 
   return (
     <PostDiary
       isLoading={isLoading}
+      isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
       isPublic={isPublic}
       title={title}
       text={text}
+      onPressSubmitModalLack={onPressSubmitModalLack}
+      onPressCloseModalLack={onPressCloseModalLack}
       onValueChangePublic={(): void => setIsPublic(!isPublic)}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
@@ -208,15 +223,21 @@ PostDiaryScreen.navigationOptions = ({
 }): NavigationStackOptions => {
   const onPressClose = navigation.getParam('onPressClose');
   const onPressPublic = navigation.getParam('onPressPublic');
+  const onPressDraft = navigation.getParam('onPressDraft');
+  const points = navigation.getParam('points');
+
   return {
     ...DefaultNavigationOptions,
     title: '新規日記',
-    headerLeft: (): JSX.Element => (
+    headerLeft: (): ReactNode => (
       <HeaderText title="閉じる" onPress={onPressClose} />
     ),
-    headerRight: (): JSX.Element => (
-      <HeaderText title="投稿" onPress={onPressPublic} />
-    ),
+    headerRight: (): ReactNode => {
+      if (points >= 10) {
+        return <HeaderText title="投稿" onPress={onPressPublic} />;
+      }
+      return <HeaderText title="下書き保存" onPress={onPressDraft} />;
+    },
   };
 };
 
