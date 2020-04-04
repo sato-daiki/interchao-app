@@ -5,8 +5,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier/@typescript-eslint',
   ],
-  plugins: ['react-native', '@typescript-eslint'],
-  // plugins: ['react-native', '@typescript-eslint', 'react-hooks'],
+  // plugins: ['react-native', '@typescript-eslint'],
+  plugins: ['react-native', '@typescript-eslint', 'react-hooks'],
   // decorator等、Babel独自の記法を許可する
   parser: '@typescript-eslint/parser',
   // __DEV__をGlobal関数とみなす
