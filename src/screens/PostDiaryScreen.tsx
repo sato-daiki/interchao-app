@@ -192,7 +192,7 @@ const PostDiaryScreen: ScreenType = ({
   }, []);
 
   const onPressCloseModalLack = useCallback((): void => {
-    navigation.navigate('TeachDiary');
+    navigation.navigate('TeachDiaryList');
   }, [navigation]);
 
   return (
