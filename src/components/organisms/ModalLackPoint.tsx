@@ -51,7 +51,7 @@ const ModalLackPoint: React.FC<Props> = ({
         <Text style={styles.title}>ポイント不足</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
-          ポイントが足りません。日記を投稿するには10ポイントが必要です。
+          ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。
           {'\n'}
           {'\n'}
           日本語の日記を添削すると10ポイントが貰えます。

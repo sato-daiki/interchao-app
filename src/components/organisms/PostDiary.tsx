@@ -6,6 +6,8 @@ import {
   Dimensions,
   SafeAreaView,
   View,
+  Text,
+  Image,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LoadingModal, TextButtun } from '../atoms';
@@ -17,7 +19,11 @@ import {
   borderLightColor,
   offWhite,
   mainColor,
+  fontSizeS,
 } from '../../styles/Common';
+import { Points } from '../../images';
+import { getUsePoint } from '../../utils/diary';
+import { Language } from '../../types';
 
 const { height } = Dimensions.get('window');
 const defaultHeight = height - 520;
@@ -31,6 +37,7 @@ interface Props {
   title: string;
   text: string;
   points: number;
+  learnLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onValueChangePublic: () => void;
@@ -47,6 +54,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: offWhite,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    marginLeft: 16,
+    borderColor: borderLightColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  left: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  right: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  points: {
+    width: 16,
+    height: 16,
+    tintColor: primaryColor,
+    marginRight: 3,
+  },
+  headerLabel: {
+    color: primaryColor,
+    fontSize: fontSizeS,
+    marginRight: 4,
+  },
+  headerValue: {
+    color: primaryColor,
+    fontSize: fontSizeS,
+    marginRight: 16,
   },
   titleInput: {
     fontSize: fontSizeM,
@@ -87,6 +127,7 @@ const PostDiary = ({
   title,
   text,
   points,
+  learnLanguage,
   onValueChangePublic,
   onPressSubmitModalLack,
   onPressCloseModalLack,
@@ -99,7 +140,7 @@ const PostDiary = ({
   onPressNotSave,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
-
+  const usePoints = getUsePoint(text.length, learnLanguage);
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -112,6 +153,7 @@ const PostDiary = ({
         visible={isModalAlert}
         isLoading={isLoading}
         isPublic={isPublic}
+        usePoints={usePoints}
         points={points}
         onValueChangePublic={onValueChangePublic}
         onPressSubmit={onPressSubmit}
@@ -124,6 +166,19 @@ const PostDiary = ({
         onPressNotSave={onPressNotSave}
         onPressClose={onPressCloseModalCancel}
       />
+      <View style={styles.header}>
+        <View style={styles.left}>
+          <Text style={styles.headerLabel}>消費ポイント</Text>
+          <Text style={styles.headerValue}>{usePoints}</Text>
+          <Text style={styles.headerLabel}>文字数</Text>
+          <Text style={styles.headerValue}>{text.length}</Text>
+        </View>
+        <View style={styles.right}>
+          <Image style={styles.points} source={Points} />
+          <Text style={styles.headerLabel}>所持ポイント</Text>
+          <Text style={styles.headerValue}>{usePoints}</Text>
+        </View>
+      </View>
       <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
         <TextInput
           style={styles.titleInput}
