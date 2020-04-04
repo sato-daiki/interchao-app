@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { State } from '../types/state';
 import { setPoints } from '../stores/actions/user';
-import { addDiary, setDiaryTotalNum } from '../stores/actions/diaryList';
+import { addDiary } from '../stores/actions/diaryList';
 import {
   addDraftDiary,
   deleteDraftDiary,
-  setDraftDiary,
+  editDraftDiary,
 } from '../stores/actions/draftDiaryList';
 import PostDraftDiaryScreen from '../screens/PostDraftDiaryScreen';
 
@@ -21,7 +21,7 @@ const mapDispatchToProps = {
   addDiary,
   addDraftDiary,
   deleteDraftDiary,
-  setDraftDiary,
+  editDraftDiary,
 };
 
 export default connect(
