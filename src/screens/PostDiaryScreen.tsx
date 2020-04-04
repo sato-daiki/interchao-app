@@ -11,7 +11,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
-import { checkBeforePost } from '../utils/diary';
+import { checkBeforePost, getUsePoint } from '../utils/diary';
 
 interface Props {
   user: User;
@@ -131,12 +131,17 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressPublic = useCallback((): void => {
     Keyboard.dismiss();
-    const res = checkBeforePost(title, text);
+    const res = checkBeforePost(
+      title,
+      text,
+      user.points,
+      profile.learnLanguage
+    );
     if (!res) {
       return;
     }
     setIsModalAlert(true);
-  }, [text, title]);
+  }, [profile.learnLanguage, text, title, user.points]);
 
   useEffect(() => {
     navigation.setParams({
@@ -154,7 +159,8 @@ const PostDiaryScreen: ScreenType = ({
       try {
         setIsLoading(true);
         const diary = getDiary('publish');
-        const newPoints = user.points - 10;
+        const usePoints = getUsePoint(text.length, profile.learnLanguage);
+        const newPoints = user.points - usePoints;
         const diaryDoc = await firebase
           .firestore()
           .collection('diaries')
@@ -188,7 +194,9 @@ const PostDiaryScreen: ScreenType = ({
     getDiary,
     isLoading,
     navigation,
+    profile.learnLanguage,
     setPoints,
+    text.length,
     user.points,
     user.uid,
   ]);
@@ -207,6 +215,7 @@ const PostDiaryScreen: ScreenType = ({
       title={title}
       text={text}
       points={user.points}
+      learnLanguage={profile.learnLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');

@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   text: {
-    textAlign: 'center',
     fontSize: fontSizeM,
     color: primaryColor,
     paddingHorizontal: 16,
@@ -77,6 +76,7 @@ interface Props {
   visible: boolean;
   isLoading: boolean;
   isPublic: boolean;
+  usePoints: number;
   points: number;
   onValueChangePublic: () => void;
   onPressSubmit: () => void;
@@ -87,6 +87,7 @@ const ModalAlertPublish: React.FC<Props> = ({
   visible,
   isLoading,
   isPublic,
+  usePoints,
   points,
   onValueChangePublic,
   onPressSubmit,
@@ -98,9 +99,9 @@ const ModalAlertPublish: React.FC<Props> = ({
         <Text style={styles.title}>確認</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
-          10ポイントを使い日記を投稿します。
-          {'\n'}
-          一度投稿すると、編集ができません。
+          {usePoints}
+          ポイントを使い日記を投稿します。
+          一度投稿すると、編集ができませんが、よろしいですか？
         </Text>
         <View style={styles.points}>
           <UserPointsBig points={points} />

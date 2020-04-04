@@ -12,7 +12,11 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
-import { getDisplayProfile, checkBeforePost } from '../utils/diary';
+import {
+  getDisplayProfile,
+  checkBeforePost,
+  getUsePoint,
+} from '../utils/diary';
 
 interface Props {
   user: User;
@@ -127,12 +131,17 @@ const PostDraftDiaryScreen: ScreenType = ({
   }, [navigation, text.length, title.length]);
 
   const onPressPublic = useCallback((): void => {
-    const res = checkBeforePost(title, text);
+    const res = checkBeforePost(
+      title,
+      text,
+      user.points,
+      profile.learnLanguage
+    );
     if (!res) {
       return;
     }
     setIsModalAlert(true);
-  }, [text, title]);
+  }, [profile.learnLanguage, text, title, user.points]);
 
   useEffect(() => {
     navigation.setParams({
@@ -149,14 +158,10 @@ const PostDraftDiaryScreen: ScreenType = ({
       Keyboard.dismiss();
       if (isLoading) return;
       try {
-        const res = checkBeforePost(title, text);
-        if (!res) {
-          return;
-        }
-
         const { params = {} } = navigation.state;
         const { item }: { item: Diary } = params;
-        const points = user.points - 10;
+        const usePoints = getUsePoint(text.length, profile.learnLanguage);
+        const newPoints = user.points - usePoints;
 
         setIsLoading(true);
         const diary = getDiary('publish');
@@ -165,7 +170,7 @@ const PostDraftDiaryScreen: ScreenType = ({
 
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
         await refUser.update({
-          points,
+          points: newPoints,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         track(events.CREATED_DIARY, { diaryStatus: 'publish' });
@@ -180,7 +185,7 @@ const PostDraftDiaryScreen: ScreenType = ({
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         deleteDraftDiary(item.objectID!);
-        setPoints(points);
+        setPoints(newPoints);
 
         navigation.navigate('MyDiaryList');
         setIsLoading(false);
@@ -198,6 +203,7 @@ const PostDraftDiaryScreen: ScreenType = ({
     isLoading,
     isPublic,
     navigation,
+    profile.learnLanguage,
     setPoints,
     text,
     title,
@@ -219,6 +225,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       title={title}
       text={text}
       points={user.points}
+      learnLanguage={profile.learnLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');

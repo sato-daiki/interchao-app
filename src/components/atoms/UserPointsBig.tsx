@@ -1,11 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import {
-  fontSizeS,
-  primaryColor,
-  subTextColor,
-  fontSizeM,
-} from '../../styles/Common';
+import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Points } from '../../images';
 
 interface Props {
