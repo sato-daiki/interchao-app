@@ -4,7 +4,6 @@ import {
   View,
   Text,
   LayoutChangeEvent,
-  Vibration,
   FlatList,
   Alert,
   ScrollView,
@@ -13,7 +12,6 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
-
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -53,8 +51,8 @@ import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 import { getUuid } from '../utils/common';
+import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 
-const VIBRATION_DURATION = 500;
 const LINE_HEIGHT = fontSizeM * 1.7;
 const LINE_SPACE = LINE_HEIGHT - fontSizeM;
 
@@ -138,6 +136,7 @@ const CorrectingScreen: ScreenType = ({
   const [endWord, setEndWord] = useState<ActiveWord>();
   const [initialWords, setInitialWords] = useState<InitialWord[]>([]);
 
+  const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalComment, setIsModalComment] = useState(false); // コメントするのメニューのon/offフラグ
 
   /* 右上と画面下のボタン関連 */
@@ -208,9 +207,8 @@ const CorrectingScreen: ScreenType = ({
         correctionStatus: 'unread',
       });
       setPoints(newPoints);
-
-      navigation.goBack(null);
       setIsLoading(false);
+      setIsModalDone(true);
     };
     f();
   }, [
@@ -223,7 +221,6 @@ const CorrectingScreen: ScreenType = ({
     user.uid,
     editTeachDiary,
     setPoints,
-    navigation,
   ]);
 
   /**
@@ -637,6 +634,14 @@ const CorrectingScreen: ScreenType = ({
     setIsCommentInput(false);
   }, []);
 
+  /*
+   * 添削完了
+   */
+  const onPressCloseDone = useCallback(() => {
+    navigation.navigate('teachDiary');
+    setIsModalDone(false);
+  }, [navigation]);
+
   const listEmptyComponent = isCommentInput ? null : (
     <>
       <EmptyList
@@ -676,6 +681,11 @@ const CorrectingScreen: ScreenType = ({
 
   return (
     <View style={styles.container}>
+      <ModalCorrectingDone
+        visible={isModalDone}
+        points={user.points}
+        onPressClose={onPressCloseDone}
+      />
       <ScrollView style={styles.scrollView}>
         <LoadingModal visible={isLoading} />
         <View style={styles.main}>

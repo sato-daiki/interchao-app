@@ -30,6 +30,7 @@ interface Props {
   isPublic: boolean;
   title: string;
   text: string;
+  points: number;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onValueChangePublic: () => void;
@@ -85,6 +86,7 @@ const PostDiary = ({
   isPublic,
   title,
   text,
+  points,
   onValueChangePublic,
   onPressSubmitModalLack,
   onPressCloseModalLack,
@@ -110,6 +112,7 @@ const PostDiary = ({
         visible={isModalAlert}
         isLoading={isLoading}
         isPublic={isPublic}
+        points={points}
         onValueChangePublic={onValueChangePublic}
         onPressSubmit={onPressSubmit}
         onPressClose={onPressCloseModalPublish}

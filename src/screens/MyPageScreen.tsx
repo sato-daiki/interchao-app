@@ -7,18 +7,20 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM } from '../styles/Common';
-import { Profile, UserReview } from '../types';
+import { Profile, UserReview, User } from '../types';
 import {
   ProfileIconHorizontal,
   SmallButtonWhite,
   Space,
   ScoreStar,
+  UserPoints,
 } from '../components/atoms';
 import { ProfileLanguage } from '../components/molecules';
 import { getUserReview } from '../utils/userReview';
 
 export interface Props {
   profile: Profile;
+  user: User;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
 /**
  * マイページ
  */
-const MyPageScreen: ScreenType = ({ navigation, profile }) => {
+const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
 
   const {
@@ -79,6 +81,7 @@ const MyPageScreen: ScreenType = ({ navigation, profile }) => {
       setUserReview(newUserReivew);
     };
     f();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 
   const onPressEdit = useCallback(() => {
@@ -97,6 +100,8 @@ const MyPageScreen: ScreenType = ({ navigation, profile }) => {
       ) : null}
       <Space size={8} />
       <Text style={styles.introduction}>{introduction}</Text>
+      <UserPoints points={user.points} />
+      <Space size={8} />
       <ProfileLanguage
         nativeLanguage={nativeLanguage}
         learnLanguage={learnLanguage}
