@@ -57,6 +57,7 @@ import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 import { getUuid } from '../utils/common';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
+import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
 
 const LINE_HEIGHT = fontSizeM * 1.7;
 const LINE_SPACE = LINE_HEIGHT - fontSizeM;
@@ -67,6 +68,7 @@ interface Props {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
+  setUser: (user: User) => void;
   setPoints: (points: number) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
@@ -131,11 +133,13 @@ const CorrectingScreen: ScreenType = ({
   user,
   currentProfile,
   teachDiary,
+  setUser,
   setPoints,
   editTeachDiary,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
+  const [isTutorialLoading, setIsTutorialLoading] = useState(false);
   const [longPressWord, setLongPressWord] = useState<LongPressWord>();
   const [startWord, setStartWord] = useState<ActiveWord>();
   const [endWord, setEndWord] = useState<ActiveWord>();
@@ -651,6 +655,28 @@ const CorrectingScreen: ScreenType = ({
     setIsModalDone(false);
   }, [navigation]);
 
+  /**
+   * 初回チュートリアル
+   */
+  const onPressTutorial = useCallback((): void => {
+    const f = async (): Promise<void> => {
+      setIsTutorialLoading(true);
+      await firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({
+          tutorialCorrectiong: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      setUser({
+        ...user,
+        tutorialCorrectiong: true,
+      });
+      setIsTutorialLoading(false);
+    };
+    f();
+  }, [setUser, user]);
+
   const listEmptyComponent = isCommentInput ? null : (
     <>
       <EmptyList
@@ -694,14 +720,19 @@ const CorrectingScreen: ScreenType = ({
   );
   return (
     <View style={styles.container}>
+      <LoadingModal visible={isLoading} />
       <ModalCorrectingDone
         visible={isModalDone}
         getPoints={getPoints}
         points={user.points}
         onPressClose={onPressCloseDone}
       />
+      <TutorialCorrecting
+        isLoading={isTutorialLoading}
+        displayed={user.tutorialCorrectiong}
+        onPress={onPressTutorial}
+      />
       <ScrollView style={styles.scrollView}>
-        <LoadingModal visible={isLoading} />
         <View style={styles.main}>
           <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
           <Space size={8} />
@@ -711,21 +742,19 @@ const CorrectingScreen: ScreenType = ({
           </View>
           <Text style={styles.title}>{title}</Text>
         </View>
-        <View>
-          <CorrectionText
-            text={text}
-            isModalComment={isModalComment}
-            startWord={startWord}
-            endWord={endWord}
-            onLongPress={onLongPress}
-            onGestureEventTop={onGestureEventTop}
-            onGestureEventEnd={onGestureEventEnd}
-            onLayout={onLayout}
-            onPressComment={onPressComment}
-            initialWords={initialWords}
-          />
-          <CorrectionUnderline infoComments={infoComments} />
-        </View>
+        <CorrectionText
+          text={text}
+          isModalComment={isModalComment}
+          startWord={startWord}
+          endWord={endWord}
+          onLongPress={onLongPress}
+          onGestureEventTop={onGestureEventTop}
+          onGestureEventEnd={onGestureEventEnd}
+          onLayout={onLayout}
+          onPressComment={onPressComment}
+          initialWords={initialWords}
+        />
+        <CorrectionUnderline infoComments={infoComments} />
         <Space size={32} />
         {/* 新規でコメント追加 */}
         {isCommentInput ? (

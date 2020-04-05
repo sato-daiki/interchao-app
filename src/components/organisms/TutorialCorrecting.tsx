@@ -22,18 +22,26 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  isLoading: boolean;
+  isLoading?: boolean;
   displayed: boolean;
-  onPress?: () => void;
+  buttonText?: string;
+  onPress: () => void;
 }
 
 const TutorialCorrecting: React.FC<Props> = ({
-  isLoading,
+  isLoading = false,
   displayed,
-  onPress = (): void => {},
+  buttonText = '始める',
+  onPress,
 }: Props): JSX.Element | null => {
   return (
-    <Tutorial displayed={displayed} isLoading={isLoading} onPress={onPress}>
+    <Tutorial
+      displayed={displayed}
+      isLoading={isLoading}
+      title="添削の仕方"
+      buttonText={buttonText}
+      onPress={onPress}
+    >
       <View style={styles.container}>
         <Image style={styles.img} source={Zebbu} resizeMode="contain" />
         <Space size={24} />

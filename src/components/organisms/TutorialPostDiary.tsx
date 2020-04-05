@@ -22,18 +22,26 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  isLoading: boolean;
+  isLoading?: boolean;
   displayed: boolean;
+  buttonText?: string;
   onPress?: () => void;
 }
 
 const TutorialPostDiary: React.FC<Props> = ({
-  isLoading,
+  isLoading = false,
   displayed,
+  buttonText = '始める',
   onPress = (): void => {},
 }: Props): JSX.Element | null => {
   return (
-    <Tutorial displayed={displayed} isLoading={isLoading} onPress={onPress}>
+    <Tutorial
+      displayed={displayed}
+      isLoading={isLoading}
+      title="日記の書き方"
+      buttonText={buttonText}
+      onPress={onPress}
+    >
       <View style={styles.container}>
         <Image style={styles.img} source={Zebbu} resizeMode="contain" />
         <Space size={24} />
