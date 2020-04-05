@@ -85,7 +85,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       setIsLoading(false);
     };
     f();
-  }, [clearErrorMessage]);
+  }, [email, password]);
 
   const onPressForget = useCallback(() => {
     navigation.navigate('ForegetPassword');

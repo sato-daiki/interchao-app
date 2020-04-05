@@ -24,6 +24,7 @@ import {
 import { Points } from '../../images';
 import { getUsePoints } from '../../utils/diary';
 import { Language } from '../../types';
+import TutorialPostDiary from './TutorialPostDiary';
 
 const { height } = Dimensions.get('window');
 const defaultHeight = height - 520;
@@ -34,6 +35,8 @@ interface Props {
   isModalAlert: boolean;
   isModalCancel: boolean;
   isPublic: boolean;
+  isTutorialLoading?: boolean;
+  tutorialPostDiary?: boolean;
   title: string;
   text: string;
   points: number;
@@ -48,6 +51,7 @@ interface Props {
   onPressSubmit: () => void;
   onPressDraft: () => void;
   onPressNotSave: () => void;
+  onPressTutorial?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -124,6 +128,8 @@ const PostDiary = ({
   isModalAlert,
   isModalCancel,
   isPublic,
+  isTutorialLoading = false,
+  tutorialPostDiary = true,
   title,
   text,
   points,
@@ -138,12 +144,18 @@ const PostDiary = ({
   onPressSubmit,
   onPressDraft,
   onPressNotSave,
+  onPressTutorial,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
   const usePoints = getUsePoints(text.length, learnLanguage);
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
+      <TutorialPostDiary
+        isLoading={isTutorialLoading}
+        displayed={tutorialPostDiary}
+        onPress={onPressTutorial}
+      />
       <ModalLackPoint
         visible={isModalLack}
         onPressSubmit={onPressSubmitModalLack}

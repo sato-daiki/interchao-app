@@ -12,7 +12,7 @@ import {
 } from 'react-navigation-stack';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
-import { Diary, Profile } from '../types';
+import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { EmptyList } from '../components/molecules';
@@ -20,10 +20,13 @@ import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import { getExceptUser } from '../utils/diary';
+import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
 
 export interface Props {
   profile: Profile;
+  user: User;
   teachDiaries: Diary[];
+  setUser: (user: User) => void;
   setTeachDiaries: (teachDiaries: Diary[]) => void;
 }
 
@@ -49,12 +52,15 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
  */
 const TeachDiaryListScreen: ScreenType = ({
   profile,
+  user,
+  setUser,
   teachDiaries,
   setTeachDiaries,
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [blockUids, setBlockUids] = useState<string>([]);
+  const [isTutorialLoading, setIsTutorialLoading] = useState(false);
+  const [blockUids, setBlockUids] = useState<string[]>([]);
 
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
@@ -77,10 +83,8 @@ const TeachDiaryListScreen: ScreenType = ({
       const f = async (): Promise<void> => {
         try {
           // ブロック一覧を取得する
-          const { currentUser } = firebase.auth();
-          if (!currentUser) return;
-          const blockerUids = await getBlockers(currentUser.uid);
-          const blockeeUids = await getBlockees(currentUser.uid);
+          const blockerUids = await getBlockers(user.uid);
+          const blockeeUids = await getBlockees(user.uid);
           const uids = blockerUids.concat(blockeeUids);
 
           const index = await Algolia.getDiaryIndex(clean);
@@ -108,7 +112,7 @@ const TeachDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [profile.nativeLanguage, setTeachDiaries]
+    [profile.nativeLanguage, setTeachDiaries, user.uid]
   );
 
   // 初期データの取得
@@ -177,6 +181,25 @@ const TeachDiaryListScreen: ScreenType = ({
     [navigation]
   );
 
+  const onPressTutorial = useCallback((): void => {
+    const f = async (): Promise<void> => {
+      setIsTutorialLoading(true);
+      await firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({
+          tutorialTeachDiaryList: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      setUser({
+        ...user,
+        tutorialTeachDiaryList: true,
+      });
+      setIsTutorialLoading(false);
+    };
+    f();
+  }, [setUser, user]);
+
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
       return (
@@ -201,6 +224,11 @@ const TeachDiaryListScreen: ScreenType = ({
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
+      <TutorialTeachDiaryList
+        isLoading={isTutorialLoading}
+        displayed={user.tutorialTeachDiaryList}
+        onPress={onPressTutorial}
+      />
       {displayEmptyComponent ? (
         <EmptyList
           message="みんなの日記一覧がありません"
