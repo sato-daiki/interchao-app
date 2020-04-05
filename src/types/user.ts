@@ -9,6 +9,7 @@ export interface User {
   tutorialCorrectiong: boolean;
   points: number;
   expoPushToken: string | null;
+  correctingObjectID: string | null;
   unreadCorrectionNum: number;
   notificationCorrection: boolean;
   notificationReview: boolean;

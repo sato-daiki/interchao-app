@@ -7,7 +7,7 @@ export type Timestamp = {
 };
 
 export type DiaryStatus = 'draft' | 'publish';
-export type CorrectionStatus = 'yet' | 'doing' | 'unread' | 'done';
+export type CorrectionStatus = 'yet' | 'correcting' | 'unread' | 'done';
 
 // Correctionのうち一部を抜粋したもの
 export interface DisplaCorrection {

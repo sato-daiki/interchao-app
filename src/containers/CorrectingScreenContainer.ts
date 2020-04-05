@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { setPoints, setUser } from '../stores/actions/user';
+import { setUser } from '../stores/actions/user';
 import CorrectingScreen from '../screens/CorrectingScreen';
 import { State } from '../types/state';
 import { editTeachDiary } from '../stores/actions/teachDiaryList';
@@ -23,7 +23,6 @@ const mapStateToProps = (state: State, ownProps: OwnProps) => {
 };
 
 const mapDispatchToProps = {
-  setPoints,
   setUser,
   editTeachDiary,
 };
