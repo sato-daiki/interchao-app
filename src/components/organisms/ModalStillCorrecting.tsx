@@ -50,7 +50,7 @@ const ModalStillCorrecting: React.FC<Props> = ({
       <View style={styles.container}>
         <Text style={styles.title}>エラー</Text>
         <View style={styles.line} />
-        <Text style={styles.text}>前回、添削が途中で中断されました</Text>
+        <Text style={styles.text}>添削が途中で中断されました</Text>
         <Space size={32} />
         <SubmitButton title="閉じる" isLoading={isLoading} onPress={onPress} />
       </View>
