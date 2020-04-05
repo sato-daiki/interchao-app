@@ -16,6 +16,7 @@ import { checkBeforePost, getUsePoints } from '../utils/diary';
 interface Props {
   user: User;
   profile: Profile;
+  setUser: (user: User) => void;
   setPoints: (points: number) => void;
   addDiary: (diary: Diary) => void;
   addDraftDiary: (diary: Diary) => void;
@@ -34,11 +35,14 @@ const PostDiaryScreen: ScreenType = ({
   navigation,
   user,
   profile,
+  setUser,
   setPoints,
   addDiary,
   addDraftDiary,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isTutorialLoading, setIsTutorialLoading] = useState(false);
+
   // ポイントが足りない時アラートをだす
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
   const [isModalAlert, setIsModalAlert] = useState(false);
@@ -205,6 +209,25 @@ const PostDiaryScreen: ScreenType = ({
     navigation.goBack(null);
   }, [navigation]);
 
+  const onPressTutorial = useCallback((): void => {
+    const f = async (): Promise<void> => {
+      setIsTutorialLoading(true);
+      await firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({
+          tutorialPostDiary: true,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      setUser({
+        ...user,
+        tutorialPostDiary: true,
+      });
+      setIsTutorialLoading(false);
+    };
+    f();
+  }, [setUser, user]);
+
   return (
     <PostDiary
       isLoading={isLoading}
@@ -212,6 +235,8 @@ const PostDiaryScreen: ScreenType = ({
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
       isPublic={isPublic}
+      isTutorialLoading={isTutorialLoading}
+      tutorialPostDiary={user.tutorialPostDiary}
       title={title}
       text={text}
       points={user.points}
@@ -228,6 +253,7 @@ const PostDiaryScreen: ScreenType = ({
       onPressSubmit={onPressSubmit}
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
+      onPressTutorial={onPressTutorial}
     />
   );
 };

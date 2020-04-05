@@ -4,6 +4,9 @@ export interface User {
   uid: string;
   premium: boolean;
   confirmCorrection: boolean;
+  tutorialPostDiary: boolean;
+  tutorialTeachDiaryList: boolean;
+  tutorialCorrectiong: boolean;
   points: number;
   expoPushToken: string | null;
   unreadCorrectionNum: number;

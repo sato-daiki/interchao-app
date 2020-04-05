@@ -1,0 +1,50 @@
+import React from 'react';
+import { View, StyleSheet, Text } from 'react-native';
+import Modal from './Modal';
+import { SubmitButton } from '../atoms';
+import { fontSizeL, primaryColor, borderLightColor } from '../../styles/Common';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 16,
+  },
+  title: {
+    fontSize: fontSizeL,
+    color: primaryColor,
+    fontWeight: 'bold',
+    marginVertical: 6,
+    paddingBottom: 16,
+    textAlign: 'center',
+  },
+  line: {
+    width: '100%',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: borderLightColor,
+    marginBottom: 24,
+  },
+});
+
+interface Props {
+  displayed: boolean;
+  isLoading?: boolean;
+  onPress: () => void;
+  children: React.ReactNode;
+}
+
+const Tutorial: React.FC<Props> = ({
+  displayed,
+  isLoading,
+  onPress,
+  children,
+}: Props): JSX.Element => (
+  <Modal visible={!displayed}>
+    <View style={styles.container}>
+      <Text style={styles.title}>チュートリアル</Text>
+      <View style={styles.line} />
+      {children}
+      <SubmitButton title="始める" onPress={onPress} isLoading={isLoading} />
+    </View>
+  </Modal>
+);
+
+export default Tutorial;
