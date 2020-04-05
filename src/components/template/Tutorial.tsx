@@ -26,7 +26,9 @@ const styles = StyleSheet.create({
 
 interface Props {
   displayed: boolean;
-  isLoading?: boolean;
+  isLoading: boolean;
+  title: string;
+  buttonText: string;
   onPress: () => void;
   children: React.ReactNode;
 }
@@ -34,15 +36,21 @@ interface Props {
 const Tutorial: React.FC<Props> = ({
   displayed,
   isLoading,
+  title,
+  buttonText,
   onPress,
   children,
 }: Props): JSX.Element => (
   <Modal visible={!displayed}>
     <View style={styles.container}>
-      <Text style={styles.title}>チュートリアル</Text>
+      <Text style={styles.title}>{title}</Text>
       <View style={styles.line} />
       {children}
-      <SubmitButton title="始める" onPress={onPress} isLoading={isLoading} />
+      <SubmitButton
+        title={buttonText}
+        onPress={onPress}
+        isLoading={isLoading}
+      />
     </View>
   </Modal>
 );

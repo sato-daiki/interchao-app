@@ -54,10 +54,6 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
     navigation.navigate('Premium');
   }, [navigation]);
 
-  const onPressNotice = useCallback(() => {
-    navigation.navigate('Notice');
-  }, [navigation]);
-
   const onPressFavoriteUserList = useCallback(() => {
     navigation.navigate('FavoriteUserList');
   }, [navigation]);
@@ -68,10 +64,6 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const onPressManagement = useCallback(() => {
     navigation.navigate('Management');
-  }, [navigation]);
-
-  const onPressDelete = useCallback(() => {
-    navigation.navigate('DeleteAcount');
   }, [navigation]);
 
   const onPressLogout = useCallback(() => {
@@ -91,38 +83,60 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       }
     };
     f();
-  }, []);
+  }, [currentUser]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>基本設定</Text>
-      <OptionItem title="プレミアムサービス" onPress={onPressPremium} />
-      <OptionItem title="通知" onPress={onPressNotice} />
+      {/* <OptionItem title="プレミアムサービス" onPress={onPressPremium} /> */}
+      <OptionItem
+        title="通知"
+        onPress={(): void => {
+          navigation.navigate('Notice');
+        }}
+      />
       {currentUser && currentUser.email ? (
         <>
           <OptionItem
             title="メールアドレスの変更"
-            onPress={(): boolean => navigation.navigate('EditEmail')}
+            onPress={(): void => {
+              navigation.navigate('EditEmail');
+            }}
           />
           <OptionItem
             title="パスワードの変更"
-            onPress={(): boolean => navigation.navigate('EditPassword')}
+            onPress={(): void => {
+              navigation.navigate('EditPassword');
+            }}
           />
         </>
       ) : (
         <OptionItem
           title="メールアドレス/パスワードの登録"
-          onPress={(): boolean => navigation.navigate('RegisterEmailPassword')}
+          onPress={(): void => {
+            navigation.navigate('RegisterEmailPassword');
+          }}
         />
       )}
       <OptionItem
+        title="アプリのチュートリアル"
+        onPress={(): void => {
+          navigation.navigate('TutorialList');
+        }}
+      />
+      {/* <OptionItem
         title="お気に入りユーザ一覧"
         onPress={onPressFavoriteUserList}
-      />
+      /> */}
       <Space size={16} />
       <OptionItem title="プライバシーポリシー" onPress={onPressPrivacy} />
       <OptionItem title="運営" onPress={onPressManagement} />
-      <OptionItem title="退会について" onPress={onPressDelete} />
+      <OptionItem
+        title="退会について"
+        onPress={(): void => {
+          navigation.navigate('DeleteAcount');
+        }}
+      />
       <Space size={16} />
       <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
         <Text style={styles.logout}>ログアウト</Text>

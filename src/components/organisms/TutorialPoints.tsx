@@ -19,9 +19,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
   },
-  main: {
-    color: mainColor,
-  },
 });
 
 interface Props {
@@ -31,7 +28,7 @@ interface Props {
   onPress?: () => void;
 }
 
-const TutorialTeachDiaryList: React.FC<Props> = ({
+const TutorialPoints: React.FC<Props> = ({
   isLoading = false,
   displayed,
   buttonText = '始める',
@@ -41,7 +38,7 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title="日本語日記一覧とは"
+      title="ポイントについて"
       buttonText={buttonText}
       onPress={onPress}
     >
@@ -49,16 +46,18 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
         <Image style={styles.img} source={Zebbu} resizeMode="contain" />
         <Space size={24} />
         <Text style={styles.text}>
-          日本語を勉強をしているユーザの日記一覧です。
+          日記を投稿するには10ポイント〜が必要です。
           {'\n'}
           {'\n'}
-          ステータスが
-          <Text style={styles.main}>添削待ち</Text>
-          のものを探して添削して10ポイントをゲットしよう。
+          レビューをすると10ポイント〜を獲得できます。
+          {'\n'}
+          {'\n'}
+          消費、獲得するポイントは文字数と言語により異なります。
+          英語は600文字ごと、日本語は200文字ごとに10ポイント消費または獲得できます。
         </Text>
       </View>
     </Tutorial>
   );
 };
 
-export default TutorialTeachDiaryList;
+export default TutorialPoints;

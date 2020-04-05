@@ -33,7 +33,7 @@ import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScree
 import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
 import ReviewListScreen from '../screens/ReviewListScreen';
-
+import TutorialListScreen from '../screens/TutorialListScreen';
 import { TabIcon } from '../components/molecules';
 
 /* components */
@@ -84,6 +84,9 @@ const MyDiaryTabStack = createStackNavigator(
     },
     Setting: {
       screen: SettingScreen,
+    },
+    TutorialList: {
+      screen: TutorialListScreen,
     },
     Notice: {
       screen: NoticeScreenContainer,
