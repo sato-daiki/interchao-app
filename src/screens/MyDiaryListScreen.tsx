@@ -245,7 +245,7 @@ const MyDiaryListScreen: ScreenType = ({
       />
       <LoadingModal visible={isLoading} />
       <ModalStillCorrecting
-        visible={user.correctingObjectID !== null}
+        visible={!!user.correctingObjectID}
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />

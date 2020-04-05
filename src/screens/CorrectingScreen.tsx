@@ -677,6 +677,10 @@ const CorrectingScreen: ScreenType = ({
   const onPressTutorial = useCallback((): void => {
     const f = async (): Promise<void> => {
       if (isTutorialLoading) return;
+      if (user.tutorialCorrectiong) {
+        setTutorialCorrectiong(true);
+        return;
+      }
       setIsTutorialLoading(true);
       await firebase
         .firestore()
@@ -690,7 +694,7 @@ const CorrectingScreen: ScreenType = ({
         tutorialCorrectiong: true,
       });
       setIsTutorialLoading(false);
-      setTutorialCorrectiong(false);
+      setTutorialCorrectiong(true);
     };
     f();
   }, [isTutorialLoading, setUser, user]);
@@ -814,7 +818,7 @@ const CorrectingScreen: ScreenType = ({
       <CorrectionFooterButton
         nextActionText={buttonTitle}
         onPressNextAction={onPressSubmitButton}
-        onPressHowTo={(): void => setTutorialCorrectiong(true)}
+        onPressHowTo={(): void => setTutorialCorrectiong(false)}
       />
     </View>
   );
