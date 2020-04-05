@@ -7,7 +7,7 @@ import { Profile } from './profile';
 import { DiaryListState } from '../stores/reducers/diaryList';
 import { DraftDiaryListState } from '../stores/reducers/draftDiaryList';
 import { TeachDiaryListState } from '../stores/reducers/teachDiaryList';
-import { SetUserAction, SetPointsAction } from '../stores/actions/user';
+import { SetUserAction } from '../stores/actions/user';
 import { SetProfileAction } from '../stores/actions/profile';
 import {
   SetDiariesAction,
@@ -40,7 +40,6 @@ export interface State {
 
 export type Actions =
   | SetUserAction
-  | SetPointsAction
   | SetProfileAction
   | SetDiariesAction
   | SetDiaryTotalNumAction

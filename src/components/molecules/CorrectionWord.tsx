@@ -9,7 +9,7 @@ import {
 import { selectedBlue, fontSizeM, primaryColor } from '../../styles/Common';
 import SelectedPicTop from '../atoms/SelectedPicTop';
 import { SelectedPicBottom } from '../atoms';
-import { ActiveWord } from '../../types/correcting';
+import { ActiveWord } from '../../types/correctingScreen';
 
 const styles = StyleSheet.create({
   container: {

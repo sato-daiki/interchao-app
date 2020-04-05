@@ -160,18 +160,39 @@ const TeachDiaryScreen: ScreenType = ({
           });
         }
 
-        // // 日記のステータスを添削中に変更する
+        //  添削中のobjectIDを更新する
+        const userRef = firebase.firestore().doc(`users/${user.uid}`);
+        await userRef.update({
+          correctingObjectID: teachDiary.objectID,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        setUser({
+          ...user,
+          correctingObjectID: teachDiary.objectID,
+        });
+
+        //  添削中一覧に追加する
+        const correctingRef = firebase
+          .firestore()
+          .doc(`correctings/${teachDiary.objectID}`);
+        await correctingRef.set({
+          uid: user.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        //  日記のステータスを添削中に変更する
         const diaryRef = firebase
           .firestore()
           .doc(`diaries/${teachDiary.objectID}`);
         await diaryRef.update({
-          correctionStatus: 'doing',
+          correctionStatus: 'correcting',
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
         editTeachDiary(teachDiary.objectID, {
           ...teachDiary,
-          correctionStatus: 'doing',
+          correctionStatus: 'correcting',
         });
 
         navigation.navigate('Correcting', { objectID: teachDiary.objectID });
@@ -200,7 +221,7 @@ const TeachDiaryScreen: ScreenType = ({
   );
 
   const renderDiaryCorrection = (): ReactNode => {
-    if (correctionStatus === 'yet') {
+    if (correctionStatus === 'yet' && user) {
       return (
         <View style={styles.correctionButton}>
           <SubmitButton

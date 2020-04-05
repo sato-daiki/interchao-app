@@ -21,7 +21,7 @@ import {
 interface Props {
   user: User;
   profile: Profile;
-  setPoints: (points: number) => void;
+  setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
   deleteDraftDiary: (objectID: string) => void;
   editDraftDiary: (objectID: string, draftDiary: Diary) => void;
@@ -40,7 +40,7 @@ const PostDraftDiaryScreen: ScreenType = ({
   navigation,
   user,
   profile,
-  setPoints,
+  setUser,
   addDiary,
   deleteDraftDiary,
   editDraftDiary,
@@ -185,7 +185,10 @@ const PostDraftDiaryScreen: ScreenType = ({
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
         deleteDraftDiary(item.objectID!);
-        setPoints(newPoints);
+        setUser({
+          ...user,
+          points: newPoints,
+        });
 
         navigation.navigate('MyDiaryList');
         setIsLoading(false);
@@ -204,11 +207,10 @@ const PostDraftDiaryScreen: ScreenType = ({
     isPublic,
     navigation,
     profile.learnLanguage,
-    setPoints,
+    setUser,
     text,
     title,
-    user.points,
-    user.uid,
+    user,
   ]);
 
   const onPressNotSave = useCallback((): void => {

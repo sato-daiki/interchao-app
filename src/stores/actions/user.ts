@@ -11,13 +11,3 @@ export const setUser = (user: User): SetUserAction => ({
   type: Types.SET_USER,
   user,
 });
-
-export interface SetPointsAction extends Action {
-  type: Types.SET_POINTS;
-  points: number;
-}
-
-export const setPoints = (points: number): SetPointsAction => ({
-  type: Types.SET_POINTS,
-  points,
-});

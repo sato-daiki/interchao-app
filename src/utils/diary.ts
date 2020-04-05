@@ -51,7 +51,7 @@ export const getUserDiaryStatus = (
     return { text: '未添削', color: mainColor };
   }
 
-  if (correctionStatus === 'doing') {
+  if (correctionStatus === 'correcting') {
     return { text: '添削中', color: subTextColor };
   }
 
@@ -64,7 +64,7 @@ export const getMyDiaryStatus = (
   isReview: boolean
 ): Status | null => {
   if (diaryStatus === 'publish') {
-    if (correctionStatus === 'yet' || correctionStatus === 'doing') {
+    if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
       return { text: '添削待ち', color: subTextColor };
     }
     if (correctionStatus === 'unread') {
@@ -175,4 +175,33 @@ export const checkBeforePost = (
   }
 
   return true;
+};
+
+/**
+ * 途中で日記をやめた時の処理
+ */
+export const updateYet = async (
+  objectID: string,
+  uid: string
+): Promise<void> => {
+  await await firebase
+    .firestore()
+    .doc(`diaries/${objectID}`)
+    .update({
+      correctionStatus: 'yet',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+  await await firebase
+    .firestore()
+    .doc(`correctings/${objectID}`)
+    .delete();
+
+  await await firebase
+    .firestore()
+    .doc(`users/${uid}`)
+    .update({
+      correctingObjectID: null,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 };

@@ -5,7 +5,7 @@ import {
   LongPressGestureHandlerStateChangeEvent,
 } from 'react-native-gesture-handler';
 import { CorrectionWord, CorrectionMenu } from '../molecules';
-import { ActiveWord, InitialWord } from '../../types/correcting';
+import { ActiveWord, InitialWord } from '../../types/correctingScreen';
 
 interface Props {
   text: string;

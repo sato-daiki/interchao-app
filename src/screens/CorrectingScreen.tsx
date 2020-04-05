@@ -49,10 +49,15 @@ import {
   getDisplayProfile,
   getComments,
   getUsePoints,
+  updateYet,
 } from '../utils/diary';
 import CorrectionText from '../components/organisms/CorrectionText';
 import CommentInputCard from '../components/organisms/CommentInputCard';
-import { ActiveWord, InitialWord, LongPressWord } from '../types/correcting';
+import {
+  ActiveWord,
+  InitialWord,
+  LongPressWord,
+} from '../types/correctingScreen';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 import { getUuid } from '../utils/common';
@@ -69,7 +74,6 @@ interface Props {
   currentProfile: Profile;
   teachDiary: Diary;
   setUser: (user: User) => void;
-  setPoints: (points: number) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
 
@@ -134,12 +138,14 @@ const CorrectingScreen: ScreenType = ({
   currentProfile,
   teachDiary,
   setUser,
-  setPoints,
   editTeachDiary,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
+  const [tutorialCorrectiong, setTutorialCorrectiong] = useState(
+    user.tutorialCorrectiong
+  );
   const [longPressWord, setLongPressWord] = useState<LongPressWord>();
   const [startWord, setStartWord] = useState<ActiveWord>();
   const [endWord, setEndWord] = useState<ActiveWord>();
@@ -202,7 +208,7 @@ const CorrectingScreen: ScreenType = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
-      // ポイントを増やす
+      // usersの更新 ポイントを増やす correctingObjectIDをnull
       const getPoints = getUsePoints(
         teachDiary.text.length,
         teachDiary.profile.learnLanguage
@@ -211,15 +217,26 @@ const CorrectingScreen: ScreenType = ({
       const userRef = firebase.firestore().doc(`users/${user.uid}`);
       await userRef.update({
         points: newPoints,
+        correctingObjectID: null,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+
+      // correctingsの更新
+      await firebase
+        .firestore()
+        .doc(`correctings/${teachDiary.objectID}`)
+        .delete();
 
       // reduxに追加
       editTeachDiary(teachDiary.objectID, {
         ...teachDiary,
         correctionStatus: 'unread',
       });
-      setPoints(newPoints);
+      setUser({
+        ...user,
+        points: newPoints,
+        correctingObjectID: null,
+      });
       setIsLoading(false);
       setIsModalDone(true);
     };
@@ -230,10 +247,9 @@ const CorrectingScreen: ScreenType = ({
     currentProfile,
     infoComments,
     summary,
-    user.points,
-    user.uid,
+    user,
     editTeachDiary,
-    setPoints,
+    setUser,
   ]);
 
   /**
@@ -261,16 +277,16 @@ const CorrectingScreen: ScreenType = ({
     if (isLoading) return;
     if (!teachDiary.objectID) return;
     setIsLoading(true);
-    // 日記のステータスを添削中に変更する
-    const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
-    await diaryRef.update({
-      correctionStatus: 'yet',
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    // ステータスを戻す
+    updateYet(teachDiary.objectID, user.uid);
 
     editTeachDiary(teachDiary.objectID, {
       ...teachDiary,
       correctionStatus: 'yet',
+    });
+    setUser({
+      ...user,
+      correctingObjectID: null,
     });
     setIsLoading(false);
     navigation.goBack(null);
@@ -660,6 +676,7 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressTutorial = useCallback((): void => {
     const f = async (): Promise<void> => {
+      if (isTutorialLoading) return;
       setIsTutorialLoading(true);
       await firebase
         .firestore()
@@ -673,9 +690,10 @@ const CorrectingScreen: ScreenType = ({
         tutorialCorrectiong: true,
       });
       setIsTutorialLoading(false);
+      setTutorialCorrectiong(false);
     };
     f();
-  }, [setUser, user]);
+  }, [isTutorialLoading, setUser, user]);
 
   const listEmptyComponent = isCommentInput ? null : (
     <>
@@ -729,7 +747,7 @@ const CorrectingScreen: ScreenType = ({
       />
       <TutorialCorrecting
         isLoading={isTutorialLoading}
-        displayed={user.tutorialCorrectiong}
+        displayed={tutorialCorrectiong}
         onPress={onPressTutorial}
       />
       <ScrollView style={styles.scrollView}>
@@ -796,7 +814,7 @@ const CorrectingScreen: ScreenType = ({
       <CorrectionFooterButton
         nextActionText={buttonTitle}
         onPressNextAction={onPressSubmitButton}
-        onPressHowTo={() => console.log('')}
+        onPressHowTo={(): void => setTutorialCorrectiong(true)}
       />
     </View>
   );

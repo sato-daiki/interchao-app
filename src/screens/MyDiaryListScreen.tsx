@@ -22,7 +22,8 @@ import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import { registerForPushNotificationsAsync } from '../utils/Notification';
-import { updateUnread } from '../utils/diary';
+import { updateUnread, updateYet } from '../utils/diary';
+import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
 
 export interface Props {
   user: User;
@@ -64,6 +65,7 @@ const MyDiaryListScreen: ScreenType = ({
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isStillLoading, setIsStillLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
@@ -166,6 +168,21 @@ const MyDiaryListScreen: ScreenType = ({
     setIsMenu(false);
   }, []);
 
+  const onPressModalStill = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (isStillLoading || !user.correctingObjectID) return;
+      setIsStillLoading(true);
+      // ステータスを戻す
+      updateYet(user.correctingObjectID, user.uid);
+      setUser({
+        ...user,
+        correctingObjectID: null,
+      });
+      setIsStillLoading(false);
+    };
+    f();
+  }, [isStillLoading, setUser, user]);
+
   const onPressItem = useCallback(
     (item: Diary) => {
       const f = async (): Promise<void> => {
@@ -227,6 +244,11 @@ const MyDiaryListScreen: ScreenType = ({
         onClose={onClose}
       />
       <LoadingModal visible={isLoading} />
+      <ModalStillCorrecting
+        visible={user.correctingObjectID !== null}
+        isLoading={isStillLoading}
+        onPress={onPressModalStill}
+      />
       {displayEmptyComponent ? (
         <EmptyMyDiaryList />
       ) : (

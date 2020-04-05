@@ -17,7 +17,6 @@ interface Props {
   user: User;
   profile: Profile;
   setUser: (user: User) => void;
-  setPoints: (points: number) => void;
   addDiary: (diary: Diary) => void;
   addDraftDiary: (diary: Diary) => void;
 }
@@ -36,7 +35,6 @@ const PostDiaryScreen: ScreenType = ({
   user,
   profile,
   setUser,
-  setPoints,
   addDiary,
   addDraftDiary,
 }) => {
@@ -182,7 +180,10 @@ const PostDiaryScreen: ScreenType = ({
           objectID: diaryDoc.id,
           ...diary,
         });
-        setPoints(newPoints);
+        setUser({
+          ...user,
+          points: newPoints,
+        });
 
         navigation.navigate('MyDiaryList');
         setIsLoading(false);
@@ -199,10 +200,9 @@ const PostDiaryScreen: ScreenType = ({
     isLoading,
     navigation,
     profile.learnLanguage,
-    setPoints,
+    setUser,
     text.length,
-    user.points,
-    user.uid,
+    user,
   ]);
 
   const onPressNotSave = useCallback((): void => {
