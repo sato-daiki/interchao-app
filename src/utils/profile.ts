@@ -43,7 +43,9 @@ export const getProfile = async (uid: string): Promise<Profile | null> => {
 };
 
 // ユーザー名の重複チェック
-export const checkUserName = async (userName: string): Promise<boolean> => {
+export const checkDuplicatedUserName = async (
+  userName: string
+): Promise<boolean> => {
   const docs = await firebase
     .firestore()
     .collection('profiles')
@@ -51,6 +53,26 @@ export const checkUserName = async (userName: string): Promise<boolean> => {
     .get();
 
   if (docs.empty) {
+    // 重複なし
+    return true;
+  }
+  return false;
+};
+
+// 入力された文字チェック
+export const checkTypeUserName = (text: string): boolean => {
+  const letters = /^[a-zA-Z0-9\_\.]+$/;
+  if (text.match(letters)) {
+    return true;
+  }
+  return false;
+};
+
+// 先頭チェック
+export const checkInitialUserName = (text: string): boolean => {
+  const initialText = text.slice(0, 1);
+  const letters = /^[_\.]+$/;
+  if (initialText.match(letters)) {
     return false;
   }
   return true;

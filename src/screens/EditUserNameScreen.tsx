@@ -4,7 +4,11 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { checkUserName } from '../utils/profile';
+import {
+  checkDuplicatedUserName,
+  checkTypeUserName,
+  checkInitialUserName,
+} from '../utils/profile';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { HeaderText } from '../components/atoms';
@@ -47,9 +51,14 @@ const EditUserNameScreen: ScreenType = ({
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (userName === '') return;
+
       if (profile.userName !== userName) {
-        const duplicated = await checkUserName(userName);
-        if (duplicated) {
+        const typeChecked = checkTypeUserName(userName);
+        const initialChecked = checkInitialUserName(userName);
+        const resDuplicated = await checkDuplicatedUserName(userName);
+
+        if (!initialChecked || !typeChecked || !resDuplicated) {
           // 変更があった時かつ、他のユーザと重複している場合
           return;
         }
@@ -60,31 +69,57 @@ const EditUserNameScreen: ScreenType = ({
     f();
   }, [navigation, profile.userName, userName]);
 
-  // 第二引数をなしにするのがポイント
   useEffect(() => {
     navigation.setParams({ onPressSubmit });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userName]);
 
   const onChangeText = useCallback(
     text => {
       const f = async (): Promise<void> => {
-        setIsUserNameLoading(true);
         setUserName(text);
-        const duplicated = await checkUserName(text);
-        if (duplicated && text === profile.userName) {
+        if (text === '') {
+          setIsUserNameLoading(false);
+          setIsUserNameCheckOk(false);
+          setErrorMessage('ユーザ名を入力してください');
+          return;
+        }
+
+        const typeChecked = checkTypeUserName(text);
+        if (!typeChecked) {
+          setIsUserNameLoading(false);
+          setIsUserNameCheckOk(false);
+          setErrorMessage(
+            'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません'
+          );
+          return;
+        }
+
+        const initialChecked = checkInitialUserName(text);
+        if (!initialChecked) {
+          setIsUserNameLoading(false);
+          setIsUserNameCheckOk(false);
+          setErrorMessage('先頭の文字は半角英数字以外使えません');
+          return;
+        }
+
+        setIsUserNameLoading(true);
+        const resDuplicated = await checkDuplicatedUserName(text);
+        if (!resDuplicated && text !== profile.userName) {
+          setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
           setErrorMessage(
             'すでにこのユーザーネームを使用しているユーザーがいます'
           );
-        } else {
-          setIsUserNameCheckOk(true);
-          setErrorMessage('');
+          return;
         }
         setIsUserNameLoading(false);
+        setIsUserNameCheckOk(true);
+        setErrorMessage('');
       };
       f();
     },
-    [setUserName, userName]
+    [profile.userName]
   );
   return (
     <View style={styles.container}>

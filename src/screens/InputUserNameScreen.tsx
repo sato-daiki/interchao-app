@@ -15,7 +15,11 @@ import Space from '../components/atoms/Space';
 import { CheckTextInput } from '../components/molecules';
 import { Profile } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { checkUserName } from '../utils/profile';
+import {
+  checkDuplicatedUserName,
+  checkTypeUserName,
+  checkInitialUserName,
+} from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 
 interface Props {
@@ -66,18 +70,45 @@ const InputUserNameScreen: ScreenType = ({
   const onChangeText = useCallback(
     text => {
       const f = async (): Promise<void> => {
-        setIsUserNameLoading(true);
         setUserName(text);
-        const duplicated = await checkUserName(text);
-        if (duplicated) {
+        if (text === '') {
+          setIsUserNameLoading(false);
+          setIsUserNameCheckOk(false);
+          setErrorMessage('');
+          return;
+        }
+
+        const typeChecked = checkTypeUserName(text);
+        if (!typeChecked) {
+          setIsUserNameLoading(false);
+          setIsUserNameCheckOk(false);
+          setErrorMessage(
+            'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません'
+          );
+          return;
+        }
+
+        const initialChecked = checkInitialUserName(text);
+        if (!initialChecked) {
+          setIsUserNameLoading(false);
+          setIsUserNameCheckOk(false);
+          setErrorMessage('先頭の文字は半角英数字以外使えません');
+          return;
+        }
+
+        setIsUserNameLoading(true);
+        const resDuplicated = await checkDuplicatedUserName(text);
+        if (!resDuplicated) {
+          setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
           setErrorMessage(
             'すでにこのユーザーネームを使用しているユーザーがいます'
           );
-        } else {
-          setIsUserNameCheckOk(true);
-          setErrorMessage('');
+          return;
         }
+
+        setIsUserNameCheckOk(true);
+        setErrorMessage('');
         setIsUserNameLoading(false);
       };
       f();
@@ -86,8 +117,11 @@ const InputUserNameScreen: ScreenType = ({
   );
 
   const onPressNext = async (): Promise<void> => {
-    const duplicated = await checkUserName(userName);
-    if (duplicated) {
+    const typeChecked = checkTypeUserName(userName);
+    const initialChecked = checkInitialUserName(userName);
+    const resDuplicated = await checkDuplicatedUserName(userName);
+
+    if (!typeChecked || !initialChecked || !resDuplicated) {
       return;
     }
     setProfile({
@@ -104,7 +138,7 @@ const InputUserNameScreen: ScreenType = ({
       <CheckTextInput
         value={userName}
         onChangeText={onChangeText}
-        maxLength={50}
+        maxLength={20}
         placeholder="zebra"
         keyboardType="email-address"
         autoCapitalize="none"
