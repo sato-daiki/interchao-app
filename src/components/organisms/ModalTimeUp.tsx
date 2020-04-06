@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   primaryColor,
   fontSizeL,
@@ -8,7 +8,7 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { SubmitButton, Space } from '../atoms';
+import { Space, SubmitButton } from '../atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,33 +33,39 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: fontSizeM,
     color: primaryColor,
+    lineHeight: fontSizeM * 1.3,
   },
 });
 
 interface Props {
   visible: boolean;
-  isLoading: boolean;
-  onPress: () => void;
+  onPressClose: () => void;
 }
 
-const ModalStillCorrecting: React.FC<Props> = ({
+const ModalTimeUp: React.FC<Props> = ({
   visible,
-  isLoading,
-  onPress,
+  onPressClose,
 }: Props): JSX.Element | null => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>エラー</Text>
+        <Text style={styles.title}>タイムアップ</Text>
         <View style={styles.line} />
-        <MaterialIcons name="error" size={64} color={primaryColor} />
         <Space size={16} />
-        <Text style={styles.text}>途中で添削が中断されました。</Text>
+        <MaterialCommunityIcons
+          size={64}
+          color={primaryColor}
+          name="timer-off"
+        />
+        <Space size={16} />
+        <Text style={styles.text}>
+          30分が経過したため、添削のロックを解除しました。
+        </Text>
         <Space size={32} />
-        <SubmitButton title="閉じる" isLoading={isLoading} onPress={onPress} />
+        <SubmitButton title="OK" onPress={onPressClose} />
       </View>
     </Modal>
   );
 };
 
-export default ModalStillCorrecting;
+export default ModalTimeUp;
