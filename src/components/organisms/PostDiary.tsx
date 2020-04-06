@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -8,8 +7,13 @@ import {
   View,
   Text,
   Image,
+  Keyboard,
+  Animated,
+  Easing,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LoadingModal, TextButtun } from '../atoms';
 import { ModalAlertPublish, ModalLackPoint } from '.';
 import ModalDiaryCancel from './ModalDiaryCancel';
@@ -27,7 +31,6 @@ import { Language } from '../../types';
 import TutorialPostDiary from './TutorialPostDiary';
 
 const { height } = Dimensions.get('window');
-const defaultHeight = height - 520;
 
 interface Props {
   isLoading: boolean;
@@ -106,7 +109,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.7,
     textAlignVertical: 'top',
-    height: defaultHeight,
     flex: 1,
     borderColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -117,8 +119,13 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 4,
   },
-  keyboardAwareScrollView: {
-    flex: 1,
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    height: 80,
+    justifyContent: 'flex-end',
+    width: '100%',
+    backgroundColor: offWhite,
   },
 });
 
@@ -147,7 +154,21 @@ const PostDiary = ({
   onPressTutorial,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
+  const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      easing: Easing.back(1),
+      duration: 400,
+    }).start();
+  }, [fadeAnim]);
+
+  const onFocus = (): void => {
+    setFadeAnim(new Animated.Value(0));
+    setIsForce(true);
+  };
   const usePoints = getUsePoints(text.length, learnLanguage);
+
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -191,45 +212,51 @@ const PostDiary = ({
           <Text style={styles.headerValue}>{usePoints}</Text>
         </View>
       </View>
-      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
-        <TextInput
-          style={styles.titleInput}
-          value={title}
-          onChangeText={onChangeTextTitle}
-          placeholder="Title"
-          maxLength={100}
-          autoCapitalize="none"
-          keyboardType="default"
-        />
-        <TextInput
-          style={styles.textInput}
-          value={text}
-          onChangeText={onChangeTextText}
-          onFocus={(): void => setIsForce(true)}
-          onEndEditing={(): void => setIsForce(false)}
-          placeholder="本文"
-          underlineColorAndroid="transparent"
-          multiline
-          autoCapitalize="none"
-          keyboardType="default"
-        />
-        {/* keybordアイコン自体はクリックしても意味がない */}
-        {isForce ? (
-          <View style={styles.icon}>
+      <TextInput
+        style={styles.titleInput}
+        value={title}
+        onChangeText={onChangeTextTitle}
+        placeholder="Title"
+        maxLength={100}
+        autoCapitalize="none"
+        keyboardType="default"
+      />
+      <TextInput
+        style={styles.textInput}
+        value={text}
+        onChangeText={onChangeTextText}
+        onFocus={onFocus}
+        onEndEditing={(): void => setIsForce(false)}
+        placeholder="本文"
+        underlineColorAndroid="transparent"
+        multiline
+        autoCapitalize="none"
+        keyboardType="default"
+      />
+      {isForce ? (
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+          }}
+        >
+          <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
             <MaterialCommunityIcons
               size={28}
               color={mainColor}
               name="keyboard-close"
             />
-          </View>
-        ) : null}
-      </KeyboardAwareScrollView>
-      <TextButtun
-        isBorrderTop
-        isBorrderBottom
-        title="下書き保存"
-        onPress={onPressDraft}
-      />
+          </TouchableOpacity>
+        </Animated.View>
+      ) : null}
+      <KeyboardSpacer />
+      <View style={styles.footer}>
+        <TextButtun
+          isBorrderTop
+          isBorrderBottom
+          title="下書き保存"
+          onPress={onPressDraft}
+        />
+      </View>
     </SafeAreaView>
   );
 };
