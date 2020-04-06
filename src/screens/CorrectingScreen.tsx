@@ -63,6 +63,8 @@ import CorrectionUnderline from '../components/organisms/CorrectionUnderline';
 import { getUuid } from '../utils/common';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
+import CorrectionTimer from '../components/organisms/CorrectionTimer';
+import ModalTimeUp from '../components/organisms/ModalTimeUp';
 
 const LINE_HEIGHT = fontSizeM * 1.7;
 const LINE_SPACE = LINE_HEIGHT - fontSizeM;
@@ -96,6 +98,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 8,
+  },
+  diaryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -153,6 +161,7 @@ const CorrectingScreen: ScreenType = ({
 
   const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalComment, setIsModalComment] = useState(false); // コメントするのメニューのon/offフラグ
+  const [isModalTimeUp, setIsModalTimeUp] = useState(false); // タイムアップモーダル
 
   /* 右上と画面下のボタン関連 */
   const [state, setState] = useState<RightButtonState>('nothing'); // 状態推移
@@ -699,6 +708,31 @@ const CorrectingScreen: ScreenType = ({
     f();
   }, [isTutorialLoading, setUser, user]);
 
+  const onTimeUp = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!teachDiary.objectID) return;
+      setIsLoading(true);
+      // ステータスを戻す
+      updateYet(teachDiary.objectID, user.uid);
+
+      editTeachDiary(teachDiary.objectID, {
+        ...teachDiary,
+        correctionStatus: 'yet',
+      });
+      setUser({
+        ...user,
+        correctingObjectID: null,
+      });
+      setIsLoading(false);
+      setIsModalTimeUp(true);
+    };
+    f();
+  }, [editTeachDiary, setUser, teachDiary, user]);
+
+  const onPressCloseTimeUp = useCallback(() => {
+    navigation.navigate('TeachDiaryList');
+  }, [navigation]);
+
   const listEmptyComponent = isCommentInput ? null : (
     <>
       <EmptyList
@@ -743,6 +777,7 @@ const CorrectingScreen: ScreenType = ({
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
+      <ModalTimeUp visible={isModalTimeUp} onPressClose={onPressCloseTimeUp} />
       <ModalCorrectingDone
         visible={isModalDone}
         getPoints={getPoints}
@@ -756,9 +791,11 @@ const CorrectingScreen: ScreenType = ({
       />
       <ScrollView style={styles.scrollView}>
         <View style={styles.main}>
-          <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
-          <Space size={8} />
           <View style={styles.header}>
+            <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
+            <CorrectionTimer onTimeUp={onTimeUp} />
+          </View>
+          <View style={styles.diaryHeader}>
             <Text style={styles.postDayText}>{getAlgoliaDate(createdAt)}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   primaryColor,
   fontSizeL,
@@ -30,9 +31,9 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   text: {
-    textAlign: 'center',
     fontSize: fontSizeM,
     color: primaryColor,
+    lineHeight: fontSizeM * 1.3,
   },
   row: {
     flexDirection: 'row',
@@ -42,6 +43,9 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     fontSize: fontSizeS,
     color: subTextColor,
+  },
+  icon: {
+    alignSelf: 'center',
   },
 });
 
@@ -65,6 +69,13 @@ const ModalAlertCorrection: React.FC<Props> = ({
       <View style={styles.container}>
         <Text style={styles.title}>確認</Text>
         <View style={styles.line} />
+        <MaterialCommunityIcons
+          style={styles.icon}
+          name="pencil-lock"
+          size={64}
+          color={primaryColor}
+        />
+        <Space size={16} />
         <Text style={styles.text}>
           添削は30分以内で行ってください。30分をすぎると添削は破棄されます。
           {'\n'}

@@ -32,6 +32,7 @@
     "@expo/vector-icons": "^10.0.6",
     "@firebase/firestore": "^1.10.2",
     "@react-native-community/masked-view": "^0.1.6",
+    "@use-expo/font": "^2.0.0",
     "add": "^2.0.6",
     "algoliasearch": "^4.0.3",
     "babel-plugin-dotenv-import": "^2.0.0",

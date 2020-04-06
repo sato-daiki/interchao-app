@@ -184,7 +184,7 @@ export const updateYet = async (
   objectID: string,
   uid: string
 ): Promise<void> => {
-  await await firebase
+  await firebase
     .firestore()
     .doc(`diaries/${objectID}`)
     .update({
@@ -192,12 +192,12 @@ export const updateYet = async (
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
-  await await firebase
+  await firebase
     .firestore()
     .doc(`correctings/${objectID}`)
     .delete();
 
-  await await firebase
+  await firebase
     .firestore()
     .doc(`users/${uid}`)
     .update({
