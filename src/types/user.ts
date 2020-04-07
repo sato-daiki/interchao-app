@@ -10,7 +10,6 @@ export interface User {
   points: number;
   expoPushToken: string | null;
   correctingObjectID: string | null;
-  unreadCorrectionNum: number;
   notificationCorrection: boolean;
   notificationReview: boolean;
   createdAt: firestore.FieldValue;

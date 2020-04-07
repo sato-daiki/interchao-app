@@ -4,6 +4,7 @@ import {
   setDiaryTotalNum,
   editDiary,
 } from '../stores/actions/diaryList';
+import { setLocalStatus } from '../stores/actions/localStatus';
 import { setUser } from '../stores/actions/user';
 import { State } from '../types/state';
 import MyDiaryListScreen from '../screens/MyDiaryListScreen';
@@ -11,6 +12,7 @@ import MyDiaryListScreen from '../screens/MyDiaryListScreen';
 const mapStateToProps = (state: State) => {
   const { diaries, diaryTotalNum } = state.rootReducer.diaryList;
   return {
+    localStatus: state.rootReducer.localStatus,
     user: state.rootReducer.user,
     diaries,
     diaryTotalNum,
@@ -18,6 +20,7 @@ const mapStateToProps = (state: State) => {
 };
 
 const mapDispatchToProps = {
+  setLocalStatus,
   setUser,
   editDiary,
   setDiaries,

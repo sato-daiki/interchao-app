@@ -23,8 +23,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const getBadgeStatus = (badgeMode: string, user: User): number => {
-  const { unreadCorrectionNum = 0 } = user;
+interface LocalStatus {
+  unreadCorrectionNum?: number;
+}
+
+const getBadgeStatus = (
+  badgeMode: string,
+  localStatus: LocalStatus
+): number => {
+  const { unreadCorrectionNum = 0 } = localStatus;
   if (badgeMode === 'myDiary' && unreadCorrectionNum > 0) {
     return unreadCorrectionNum;
   }
@@ -33,7 +40,7 @@ const getBadgeStatus = (badgeMode: string, user: User): number => {
 
 const TabIcon = ({ name, size, color, badgeMode }: Props): JSX.Element => {
   const localStatus = useSelector(
-    (state: State) => state.rootReducer.user,
+    (state: State) => state.rootReducer.localStatus,
     shallowEqual
   );
   // check badge show or not
