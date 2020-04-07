@@ -1,4 +1,6 @@
 export enum Types {
+  // LocalStatus
+  SET_LOCAL_STATUS = 'SET_LOCAL_STATUS',
   // User
   SET_USER = 'SET_USER',
   // Profile

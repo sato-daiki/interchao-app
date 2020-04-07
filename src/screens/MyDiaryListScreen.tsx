@@ -12,6 +12,7 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Notifications } from 'expo';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
@@ -27,15 +28,18 @@ import {
 } from '../utils/Notification';
 import { updateUnread, updateYet } from '../utils/diary';
 import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
-import { getUser } from '../utils/user';
+import { getUnreadCorrectionNum } from '../utils/localStatus';
+import { LocalStatus } from '../types/localStatus';
 
 export interface Props {
   user: User;
   diaries: Diary[];
   diaryTotalNum: number;
+  localStatus: LocalStatus;
   editDiary: (objectID: string, diary: Diary) => void;
   setUser: (user: User) => void;
   setDiaries: (diaries: Diary[]) => void;
+  setLocalStatus: (localStatus: LocalStatus) => void;
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
@@ -62,10 +66,12 @@ const MyDiaryListScreen: ScreenType = ({
   user,
   diaries,
   diaryTotalNum,
+  localStatus,
   editDiary,
   setUser,
   setDiaries,
   setDiaryTotalNum,
+  setLocalStatus,
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -107,9 +113,12 @@ const MyDiaryListScreen: ScreenType = ({
           setDiaryTotalNum(nbHits);
 
           // ユーザ情報も更新し直す（badgeのカウントの対応のため）
-          const newUser = await getUser(user.uid);
-          if (newUser) {
-            setUser(newUser);
+          const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
+          if (newUnreadCorrectionNum) {
+            setLocalStatus({
+              ...localStatus,
+              unreadCorrectionNum: newUnreadCorrectionNum,
+            });
           }
         } catch (err) {
           setIsLoading(false);
@@ -120,7 +129,7 @@ const MyDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [setDiaries, setDiaryTotalNum, setUser, user.uid]
+    [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]
   );
 
   const onRefresh = useCallback(() => {
@@ -199,19 +208,24 @@ const MyDiaryListScreen: ScreenType = ({
       const f = async (): Promise<void> => {
         if (!item.objectID) return;
         if (item.correctionStatus === 'unread') {
+          // 未読の場合
           if (isLoading) return;
           setIsLoading(true);
-          // 未読の場合
-          const newUnreadCorrectionNum = user.unreadCorrectionNum - 1;
+
+          const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
+          // アプリの通知数を設定
+          Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
+
           // DBを更新
-          await updateUnread(item.objectID, user.uid, newUnreadCorrectionNum);
+          await updateUnread(item.objectID);
+
           // reduxを更新
           editDiary(item.objectID, {
             ...item,
             correctionStatus: 'done',
           });
-          setUser({
-            ...user,
+          setLocalStatus({
+            ...localStatus,
             unreadCorrectionNum: newUnreadCorrectionNum,
           });
           setIsLoading(false);
@@ -220,7 +234,7 @@ const MyDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [editDiary, isLoading, navigation, setUser, user]
+    [editDiary, isLoading, localStatus, navigation, setLocalStatus]
   );
 
   const renderItem = useCallback(

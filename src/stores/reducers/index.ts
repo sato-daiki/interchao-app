@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { AsyncStorage } from 'react-native';
 import { persistReducer } from 'redux-persist';
+import localStatus from './localStatus';
 import user from './user';
 import profile from './profile';
 import diaryList from './diaryList';
@@ -14,6 +15,7 @@ const rootPersistConfig = {
 };
 
 const rootReducer = combineReducers({
+  localStatus,
   user,
   profile,
   diaryList,

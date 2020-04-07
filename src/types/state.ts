@@ -2,6 +2,7 @@ import {
   ThunkAction as OrgThunkAction,
   ThunkDispatch as OrgThunkDispatch,
 } from 'redux-thunk';
+import { LocalStatus } from './localStatus';
 import { User } from './user';
 import { Profile } from './profile';
 import { DiaryListState } from '../stores/reducers/diaryList';
@@ -27,9 +28,11 @@ import {
   SetTeachDiariesAction,
   EditTeachDiaryAction,
 } from '../stores/actions/teachDiaryList';
+import { SetLocalStatusAction } from '../stores/actions/localStatus';
 
 export interface State {
   rootReducer: {
+    localStatus: LocalStatus;
     user: User;
     profile: Profile;
     diaryList: DiaryListState;
@@ -39,6 +42,7 @@ export interface State {
 }
 
 export type Actions =
+  | SetLocalStatusAction
   | SetUserAction
   | SetProfileAction
   | SetDiariesAction
