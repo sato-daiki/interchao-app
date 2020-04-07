@@ -14,13 +14,15 @@ const { store } = configureStore();
 
 firebase.initializeApp(firebaseConfig);
 
-const App: React.SFC = () => (
-  <Provider store={store}>
-    <StatusBar barStyle="dark-content" />
-    <ActionSheetProvider>
-      <AppNavigator />
-    </ActionSheetProvider>
-  </Provider>
-);
+const App: React.SFC = () => {
+  return (
+    <Provider store={store}>
+      <StatusBar barStyle="dark-content" />
+      <ActionSheetProvider>
+        <AppNavigator />
+      </ActionSheetProvider>
+    </Provider>
+  );
+};
 
 export default App;

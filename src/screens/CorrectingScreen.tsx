@@ -65,6 +65,7 @@ import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
 import CorrectionTimer from '../components/organisms/CorrectionTimer';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
+import Algolia from '../utils/Algolia';
 
 const LINE_HEIGHT = fontSizeM * 1.7;
 const LINE_SPACE = LINE_HEIGHT - fontSizeM;
@@ -186,68 +187,74 @@ const CorrectingScreen: ScreenType = ({
       if (!teachDiary.objectID) return;
       if (isLoading) return;
       setIsLoading(true);
+
       const displayProfile = getDisplayProfile(currentProfile);
       const comments = getComments(infoComments);
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
-      const correctionsDoc = await firebase
-        .firestore()
-        .collection('corrections')
-        .add({
+      const getPoints = getUsePoints(
+        teachDiary.text.length,
+        teachDiary.profile.learnLanguage
+      );
+      const newPoints = user.points + getPoints;
+
+      await firebase.firestore().runTransaction(async transaction => {
+        //  correctionsの更新
+        const correctionRef = firebase
+          .firestore()
+          .collection('corrections')
+          .doc();
+        transaction.set(correctionRef, {
           objectID: teachDiary.objectID,
           profile: displayProfile,
-          correctionStatus: 'unread',
           comments,
           summary,
           createdAt: timestamp,
           updatedAt: timestamp,
         });
 
-      // 日記のステータスを未読に変更する
-      const newCorrection = {
-        id: correctionsDoc.id,
-        profile: displayProfile,
-      };
-      const diaryRef = firebase
-        .firestore()
-        .doc(`diaries/${teachDiary.objectID}`);
-      await diaryRef.update({
-        correctionStatus: 'unread',
-        correction: newCorrection,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+        // 日記のステータスを未読に変更する
+        const newCorrection = {
+          id: correctionRef.id,
+          profile: displayProfile,
+        };
+        const diaryRef = firebase
+          .firestore()
+          .doc(`diaries/${teachDiary.objectID}`);
+        transaction.update(diaryRef, {
+          correctionStatus: 'unread',
+          correction: newCorrection,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
 
-      // usersの更新 ポイントを増やす correctingObjectIDをnull
-      const getPoints = getUsePoints(
-        teachDiary.text.length,
-        teachDiary.profile.learnLanguage
-      );
-      const newPoints = user.points + getPoints;
-      const userRef = firebase.firestore().doc(`users/${user.uid}`);
-      await userRef.update({
-        points: newPoints,
-        correctingObjectID: null,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+        //  添削をしたuserの更新 ポイントを増やす correctingObjectIDをnull
+        const currentUserRef = firebase.firestore().doc(`users/${user.uid}`);
+        transaction.update(currentUserRef, {
+          points: newPoints,
+          correctingObjectID: null,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
 
-      // correctingsの更新
-      await firebase
-        .firestore()
-        .doc(`correctings/${teachDiary.objectID}`)
-        .delete();
+        // correctingsの削除
+        const correctingRef = firebase
+          .firestore()
+          .doc(`correctings/${teachDiary.objectID}`);
+        transaction.delete(correctingRef);
 
-      // reduxに追加
-      editTeachDiary(teachDiary.objectID, {
-        ...teachDiary,
-        correctionStatus: 'unread',
+        // reduxに追加
+        editTeachDiary(teachDiary.objectID, {
+          ...teachDiary,
+          correctionStatus: 'unread',
+          correction: newCorrection,
+        });
+        setUser({
+          ...user,
+          points: newPoints,
+          correctingObjectID: null,
+        });
+        setIsLoading(false);
+        setIsModalDone(true);
       });
-      setUser({
-        ...user,
-        points: newPoints,
-        correctingObjectID: null,
-      });
-      setIsLoading(false);
-      setIsModalDone(true);
     };
     f();
   }, [
@@ -255,10 +262,10 @@ const CorrectingScreen: ScreenType = ({
     isLoading,
     currentProfile,
     infoComments,
-    summary,
     user,
     editTeachDiary,
     setUser,
+    summary,
   ]);
 
   /**

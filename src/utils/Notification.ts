@@ -1,5 +1,6 @@
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import { NavigationStackProp } from 'react-navigation-stack';
 import firebase from '../constants/firebase';
 
 export const registerForPushNotificationsAsync = async (
@@ -26,4 +27,32 @@ export const registerForPushNotificationsAsync = async (
       expoPushToken,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
+};
+
+const generateNotificationHandler = (
+  navigation: NavigationStackProp,
+  onRefresh: () => void
+) => {
+  return async function notificationHandler(notification) {
+    const { origin, data } = notification;
+    if (origin !== 'selected' || !data.navigate) {
+      return;
+    }
+    if (data.navigate === 'myDiaryList') {
+      // 通知をクリックした場合
+      navigation.navigate('MyDiaryList');
+      onRefresh();
+    }
+  };
+};
+
+export const addLisner = (
+  navigation: NavigationStackProp,
+  onRefresh: () => void
+): void => {
+  const notificationHandler = generateNotificationHandler(
+    navigation,
+    onRefresh
+  );
+  Notifications.addListener(notificationHandler);
 };
