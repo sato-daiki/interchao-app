@@ -8,7 +8,6 @@ export interface Comment {
 
 export interface Correction {
   objectID: string;
-  pro: string;
   profile: DisplayProfile;
   comments: Comment[];
   summary: string;

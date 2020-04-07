@@ -21,9 +21,13 @@ import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
-import { registerForPushNotificationsAsync } from '../utils/Notification';
+import {
+  registerForPushNotificationsAsync,
+  addLisner,
+} from '../utils/Notification';
 import { updateUnread, updateYet } from '../utils/diary';
 import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
+import { getUser } from '../utils/user';
 
 export interface Props {
   user: User;
@@ -83,8 +87,6 @@ const MyDiaryListScreen: ScreenType = ({
       onPressMenu: () => setIsMenu(true),
       onPressSearch,
     });
-    // push通知の設定
-    registerForPushNotificationsAsync(user.uid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -103,6 +105,12 @@ const MyDiaryListScreen: ScreenType = ({
           const { hits, nbHits } = res;
           setDiaries(hits as Diary[]);
           setDiaryTotalNum(nbHits);
+
+          // ユーザ情報も更新し直す（badgeのカウントの対応のため）
+          const newUser = await getUser(user.uid);
+          if (newUser) {
+            setUser(newUser);
+          }
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
@@ -112,16 +120,8 @@ const MyDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [setDiaries, setDiaryTotalNum, user.uid]
+    [setDiaries, setDiaryTotalNum, setUser, user.uid]
   );
-
-  // 初期データの取得
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      await getNewDiary(false);
-    };
-    f();
-  }, [getNewDiary]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -131,6 +131,17 @@ const MyDiaryListScreen: ScreenType = ({
     };
     f();
   }, [getNewDiary]);
+
+  // 初期データの取得
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      await getNewDiary(false);
+      // push通知の設定
+      await registerForPushNotificationsAsync(user.uid);
+      addLisner(navigation, onRefresh);
+    };
+    f();
+  }, [getNewDiary, navigation, onRefresh, user.uid]);
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {

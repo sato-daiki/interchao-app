@@ -18,6 +18,7 @@ export interface DisplaCorrection {
 // Profileのうち一部を抜粋したもの
 export interface DisplayProfile {
   uid: string;
+  pro: string;
   userName: string;
   photoUrl: string;
   learnLanguage: Language;
