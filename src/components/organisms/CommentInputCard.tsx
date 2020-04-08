@@ -46,12 +46,12 @@ const CommentInputCard: React.FC<Props> = ({
   const onPressCancel = useCallback(() => {
     onPressClose();
     clear();
-  }, []);
+  }, [clear, onPressClose]);
 
   const onPressAdd = useCallback(() => {
     onPressSubmit(fix, detail);
     clear();
-  }, [fix, detail]);
+  }, [onPressSubmit, fix, detail, clear]);
 
   return (
     <View style={[styles.container]}>

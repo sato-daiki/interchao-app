@@ -6,3 +6,4 @@ export * from './correctingScreen';
 export * from './correcting';
 export * from './review';
 export * from './userReview';
+export * from './correction';

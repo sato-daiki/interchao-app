@@ -66,12 +66,12 @@ const SummaryInputCard: React.FC<Props> = ({ onPressSubmit, onPressClose }) => {
   const onPressCancel = useCallback(() => {
     onPressClose();
     setSummary('');
-  }, []);
+  }, [onPressClose]);
 
   const onPressAdd = useCallback(() => {
     onPressSubmit(summary);
     setSummary('');
-  }, [summary]);
+  }, [onPressSubmit, summary]);
 
   return (
     <View style={styles.container}>

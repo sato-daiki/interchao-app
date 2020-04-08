@@ -53,7 +53,8 @@ const CorrectionText: React.FC<Props> = ({
     (word: string, index: number): ReactNode => {
       return (
         <CorrectionWord
-          // key={getUuid()}
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
           index={index}
           word={word}
           startWord={startWord}

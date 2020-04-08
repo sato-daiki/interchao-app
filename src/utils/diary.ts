@@ -103,6 +103,7 @@ export const getExceptUser = (uids: string[]): string => {
 export const getDisplayProfile = (profile: Profile): DisplayProfile => {
   return {
     uid: profile.uid,
+    pro: profile.pro,
     userName: profile.userName,
     photoUrl: profile.photoUrl,
     learnLanguage: profile.learnLanguage,
@@ -119,24 +120,12 @@ export const getComments = (infoComments: InfoComment[]): Comment[] => {
   }));
 };
 
-export const updateUnread = async (
-  objectID: string,
-  uid: string,
-  newUnreadCorrectionNum: number
-): Promise<void> => {
-  await await firebase
+export const updateUnread = async (objectID: string): Promise<void> => {
+  await firebase
     .firestore()
     .doc(`diaries/${objectID}`)
     .update({
       correctionStatus: 'done',
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
-
-  await await firebase
-    .firestore()
-    .doc(`users/${uid}`)
-    .update({
-      unreadCorrectionNum: newUnreadCorrectionNum,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 };

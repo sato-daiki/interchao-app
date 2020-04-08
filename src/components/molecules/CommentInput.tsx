@@ -8,7 +8,7 @@ import {
   offWhite,
 } from '../../styles/Common';
 import { Space } from '../atoms';
-import { ClearTextInput } from '.';
+import ClearTextInput from './ClearTextInput';
 
 interface Props {
   original: string;
