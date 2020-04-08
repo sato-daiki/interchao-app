@@ -4,8 +4,6 @@ export { default as ClearTextInput } from './ClearTextInput';
 export { default as CommentButton } from './CommentButton';
 export { default as CommentInput } from './CommentInput';
 export { default as CorrectionFooterButton } from './CorrectionFooterButton';
-export { default as CorrectionMenu } from './CorrectionMenu';
-export { default as CorrectionWord } from './CorrectionWord';
 export { default as EmptyDiary } from './EmptyDiary';
 export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
 export { default as EmptyList } from './EmptyList';
