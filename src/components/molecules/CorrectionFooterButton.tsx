@@ -11,15 +11,11 @@ interface Props {
 
 const styles = StyleSheet.create({
   footer: {
-    position: 'absolute',
-    bottom: 0,
     width: '100%',
     justifyContent: 'flex-end',
-    backgroundColor: offWhite,
   },
   footerButton: {
-    marginBottom: 32,
-    backgroundColor: '#fff',
+    backgroundColor: offWhite,
   },
 });
 

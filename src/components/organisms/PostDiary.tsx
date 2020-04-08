@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   TextInput,
-  Dimensions,
   SafeAreaView,
   View,
   Text,
@@ -29,8 +28,6 @@ import { Points } from '../../images';
 import { getUsePoints } from '../../utils/diary';
 import { Language } from '../../types';
 import TutorialPostDiary from './TutorialPostDiary';
-
-const { height } = Dimensions.get('window');
 
 interface Props {
   isLoading: boolean;
@@ -209,7 +206,7 @@ const PostDiary = ({
         <View style={styles.right}>
           <Image style={styles.points} source={Points} />
           <Text style={styles.headerLabel}>所持ポイント</Text>
-          <Text style={styles.headerValue}>{usePoints}</Text>
+          <Text style={styles.headerValue}>{points}</Text>
         </View>
       </View>
       <TextInput
