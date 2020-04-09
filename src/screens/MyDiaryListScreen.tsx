@@ -150,7 +150,8 @@ const MyDiaryListScreen: ScreenType = ({
       addLisner(navigation, onRefresh);
     };
     f();
-  }, [getNewDiary, navigation, onRefresh, user.uid]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
