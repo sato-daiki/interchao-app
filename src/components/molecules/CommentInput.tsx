@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import {
   fontSizeM,
   primaryColor,
@@ -8,7 +8,6 @@ import {
   offWhite,
 } from '../../styles/Common';
 import { Space } from '../atoms';
-import ClearTextInput from './ClearTextInput';
 
 interface Props {
   original: string;
@@ -16,8 +15,6 @@ interface Props {
   detail: string;
   onChangeTextFix: (fix: string) => void;
   onChangeTextDetail: (detail: string) => void;
-  onPressClearFix: () => void;
-  onPressClearDetail: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -42,9 +39,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   textInput: {
+    lineHeight: fontSizeM * 1.3,
+    fontSize: fontSizeM,
+    color: primaryColor,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingHorizontal: 8,
-    paddingVertical: 14,
-    textAlignVertical: 'top',
     backgroundColor: offWhite,
     borderRadius: 6,
     borderColor: borderLightColor,
@@ -58,28 +58,51 @@ const CommentInput: React.FC<Props> = ({
   detail,
   onChangeTextFix,
   onChangeTextDetail,
-  onPressClearFix,
-  onPressClearDetail,
 }) => {
+  const refFix = useRef<TextInput>(null);
+  const refComment = useRef<TextInput>(null);
+
   return (
     <>
       <Text style={styles.label}>原文</Text>
       <Text style={styles.title}>{original}</Text>
       <View style={styles.line} />
       <Text style={styles.label}>修正文</Text>
-      <ClearTextInput
+      <TextInput
+        ref={refFix}
+        onSubmitEditing={(): void => {
+          if (refComment && refComment.current) {
+            refComment.current.focus();
+          }
+        }}
         autoFocus
+        style={styles.textInput}
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         value={fix}
-        defaultValue={original}
         onChangeText={onChangeTextFix}
-        onPressClear={onPressClearFix}
+        defaultValue={original}
+        multiline
+        returnKeyType="next"
+        blurOnSubmit
+        scrollEnabled={false}
       />
       <Space size={16} />
       <Text style={styles.label}>コメント</Text>
-      <ClearTextInput
+      <TextInput
+        ref={refComment}
+        // onSubmitEditing={onPressAdd}
+        style={styles.textInput}
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
         value={detail}
         onChangeText={onChangeTextDetail}
-        onPressClear={onPressClearDetail}
+        multiline
+        returnKeyType="done"
+        blurOnSubmit
+        scrollEnabled={false}
       />
     </>
   );

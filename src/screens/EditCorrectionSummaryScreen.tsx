@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { HeaderText } from '../components/atoms';
-import {
-  fontSizeM,
-  borderLightColor,
-  primaryColor,
-  offWhite,
-} from '../styles/Common';
+
+import { SummaryInput } from '../components/molecules';
+import { primaryColor } from '../styles/Common';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -41,33 +38,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 5,
   },
-  title: {
-    fontSize: fontSizeM,
-    fontWeight: 'bold',
-    color: primaryColor,
-    paddingBottom: 16,
-    lineHeight: fontSizeM * 1.3,
-  },
-  line: {
-    alignSelf: 'center',
-    width: '100%',
-    marginHorizontal: 16,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-    marginBottom: 16,
-  },
-  textInput: {
-    lineHeight: fontSizeM * 1.3,
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingHorizontal: 8,
-    paddingVertical: 14,
-    textAlignVertical: 'top',
-    backgroundColor: offWhite,
-    borderRadius: 6,
-    borderColor: borderLightColor,
-    flexWrap: 'wrap',
-  },
 });
 
 const EditCorrectionSummaryScreen: ScreenType = ({ navigation }) => {
@@ -77,34 +47,31 @@ const EditCorrectionSummaryScreen: ScreenType = ({ navigation }) => {
     if (navigation.state.params) {
       setSummary(navigation.state.params.summary);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onPressSubmit = useCallback((text): void => {
-    navigation.state.params.onPressSubmit(text);
-    navigation.goBack();
-  }, []);
+  const onPressSubmit = useCallback(
+    (text): void => {
+      navigation.state.params.onPressSubmit(text);
+      navigation.goBack();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
   useEffect(() => {
     navigation.setParams({
       onPressSubmit: () => onPressSubmit(summary),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [summary]);
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>まとめ</Text>
-        <View style={styles.line} />
-        <TextInput
-          style={styles.textInput}
-          autoFocus
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          value={summary}
-          onChangeText={(text): void => setSummary(text)}
-          multiline
-          clearButtonMode="always"
+        <SummaryInput
+          summary={summary}
+          onChangeText={(text: string): void => setSummary(text)}
         />
       </View>
     </View>

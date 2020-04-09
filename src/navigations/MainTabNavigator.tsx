@@ -49,11 +49,19 @@ const ModalReviewNavigator = createStackNavigator({
   Review: { screen: ReviewScreenContainer },
 });
 
-const ModalCorrectingNavigator = createStackNavigator({
-  Correcting: { screen: CorrectingScreenContainer },
-  EditCorrectionComment: { screen: EditCorrectionCommentScreen },
-  EditCorrectionSummary: { screen: EditCorrectionSummaryScreen },
-});
+const ModalCorrectingNavigator = createStackNavigator(
+  {
+    Correcting: { screen: CorrectingScreenContainer },
+    EditCorrectionComment: { screen: EditCorrectionCommentScreen },
+    EditCorrectionSummary: { screen: EditCorrectionSummaryScreen },
+  },
+  {
+    initialRouteName: 'Correcting',
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+  }
+);
 
 const ModalEditMyProfileNavigator = createStackNavigator(
   {

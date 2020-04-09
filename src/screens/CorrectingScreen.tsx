@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View, FlatList, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView } from 'react-native';
 import {
   connectActionSheet,
   useActionSheet,
@@ -8,10 +8,9 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firebase from '../constants/firebase';
-import { EmptyList } from '../components/molecules';
+import { CorrectionFooterButton } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
   HeaderText,
@@ -20,6 +19,7 @@ import {
   Space,
   CommentCard,
   SummaryCard,
+  GrayHeader,
 } from '../components/atoms';
 import { User, Diary, InfoComment, Profile, Selection } from '../types';
 import {
@@ -32,15 +32,12 @@ import { getUuid } from '../utils/common';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
-import CorrectionHeader from '../components/organisms/CorrectionHeader';
 import { mainColor, green, primaryColor } from '../styles/Common';
+import CommentInputCard from '../components/organisms/CommentInputCard';
+import SummaryInputCard from '../components/organisms/SummaryInputCard';
+import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
-type RightButtonState =
-  | 'comment'
-  | 'reComment'
-  | 'summary'
-  | 'done'
-  | 'nothing';
+type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
 interface ButtonInfo {
   title: string;
@@ -68,23 +65,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingVertical: 16,
+  },
+  main: {
+    flex: 1,
+    paddingTop: 16,
+    backgroundColor: '#FFF',
   },
   commentCard: {
-    paddingHorizontal: 16,
+    marginHorizontal: 16,
   },
 });
-
-const keyExtractor = (item: InfoComment, index: number): string =>
-  String(index);
 
 const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
   if (state === 'comment') {
     return { title: 'コメントする', color: mainColor };
   }
-  if (state === 'reComment') {
-    return { title: '範囲を変更', color: mainColor };
-  }
+
   if (state === 'summary') {
     return { title: 'まとめを書く', color: primaryColor };
   }
@@ -315,12 +311,8 @@ const CorrectingScreen: ScreenType = ({
   useEffect(() => {
     let newState = 'nothing' as RightButtonState;
 
-    if (selection && selection.start !== selection.end) {
-      if (!isCommentInput) {
-        newState = 'comment';
-      } else {
-        newState = 'reComment';
-      }
+    if (selection && selection.start !== selection.end && !isCommentInput) {
+      newState = 'comment';
     } else if (
       !isSummary &&
       !isCommentInput &&
@@ -359,6 +351,11 @@ const CorrectingScreen: ScreenType = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buttonInfo]);
+
+  const onPressCloseSummary = useCallback((): void => {
+    setSummary('');
+    setIsSummary(false);
+  }, []);
 
   /**
    * まとめを完了する
@@ -583,64 +580,17 @@ const CorrectingScreen: ScreenType = ({
     navigation.navigate('TeachDiaryList');
   }, [navigation]);
 
-  const listEmptyComponent = isCommentInput ? null : (
-    <>
-      <EmptyList
-        iconName="cursor-pointer"
-        message="文章をタップして添削を始めましょう"
-        paddingTop={0}
-      />
-      <Space size={32} />
-    </>
-  );
-
-  const listFooterComponent = (
-    <View style={styles.commentCard}>
-      <SummaryCard summary={summary} isEdit onPressMore={onPressMoreSummary} />
-    </View>
-  );
-
-  const listHeaderComponent = (
-    <CorrectionHeader
-      isCommentInput={isCommentInput}
-      isSummary={isSummary}
-      original={original}
-      teachDiary={teachDiary}
-      infoComments={infoComments}
-      onTimeUp={onTimeUp}
-      onPressSubmitComment={onPressSubmitComment}
-      onPressCloseComment={onPressCloseComment}
-      onPressSubmitSummary={onPressSubmitSummary}
-      onPressCloseSummary={(): void => setIsSummary(false)}
-      setSelection={setSelection}
-    />
-  );
-
-  const renderItem = useCallback(
-    ({ item, index }: { item: InfoComment; index: number }): JSX.Element => {
-      return (
-        <View style={styles.commentCard}>
-          <CommentCard
-            index={index}
-            original={item.original}
-            fix={item.fix}
-            detail={item.detail}
-            isEdit
-            onPressMore={(): void => onPressMoreComment(item)}
-          />
-        </View>
-      );
-    },
-    [onPressMoreComment]
-  );
-
   const getPoints = getUsePoints(
     teachDiary.text.length,
     teachDiary.profile.learnLanguage
   );
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={32}
+      >
         <LoadingModal visible={isLoading} />
         <ModalTimeUp
           visible={isModalTimeUp}
@@ -657,21 +607,65 @@ const CorrectingScreen: ScreenType = ({
           displayed={tutorialCorrectiong}
           onPress={onPressTutorial}
         />
-        <FlatList
-          data={infoComments}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ListHeaderComponent={listHeaderComponent}
-          ListFooterComponent={listFooterComponent}
-          ListEmptyComponent={listEmptyComponent}
-        />
-        {/* <CorrectionFooterButton
-          nextActionText={buttonInfo}
-          onPressNextAction={onPressSubmitButton}
-          onPressHowTo={(): void => setTutorialCorrectiong(false)}
-        /> */}
-        <KeyboardSpacer />
-      </View>
+        <View style={styles.main}>
+          <CorrectionOrigin
+            isEmpty={!isCommentInput && infoComments.length === 0}
+            teachDiary={teachDiary}
+            onTimeUp={onTimeUp}
+            setSelection={setSelection}
+          />
+          <Space size={32} />
+          {/* 新規でコメント追加 */}
+          {isCommentInput ? (
+            <CommentInputCard
+              containerStyle={styles.commentCard}
+              original={original}
+              onPressSubmit={onPressSubmitComment}
+              onPressClose={onPressCloseComment}
+            />
+          ) : null}
+          {/* 総評の追加 */}
+          {isSummary ? (
+            <SummaryInputCard
+              containerStyle={styles.commentCard}
+              onPressSubmit={onPressSubmitSummary}
+              onPressClose={onPressCloseSummary}
+            />
+          ) : null}
+          {/* コメント一覧 */}
+          {infoComments.length > 0 ? (
+            <>
+              <GrayHeader title="コメント一覧" />
+              <Space size={16} />
+            </>
+          ) : (
+            <View style={{ height: 500 }} />
+          )}
+          {infoComments.map((item: InfoComment, index: number) => (
+            <CommentCard
+              containerStyle={styles.commentCard}
+              index={index}
+              original={item.original}
+              fix={item.fix}
+              detail={item.detail}
+              isEdit
+              onPressMore={(): void => onPressMoreComment(item)}
+            />
+          ))}
+          {/* まとめ */}
+          <SummaryCard
+            containerStyle={styles.commentCard}
+            summary={summary}
+            isEdit
+            onPressMore={onPressMoreSummary}
+          />
+        </View>
+      </KeyboardAwareScrollView>
+      <CorrectionFooterButton
+        nextActionText={buttonInfo ? buttonInfo.title : ''}
+        onPressNextAction={onPressSubmitButton}
+        onPressHowTo={(): void => setTutorialCorrectiong(false)}
+      />
     </SafeAreaView>
   );
 };

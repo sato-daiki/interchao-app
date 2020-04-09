@@ -1,5 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import {
   fontSizeM,
   primaryColor,
@@ -7,9 +14,10 @@ import {
   offWhite,
 } from '../../styles/Common';
 import { Space } from '../atoms';
-import { CommentButton } from '../molecules';
+import { CommentButton, SummaryInput } from '../molecules';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
   onPressSubmit: (summary: string) => void;
   onPressClose: () => void;
 }
@@ -50,9 +58,9 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
     fontSize: fontSizeM,
     color: primaryColor,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingHorizontal: 8,
-    paddingVertical: 14,
-    textAlignVertical: 'top',
     backgroundColor: offWhite,
     borderRadius: 6,
     borderColor: borderLightColor,
@@ -60,7 +68,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const SummaryInputCard: React.FC<Props> = ({ onPressSubmit, onPressClose }) => {
+const SummaryInputCard: React.FC<Props> = ({
+  containerStyle,
+  onPressSubmit,
+  onPressClose,
+}) => {
   const [summary, setSummary] = useState(''); // まとめの続き
 
   const onPressCancel = useCallback(() => {
@@ -74,19 +86,10 @@ const SummaryInputCard: React.FC<Props> = ({ onPressSubmit, onPressClose }) => {
   }, [onPressSubmit, summary]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>まとめ</Text>
-      <View style={styles.line} />
-      <TextInput
-        style={styles.textInput}
-        autoFocus
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        value={summary}
+    <View style={[styles.container, containerStyle]}>
+      <SummaryInput
+        summary={summary}
         onChangeText={(text): void => setSummary(text)}
-        multiline
-        clearButtonMode="always"
       />
       <Space size={16} />
       <CommentButton onPressAdd={onPressAdd} onPressCancel={onPressCancel} />

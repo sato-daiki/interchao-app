@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { mainColor } from '../../styles/Common';
 import { Space } from '../atoms';
-import CommentInput from '../molecules/CommentInput';
-import { CommentButton } from '../molecules';
+import { CommentButton, CommentInput } from '../molecules';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
   original: string;
   onPressSubmit: (fix: string, detail: string) => void;
   onPressClose: () => void;
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 });
 
 const CommentInputCard: React.FC<Props> = ({
+  containerStyle,
   original,
   onPressSubmit,
   onPressClose,
@@ -54,15 +55,13 @@ const CommentInputCard: React.FC<Props> = ({
   }, [onPressSubmit, fix, detail, clear]);
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, containerStyle]}>
       <CommentInput
         original={original}
         fix={fix}
         detail={detail}
         onChangeTextFix={(text: string): void => setFix(text)}
         onChangeTextDetail={(text: string): void => setDetail(text)}
-        onPressClearFix={(): void => setFix('')}
-        onPressClearDetail={(): void => setDetail('')}
       />
       <Space size={16} />
       <CommentButton onPressAdd={onPressAdd} onPressCancel={onPressCancel} />
