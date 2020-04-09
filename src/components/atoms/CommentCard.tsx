@@ -1,5 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   fontSizeM,
@@ -10,6 +17,7 @@ import {
 } from '../../styles/Common';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
   index: number;
   original: string;
   fix: string;
@@ -84,6 +92,7 @@ const styles = StyleSheet.create({
 });
 
 const CommentCard = ({
+  containerStyle,
   index,
   original,
   fix,
@@ -93,7 +102,7 @@ const CommentCard = ({
 }: Props): JSX.Element => {
   const indexText = `${index + 1}.`;
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {isEdit ? (
         <View style={styles.icon}>
           <TouchableOpacity onPress={onPressMore}>

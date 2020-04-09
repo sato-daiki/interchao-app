@@ -1,9 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
   summary: string;
   isEdit?: boolean;
   onPressMore?: () => void;
@@ -53,6 +61,7 @@ const styles = StyleSheet.create({
 });
 
 const SummaryCard = ({
+  containerStyle,
   summary,
   isEdit = false,
   onPressMore,
@@ -61,7 +70,7 @@ const SummaryCard = ({
     return null;
   }
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {isEdit ? (
         <View style={styles.icon}>
           <TouchableOpacity onPress={onPressMore}>

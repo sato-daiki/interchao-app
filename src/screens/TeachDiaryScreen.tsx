@@ -15,6 +15,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
+  HeaderText,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -115,13 +116,6 @@ const TeachDiaryScreen: ScreenType = ({
     f();
   }, [teachDiary.correction, teachDiary.proCorrection]);
 
-  useEffect(() => {
-    navigation.setParams({
-      title: teachDiary.title,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const onPressSubmitCorrection = useCallback(
     checked => {
       const f = async (): Promise<void> => {
@@ -213,6 +207,15 @@ const TeachDiaryScreen: ScreenType = ({
     }
   }, [confirmCorrection, onPressSubmitCorrection]);
 
+  useEffect(() => {
+    navigation.setParams({
+      title: teachDiary.title,
+      onPressCorrection,
+      isYet: correctionStatus === 'yet' && user && !isModalCorrection,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [correctionStatus, user]);
+
   const onPressUser = useCallback(
     (uid: string): void => {
       navigation.navigate('UserProfile', { uid });
@@ -295,9 +298,16 @@ TeachDiaryScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const title = navigation.getParam('title');
+  const isYet = navigation.getParam('isYet');
+  const onPressCorrection = navigation.getParam('onPressCorrection');
+
   return {
     ...DefaultNavigationOptions,
     title,
+    headerRight: (): JSX.Element | null =>
+      isYet ? (
+        <HeaderText title="添削する" onPress={onPressCorrection} />
+      ) : null,
   };
 };
 

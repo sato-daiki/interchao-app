@@ -6,7 +6,7 @@ import {
 } from 'react-navigation-stack';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { HeaderText } from '../components/atoms';
-import CommentInput from '../components/molecules/CommentInput';
+import { CommentInput } from '../components/molecules';
 import { mainColor } from '../styles/Common';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
@@ -52,6 +52,7 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
       navigation.state.params!.onPressSubmit(item.id, prmFix, prmDetail);
       navigation.goBack(null);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [item.id]
   );
 
@@ -59,6 +60,7 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
     navigation.setParams({
       onPressSubmit: () => onPressSubmit(fix, detail),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fix, detail]);
 
   return (

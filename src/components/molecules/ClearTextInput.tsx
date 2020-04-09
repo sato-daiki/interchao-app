@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TextInput,
@@ -29,12 +29,11 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
     fontSize: fontSizeM,
     color: primaryColor,
-    paddingHorizontal: 8,
-    paddingVertical: 14,
+    padding: 8,
     flex: 1,
   },
-  icon: {
-    marginRight: 8,
+  iconContainer: {
+    padding: 8,
   },
 });
 
@@ -50,6 +49,7 @@ const ClearTextInput = ({
   onChangeText,
   onPressClear,
 }: Props): JSX.Element => {
+  const [isDeleteButton, setIsDeleteButton] = useState(true);
   return (
     <View style={styles.container}>
       <TextInput
@@ -61,15 +61,20 @@ const ClearTextInput = ({
         value={value}
         defaultValue={defaultValue}
         onChangeText={onChangeText}
+        onFocus={(): void => setIsDeleteButton(false)}
+        onEndEditing={(): void => setIsDeleteButton(true)}
         multiline
+        scrollEnabled={false}
       />
-      <TouchableOpacity style={styles.icon} onPress={onPressClear}>
-        <MaterialCommunityIcons
-          size={16}
-          name="close-circle"
-          color={subTextColor}
-        />
-      </TouchableOpacity>
+      {isDeleteButton && value ? (
+        <TouchableOpacity style={styles.iconContainer} onPress={onPressClear}>
+          <MaterialCommunityIcons
+            size={16}
+            name="close-circle"
+            color={subTextColor}
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };
