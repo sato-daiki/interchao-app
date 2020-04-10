@@ -12,6 +12,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
@@ -19,6 +20,7 @@ import { User, Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
+import I18n from '../utils/I18n';
 
 export interface Props {
   user: User;
@@ -76,7 +78,7 @@ const DraftDiaryListScreen: ScreenType = ({
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [preOpendIndex, setPreOpenIndex] = useState<number | undefined>();
-  const elRefs = useRef([]);
+  const elRefs = useRef<Swipeable[]>([]);
 
   const onPressEdit = useCallback(() => {
     const isEditMode = getIsEditMode(isEditing, preOpendIndex);
@@ -103,6 +105,7 @@ const DraftDiaryListScreen: ScreenType = ({
       isEditing,
       onPressEdit,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preOpendIndex, isEditing, onPressEdit]);
 
   const getNewDraftDiary = useCallback(
@@ -117,12 +120,12 @@ const DraftDiaryListScreen: ScreenType = ({
             hitsPerPage: HIT_PER_PAGE,
           });
 
-          setDraftDiaries(res.hits);
+          setDraftDiaries(res.hits as Diary[]);
           setDraftDiaryTotalNum(res.nbHits);
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
         setIsLoading(false);
       };
@@ -166,13 +169,13 @@ const DraftDiaryListScreen: ScreenType = ({
             setReadAllResults(true);
             setReadingNext(false);
           } else {
-            setDraftDiaries([...draftDiaries, ...res.hits]);
+            setDraftDiaries([...draftDiaries, ...(res.hits as Diary[])]);
             setPage(nextPage);
             setReadingNext(false);
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
       }
     };
@@ -194,16 +197,16 @@ const DraftDiaryListScreen: ScreenType = ({
   );
 
   const onPressDelete = useCallback(
-    (objectID?: string, index: number) => {
+    (item: Diary, index: number) => {
       const f = async (): Promise<void> => {
-        if (!objectID) return;
+        if (!item.objectID) return;
         setIsLoading(true);
         await firebase
           .firestore()
           .collection('diaries')
-          .doc(objectID)
+          .doc(item.objectID)
           .delete();
-        deleteDraftDiary(objectID);
+        deleteDraftDiary(item.objectID);
 
         setPreOpenIndex(undefined);
         if (elRefs.current[index]) {
@@ -263,27 +266,29 @@ const DraftDiaryListScreen: ScreenType = ({
           item={item}
           onPressItem={onPressItem}
           onPressMinus={(): void => onPressMinus(index)}
-          onPressDelete={(): void => onPressDelete(item.objectID, index)}
+          onPressDelete={(): void => onPressDelete(item, index)}
           onSwipeableOpen={(): void => onSwipeableOpen(index)}
           onSwipeableClose={(): void => onSwipeableClose(index)}
         />
       );
     },
     [
+      x,
+      isEditing,
+      onPressItem,
+      onPressMinus,
       onPressDelete,
       onSwipeableOpen,
       onSwipeableClose,
-      onPressItem,
-      onPressMinus,
     ]
   );
 
   const listHeaderComponent = useCallback(() => {
-    const title =
-      draftDiaryTotalNum !== 0
-        ? `下書き一覧(${draftDiaryTotalNum}件)`
-        : '下書き一覧';
-    return <GrayHeader title={title} />;
+    return (
+      <GrayHeader
+        title={I18n.t('draftDiary.diaryList', { count: draftDiaryTotalNum })}
+      />
+    );
   }, [draftDiaryTotalNum]);
 
   const displayEmptyComponent =
@@ -291,7 +296,7 @@ const DraftDiaryListScreen: ScreenType = ({
   if (displayEmptyComponent) {
     return (
       <EmptyList
-        message="下書き一覧はありません"
+        message={I18n.t('draftDiary.empty')}
         iconName="book-open-variant"
       />
     );
@@ -330,10 +335,14 @@ DraftDiaryListScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
-    title: '下書き',
+    title: I18n.t('draftDiary.headerTitle'),
     headerRight: (): JSX.Element => (
       <HeaderText
-        title={getIsEditMode(isEditing, preOpendIndex) ? '完了' : '編集'}
+        title={
+          getIsEditMode(isEditing, preOpendIndex)
+            ? I18n.t('common.done')
+            : I18n.t('common.edit')
+        }
         onPress={onPressEdit}
       />
     ),
