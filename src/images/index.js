@@ -1,4 +1,5 @@
 module.exports = {
+  BagPoints: require ('./bagPoints.png'),
   BlankProfile: require ('./blankProfile.png'),
   FLogo: require ('./fLogo.png'),
   Email: require ('./email.png'),
@@ -9,4 +10,6 @@ module.exports = {
   Star: require ('./star.png'),
   Points: require ('./points.png'),
   GetPoints: require ('./getPoints.png'),
+  Pen: require ('./pen.png'),
+  People: require ('./people.png'),
 };
