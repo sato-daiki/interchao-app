@@ -71,6 +71,21 @@ const editEmail = {
   labelPassword: '現在のパスワード',
 };
 
+const editMyProfile = {
+  headerTitle: 'プロフィール変更',
+  name: '名前',
+  userName: 'ユーザネーム',
+  placeholderIntroduction: '自己紹介(200字以内)',
+};
+
+const editPassword = {
+  headerTitle: 'パスワード変更',
+  forgetText: 'パスワードをお忘れの方は',
+  link: 'こちら',
+  currentPassword: '現在のパスワード',
+  newPassword: '新しいパスワード（６ケタ以上）',
+};
+
 const myDiaryList = {
   headerTitle: 'マイ日記を探す',
   diaryList: {
@@ -89,6 +104,8 @@ const ja = {
   editCorrectionComment,
   editCorrectionSummary,
   editEmail,
+  editMyProfile,
+  editPassword,
   myDiaryList,
   ...initializeScreen,
 };
