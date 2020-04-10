@@ -9,7 +9,8 @@ import firebase from '../constants/firebase';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
-import { primaryColor, fontSizeM, fontSizeL, linkBlue } from '../styles/Common';
+import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -77,7 +78,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       setIsLoading(false);
     };
     f();
-  }, [navigation, clearErrorMessage, setIsLoading, passwordInputError]);
+  }, [currentPassword, newPassword, navigation]);
 
   const onEndEditinCurrentPassword = useCallback(() => {
     setErrorCurrentPassword('');
@@ -90,7 +91,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.label}>現在のパスワード</Text>
+      <Text style={styles.label}>{I18n.t('editPassword.currentPassword')}</Text>
       <CheckTextInput
         value={currentPassword}
         onChangeText={(text: string): void => setCurrentPassword(text)}
@@ -105,7 +106,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         errorMessage={errorCurrentPassword}
       />
       <Space size={16} />
-      <Text style={styles.label}>新しいパスワード（６ケタ以上）</Text>
+      <Text style={styles.label}>{I18n.t('editPassword.newPassword')}</Text>
       <CheckTextInput
         value={newPassword}
         onChangeText={(text: string): void => setNewPassword(text)}
@@ -121,7 +122,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       />
       <Space size={32} />
       <SubmitButton
-        title="登録"
+        title={I18n.t('common.register')}
         onPress={onPressSubmit}
         disable={
           errorCurrentPassword !== '' ||
@@ -132,14 +133,14 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       />
       <Space size={16} />
       <Text style={styles.forgetText}>
-        パスワードをお忘れの方は
+        {I18n.t('editPassword.forgetText')}
         <Text
           style={styles.linkText}
-          onPress={() => {
+          onPress={(): void => {
             navigation.navigate('ForegetPassword');
           }}
         >
-          こちら
+          {I18n.t('editPassword.link')}
         </Text>
       </Text>
     </View>
@@ -149,7 +150,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
 EditPasswordScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'パスワード変更',
+    title: I18n.t('editPassword.headerTitle'),
   };
 };
 

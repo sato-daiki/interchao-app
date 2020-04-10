@@ -17,6 +17,7 @@ import firebase from '../constants/firebase';
 import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Profile } from '../types';
+import I18n from '../utils/I18n';
 
 interface Props {
   profile: Profile;
@@ -153,7 +154,7 @@ const EditMyProfileScreen: ScreenType = ({
           <Avatar photoUrl={photoUrl} pickImage={pickImage} />
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>名前</Text>
+          <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
           <TextInput
             value={name}
             onChangeText={(text: string): void => setName(text)}
@@ -171,14 +172,14 @@ const EditMyProfileScreen: ScreenType = ({
           activeOpacity={1}
           onPress={onPressUserName}
         >
-          <Text style={styles.label}>ユーザネーム</Text>
+          <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
           <Text>{userName}</Text>
         </TouchableOpacity>
         <TextInput
           value={introduction}
           onChangeText={(text: string): void => setIntroduction(text)}
           maxLength={200}
-          placeholder="自己紹介(200字以内)"
+          placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
           multiline
           numberOfLines={3}
           autoCapitalize="none"
@@ -197,15 +198,15 @@ EditMyProfileScreen.navigationOptions = ({
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
-    title: 'プロフィール変更',
+    title: I18n.t('editMyProfile.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
-        title="閉じる"
+        title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title="完了" onPress={onPressSubmit} />
+      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };
