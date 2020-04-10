@@ -13,7 +13,6 @@ import {
 } from 'react-navigation-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Notifications } from 'expo';
-import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -22,6 +21,7 @@ import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
+import Algolia from '../utils/Algolia';
 import {
   registerForPushNotificationsAsync,
   addLisner,
@@ -30,6 +30,7 @@ import { updateUnread, updateYet } from '../utils/diary';
 import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
 import { getUnreadCorrectionNum } from '../utils/localStatus';
 import { LocalStatus } from '../types/localStatus';
+import I18n from '../utils/I18n';
 
 export interface Props {
   user: User;
@@ -123,7 +124,7 @@ const MyDiaryListScreen: ScreenType = ({
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
         setIsLoading(false);
       };
@@ -178,7 +179,7 @@ const MyDiaryListScreen: ScreenType = ({
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
       }
     };
@@ -255,9 +256,11 @@ const MyDiaryListScreen: ScreenType = ({
   );
 
   const listHeaderComponent = useCallback(() => {
-    const title =
-      diaryTotalNum !== 0 ? `マイ日記一覧(${diaryTotalNum}件)` : 'マイ日記一覧';
-    return <GrayHeader title={title} />;
+    return (
+      <GrayHeader
+        title={I18n.t('myDiaryList.diaryList', { count: diaryTotalNum })}
+      />
+    );
   }, [diaryTotalNum]);
 
   const displayEmptyComponent = !isLoading && !refreshing && diaries.length < 1;
@@ -302,7 +305,10 @@ MyDiaryListScreen.navigationOptions = ({
   return {
     ...DefaultNavigationOptions,
     headerTitle: (): JSX.Element => (
-      <SearchBarButton title="マイ日記を探す" onPress={onPressSearch} />
+      <SearchBarButton
+        title={I18n.t('myDiaryList.headerTitle')}
+        onPress={onPressSearch}
+      />
     ),
     headerRight: (): JSX.Element => (
       <TouchableOpacity onPress={onPressMenu}>

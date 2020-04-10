@@ -4,7 +4,12 @@ const initializeScreen = {
   initializeHere: 'here',
 };
 
+const myDiaryList = {
+  headerTitle: 'aaa',
+};
+
 const en = {
+  myDiaryList,
   ...initializeScreen,
 };
 
