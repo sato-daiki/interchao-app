@@ -9,9 +9,6 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import firebase from '../constants/firebase';
-import { CorrectionFooterButton } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
   HeaderText,
   HeaderButton,
@@ -21,7 +18,18 @@ import {
   SummaryCard,
   GrayHeader,
 } from '../components/atoms';
+import { CorrectionFooterButton } from '../components/molecules';
+import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
+import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
+import ModalTimeUp from '../components/organisms/ModalTimeUp';
+import CommentInputCard from '../components/organisms/CommentInputCard';
+import SummaryInputCard from '../components/organisms/SummaryInputCard';
+import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
+
+import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import firebase from '../constants/firebase';
 import { User, Diary, InfoComment, Profile, Selection } from '../types';
+import I18n from '../utils/I18n';
 import {
   getDisplayProfile,
   getComments,
@@ -29,13 +37,7 @@ import {
   updateYet,
 } from '../utils/diary';
 import { getUuid } from '../utils/common';
-import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
-import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
-import ModalTimeUp from '../components/organisms/ModalTimeUp';
 import { mainColor, green, primaryColor } from '../styles/Common';
-import CommentInputCard from '../components/organisms/CommentInputCard';
-import SummaryInputCard from '../components/organisms/SummaryInputCard';
-import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
@@ -78,15 +80,15 @@ const styles = StyleSheet.create({
 
 const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
   if (state === 'comment') {
-    return { title: 'コメントする', color: mainColor };
+    return { title: I18n.t('correcting.titleComment'), color: mainColor };
   }
 
   if (state === 'summary') {
-    return { title: 'まとめを書く', color: primaryColor };
+    return { title: I18n.t('correcting.titleSummary'), color: primaryColor };
   }
 
   if (state === 'done') {
-    return { title: '投稿する', color: green };
+    return { title: I18n.t('correcting.titleDone'), color: green };
   }
   return { title: '', color: '' };
 };
@@ -132,7 +134,7 @@ const CorrectingScreen: ScreenType = ({
    */
   const onAddComment = useCallback((): void => {
     if (isSummary) {
-      Alert.alert('', 'まとめが編集中です');
+      Alert.alert('', I18n.t('correcting.summaryAlert'));
       setOriginal('');
       setCorrectingSelection(undefined);
       setIsCommentInput(false);
@@ -286,11 +288,11 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressClose = useCallback(() => {
     Alert.alert(
-      '確認',
-      '編集中の添削は全て削除されますが、よろしいでしょうか？',
+      I18n.t('common.confirmation'),
+      I18n.t('correcting.deleteAlert'),
       [
         {
-          text: 'キャンセル',
+          text: I18n.t('common.cancel'),
           style: 'cancel',
         },
         {
@@ -379,7 +381,11 @@ const CorrectingScreen: ScreenType = ({
    * まとめのメニューアイコンをクリック
    */
   const onPressMoreSummary = useCallback(() => {
-    const options = ['編集する', 'まとめを削除する', 'キャンセル'];
+    const options = [
+      I18n.t('correcting.menuEdit'),
+      I18n.t('correcting.menuSummaryDelete'),
+      I18n.t('common.cancel'),
+    ];
     showActionSheetWithOptions(
       {
         options,
@@ -490,7 +496,11 @@ const CorrectingScreen: ScreenType = ({
    */
   const onPressMoreComment = useCallback(
     (item: InfoComment) => {
-      const options = ['編集する', 'コメントを削除する', 'キャンセル'];
+      const options = [
+        I18n.t('correcting.menuEdit'),
+        I18n.t('correcting.menuCommentDelete'),
+        I18n.t('common.cancel'),
+      ];
       showActionSheetWithOptions(
         {
           options,
@@ -635,7 +645,7 @@ const CorrectingScreen: ScreenType = ({
           {/* コメント一覧 */}
           {infoComments.length > 0 ? (
             <>
-              <GrayHeader title="コメント一覧" />
+              <GrayHeader title={I18n.t('correcting.commentList')} />
               <Space size={16} />
             </>
           ) : null}
@@ -677,9 +687,9 @@ CorrectingScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
-    title: '添削する',
+    title: I18n.t('correcting.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title="閉じる" onPress={onPressClose} />
+      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element | null =>
       buttonInfo ? (
