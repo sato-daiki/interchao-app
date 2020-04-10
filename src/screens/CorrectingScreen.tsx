@@ -638,9 +638,7 @@ const CorrectingScreen: ScreenType = ({
               <GrayHeader title="コメント一覧" />
               <Space size={16} />
             </>
-          ) : (
-            <View style={{ height: 500 }} />
-          )}
+          ) : null}
           {infoComments.map((item: InfoComment, index: number) => (
             <CommentCard
               containerStyle={styles.commentCard}

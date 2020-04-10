@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { primaryColor, fontSizeM, mainColor } from '../../styles/Common';
 import { Space } from '../atoms';
-import { Zebbu } from '../../images';
+import { BagPoints } from '../../images';
 import Tutorial from '../template/Tutorial';
 
 const styles = StyleSheet.create({
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
   img: {
     alignSelf: 'center',
-    width: 200,
-    height: 200,
+    width: 80,
+    height: 80,
   },
 });
 
@@ -43,7 +43,7 @@ const TutorialPoints: React.FC<Props> = ({
       onPress={onPress}
     >
       <View style={styles.container}>
-        <Image style={styles.img} source={Zebbu} resizeMode="contain" />
+        <Image style={styles.img} source={BagPoints} resizeMode="contain" />
         <Space size={24} />
         <Text style={styles.text}>
           日記を投稿するには10ポイント〜が必要です。
