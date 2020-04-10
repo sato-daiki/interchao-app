@@ -16,6 +16,7 @@ import {
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
+import I18n from '../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -60,16 +61,16 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
     const f = async (): Promise<void> => {
       try {
         const { currentUser } = firebase.auth();
+        if (!currentUser) return;
         if (!currentUser.email) {
           setIsLoading(true);
-          await currentUser!.delete();
+          await currentUser.delete();
         } else {
           setIsModal(true);
         }
       } catch (error) {
         setIsLoading(false);
-        console.log(error);
-        Alert.alert(' エラー', 'ネットワークエラーです');
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       }
       setIsLoading(false);
       track(events.DELETED_USER);
@@ -94,10 +95,10 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorCode === 'auth/wrong-password') {
-          setErrorPassword('パスワードが違います');
+          setErrorPassword(I18n.t('errorMessage.wrongPassword'));
         } else {
           setErrorPassword('');
-          Alert.alert('', 'ネットワークエラーです', errorMessage);
+          Alert.alert(I18n.t('common.error'), errorMessage);
         }
       }
       track(events.DELETED_USER);
@@ -129,14 +130,9 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onPressClose={onPressClose}
       />
       <View style={styles.main}>
-        <Text style={styles.text}>
-          退会すると投稿した日記の情報が完全に消去され、復元することはできません。
-          {'\n'}
-          {'\n'}
-          それでも退会を希望する方は下のボタンから退会してください。
-        </Text>
+        <Text style={styles.text}>{I18n.t('deleteAcount.text')}</Text>
         <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
-          <Text style={styles.delete}>退会する</Text>
+          <Text style={styles.delete}>{I18n.t('deleteAcount.withdrawal')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -146,7 +142,7 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
 DeleteAcountScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: '退会について',
+    title: I18n.t('deleteAcount.headerTitle'),
   };
 };
 

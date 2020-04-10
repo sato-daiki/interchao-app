@@ -9,6 +9,7 @@ import { HeaderText } from '../components/atoms';
 
 import { SummaryInput } from '../components/molecules';
 import { primaryColor } from '../styles/Common';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -52,6 +53,7 @@ const EditCorrectionSummaryScreen: ScreenType = ({ navigation }) => {
 
   const onPressSubmit = useCallback(
     (text): void => {
+      if (!navigation.state.params) return;
       navigation.state.params.onPressSubmit(text);
       navigation.goBack();
     },
@@ -84,15 +86,15 @@ EditCorrectionSummaryScreen.navigationOptions = ({
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
-    title: 'まとめを編集する',
+    title: I18n.t('editCorrectionSummary.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
-        title="閉じる"
+        title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title="完了" onPress={onPressSubmit} />
+      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };

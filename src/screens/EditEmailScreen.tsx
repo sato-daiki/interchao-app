@@ -14,6 +14,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import { primaryColor, fontSizeM, fontSizeL } from '../styles/Common';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -81,7 +82,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
       setIsLoading(false);
     };
     f();
-  }, [clearErrorMessage, setIsLoading, emailInputError, setErrorEmail]);
+  }, [password, email, navigation]);
 
   const onEndEditingEmail = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -93,7 +94,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
 
       if (emailValidate(email)) {
         setIsEmailCheckOk(false);
-        setErrorEmail('メールアドレスの形式が正しくありません');
+        setErrorEmail(I18n.t('errorMessage.invalidEmail'));
         return;
       }
 
@@ -102,7 +103,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
 
       if (res) {
         setIsEmailCheckOk(false);
-        setErrorEmail('このメールアドレスはすでに登録されています');
+        setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
       } else {
         setIsEmailCheckOk(true);
         setErrorEmail('');
@@ -119,9 +120,9 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.title}>新しいメールアドレスを入力してください</Text>
+      <Text style={styles.title}>{I18n.t('editEmail.title')}</Text>
 
-      <Text style={styles.label}>新しいメールアドレス</Text>
+      <Text style={styles.label}>{I18n.t('editEmail.labelEmail')}</Text>
       <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
@@ -138,7 +139,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
         errorMessage={errorEmail}
       />
       <Space size={16} />
-      <Text style={styles.label}>現在のパスワード</Text>
+      <Text style={styles.label}>{I18n.t('editEmail.labelPassword')}</Text>
       <CheckTextInput
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
@@ -154,7 +155,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
       />
       <Space size={32} />
       <SubmitButton
-        title="登録"
+        title={I18n.t('common.register')}
         onPress={onPressSubmit}
         disable={!isEmailCheckOk}
       />
@@ -166,7 +167,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
 EditEmailScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'メールアドレス変更',
+    title: I18n.t('editEmail.headerTitle'),
   };
 };
 

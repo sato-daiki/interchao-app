@@ -8,6 +8,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { HeaderText } from '../components/atoms';
 import { CommentInput } from '../components/molecules';
 import { mainColor } from '../styles/Common';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -49,7 +50,8 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
 
   const onPressSubmit = useCallback(
     (prmFix: string, prmDetail: string): void => {
-      navigation.state.params!.onPressSubmit(item.id, prmFix, prmDetail);
+      if (!navigation.state.params) return;
+      navigation.state.params.onPressSubmit(item.id, prmFix, prmDetail);
       navigation.goBack(null);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,15 +86,15 @@ EditCorrectionCommentScreen.navigationOptions = ({
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
-    title: 'コメントを編集する',
+    title: I18n.t('editCorrectionComment.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
-        title="閉じる"
+        title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title="完了" onPress={onPressSubmit} />
+      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };
