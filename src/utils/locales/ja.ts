@@ -7,6 +7,10 @@ const common = {
   done: '完了',
   edit: '編集',
   register: '登録',
+  sending: '送信',
+  next: '次へ',
+  publish: '投稿',
+  draft: '下書き保存',
 };
 
 // 共通のエラーメッセージ
@@ -17,12 +21,14 @@ const errorMessage = {
   weakPassword: 'パスワードは6桁以上で入力してください',
   userNotFound: 'メールアドレスが存在しません',
   emailAlreadyInUse: 'このメールアドレスはすでに登録されています',
-};
-
-const initializeScreen = {
-  initializeStart: 'はじめる',
-  initializeHaveAcconut: 'アカウントをお持ちの方は',
-  initializeHere: 'こちら',
+  emptyUserName: 'ユーザネームを入力してください',
+  invalidUserName:
+    'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません',
+  initialUserName: '先頭の文字は半角英数字以外使えません',
+  userNameAlreadyInUse:
+    'すでにこのユーザーネームを使用しているユーザーがいます',
+  notFound: 'ページが開けません。エラーが発生しました',
+  cantLogout: 'メールアドレスが登録されていないため、ログアウトできません。',
 };
 
 // 各画面ごとの文字
@@ -86,6 +92,36 @@ const editPassword = {
   newPassword: '新しいパスワード（６ケタ以上）',
 };
 
+const editUserName = {
+  headerTitle: 'ユーザーネーム',
+  userName: 'ユーザーネーム',
+};
+
+const foregetPassword = {
+  headerTitle: 'パスワード再設定',
+  email: 'メールアドレス',
+  title: 'メールアドレスを入力してください',
+  subText: 'メールアドレスにパスワードの変更URLを送ります',
+};
+
+const initialize = {
+  start: 'はじめる',
+  acount: 'アカウントをお持ちの方は',
+  link: 'こちら',
+};
+
+const inputUserName = {
+  headerTitle: 'ユーザーネーム登録',
+  title: 'ユーザーネームを入力してください',
+  subText: 'このユーザネームはいつでも変更できます',
+};
+
+const myDiary = {
+  menuDelete: '削除する',
+  menuChangePublic: '公開設定を変更する',
+  confirmMessage: '本当に削除してよろしいでしょうか？',
+};
+
 const myDiaryList = {
   headerTitle: 'マイ日記を探す',
   diaryList: {
@@ -93,6 +129,57 @@ const myDiaryList = {
     other: 'マイ日記一覧{{count}}件',
     zero: 'マイ日記一覧',
   },
+};
+
+const myDiarySerch = {
+  placeholder: 'タイトルと本文で検索',
+};
+
+const myPage = {
+  headerTitle: 'マイページ',
+  editButton: '編集する',
+};
+
+const notice = {
+  headerTitle: '通知',
+  finishCorrection: 'マイ日記の添削が完了',
+  finishReview: 'レビューが届く',
+};
+
+const postDiary = {
+  headerTitle: '新規日記',
+};
+
+const postDraftDiary = {
+  headerTitle: '下書を編集',
+};
+
+const registerEmailPassword = {
+  headerTitle: 'メールアドレス/パスワード登録',
+  title: 'メールアドレスとパスワードを入力してください',
+  subText:
+    '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
+  email: 'メールアドレス',
+  password: 'パスワード（６ケタ以上）',
+};
+
+const reviewList = {
+  headerTitle: 'レビュー一覧',
+  reviewList: 'レビュー一覧',
+};
+
+const setting = {
+  headerTitle: '設定',
+  title: '基本設定',
+  notice: '通知',
+  editEmail: 'メールアドレスの変更',
+  editPassword: 'パスワードの変更',
+  registerEmailPassword: 'メールアドレス/パスワードの登録',
+  tutorial: 'チュートリアル',
+  management: '運営',
+  privacy: 'プライバシーポリシー',
+  deleteAcount: '退会について',
+  logout: 'ログアウト',
 };
 
 const ja = {
@@ -106,8 +193,20 @@ const ja = {
   editEmail,
   editMyProfile,
   editPassword,
+  editUserName,
+  foregetPassword,
+  initialize,
+  inputUserName,
+  myDiary,
   myDiaryList,
-  ...initializeScreen,
+  myDiarySerch,
+  myPage,
+  notice,
+  postDiary,
+  postDraftDiary,
+  registerEmailPassword,
+  reviewList,
+  setting,
 };
 
 export default ja;

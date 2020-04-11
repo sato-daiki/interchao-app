@@ -19,6 +19,7 @@ import {
   fontSizeL,
   subTextColor,
 } from '../styles/Common';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -96,7 +97,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
       setIsLoading(false);
     };
     f();
-  }, [clearErrorMessage, setIsLoading]);
+  }, [email, navigation, password]);
 
   const onEndEditingEmail = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -108,7 +109,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
 
       if (emailValidate(email)) {
         setIsEmailCheckOk(false);
-        setErrorEmail('メールアドレスの形式が正しくありません');
+        setErrorEmail(I18n.t('errorMessage.invalidEmail'));
         return;
       }
 
@@ -117,7 +118,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
 
       if (res) {
         setIsEmailCheckOk(false);
-        setErrorEmail('このメールアドレスはすでに登録されています');
+        setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
       } else {
         setIsEmailCheckOk(true);
         setErrorEmail('');
@@ -133,7 +134,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
       setErrorPassword('');
     } else if (password.length > 0 && password.length < 6) {
       setIsPasswordCheckOk(false);
-      setErrorPassword('パスワードは6桁以上で入力してください');
+      setErrorPassword(I18n.t('errorMessage.weakPassword'));
     } else {
       setIsPasswordCheckOk(true);
       setErrorPassword('');
@@ -143,13 +144,11 @@ const RegisterEmailPasswordScreen: ScreenType = ({
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.title}>
-        メールアドレスとパスワードを入力してください
-      </Text>
+      <Text style={styles.title}>{I18n.t('registerEmailPassword.title')}</Text>
       <Text style={styles.subText}>
-        機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。
+        {I18n.t('registerEmailPassword.subText')}
       </Text>
-      <Text style={styles.label}>メールアドレス</Text>
+      <Text style={styles.label}>{I18n.t('registerEmailPassword.email')}</Text>
       <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
@@ -166,7 +165,9 @@ const RegisterEmailPasswordScreen: ScreenType = ({
         errorMessage={errorEmail}
       />
       <Space size={16} />
-      <Text style={styles.label}>パスワード（６ケタ以上）</Text>
+      <Text style={styles.label}>
+        {I18n.t('registerEmailPassword.password')}
+      </Text>
       <CheckTextInput
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
@@ -183,7 +184,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
       />
       <Space size={32} />
       <SubmitButton
-        title="登録"
+        title={I18n.t('common.register')}
         onPress={onPressSubmit}
         disable={!isEmailCheckOk}
       />
@@ -195,7 +196,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
 RegisterEmailPasswordScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'メールアドレス/パスワード登録',
+    title: I18n.t('registerEmailPassword.headerTitle'),
   };
 };
 

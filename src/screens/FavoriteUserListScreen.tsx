@@ -45,7 +45,7 @@ const FavoriteUserListScreen: NavigationStackScreenComponent = ({
         </View>
       );
     },
-    [onPressFavorite]
+    [navigation, onPressFavorite]
   );
 
   return (

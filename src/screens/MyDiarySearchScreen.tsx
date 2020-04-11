@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
 import algoliasearch from 'algoliasearch';
 import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '@env';
@@ -10,6 +10,7 @@ import {
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -37,6 +38,8 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
     [navigation]
   );
 
+  if (!currentUser) return <View />;
+
   return (
     <SafeAreaView style={styles.container}>
       <InstantSearch
@@ -44,10 +47,10 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
         indexName={__DEV__ ? 'dev_diaries' : 'prod_diaries'}
       >
         <Configure
-          filters={`profile.uid:${currentUser!.uid} AND diaryStatus: publish`}
+          filters={`profile.uid:${currentUser.uid} AND diaryStatus: publish`}
         />
         <SearchBar
-          placeholder="タイトルと本文で検索"
+          placeholder={I18n.t('myDiarySerch.placeholder')}
           setIsEmpty={setIsEmpty}
           onPressClose={(): void => {
             navigation.goBack();

@@ -17,6 +17,7 @@ import {
   checkBeforePost,
   getUsePoints,
 } from '../utils/diary';
+import I18n from '../utils/I18n';
 
 interface Props {
   user: User;
@@ -107,7 +108,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         setIsModalAlert(false);
       } catch (err) {
         setIsLoading(false);
-        Alert.alert('ネットワークエラーです');
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       }
     };
     f();
@@ -195,7 +196,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         setIsModalAlert(false);
       } catch (err) {
         setIsLoading(false);
-        Alert.alert('ネットワークエラーです');
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       }
     };
     f();
@@ -254,15 +255,22 @@ PostDraftDiaryScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
-    title: '下書を編集',
+    title: I18n.t('postDraftDiary.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title="閉じる" onPress={onPressClose} />
+      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => {
       if (points >= 10) {
-        return <HeaderText title="投稿" onPress={onPressPublic} />;
+        return (
+          <HeaderText
+            title={I18n.t('common.publish')}
+            onPress={onPressPublic}
+          />
+        );
       }
-      return <HeaderText title="下書き保存" onPress={onPressDraft} />;
+      return (
+        <HeaderText title={I18n.t('common.draft')} onPress={onPressDraft} />
+      );
     },
   };
 };

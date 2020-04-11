@@ -14,6 +14,7 @@ import { CheckTextInput } from '../components/molecules';
 import { HeaderText } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
+import I18n from '../utils/I18n';
 
 interface Props {
   profile: Profile;
@@ -52,6 +53,7 @@ const EditUserNameScreen: ScreenType = ({
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (userName === '') return;
+      if (!navigation.state.params) return;
 
       if (profile.userName !== userName) {
         const typeChecked = checkTypeUserName(userName);
@@ -63,7 +65,7 @@ const EditUserNameScreen: ScreenType = ({
           return;
         }
       }
-      navigation.state.params!.setUserName(userName);
+      navigation.state.params.setUserName(userName);
       navigation.goBack(null);
     };
     f();
@@ -81,7 +83,7 @@ const EditUserNameScreen: ScreenType = ({
         if (text === '') {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage('ユーザ名を入力してください');
+          setErrorMessage(I18n.t('errorMessage/emptyUserName'));
           return;
         }
 
@@ -89,9 +91,7 @@ const EditUserNameScreen: ScreenType = ({
         if (!typeChecked) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(
-            'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません'
-          );
+          setErrorMessage(I18n.t('errorMessage/invalidUserName'));
           return;
         }
 
@@ -99,7 +99,7 @@ const EditUserNameScreen: ScreenType = ({
         if (!initialChecked) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage('先頭の文字は半角英数字以外使えません');
+          setErrorMessage(I18n.t('errorMessage/initialUserName'));
           return;
         }
 
@@ -108,9 +108,7 @@ const EditUserNameScreen: ScreenType = ({
         if (!resDuplicated && text !== profile.userName) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(
-            'すでにこのユーザーネームを使用しているユーザーがいます'
-          );
+          setErrorMessage(I18n.t('errorMessage/userNameAlreadyInUse'));
           return;
         }
         setIsUserNameLoading(false);
@@ -123,7 +121,7 @@ const EditUserNameScreen: ScreenType = ({
   );
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>ユーザーネーム</Text>
+      <Text style={styles.label}>{I18n.t('editUserName.userName')}</Text>
       <CheckTextInput
         value={userName}
         onChangeText={onChangeText}
@@ -148,9 +146,9 @@ EditUserNameScreen.navigationOptions = ({
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
-    title: 'ユーザーネーム',
+    title: I18n.t('editUserName.headerTitle'),
     headerRight: (): JSX.Element => (
-      <HeaderText title="完了" onPress={onPressSubmit} />
+      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };

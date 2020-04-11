@@ -33,6 +33,7 @@ import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
 import { LoadingModal } from '../components/atoms';
+import I18n from '../utils/I18n';
 
 interface Props {
   diary?: Diary;
@@ -107,7 +108,11 @@ const MyDiaryScreen: ScreenType = ({
   }, []);
 
   const onPressMore = useCallback(() => {
-    const options = ['削除する', '公開設定を変更する', 'キャンセル'];
+    const options = [
+      I18n.t('myDiary.menuDelete'),
+      I18n.t('myDiary.menuChangePublic'),
+      I18n.t('common.cancel'),
+    ];
     showActionSheetWithOptions(
       {
         options,
@@ -203,7 +208,7 @@ const MyDiaryScreen: ScreenType = ({
   }, [deleteDiary, diary, navigation]);
 
   if (!diary) {
-    Alert.alert('エラー', 'ページが開けません。エラーが発生しました');
+    Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.notFound'));
     return null;
   }
 
@@ -215,9 +220,9 @@ const MyDiaryScreen: ScreenType = ({
       <ModalConfirm
         visible={isModalDelete}
         isLoading={isLoading}
-        title="確認"
-        message="本当に削除してよろしいでしょうか？"
-        mainButtonText="削除する"
+        title={I18n.t('common.confirmation')}
+        message={I18n.t('myDiary.confirmMessage')}
+        mainButtonText={I18n.t('myDiary.menuDelete')}
         onPressMain={onPressDelete}
         onPressClose={(): void => setIsModalDelete(false)}
       />
