@@ -11,6 +11,7 @@ const common = {
   next: '次へ',
   publish: '投稿',
   draft: '下書き保存',
+  skip: 'スキップ',
 };
 
 // 共通のエラーメッセージ
@@ -29,6 +30,11 @@ const errorMessage = {
     'すでにこのユーザーネームを使用しているユーザーがいます',
   notFound: 'ページが開けません。エラーが発生しました',
   cantLogout: 'メールアドレスが登録されていないため、ログアウトできません。',
+  invalidRaiting: '評価は1〜5で入力してください',
+  correctionAlready:
+    'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
+  deleteTargetUser:
+    'このページは開けません。対象のユーザは削除された可能性があります。',
 };
 
 // 各画面ごとの文字
@@ -168,6 +174,19 @@ const reviewList = {
   reviewList: 'レビュー一覧',
 };
 
+const review = {
+  headerTitle: 'レビューする',
+  placeholder: 'コメント',
+  confirmation: '編集中のレビューは全て削除されますが、よろしいでしょうか？',
+};
+
+const selectLanguage = {
+  headerTitle: '言語の選択',
+  title: '言語を選択してください',
+  learn: '学びたい言語',
+  native: 'ネイティブ言語',
+};
+
 const setting = {
   headerTitle: '設定',
   title: '基本設定',
@@ -180,6 +199,59 @@ const setting = {
   privacy: 'プライバシーポリシー',
   deleteAcount: '退会について',
   logout: 'ログアウト',
+};
+
+const signIn = {
+  headerTitle: 'ログイン',
+  email: 'メールアドレス',
+  password: 'パスワード',
+  login: 'ログイン',
+  forgetText: 'パスワードをお忘れの方は',
+  link: 'こちら',
+};
+
+const signUp = {
+  headerTitle: 'メールアドレス登録',
+  title: 'メールアドレスとパスワードを入力してください',
+  subText:
+    '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
+  email: 'メールアドレス',
+  password: 'パスワード（６ケタ以上）',
+};
+
+const teachDiary = {
+  correcting: '添削する',
+};
+
+const teachDiaryList = {
+  headerTitle: 'みんなの日記を探す',
+  diaryList: '日本語を勉強している人の日記一覧',
+  empty: 'みんなの日記一覧がありません',
+};
+
+const teachDiarySerch = {
+  searchBar: 'タイトルと本文で検索',
+};
+
+const tutorialList = {
+  headerTitle: 'チュートリアル一覧',
+  correcting: '添削の仕方',
+  postDiary: '日記の書き方',
+  points: 'ポイントについて',
+};
+
+const userProfile = {
+  headerTitle: 'プロフィール',
+  moreRead: '{{count}}件のレビューを全部見る',
+  blocked: 'ブロック',
+  unBlocked: 'ブロックを解除する',
+  report: '報告する',
+  diaryList: {
+    one: '日記一覧{{count}}件',
+    other: '日記一覧{{count}}件',
+    zero: '日記一覧',
+  },
+  topReview: 'トップレビュー',
 };
 
 const ja = {
@@ -205,8 +277,17 @@ const ja = {
   postDiary,
   postDraftDiary,
   registerEmailPassword,
+  review,
   reviewList,
+  selectLanguage,
   setting,
+  signIn,
+  signUp,
+  teachDiary,
+  teachDiaryList,
+  teachDiarySerch,
+  tutorialList,
+  userProfile,
 };
 
 export default ja;

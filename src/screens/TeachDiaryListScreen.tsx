@@ -21,6 +21,7 @@ import { getBlockers, getBlockees } from '../utils/blockUser';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import { getExceptUser } from '../utils/diary';
 import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
+import I18n from '../utils/I18n';
 
 export interface Props {
   profile: Profile;
@@ -106,7 +107,7 @@ const TeachDiaryListScreen: ScreenType = ({
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
         setIsLoading(false);
       };
@@ -159,7 +160,7 @@ const TeachDiaryListScreen: ScreenType = ({
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
       }
     };
@@ -216,7 +217,7 @@ const TeachDiaryListScreen: ScreenType = ({
   );
 
   const listHeaderComponent = (
-    <GrayHeader title="日本語を勉強している人の日記一覧" />
+    <GrayHeader title={I18n.t('teachDiaryList.diaryList')} />
   );
 
   const displayEmptyComponent =
@@ -231,7 +232,7 @@ const TeachDiaryListScreen: ScreenType = ({
       />
       {displayEmptyComponent ? (
         <EmptyList
-          message="みんなの日記一覧がありません"
+          message={I18n.t('teachDiaryList.empty')}
           iconName="book-open-variant"
         />
       ) : (
@@ -258,7 +259,10 @@ TeachDiaryListScreen.navigationOptions = ({
   return {
     ...DefaultNavigationOptions,
     headerTitle: (): JSX.Element => (
-      <SearchBarButton title="みんなの日記を探す" onPress={onPressSearch} />
+      <SearchBarButton
+        title={I18n.t('teachDiaryList.headerTitle')}
+        onPress={onPressSearch}
+      />
     ),
   };
 };

@@ -27,6 +27,7 @@ import {
   fontSizeL,
 } from '../styles/Common';
 import { track, events } from '../utils/Analytics';
+import I18n from '../utils/I18n';
 
 interface Props {
   user: User;
@@ -208,7 +209,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
       if (emailValidate(email)) {
         setIsEmailCheckOk(false);
-        setErrorEmail('メールアドレスの形式が正しくありません');
+        setErrorEmail(I18n.t('errorMessage.invalidEmail'));
         return;
       }
 
@@ -217,7 +218,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
       if (res) {
         setIsEmailCheckOk(false);
-        setErrorEmail('このメールアドレスはすでに登録されています');
+        setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
       } else {
         setIsEmailCheckOk(true);
         setErrorEmail('');
@@ -233,7 +234,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       setErrorPassword('');
     } else if (password.length > 0 && password.length < 6) {
       setIsPasswordCheckOk(false);
-      setErrorPassword('パスワードは6桁以上で入力してください');
+      setErrorPassword(I18n.t('errorMessage.weakPassword'));
     } else {
       setIsPasswordCheckOk(true);
       setErrorPassword('');
@@ -243,13 +244,9 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.title}>
-        メールアドレスとパスワードを入力してください
-      </Text>
-      <Text style={styles.subText}>
-        機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。
-      </Text>
-      <Text style={styles.label}>メールアドレス</Text>
+      <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
+      <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
+      <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
       <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
@@ -266,7 +263,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         errorMessage={errorEmail}
       />
       <Space size={16} />
-      <Text style={styles.label}>パスワード（６ケタ以上）</Text>
+      <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
       <CheckTextInput
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
@@ -283,7 +280,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       />
       <Space size={32} />
       <SubmitButton
-        title="登録"
+        title={I18n.t('common.register')}
         onPress={onPressSubmit}
         disable={!(isEmailCheckOk && isPasswordCheckOk)}
       />
@@ -296,9 +293,9 @@ SignUpScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
   const onPressSkip = navigation.getParam('onPressSkip');
   return {
     ...DefaultNavigationOptions,
-    title: 'メールアドレス登録',
+    title: I18n.t('signUp.headerTitle'),
     headerRight: (): JSX.Element => (
-      <HeaderText title="Skip" onPress={onPressSkip} />
+      <HeaderText title={I18n.t('common.skip')} onPress={onPressSkip} />
     ),
   };
 };
