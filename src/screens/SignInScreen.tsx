@@ -11,6 +11,7 @@ import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
 import { emailInputError, emailValidate } from '../utils/InputCheck';
 import { track, events } from '../utils/Analytics';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -98,7 +99,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
     }
 
     if (emailValidate(email)) {
-      setErrorEmail('メールアドレスの形式が正しくありません');
+      setErrorEmail(I18n.t('signIn.invalidEmail'));
     }
     setErrorEmail('');
   }, [email, setErrorEmail]);
@@ -110,7 +111,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.label}>メールアドレス</Text>
+      <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
       <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
@@ -125,7 +126,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
         errorMessage={errorEmail}
       />
       <Space size={16} />
-      <Text style={styles.label}>パスワード</Text>
+      <Text style={styles.label}>{I18n.t('signIn.password')}</Text>
       <CheckTextInput
         value={password}
         onChangeText={(text: string): void => setPassword(text)}
@@ -141,7 +142,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       />
       <Space size={32} />
       <SubmitButton
-        title="ログイン"
+        title={I18n.t('signIn.login')}
         onPress={onPressLogin}
         disable={
           errorEmail !== '' ||
@@ -152,9 +153,9 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       />
       <Space size={16} />
       <View style={styles.row}>
-        <Text style={styles.forgetText}>パスワードをお忘れの方は</Text>
+        <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
         <TouchableOpacity onPress={onPressForget}>
-          <Text style={styles.linkText}>こちら</Text>
+          <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -164,7 +165,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
 SignInScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'ログイン',
+    title: I18n.t('signIn.headerTitle'),
   };
 };
 

@@ -27,6 +27,7 @@ import {
 import { getCorrection } from '../utils/corrections';
 import { Correction } from '../types/correction';
 import Algolia from '../utils/Algolia';
+import I18n from '../utils/I18n';
 
 interface Props {
   user: User;
@@ -134,8 +135,8 @@ const TeachDiaryScreen: ScreenType = ({
 
         if (res.nbHits !== 1) {
           Alert.alert(
-            'エラー',
-            'この日記は他の人が添削を始めました。他の日記を再度検索ください'
+            I18n.t('common.error'),
+            I18n.t('errorMessage.correctionAlready')
           );
           setIsLoading(false);
           return;
@@ -229,7 +230,7 @@ const TeachDiaryScreen: ScreenType = ({
         <View style={styles.correctionButton}>
           <SubmitButton
             isLoading={isLoading}
-            title="添削する"
+            title={I18n.t('teachDiary.correcting')}
             onPress={onPressCorrection}
           />
         </View>
@@ -306,7 +307,10 @@ TeachDiaryScreen.navigationOptions = ({
     title,
     headerRight: (): JSX.Element | null =>
       isYet ? (
-        <HeaderText title="添削する" onPress={onPressCorrection} />
+        <HeaderText
+          title={I18n.t('teachDiary.correcting')}
+          onPress={onPressCorrection}
+        />
       ) : null,
   };
 };

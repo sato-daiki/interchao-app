@@ -11,6 +11,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
 import TutorialPostDiary from '../components/organisms/TutorialPostDiary';
 import TutorialPoints from '../components/organisms/TutorialPoints';
+import I18n from '../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,7 +30,7 @@ const TutorialListScreen: NavigationStackScreenComponent = () => {
   const [tutorialPostDiary, setTutorialPostDiary] = useState(true);
   const [tutorialPoints, setTutorialPoints] = useState(true);
 
-  const buttonText = '閉じる';
+  const buttonText = I18n.t('common.close');
 
   return (
     <View style={styles.container}>
@@ -49,15 +50,15 @@ const TutorialListScreen: NavigationStackScreenComponent = () => {
         onPress={(): void => setTutorialPoints(true)}
       />
       <OptionItem
-        title="添削の仕方"
+        title={I18n.t('tutorialList.correcting')}
         onPress={(): void => setTutorialCorrecting(false)}
       />
       <OptionItem
-        title="日記の書き方"
+        title={I18n.t('tutorialList.postDiary')}
         onPress={(): void => setTutorialPostDiary(false)}
       />
       <OptionItem
-        title="ポイントについて"
+        title={I18n.t('tutorialList.points')}
         onPress={(): void => setTutorialPoints(false)}
       />
     </View>
@@ -67,7 +68,7 @@ const TutorialListScreen: NavigationStackScreenComponent = () => {
 TutorialListScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'チュートリアル一覧',
+    title: I18n.t('tutorialList.headerTitle'),
   };
 };
 

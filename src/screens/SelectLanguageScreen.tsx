@@ -11,6 +11,7 @@ import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Profile } from '../types';
 import { track, events } from '../utils/Analytics';
+import I18n from '../utils/I18n';
 
 interface Props {
   profile: Profile;
@@ -63,22 +64,22 @@ const SelectLanguageScreen: ScreenType = ({
 
   return (
     <View style={styles.contaner}>
-      <Text style={styles.title}>言語を選択してください</Text>
+      <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
       <LanguageRadioBox
-        label="学びたい言語"
+        label={I18n.t('selectLanguage.learn')}
         checkedJa={isCheckedJa}
         onPressJa={(): void => setIsCheckedJa(true)}
         onPressEn={(): void => setIsCheckedJa(false)}
       />
       <Space size={16} />
       <LanguageRadioBox
-        label="ネイティブ言語"
+        label={I18n.t('selectLanguage.native')}
         checkedJa={!isCheckedJa}
         onPressJa={(): void => setIsCheckedJa(false)}
         onPressEn={(): void => setIsCheckedJa(true)}
       />
       <Space size={32} />
-      <SubmitButton title="次へ" onPress={onPressNext} />
+      <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
     </View>
   );
 };
@@ -86,7 +87,7 @@ const SelectLanguageScreen: ScreenType = ({
 SelectLanguageScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: '言語の選択',
+    title: I18n.t('selectLanguage.headerTitle'),
   };
 };
 

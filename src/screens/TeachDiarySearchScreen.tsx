@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, View } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
 import algoliasearch from 'algoliasearch';
 import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '@env';
@@ -14,6 +14,7 @@ import { getExceptUser } from '../utils/diary';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import { Profile } from '../types';
 import { LoadingModal } from '../components/atoms';
+import I18n from '../utils/I18n';
 
 export interface Props {
   profile: Profile;
@@ -76,7 +77,7 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
       >
         <Configure filters={filters} />
         <SearchBar
-          placeholder="タイトルと本文で検索"
+          placeholder={I18n.t('teachDiarySerch.searchBar')}
           setIsEmpty={setIsEmpty}
           onPressClose={(): void => {
             navigation.goBack();

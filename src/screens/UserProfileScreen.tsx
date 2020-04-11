@@ -34,6 +34,7 @@ import { getUserReview } from '../utils/userReview';
 import UserProfileHeader from '../components/organisms/UserProfileHeader';
 import { getTopReviews, getReviewNum } from '../utils/review';
 import ReviewListItem from '../components/organisms/ReviewListItem';
+import I18n from '../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -86,7 +87,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
-      const { uid } = navigation.state.params!;
+      if (!navigation.state.params) return;
+      const { uid } = navigation.state.params;
       const newProfile = await getProfile(uid);
       const newUserReivew = await getUserReview(uid);
       setProfile(newProfile);
@@ -99,8 +101,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const getNewDiary = useCallback(
     (clean: boolean) => {
       const f = async (): Promise<void> => {
+        if (!navigation.state.params) return;
         try {
-          const { uid } = navigation.state.params!;
+          const { uid } = navigation.state.params;
           const index = await Algolia.getDiaryIndex(clean);
           await Algolia.setSettings(index);
           const res = await index.search('', {
@@ -109,23 +112,24 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             hitsPerPage: HIT_PER_PAGE,
           });
 
-          setDiaries(res.hits);
+          setDiaries(res.hits as Diary[]);
           setDiaryTotalNum(res.nbHits);
         } catch (err) {
           setLoadingDiary(false);
           setRefreshing(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
         setLoadingDiary(false);
       };
       f();
     },
-    [setDiaries, setDiaryTotalNum]
+    [navigation.state.params]
   );
 
   const getNewReview = useCallback(() => {
     const f = async (): Promise<void> => {
-      const { uid } = navigation.state.params!;
+      if (!navigation.state.params) return;
+      const { uid } = navigation.state.params;
       const newReivews = await getTopReviews(uid);
       const newReviewNum = await getReviewNum(uid);
       setTopReviews(newReivews);
@@ -133,7 +137,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       setLoadingReview(false);
     };
     f();
-  }, []);
+  }, [navigation.state.params]);
 
   // 初期データの取得
   useEffect(() => {
@@ -159,6 +163,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       await Promise.all([getNewProfile(), getNewDiary(false), getNewReview()]);
     };
     f();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getNewDiary, getNewProfile, getNewReview]);
 
   const onRefresh = useCallback(() => {
@@ -174,7 +180,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     const f = async (): Promise<void> => {
       if (!readingNext && !readAllResults) {
         try {
-          const { uid } = navigation.state.params!;
+          if (!navigation.state.params) return;
+          const { uid } = navigation.state.params;
           const nextPage = page + 1;
           setReadingNext(true);
 
@@ -189,22 +196,24 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             setReadAllResults(true);
             setReadingNext(false);
           } else {
-            setDiaries([...diaries, ...res.hits]);
+            if (diaries) {
+              setDiaries([...diaries, ...(res.hits as Diary[])]);
+            }
             setPage(nextPage);
             setReadingNext(false);
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
       }
     };
     f();
-  }, [diaries, page, readAllResults, readingNext]);
+  }, [diaries, navigation.state.params, page, readAllResults, readingNext]);
 
   const onPressBlock = useCallback(() => {
     setIsModalBlock(true);
-  }, [navigation]);
+  }, []);
 
   const onPressReport = useCallback(() => {
     setIsReportSuccess(false);
@@ -213,9 +222,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const onPressMore = useCallback(() => {
     const options = [
-      !isBlocked ? 'ブロック' : 'ブロックを解除する',
-      '報告する',
-      'キャンセル',
+      !isBlocked
+        ? I18n.t('userProfile.blocked')
+        : I18n.t('userProfile.unBlocked'),
+      I18n.t('userProfile.report'),
+      I18n.t('common.cancel'),
     ];
     showActionSheetWithOptions(
       {
@@ -234,16 +245,17 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         }
       }
     );
-  }, [onPressBlock, onPressReport, showActionSheetWithOptions]);
+  }, [isBlocked, onPressBlock, onPressReport, showActionSheetWithOptions]);
 
   useEffect(() => {
     navigation.setParams({ onPressMore });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onPressMoreReview = useCallback((): void => {
     if (!profile) return;
     navigation.navigate('ReviewList', { uid: profile.uid });
-  }, [profile]);
+  }, [navigation, profile]);
 
   const onPressBlockSubmit = useCallback((): void => {
     const f = async (): Promise<void> => {
@@ -334,11 +346,13 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const listHeaderDiaryComponent = (
     <GrayHeader
-      title={diaryTotalNum !== 0 ? `日記一覧(${diaryTotalNum}件)` : '日記一覧'}
+      title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
     />
   );
 
-  const listHeaderReviewComponent = <GrayHeader title="トップレビュー" />;
+  const listHeaderReviewComponent = (
+    <GrayHeader title={I18n.t('userProfile.topReview')} />
+  );
 
   const listFooterDiaryComponent =
     loadingDiary && !refreshing ? (
@@ -358,19 +372,22 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       </>
     ) : null;
 
-  const renderDiary = useCallback(({ item }: { item: Diary }): JSX.Element => {
-    return (
-      <DiaryListItem
-        item={item}
-        onPressUser={(uid: string): void => {
-          navigation.navigate('UserProfile', { uid });
-        }}
-        onPressItem={(): void => {
-          navigation.navigate('UserDiary', { item });
-        }}
-      />
-    );
-  }, []);
+  const renderDiary = useCallback(
+    ({ item }: { item: Diary }): JSX.Element => {
+      return (
+        <DiaryListItem
+          item={item}
+          onPressUser={(uid: string): void => {
+            navigation.navigate('UserProfile', { uid });
+          }}
+          onPressItem={(): void => {
+            navigation.navigate('UserDiary', { item });
+          }}
+        />
+      );
+    },
+    [navigation]
+  );
 
   const renderReview = useCallback(
     ({ item }: { item: Review }): JSX.Element => {
@@ -383,7 +400,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         />
       );
     },
-    []
+    [navigation]
   );
 
   return (
@@ -395,9 +412,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     >
       <ModalConfirm
         visible={isModalDeleted}
-        title="エラー"
-        message="このページは開けません。対象のユーザは削除された可能性があります。"
-        cancelButtonText="閉じる"
+        title={I18n.t('common.error')}
+        message={I18n.t('errorMessage.deleteTargetUser')}
+        cancelButtonText={I18n.t('common.close')}
         onPressClose={onPressCloseDeleted}
       />
       <ModalBlock
@@ -432,7 +449,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       {!!reviewNum && reviewNum > 3 ? (
         <TouchableOpacity style={styles.moreRead} onPress={onPressMoreReview}>
           <Text style={styles.moreReadText}>
-            {`${reviewNum}件のレビューを全部見る`}
+            {I18n.t('userProfile.moreRead', { count: reviewNum })}
           </Text>
         </TouchableOpacity>
       ) : null}
@@ -455,7 +472,7 @@ UserProfileScreen.navigationOptions = ({
   const onPressMore = navigation.getParam('onPressMore');
   return {
     ...DefaultNavigationOptions,
-    title: 'プロフィール',
+    title: I18n.t('userProfile.headerTitle'),
     headerRight: (): JSX.Element => (
       <TouchableOpacity onPress={onPressMore}>
         <MaterialCommunityIcons

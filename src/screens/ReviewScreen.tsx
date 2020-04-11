@@ -12,6 +12,7 @@ import { UserListItem } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Diary, Profile, Review } from '../types';
 import firebase from '../constants/firebase';
+import I18n from '../utils/I18n';
 
 interface Props {
   diary?: Diary;
@@ -58,11 +59,11 @@ const ReviewScreen: ScreenType = ({
     Keyboard.dismiss();
     if (rating > 0 || comment.length > 0) {
       Alert.alert(
-        '確認',
-        '編集中のレビューは全て削除されますが、よろしいでしょうか？',
+        I18n.t('common.confirmation'),
+        I18n.t('review.confirmation'),
         [
           {
-            text: 'キャンセル',
+            text: I18n.t('common.cancel'),
             style: 'cancel',
           },
           {
@@ -84,7 +85,7 @@ const ReviewScreen: ScreenType = ({
       if (!diary || !diary.objectID) return;
       if (isLoading) return;
       if (rating === 0) {
-        Alert.alert('', '評価は1〜5で入力してください');
+        Alert.alert('', I18n.t('errorMessage.invalidRaiting'));
         return;
       }
 
@@ -158,7 +159,7 @@ const ReviewScreen: ScreenType = ({
   }, [rating, comment]);
 
   if (!diary) {
-    Alert.alert('エラー', 'ページが開けません。エラーが発生しました');
+    Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.notFound'));
     return null;
   }
 
@@ -182,7 +183,7 @@ const ReviewScreen: ScreenType = ({
           value={comment}
           onChangeText={(text: string): void => setComment(text)}
           maxLength={140}
-          placeholder="コメント"
+          placeholder={I18n.t('review.placeholder')}
           multiline
           numberOfLines={3}
           autoCapitalize="none"
@@ -201,12 +202,12 @@ ReviewScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
 
   return {
     ...DefaultNavigationOptions,
-    title: 'レビューする',
+    title: I18n.t('review.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title="閉じる" onPress={onPressClose} />
+      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title="送信" onPress={onPressSubmit} />
+      <HeaderText title={I18n.t('common.sending')} onPress={onPressSubmit} />
     ),
   };
 };
