@@ -19,6 +19,7 @@ import { LoadingModal, GrayHeader } from '../components/atoms';
 import { getReviews } from '../utils/review';
 import ReviewListItem from '../components/organisms/ReviewListItem';
 import { EmptyReview } from '../components/molecules';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -62,6 +63,7 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
       setIsLoading(false);
     };
     f();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onRefresh = useCallback(() => {
@@ -96,16 +98,24 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(' エラー', 'ネットワークエラーです');
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         }
       }
     };
     f();
-  }, [lastVisible, readAllResults, readingNext, reviews]);
+  }, [
+    lastVisible,
+    navigation.state.params,
+    readAllResults,
+    readingNext,
+    reviews,
+  ]);
 
   const listEmptyComponent = isLoading || refreshing ? null : <EmptyReview />;
 
-  const listHeaderComponent = <GrayHeader title="レビュー一覧" />;
+  const listHeaderComponent = (
+    <GrayHeader title={I18n.t('reviewList.reviewList')} />
+  );
 
   const renderItem = useCallback(
     ({ item }: { item: Review }): JSX.Element => {
@@ -142,7 +152,7 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
 ReviewListScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'レビュー一覧',
+    title: I18n.t('reviewList.headerTitle'),
   };
 };
 

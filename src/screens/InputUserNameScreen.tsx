@@ -21,6 +21,7 @@ import {
   checkInitialUserName,
 } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
+import I18n from '../utils/I18n';
 
 interface Props {
   profile: Profile;
@@ -82,9 +83,7 @@ const InputUserNameScreen: ScreenType = ({
         if (!typeChecked) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(
-            'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません'
-          );
+          setErrorMessage(I18n.t('errorMessage.invalidUserName'));
           return;
         }
 
@@ -92,7 +91,7 @@ const InputUserNameScreen: ScreenType = ({
         if (!initialChecked) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage('先頭の文字は半角英数字以外使えません');
+          setErrorMessage(I18n.t('errorMessage.initialUserName'));
           return;
         }
 
@@ -101,9 +100,7 @@ const InputUserNameScreen: ScreenType = ({
         if (!resDuplicated) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(
-            'すでにこのユーザーネームを使用しているユーザーがいます'
-          );
+          setErrorMessage(I18n.t('errorMessage.userNameAlreadyInUse'));
           return;
         }
 
@@ -133,8 +130,8 @@ const InputUserNameScreen: ScreenType = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>ユーザーネームを入力してください</Text>
-      <Text style={styles.subText}>このユーザネームはいつでも変更できます</Text>
+      <Text style={styles.title}>{I18n.t('inputUserName.title')}</Text>
+      <Text style={styles.subText}>{I18n.t('inputUserName.subText')}</Text>
       <CheckTextInput
         value={userName}
         onChangeText={onChangeText}
@@ -152,7 +149,7 @@ const InputUserNameScreen: ScreenType = ({
       <Space size={32} />
       <SubmitButton
         disable={!isUserNameCheckOk}
-        title="次へ"
+        title={I18n.t('common.next')}
         onPress={onPressNext}
       />
     </View>
@@ -162,7 +159,7 @@ const InputUserNameScreen: ScreenType = ({
 InputUserNameScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'ユーザーネーム登録',
+    title: I18n.t('inputUserName.headerTitle'),
   };
 };
 

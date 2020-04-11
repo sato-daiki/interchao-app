@@ -19,7 +19,6 @@ import EditMyProfileScreenContainer from '../containers/EditMyProfileScreenConta
 import SettingScreen from '../screens/SettingScreen';
 import NoticeScreenContainer from '../containers/NoticeScreenContainer';
 import PremiumScreen from '../screens/PremiumScreen';
-import FavoriteUserListScreen from '../screens/FavoriteUserListScreen';
 import EditEmailScreen from '../screens/EditEmailScreen';
 import EditPasswordScreen from '../screens/EditPasswordScreen';
 import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen';
@@ -102,9 +101,7 @@ const MyDiaryTabStack = createStackNavigator(
     Premium: {
       screen: PremiumScreen,
     },
-    FavoriteUserList: {
-      screen: FavoriteUserListScreen,
-    },
+
     EditEmail: {
       screen: EditEmailScreen,
     },

@@ -1,14 +1,10 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import {
-  emailInputError,
-  emailValidate,
-  emaillExistCheck,
-} from '../utils/InputCheck';
+import { emailInputError, emailValidate } from '../utils/InputCheck';
 import firebase from '../constants/firebase';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
@@ -20,6 +16,7 @@ import {
   subTextColor,
 } from '../styles/Common';
 import ModalSendEmail from '../components/organisms/ModalSendEmail';
+import I18n from '../utils/I18n';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -68,14 +65,14 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       try {
         setIsLoading(true);
         await firebase.auth().sendPasswordResetEmail(email);
-        setIsModal('true');
+        setIsModal(true);
       } catch (error) {
         emailInputError(error, _ => {}, setErrorEmail, clearErrorMessage);
       }
       setIsLoading(false);
     };
     f();
-  }, [clearErrorMessage, setIsLoading]);
+  }, [email]);
 
   const onEndEditingEmail = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -84,7 +81,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         return;
       }
       if (emailValidate(email)) {
-        setErrorEmail('メールアドレスの形式が正しくありません');
+        setErrorEmail(I18n.t('errorMessage.invalidEmail'));
       }
       setErrorEmail('');
     };
@@ -98,11 +95,9 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         visible={isModal}
         onPressClose={(): boolean => navigation.goBack()}
       />
-      <Text style={styles.title}>メールアドレスを入力してください</Text>
-      <Text style={styles.subText}>
-        メールアドレスにパスワードの変更URLを送ります
-      </Text>
-      <Text style={styles.label}>メールアドレス</Text>
+      <Text style={styles.title}>{I18n.t('foregetPassword.title')}</Text>
+      <Text style={styles.subText}>{I18n.t('foregetPassword.subText')}</Text>
+      <Text style={styles.label}>{I18n.t('foregetPassword.email')}</Text>
       <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
@@ -118,7 +113,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       />
       <Space size={32} />
       <SubmitButton
-        title="送信"
+        title={I18n.t('common.sending')}
         onPress={onPressSubmit}
         disable={errorEmail !== '' || email === ''}
       />
@@ -130,7 +125,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
 ForegetPasswordScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: 'パスワード再設定',
+    title: I18n.t('foregetPassword.headerTitle'),
   };
 };
 

@@ -15,6 +15,7 @@ import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
 import { LogoVercitacl } from '../images';
 import { track, events } from '../utils/Analytics';
+import I18n from '../utils/I18n';
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -78,11 +79,14 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
           <Image style={styles.img} source={LogoVercitacl} />
         </View>
         <View style={styles.footer}>
-          <SubmitButton title="はじめる" onPress={onPressSignUp} />
+          <SubmitButton
+            title={I18n.t('initialize.start')}
+            onPress={onPressSignUp}
+          />
           <View style={styles.row}>
-            <Text style={styles.text}>アカウントをお持ちの方は</Text>
+            <Text style={styles.text}>{I18n.t('initialize.acount')}</Text>
             <TouchableOpacity onPress={onPressSignIn}>
-              <Text style={styles.linkText}>こちら</Text>
+              <Text style={styles.linkText}>{I18n.t('initialize.link')}</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -17,6 +17,7 @@ import { OptionItem } from '../components/molecules';
 import { Space } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
+import I18n from '../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,14 +51,6 @@ const styles = StyleSheet.create({
 const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { currentUser } = firebase.auth();
 
-  const onPressPremium = useCallback(() => {
-    navigation.navigate('Premium');
-  }, [navigation]);
-
-  const onPressFavoriteUserList = useCallback(() => {
-    navigation.navigate('FavoriteUserList');
-  }, [navigation]);
-
   const onPressPrivacy = useCallback(() => {
     navigation.navigate('Privacy');
   }, [navigation]);
@@ -72,14 +65,11 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         if (currentUser && currentUser.email) {
           await firebase.auth().signOut();
         } else {
-          Alert.alert(
-            '',
-            'メールアドレスが登録されていないため、ログアウトできません。'
-          );
+          Alert.alert('', I18n.t('errorMessage.cantLogout'));
         }
         track(events.SIGN_OUT);
       } catch (error) {
-        Alert.alert(' エラー', 'ネットワークエラーです');
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       }
     };
     f();
@@ -87,10 +77,10 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>基本設定</Text>
+      <Text style={styles.title}>{I18n.t('setting.title')}</Text>
       {/* <OptionItem title="プレミアムサービス" onPress={onPressPremium} /> */}
       <OptionItem
-        title="通知"
+        title={I18n.t('setting.notice')}
         onPress={(): void => {
           navigation.navigate('Notice');
         }}
@@ -98,13 +88,13 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       {currentUser && currentUser.email ? (
         <>
           <OptionItem
-            title="メールアドレスの変更"
+            title={I18n.t('setting.editEmail')}
             onPress={(): void => {
               navigation.navigate('EditEmail');
             }}
           />
           <OptionItem
-            title="パスワードの変更"
+            title={I18n.t('setting.editPassword')}
             onPress={(): void => {
               navigation.navigate('EditPassword');
             }}
@@ -112,14 +102,14 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         </>
       ) : (
         <OptionItem
-          title="メールアドレス/パスワードの登録"
+          title={I18n.t('setting.registerEmailPassword')}
           onPress={(): void => {
             navigation.navigate('RegisterEmailPassword');
           }}
         />
       )}
       <OptionItem
-        title="アプリのチュートリアル"
+        title={I18n.t('setting.tutorial')}
         onPress={(): void => {
           navigation.navigate('TutorialList');
         }}
@@ -129,17 +119,20 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onPress={onPressFavoriteUserList}
       /> */}
       <Space size={16} />
-      <OptionItem title="プライバシーポリシー" onPress={onPressPrivacy} />
-      <OptionItem title="運営" onPress={onPressManagement} />
+      <OptionItem title={I18n.t('setting.privacy')} onPress={onPressPrivacy} />
       <OptionItem
-        title="退会について"
+        title={I18n.t('setting.management')}
+        onPress={onPressManagement}
+      />
+      <OptionItem
+        title={I18n.t('setting.deleteAcount')}
         onPress={(): void => {
           navigation.navigate('DeleteAcount');
         }}
       />
       <Space size={16} />
       <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
-        <Text style={styles.logout}>ログアウト</Text>
+        <Text style={styles.logout}>{I18n.t('setting.logout')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -148,7 +141,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
 SettingScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: '設定',
+    title: I18n.t('setting.headerTitle'),
   };
 };
 

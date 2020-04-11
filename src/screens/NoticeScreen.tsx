@@ -9,6 +9,7 @@ import { CheckItem } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { User } from '../types';
 import firebase from '../constants/firebase';
+import I18n from '../utils/I18n';
 
 interface Props {
   user: User;
@@ -49,7 +50,7 @@ const NoticeScreen: ScreenType = ({ user, setUser }) => {
       });
     };
     f();
-  }, [user]);
+  }, [notificationCorrection, setUser, user]);
 
   const onPressReview = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -66,18 +67,18 @@ const NoticeScreen: ScreenType = ({ user, setUser }) => {
       });
     };
     f();
-  }, [user]);
+  }, [notificationReview, setUser, user]);
 
   return (
     <View style={styles.container}>
       <CheckItem
         checked={notificationCorrection}
-        title="マイ日記の添削が完了"
+        title={I18n.t('notice.finishCorrection')}
         onPress={onPressCorrection}
       />
       <CheckItem
         checked={notificationReview}
-        title="レビューが届く"
+        title={I18n.t('notice.finishReview')}
         onPress={onPressReview}
       />
     </View>
@@ -87,7 +88,7 @@ const NoticeScreen: ScreenType = ({ user, setUser }) => {
 NoticeScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title: '通知',
+    title: I18n.t('notice.headerTitle'),
   };
 };
 

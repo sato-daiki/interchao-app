@@ -17,6 +17,7 @@ import {
 } from '../components/atoms';
 import { ProfileLanguage } from '../components/molecules';
 import { getUserReview } from '../utils/userReview';
+import I18n from '../utils/I18n';
 
 export interface Props {
   profile: Profile;
@@ -92,7 +93,10 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
-        <SmallButtonWhite title="編集する" onPress={onPressEdit} />
+        <SmallButtonWhite
+          title={I18n.t('myPage.editButton')}
+          onPress={onPressEdit}
+        />
       </View>
       {name ? <Text style={styles.name}>{name}</Text> : null}
       {userReview ? (
@@ -114,7 +118,7 @@ MyPageScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
   const onPressSetting = navigation.getParam('onPressSetting');
   return {
     ...DefaultNavigationOptions,
-    title: 'マイページ',
+    title: I18n.t('myPage.headerTitle'),
     headerRight: (): JSX.Element => (
       <TouchableOpacity onPress={onPressSetting}>
         <MaterialCommunityIcons
