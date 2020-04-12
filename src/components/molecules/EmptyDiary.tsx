@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, subTextColor } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ const EmptyDiary = (): JSX.Element => {
         size={50}
         color={subTextColor}
       />
-      <Text style={styles.text}>日記がまだ投稿されていません。</Text>
+      <Text style={styles.text}>{I18n.t('emptyDiary.empty')}</Text>
     </View>
   );
 };

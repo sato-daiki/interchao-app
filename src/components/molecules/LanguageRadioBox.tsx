@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { mainColor, primaryColor, fontSizeM } from '../../styles/Common';
 import { RadioBox } from '../atoms';
+import I18n from '../../utils/I18n';
 
 interface Props {
   label: string;
@@ -45,11 +46,15 @@ const LanguageRadioBox: React.FC<Props> = ({
       <View style={styles.radioBoxWrapper}>
         <TouchableWithoutFeedback style={styles.radioBox} onPress={onPressJa}>
           <RadioBox checked={checkedJa} color={mainColor} />
-          <Text style={styles.radioBoxText}>日本語</Text>
+          <Text style={styles.radioBoxText}>
+            {I18n.t('languageRadioBox.ja')}
+          </Text>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback style={styles.radioBox} onPress={onPressEn}>
           <RadioBox checked={!checkedJa} color={mainColor} />
-          <Text style={styles.radioBoxText}>英語</Text>
+          <Text style={styles.radioBoxText}>
+            {I18n.t('languageRadioBox.en')}
+          </Text>
         </TouchableWithoutFeedback>
       </View>
     </>

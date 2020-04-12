@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { fontSizeL, fontSizeM, mainColor } from '../../styles/Common';
+import { fontSizeM, mainColor } from '../../styles/Common';
 
 interface Props {
   title: string;

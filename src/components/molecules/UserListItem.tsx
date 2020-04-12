@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import OnOffSmallButton from './OnOffSmallButton';
+// import OnOffSmallButton from './OnOffSmallButton';
 import { ProfileIconHorizontal } from '../atoms';
 
 interface Props {
@@ -31,14 +31,14 @@ const UserListItem = ({
         photoUrl={photoUrl}
         onPress={onPressUser}
       />
-      <OnOffSmallButton
+      {/* <OnOffSmallButton
         isOn={false}
         isLoading={false}
         disable={false}
         titleOn="お気に入り済み"
         titleOff="お気に入りに追加"
         onPress={onPressButton}
-      />
+      /> */}
     </View>
   );
 };

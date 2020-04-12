@@ -6,6 +6,7 @@ import {
   borderLightColor,
   offWhite,
 } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   summary: string;
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
 const SummaryInput: React.FC<Props> = ({ summary, onChangeText }) => {
   return (
     <>
-      <Text style={styles.title}>まとめ</Text>
+      <Text style={styles.title}>{I18n.t('summaryInput.title')}</Text>
       <View style={styles.line} />
       <TextInput
         style={styles.textInput}

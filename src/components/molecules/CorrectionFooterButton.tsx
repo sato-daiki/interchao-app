@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { offWhite } from '../../styles/Common';
 import { TextButtun } from '../atoms';
+import I18n from '../../utils/I18n';
 
 interface Props {
   nextActionText: string;
@@ -37,7 +38,7 @@ const CorrectionFooterButton: React.FC<Props> = ({
         <TextButtun
           isBorrderTop
           isBorrderBottom
-          title="添削の仕方"
+          title={I18n.t('correctionFooterButton.correction')}
           onPress={onPressHowTo}
         />
       </View>

@@ -14,6 +14,13 @@ const common = {
   skip: 'スキップ',
 };
 
+// タブ
+const mainTab = {
+  myDiary: 'マイ日記',
+  postDiary: '日記を書く',
+  teachDiary: 'みんなの日記',
+};
+
 // 共通のエラーメッセージ
 const errorMessage = {
   network: 'ネットワークエラーです',
@@ -254,9 +261,29 @@ const userProfile = {
   topReview: 'トップレビュー',
 };
 
+// 各コンポーネント Atom
+const commentCard = {
+  original: '原文',
+  fix: '修正文',
+  detail: 'コメント',
+};
+
+const summaryCard = {
+  title: 'まとめ',
+};
+
+const userPoints = {
+  points: 'ポイント',
+};
+
+const userPointsBig = {
+  points: '現在のポイント',
+};
+
 const ja = {
   common,
   errorMessage,
+  mainTab,
   correcting,
   deleteAcount,
   draftDiary,
@@ -288,6 +315,10 @@ const ja = {
   teachDiarySerch,
   tutorialList,
   userProfile,
+  commentCard,
+  summaryCard,
+  userPoints,
+  userPointsBig,
 };
 
 export default ja;

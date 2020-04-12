@@ -13,7 +13,6 @@ export { default as MyDiaryCorrectionFooter } from './MyDiaryCorrectionFooter';
 export { default as MyDiaryStatus } from './MyDiaryStatus';
 export { default as OnOffSmallButton } from './OnOffSmallButton';
 export { default as OptionItem } from './OptionItem';
-export { default as ProfileHeader } from './ProfileHeader';
 export { default as ProfileIcons } from './ProfileIcons';
 export { default as ProfileLanguage } from './ProfileLanguage';
 export { default as SummaryInput } from './SummaryInput';

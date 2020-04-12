@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { fontSizeS, primaryColor, subTextColor } from '../../styles/Common';
 import { Points } from '../../images';
+import I18n from '../../utils/I18n';
 
 interface Props {
   points: number;
@@ -33,7 +34,7 @@ const UserPoints: React.FC<Props> = ({ points }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
       <Image style={styles.img} source={Points} />
-      <Text style={styles.label}>ポイント</Text>
+      <Text style={styles.label}>{I18n.t('userPoints.points')}</Text>
       <Text style={styles.points}>{text}</Text>
     </View>
   );

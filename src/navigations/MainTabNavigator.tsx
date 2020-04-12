@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import I18n from '../utils/I18n';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
@@ -157,7 +158,7 @@ const MainTab = createBottomTabNavigator(
     MyDiary: {
       screen: MyDiaryTabStack,
       navigationOptions: {
-        tabBarLabel: 'マイ日記',
+        tabBarLabel: I18n.t('mainTab.myDiary'),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <TabIcon
             name="book-open"
@@ -171,7 +172,7 @@ const MainTab = createBottomTabNavigator(
     PostDiary: {
       screen: PostDiaryScreen,
       navigationOptions: {
-        tabBarLabel: '日記を書く',
+        tabBarLabel: I18n.t('mainTab.postDiary'),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons name="pencil" size={25} color={tintColor} />
         ),
@@ -182,7 +183,7 @@ const MainTab = createBottomTabNavigator(
     TeachDiary: {
       screen: TeachDiaryTabStack,
       navigationOptions: {
-        tabBarLabel: 'みんなの日記',
+        tabBarLabel: I18n.t('mainTab.teachDiary'),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons
             name="account-multiple"
