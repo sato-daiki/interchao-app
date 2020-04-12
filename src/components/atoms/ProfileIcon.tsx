@@ -1,24 +1,19 @@
 import React from 'react';
-import { Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { borderLightColor } from '../../styles/Common';
-import { Zebbu } from '../../images';
+import { Image, TouchableOpacity } from 'react-native';
+import { getPhotoUrl } from '../../utils/profile';
+import { Language } from '../../types';
 
 interface Props {
   size?: number;
   photoUrl: string;
+  nativeLanguage: Language;
   onPress: () => void;
 }
-
-const styles = StyleSheet.create({
-  iconEmpty: {
-    borderColor: borderLightColor,
-    borderWidth: 0.5,
-  },
-});
 
 const ProfileIcon: React.FC<Props> = ({
   size = 36,
   photoUrl,
+  nativeLanguage,
   onPress,
 }: Props): JSX.Element => {
   const styleIcon = {
@@ -28,11 +23,7 @@ const ProfileIcon: React.FC<Props> = ({
   };
   return (
     <TouchableOpacity onPress={onPress}>
-      {photoUrl ? (
-        <Image style={styleIcon} source={{ uri: photoUrl }} />
-      ) : (
-        <Image style={[styleIcon, styles.iconEmpty]} source={Zebbu} />
-      )}
+      <Image style={styleIcon} source={getPhotoUrl(photoUrl, nativeLanguage)} />
     </TouchableOpacity>
   );
 };

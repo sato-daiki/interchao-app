@@ -262,7 +262,7 @@ const TeachDiaryScreen: ScreenType = ({
   // };
 
   const { createdAt, title, text, profile } = teachDiary;
-  const { userName, photoUrl, uid } = profile;
+  const { userName, photoUrl, nativeLanguage, uid } = profile;
   const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
@@ -278,6 +278,7 @@ const TeachDiaryScreen: ScreenType = ({
           <ProfileIconHorizontal
             userName={userName}
             photoUrl={photoUrl}
+            nativeLanguage={nativeLanguage}
             onPress={(): void => onPressUser(uid)}
           />
           <Space size={8} />

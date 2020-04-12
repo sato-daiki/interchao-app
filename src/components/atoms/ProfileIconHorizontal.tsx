@@ -1,11 +1,13 @@
 import React from 'react';
 import { Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { fontSizeS, primaryColor, borderLightColor } from '../../styles/Common';
-import { Zebbu } from '../../images';
+import { fontSizeS, primaryColor } from '../../styles/Common';
+import { getPhotoUrl } from '../../utils/profile';
+import { Language } from '../../types';
 
 interface Props {
   userName: string;
   photoUrl: string;
+  nativeLanguage: Language;
   onPress?: () => void;
 }
 
@@ -20,10 +22,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     marginRight: 4,
   },
-  iconEmpty: {
-    borderColor: borderLightColor,
-    borderWidth: 0.5,
-  },
   userName: {
     fontSize: fontSizeS,
     color: primaryColor,
@@ -33,6 +31,7 @@ const styles = StyleSheet.create({
 const ProfileIconHorizontal: React.FC<Props> = ({
   userName,
   photoUrl,
+  nativeLanguage,
   onPress,
 }: Props): JSX.Element => {
   return (
@@ -41,11 +40,11 @@ const ProfileIconHorizontal: React.FC<Props> = ({
       onPress={onPress || undefined}
       activeOpacity={onPress ? 0.2 : 1}
     >
-      {photoUrl ? (
-        <Image style={styles.icon} source={{ uri: photoUrl }} />
-      ) : (
-        <Image style={[styles.icon, styles.iconEmpty]} source={Zebbu} />
-      )}
+      <Image
+        style={styles.icon}
+        source={getPhotoUrl(photoUrl, nativeLanguage)}
+      />
+
       <Text style={styles.userName}>{userName}</Text>
     </TouchableOpacity>
   );

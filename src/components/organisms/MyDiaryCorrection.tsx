@@ -43,7 +43,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
   onPressReview,
 }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
-  const { userName, photoUrl, uid } = profile;
+  const { userName, photoUrl, nativeLanguage, uid } = profile;
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
@@ -76,6 +76,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
           <ProfileIconHorizontal
             userName={userName}
             photoUrl={photoUrl}
+            nativeLanguage={nativeLanguage}
             onPress={(): void => onPressUser(uid)}
           />
           <Text style={styles.daytext}>{postDate}</Text>

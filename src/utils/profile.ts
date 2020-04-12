@@ -1,5 +1,20 @@
-import { Profile } from '../types';
+import { ImageSourcePropType } from 'react-native';
+import { Profile, Language } from '../types';
 import firebase from '../constants/firebase';
+import { Zebbu, Zenny } from '../images';
+
+export const getPhotoUrl = (
+  photoUrl: string,
+  nativeLanguage: Language
+): ImageSourcePropType => {
+  if (photoUrl) {
+    return { uri: photoUrl };
+  }
+  if (nativeLanguage === 'ja') {
+    return Zebbu;
+  }
+  return Zenny;
+};
 
 // ユーザ情報取得
 export const getProfile = async (uid: string): Promise<Profile | null> => {

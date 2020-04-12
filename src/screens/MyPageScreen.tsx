@@ -92,7 +92,11 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
+        <ProfileIconHorizontal
+          userName={userName}
+          photoUrl={photoUrl}
+          nativeLanguage={nativeLanguage}
+        />
         <SmallButtonWhite
           title={I18n.t('myPage.editButton')}
           onPress={onPressEdit}

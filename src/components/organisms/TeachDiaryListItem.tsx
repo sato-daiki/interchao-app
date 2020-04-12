@@ -72,7 +72,7 @@ const TeachDiaryListItem = ({
   onPressItem,
 }: Props): JSX.Element => {
   const { createdAt, title, text, profile } = item;
-  const { photoUrl, uid, userName } = profile;
+  const { photoUrl, nativeLanguage, uid, userName } = profile;
   const postDay = getAlgoliaDay(createdAt);
 
   return (
@@ -80,7 +80,11 @@ const TeachDiaryListItem = ({
       style={styles.container}
       onPress={(): void => onPressItem(item)}
     >
-      <ProfileIcon photoUrl={photoUrl} onPress={(): void => onPressUser(uid)} />
+      <ProfileIcon
+        photoUrl={photoUrl}
+        nativeLanguage={nativeLanguage}
+        onPress={(): void => onPressUser(uid)}
+      />
       <View style={styles.main}>
         <View style={styles.header}>
           <Text style={styles.userName}>{userName}</Text>

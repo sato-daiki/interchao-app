@@ -2,10 +2,12 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 // import OnOffSmallButton from './OnOffSmallButton';
 import { ProfileIconHorizontal } from '../atoms';
+import { Language } from '../../types';
 
 interface Props {
   userName: string;
   photoUrl: string;
+  nativeLanguage: Language;
   onPressUser?: () => void;
   onPressButton: () => void;
 }
@@ -21,6 +23,7 @@ const styles = StyleSheet.create({
 const UserListItem = ({
   userName,
   photoUrl,
+  nativeLanguage,
   onPressUser,
   onPressButton,
 }: Props): JSX.Element => {
@@ -29,6 +32,7 @@ const UserListItem = ({
       <ProfileIconHorizontal
         userName={userName}
         photoUrl={photoUrl}
+        nativeLanguage={nativeLanguage}
         onPress={onPressUser}
       />
       {/* <OnOffSmallButton

@@ -8,7 +8,6 @@ export { default as HeaderText } from './HeaderText';
 export { default as LoadingModal } from './LoadingModal';
 export { default as ProfileIcon } from './ProfileIcon';
 export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';
-export { default as ProfileIconVertical } from './ProfileIconVertical';
 export { default as RadioBox } from './RadioBox';
 export { default as ScoreStar } from './ScoreStar';
 export { default as SmallButtonBlue } from './SmallButtonBlue';
