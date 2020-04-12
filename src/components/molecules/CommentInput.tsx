@@ -8,6 +8,7 @@ import {
   offWhite,
 } from '../../styles/Common';
 import { Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 interface Props {
   original: string;
@@ -64,10 +65,10 @@ const CommentInput: React.FC<Props> = ({
 
   return (
     <>
-      <Text style={styles.label}>原文</Text>
+      <Text style={styles.label}>{I18n.t('commentInput.original')}</Text>
       <Text style={styles.title}>{original}</Text>
       <View style={styles.line} />
-      <Text style={styles.label}>修正文</Text>
+      <Text style={styles.label}>{I18n.t('commentInput.fix')}</Text>
       <TextInput
         ref={refFix}
         onSubmitEditing={(): void => {
@@ -89,7 +90,7 @@ const CommentInput: React.FC<Props> = ({
         scrollEnabled={false}
       />
       <Space size={16} />
-      <Text style={styles.label}>コメント</Text>
+      <Text style={styles.label}>{I18n.t('commentInput.detail')}</Text>
       <TextInput
         ref={refComment}
         // onSubmitEditing={onPressAdd}

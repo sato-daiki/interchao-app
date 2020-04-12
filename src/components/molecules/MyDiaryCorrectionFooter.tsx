@@ -3,6 +3,7 @@ import { Text, StyleSheet } from 'react-native';
 
 import { fontSizeM, primaryColor, subTextColor } from '../../styles/Common';
 import { SubmitButton } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   promptText: {
@@ -28,12 +29,21 @@ const MyDiaryCorrectionFooter: React.FC<Props> = ({
   onPress,
 }): JSX.Element => {
   if (isReview) {
-    return <Text style={styles.finText}>この日記はレビュー済みです</Text>;
+    return (
+      <Text style={styles.finText}>
+        {I18n.t('myDiaryCorrectionFooter.finText')}
+      </Text>
+    );
   }
   return (
     <>
-      <SubmitButton title="添削のレビューをする" onPress={onPress} />
-      <Text style={styles.promptText}>添削のお礼と評価をお願いします</Text>
+      <SubmitButton
+        title={I18n.t('myDiaryCorrectionFooter.title')}
+        onPress={onPress}
+      />
+      <Text style={styles.promptText}>
+        {I18n.t('myDiaryCorrectionFooter.promptText')}
+      </Text>
     </>
   );
 };

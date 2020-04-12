@@ -15,6 +15,7 @@ import {
   mainColor,
   subTextColor,
 } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -114,16 +115,16 @@ const CommentCard = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      <Text style={styles.label}>原文</Text>
+      <Text style={styles.label}>{I18n.t('commentCard.original')}</Text>
       <View style={styles.originalContainer}>
         <Text style={styles.index}>{indexText}</Text>
         <Text style={styles.original}>{original}</Text>
       </View>
       <View style={styles.line} />
-      <Text style={styles.label}>修正文</Text>
+      <Text style={styles.label}>{I18n.t('commentCard.fix')}</Text>
       <Text style={styles.fix}>{fix}</Text>
       <View style={styles.line} />
-      <Text style={styles.label}>コメント</Text>
+      <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
       <Text style={styles.detail}>{detail}</Text>
     </View>
   );

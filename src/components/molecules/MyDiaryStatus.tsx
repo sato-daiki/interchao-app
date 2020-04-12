@@ -5,7 +5,6 @@ import { fontSizeS, subTextColor } from '../../styles/Common';
 import { Diary } from '../../types';
 import { getMyDiaryStatus } from '../../utils/diary';
 import DiaryStatus from '../atoms/DiaryStatus';
-import { Space } from '../atoms';
 
 interface Props {
   diary: Diary;

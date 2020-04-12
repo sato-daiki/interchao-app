@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { fontSizeM, mainColor } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   onPressAdd: () => void;
@@ -27,10 +28,10 @@ const CommentButton: React.FC<Props> = ({ onPressAdd, onPressCancel }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={onPressCancel}>
-        <Text style={styles.cancel}>キャンセル</Text>
+        <Text style={styles.cancel}>{I18n.t('common.cancel')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={onPressAdd}>
-        <Text style={styles.add}>追加</Text>
+        <Text style={styles.add}>{I18n.t('common.add')}</Text>
       </TouchableOpacity>
     </View>
   );

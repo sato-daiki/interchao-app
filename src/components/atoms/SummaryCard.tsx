@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -82,7 +83,7 @@ const SummaryCard = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      <Text style={styles.title}>まとめ</Text>
+      <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
       <View style={styles.line} />
       <Text style={styles.text}>{summary}</Text>
     </View>

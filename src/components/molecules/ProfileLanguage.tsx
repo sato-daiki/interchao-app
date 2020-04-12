@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { primaryColor, subTextColor, fontSizeS } from '../../styles/Common';
 import { getlanguage } from '../../utils/diary';
 import { Language } from '../../types';
+import I18n from '../../utils/I18n';
 
 interface Props {
   nativeLanguage: Language;
@@ -36,7 +37,7 @@ const ProfileLanguage: React.FC<Props> = ({
     <>
       <View style={styles.languageContainer}>
         <MaterialCommunityIcons size={14} color={subTextColor} name="pencil" />
-        <Text style={styles.label}>勉強中の言語</Text>
+        <Text style={styles.label}>{I18n.t('profileLanguage.learn')}</Text>
         <Text style={styles.language}>{getlanguage(learnLanguage)}</Text>
       </View>
       <View style={styles.languageContainer}>
@@ -45,7 +46,7 @@ const ProfileLanguage: React.FC<Props> = ({
           color={subTextColor}
           name="spellcheck"
         />
-        <Text style={styles.label}>ネイティブの言語</Text>
+        <Text style={styles.label}>{I18n.t('profileLanguage.native')}</Text>
         <Text style={styles.language}>{getlanguage(nativeLanguage)}</Text>
       </View>
     </>
