@@ -9,6 +9,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { Space, SubmitButton } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +50,7 @@ const ModalTimeUp: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>タイムアップ</Text>
+        <Text style={styles.title}>{I18n.t('modalTimeUp.title')}</Text>
         <View style={styles.line} />
         <Space size={16} />
         <MaterialCommunityIcons
@@ -58,9 +59,7 @@ const ModalTimeUp: React.FC<Props> = ({
           name="timer-off"
         />
         <Space size={16} />
-        <Text style={styles.text}>
-          30分が経過したため、添削のロックを解除しました。
-        </Text>
+        <Text style={styles.text}>{I18n.t('modalTimeUp.text')}</Text>
         <Space size={32} />
         <SubmitButton title="OK" onPress={onPressClose} />
       </View>

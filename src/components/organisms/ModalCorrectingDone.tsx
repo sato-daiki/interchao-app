@@ -9,6 +9,7 @@ import {
 import { Modal } from '../template';
 import { Space, UserPointsBig, SubmitButton } from '../atoms';
 import { GetPoints } from '../../images';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,19 +58,17 @@ const ModalCorrectingDone: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>添削完了</Text>
+        <Text style={styles.title}>{I18n.t('modalCorrectingDone.title')}</Text>
         <View style={styles.line} />
         <Image style={styles.img} source={GetPoints} />
         <Space size={32} />
         <Text style={styles.text}>
-          添削ありがとうございます。
-          {getPoints}
-          ポイント獲得。
+          {I18n.t('modalCorrectingDone.text', { getPoints })}
         </Text>
         <Space size={24} />
         <UserPointsBig points={points} />
         <Space size={32} />
-        <SubmitButton title="閉じる" onPress={onPressClose} />
+        <SubmitButton title={I18n.t('common.close')} onPress={onPressClose} />
       </View>
     </Modal>
   );

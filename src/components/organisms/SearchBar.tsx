@@ -9,6 +9,7 @@ import {
   borderLightColor,
 } from '../../styles/Common';
 import { HeaderText } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const { width } = Dimensions.get('window');
 
@@ -77,7 +78,7 @@ const SearchBar: React.FC<Props & any> = ({
         value={currentRefinement}
         onChangeText={onChangeText}
       />
-      <HeaderText title="キャンセル" onPress={onPressClose} />
+      <HeaderText title={I18n.t('common.cancel')} onPress={onPressClose} />
     </View>
   );
 };

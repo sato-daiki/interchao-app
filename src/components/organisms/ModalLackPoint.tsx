@@ -8,6 +8,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,21 +49,19 @@ const ModalLackPoint: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>ポイント不足</Text>
+        <Text style={styles.title}>{I18n.t('modalLackPoint.title')}</Text>
         <View style={styles.line} />
-        <Text style={styles.text}>
-          ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。
-          {'\n'}
-          {'\n'}
-          日本語の日記を添削すると10ポイントが貰えます。
-          {'\n'}
-          {'\n'}
-          下書き保存はポイントの消費なしでできます。
-        </Text>
+        <Text style={styles.text}>{I18n.t('modalLackPoint.text')}</Text>
         <Space size={32} />
-        <SubmitButton title="続ける" onPress={onPressSubmit} />
+        <SubmitButton
+          title={I18n.t('modalLackPoint.submit')}
+          onPress={onPressSubmit}
+        />
         <Space size={16} />
-        <WhiteButton title="添削する日記を探す" onPress={onPressClose} />
+        <WhiteButton
+          title={I18n.t('modalLackPoint.close')}
+          onPress={onPressClose}
+        />
       </View>
     </Modal>
   );

@@ -8,6 +8,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { WhiteButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,13 +47,11 @@ const ModalSendEmail: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>メール送信</Text>
+        <Text style={styles.title}>{I18n.t('modalSendEmail.title')}</Text>
         <View style={styles.line} />
-        <Text style={styles.text}>
-          メールを送信しました。メールのリンクからパスワードを再設定してください。
-        </Text>
+        <Text style={styles.text}>{I18n.t('modalSendEmail.text')}</Text>
         <Space size={32} />
-        <WhiteButton title="閉じる" onPress={onPressClose} />
+        <WhiteButton title={I18n.t('common.close')} onPress={onPressClose} />
       </View>
     </Modal>
   );

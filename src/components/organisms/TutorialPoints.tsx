@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { primaryColor, fontSizeM, mainColor } from '../../styles/Common';
+import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Space } from '../atoms';
 import { BagPoints } from '../../images';
 import Tutorial from '../template/Tutorial';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,30 +32,21 @@ interface Props {
 const TutorialPoints: React.FC<Props> = ({
   isLoading = false,
   displayed,
-  buttonText = '始める',
+  buttonText = I18n.t('tutorialPoints.buttonText'),
   onPress = (): void => {},
 }: Props): JSX.Element | null => {
   return (
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title="ポイントについて"
+      title={I18n.t('tutorialPoints.title')}
       buttonText={buttonText}
       onPress={onPress}
     >
       <View style={styles.container}>
         <Image style={styles.img} source={BagPoints} resizeMode="contain" />
         <Space size={24} />
-        <Text style={styles.text}>
-          日記を投稿するには10ポイント〜が必要です。
-          {'\n'}
-          {'\n'}
-          レビューをすると10ポイント〜を獲得できます。
-          {'\n'}
-          {'\n'}
-          消費、獲得するポイントは文字数と言語により異なります。
-          英語は600文字ごと、日本語は200文字ごとに10ポイント消費または獲得できます。
-        </Text>
+        <Text style={styles.text}>{I18n.t('tutorialPoints.text')}</Text>
       </View>
     </Tutorial>
   );

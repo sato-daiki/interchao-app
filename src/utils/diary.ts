@@ -13,6 +13,7 @@ import {
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
+import I18n from './I18n';
 
 interface Status {
   text: string;
@@ -48,11 +49,11 @@ export const getUserDiaryStatus = (
   correctionStatus: CorrectionStatus
 ): Status | null => {
   if (correctionStatus === 'yet') {
-    return { text: '未添削', color: mainColor };
+    return { text: I18n.t('diaryStatus.yet'), color: mainColor };
   }
 
   if (correctionStatus === 'correcting') {
-    return { text: '添削中', color: subTextColor };
+    return { text: I18n.t('diaryStatus.correcting'), color: subTextColor };
   }
 
   return null;
@@ -65,14 +66,14 @@ export const getMyDiaryStatus = (
 ): Status | null => {
   if (diaryStatus === 'publish') {
     if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
-      return { text: '添削待ち', color: subTextColor };
+      return { text: I18n.t('diaryStatus.yet'), color: subTextColor };
     }
     if (correctionStatus === 'unread') {
-      return { text: '未読', color: softRed };
+      return { text: I18n.t('diaryStatus.unread'), color: softRed };
     }
     if (correctionStatus === 'done') {
       if (!isReview) {
-        return { text: 'レビュー待ち', color: mainColor };
+        return { text: I18n.t('diaryStatus.yetReview'), color: mainColor };
       }
     }
   }
@@ -82,9 +83,9 @@ export const getMyDiaryStatus = (
 export const getlanguage = (language: Language): string => {
   switch (language) {
     case 'ja':
-      return '日本語';
+      return I18n.t('language.ja');
     case 'en':
-      return '英語';
+      return I18n.t('language.en');
     default:
       return '';
   }
@@ -147,18 +148,21 @@ export const checkBeforePost = (
   learnLanguage: Language
 ): boolean => {
   if (!title) {
-    Alert.alert('', 'タイトルが入力されていません');
+    Alert.alert('', I18n.t('errorMessage.emptyTitile'));
     return false;
   }
   if (!text) {
-    Alert.alert('', '本文が入力されていません');
+    Alert.alert('', I18n.t('errorMessage.emptyText'));
     return false;
   }
   const usePoint = getUsePoints(text.length, learnLanguage);
   if (usePoint > points) {
     Alert.alert(
-      'ポイント不足',
-      `文字数${text.length}の日記を投稿するには${usePoint}ポイントが必要です。ポイントは日本語の日記を添削することで溜めることができます。`
+      I18n.t('errorMessage.lackPointsTitle'),
+      I18n.t('errorMessage.lackPointsText', {
+        textLength: text.length,
+        usePoint,
+      })
     );
     return false;
   }

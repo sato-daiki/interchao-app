@@ -3,6 +3,7 @@ import * as Permissions from 'expo-permissions';
 import { Alert, CameraRoll } from 'react-native';
 import openBrowserSafely from '../constants/safeWebBrowser';
 import { SERVICE_NAME } from '../constants';
+import I18n from './I18n';
 
 export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatus> => {
   // await Permissions.askAsync(Permissions.CAMERA);
@@ -12,11 +13,13 @@ export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatu
 
 export const openAlert = () => {
   Alert.alert(
-    'アクセス許可が必要です',
-    `${SERVICE_NAME}にカメラロールのアクセス許可が必要です`,
+    I18n.t('cameraRoll.permitTitle'),
+    I18n.t('cameraRoll.permitMessage', {
+      name: SERVICE_NAME,
+    }),
     [
       {
-        text: '設定方法',
+        text: I18n.t('cameraRoll.permitHowTo'),
         onPress: () => {
           //  TODO
           openBrowserSafely('');

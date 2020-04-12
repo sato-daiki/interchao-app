@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { subTextColor, mainColor, fontSizeS } from '../../styles/Common';
 import { Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,11 +54,7 @@ const EmptyMyDiaryList: React.FC = (): JSX.Element => {
           color={subTextColor}
         />
         <Space size={8} />
-        <Text style={styles.emptyText}>
-          {
-            '日記がまだ投稿されていません。\n日記を書いてネィティブに添削してもらおう！'
-          }
-        </Text>
+        <Text style={styles.emptyText}>{I18n.t('emptyMyDiaryList.text')}</Text>
       </View>
       <View style={styles.emptyLower}>
         <MaterialCommunityIcons
@@ -67,7 +64,7 @@ const EmptyMyDiaryList: React.FC = (): JSX.Element => {
         />
         <View style={styles.emptyHintContainer}>
           <Text style={styles.emptyHintText}>
-            {'まずはここから！\n日記を無料で\n添削してもらえるよ！'}
+            {I18n.t('emptyMyDiaryList.hint')}
           </Text>
         </View>
       </View>

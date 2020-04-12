@@ -8,6 +8,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,12 +57,12 @@ const ModalBlock: React.FC<Props> = ({
   let title = '';
   if (!isBlocked) {
     title = !isSuccess
-      ? `${userName}をブロックしますか？`
-      : `${userName}をブロックしました`;
+      ? I18n.t('modalBlock.blockedQuestion', { userName })
+      : I18n.t('modalBlock.blockedSuccess', { userName });
   } else {
     title = !isSuccess
-      ? `${userName}のブロックを解除しますか？`
-      : `${userName}のブロックを解除しました`;
+      ? I18n.t('modalBlock.unblockedQuestion', { userName })
+      : I18n.t('modalBlock.unblockedSuccess', { userName });
   }
 
   return (
@@ -73,27 +74,37 @@ const ModalBlock: React.FC<Props> = ({
           <>
             <Text style={styles.text}>
               {!isBlocked
-                ? 'ブロックした人はあなたのプロフィールや日記を見られなくなります。ブロックしたことは、相手に通知されません。'
-                : 'ブロックを解除すると、この人はあなたの日記を見たり、フォローできるようになります。ブロックが解除されたことは、相手に通知されません。'}
+                ? I18n.t('modalBlock.blockedMessage')
+                : I18n.t('modalBlock.unblockedMessage')}
             </Text>
             <Space size={32} />
             <SubmitButton
               isLoading={isLoading}
-              title={!isBlocked ? 'ブロックする' : 'ブロックを解除'}
+              title={
+                !isBlocked
+                  ? I18n.t('modalBlock.blockedButton')
+                  : I18n.t('modalBlock.unblockedButton')
+              }
               onPress={onPressSubmit}
             />
             <Space size={16} />
-            <WhiteButton title="キャンセル" onPress={onPressClose} />
+            <WhiteButton
+              title={I18n.t('common.cancel')}
+              onPress={onPressClose}
+            />
           </>
         ) : (
           <>
             <Text style={styles.text}>
               {!isBlocked
-                ? 'ブロックした相手のプロフィールから、いつでもブロックを解除できます。'
-                : '相手のプロフィールからいつでもブロックができます。'}
+                ? I18n.t('modalBlock.blockedEndMessage')
+                : I18n.t('modalBlock.unblockedEndMessage')}
             </Text>
             <Space size={32} />
-            <WhiteButton title="閉じる" onPress={onPressClose} />
+            <WhiteButton
+              title={I18n.t('common.cancel')}
+              onPress={onPressClose}
+            />
           </>
         )}
       </View>

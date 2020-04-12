@@ -28,6 +28,7 @@ import { Points } from '../../images';
 import { getUsePoints } from '../../utils/diary';
 import { Language } from '../../types';
 import TutorialPostDiary from './TutorialPostDiary';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isLoading: boolean;
@@ -198,14 +199,20 @@ const PostDiary = ({
       />
       <View style={styles.header}>
         <View style={styles.left}>
-          <Text style={styles.headerLabel}>消費ポイント</Text>
+          <Text style={styles.headerLabel}>
+            {I18n.t('postDiaryComponent.usePoints')}
+          </Text>
           <Text style={styles.headerValue}>{usePoints}</Text>
-          <Text style={styles.headerLabel}>文字数</Text>
+          <Text style={styles.headerLabel}>
+            {I18n.t('postDiaryComponent.textLength')}
+          </Text>
           <Text style={styles.headerValue}>{text.length}</Text>
         </View>
         <View style={styles.right}>
           <Image style={styles.points} source={Points} />
-          <Text style={styles.headerLabel}>所持ポイント</Text>
+          <Text style={styles.headerLabel}>
+            {I18n.t('postDiaryComponent.points')}
+          </Text>
           <Text style={styles.headerValue}>{points}</Text>
         </View>
       </View>
@@ -224,7 +231,7 @@ const PostDiary = ({
         onChangeText={onChangeTextText}
         onFocus={onFocus}
         onEndEditing={(): void => setIsForce(false)}
-        placeholder="本文"
+        placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
         underlineColorAndroid="transparent"
         multiline
         autoCapitalize="none"
@@ -250,7 +257,7 @@ const PostDiary = ({
         <TextButtun
           isBorrderTop
           isBorrderBottom
-          title="下書き保存"
+          title={I18n.t('postDiaryComponent.draft')}
           onPress={onPressDraft}
         />
       </View>

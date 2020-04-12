@@ -9,6 +9,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,13 +51,17 @@ const ModalStillCorrecting: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>エラー</Text>
+        <Text style={styles.title}>{I18n.t('common.error')}</Text>
         <View style={styles.line} />
         <MaterialIcons name="error" size={64} color={primaryColor} />
         <Space size={16} />
-        <Text style={styles.text}>途中で添削が中断されました。</Text>
+        <Text style={styles.text}>{I18n.t('modalStillCorrecting.text')}</Text>
         <Space size={32} />
-        <SubmitButton title="閉じる" isLoading={isLoading} onPress={onPress} />
+        <SubmitButton
+          title={I18n.t('common.close')}
+          isLoading={isLoading}
+          onPress={onPress}
+        />
       </View>
     </Modal>
   );

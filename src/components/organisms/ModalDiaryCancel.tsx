@@ -8,6 +8,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,21 +53,19 @@ const ModalDiaryCancel: React.FC<Props> = ({
 }: Props): JSX.Element | null => (
   <Modal visible={visible}>
     <View style={styles.container}>
-      <Text style={styles.title}>確認</Text>
+      <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
       <View style={styles.line} />
-      <Text style={styles.text}>
-        保存されていない変更は失われます。閉じてよろしいですか？
-      </Text>
+      <Text style={styles.text}>{I18n.t('modalDiaryCancel.message')}</Text>
       <Space size={32} />
       <SubmitButton
         isLoading={isLoading}
-        title="下書きとして保存"
+        title={I18n.t('modalDiaryCancel.button')}
         onPress={(): void => onPressSave()}
       />
       <Space size={16} />
-      <WhiteButton title="閉じる" onPress={onPressNotSave} />
+      <WhiteButton title={I18n.t('common.close')} onPress={onPressNotSave} />
       <Space size={16} />
-      <WhiteButton title="キャンセル" onPress={onPressClose} />
+      <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
     </View>
   </Modal>
 );

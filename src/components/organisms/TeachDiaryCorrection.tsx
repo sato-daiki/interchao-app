@@ -5,6 +5,7 @@ import { fontSizeM, subTextColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
+import I18n from '../../utils/I18n';
 
 interface Props {
   correction: Correction;
@@ -56,7 +57,7 @@ const TeachDiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
 
   return (
     <>
-      <GrayHeader title="添削結果" />
+      <GrayHeader title={I18n.t('teachDiaryCorrection.header')} />
       <View style={styles.main}>
         <View style={styles.header}>
           <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />

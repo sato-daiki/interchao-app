@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import firebase from '../constants/firebase';
+import I18n from './I18n';
 
 export const emailValidate = (email: string): boolean => {
   const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
@@ -27,41 +28,39 @@ export const emailInputError = (
 ): void => {
   const errorCode = error.code;
   const errorMessage = error.message;
-  console.log(errorCode);
-  console.log(errorMessage);
 
   switch (errorCode) {
     case 'auth/weak-password':
-      setErrorPassword('パスワードは6桁以上で入力してください');
+      setErrorPassword(I18n.t('errorMessage.weakPassword'));
       break;
     case 'auth/wrong-password':
-      setErrorPassword('パスワードが違います');
+      setErrorPassword(I18n.t('errorMessage.wrongPassword'));
       break;
     case 'auth/user-not-found':
-      setErrorEmail('メールアドレスが存在しません');
+      setErrorEmail(I18n.t('errorMessage.userNotFound'));
       break;
     case 'auth/invalid-email':
-      setErrorEmail('メールアドレスの形式が正しくありません');
+      setErrorEmail(I18n.t('errorMessage.invalidEmail'));
       break;
     case 'auth/email-already-in-use':
-      setErrorEmail('このメールアドレスはすでに登録されています');
+      setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
       break;
     case 'auth/network-request-failed':
-      Alert.alert(
-        'エラー',
-        'ネットワークエラーです。電波のいい箇所で再度お試しください'
-      );
+      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       clearErrorMessage();
       break;
     case 'auth/too-many-requests':
       Alert.alert(
-        'エラー',
-        'エラーの数が一定数を超えました。時間をおいてから再度お試しください'
+        I18n.t('common.error'),
+        I18n.t('errorMessage.tooManyRequests')
       );
       clearErrorMessage();
       break;
     default:
-      Alert.alert('エラー', `エラーが発生しました。${errorMessage}`);
+      Alert.alert(
+        I18n.t('common.error'),
+        I18n.t('errorMessage.defaultError', { message: errorMessage })
+      );
       clearErrorMessage();
   }
 };
@@ -77,27 +76,27 @@ export const passwordInputError = (
 
   switch (errorCode) {
     case 'auth/weak-password':
-      setErrorNewPassword('パスワードは6桁以上で入力してください');
+      setErrorNewPassword(I18n.t('errorMessage.weakPassword'));
       break;
     case 'auth/wrong-password':
-      setErrorCurrentPassword('パスワードが違います');
+      setErrorCurrentPassword(I18n.t('errorMessage.wrongPassword'));
       break;
     case 'auth/network-request-failed':
-      Alert.alert(
-        'エラー',
-        'ネットワークエラーです。電波のいい箇所で再度お試しください'
-      );
+      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       clearErrorMessage();
       break;
     case 'auth/too-many-requests':
       Alert.alert(
-        'エラー',
-        'エラーの数が一定数を超えました。時間をおいてから再度お試しください'
+        I18n.t('common.error'),
+        I18n.t('errorMessage.tooManyRequests')
       );
       clearErrorMessage();
       break;
     default:
-      Alert.alert('エラー', 'エラーが発生しました。', errorMessage);
+      Alert.alert(
+        I18n.t('common.error'),
+        I18n.t('errorMessage.defaultError', { message: errorMessage })
+      );
       clearErrorMessage();
   }
 };
