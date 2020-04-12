@@ -33,6 +33,7 @@ const ProfileIcons: React.FC<Props> = ({
     return (
       <ProfileIcon
         photoUrl={correction.profile.photoUrl}
+        nativeLanguage={correction.profile.nativeLanguage}
         onPress={(): void => onPressUser(correction.profile.uid)}
       />
     );
@@ -43,6 +44,7 @@ const ProfileIcons: React.FC<Props> = ({
     return (
       <ProfileIcon
         photoUrl={proCorrection.profile.photoUrl}
+        nativeLanguage={proCorrection.profile.nativeLanguage}
         onPress={(): void => onPressUser(proCorrection.profile.uid)}
       />
     );

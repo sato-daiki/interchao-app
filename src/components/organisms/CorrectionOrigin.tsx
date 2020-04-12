@@ -66,12 +66,16 @@ const CorrectionOrigin: React.FC<Props> = ({
   setSelection,
 }) => {
   const { createdAt, title, text, profile } = teachDiary;
-  const { userName, photoUrl } = profile;
+  const { userName, photoUrl, nativeLanguage } = profile;
   return (
     <View style={styles.container}>
       <View style={styles.main}>
         <View style={styles.header}>
-          <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
+          <ProfileIconHorizontal
+            userName={userName}
+            photoUrl={photoUrl}
+            nativeLanguage={nativeLanguage}
+          />
           <CorrectionTimer onTimeUp={onTimeUp} />
         </View>
         <Text style={styles.postDayText}>{getAlgoliaDate(createdAt)}</Text>

@@ -34,7 +34,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  */
 const TeachDiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
-  const { userName, photoUrl } = profile;
+  const { userName, photoUrl, nativeLanguage } = profile;
 
   const postDate = getAlgoliaDate(createdAt);
 
@@ -60,7 +60,11 @@ const TeachDiaryCorrection: React.FC<Props> = ({ correction }): JSX.Element => {
       <GrayHeader title={I18n.t('teachDiaryCorrection.header')} />
       <View style={styles.main}>
         <View style={styles.header}>
-          <ProfileIconHorizontal userName={userName} photoUrl={photoUrl} />
+          <ProfileIconHorizontal
+            userName={userName}
+            photoUrl={photoUrl}
+            nativeLanguage={nativeLanguage}
+          />
           <Text style={styles.daytext}>{postDate}</Text>
         </View>
         <FlatList

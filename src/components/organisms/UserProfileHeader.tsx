@@ -35,6 +35,7 @@ const UserProfileHeader = ({ profile, userReview }: Props): JSX.Element => {
       <ProfileIconHorizontal
         userName={profile.userName}
         photoUrl={profile.photoUrl}
+        nativeLanguage={profile.nativeLanguage}
       />
       <Space size={16} />
       {profile.name ? <Text style={styles.name}>{profile.name}</Text> : null}

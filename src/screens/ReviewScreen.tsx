@@ -169,6 +169,7 @@ const ReviewScreen: ScreenType = ({
       <UserListItem
         userName={diary.profile.userName}
         photoUrl={diary.profile.photoUrl}
+        nativeLanguage={diary.profile.nativeLanguage}
         onPressButton={onPressFavorite}
       />
       <Space size={24} />

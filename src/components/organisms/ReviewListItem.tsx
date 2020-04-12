@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
 const ReviewListItem = ({ item, onPressUser }: Props): JSX.Element => {
   const { createdAt, comment, reviewer } = item;
-  const { uid, userName, photoUrl } = reviewer;
+  const { uid, userName, photoUrl, nativeLanguage } = reviewer;
 
   return (
     <View style={styles.container}>
@@ -55,6 +55,7 @@ const ReviewListItem = ({ item, onPressUser }: Props): JSX.Element => {
       <ProfileIconHorizontal
         userName={userName}
         photoUrl={photoUrl}
+        nativeLanguage={nativeLanguage}
         onPress={(): void => onPressUser(uid)}
       />
     </View>
