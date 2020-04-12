@@ -8,6 +8,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,7 +53,7 @@ const ModalConfirm: React.FC<Props> = ({
   title,
   message,
   mainButtonText = '',
-  cancelButtonText = 'キャンセル',
+  cancelButtonText = I18n.t('common.cancel'),
   onPressMain,
   onPressClose,
 }: Props): JSX.Element | null => {

@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { Space, SubmitButton } from '../atoms';
 import { CheckTextInput } from '../molecules';
 import { primaryColor, fontSizeM, linkBlue } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isSignUp: boolean;
@@ -66,7 +67,7 @@ const SignInUpForm: React.FC<Props> = ({
 }): JSX.Element => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>メールアドレス</Text>
+      <Text style={styles.label}>{I18n.t('signInUpForm.email')}</Text>
       <CheckTextInput
         value={email}
         onChangeText={onChangeTextEmail}
@@ -83,7 +84,7 @@ const SignInUpForm: React.FC<Props> = ({
         errorMessage={errorEmail}
       />
       <Space size={16} />
-      <Text style={styles.label}>パスワード（６ケタ以上）</Text>
+      <Text style={styles.label}>{I18n.t('signInUpForm.password')}</Text>
       <CheckTextInput
         value={password}
         onChangeText={onChangePassword}
@@ -100,7 +101,7 @@ const SignInUpForm: React.FC<Props> = ({
       />
       <Space size={32} />
       <SubmitButton
-        title={isSignUp ? '次へ' : 'ログイン'}
+        title={isSignUp ? I18n.t('common.next') : I18n.t('signInUpForm.login')}
         onPress={onPressSubmit}
         isLoading={isSubmitLoading}
         disable={!(isEmailCheckOk && isPasswordCheckOk)}
@@ -109,9 +110,9 @@ const SignInUpForm: React.FC<Props> = ({
         <>
           <Space size={16} />
           <Text style={styles.forgetText}>
-            パスワードをお忘れの方は
+            {I18n.t('signInUpForm.forgetText')}
             <Text style={styles.linkText} onPress={onPressForget}>
-              こちら
+              {I18n.t('signInUpForm.link')}
             </Text>
           </Text>
         </>

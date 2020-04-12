@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -11,6 +11,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space, Checkbox } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +68,7 @@ const ModalAlertCorrection: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>確認</Text>
+        <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
         <View style={styles.line} />
         <MaterialCommunityIcons
           style={styles.icon}
@@ -76,16 +77,11 @@ const ModalAlertCorrection: React.FC<Props> = ({
           color={primaryColor}
         />
         <Space size={16} />
-        <Text style={styles.text}>
-          添削は30分以内で行ってください。30分をすぎると添削は破棄されます。
-          {'\n'}
-          {'\n'}
-          本サービスは、１日記につき、１添削で行っています。添削を始めると、ロックがかかり他の人は添削できなくなります。
-        </Text>
+        <Text style={styles.text}>{I18n.t('modalAlertCorrection.text')}</Text>
         <Space size={32} />
         <SubmitButton
           isLoading={isLoading}
-          title="添削を始める"
+          title={I18n.t('modalAlertCorrection.start')}
           onPress={(): void => onPressSubmit(checked)}
         />
         <Space size={12} />
@@ -95,11 +91,11 @@ const ModalAlertCorrection: React.FC<Props> = ({
             onPress={(): void => setChecked(!checked)}
           />
           <Text style={styles.checkboxText}>
-            以後、このメッセージを表示しない
+            {I18n.t('modalAlertCorrection.checkboxText')}
           </Text>
         </View>
         <Space size={24} />
-        <WhiteButton title="キャンセル" onPress={onPressClose} />
+        <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
       </View>
     </Modal>
   );

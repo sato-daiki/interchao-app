@@ -1,6 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
-import { UserDiaryStatus, EmptyList } from '../molecules';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  NativeSyntheticEvent,
+  TextInputSelectionChangeEventData,
+} from 'react-native';
+import { EmptyList } from '../molecules';
 import { Selection } from '../../types/correctingScreen';
 import { ProfileIconHorizontal, Space } from '../atoms';
 import CorrectionTimer from '../molecules/CorrectionTimer';
@@ -76,7 +83,9 @@ const CorrectionOrigin: React.FC<Props> = ({
         editable={false}
         value={text}
         selectTextOnFocus
-        onSelectionChange={e => {
+        onSelectionChange={(
+          e: NativeSyntheticEvent<TextInputSelectionChangeEventData>
+        ): void => {
           setSelection(e.nativeEvent.selection);
         }}
         contextMenuHidden

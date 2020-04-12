@@ -11,7 +11,6 @@ export const getCorrection = async (id: string): Promise<Correction | null> => {
     if (data) {
       const {
         objectID,
-        pro,
         profile,
         comments,
         summary,
@@ -21,7 +20,6 @@ export const getCorrection = async (id: string): Promise<Correction | null> => {
 
       return {
         objectID,
-        pro,
         profile,
         comments,
         summary,

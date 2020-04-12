@@ -9,6 +9,7 @@ import {
 import { Modal } from '../template';
 import { WhiteButton, Space, SubmitButton } from '../atoms';
 import { CheckTextInput } from '../molecules';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,11 +64,9 @@ const ModalDeleteAcount: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>退会確定処理</Text>
+        <Text style={styles.title}>{I18n.t('modalDeleteAcount.title')}</Text>
         <View style={styles.line} />
-        <Text style={styles.text}>
-          パスワードを入力して確定ボタンを押してください。
-        </Text>
+        <Text style={styles.text}>{I18n.t('modalDeleteAcount.text')}</Text>
         <CheckTextInput
           value={password}
           onChangeText={onChangeText}
@@ -85,11 +84,11 @@ const ModalDeleteAcount: React.FC<Props> = ({
         <View style={styles.button}>
           <SubmitButton
             isLoading={isLoading}
-            title="退会する"
+            title={I18n.t('modalDeleteAcount.button')}
             onPress={onPressSubmit}
           />
           <Space size={16} />
-          <WhiteButton title="キャンセル" onPress={onPressClose} />
+          <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
         </View>
       </View>
     </Modal>

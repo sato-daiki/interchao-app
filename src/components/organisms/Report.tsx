@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import SwipeablePanel from 'rn-swipeable-panel';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -10,6 +10,7 @@ import {
 } from '../../styles/Common';
 import { OptionItem } from '../molecules';
 import { LoadingModal } from '../atoms';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isReport: boolean;
@@ -65,19 +66,17 @@ const Report = ({
     <>
       <LoadingModal visible={isLoading} />
       <View style={styles.header}>
-        <Text style={styles.title}>報告</Text>
+        <Text style={styles.title}>{I18n.t('report.title')}</Text>
       </View>
-      <Text style={styles.subTitle}>このアカウントを報告する理由</Text>
-      <Text style={styles.description}>
-        どのアクションを実行しても、相手に通知されることはありません。差し迫った危険に直面する人がいた場合は、今すぐ地域の警察または消防機関に緊急通報してください。
-      </Text>
+      <Text style={styles.subTitle}>{I18n.t('report.subTitle')}</Text>
+      <Text style={styles.description}>{I18n.t('report.description')}</Text>
       <OptionItem
         isBorrderTop
-        title="スパムである"
+        title={I18n.t('report.spam')}
         onPress={(): void => onReportSubmit('spam')}
       />
       <OptionItem
-        title="不適切である"
+        title={I18n.t('report.inappropriate')}
         onPress={(): void => onReportSubmit('inappropriate')}
       />
     </>
@@ -87,10 +86,10 @@ const Report = ({
     <>
       <View style={styles.headerReported}>
         <MaterialCommunityIcons size={70} color={green} name="check" />
-        <Text style={styles.title}>ご報告ありがとうございます</Text>
+        <Text style={styles.title}>{I18n.t('report.reportedTitle')}</Text>
       </View>
       <Text style={styles.description}>
-        いただいた情報はホワイトジブラをより安全なものにするために役立たせていただきます。
+        {I18n.t('report.reportedDescription')}
       </Text>
     </>
   );

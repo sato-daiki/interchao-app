@@ -5,6 +5,7 @@ import { Diary } from '../../types';
 import SearchMyDiaryList from './SearchMyDiaryList';
 import { GrayHeader } from '../atoms';
 import { EmptyList } from '../molecules';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isEmpty: boolean;
@@ -26,14 +27,15 @@ const DiaryHitList: React.FC<Props & any> = ({
       isEmpty ? null : (
         <EmptyList
           iconName="book-open-variant"
-          message="検索条件の日記がありません"
+          message={I18n.t('diaryHitList.empty')}
         />
       ),
     [isEmpty]
   );
 
   const listHeaderComponent = useCallback(
-    () => (isEmpty ? null : <GrayHeader title="検索結果" />),
+    () =>
+      isEmpty ? null : <GrayHeader title={I18n.t('diaryHitList.header')} />,
     [isEmpty]
   );
 

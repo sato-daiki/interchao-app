@@ -4,6 +4,7 @@ import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Space } from '../atoms';
 import { Pen } from '../../images';
 import Tutorial from '../template/Tutorial';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,27 +32,21 @@ interface Props {
 const TutorialPostDiary: React.FC<Props> = ({
   isLoading = false,
   displayed,
-  buttonText = '始める',
+  buttonText = I18n.t('tutorialPostDiary.buttonText'),
   onPress = (): void => {},
 }: Props): JSX.Element | null => {
   return (
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title="日記の書き方"
+      title={I18n.t('tutorialPostDiary.title')}
       buttonText={buttonText}
       onPress={onPress}
     >
       <View style={styles.container}>
         <Image style={styles.img} source={Pen} resizeMode="contain" />
         <Space size={24} />
-        <Text style={styles.text}>
-          英語で日記を書いてみよう。 600文字ごとに10ポイントが必要です。
-          {'\n'}
-          {'\n'}
-          日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？
-          日本語を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！
-        </Text>
+        <Text style={styles.text}>{I18n.t('tutorialPostDiary.text')}</Text>
       </View>
     </Tutorial>
   );

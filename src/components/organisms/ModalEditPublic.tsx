@@ -9,6 +9,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -73,13 +74,13 @@ const ModalEditPublic: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>公開設定を変更する</Text>
+        <Text style={styles.title}>{I18n.t('modalEditPublic.title')}</Text>
         <View style={styles.line} />
         <Text style={styles.description}>
-          InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると、TwitterやFacebookで添削結果を投稿することができます。また、他の学習者の手助けになります。
+          {I18n.t('modalEditPublic.description')}
         </Text>
         <View style={styles.row}>
-          <Text style={styles.label}>Webで公開</Text>
+          <Text style={styles.label}>{I18n.t('modalEditPublic.publish')}</Text>
           <Switch
             onValueChange={(): void => setChangedIsPublic(!changedIsPublic)}
             value={changedIsPublic}
@@ -89,11 +90,11 @@ const ModalEditPublic: React.FC<Props> = ({
         <View style={styles.button}>
           <SubmitButton
             isLoading={isLoading}
-            title="更新する"
+            title={I18n.t('modalEditPublic.button')}
             onPress={(): void => onPressSubmit(changedIsPublic)}
           />
           <Space size={16} />
-          <WhiteButton title="キャンセル" onPress={onPressClose} />
+          <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
         </View>
       </View>
     </Modal>

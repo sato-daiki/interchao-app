@@ -20,6 +20,7 @@ import {
 import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
 import { DiaryStatus } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const { width } = Dimensions.get('window');
 const EDIT_WIDTH = 48;
@@ -107,7 +108,10 @@ const DraftListItem = ({
   const { createdAt, title, text } = item;
   const postDay = getAlgoliaDay(createdAt);
 
-  const renderRightActions = (progress, dragX): JSX.Element => {
+  const renderRightActions = (
+    progress: Animated.AnimatedInterpolation,
+    dragX: Animated.AnimatedInterpolation
+  ): JSX.Element => {
     const trans = dragX.interpolate({
       inputRange: [-100, 0],
       outputRange: [1, 0],
@@ -124,7 +128,7 @@ const DraftListItem = ({
           <Animated.Text
             style={[styles.deleteText, { transform: [{ translateX: trans }] }]}
           >
-            削除
+            {I18n.t('common.delete')}
           </Animated.Text>
         </TouchableOpacity>
       </View>
@@ -157,7 +161,10 @@ const DraftListItem = ({
         >
           <View style={styles.header}>
             <Text style={styles.postDayText}>{postDay}</Text>
-            <DiaryStatus color={subTextColor} text="下書き" />
+            <DiaryStatus
+              color={subTextColor}
+              text={I18n.t('draftListItem.draft')}
+            />
           </View>
           <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
             {title}

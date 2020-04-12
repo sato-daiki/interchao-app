@@ -6,6 +6,7 @@ import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isReview: boolean;
@@ -69,7 +70,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
 
   return (
     <>
-      <GrayHeader title="添削結果" />
+      <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
       <View style={styles.main}>
         <View style={styles.header}>
           <ProfileIconHorizontal

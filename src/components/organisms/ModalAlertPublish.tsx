@@ -9,6 +9,7 @@ import {
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space, UserPointsBig } from '../atoms';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -96,33 +97,36 @@ const ModalAlertPublish: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>確認</Text>
+        <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
           {usePoints}
-          ポイントを使い日記を投稿します。
-          一度投稿すると、編集ができませんが、よろしいですか？
+          {I18n.t('modalAlertPublish.confirmation')}
         </Text>
         <View style={styles.points}>
           <UserPointsBig points={points} />
         </View>
-        <Text style={styles.subTitle}>公開設定</Text>
+        <Text style={styles.subTitle}>
+          {I18n.t('modalAlertPublish.subTitle')}
+        </Text>
         <Text style={styles.description}>
-          InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。
+          {I18n.t('modalAlertPublish.description')}
         </Text>
         <View style={styles.row}>
-          <Text style={styles.label}>Webで公開</Text>
+          <Text style={styles.label}>
+            {I18n.t('modalAlertPublish.publish')}
+          </Text>
           <Switch onValueChange={onValueChangePublic} value={isPublic} />
         </View>
         <Space size={32} />
         <View style={styles.button}>
           <SubmitButton
             isLoading={isLoading}
-            title="投稿する"
+            title={I18n.t('modalAlertPublish.submit')}
             onPress={onPressSubmit}
           />
           <Space size={16} />
-          <WhiteButton title="キャンセル" onPress={onPressClose} />
+          <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
         </View>
       </View>
     </Modal>

@@ -4,6 +4,7 @@ import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Space } from '../atoms';
 import { Zebbu } from '../../images';
 import Tutorial from '../template/Tutorial';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,32 +32,21 @@ interface Props {
 const TutorialCorrecting: React.FC<Props> = ({
   isLoading = false,
   displayed,
-  buttonText = '始める',
+  buttonText = I18n.t('tutorialCorrecting.buttonText'),
   onPress,
 }: Props): JSX.Element | null => {
   return (
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title="添削の仕方"
+      title={I18n.t('tutorialCorrecting.title')}
       buttonText={buttonText}
       onPress={onPress}
     >
       <View style={styles.container}>
         <Image style={styles.img} source={Zebbu} resizeMode="contain" />
         <Space size={24} />
-        <Text style={styles.text}>
-          誤っている箇所を長押しして、選択して「正しい表現」と「補足」をしてあげましょう。
-          {'\n'}
-          {'\n'}
-          間違っている場所がない場合は、「より良くなる表現」を教えてあげましょう。
-          {'\n'}
-          {'\n'}
-          コメントは600文字に対して3つを目安に入れてあげましょう！
-          {'\n'}
-          {'\n'}
-          最後にまとめとして、全体の評価をしてあげましょう！
-        </Text>
+        <Text style={styles.text}>{I18n.t('tutorialCorrecting.text')}</Text>
       </View>
     </Tutorial>
   );

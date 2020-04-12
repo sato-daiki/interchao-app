@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import SwipeablePanel from 'rn-swipeable-panel';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { OptionItem } from '../molecules';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isMenu: boolean;
@@ -34,7 +35,7 @@ const MyDiaryListMenu = ({
   const onPressReviewList = useCallback(() => {
     navigation.navigate('ReviewList', { uid });
     onClose();
-  }, [navigation, onClose]);
+  }, [navigation, onClose, uid]);
 
   return (
     <SwipeablePanel
@@ -45,10 +46,19 @@ const MyDiaryListMenu = ({
       onClose={onClose}
       onPressCloseButton={onClose}
     >
-      <OptionItem title="マイページ" onPress={onPressMyPage} />
-      <OptionItem title="下書き一覧" onPress={onPressDraftList} />
-      <OptionItem title="レビュー一覧" onPress={onPressReviewList} />
-      <OptionItem title="プレミアム会員" onPress={onPressModalPremium} />
+      <OptionItem
+        title={I18n.t('myDiaryListMenu.myPage')}
+        onPress={onPressMyPage}
+      />
+      <OptionItem
+        title={I18n.t('myDiaryListMenu.draftList')}
+        onPress={onPressDraftList}
+      />
+      <OptionItem
+        title={I18n.t('myDiaryListMenu.reviewList')}
+        onPress={onPressReviewList}
+      />
+      {/* <OptionItem title="プレミアム会員" onPress={onPressModalPremium} /> */}
     </SwipeablePanel>
   );
 };

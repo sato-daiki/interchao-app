@@ -4,6 +4,7 @@ import { primaryColor, fontSizeM, mainColor } from '../../styles/Common';
 import { Space } from '../atoms';
 import { People } from '../../images';
 import Tutorial from '../template/Tutorial';
+import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,14 +35,14 @@ interface Props {
 const TutorialTeachDiaryList: React.FC<Props> = ({
   isLoading = false,
   displayed,
-  buttonText = '始める',
+  buttonText = I18n.t('tutorialTeachDiaryList.buttonText'),
   onPress = (): void => {},
 }: Props): JSX.Element | null => {
   return (
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title="日本語日記一覧とは"
+      title={I18n.t('tutorialTeachDiaryList.title')}
       buttonText={buttonText}
       onPress={onPress}
     >
@@ -49,12 +50,11 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
         <Image style={styles.img} source={People} resizeMode="contain" />
         <Space size={24} />
         <Text style={styles.text}>
-          日本語を勉強をしているユーザの日記一覧です。
-          {'\n'}
-          {'\n'}
-          ステータスが
-          <Text style={styles.main}>添削待ち</Text>
-          のものを探して添削して10ポイントをゲットしよう。
+          {I18n.t('tutorialTeachDiaryList.text1')}
+          <Text style={styles.main}>
+            {I18n.t('tutorialTeachDiaryList.textMainColor')}
+          </Text>
+          {I18n.t('tutorialTeachDiaryList.text2')}
         </Text>
       </View>
     </Tutorial>
