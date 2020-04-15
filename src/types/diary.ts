@@ -23,7 +23,6 @@ export interface DisplayProfile {
   photoUrl: string | null;
   learnLanguage: Language;
   nativeLanguage: Language;
-  ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;
 }
 
 export interface Diary {
