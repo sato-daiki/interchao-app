@@ -156,9 +156,9 @@ const EditMyProfileScreen: ScreenType = ({
         <View style={styles.row}>
           <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
           <TextInput
-            value={name}
+            value={name || ''}
             onChangeText={(text: string): void => setName(text)}
-            maxLength={50}
+            maxLength={20}
             placeholder="zebra"
             keyboardType="default"
             autoCapitalize="none"
@@ -176,7 +176,7 @@ const EditMyProfileScreen: ScreenType = ({
           <Text>{userName}</Text>
         </TouchableOpacity>
         <TextInput
-          value={introduction}
+          value={introduction || ''}
           onChangeText={(text: string): void => setIntroduction(text)}
           maxLength={200}
           placeholder={I18n.t('editMyProfile.placeholderIntroduction')}

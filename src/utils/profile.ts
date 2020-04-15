@@ -4,7 +4,7 @@ import firebase from '../constants/firebase';
 import { Zebbu, Zenny } from '../images';
 
 export const getPhotoUrl = (
-  photoUrl: string,
+  photoUrl: string | null,
   nativeLanguage: Language
 ): ImageSourcePropType => {
   if (photoUrl) {
