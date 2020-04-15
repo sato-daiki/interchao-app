@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Alert, CameraRoll } from 'react-native';
-import openBrowserSafely from '../constants/safeWebBrowser';
+import openBrowserSafely from '../constants/SafeWebBrowser';
 import { SERVICE_NAME } from '../constants';
 import I18n from './I18n';
 
