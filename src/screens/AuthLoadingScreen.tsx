@@ -40,6 +40,7 @@ const AuthLoadingScreen: ScreenType = ({
           // 登録済のユーザ
           const user = await getUser(authUser.uid);
           const profile = await getProfile(authUser.uid);
+
           if (user && profile) {
             // reduxの登録
             setUser(user);
@@ -49,7 +50,7 @@ const AuthLoadingScreen: ScreenType = ({
             setAnalyticsUser(user, profile);
             navigation.navigate('MainTabNavigator');
           } else {
-            // TODO: ここに入る場合エラーどうするか
+            // ここに入る場合エラーどうするか;
             navigation.navigate('AuthNavigator');
           }
         } else {
