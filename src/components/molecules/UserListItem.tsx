@@ -6,7 +6,7 @@ import { Language } from '../../types';
 
 interface Props {
   userName: string;
-  photoUrl: string;
+  photoUrl: string | null;
   nativeLanguage: Language;
   onPressUser?: () => void;
   onPressButton: () => void;

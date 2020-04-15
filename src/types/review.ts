@@ -3,7 +3,7 @@ import { firestore } from 'firebase';
 interface Reviewer {
   uid: string;
   userName: string;
-  photoUrl: string;
+  photoUrl: string | null;
 }
 
 export interface Review {

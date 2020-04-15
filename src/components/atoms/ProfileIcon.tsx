@@ -5,7 +5,7 @@ import { Language } from '../../types';
 
 interface Props {
   size?: number;
-  photoUrl: string;
+  photoUrl: string | null;
   nativeLanguage: Language;
   onPress: () => void;
 }

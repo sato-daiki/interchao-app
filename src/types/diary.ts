@@ -20,7 +20,7 @@ export interface DisplayProfile {
   uid: string;
   pro: boolean;
   userName: string;
-  photoUrl: string;
+  photoUrl: string | null;
   learnLanguage: Language;
   nativeLanguage: Language;
   ref: firebase.firestore.DocumentReference<firebase.firestore.DocumentData>;

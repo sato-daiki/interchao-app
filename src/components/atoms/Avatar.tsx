@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  photoUrl?: string;
+  photoUrl: string | null;
   pickImage: () => void;
 }
 

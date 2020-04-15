@@ -36,7 +36,7 @@ const ScoreStar: React.FC<Props> = ({
 }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
-      <Text style={styles.score}>{score}</Text>
+      <Text style={styles.score}>{score.toFixed(1)}</Text>
       <Image style={styles.img} source={Star} />
       <Text style={styles.reviewNum}>{`(${reviewNum})`}</Text>
     </View>
