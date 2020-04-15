@@ -59,11 +59,10 @@ const PostDiaryScreen: ScreenType = ({
         photoUrl: profile.photoUrl,
         learnLanguage: profile.learnLanguage,
         nativeLanguage: profile.nativeLanguage,
-        ref: firebase.firestore().doc(`profiles/${profile.uid}`),
       };
 
       return {
-        premium: user.premium || false,
+        premium: user.premium,
         isPublic,
         title,
         text,
@@ -161,40 +160,49 @@ const PostDiaryScreen: ScreenType = ({
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (isLoading) return;
-      try {
-        setIsLoading(true);
-        const diary = getDiary('publish');
-        const usePoints = getUsePoints(text.length, profile.learnLanguage);
-        const newPoints = user.points - usePoints;
-        const diaryDoc = await firebase
-          .firestore()
-          .collection('diaries')
-          .add(diary);
 
-        const refUser = firebase.firestore().doc(`users/${user.uid}`);
-        await refUser.update({
-          points: newPoints,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+      setIsLoading(true);
+      const diary = getDiary('publish');
+      const usePoints = getUsePoints(text.length, profile.learnLanguage);
+      const newPoints = user.points - usePoints;
 
-        // reduxに追加
-        addDiary({
-          objectID: diaryDoc.id,
-          ...diary,
-        });
-        setUser({
-          ...user,
-          points: newPoints,
-        });
+      // 日記の更新とpointsの生合成をとるためtransactionを使う
+      await firebase
+        .firestore()
+        .runTransaction(async transaction => {
+          const diaryRef = firebase
+            .firestore()
+            .collection('diaries')
+            .doc();
 
-        navigation.navigate('MyDiaryList');
-        setIsLoading(false);
-        setIsModalAlert(false);
-      } catch (err) {
-        setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
-      }
+          transaction.set(diaryRef, diary);
+
+          const refUser = firebase.firestore().doc(`users/${user.uid}`);
+          transaction.update(refUser, {
+            points: newPoints,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+          track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+          // reduxに追加
+          addDiary({
+            objectID: diaryRef.id,
+            ...diary,
+          });
+          setUser({
+            ...user,
+            points: newPoints,
+          });
+
+          navigation.navigate('MyDiaryList');
+          setIsLoading(false);
+          setIsModalAlert(false);
+        })
+        .catch(err => {
+          setIsLoading(false);
+          console.log(err);
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+        });
     };
     f();
   }, [
