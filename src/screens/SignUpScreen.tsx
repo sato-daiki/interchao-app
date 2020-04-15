@@ -91,7 +91,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
   const createUser = useCallback(
     async (credentUser: firebase.User): Promise<void> => {
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const userInfo = {
         premium: false,
         confirmCorrection: false,
@@ -103,28 +102,28 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         correctingObjectID: null,
         notificationCorrection: true,
         notificationReview: true,
-        createdAt: timestamp,
-        updatedAt: timestamp,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as User;
 
       const profileInfo = {
-        name: '',
+        name: null,
         userName: profile.userName,
-        photoUrl: '',
+        photoUrl: null,
         pro: false,
         learnLanguage: profile.learnLanguage,
         nativeLanguage: profile.nativeLanguage,
-        introduction: '',
-        createdAt: timestamp,
-        updatedAt: timestamp,
+        introduction: null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as Profile;
 
       const userReviewInfo = {
         ratingSum: 0,
         reviewNum: 0,
         score: 0.0,
-        createdAt: timestamp,
-        updatedAt: timestamp,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as UserReview;
 
       const batch = firebase.firestore().batch();
@@ -149,7 +148,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       try {
         const credent = await firebase.auth().signInAnonymously();
         if (credent.user) {
-          await createUser(credent.user);
+          createUser(credent.user);
           track(events.CREATED_USER, { loginMethod: 'anonymously' });
         }
       } catch (error) {
@@ -161,7 +160,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         );
         setIsLoading(false);
       }
-      setIsLoading(false);
     };
     f();
   }, [clearErrorMessage, createUser]);
@@ -194,7 +192,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         );
         setIsLoading(false);
       }
-      setIsLoading(false);
     };
     f();
   }, [clearErrorMessage, createUser, email, password]);
