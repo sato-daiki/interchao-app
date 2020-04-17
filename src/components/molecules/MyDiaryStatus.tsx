@@ -43,14 +43,14 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
     isReviewPro
   );
 
-  const publicIcon = isPublic ? null : (
-    <MaterialCommunityIcons size={14} color={subTextColor} name="lock" />
-  );
+  // const publicIcon = isPublic ? null : (
+  //   <MaterialCommunityIcons size={14} color={subTextColor} name="lock" />
+  // );
 
   if (premium) {
     return (
       <View style={styles.row}>
-        {publicIcon}
+        {/* {publicIcon} */}
         <View style={styles.padding} />
         {statusPro ? (
           <DiaryStatus color={statusPro.color} text={statusPro.text} />
@@ -68,7 +68,7 @@ const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
 
   return (
     <View style={styles.row}>
-      {publicIcon}
+      {/* {publicIcon} */}
       {status ? (
         <>
           <View style={styles.padding} />

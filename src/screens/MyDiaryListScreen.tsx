@@ -55,6 +55,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
+  flatList: {
+    flex: 1,
+  },
 });
 
 const HIT_PER_PAGE = 20;
@@ -263,7 +266,13 @@ const MyDiaryListScreen: ScreenType = ({
     );
   }, [diaryTotalNum]);
 
-  const displayEmptyComponent = !isLoading && !refreshing && diaries.length < 1;
+  const ListEmptyComponent = useCallback(() => {
+    if (!isLoading && !refreshing && diaries.length < 1) {
+      return <EmptyMyDiaryList />;
+    }
+    return null;
+  }, [diaries.length, isLoading, refreshing]);
+
   return (
     <View style={styles.container}>
       <MyDiaryListMenu
@@ -278,21 +287,19 @@ const MyDiaryListScreen: ScreenType = ({
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />
-      {displayEmptyComponent ? (
-        <EmptyMyDiaryList />
-      ) : (
-        <FlatList
-          data={diaries}
-          keyExtractor={keyExtractor}
-          refreshing={refreshing}
-          renderItem={renderItem}
-          ListHeaderComponent={listHeaderComponent}
-          onEndReached={loadNextPage}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-      )}
+      <FlatList
+        contentContainerStyle={styles.flatList}
+        data={diaries}
+        keyExtractor={keyExtractor}
+        refreshing={refreshing}
+        renderItem={renderItem}
+        ListEmptyComponent={ListEmptyComponent}
+        ListHeaderComponent={listHeaderComponent}
+        onEndReached={loadNextPage}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </View>
   );
 };
