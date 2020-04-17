@@ -3,11 +3,11 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import I18n from '../utils/I18n';
+import { mainColor } from '../styles/Common';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
-import DraftDiaryListScreenContainer from '../containers/DraftDiaryListScreenContainer';
-import { mainColor } from '../styles/Common';
+import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
 import PostDiaryScreen from '../screens/PostDiaryScreen';
 import ReviewScreenContainer from '../containers/ReviewScreenContainer';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
@@ -82,7 +82,7 @@ const MyDiaryTabStack = createStackNavigator(
       screen: MyDiarySerchScreen,
     },
     DraftDiaryList: {
-      screen: DraftDiaryListScreenContainer,
+      screen: DraftDiaryListScreen,
     },
     MyDiary: {
       screen: MyDiaryScreenContainer,

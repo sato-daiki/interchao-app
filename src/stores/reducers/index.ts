@@ -5,7 +5,6 @@ import localStatus from './localStatus';
 import user from './user';
 import profile from './profile';
 import diaryList from './diaryList';
-import draftDiaryList from './draftDiaryList';
 import teachDiaryList from './teachDiaryList';
 
 const rootPersistConfig = {
@@ -19,7 +18,6 @@ const rootReducer = combineReducers({
   user,
   profile,
   diaryList,
-  draftDiaryList,
   teachDiaryList,
 });
 
