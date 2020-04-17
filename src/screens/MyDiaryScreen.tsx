@@ -5,7 +5,6 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -28,7 +27,6 @@ import {
   fontSizeM,
   fontSizeS,
 } from '../styles/Common';
-import ModalEditPublic from '../components/organisms/ModalEditPublic';
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
@@ -98,19 +96,19 @@ const MyDiaryScreen: ScreenType = ({
   const [proCorrection, setProCorrection] = useState<Correction>();
   const [isLoading, setIsLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
-  const [isModalPublic, setIsModalPublic] = useState(false);
+  // const [isModalPublic, setIsModalPublic] = useState(false);
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
   }, []);
-  const onPressPublicMenu = useCallback(() => {
-    setIsModalPublic(true);
-  }, []);
+  // const onPressPublicMenu = useCallback(() => {
+  //   setIsModalPublic(true);
+  // }, []);
 
   const onPressMore = useCallback(() => {
     const options = [
       I18n.t('myDiary.menuDelete'),
-      I18n.t('myDiary.menuChangePublic'),
+      // I18n.t('myDiary.menuChangePublic'),
       I18n.t('common.cancel'),
     ];
     showActionSheetWithOptions(
@@ -124,14 +122,14 @@ const MyDiaryScreen: ScreenType = ({
           case 0:
             onPressDeleteMenu();
             break;
-          case 1:
-            onPressPublicMenu();
-            break;
+          // case 1:
+          //   onPressPublicMenu();
+          //   break;
           default:
         }
       }
     );
-  }, [onPressDeleteMenu, onPressPublicMenu, showActionSheetWithOptions]);
+  }, [onPressDeleteMenu, showActionSheetWithOptions]);
 
   useEffect(() => {
     navigation.setParams({
@@ -163,56 +161,52 @@ const MyDiaryScreen: ScreenType = ({
     f();
   }, [diary]);
 
-  const onPressSubmitPublic = useCallback(
-    (changedIsPublic: boolean) => {
-      const f = async (): Promise<void> => {
-        if (!diary || !diary.objectID) return;
-        if (isLoading) return;
-        setIsLoading(true);
-        await firebase
-          .firestore()
-          .collection('diaries')
-          .doc(diary.objectID)
-          .update({
-            isPublic: changedIsPublic,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        editDiary(diary.objectID, {
-          ...diary,
-          isPublic: changedIsPublic,
-        });
-        setIsModalPublic(false);
-        setIsLoading(false);
-      };
-      f();
-    },
-    [diary, editDiary, isLoading]
-  );
+  // const onPressSubmitPublic = useCallback(
+  //   (changedIsPublic: boolean) => {
+  //     const f = async (): Promise<void> => {
+  //       if (!diary || !diary.objectID) return;
+  //       if (isLoading) return;
+  //       setIsLoading(true);
+  //       await firebase
+  //         .firestore()
+  //         .collection('diaries')
+  //         .doc(diary.objectID)
+  //         .update({
+  //           isPublic: changedIsPublic,
+  //           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //         });
+  //       editDiary(diary.objectID, {
+  //         ...diary,
+  //         isPublic: changedIsPublic,
+  //       });
+  //       setIsModalPublic(false);
+  //       setIsLoading(false);
+  //     };
+  //     f();
+  //   },
+  //   [diary, editDiary, isLoading]
+  // );
 
   const onPressDelete = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!diary || !diary.objectID) return;
-      setIsLoading(true);
-      await firebase
-        .firestore()
-        .collection('diaries')
-        .doc(diary.objectID)
-        .delete();
-      setIsModalDelete(false);
-      // reduxの設定
-      deleteDiary(diary.objectID);
-      navigation.goBack();
-      setIsLoading(false);
-    };
-    f();
+    if (!diary || !diary.objectID) return;
+    setIsLoading(true);
+    firebase
+      .firestore()
+      .collection('diaries')
+      .doc(diary.objectID)
+      .delete();
+    setIsModalDelete(false);
+    // reduxの設定
+    deleteDiary(diary.objectID);
+    navigation.goBack();
+    setIsLoading(false);
   }, [deleteDiary, diary, navigation]);
 
   if (!diary) {
-    Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.notFound'));
     return null;
   }
 
-  const { createdAt, title, text, isReview, isPublic } = diary;
+  const { createdAt, title, text, isReview } = diary;
   const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
@@ -226,13 +220,13 @@ const MyDiaryScreen: ScreenType = ({
         onPressMain={onPressDelete}
         onPressClose={(): void => setIsModalDelete(false)}
       />
-      <ModalEditPublic
+      {/* <ModalEditPublic
         visible={isModalPublic}
         isLoading={isLoading}
         isPublic={isPublic}
         onPressSubmit={onPressSubmitPublic}
         onPressClose={(): void => setIsModalPublic(false)}
-      />
+      /> */}
       <ScrollView style={styles.scrollView}>
         <View style={styles.diaryOriginal}>
           <View style={styles.header}>
