@@ -24,7 +24,6 @@ interface Props {
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
-  deleteDraftDiary: (objectID: string) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -42,7 +41,6 @@ const PostDraftDiaryScreen: ScreenType = ({
   profile,
   setUser,
   addDiary,
-  deleteDraftDiary,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
@@ -50,7 +48,7 @@ const PostDraftDiaryScreen: ScreenType = ({
   const [isModalCancel, setIsModalCancel] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  const [isPublic, setIsPublic] = useState(false);
+  // const [isPublic, setIsPublic] = useState(false);
 
   useEffect(() => {
     const { params = {} } = navigation.state;
@@ -68,7 +66,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       const displayProfile = getDisplayProfile(profile);
       return {
         premium: user.premium || false,
-        isPublic,
+        isPublic: false,
         title,
         text,
         profile: displayProfile,
@@ -76,7 +74,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [isPublic, profile, text, title, user.premium]
+    [profile, text, title, user.premium]
   );
 
   const onPressDraft = useCallback(() => {
@@ -91,7 +89,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         setIsLoading(true);
         const diary = getDiary('draft');
         const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
-        await refDiary.update(diary);
+        refDiary.update(diary);
 
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
         navigation.navigate('MyDiaryList');
@@ -162,13 +160,12 @@ const PostDraftDiaryScreen: ScreenType = ({
         // reduxに追加
         addDiary({
           ...item,
-          isPublic,
+          isPublic: false,
           title,
           text,
           diaryStatus: 'publish',
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
-        deleteDraftDiary(item.objectID!);
         setUser({
           ...user,
           points: newPoints,
@@ -185,10 +182,8 @@ const PostDraftDiaryScreen: ScreenType = ({
     f();
   }, [
     addDiary,
-    deleteDraftDiary,
     getDiary,
     isLoading,
-    isPublic,
     navigation,
     profile.learnLanguage,
     setUser,
@@ -207,7 +202,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
-      isPublic={isPublic}
+      // isPublic={isPublic}
       title={title}
       text={text}
       points={user.points}
@@ -216,8 +211,8 @@ const PostDraftDiaryScreen: ScreenType = ({
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');
       }}
-      onValueChangePublic={(): void => setIsPublic(!isPublic)}
-      onPressCloseModalPublish={(): void => setIsModalAlert(false)}
+      // onValueChangePublic={(): void => setIsPublic(!isPublic)}
+      onPressCloseModalPublic={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
       onChangeTextTitle={(txt: string): void => setTitle(txt)}
       onChangeTextText={(txt: string): void => setText(txt)}

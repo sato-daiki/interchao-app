@@ -14,7 +14,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LoadingModal, TextButtun } from '../atoms';
-import { ModalAlertPublish, ModalLackPoint } from '.';
+import ModalAlertPublish from './ModalAlertPublish';
+import ModalLackPoint from './ModalLackPoint';
 import ModalDiaryCancel from './ModalDiaryCancel';
 import {
   fontSizeM,
@@ -35,7 +36,7 @@ interface Props {
   isModalLack: boolean;
   isModalAlert: boolean;
   isModalCancel: boolean;
-  isPublic: boolean;
+  // isPublic: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
   title: string;
@@ -44,8 +45,8 @@ interface Props {
   learnLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
-  onValueChangePublic: () => void;
-  onPressCloseModalPublish: () => void;
+  // onValueChangePublic: () => void;
+  onPressCloseModalPublic: () => void;
   onPressCloseModalCancel: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
@@ -132,17 +133,17 @@ const PostDiary = ({
   isModalLack,
   isModalAlert,
   isModalCancel,
-  isPublic,
+  // isPublic,
   isTutorialLoading = false,
   tutorialPostDiary = true,
   title,
   text,
   points,
   learnLanguage,
-  onValueChangePublic,
+  // onValueChangePublic,
   onPressSubmitModalLack,
   onPressCloseModalLack,
-  onPressCloseModalPublish,
+  onPressCloseModalPublic,
   onPressCloseModalCancel,
   onChangeTextTitle,
   onChangeTextText,
@@ -183,12 +184,12 @@ const PostDiary = ({
       <ModalAlertPublish
         visible={isModalAlert}
         isLoading={isLoading}
-        isPublic={isPublic}
+        // isPublic={isPublic}
         usePoints={usePoints}
         points={points}
-        onValueChangePublic={onValueChangePublic}
+        // onValueChangePublic={onValueChangePublic}
         onPressSubmit={onPressSubmit}
-        onPressClose={onPressCloseModalPublish}
+        onPressClose={onPressCloseModalPublic}
       />
       <ModalDiaryCancel
         visible={isModalCancel}
