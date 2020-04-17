@@ -19,7 +19,6 @@ interface Props {
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
-  addDraftDiary: (diary: Diary) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -37,7 +36,6 @@ const PostDiaryScreen: ScreenType = ({
   profile,
   setUser,
   addDiary,
-  addDraftDiary,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
@@ -93,35 +91,26 @@ const PostDiaryScreen: ScreenType = ({
   );
 
   const onPressDraft = useCallback(() => {
-    const f = async (): Promise<void> => {
-      Keyboard.dismiss();
-      if (isLoading || isModalLack) return;
-      try {
-        setIsLoading(true);
-        const diary = getDiary('draft');
-        const diaryDoc = await firebase
-          .firestore()
-          .collection('diaries')
-          .add(diary);
+    Keyboard.dismiss();
+    if (isLoading || isModalLack) return;
+    try {
+      setIsLoading(true);
+      const diary = getDiary('draft');
+      firebase
+        .firestore()
+        .collection('diaries')
+        .add(diary);
 
-        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+      track(events.CREATED_DIARY, { diaryStatus: 'draft' });
 
-        // reduxに追加
-        addDraftDiary({
-          objectID: diaryDoc.id,
-          ...diary,
-        });
-
-        navigation.navigate('DraftDiaryList');
-        setIsLoading(false);
-        setIsModalAlert(false);
-      } catch (err) {
-        setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
-      }
-    };
-    f();
-  }, [addDraftDiary, getDiary, isLoading, isModalLack, navigation]);
+      navigation.navigate('MyDiaryList');
+      setIsLoading(false);
+      setIsModalAlert(false);
+    } catch (err) {
+      setIsLoading(false);
+      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+    }
+  }, [getDiary, isLoading, isModalLack, navigation]);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();

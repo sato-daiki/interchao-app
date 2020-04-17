@@ -16,22 +16,13 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
-import { User, Diary } from '../types';
+import { Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
 import I18n from '../utils/I18n';
 
-export interface Props {
-  user: User;
-  draftDiaries: Diary[];
-  draftDiaryTotalNum: number;
-  setDraftDiaries: (draftDiaries: Diary[]) => void;
-  setDraftDiaryTotalNum: (draftDiaryTotalNum: number) => void;
-  deleteDraftDiary: (objectID: string) => void;
-}
-
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -61,17 +52,11 @@ const getIsEditMode = (
 /**
  * 下書き一覧
  */
-const DraftDiaryListScreen: ScreenType = ({
-  user,
-  draftDiaries,
-  draftDiaryTotalNum,
-  setDraftDiaries,
-  deleteDraftDiary,
-  setDraftDiaryTotalNum,
-  navigation,
-}) => {
+const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [draftDiaries, setDraftDiaries] = useState<Diary[]>([]);
+  const [draftDiaryTotalNum, setDraftDiaryTotalNum] = useState<number>(0);
   const [x] = useState(new Animated.Value(-EDIT_WIDTH));
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(0);
@@ -108,31 +93,31 @@ const DraftDiaryListScreen: ScreenType = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preOpendIndex, isEditing, onPressEdit]);
 
-  const getNewDraftDiary = useCallback(
-    (clean: boolean) => {
-      const f = async (): Promise<void> => {
-        try {
-          const index = await Algolia.getDiaryIndex(clean);
-          await Algolia.setSettings(index);
-          const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
-            page: 0,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+  const getNewDraftDiary = useCallback((clean: boolean) => {
+    const f = async (): Promise<void> => {
+      try {
+        const { currentUser } = firebase.auth();
+        if (!currentUser) return;
 
-          setDraftDiaries(res.hits as Diary[]);
-          setDraftDiaryTotalNum(res.nbHits);
-        } catch (err) {
-          setIsLoading(false);
-          setRefreshing(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
-        }
+        const index = await Algolia.getDiaryIndex(clean);
+        await Algolia.setSettings(index);
+        const res = await index.search('', {
+          filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
+          page: 0,
+          hitsPerPage: HIT_PER_PAGE,
+        });
+
+        setDraftDiaries(res.hits as Diary[]);
+        setDraftDiaryTotalNum(res.nbHits);
+      } catch (err) {
         setIsLoading(false);
-      };
-      f();
-    },
-    [setDraftDiaries, setDraftDiaryTotalNum, user.uid]
-  );
+        setRefreshing(false);
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, []);
 
   // 初期データの取得
   useEffect(() => {
@@ -153,6 +138,9 @@ const DraftDiaryListScreen: ScreenType = ({
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
+      const { currentUser } = firebase.auth();
+      if (!currentUser) return;
+
       if (!readingNext && !readAllResults) {
         try {
           const nextPage = page + 1;
@@ -160,7 +148,7 @@ const DraftDiaryListScreen: ScreenType = ({
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
+            filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -180,14 +168,7 @@ const DraftDiaryListScreen: ScreenType = ({
       }
     };
     f();
-  }, [
-    draftDiaries,
-    page,
-    readAllResults,
-    readingNext,
-    setDraftDiaries,
-    user.uid,
-  ]);
+  }, [draftDiaries, page, readAllResults, readingNext, setDraftDiaries]);
 
   const onPressItem = useCallback(
     item => {
@@ -206,7 +187,9 @@ const DraftDiaryListScreen: ScreenType = ({
           .collection('diaries')
           .doc(item.objectID)
           .delete();
-        deleteDraftDiary(item.objectID);
+
+        setDraftDiaries(draftDiaries.filter(c => c.objectID !== item.objectID));
+        setDraftDiaryTotalNum(draftDiaryTotalNum - 1);
 
         setPreOpenIndex(undefined);
         if (elRefs.current[index]) {
@@ -216,7 +199,7 @@ const DraftDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [deleteDraftDiary, setPreOpenIndex]
+    [draftDiaries, draftDiaryTotalNum]
   );
 
   useEffect(() => {
@@ -291,19 +274,22 @@ const DraftDiaryListScreen: ScreenType = ({
     );
   }, [draftDiaryTotalNum]);
 
-  const displayEmptyComponent =
-    !isLoading && !refreshing && draftDiaries.length < 1;
-  if (displayEmptyComponent) {
-    return (
-      <EmptyList
-        message={I18n.t('draftDiary.empty')}
-        iconName="book-open-variant"
-      />
-    );
-  }
+  const listEmptyComponent = useCallback(() => {
+    const displayEmptyComponent =
+      !isLoading && !refreshing && draftDiaries.length < 1;
+    if (displayEmptyComponent) {
+      return (
+        <EmptyList
+          message={I18n.t('draftDiary.empty')}
+          iconName="book-open-variant"
+        />
+      );
+    }
+    return null;
+  }, [draftDiaries.length, isLoading, refreshing]);
 
   const listFooterComponent =
-    isLoading && !refreshing && draftDiaries.length > 0 ? (
+    isLoading && !refreshing && draftDiaries && draftDiaries.length > 0 ? (
       <ActivityIndicator />
     ) : null;
 
@@ -315,6 +301,7 @@ const DraftDiaryListScreen: ScreenType = ({
         keyExtractor={keyExtractor}
         refreshing={refreshing}
         renderItem={renderItem}
+        ListEmptyComponent={listEmptyComponent}
         ListHeaderComponent={listHeaderComponent}
         ListFooterComponent={listFooterComponent}
         onEndReached={loadNextPage}

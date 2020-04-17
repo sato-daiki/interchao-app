@@ -6,7 +6,6 @@ import { LocalStatus } from './localStatus';
 import { User } from './user';
 import { Profile } from './profile';
 import { DiaryListState } from '../stores/reducers/diaryList';
-import { DraftDiaryListState } from '../stores/reducers/draftDiaryList';
 import { TeachDiaryListState } from '../stores/reducers/teachDiaryList';
 import { SetUserAction } from '../stores/actions/user';
 import { SetProfileAction } from '../stores/actions/profile';
@@ -17,13 +16,6 @@ import {
   EditDiaryAction,
   DeleteDiaryAction,
 } from '../stores/actions/diaryList';
-import {
-  SetDraftDiariesAction,
-  SetDraftDiaryTotalNumAction,
-  AddDraftDiaryAction,
-  EditDraftDiaryAction,
-  DeleteDraftDiaryAction,
-} from '../stores/actions/draftDiaryList';
 import {
   SetTeachDiariesAction,
   EditTeachDiaryAction,
@@ -50,11 +42,6 @@ export type Actions =
   | AddDiaryAction
   | EditDiaryAction
   | DeleteDiaryAction
-  | SetDraftDiariesAction
-  | SetDraftDiaryTotalNumAction
-  | DeleteDraftDiaryAction
-  | AddDraftDiaryAction
-  | EditDraftDiaryAction
   | SetTeachDiariesAction
   | EditTeachDiaryAction;
 

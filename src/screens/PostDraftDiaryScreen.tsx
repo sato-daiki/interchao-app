@@ -25,7 +25,6 @@ interface Props {
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
   deleteDraftDiary: (objectID: string) => void;
-  editDraftDiary: (objectID: string, draftDiary: Diary) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -44,7 +43,6 @@ const PostDraftDiaryScreen: ScreenType = ({
   setUser,
   addDiary,
   deleteDraftDiary,
-  editDraftDiary,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
@@ -96,14 +94,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         await refDiary.update(diary);
 
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
-
-        // reduxに追加
-        editDraftDiary(item.objectID, {
-          ...item,
-          title,
-          text,
-        });
-        navigation.navigate('DraftDiaryList');
+        navigation.navigate('MyDiaryList');
         setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
@@ -112,15 +103,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       }
     };
     f();
-  }, [
-    editDraftDiary,
-    getDiary,
-    isLoading,
-    isModalLack,
-    navigation,
-    text,
-    title,
-  ]);
+  }, [getDiary, isLoading, isModalLack, navigation]);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
