@@ -170,7 +170,6 @@ const CorrectingScreen: ScreenType = ({
 
       const displayProfile = getDisplayProfile(currentProfile);
       const comments = getComments(infoComments);
-      const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
       const getPoints = getUsePoints(
         teachDiary.text.length,
@@ -189,11 +188,10 @@ const CorrectingScreen: ScreenType = ({
           profile: displayProfile,
           comments,
           summary,
-          createdAt: timestamp,
-          updatedAt: timestamp,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
-        // 日記のステータスを未読に変更する
+        // // 日記のステータスを未読に変更する
         const newCorrection = {
           id: correctionRef.id,
           profile: displayProfile,
@@ -215,7 +213,7 @@ const CorrectingScreen: ScreenType = ({
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
-        // correctingsの削除
+        // // correctingsの削除
         const correctingRef = firebase
           .firestore()
           .doc(`correctings/${teachDiary.objectID}`);
@@ -243,9 +241,9 @@ const CorrectingScreen: ScreenType = ({
     currentProfile,
     infoComments,
     user,
+    summary,
     editTeachDiary,
     setUser,
-    summary,
   ]);
 
   /**

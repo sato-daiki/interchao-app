@@ -176,24 +176,18 @@ export const updateYet = async (
   objectID: string,
   uid: string
 ): Promise<void> => {
-  await firebase
-    .firestore()
-    .doc(`diaries/${objectID}`)
-    .update({
-      correctionStatus: 'yet',
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  const batch = firebase.firestore().batch();
+  batch.update(firebase.firestore().doc(`diaries/${objectID}`), {
+    correctionStatus: 'yet',
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
 
-  await firebase
-    .firestore()
-    .doc(`correctings/${objectID}`)
-    .delete();
+  batch.delete(firebase.firestore().doc(`correctings/${objectID}`));
 
-  await firebase
-    .firestore()
-    .doc(`users/${uid}`)
-    .update({
-      correctingObjectID: null,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  batch.update(firebase.firestore().doc(`users/${uid}`), {
+    correctingObjectID: null,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+
+  batch.commit();
 };

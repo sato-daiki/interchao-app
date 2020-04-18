@@ -12,5 +12,4 @@ export interface Correction {
   comments: Comment[];
   summary: string;
   createdAt: firebase.firestore.FieldValue;
-  updatedAt: firebase.firestore.FieldValue;
 }

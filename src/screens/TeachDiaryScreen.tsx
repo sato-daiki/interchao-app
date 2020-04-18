@@ -141,11 +141,11 @@ const TeachDiaryScreen: ScreenType = ({
           setIsLoading(false);
           return;
         }
-
+        const batch = firebase.firestore().batch();
         // 以後メッセージを表示しないにチェックが入っている時の処理
         if (checked) {
           const userRef = firebase.firestore().doc(`users/${user.uid}`);
-          await userRef.update({
+          batch.update(userRef, {
             confirmCorrection: true,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
@@ -157,7 +157,7 @@ const TeachDiaryScreen: ScreenType = ({
 
         //  添削中のobjectIDを更新する
         const userRef = firebase.firestore().doc(`users/${user.uid}`);
-        await userRef.update({
+        batch.update(userRef, {
           correctingObjectID: teachDiary.objectID,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
@@ -166,21 +166,20 @@ const TeachDiaryScreen: ScreenType = ({
           correctingObjectID: teachDiary.objectID,
         });
 
-        //  添削中一覧に追加する
+        // //  添削中一覧に追加する
         const correctingRef = firebase
           .firestore()
           .doc(`correctings/${teachDiary.objectID}`);
-        await correctingRef.set({
+        batch.set(correctingRef, {
           uid: user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
-        //  日記のステータスを添削中に変更する
+        // //  日記のステータスを添削中に変更する
         const diaryRef = firebase
           .firestore()
           .doc(`diaries/${teachDiary.objectID}`);
-        await diaryRef.update({
+        batch.update(diaryRef, {
           correctionStatus: 'correcting',
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
@@ -189,7 +188,7 @@ const TeachDiaryScreen: ScreenType = ({
           ...teachDiary,
           correctionStatus: 'correcting',
         });
-
+        batch.commit();
         navigation.navigate('Correcting', { objectID: teachDiary.objectID });
         setIsLoading(false);
         setIsModalCorrection(false);
