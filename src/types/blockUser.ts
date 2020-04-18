@@ -1,5 +1,5 @@
 export interface BlockUser {
-  blockeeId: string;
-  blockerId: string;
+  blockerUid: string;
+  blockeeUid: string;
   createdAt: firebase.firestore.FieldValue;
 }

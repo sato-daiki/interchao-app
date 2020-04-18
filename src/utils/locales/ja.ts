@@ -448,7 +448,7 @@ const report = {
   inappropriate: '不適切である',
   reportedTitle: 'ご報告ありがとうございます',
   reportedDescription:
-    'いただいた情報はホワイトジブラをより安全なものにするために役立たせていただきます。',
+    'いただいた情報はインターチャオをより安全なものにするために役立たせていただきます。',
 };
 
 const postDiaryComponent = {

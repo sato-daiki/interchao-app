@@ -7,3 +7,5 @@ export * from './correcting';
 export * from './review';
 export * from './userReview';
 export * from './correction';
+export * from './blockUser';
+export * from './report';
