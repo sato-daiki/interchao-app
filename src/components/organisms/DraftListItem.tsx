@@ -105,8 +105,8 @@ const DraftListItem = ({
   onSwipeableOpen,
   onSwipeableClose,
 }: Props): JSX.Element => {
-  const { createdAt, title, text } = item;
-  const postDay = getAlgoliaDay(createdAt);
+  const { updatedAt, title, text } = item;
+  const postDay = getAlgoliaDay(updatedAt);
 
   const renderRightActions = (
     progress: Animated.AnimatedInterpolation,

@@ -11,7 +11,11 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
-import { checkBeforePost, getUsePoints } from '../utils/diary';
+import {
+  checkBeforePost,
+  getUsePoints,
+  getDisplayProfile,
+} from '../utils/diary';
 import I18n from '../utils/I18n';
 
 interface Props {
@@ -50,14 +54,7 @@ const PostDiaryScreen: ScreenType = ({
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
-      const displayProfile: DisplayProfile = {
-        uid: profile.uid,
-        pro: profile.pro,
-        userName: profile.userName,
-        photoUrl: profile.photoUrl,
-        learnLanguage: profile.learnLanguage,
-        nativeLanguage: profile.nativeLanguage,
-      };
+      const displayProfile = getDisplayProfile(profile);
 
       return {
         premium: user.premium,
@@ -76,39 +73,32 @@ const PostDiaryScreen: ScreenType = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [
-      profile.learnLanguage,
-      profile.nativeLanguage,
-      profile.photoUrl,
-      profile.pro,
-      profile.uid,
-      profile.userName,
-      text,
-      title,
-      user.premium,
-    ]
+    [profile, text, title, user.premium]
   );
 
   const onPressDraft = useCallback(() => {
-    Keyboard.dismiss();
-    if (isLoading || isModalLack) return;
-    try {
-      setIsLoading(true);
-      const diary = getDiary('draft');
-      firebase
-        .firestore()
-        .collection('diaries')
-        .add(diary);
+    const f = async (): Promise<void> => {
+      Keyboard.dismiss();
+      if (isLoading || isModalLack) return;
+      try {
+        setIsLoading(true);
+        const diary = getDiary('draft');
+        await firebase
+          .firestore()
+          .collection('diaries')
+          .add(diary);
 
-      track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
 
-      navigation.navigate('MyDiaryList');
-      setIsLoading(false);
-      setIsModalAlert(false);
-    } catch (err) {
-      setIsLoading(false);
-      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
-    }
+        navigation.navigate('MyDiaryList');
+        setIsLoading(false);
+        setIsModalAlert(false);
+      } catch (err) {
+        setIsLoading(false);
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+      }
+    };
+    f();
   }, [getDiary, isLoading, isModalLack, navigation]);
 
   const onPressClose = useCallback((): void => {
@@ -148,13 +138,12 @@ const PostDiaryScreen: ScreenType = ({
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (isLoading) return;
-
       setIsLoading(true);
       const diary = getDiary('publish');
       const usePoints = getUsePoints(text.length, profile.learnLanguage);
       const newPoints = user.points - usePoints;
-
-      // 日記の更新とpointsの生合成をとるためtransactionを使う
+      let diaryId = '';
+      // 日記の更新とpointsの整合性をとるためtransactionを使う
       await firebase
         .firestore()
         .runTransaction(async transaction => {
@@ -162,7 +151,7 @@ const PostDiaryScreen: ScreenType = ({
             .firestore()
             .collection('diaries')
             .doc();
-
+          diaryId = diaryRef.id;
           transaction.set(diaryRef, diary);
 
           const refUser = firebase.firestore().doc(`users/${user.uid}`);
@@ -170,27 +159,26 @@ const PostDiaryScreen: ScreenType = ({
             points: newPoints,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
-
-          track(events.CREATED_DIARY, { diaryStatus: 'publish' });
-          // reduxに追加
-          addDiary({
-            objectID: diaryRef.id,
-            ...diary,
-          });
-          setUser({
-            ...user,
-            points: newPoints,
-          });
-
-          navigation.navigate('MyDiaryList');
-          setIsLoading(false);
-          setIsModalAlert(false);
         })
         .catch(err => {
           setIsLoading(false);
           console.log(err);
           Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         });
+      track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+      // reduxに追加
+      addDiary({
+        objectID: diaryId,
+        ...diary,
+      });
+      setUser({
+        ...user,
+        points: newPoints,
+      });
+
+      navigation.navigate('MyDiaryList');
+      setIsLoading(false);
+      setIsModalAlert(false);
     };
     f();
   }, [
@@ -245,7 +233,7 @@ const PostDiaryScreen: ScreenType = ({
         navigation.navigate('TeachDiaryList');
       }}
       // onValueChangePublic={(): void => setIsPublic(!isPublic)}
-      onPressCloseModalPublic={(): void => setIsModalAlert(false)}
+      onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
       onChangeTextTitle={(txt: string): void => setTitle(txt)}
       onChangeTextText={(txt: string): void => setText(txt)}
