@@ -1,0 +1,303 @@
+rules_version = '2';
+service cloud.firestore {
+	// user
+  function isValidUsers(user) {
+  	return user.size() == 12
+    	&& "premium" in user && user.premium is bool
+    	&& "confirmCorrection" in user && user.confirmCorrection is bool
+    	&& "tutorialPostDiary" in user && user.tutorialPostDiary is bool
+    	&& "tutorialTeachDiaryList" in user && user.tutorialTeachDiaryList is bool
+    	&& "tutorialCorrectiong" in user && user.tutorialCorrectiong is bool
+    	&& "points" in user && user.points is int
+    	&& "expoPushToken" in user
+    	&& (user.expoPushToken == null || user.expoPushToken is string)
+    	&& "correctingObjectID" in user
+    	&& (user.correctingObjectID == null || user.correctingObjectID is string)
+    	&& "notificationCorrection" in user && user.notificationCorrection is bool
+    	&& "notificationReview" in user && user.notificationReview is bool
+    	&& "createdAt" in user && user.createdAt is timestamp
+    	&& "updatedAt" in user && user.updatedAt is timestamp
+  }
+  
+  // profile
+  function isValidProfiles(profile) {
+  	return profile.size() == 9
+    	&& "name" in profile
+    	&& (profile.name == null || profile.name is string)
+    	&& "userName" in profile && profile.userName is string
+    	&& "photoUrl" in profile 
+    	&& (profile.photoUrl == null || profile.photoUrl is string)
+    	&& "pro" in profile && profile.pro is bool
+    	&& "learnLanguage" in profile && profile.learnLanguage is string
+    	&& "nativeLanguage" in profile && profile.nativeLanguage is string
+    	&& "introduction" in profile
+    	&& (profile.introduction == null || profile.introduction is string)
+    	&& "createdAt" in profile && profile.createdAt is timestamp
+    	&& "updatedAt" in profile && profile.updatedAt is timestamp
+  }
+  
+  // userReview
+  function isValidUserReviews(userReview) {
+  	return userReview.size() == 5
+    	&& "ratingSum" in userReview && userReview.ratingSum is int
+      && "reviewNum" in userReview && userReview.reviewNum is int
+      && "score" in userReview && userReview.score is number
+     	&& "createdAt" in userReview && userReview.createdAt is timestamp
+    	&& "updatedAt" in userReview && userReview.updatedAt is timestamp
+  }
+  
+  // displayProfiles
+  function isValidDisplayProfiles(profile) {
+  	return profile.size() == 6
+    	&& "uid" in profile && profile.uid is string
+      && "pro" in profile && profile.pro is bool
+      && "userName" in profile && profile.userName is string
+      && "photoUrl" in profile
+      && (profile.photoUrl == null || profile.photoUrl is string)
+      && "learnLanguage" in profile && profile.learnLanguage is string
+ 			&& "nativeLanguage" in profile && profile.nativeLanguage is string
+  }
+  
+  // displayCorrections
+  function isValidDisplayCorrections(correction) {
+  	return correction.size() == 2
+    	&& "id" in correction && correction.id is string
+    	&& isValidDisplayProfiles(correction.profile)
+  }
+  
+  // diaries
+  function isValidDiaries(diary) {
+  	return diary.size() == 14
+    	&& "premium" in diary && diary.premium is bool
+    	&& "isPublic" in diary && diary.isPublic is bool
+    	&& "title" in diary && diary.title is string
+    	&& "text" in diary && diary.text is string
+      && isValidDisplayProfiles(diary.profile)
+    	&& "diaryStatus" in diary && diary.diaryStatus is string
+      && (diary.correction == null || isValidDisplayCorrections(diary.correction))
+      && (diary.proCorrection == null || isValidDisplayCorrections(diary.proCorrection))
+    	&& "correctionStatus" in diary && diary.correctionStatus is string
+      && "correctionStatusPro" in diary && diary.correctionStatusPro is string
+    	&& "isReview" in diary && diary.isReview is bool
+    	&& "isReviewPro" in diary && diary.isReviewPro is bool
+      && "createdAt" in diary && diary.createdAt is timestamp
+    	&& "updatedAt" in diary && diary.updatedAt is timestamp  
+  }
+    
+  
+  match /databases/{database}/documents {
+  	function user(uid) {
+    	return /databases/$(database)/documents/users/$(uid)
+    }
+    
+    function profile(uid) {
+    	return /databases/$(database)/documents/profiles/$(uid)
+    }
+    
+    function userReview(uid) {
+    	return /databases/$(database)/documents/userReviews/$(uid)
+    }
+    
+    match /users/{uid} {
+    	// アカウント所持者だけが参照可能
+    	allow get: if request.auth != null
+      	&& request.auth.uid == uid;
+        
+      allow create: if request.auth != null
+      	&& request.auth.uid == uid
+        && isValidUsers(request.resource.data)
+    		// 初期値
+        && request.resource.data.premium == false
+        && request.resource.data.confirmCorrection == false
+        && request.resource.data.tutorialPostDiary == false
+        && request.resource.data.tutorialTeachDiaryList == false
+        && request.resource.data.tutorialCorrectiong == false
+        && request.resource.data.points >= 0
+        && request.resource.data.expoPushToken == null
+        && request.resource.data.correctingObjectID == null
+        && request.resource.data.notificationCorrection == true
+        && request.resource.data.notificationReview == true
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        // 同一トランザクション内でprofireとusrReviewが作成される
+        && !exists(profile(request.auth.uid))
+        && existsAfter(profile(request.auth.uid))
+        && !exists(userReview(request.auth.uid))
+        && existsAfter(userReview(request.auth.uid));
+        
+      // ポイントの変更
+      allow update: if request.auth != null
+      	&& request.auth.uid == uid
+        && isValidUsers(request.resource.data)
+        // 10ポイント以上減っている or 増えていること
+        && (request.resource.data.points <= resource.data.points - 10 
+        	|| request.resource.data.points >= resource.data.points + 10 )
+        // 0以下にはならない
+        && request.resource.data.points >= 0
+        // 他は変わらないこと
+        && request.resource.data.premium == resource.data.premium
+        && request.resource.data.confirmCorrection == resource.data.confirmCorrection
+        && request.resource.data.tutorialPostDiary == resource.data.tutorialPostDiary
+        && request.resource.data.tutorialTeachDiaryList == resource.data.tutorialTeachDiaryList
+        && request.resource.data.tutorialCorrectiong == resource.data.tutorialCorrectiong
+        && request.resource.data.expoPushToken == resource.data.expoPushToken
+        && request.resource.data.correctingObjectID == resource.data.correctingObjectID
+        && request.resource.data.notificationCorrection == resource.data.notificationCorrection
+        && request.resource.data.notificationReview == resource.data.notificationReview
+        && request.resource.data.createdAt == resource.data.createdAt;
+        
+      // expoPushToken
+			allow update: if request.auth != null
+        && request.auth.uid == uid
+        && isValidUsers(request.resource.data)
+        // 他が変わらないこと
+        && request.resource.data.premium == resource.data.premium
+        && request.resource.data.confirmCorrection == resource.data.confirmCorrection
+        && request.resource.data.tutorialPostDiary == resource.data.tutorialPostDiary
+        && request.resource.data.tutorialTeachDiaryList == resource.data.tutorialTeachDiaryList
+        && request.resource.data.tutorialCorrectiong == resource.data.tutorialCorrectiong
+        && request.resource.data.points == resource.data.points
+        && request.resource.data.correctingObjectID == resource.data.correctingObjectID
+        && request.resource.data.notificationCorrection == resource.data.notificationCorrection
+        && request.resource.data.notificationReview == resource.data.notificationReview
+        && request.resource.data.createdAt == resource.data.createdAt;
+        
+      // その他のフラグの更新（confirmCorrection, tutorialPostDiary,tutorialTeachDiaryList, tutorialCorrectiong, notificationCorrection, notificationReview ）
+      allow update: if request.auth != null
+        && request.auth.uid == uid
+        && isValidUsers(request.resource.data)
+        && request.resource.data.premium == resource.data.premium
+        && request.resource.data.points == resource.data.points
+        && request.resource.data.expoPushToken == resource.data.expoPushToken
+        && request.resource.data.correctingObjectID == resource.data.correctingObjectID
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+    
+    match /profiles/{uid} {
+    	// 誰でも参照可能
+      allow read;
+      
+      allow create: if request.auth != null
+      	&& request.auth.uid == uid
+        && isValidProfiles(request.resource.data)
+        && request.resource.data.name == null
+        && request.resource.data.userName.size() <= 20
+        && request.resource.data.photoUrl == null
+        && request.resource.data.pro == false
+        && request.resource.data.learnLanguage in ["ja", "en"] 
+        && request.resource.data.nativeLanguage in ["ja", "en"] 
+        && request.resource.data.learnLanguage != request.resource.data.nativeLanguage
+        && request.resource.data.introduction == null
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        // 同一トランザクション内でuserとusrReviewが作成される
+        && !exists(user(request.auth.uid))
+        && existsAfter(user(request.auth.uid))
+        && !exists(userReview(request.auth.uid))
+        && existsAfter(userReview(request.auth.uid));
+        
+      // プロフィールの更新はアカウント所持者だけがしかできない
+      allow update: if request.auth != null
+      	&& request.auth.uid == uid
+        && isValidProfiles(request.resource.data)
+        && request.resource.data.name.size() <= 20
+        && request.resource.data.userName.size() <= 20
+        && request.resource.data.introduction.size() <= 200
+   			// 修正箇所以外は変わっていないこと
+        && request.resource.data.pro == resource.data.pro
+        && request.resource.data.learnLanguage == resource.data.learnLanguage
+        && request.resource.data.nativeLanguage == resource.data.nativeLanguage
+        && request.resource.data.learnLanguage != request.resource.data.nativeLanguage
+        && request.resource.data.createdAt == resource.data.createdAt
+    }
+    
+    match /userReviews/{uid} {
+    	// 誰でも参照可能
+      allow read;
+      
+    	allow create: if request.auth != null
+      	&& request.auth.uid == uid
+        && isValidUserReviews(request.resource.data)
+        && request.resource.data.ratingSum == 0
+        && request.resource.data.reviewNum == 0
+        && request.resource.data.score == 0.0
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        // 同一トランザクション内でuserとprofireが作成される
+        && !exists(user(request.auth.uid))
+        && existsAfter(user(request.auth.uid))
+        && !exists(profile(request.auth.uid))
+        && existsAfter(profile(request.auth.uid));
+    }
+    
+    match /diaries/{id} {
+    	// 誰でも参照可能
+      allow read;
+      
+      // 新規で投稿
+      allow create: if request.auth != null
+      	&& request.auth.uid == request.resource.data.profile.uid
+        && isValidDiaries(request.resource.data)
+        // statusは公開
+        && request.resource.data.diaryStatus == "publish" 
+        // タイトル、文字列は必須
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 3000        
+        && request.resource.data.correctionStatus == "yet"
+        && request.resource.data.correctionStatusPro == "yet"
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time
+        
+      // 新規で下書き投稿
+      allow create: if request.auth != null
+      	&& request.auth.uid == request.resource.data.profile.uid
+        && isValidDiaries(request.resource.data)
+        // statusは下書き
+      	&& request.resource.data.diaryStatus == "draft" 
+        // 下書きの場合タイトル、文字列は必須でない
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.text.size() <= 3000        
+        && request.resource.data.correctionStatus == "yet"
+        && request.resource.data.correctionStatusPro == "yet"
+        && request.resource.data.createdAt == request.time
+        
+      // 下書きから下書きで保存
+      allow update: if request.auth != null
+      	&& request.auth.uid == request.resource.data.profile.uid
+        && isValidDiaries(request.resource.data)
+        // 下書きから下書き
+        && resource.data.diaryStatus == "draft" 
+      	&& request.resource.data.diaryStatus == "draft"
+        // 下書きの場合タイトル、文字列は必須でない
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.text.size() <= 3000   
+        && request.resource.data.premium == resource.data.premium
+        && request.resource.data.correctionStatus == "yet"
+        && request.resource.data.correctionStatusPro == "yet"
+        && request.resource.data.createdAt == resource.data.createdAt
+        
+      // 下書きから公開
+      allow update: if request.auth != null
+      	&& request.auth.uid == request.resource.data.profile.uid
+        && isValidDiaries(request.resource.data)
+        // 下書きから公開
+        && resource.data.diaryStatus == "draft" 
+      	&& request.resource.data.diaryStatus == "publish"
+        // タイトル、文字列は必須
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 100
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 3000      
+        && request.resource.data.premium == resource.data.premium
+        && request.resource.data.correctionStatus == "yet"
+        && request.resource.data.correctionStatusPro == "yet"
+        && request.resource.data.createdAt == resource.data.createdAt
+              
+      // 削除
+      allow delete: if request.auth != null
+      	&& request.auth.uid == resource.data.profile.uid
+    }
+  }
+}
