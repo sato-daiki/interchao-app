@@ -594,27 +594,24 @@ const CorrectingScreen: ScreenType = ({
   );
   return (
     <SafeAreaView style={styles.safeAreaView}>
+      <LoadingModal visible={isLoading} />
+      <ModalTimeUp visible={isModalTimeUp} onPressClose={onPressCloseTimeUp} />
+      <ModalCorrectingDone
+        visible={isModalDone}
+        getPoints={getPoints}
+        points={user.points}
+        onPressClose={onPressCloseDone}
+      />
+      <TutorialCorrecting
+        isLoading={isTutorialLoading}
+        displayed={tutorialCorrectiong}
+        onPress={onPressTutorial}
+      />
       <KeyboardAwareScrollView
         style={styles.container}
         keyboardShouldPersistTaps="handled"
         extraScrollHeight={32}
       >
-        <LoadingModal visible={isLoading} />
-        <ModalTimeUp
-          visible={isModalTimeUp}
-          onPressClose={onPressCloseTimeUp}
-        />
-        <ModalCorrectingDone
-          visible={isModalDone}
-          getPoints={getPoints}
-          points={user.points}
-          onPressClose={onPressCloseDone}
-        />
-        <TutorialCorrecting
-          isLoading={isTutorialLoading}
-          displayed={tutorialCorrectiong}
-          onPress={onPressTutorial}
-        />
         <View style={styles.main}>
           <CorrectionOrigin
             isEmpty={!isCommentInput && infoComments.length === 0}
