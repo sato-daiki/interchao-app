@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {
+  View,
   StyleSheet,
   TouchableOpacity,
   FlatList,
@@ -21,7 +22,14 @@ import {
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
 import { Space, GrayHeader } from '../components/atoms';
-import { Diary, Profile, UserReview, Review } from '../types';
+import {
+  Diary,
+  Profile,
+  UserReview,
+  Review,
+  BlockUser,
+  Report as ReportType,
+} from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, linkBlue, fontSizeM } from '../styles/Common';
 import Report from '../components/organisms/Report';
@@ -212,6 +220,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, [diaries, navigation.state.params, page, readAllResults, readingNext]);
 
   const onPressBlock = useCallback(() => {
+    setIsBlockSuccess(false);
     setIsModalBlock(true);
   }, []);
 
@@ -220,11 +229,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     setIsReport(true);
   }, []);
 
-  const onPressMore = useCallback(() => {
+  const onPressMore = () => {
     const options = [
-      !isBlocked
-        ? I18n.t('userProfile.blocked')
-        : I18n.t('userProfile.unBlocked'),
+      isBlocked
+        ? I18n.t('userProfile.unBlocked')
+        : I18n.t('userProfile.blocked'),
       I18n.t('userProfile.report'),
       I18n.t('common.cancel'),
     ];
@@ -245,7 +254,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         }
       }
     );
-  }, [isBlocked, onPressBlock, onPressReport, showActionSheetWithOptions]);
+  };
 
   useEffect(() => {
     navigation.setParams({ onPressMore });
@@ -264,21 +273,21 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         return;
       }
       setIsLoading(true);
+      const newBlockUser = {
+        blockerUid: currentUser.uid,
+        blockeeUid: profile.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      } as BlockUser;
       await firebase
         .firestore()
         .collection(`blockUsers`)
-        .add({
-          blockerUid: currentUser.uid,
-          blockeeUid: profile.uid,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+        .add(newBlockUser);
       setIsBlockSuccess(true);
       setIsLoading(false);
       setIsBlocked(true);
     };
     f();
-  }, [profile]);
+  }, [profile, setIsBlocked]);
 
   const onPressUnblockSubmit = useCallback((): void => {
     const f = async (): Promise<void> => {
@@ -328,8 +337,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             targetUid: profile.uid,
             reason,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          } as ReportType);
         setIsLoading(false);
         setIsReportSuccess(true);
       };
@@ -404,12 +412,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
+    <View style={styles.container}>
       <ModalConfirm
         visible={isModalDeleted}
         title={I18n.t('common.error')}
@@ -433,36 +436,43 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onReportSubmit={onReportSubmit}
         onReportClose={(): void => setIsReport(false)}
       />
-      {profile && !loadingProfile ? (
-        <UserProfileHeader profile={profile} userReview={userReview} />
-      ) : (
-        <ActivityIndicator />
-      )}
-      <FlatList
-        data={topReviews}
-        keyExtractor={keyExtractor}
-        renderItem={renderReview}
-        ListHeaderComponent={listHeaderReviewComponent}
-        ListEmptyComponent={listEmptyReviewComponent}
-        ListFooterComponent={listFooterReviewComponent}
-      />
-      {!!reviewNum && reviewNum > 3 ? (
-        <TouchableOpacity style={styles.moreRead} onPress={onPressMoreReview}>
-          <Text style={styles.moreReadText}>
-            {I18n.t('userProfile.moreRead', { count: reviewNum })}
-          </Text>
-        </TouchableOpacity>
-      ) : null}
-      <FlatList
-        data={diaries}
-        keyExtractor={keyExtractor}
-        renderItem={renderDiary}
-        ListHeaderComponent={listHeaderDiaryComponent}
-        ListEmptyComponent={listEmptyDiaryComponent}
-        ListFooterComponent={listFooterDiaryComponent}
-        onEndReached={loadNextPage}
-      />
-    </ScrollView>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {profile && !loadingProfile ? (
+          <UserProfileHeader profile={profile} userReview={userReview} />
+        ) : (
+          <ActivityIndicator />
+        )}
+        <FlatList
+          data={topReviews}
+          keyExtractor={keyExtractor}
+          renderItem={renderReview}
+          ListHeaderComponent={listHeaderReviewComponent}
+          ListEmptyComponent={listEmptyReviewComponent}
+          ListFooterComponent={listFooterReviewComponent}
+        />
+        {!!reviewNum && reviewNum > 3 ? (
+          <TouchableOpacity style={styles.moreRead} onPress={onPressMoreReview}>
+            <Text style={styles.moreReadText}>
+              {I18n.t('userProfile.moreRead', { count: reviewNum })}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+        <FlatList
+          data={diaries}
+          keyExtractor={keyExtractor}
+          renderItem={renderDiary}
+          ListHeaderComponent={listHeaderDiaryComponent}
+          ListEmptyComponent={listEmptyDiaryComponent}
+          ListFooterComponent={listFooterDiaryComponent}
+          onEndReached={loadNextPage}
+        />
+      </ScrollView>
+    </View>
   );
 };
 

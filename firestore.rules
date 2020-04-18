@@ -126,8 +126,8 @@ service cloud.firestore {
   // blockUser
   function isValidBlockUsers(blockUser) {
     return blockUser.size() == 3
-      && "blockeeId" in blockUser && blockUser.blockee is string
-    	&& "blockerId" in blockUser && blockUser.blocker is string
+      && "blockerUid" in blockUser && blockUser.blockerUid is string
+    	&& "blockeeUid" in blockUser && blockUser.blockeeUid is string
       && "createdAt" in blockUser && blockUser.createdAt is timestamp
   }
 
@@ -157,6 +157,7 @@ service cloud.firestore {
     	&& (reviewer.photoUrl == null || reviewer.photoUrl is string)
   }
 
+  // reviews
   function isValidReviews(review) {
     return review.size() == 6
       && isValidReviewers(review.reviewer)
@@ -166,6 +167,18 @@ service cloud.firestore {
       && "comment" in review && review.comment is string
       && "createdAt" in review && review.createdAt is timestamp
   }
+
+  // report
+  function isValidReports(report) {
+    return report.size() == 4
+      && "uid" in report && report.uid is string
+      && "targetUid" in report && report.targetUid is string 
+      && "reason" in report && report.reason is string 
+      && "createdAt" in report && report.createdAt is timestamp
+  }
+  
+
+  
   
   match /databases/{database}/documents {
   	function user(uid) {
@@ -441,6 +454,14 @@ service cloud.firestore {
       allow list: if request.auth != null
       	&& (request.auth.uid == resource.data.blockerUid
           || request.auth.uid == resource.data.blockeeUid);
+
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.blockerUid
+        && request.resource.data.createdAt == request.time
+        && isValidBlockUsers(request.resource.data);
+
+      allow delete: if request.auth != null
+        && request.auth.uid == resource.data.blockerUid;
     }
 
     match /correctings/{id} {
@@ -478,7 +499,14 @@ service cloud.firestore {
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.reviewer.uid
         && request.resource.data.createdAt == request.time
-        // && isValidReviews(request.resource.data)
+        && isValidReviews(request.resource.data)
+    }
+
+    match /reports/{id} {
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.uid
+        && request.resource.data.createdAt == request.time
+        && isValidReports(request.resource.data)
     }
   }
 }
