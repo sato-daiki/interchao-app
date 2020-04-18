@@ -119,17 +119,16 @@ service cloud.firestore {
       && request.resource.data.diaryStatus == resource.data.diaryStatus
       && request.resource.data.proCorrection == resource.data.proCorrection
       && request.resource.data.correctionStatusPro == resource.data.correctionStatusPro
-      && request.resource.data.isReview == resource.data.isReview
       && request.resource.data.isReviewPro == resource.data.isReviewPro
       && request.resource.data.createdAt == resource.data.createdAt
   }
 
   // blockUser
   function isValidBlockUsers(blockUser) {
-    return blockUsers.size() == 3
-      && "blockeeId" in blockUser && blockee.blockee is string
-    	&& "blockerId" in blockUser && blockee.blocker is string
-      && "createdAt" in blockUser && blockee.createdAt is timestamp
+    return blockUser.size() == 3
+      && "blockeeId" in blockUser && blockUser.blockee is string
+    	&& "blockerId" in blockUser && blockUser.blocker is string
+      && "createdAt" in blockUser && blockUser.createdAt is timestamp
   }
 
   // correcting
@@ -147,6 +146,25 @@ service cloud.firestore {
       && "comments" in correction && correction.comments is list
       && "summary" in correction && correction.summary is string
       && "createdAt" in correction && correction.createdAt is timestamp
+  }
+
+  // review
+  function isValidReviewers(reviewer) {
+    return reviewer.size() == 3
+      && "uid" in reviewer && reviewer.uid is string
+      && "userName" in reviewer && reviewer.userName is string
+      && "photoUrl" in reviewer
+    	&& (reviewer.photoUrl == null || reviewer.photoUrl is string)
+  }
+
+  function isValidReviews(review) {
+    return review.size() == 6
+      && isValidReviewers(review.reviewer)
+      && "revieweeUid" in review && review.revieweeUid is string
+      && "objectID" in review && review.objectID is string
+      && "rating" in review && review.rating is int
+      && "comment" in review && review.comment is string
+      && "createdAt" in review && review.createdAt is timestamp
   }
   
   match /databases/{database}/documents {
@@ -200,11 +218,11 @@ service cloud.firestore {
       // 日記投稿：ポイントが減る
       allow update: if request.auth != null
       	&& request.auth.uid == uid
-        && isValidUsers(request.resource.data)
         // 10ポイント以上減っている
         && request.resource.data.points <= resource.data.points - 10 
         // 0以下にはならない
         && request.resource.data.points >= 0
+        && isValidUsers(request.resource.data)
         // 他は変わらないこと
         && request.resource.data.premium == resource.data.premium
         && request.resource.data.confirmCorrection == resource.data.confirmCorrection
@@ -220,13 +238,13 @@ service cloud.firestore {
       // 添削完了投稿：ポイントが増える
       allow update: if request.auth != null
       	&& request.auth.uid == uid
-        && isValidUsers(request.resource.data)
         // 10ポイント以上 増えていること
         && request.resource.data.points >= resource.data.points + 10 
         // 0以下にはならない
         && request.resource.data.points >= 0
         // correctingObjectIDはnull
         && request.resource.data.correctingObjectID == null
+        && isValidUsers(request.resource.data)
         // 他は変わらないこと
         && request.resource.data.premium == resource.data.premium
         && request.resource.data.confirmCorrection == resource.data.confirmCorrection
@@ -282,7 +300,7 @@ service cloud.firestore {
         && request.resource.data.learnLanguage == resource.data.learnLanguage
         && request.resource.data.nativeLanguage == resource.data.nativeLanguage
         && request.resource.data.learnLanguage != request.resource.data.nativeLanguage
-        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdAt == resource.data.createdAt;
     }
     
     match /userReviews/{uid} {
@@ -311,80 +329,111 @@ service cloud.firestore {
       // 新規で投稿
       allow create: if request.auth != null
       	&& request.auth.uid == request.resource.data.profile.uid
-        && isValidDiaries(request.resource.data)
         // statusは公開
         && request.resource.data.diaryStatus == "publish" 
         // 初期値チェック
         && isInitDiaryCreate(request.resource.data)
+        && isValidDiaries(request.resource.data)
         // titleとtextは入力必須
         && request.resource.data.title.size() > 0
-        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() > 0;
         
       // 新規で下書き投稿
       allow create: if request.auth != null
       	&& request.auth.uid == request.resource.data.profile.uid
-        && isValidDiaries(request.resource.data)
         // statusは下書き
       	&& request.resource.data.diaryStatus == "draft" 
         && isInitDiaryCreate(request.resource.data)
+        && isValidDiaries(request.resource.data);
         
       // 下書きから下書きで保存
       allow update: if request.auth != null
       	&& request.auth.uid == request.resource.data.profile.uid
-        && isValidDiaries(request.resource.data)
         // 下書きから下書き
         && resource.data.diaryStatus == "draft" 
       	&& request.resource.data.diaryStatus == "draft"
-        && isDraftDiaryUpdate(request, resource)
+        && isValidDiaries(request.resource.data)
+        && isDraftDiaryUpdate(request, resource);
 
       // 下書きから公開
       allow update: if request.auth != null
       	&& request.auth.uid == request.resource.data.profile.uid
-        && isValidDiaries(request.resource.data)
         // 下書きから公開
         && resource.data.diaryStatus == "draft" 
       	&& request.resource.data.diaryStatus == "publish"
+        && isValidDiaries(request.resource.data)
         // タイトル、文字列は必須
         && request.resource.data.title.size() > 0
         && request.resource.data.text.size() > 0
-        && isDraftDiaryUpdate(request, resource)
+        && isDraftDiaryUpdate(request, resource);
 
       // 添削を開始
       allow update: if request.auth != null
-        && isValidDiaries(request.resource.data)
         // 日記のステータスを変更
         && resource.data.correctionStatus == "yet" 
         && request.resource.data.correctionStatus == "correcting" 
+        // 更新は誰でもできる
+        && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
         && request.resource.data.correction == resource.data.correction
-        && isNoChangeCorrectionStatus(request, resource)
+        && request.resource.data.isReview == resource.data.isReview
+        && isNoChangeCorrectionStatus(request, resource);
       
       // 添削を途中破棄
       allow update: if request.auth != null
-        && isValidDiaries(request.resource.data)
-        // 日記のステータスを変更
+      // 日記のステータスを変更
         && resource.data.correctionStatus == "correcting" 
         && request.resource.data.correctionStatus == "yet" 
+        // 更新は誰でもできる
+        && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
         && request.resource.data.correction == resource.data.correction
-        && isNoChangeCorrectionStatus(request, resource)
+        && request.resource.data.isReview == resource.data.isReview
+        && isNoChangeCorrectionStatus(request, resource);
 
       // 添削完了
       allow update: if request.auth != null
+        // 添削した人
         && request.auth.uid == request.resource.data.correction.profile.uid
-        && isValidDiaries(request.resource.data)
         // 日記のステータスを変更
         && resource.data.correctionStatus == "correcting" 
         && request.resource.data.correctionStatus == "unread"
+        && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
+        && request.resource.data.isReview == resource.data.isReview
         && isNoChangeCorrectionStatus(request, resource)
         // correctingsが削除されること
         && exists(correcting(id))
-        && !existsAfter(correcting(id))  
+        && !existsAfter(correcting(id));
+
+      // 未読を開いた時
+      allow update: if request.auth != null
+        // 日記を書いた人
+      	&& request.auth.uid == request.resource.data.profile.uid
+        // 日記のステータスを変更
+        && resource.data.correctionStatus == "unread" 
+        && request.resource.data.correctionStatus == "done"
+        && isValidDiaries(request.resource.data)
+        // 他のステータスが変更されないこと
+        && request.resource.data.isReview == resource.data.isReview
+        && request.resource.data.correction == resource.data.correction
+        && isNoChangeCorrectionStatus(request, resource);
+      
+      // レビュー完了
+      allow update: if request.auth != null
+        // 日記を書いた人
+      	&& request.auth.uid == request.resource.data.profile.uid
+        // 日記のステータスを変更
+        && resource.data.isReview == false 
+        && request.resource.data.isReview == true
+        && isValidDiaries(request.resource.data)
+        // 他のステータスが変更されないこと
+        && request.resource.data.correction == resource.data.correction
+        && isNoChangeCorrectionStatus(request, resource);
               
       // 削除
       allow delete: if request.auth != null
-      	&& request.auth.uid == resource.data.profile.uid
+      	&& request.auth.uid == resource.data.profile.uid;
     }
 
     match /blockUsers/{id} {
@@ -397,10 +446,10 @@ service cloud.firestore {
     match /correctings/{id} {
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.uid
-        && isValidCorrectings(request.resource.data)
+        && isValidCorrectings(request.resource.data);
 
       allow delete: if request.auth != null
-        && request.auth.uid == resource.data.uid
+        && request.auth.uid == resource.data.uid;
     }
 
     match /corrections/{id} {
@@ -419,8 +468,17 @@ service cloud.firestore {
         && exists(diary(request.resource.data.objectID))
         // correctingsが削除されること
         && exists(correcting(request.resource.data.objectID))
-        && !existsAfter(correcting(request.resource.data.objectID))
+        && !existsAfter(correcting(request.resource.data.objectID));
+    }
 
+    match /reviews/{id} {
+      // 誰でも参照可能
+      allow read;
+
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.reviewer.uid
+        && request.resource.data.createdAt == request.time
+        // && isValidReviews(request.resource.data)
     }
   }
 }
