@@ -9,14 +9,7 @@ export const getCorrection = async (id: string): Promise<Correction | null> => {
       .get();
     const data = doc.data();
     if (data) {
-      const {
-        objectID,
-        profile,
-        comments,
-        summary,
-        createdAt,
-        updatedAt,
-      } = data;
+      const { objectID, profile, comments, summary, createdAt } = data;
 
       return {
         objectID,
@@ -24,7 +17,6 @@ export const getCorrection = async (id: string): Promise<Correction | null> => {
         comments,
         summary,
         createdAt,
-        updatedAt,
       };
     }
   } catch (e) {
