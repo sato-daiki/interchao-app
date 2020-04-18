@@ -404,6 +404,9 @@ service cloud.firestore {
     }
 
     match /corrections/{id} {
+      // 誰でも参照可能
+      allow read;
+
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.profile.uid
         && isValidCorrections(request.resource.data)
