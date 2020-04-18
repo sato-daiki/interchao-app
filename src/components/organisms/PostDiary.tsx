@@ -46,7 +46,7 @@ interface Props {
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   // onValueChangePublic: () => void;
-  onPressCloseModalPublic: () => void;
+  onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
@@ -143,7 +143,7 @@ const PostDiary = ({
   // onValueChangePublic,
   onPressSubmitModalLack,
   onPressCloseModalLack,
-  onPressCloseModalPublic,
+  onPressCloseModalPublish,
   onPressCloseModalCancel,
   onChangeTextTitle,
   onChangeTextText,
@@ -189,7 +189,7 @@ const PostDiary = ({
         points={points}
         // onValueChangePublic={onValueChangePublic}
         onPressSubmit={onPressSubmit}
-        onPressClose={onPressCloseModalPublic}
+        onPressClose={onPressCloseModalPublish}
       />
       <ModalDiaryCancel
         visible={isModalCancel}

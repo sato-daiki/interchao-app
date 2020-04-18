@@ -4,6 +4,8 @@ import {
   ALGOLIA_ADMIN_API_KEY,
 } from '@env';
 
+type SortType = 'createdAt' | 'updatedAt';
+
 class Algolia {
   private client: SearchClient;
 
@@ -29,20 +31,39 @@ class Algolia {
     return this.client.initIndex('dev_diaries');
   };
 
-  public setSettings = async (index: SearchIndex): Promise<void> => {
-    await index.setSettings({
-      ranking: [
-        'desc(createdAt._seconds)',
-        'typo',
-        'geo',
-        'words',
-        'filters',
-        'proximity',
-        'attribute',
-        'exact',
-        'custom',
-      ],
-    });
+  public setSettings = async (
+    index: SearchIndex,
+    sortType: SortType = 'createdAt'
+  ): Promise<void> => {
+    if (sortType === 'createdAt') {
+      await index.setSettings({
+        ranking: [
+          'desc(createdAt._seconds)',
+          'typo',
+          'geo',
+          'words',
+          'filters',
+          'proximity',
+          'attribute',
+          'exact',
+          'custom',
+        ],
+      });
+    } else if (sortType === 'updatedAt') {
+      await index.setSettings({
+        ranking: [
+          'desc(updatedAt._seconds)',
+          'typo',
+          'geo',
+          'words',
+          'filters',
+          'proximity',
+          'attribute',
+          'exact',
+          'custom',
+        ],
+      });
+    }
   };
 }
 

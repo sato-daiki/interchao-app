@@ -65,7 +65,7 @@ const PostDraftDiaryScreen: ScreenType = ({
     (diaryStatus: DiaryStatus) => {
       const displayProfile = getDisplayProfile(profile);
       return {
-        premium: user.premium || false,
+        premium: user.premium,
         isPublic: false,
         title,
         text,
@@ -89,14 +89,14 @@ const PostDraftDiaryScreen: ScreenType = ({
         setIsLoading(true);
         const diary = getDiary('draft');
         const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
-        refDiary.update(diary);
-
+        await refDiary.update(diary);
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
         navigation.navigate('MyDiaryList');
         setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
         setIsLoading(false);
+        console.log(err);
         Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
       }
     };
@@ -139,45 +139,51 @@ const PostDraftDiaryScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       Keyboard.dismiss();
       if (isLoading) return;
-      try {
-        const { params = {} } = navigation.state;
-        const { item }: { item: Diary } = params;
-        const usePoints = getUsePoints(text.length, profile.learnLanguage);
-        const newPoints = user.points - usePoints;
+      setIsLoading(true);
 
-        setIsLoading(true);
-        const diary = getDiary('publish');
-        const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
-        await refDiary.update(diary);
+      const { params = {} } = navigation.state;
+      const { item }: { item: Diary } = params;
+      const usePoints = getUsePoints(text.length, profile.learnLanguage);
+      const newPoints = user.points - usePoints;
+      const diary = getDiary('publish');
 
-        const refUser = firebase.firestore().doc(`users/${user.uid}`);
-        await refUser.update({
-          points: newPoints,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+      await firebase
+        .firestore()
+        .runTransaction(async transaction => {
+          const diaryRef = firebase.firestore().doc(`diaries/${item.objectID}`);
+          transaction.update(diaryRef, diary);
 
-        // reduxに追加
-        addDiary({
-          ...item,
-          isPublic: false,
-          title,
-          text,
-          diaryStatus: 'publish',
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        setUser({
-          ...user,
-          points: newPoints,
+          const userRef = firebase.firestore().doc(`users/${user.uid}`);
+          transaction.update(userRef, {
+            points: newPoints,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        })
+        .catch(err => {
+          setIsLoading(false);
+          console.log(err);
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
         });
 
-        navigation.navigate('MyDiaryList');
-        setIsLoading(false);
-        setIsModalAlert(false);
-      } catch (err) {
-        setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
-      }
+      track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+
+      // reduxに追加
+      addDiary({
+        ...item,
+        isPublic: false,
+        title,
+        text,
+        diaryStatus: 'publish',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      setUser({
+        ...user,
+        points: newPoints,
+      });
+
+      navigation.navigate('MyDiaryList');
+      setIsLoading(false);
+      setIsModalAlert(false);
     };
     f();
   }, [
@@ -212,7 +218,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         navigation.navigate('TeachDiaryList');
       }}
       // onValueChangePublic={(): void => setIsPublic(!isPublic)}
-      onPressCloseModalPublic={(): void => setIsModalAlert(false)}
+      onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
       onChangeTextTitle={(txt: string): void => setTitle(txt)}
       onChangeTextText={(txt: string): void => setText(txt)}

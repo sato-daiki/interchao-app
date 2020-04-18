@@ -100,7 +100,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
         if (!currentUser) return;
 
         const index = await Algolia.getDiaryIndex(clean);
-        await Algolia.setSettings(index);
+        await Algolia.setSettings(index, 'updatedAt');
         const res = await index.search('', {
           filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
           page: 0,
