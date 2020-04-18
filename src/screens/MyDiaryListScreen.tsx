@@ -56,7 +56,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   flatList: {
-    flex: 1,
+    // nullの時うまく行かない
+    // flex: 1,
+    // paddingBottom: 32,
   },
 });
 
@@ -217,22 +219,24 @@ const MyDiaryListScreen: ScreenType = ({
           if (isLoading) return;
           setIsLoading(true);
 
-          const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
-          // アプリの通知数を設定
-          Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
+          if (localStatus.unreadCorrectionNum) {
+            const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
+            // アプリの通知数を設定
+            Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
+            setLocalStatus({
+              ...localStatus,
+              unreadCorrectionNum: newUnreadCorrectionNum,
+            });
+          }
 
           // DBを更新
           await updateUnread(item.objectID);
-
           // reduxを更新
           editDiary(item.objectID, {
             ...item,
             correctionStatus: 'done',
           });
-          setLocalStatus({
-            ...localStatus,
-            unreadCorrectionNum: newUnreadCorrectionNum,
-          });
+
           setIsLoading(false);
         }
         navigation.navigate('MyDiary', { objectID: item.objectID });

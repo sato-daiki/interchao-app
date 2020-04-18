@@ -81,63 +81,54 @@ const ReviewScreen: ScreenType = ({
   }, [comment.length, navigation, rating]);
 
   const onPressSubmit = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      if (!diary || !diary.objectID) return;
-      if (isLoading) return;
-      if (rating === 0) {
-        Alert.alert('', I18n.t('errorMessage.invalidRaiting'));
-        return;
-      }
+    if (!diary || !diary.objectID) return;
+    const { currentUser } = firebase.auth();
+    if (!currentUser || !diary.correction) {
+      return;
+    }
+    if (isLoading) return;
+    if (rating === 0) {
+      Alert.alert('', I18n.t('errorMessage.invalidRaiting'));
+      return;
+    }
 
-      setIsLoading(true);
-      const refDiary = firebase.firestore().doc(`diaries/${diary.objectID}`);
-      await refDiary.update({
-        isReview: true,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    setIsLoading(true);
+    const batch = firebase.firestore().batch();
 
-      const { currentUser } = firebase.auth();
-      if (!currentUser || !diary.correction) {
-        return;
-      }
+    const refDiary = firebase.firestore().doc(`diaries/${diary.objectID}`);
+    batch.update(refDiary, {
+      isReview: true,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 
-      const newReview = {
-        reviewer: {
-          uid: profile.uid,
-          userName: profile.userName,
-          photoUrl: profile.photoUrl,
-        },
-        revieweeUid: diary.correction.profile.uid,
-        rating,
-        comment,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as Review;
+    const newReview = {
+      reviewer: {
+        uid: profile.uid,
+        userName: profile.userName,
+        photoUrl: profile.photoUrl,
+      },
+      objectID: diary.objectID,
+      revieweeUid: diary.correction.profile.uid,
+      rating,
+      comment,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    } as Review;
 
-      await firebase
-        .firestore()
-        .collection(`reviews`)
-        .add(newReview);
+    const refReview = firebase
+      .firestore()
+      .collection(`reviews`)
+      .doc();
+    batch.set(refReview, newReview);
 
-      await firebase
-        .firestore()
-        .collection('diaries')
-        .doc(diary.objectID)
-        .update({
-          isReview: true,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+    batch.commit();
 
-      editDiary(diary.objectID, {
-        ...diary,
-        isReview: true,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    editDiary(diary.objectID, {
+      ...diary,
+      isReview: true,
+    });
 
-      navigation.goBack();
-      setIsLoading(false);
-    };
-    f();
+    navigation.goBack(null);
+    setIsLoading(false);
   }, [
     comment,
     diary,

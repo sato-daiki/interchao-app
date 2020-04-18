@@ -9,8 +9,8 @@ interface Reviewer {
 export interface Review {
   reviewer: Reviewer;
   revieweeUid: string;
+  objectID: string;
   rating: number;
   comment: string;
   createdAt: firestore.FieldValue;
-  updatedAt: firestore.FieldValue;
 }
