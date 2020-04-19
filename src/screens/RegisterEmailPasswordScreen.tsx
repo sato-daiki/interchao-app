@@ -39,11 +39,13 @@ const styles = StyleSheet.create({
     fontSize: fontSizeL,
     fontWeight: 'bold',
     paddingBottom: 16,
+    lineHeight: fontSizeL * 1.3,
   },
   subText: {
     color: subTextColor,
     fontSize: fontSizeM,
     paddingBottom: 16,
+    lineHeight: fontSizeM * 1.3,
   },
   label: {
     color: primaryColor,
