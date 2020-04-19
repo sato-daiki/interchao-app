@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -9,6 +9,7 @@ import {
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
+import { SavePoints } from '../../images';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,9 +30,15 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   text: {
-    textAlign: 'center',
     fontSize: fontSizeM,
     color: primaryColor,
+    textAlign: 'center',
+    lineHeight: fontSizeM * 1.3,
+  },
+  img: {
+    alignSelf: 'center',
+    width: 160,
+    height: 160,
   },
 });
 
@@ -51,6 +58,8 @@ const ModalLackPoint: React.FC<Props> = ({
       <View style={styles.container}>
         <Text style={styles.title}>{I18n.t('modalLackPoint.title')}</Text>
         <View style={styles.line} />
+        <Image style={styles.img} source={SavePoints} />
+        <Space size={32} />
         <Text style={styles.text}>{I18n.t('modalLackPoint.text')}</Text>
         <Space size={32} />
         <SubmitButton

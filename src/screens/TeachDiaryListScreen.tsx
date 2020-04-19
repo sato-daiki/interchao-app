@@ -221,8 +221,13 @@ const TeachDiaryListScreen: ScreenType = ({
     <GrayHeader title={I18n.t('teachDiaryList.diaryList')} />
   );
 
-  const displayEmptyComponent =
-    !isLoading && !refreshing && teachDiaries.length < 1;
+  const listEmptyComponent =
+    !isLoading && !refreshing && teachDiaries.length < 1 ? (
+      <EmptyList
+        message={I18n.t('teachDiaryList.empty')}
+        iconName="book-open-variant"
+      />
+    ) : null;
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -231,24 +236,18 @@ const TeachDiaryListScreen: ScreenType = ({
         displayed={user.tutorialTeachDiaryList}
         onPress={onPressTutorial}
       />
-      {displayEmptyComponent ? (
-        <EmptyList
-          message={I18n.t('teachDiaryList.empty')}
-          iconName="book-open-variant"
-        />
-      ) : (
-        <FlatList
-          data={teachDiaries}
-          keyExtractor={keyExtractor}
-          refreshing={refreshing}
-          renderItem={renderItem}
-          ListHeaderComponent={listHeaderComponent}
-          onEndReached={loadNextPage}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-      )}
+      <FlatList
+        data={teachDiaries}
+        keyExtractor={keyExtractor}
+        refreshing={refreshing}
+        renderItem={renderItem}
+        ListHeaderComponent={listHeaderComponent}
+        ListEmptyComponent={listEmptyComponent}
+        onEndReached={loadNextPage}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </View>
   );
 };

@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
     color: primaryColor,
   },
 });
@@ -102,7 +103,7 @@ const ModalBlock: React.FC<Props> = ({
             </Text>
             <Space size={32} />
             <WhiteButton
-              title={I18n.t('common.cancel')}
+              title={I18n.t('common.close')}
               onPress={onPressClose}
             />
           </>

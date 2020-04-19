@@ -5,7 +5,6 @@ import InitializeScreen from '../screens/InitializeScreen';
 import SignUpScreenContainer from '../containers/SignUpScreenContainer';
 import SignInScreen from '../screens/SignInScreen';
 import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
-import ResendEmailScreen from '../screens/ResendEmailScreen';
 import InputUserNameScreenContainer from '../containers/InputUserNameScreenContainer';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 
@@ -24,9 +23,6 @@ export default createStackNavigator({
   },
   InputUserName: {
     screen: InputUserNameScreenContainer,
-  },
-  ResendEmail: {
-    screen: ResendEmailScreen,
   },
   ForegetPassword: {
     screen: ForegetPasswordScreen,

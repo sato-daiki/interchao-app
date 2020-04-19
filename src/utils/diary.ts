@@ -49,11 +49,11 @@ export const getUserDiaryStatus = (
   correctionStatus: CorrectionStatus
 ): Status | null => {
   if (correctionStatus === 'yet') {
-    return { text: I18n.t('diaryStatus.yet'), color: mainColor };
+    return { text: I18n.t('userDiaryStatus.yet'), color: mainColor };
   }
 
   if (correctionStatus === 'correcting') {
-    return { text: I18n.t('diaryStatus.correcting'), color: subTextColor };
+    return { text: I18n.t('userDiaryStatus.correcting'), color: subTextColor };
   }
 
   return null;
@@ -66,14 +66,14 @@ export const getMyDiaryStatus = (
 ): Status | null => {
   if (diaryStatus === 'publish') {
     if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
-      return { text: I18n.t('diaryStatus.yet'), color: subTextColor };
+      return { text: I18n.t('myDiaryStatus.yet'), color: subTextColor };
     }
     if (correctionStatus === 'unread') {
-      return { text: I18n.t('diaryStatus.unread'), color: softRed };
+      return { text: I18n.t('myDiaryStatus.unread'), color: softRed };
     }
     if (correctionStatus === 'done') {
       if (!isReview) {
-        return { text: I18n.t('diaryStatus.yetReview'), color: mainColor };
+        return { text: I18n.t('myDiaryStatus.yetReview'), color: mainColor };
       }
     }
   }

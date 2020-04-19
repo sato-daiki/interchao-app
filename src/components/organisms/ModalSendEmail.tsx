@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
     color: primaryColor,
   },
 });

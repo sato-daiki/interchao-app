@@ -64,7 +64,7 @@ const correcting = {
   titleDone: '投稿する',
   menuEdit: '編集する',
   menuCommentDelete: 'コメントを削除する',
-  menuSummaryDelete: 'コメントを削除する',
+  menuSummaryDelete: 'まとめを削除する',
   commentList: 'コメント一覧',
 };
 
@@ -351,7 +351,7 @@ const emptyMyDiaryList = {
 
 const modalAlertCorrection = {
   text:
-    '添削は30分以内で行ってください。30分をすぎると添削は破棄されます。\n\n本サービスは、１日記につき、１添削で行っています。添削を始めると、ロックがかかり他の人は添削できなくなります。',
+    '添削は30分以内で行ってください。30分をすぎると添削は破棄されます。\n\n添削を始めると、ロックがかかり他の人は添削できなくなります。',
   start: '添削を始める',
   checkboxText: '以後、このメッセージを表示しない',
 };
@@ -388,7 +388,7 @@ const modalCorrectingDone = {
 };
 
 const modalDeleteAcount = {
-  title: '退会確定処理',
+  title: '退会',
   text: 'パスワードを入力して確定ボタンを押してください。',
   button: '退会する',
 };
@@ -448,7 +448,7 @@ const report = {
   inappropriate: '不適切である',
   reportedTitle: 'ご報告ありがとうございます',
   reportedDescription:
-    'いただいた情報はインターチャオをより安全なものにするために役立たせていただきます。',
+    'いただいた情報はInterchaoをより安全なものにするために役立たせていただきます。',
 };
 
 const postDiaryComponent = {
@@ -482,7 +482,7 @@ const tutorialPoints = {
   title: 'ポイントについて',
   buttonText: '始める',
   text:
-    '日記を投稿するには10ポイント〜が必要です。\nレビューをすると10ポイント〜を獲得できます。\n\n消費、獲得するポイントは文字数と言語により異なります。英語は600文字ごと、日本語は200文字ごとに10ポイント消費または獲得できます。',
+    '日記を投稿するには10ポイント〜が必要です。\nレビューをすると10ポイント〜を獲得できます。\n\n消費、獲得するポイントは文字数と言語により異なります。',
 };
 
 const tutorialPostDiary = {
@@ -493,11 +493,11 @@ const tutorialPostDiary = {
 };
 
 const tutorialTeachDiaryList = {
-  title: '日本語日記一覧とは',
+  title: 'みんなの日記とは',
   buttonText: '始める',
   text1: '日本語を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: 'のものを探して添削して10ポイントをゲットしよう。',
-  textMainColor: '添削待ち',
+  text2: 'の日記を添削して10ポイントをゲットしよう。',
+  textMainColor: '未添削',
 };
 
 // util
@@ -507,11 +507,16 @@ const cameraRoll = {
   permitHowTo: '設定方法',
 };
 
-const diaryStatus = {
-  yet: '未添削',
+const myDiaryStatus = {
+  yet: '添削待ち',
   correcting: '添削中',
   unread: '未読',
   yetReview: 'レビュー待ち',
+};
+
+const userDiaryStatus = {
+  yet: '未添削',
+  correcting: '添削中',
 };
 
 const language = {
@@ -592,7 +597,8 @@ const ja = {
   tutorialPostDiary,
   tutorialTeachDiaryList,
   cameraRoll,
-  diaryStatus,
+  myDiaryStatus,
+  userDiaryStatus,
   language,
 };
 
