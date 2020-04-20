@@ -1,7 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { Star } from '../../images';
-import { fontSizeS, primaryColor, star } from '../../styles/Common';
+import {
+  fontSizeS,
+  primaryColor,
+  star,
+  subTextColor,
+} from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   score: number;
@@ -19,6 +25,10 @@ const styles = StyleSheet.create({
     tintColor: star,
     marginRight: 2,
   },
+  zeroText: {
+    fontSize: fontSizeS,
+    color: subTextColor,
+  },
   score: {
     fontSize: fontSizeS,
     color: primaryColor,
@@ -34,6 +44,9 @@ const ScoreStar: React.FC<Props> = ({
   score,
   reviewNum,
 }: Props): JSX.Element => {
+  if (score === 0) {
+    return <Text style={styles.zeroText}>{I18n.t('emptyReview.empty')}</Text>;
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.score}>{score}</Text>

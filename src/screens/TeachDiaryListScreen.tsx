@@ -108,7 +108,7 @@ const TeachDiaryListScreen: ScreenType = ({
           setIsLoading(false);
           setRefreshing(false);
           console.log(err);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
         setIsLoading(false);
       };
@@ -161,7 +161,7 @@ const TeachDiaryListScreen: ScreenType = ({
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
       }
     };

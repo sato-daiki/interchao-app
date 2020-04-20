@@ -95,7 +95,7 @@ const PostDiaryScreen: ScreenType = ({
         setIsModalAlert(false);
       } catch (err) {
         setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       }
     };
     f();
@@ -163,7 +163,7 @@ const PostDiaryScreen: ScreenType = ({
         .catch(err => {
           setIsLoading(false);
           console.log(err);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         });
       track(events.CREATED_DIARY, { diaryStatus: 'publish' });
       // reduxに追加

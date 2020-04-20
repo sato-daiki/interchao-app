@@ -70,7 +70,7 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
         }
       } catch (error) {
         setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       }
       setIsLoading(false);
       track(events.DELETED_USER);

@@ -56,9 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   flatList: {
-    // nullの時うまく行かない
-    // flex: 1,
-    // paddingBottom: 32,
+    flex: 1,
   },
 });
 
@@ -129,7 +127,7 @@ const MyDiaryListScreen: ScreenType = ({
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
         setIsLoading(false);
       };
@@ -184,7 +182,7 @@ const MyDiaryListScreen: ScreenType = ({
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
       }
     };
@@ -270,12 +268,13 @@ const MyDiaryListScreen: ScreenType = ({
     );
   }, [diaryTotalNum]);
 
+  const isEmpty = !isLoading && !refreshing && diaries.length < 1;
   const ListEmptyComponent = useCallback(() => {
-    if (!isLoading && !refreshing && diaries.length < 1) {
+    if (isEmpty) {
       return <EmptyMyDiaryList />;
     }
     return null;
-  }, [diaries.length, isLoading, refreshing]);
+  }, [isEmpty]);
 
   return (
     <View style={styles.container}>
@@ -292,7 +291,8 @@ const MyDiaryListScreen: ScreenType = ({
         onPress={onPressModalStill}
       />
       <FlatList
-        contentContainerStyle={styles.flatList}
+        // emptyの時のレイアウトのため
+        contentContainerStyle={isEmpty ? styles.flatList : null}
         data={diaries}
         keyExtractor={keyExtractor}
         refreshing={refreshing}

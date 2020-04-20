@@ -33,7 +33,7 @@ const TutorialPostDiary: React.FC<Props> = ({
   isLoading = false,
   displayed,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
-  onPress = (): void => {},
+  onPress = (): void => undefined,
 }: Props): JSX.Element | null => {
   return (
     <Tutorial

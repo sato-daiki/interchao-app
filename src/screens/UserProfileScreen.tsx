@@ -125,7 +125,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         } catch (err) {
           setLoadingDiary(false);
           setRefreshing(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
         setLoadingDiary(false);
       };
@@ -212,7 +212,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
       }
     };

@@ -69,7 +69,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         }
         track(events.SIGN_OUT);
       } catch (error) {
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       }
     };
     f();
