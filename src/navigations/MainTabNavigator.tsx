@@ -58,7 +58,7 @@ const ModalCorrectingNavigator = createStackNavigator(
   {
     initialRouteName: 'Correcting',
     navigationOptions: {
-      gesturesEnabled: false,
+      gestureEnabled: false,
     },
   }
 );
