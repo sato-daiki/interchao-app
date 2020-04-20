@@ -74,9 +74,9 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
         if (credent.user) {
           track(events.SIGN_IN);
         }
-      } catch (error) {
+      } catch (err) {
         emailInputError(
-          error,
+          err,
           setErrorPassword,
           setErrorEmail,
           clearErrorMessage

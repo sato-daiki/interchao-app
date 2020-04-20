@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  Alert,
   RefreshControl,
   ScrollView,
   Text,
@@ -43,6 +42,7 @@ import UserProfileHeader from '../components/organisms/UserProfileHeader';
 import { getTopReviews, getReviewNum } from '../utils/review';
 import ReviewListItem from '../components/organisms/ReviewListItem';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 const styles = StyleSheet.create({
   container: {
@@ -125,7 +125,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         } catch (err) {
           setLoadingDiary(false);
           setRefreshing(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
         setLoadingDiary(false);
       };
@@ -212,7 +212,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
       }
     };

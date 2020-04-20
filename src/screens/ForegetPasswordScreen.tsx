@@ -66,8 +66,8 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         setIsLoading(true);
         await firebase.auth().sendPasswordResetEmail(email);
         setIsModal(true);
-      } catch (error) {
-        emailInputError(error, _ => {}, setErrorEmail, clearErrorMessage);
+      } catch (err) {
+        emailInputError(err, _ => {}, setErrorEmail, clearErrorMessage);
       }
       setIsLoading(false);
     };

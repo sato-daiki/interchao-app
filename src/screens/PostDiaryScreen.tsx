@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -8,7 +8,7 @@ import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { DiaryStatus, Profile, DisplayProfile, Diary } from '../types';
+import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
 import {
@@ -17,6 +17,7 @@ import {
   getDisplayProfile,
 } from '../utils/diary';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 interface Props {
   user: User;
@@ -94,8 +95,8 @@ const PostDiaryScreen: ScreenType = ({
         setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
+        alert({ err });
         setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       }
     };
     f();
@@ -162,8 +163,7 @@ const PostDiaryScreen: ScreenType = ({
         })
         .catch(err => {
           setIsLoading(false);
-          console.log(err);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         });
       track(events.CREATED_DIARY, { diaryStatus: 'publish' });
       // reduxに追加

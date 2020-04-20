@@ -33,6 +33,7 @@ const errorMessage = {
   emailAlreadyInUse: 'このメールアドレスはすでに登録されています',
   tooManyRequests:
     'エラーの数が一定数を超えました。時間をおいてから再度お試しください',
+  network: '通信エラーが発生しました。時間をおいて再度お試し下さい。',
   defaultError: 'エラーが発生しました。{{message}}',
   emptyUserName: 'ユーザネームを入力してください',
   invalidUserName:

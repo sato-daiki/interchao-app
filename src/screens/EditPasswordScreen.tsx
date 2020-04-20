@@ -66,9 +66,9 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.updatePassword(newPassword);
         navigation.goBack();
-      } catch (error) {
+      } catch (err) {
         passwordInputError(
-          error,
+          err,
           setErrorCurrentPassword,
           setErrorNewPassword,
           clearErrorMessage

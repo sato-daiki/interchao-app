@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Alert,
   RefreshControl,
   TouchableOpacity,
 } from 'react-native';
@@ -31,6 +30,7 @@ import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
 import { getUnreadCorrectionNum } from '../utils/localStatus';
 import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 export interface Props {
   user: User;
@@ -127,7 +127,7 @@ const MyDiaryListScreen: ScreenType = ({
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
         setIsLoading(false);
       };
@@ -182,7 +182,7 @@ const MyDiaryListScreen: ScreenType = ({
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
       }
     };
