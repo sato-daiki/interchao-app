@@ -1,5 +1,3 @@
-import { firestore } from 'firebase';
-
 interface Reviewer {
   uid: string;
   userName: string;
@@ -12,5 +10,5 @@ export interface Review {
   objectID: string;
   rating: number;
   comment: string;
-  createdAt: firestore.FieldValue;
+  createdAt: firebase.firestore.FieldValue;
 }

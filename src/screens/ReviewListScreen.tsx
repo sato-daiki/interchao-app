@@ -39,7 +39,7 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [lastVisible, setLastVisible] = useState<firestore.Timestamp | null>(
+  const [lastVisible, setLastVisible] = useState<firestore.FieldValue | null>(
     null
   );
 
