@@ -37,6 +37,7 @@ const TutorialListScreen: NavigationStackScreenComponent = () => {
       <TutorialCorrecting
         displayed={tutorialCorrecting}
         buttonText={buttonText}
+        rightButtonText={buttonText}
         onPress={(): void => setTutorialCorrecting(true)}
       />
       <TutorialPostDiary

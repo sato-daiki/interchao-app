@@ -46,7 +46,7 @@ export const emailInputError = (
       setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
       break;
     case 'auth/network-request-failed':
-      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       clearErrorMessage();
       break;
     case 'auth/too-many-requests':
@@ -82,7 +82,7 @@ export const passwordInputError = (
       setErrorCurrentPassword(I18n.t('errorMessage.wrongPassword'));
       break;
     case 'auth/network-request-failed':
-      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+      Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       clearErrorMessage();
       break;
     case 'auth/too-many-requests':

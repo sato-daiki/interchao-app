@@ -112,7 +112,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
       } catch (err) {
         setIsLoading(false);
         setRefreshing(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
       }
       setIsLoading(false);
     };
@@ -163,7 +163,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.network'));
+          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
         }
       }
     };

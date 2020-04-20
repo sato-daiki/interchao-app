@@ -1,7 +1,6 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { Alert, CameraRoll } from 'react-native';
-import openBrowserSafely from '../constants/SafeWebBrowser';
 import { SERVICE_NAME } from '../constants';
 import I18n from './I18n';
 
@@ -11,22 +10,13 @@ export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatu
   return status;
 };
 
-export const openAlert = () => {
+export const openAlert = (): void => {
   Alert.alert(
     I18n.t('cameraRoll.permitTitle'),
     I18n.t('cameraRoll.permitMessage', {
       name: SERVICE_NAME,
     }),
-    [
-      {
-        text: I18n.t('cameraRoll.permitHowTo'),
-        onPress: () => {
-          //  TODO
-          openBrowserSafely('');
-        },
-      },
-      { text: 'OK' },
-    ],
+    [{ text: 'OK' }],
     { cancelable: false }
   );
 };
