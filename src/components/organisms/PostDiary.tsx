@@ -254,14 +254,17 @@ const PostDiary = ({
         </Animated.View>
       ) : null}
       <KeyboardSpacer />
-      <View style={styles.footer}>
-        <TextButtun
-          isBorrderTop
-          isBorrderBottom
-          title={I18n.t('postDiaryComponent.draft')}
-          onPress={onPressDraft}
-        />
-      </View>
+      {/* 画面株がiOSX以上の時隠れてしまうのを対応 */}
+      <SafeAreaView>
+        <View style={styles.footer}>
+          <TextButtun
+            isBorrderTop
+            isBorrderBottom
+            title={I18n.t('postDiaryComponent.draft')}
+            onPress={onPressDraft}
+          />
+        </View>
+      </SafeAreaView>
     </SafeAreaView>
   );
 };
