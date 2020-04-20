@@ -63,6 +63,7 @@ type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
   container: {
     flex: 1,
@@ -164,7 +165,6 @@ const CorrectingScreen: ScreenType = ({
    */
   const onDone = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!teachDiary.objectID) return;
       if (isLoading) return;
       setIsLoading(true);
 
@@ -178,6 +178,8 @@ const CorrectingScreen: ScreenType = ({
       const newPoints = user.points + getPoints;
 
       await firebase.firestore().runTransaction(async transaction => {
+        if (!teachDiary.objectID) return;
+
         //  correctionsの更新
         const correctionRef = firebase
           .firestore()
