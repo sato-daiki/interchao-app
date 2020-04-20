@@ -23,7 +23,7 @@ export const getTopReviews = async (uid: string): Promise<Review[]> => {
 
 export const getReviews = async (
   uid: string,
-  lastVisible: firestore.Timestamp | null,
+  lastVisible: firestore.FieldValue | null,
   hitPerPage: number
 ): Promise<Review[]> => {
   try {
