@@ -1,22 +1,18 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
+import Modal from 'react-native-modal';
 
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    zIndex: 10,
+  container: {
     alignItems: 'center',
-    justifyContent: 'center',
+    width: width - 16,
   },
   modal: {
     borderRadius: 8,
     marginHorizontal: 8,
     backgroundColor: '#fff',
-    width: width - 16,
   },
 });
 
@@ -25,15 +21,17 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Modal: React.FC<Props> = ({
+const Modal1: React.FC<Props> = ({
   visible,
   children,
 }: Props): JSX.Element | null => {
-  return visible ? (
-    <View style={styles.overlay}>
-      <View style={styles.modal}>{children}</View>
+  return (
+    <View style={styles.container}>
+      <Modal isVisible={visible} animationIn="pulse" animationOut="zoomOut">
+        <View style={styles.modal}>{children}</View>
+      </Modal>
     </View>
-  ) : null;
+  );
 };
 
-export default Modal;
+export default Modal1;
