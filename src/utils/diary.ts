@@ -21,7 +21,7 @@ interface Status {
 }
 
 /** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
-export const getAlgoliaDay = (timestamp: Timestamp): string => {
+export const getAlgoliaDay = (timestamp: any): string => {
   if (!timestamp) {
     return '';
   }
@@ -35,7 +35,7 @@ export const getDay = (timestamp: firebase.firestore.Timestamp): string => {
   return moment(timestamp.toDate()).format('Y-M-D');
 };
 
-export const getAlgoliaDate = (timestamp: Timestamp): string => {
+export const getAlgoliaDate = (timestamp: any): string => {
   // eslint-disable-next-line no-underscore-dangle
   if (!timestamp || !timestamp._seconds) {
     return '';
