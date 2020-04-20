@@ -1,5 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions, Image } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  Image,
+  ImageProps,
+} from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Modal from '../template/Modal';
 import {
@@ -15,6 +22,23 @@ import { Star } from '../../images';
 import { Space, SubmitButton, SmallButtonBlue } from '../atoms';
 
 const { width } = Dimensions.get('window');
+
+interface Props {
+  isLoading?: boolean;
+  displayed: boolean;
+  buttonText?: string;
+  rightButtonText?: string;
+  onPress: () => void;
+}
+
+interface Item {
+  item: {
+    text: string;
+    subText?: string;
+    image: ImageProps;
+  };
+  index: number;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -53,6 +77,7 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.7,
     color: primaryColor,
   },
+  image: {},
   slide: {
     alignItems: 'center',
     paddingHorizontal: 16,
@@ -73,38 +98,30 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Props {
-  isLoading?: boolean;
-  displayed: boolean;
-  buttonText: string;
-  rightButtonText: string;
-  onPress: () => void;
-}
-
 const entries = [
   {
     text: I18n.t('tutorialCorrecting.text1'),
     subText: I18n.t('tutorialCorrecting.subText1'),
-    image: 'aaa',
+    image: Star,
   },
   {
     text: I18n.t('tutorialCorrecting.text2'),
     subText: I18n.t('tutorialCorrecting.subText2'),
-    image: 'aaa',
+    image: Star,
   },
   {
     text: I18n.t('tutorialCorrecting.text3'),
 
-    image: 'aaa',
+    image: Star,
   },
   {
     text: I18n.t('tutorialCorrecting.text4'),
     subText: I18n.t('tutorialCorrecting.subText4'),
-    image: 'aaa',
+    image: Star,
   },
-  { text: I18n.t('tutorialCorrecting.text5'), image: 'aaa' },
-  { text: I18n.t('tutorialCorrecting.text6'), image: 'aaa' },
-  { text: I18n.t('tutorialCorrecting.text7'), image: 'aaa' },
+  { text: I18n.t('tutorialCorrecting.text5'), image: Star },
+  { text: I18n.t('tutorialCorrecting.text6'), image: Star },
+  { text: I18n.t('tutorialCorrecting.text7'), image: Star },
 ];
 
 const TutorialCorrecting: React.FC<Props> = ({
@@ -117,10 +134,10 @@ const TutorialCorrecting: React.FC<Props> = ({
   const [activeSlide, setActiveSlide] = useState(0);
   const refContainer = useRef(null);
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }: Item): JSX.Element => {
     return (
       <View style={styles.slide}>
-        <Image source={Star} style={styles.loadingImage} />
+        <Image source={item.image} style={styles.image} />
         <Space size={32} />
         <Text style={styles.text}>{item.text}</Text>
         {item.subText ? (
