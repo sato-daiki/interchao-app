@@ -89,7 +89,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
   const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
   const [diaryTotalNum, setDiaryTotalNum] = useState(0);
-  const [isBlocked, setIsBlocked] = useState(false);
+  const [isBlocked, setIsBlocked] = useState<boolean>();
   const [topReviews, setTopReviews] = useState<Review[]>([]);
   const [reviewNum, setReviewNum] = useState<number>();
 
@@ -166,14 +166,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       // ブロックしているかのチェック
       const resBlocker = await checkBlocker(currentUser.uid, params.uid);
       setIsBlocked(resBlocker);
-
       // データを取得していく
       await Promise.all([getNewProfile(), getNewDiary(false), getNewReview()]);
     };
     f();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getNewDiary, getNewProfile, getNewReview]);
+  }, [getNewDiary, getNewProfile, getNewReview, navigation.state]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -229,7 +226,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     setIsReport(true);
   }, []);
 
-  const onPressMore = () => {
+  const onPressMore = useCallback(() => {
     const options = [
       isBlocked
         ? I18n.t('userProfile.unBlocked')
@@ -254,12 +251,12 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         }
       }
     );
-  };
+  }, [isBlocked, onPressBlock, onPressReport, showActionSheetWithOptions]);
 
   useEffect(() => {
     navigation.setParams({ onPressMore });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isBlocked]);
 
   const onPressMoreReview = useCallback((): void => {
     if (!profile) return;
@@ -287,7 +284,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       setIsBlocked(true);
     };
     f();
-  }, [profile, setIsBlocked]);
+  }, [profile]);
 
   const onPressUnblockSubmit = useCallback((): void => {
     const f = async (): Promise<void> => {
