@@ -153,9 +153,9 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
           createUser(credent.user);
           track(events.CREATED_USER, { loginMethod: 'anonymously' });
         }
-      } catch (error) {
+      } catch (err) {
         emailInputError(
-          error,
+          err,
           setErrorPassword,
           setErrorEmail,
           clearErrorMessage
@@ -185,9 +185,9 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
           track(events.CREATED_USER, { loginMethod: 'email' });
           setIsLoading(false);
         }
-      } catch (error) {
+      } catch (err) {
         emailInputError(
-          error,
+          err,
           setErrorPassword,
           setErrorEmail,
           clearErrorMessage

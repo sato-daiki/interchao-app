@@ -18,6 +18,7 @@ import { Space } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 const styles = StyleSheet.create({
   container: {
@@ -68,8 +69,8 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
           Alert.alert('', I18n.t('errorMessage.cantLogout'));
         }
         track(events.SIGN_OUT);
-      } catch (error) {
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+      } catch (err) {
+        alert({ err });
       }
     };
     f();

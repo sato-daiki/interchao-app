@@ -70,9 +70,9 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.updateEmail(email);
         navigation.goBack();
-      } catch (error) {
+      } catch (err) {
         emailInputError(
-          error,
+          err,
           setErrorPassword,
           setErrorEmail,
           clearErrorMessage

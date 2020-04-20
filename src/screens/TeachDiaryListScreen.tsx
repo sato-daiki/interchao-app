@@ -1,11 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Alert,
-  RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -22,6 +16,7 @@ import SearchBarButton from '../components/molecules/SearchBarButton';
 import { getExceptUser } from '../utils/diary';
 import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 export interface Props {
   profile: Profile;
@@ -107,8 +102,7 @@ const TeachDiaryListScreen: ScreenType = ({
         } catch (err) {
           setIsLoading(false);
           setRefreshing(false);
-          console.log(err);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
         setIsLoading(false);
       };
@@ -161,7 +155,7 @@ const TeachDiaryListScreen: ScreenType = ({
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
       }
     };

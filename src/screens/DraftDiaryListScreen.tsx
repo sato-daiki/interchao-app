@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Alert,
   RefreshControl,
   ActivityIndicator,
   Animated,
@@ -21,6 +20,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -112,7 +112,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
       } catch (err) {
         setIsLoading(false);
         setRefreshing(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+        alert({ err });
       }
       setIsLoading(false);
     };
@@ -163,7 +163,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
       }
     };

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {
   NavigationStackScreenComponent,
   NavigationStackOptions,
@@ -17,6 +17,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 const styles = StyleSheet.create({
   container: {
@@ -68,9 +69,9 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
         } else {
           setIsModal(true);
         }
-      } catch (error) {
+      } catch (err) {
         setIsLoading(false);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+        alert({ err });
       }
       setIsLoading(false);
       track(events.DELETED_USER);
@@ -90,15 +91,14 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
         setIsLoading(true);
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.delete();
-      } catch (error) {
+      } catch (err) {
         setIsLoading(false);
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorCode = err.code;
         if (errorCode === 'auth/wrong-password') {
           setErrorPassword(I18n.t('errorMessage.wrongPassword'));
         } else {
           setErrorPassword('');
-          Alert.alert(I18n.t('common.error'), errorMessage);
+          alert({ err });
         }
       }
       track(events.DELETED_USER);

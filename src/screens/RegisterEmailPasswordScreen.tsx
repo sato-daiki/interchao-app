@@ -87,9 +87,9 @@ const RegisterEmailPasswordScreen: ScreenType = ({
 
         setIsLoading(false);
         navigation.navigate('MyPage');
-      } catch (error) {
+      } catch (err) {
         emailInputError(
-          error,
+          err,
           setErrorPassword,
           setErrorEmail,
           clearErrorMessage

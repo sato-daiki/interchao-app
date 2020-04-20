@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Alert,
-  RefreshControl,
-} from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -20,6 +14,7 @@ import { getReviews } from '../utils/review';
 import ReviewListItem from '../components/organisms/ReviewListItem';
 import { EmptyReview } from '../components/molecules';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -98,7 +93,7 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
           }
         } catch (err) {
           setReadingNext(false);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         }
       }
     };

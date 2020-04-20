@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Alert, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -18,6 +18,7 @@ import {
   getUsePoints,
 } from '../utils/diary';
 import I18n from '../utils/I18n';
+import { alert } from '../utils/ErrorAlert';
 
 interface Props {
   user: User;
@@ -96,8 +97,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         setIsModalAlert(false);
       } catch (err) {
         setIsLoading(false);
-        console.log(err);
-        Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+        alert({ err });
       }
     };
     f();
@@ -161,8 +161,7 @@ const PostDraftDiaryScreen: ScreenType = ({
         })
         .catch(err => {
           setIsLoading(false);
-          console.log(err);
-          Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.other'));
+          alert({ err });
         });
 
       track(events.CREATED_DIARY, { diaryStatus: 'publish' });
