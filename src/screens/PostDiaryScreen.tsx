@@ -193,6 +193,7 @@ const PostDiaryScreen: ScreenType = ({
   ]);
 
   const onPressNotSave = useCallback((): void => {
+    setIsModalCancel(false);
     navigation.goBack(null);
   }, [navigation]);
 
