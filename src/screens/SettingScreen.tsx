@@ -120,11 +120,11 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onPress={onPressFavoriteUserList}
       /> */}
       <Space size={16} />
-      <OptionItem title={I18n.t('setting.privacy')} onPress={onPressPrivacy} />
+      {/* <OptionItem title={I18n.t('setting.privacy')} onPress={onPressPrivacy} />
       <OptionItem
         title={I18n.t('setting.management')}
         onPress={onPressManagement}
-      />
+      /> */}
       <OptionItem
         title={I18n.t('setting.deleteAcount')}
         onPress={(): void => {

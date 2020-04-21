@@ -83,7 +83,7 @@ const EditUserNameScreen: ScreenType = ({
         if (text === '') {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage/emptyUserName'));
+          setErrorMessage(I18n.t('errorMessage.emptyUserName'));
           return;
         }
 
@@ -91,7 +91,7 @@ const EditUserNameScreen: ScreenType = ({
         if (!typeChecked) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage/invalidUserName'));
+          setErrorMessage(I18n.t('errorMessage.invalidUserName'));
           return;
         }
 
@@ -99,7 +99,7 @@ const EditUserNameScreen: ScreenType = ({
         if (!initialChecked) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage/initialUserName'));
+          setErrorMessage(I18n.t('errorMessage.initialUserName'));
           return;
         }
 
@@ -108,7 +108,7 @@ const EditUserNameScreen: ScreenType = ({
         if (!resDuplicated && text !== profile.userName) {
           setIsUserNameLoading(false);
           setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage/userNameAlreadyInUse'));
+          setErrorMessage(I18n.t('errorMessage.userNameAlreadyInUse'));
           return;
         }
         setIsUserNameLoading(false);
@@ -123,11 +123,11 @@ const EditUserNameScreen: ScreenType = ({
     <View style={styles.container}>
       <Text style={styles.label}>{I18n.t('editUserName.userName')}</Text>
       <CheckTextInput
+        autoFocus
         value={userName}
         onChangeText={onChangeText}
-        maxLength={50}
-        placeholder="zebra"
-        keyboardType="email-address"
+        maxLength={20}
+        placeholder="username"
         autoCapitalize="none"
         autoCorrect={false}
         underlineColorAndroid="transparent"

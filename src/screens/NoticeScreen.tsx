@@ -76,11 +76,11 @@ const NoticeScreen: ScreenType = ({ user, setUser }) => {
         title={I18n.t('notice.finishCorrection')}
         onPress={onPressCorrection}
       />
-      <CheckItem
+      {/* <CheckItem
         checked={notificationReview}
         title={I18n.t('notice.finishReview')}
         onPress={onPressReview}
-      />
+      /> */}
     </View>
   );
 };
