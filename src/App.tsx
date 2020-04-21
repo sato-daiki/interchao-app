@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { YellowBox, StatusBar } from 'react-native';
 import * as Sentry from 'sentry-expo';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
+import { Updates } from 'expo';
 import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
@@ -14,6 +15,7 @@ YellowBox.ignoreWarnings(['Setting a timer']);
 
 const { store } = configureStore();
 
+// エラー監視
 Sentry.setRelease(Constants.manifest.revisionId || 'DEV');
 Sentry.init({
   dsn:
@@ -24,6 +26,19 @@ Sentry.init({
 
 firebase.initializeApp(firebaseConfig);
 const App: React.SFC = () => {
+  // OTAファイルの更新
+  const checkUpdate = async (): Promise<void> => {
+    if (__DEV__) return;
+
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      Updates.reload();
+    }
+  };
+  useEffect(() => {
+    checkUpdate();
+  }, []);
+
   return (
     <Provider store={store}>
       <StatusBar barStyle="dark-content" />
