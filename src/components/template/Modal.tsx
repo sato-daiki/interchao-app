@@ -27,7 +27,7 @@ const Modal1: React.FC<Props> = ({
 }: Props): JSX.Element | null => {
   return (
     <View style={styles.container}>
-      <Modal isVisible={visible} animationIn="pulse" animationOut="zoomOut">
+      <Modal isVisible={visible} animationIn="zoomIn" animationOut="zoomOut">
         <View style={styles.modal}>{children}</View>
       </Modal>
     </View>

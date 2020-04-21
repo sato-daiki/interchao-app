@@ -247,6 +247,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
       <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
       <CheckTextInput
+        autoFocus
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
         onEndEditing={onEndEditingEmail}

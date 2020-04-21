@@ -305,9 +305,9 @@ service cloud.firestore {
       allow update: if request.auth != null
       	&& request.auth.uid == uid
         && isValidProfiles(request.resource.data)
-        && request.resource.data.name.size() <= 20
+        && (request.resource.data.name == null || request.resource.data.name.size() <= 20)
         && request.resource.data.userName.size() <= 20
-        && request.resource.data.introduction.size() <= 200
+        && (request.resource.data.introduction == null || request.resource.data.introduction.size() <= 200)
    			// 修正箇所以外は変わっていないこと
         && request.resource.data.pro == resource.data.pro
         && request.resource.data.learnLanguage == resource.data.learnLanguage

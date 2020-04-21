@@ -113,6 +113,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       <LoadingModal visible={isLoading} />
       <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
       <CheckTextInput
+        autoFocus
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
         onEndEditing={onEndEditingEmail}

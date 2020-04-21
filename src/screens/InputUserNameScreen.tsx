@@ -133,11 +133,11 @@ const InputUserNameScreen: ScreenType = ({
       <Text style={styles.title}>{I18n.t('inputUserName.title')}</Text>
       <Text style={styles.subText}>{I18n.t('inputUserName.subText')}</Text>
       <CheckTextInput
+        autoFocus
         value={userName}
         onChangeText={onChangeText}
         maxLength={20}
-        placeholder="zebra"
-        keyboardType="email-address"
+        placeholder="username"
         autoCapitalize="none"
         autoCorrect={false}
         underlineColorAndroid="transparent"

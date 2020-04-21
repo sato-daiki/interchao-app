@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
     textAlignVertical: 'top',
+    flex: 1,
   },
   introduction: {
     padding: 16,
@@ -79,7 +80,7 @@ const EditMyProfileScreen: ScreenType = ({
   const [name, setName] = useState(profile.name);
   const [userName, setUserName] = useState(profile.userName);
   const [introduction, setIntroduction] = useState(profile.introduction);
-  const [photoUrl, setPhotoUrl] = useState('');
+  const [photoUrl, setPhotoUrl] = useState(profile.photoUrl);
   const [isLoading, setIsLoading] = useState(false);
 
   const onPressSubmit = useCallback(() => {
@@ -159,7 +160,7 @@ const EditMyProfileScreen: ScreenType = ({
             value={name || ''}
             onChangeText={(text: string): void => setName(text)}
             maxLength={20}
-            placeholder="zebra"
+            placeholder="username"
             keyboardType="default"
             autoCapitalize="none"
             autoCorrect={false}
