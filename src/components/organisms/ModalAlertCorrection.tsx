@@ -84,8 +84,8 @@ const ModalAlertCorrection: React.FC<Props> = ({
           title={I18n.t('modalAlertCorrection.start')}
           onPress={(): void => onPressSubmit(checked)}
         />
-        <Space size={12} />
-        <View style={styles.row}>
+        <Space size={16} />
+        {/* <View style={styles.row}>
           <Checkbox
             checked={checked}
             onPress={(): void => setChecked(!checked)}
@@ -93,8 +93,8 @@ const ModalAlertCorrection: React.FC<Props> = ({
           <Text style={styles.checkboxText}>
             {I18n.t('modalAlertCorrection.checkboxText')}
           </Text>
-        </View>
-        <Space size={24} />
+        </View> */}
+        {/* <Space size={24} /> */}
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
       </View>
     </Modal>

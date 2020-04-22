@@ -89,7 +89,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
   const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
   const [diaryTotalNum, setDiaryTotalNum] = useState(0);
-  const [isBlocked, setIsBlocked] = useState<boolean>();
+  const [isBlocked, setIsBlocked] = useState<boolean>(false);
   const [topReviews, setTopReviews] = useState<Review[]>([]);
   const [reviewNum, setReviewNum] = useState<number>();
 
