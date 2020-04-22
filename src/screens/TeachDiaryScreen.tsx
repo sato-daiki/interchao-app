@@ -1,11 +1,18 @@
 import React, { useCallback, useState, useEffect, ReactNode } from 'react';
-import { StyleSheet, ScrollView, View, Text, Alert } from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import firebase from '../constants/firebase';
-import { Diary, User } from '../types';
+import { Diary, User, Profile } from '../types';
 import TeachDiaryCorrection from '../components/organisms/TeachDiaryCorrection';
 import { UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection } from '../components/organisms';
@@ -28,6 +35,7 @@ import { getCorrection } from '../utils/corrections';
 import { Correction } from '../types/correction';
 import Algolia from '../utils/Algolia';
 import I18n from '../utils/I18n';
+import { getProfile } from '../utils/profile';
 
 interface Props {
   user: User;
@@ -88,33 +96,45 @@ const TeachDiaryScreen: ScreenType = ({
   editTeachDiary,
   setUser,
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
+  const [targetProfile, setTargetProfile] = useState<Profile>();
   const [correction, setCorrection] = useState<Correction>();
-  const [proCorrection, setProCorrection] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
-  const { correctionStatus, correctionStatusPro } = teachDiary;
+  const { correctionStatus } = teachDiary;
 
-  useEffect(() => {
+  const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
-      // 添削がある場合データを取得
+      const newProfile = await getProfile(teachDiary.profile.uid);
+      if (newProfile) {
+        setTargetProfile(newProfile);
+      }
+      setIsProfileLoading(false);
+    };
+    f();
+  }, [teachDiary.profile.uid]);
+
+  const getNewCorrection = useCallback(() => {
+    const f = async (): Promise<void> => {
       if (teachDiary.correction) {
         const newCorrection = await getCorrection(teachDiary.correction.id);
         if (newCorrection) {
           setCorrection(newCorrection);
         }
       }
-      if (teachDiary.proCorrection) {
-        const newProCorrection = await getCorrection(
-          teachDiary.proCorrection.id
-        );
-        if (newProCorrection) {
-          setProCorrection(newProCorrection);
-        }
-      }
-      setIsLoading(false);
+      setIsCorrectionLoading(false);
     };
     f();
-  }, [teachDiary.correction, teachDiary.proCorrection]);
+  }, [teachDiary.correction]);
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      // プロフィールを取得
+      await Promise.all([getNewProfile(), getNewCorrection()]);
+    };
+    f();
+  }, [getNewCorrection, getNewProfile]);
 
   const onPressSubmitCorrection = useCallback(
     checked => {
@@ -142,17 +162,17 @@ const TeachDiaryScreen: ScreenType = ({
         }
         const batch = firebase.firestore().batch();
         // 以後メッセージを表示しないにチェックが入っている時の処理
-        if (checked) {
-          const userRef = firebase.firestore().doc(`users/${user.uid}`);
-          batch.update(userRef, {
-            confirmCorrection: true,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-          setUser({
-            ...user,
-            confirmCorrection: true,
-          });
-        }
+        // if (checked) {
+        //   const userRef = firebase.firestore().doc(`users/${user.uid}`);
+        //   batch.update(userRef, {
+        //     confirmCorrection: true,
+        //     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        //   });
+        //   setUser({
+        //     ...user,
+        //     confirmCorrection: true,
+        //   });
+        // }
 
         //  添削中のobjectIDを更新する
         const userRef = firebase.firestore().doc(`users/${user.uid}`);
@@ -198,19 +218,14 @@ const TeachDiaryScreen: ScreenType = ({
   );
 
   const onPressCorrection = useCallback(() => {
-    // 添削モーダルはチェックを入れると２回目以降表示されなくなる
-    if (user.confirmCorrection) {
-      onPressSubmitCorrection(false);
-    } else {
-      setIsModalCorrection(true);
-    }
-  }, [user.confirmCorrection, onPressSubmitCorrection]);
+    setIsModalCorrection(true);
+  }, []);
 
   useEffect(() => {
     navigation.setParams({
       title: teachDiary.title,
       onPressCorrection,
-      isYet: correctionStatus === 'yet' && user && !isModalCorrection,
+      isYet: correctionStatus === 'yet' && !isModalCorrection,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -219,7 +234,7 @@ const TeachDiaryScreen: ScreenType = ({
     // navigation,
     // onPressCorrection,
     teachDiary.title,
-    user,
+    user.confirmCorrection,
   ]);
 
   const onPressUser = useCallback(
@@ -247,27 +262,7 @@ const TeachDiaryScreen: ScreenType = ({
     return null;
   };
 
-  // Proの実装は後回し
-  // const renderProDiaryCorrection = (): ReactNode => {
-  //   if (correctionStatusPro === 'yet') {
-  //     return (
-  //       <View style={styles.correctionButton}>
-  //         <SubmitButton
-  //           isLoading={isLoading}
-  //           title="添削する"
-  //           onPress={onPressCorrection}
-  //         />
-  //       </View>
-  //     );
-  //   }
-  //   if (proCorrection) {
-  //     return <TeachDiaryCorrection correction={proCorrection} />;
-  //   }
-  //   return null;
-  // };
-
-  const { createdAt, title, text, profile } = teachDiary;
-  const { userName, photoUrl, nativeLanguage, uid } = profile;
+  const { createdAt, title, text } = teachDiary;
   const postDate = getAlgoliaDate(createdAt);
   return (
     <View style={styles.container}>
@@ -280,12 +275,16 @@ const TeachDiaryScreen: ScreenType = ({
       />
       <ScrollView style={styles.container}>
         <View style={styles.main}>
-          <ProfileIconHorizontal
-            userName={userName}
-            photoUrl={photoUrl}
-            nativeLanguage={nativeLanguage}
-            onPress={(): void => onPressUser(uid)}
-          />
+          {targetProfile && !isProfileLoading ? (
+            <ProfileIconHorizontal
+              userName={targetProfile.userName}
+              photoUrl={targetProfile.photoUrl}
+              nativeLanguage={targetProfile.nativeLanguage}
+              onPress={(): void => onPressUser(targetProfile.uid)}
+            />
+          ) : (
+            <ActivityIndicator />
+          )}
           <Space size={8} />
           <View style={styles.header}>
             <Text style={styles.postDayText}>{postDate}</Text>
@@ -295,7 +294,6 @@ const TeachDiaryScreen: ScreenType = ({
           <Text style={styles.text}>{text}</Text>
         </View>
         {renderDiaryCorrection()}
-        {/* {renderProDiaryCorrection()} */}
       </ScrollView>
     </View>
   );
