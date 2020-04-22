@@ -38,7 +38,7 @@ const searchClient = algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
 const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  let filters = '';
+  const [filters, setFilters] = useState('');
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -48,11 +48,13 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
       const blockeeUids = await getBlockees(currentUser.uid);
       const uids = blockerUids.concat(blockeeUids);
       const fillterText = getExceptUser(uids);
-      filters = `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish ${fillterText}`;
+      setFilters(
+        `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish ${fillterText}`
+      );
       setIsLoading(false);
     };
     f();
-  }, []);
+  }, [filters, profile.nativeLanguage]);
 
   const onPressItem = useCallback(
     (objectID: string) => {
@@ -83,7 +85,7 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
             navigation.goBack();
           }}
         />
-        <DiaryHitList isEmpty={isEmpty} onPressItem={onPressItem} />
+        <DiaryHitList me={false} isEmpty={isEmpty} onPressItem={onPressItem} />
       </InstantSearch>
     </SafeAreaView>
   );

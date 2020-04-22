@@ -6,13 +6,14 @@ import {
   TextInput,
   NativeSyntheticEvent,
   TextInputSelectionChangeEventData,
+  ActivityIndicator,
 } from 'react-native';
 import { EmptyList } from '../molecules';
 import { Selection } from '../../types/correctingScreen';
 import { ProfileIconHorizontal, Space } from '../atoms';
 import CorrectionTimer from '../molecules/CorrectionTimer';
 import { getAlgoliaDate } from '../../utils/diary';
-import { Diary } from '../../types';
+import { Diary, Profile } from '../../types';
 import {
   subTextColor,
   fontSizeS,
@@ -22,7 +23,9 @@ import {
 
 interface Props {
   isEmpty: boolean;
+  isProfileLoading: boolean;
   teachDiary: Diary;
+  targetProfile?: Profile;
   onTimeUp: () => void;
   setSelection: (selection: Selection) => void;
 }
@@ -61,21 +64,27 @@ const styles = StyleSheet.create({
 
 const CorrectionOrigin: React.FC<Props> = ({
   isEmpty,
+  isProfileLoading,
   teachDiary,
+  targetProfile,
   onTimeUp,
   setSelection,
 }) => {
-  const { createdAt, title, text, profile } = teachDiary;
-  const { userName, photoUrl, nativeLanguage } = profile;
+  const { createdAt, title, text } = teachDiary;
+
   return (
     <View style={styles.container}>
       <View style={styles.main}>
         <View style={styles.header}>
-          <ProfileIconHorizontal
-            userName={userName}
-            photoUrl={photoUrl}
-            nativeLanguage={nativeLanguage}
-          />
+          {targetProfile && !isProfileLoading ? (
+            <ProfileIconHorizontal
+              userName={targetProfile.userName}
+              photoUrl={targetProfile.photoUrl}
+              nativeLanguage={targetProfile.nativeLanguage}
+            />
+          ) : (
+            <ActivityIndicator />
+          )}
           <CorrectionTimer onTimeUp={onTimeUp} />
         </View>
         <Text style={styles.postDayText}>{getAlgoliaDate(createdAt)}</Text>
