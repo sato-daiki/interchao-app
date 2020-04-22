@@ -4,7 +4,6 @@ import { Alert } from 'react-native';
 import {
   DiaryStatus,
   CorrectionStatus,
-  Timestamp,
   Language,
   Profile,
   DisplayProfile,
@@ -28,7 +27,7 @@ export const getAlgoliaDay = (timestamp: any): string => {
   return moment(timestamp).format('Y-M-D');
 };
 
-export const getDay = (timestamp: firebase.firestore.Timestamp): string => {
+export const getDay = (timestamp: any): string => {
   if (!timestamp) {
     return '';
   }
