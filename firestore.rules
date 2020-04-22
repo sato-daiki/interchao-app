@@ -150,7 +150,7 @@ service cloud.firestore {
 
   // review
   function isValidReviewers(reviewer) {
-    return reviewer.size() == 3
+    return reviewer.size() == 4
       && "uid" in reviewer && reviewer.uid is string
       && "userName" in reviewer && reviewer.userName is string
       && "photoUrl" in reviewer

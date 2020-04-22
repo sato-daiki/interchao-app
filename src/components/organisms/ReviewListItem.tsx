@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Rating } from 'react-native-ratings';
+import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
   fontSizeS,
   fontSizeM,
@@ -37,19 +37,29 @@ const styles = StyleSheet.create({
   },
   rating: {
     alignItems: 'flex-start',
-    paddingBottom: 8,
+    paddingBottom: 4,
+  },
+  starStyle: {
+    margin: 0,
   },
 });
 
 const ReviewListItem = ({ item, onPressUser }: Props): JSX.Element => {
-  const { createdAt, comment, reviewer } = item;
+  const { rating, createdAt, comment, reviewer } = item;
   const { uid, userName, photoUrl, nativeLanguage } = reviewer;
 
   return (
     <View style={styles.container}>
       <Text style={styles.postDayText}>{getDay(createdAt)}</Text>
       <View style={styles.rating}>
-        <Rating showRating={false} readonly imageSize={14} />
+        <AirbnbRating
+          isDisabled
+          defaultRating={rating}
+          showRating={false}
+          count={5}
+          size={14}
+          starStyle={styles.starStyle}
+        />
       </View>
       {comment ? <Text style={styles.comment}>{comment}</Text> : null}
       <ProfileIconHorizontal

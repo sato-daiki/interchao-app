@@ -10,7 +10,7 @@ import { borderLightColor, offWhite } from '../styles/Common';
 import { Space, HeaderText, LoadingModal } from '../components/atoms';
 import { UserListItem } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { Diary, Profile, Review } from '../types';
+import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 
@@ -101,13 +101,15 @@ const ReviewScreen: ScreenType = ({
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
+    const reviewer = {
+      uid: profile.uid,
+      userName: profile.userName,
+      photoUrl: profile.photoUrl,
+      nativeLanguage: profile.nativeLanguage,
+    } as Reviewer;
+
     const newReview = {
-      reviewer: {
-        uid: profile.uid,
-        userName: profile.userName,
-        photoUrl: profile.photoUrl,
-        nativeLanguage: profile.nativeLanguage,
-      },
+      reviewer,
       objectID: diary.objectID,
       revieweeUid: diary.correction.profile.uid,
       rating,
