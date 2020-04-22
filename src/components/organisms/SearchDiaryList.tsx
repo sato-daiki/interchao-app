@@ -8,12 +8,13 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
-import { MyDiaryStatus } from '../molecules';
+import { MyDiaryStatus, UserDiaryStatus } from '../molecules';
 import { Diary } from '../../types';
 import Highlight from './Highlight';
 import { Space } from '../atoms';
 
 interface Props {
+  me: boolean;
   item: Diary;
   onPressItem: (item: Diary) => void;
 }
@@ -54,7 +55,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchMyDiaryList: React.FC<Props> = ({
+const SearchDiaryList: React.FC<Props> = ({
+  me,
   item,
   onPressItem,
 }): JSX.Element => {
@@ -68,7 +70,7 @@ const SearchMyDiaryList: React.FC<Props> = ({
     >
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        <MyDiaryStatus diary={item} />
+        {me ? <MyDiaryStatus diary={item} /> : <UserDiaryStatus diary={item} />}
       </View>
       <Highlight
         textStyle={styles.title}
@@ -89,4 +91,4 @@ const SearchMyDiaryList: React.FC<Props> = ({
   );
 };
 
-export default SearchMyDiaryList;
+export default SearchDiaryList;

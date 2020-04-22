@@ -38,6 +38,7 @@ import {
 } from '../utils/diary';
 import { getUuid } from '../utils/common';
 import { mainColor, green, primaryColor } from '../styles/Common';
+import { getProfile } from '../utils/profile';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
@@ -112,6 +113,10 @@ const CorrectingScreen: ScreenType = ({
     user.tutorialCorrectiong
   );
 
+  // Profile関連
+  const [targetProfile, setTargetProfile] = useState<Profile>();
+  const [isProfileLoading, setIsProfileLoading] = useState(true);
+
   const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalTimeUp, setIsModalTimeUp] = useState(false); // タイムアップモーダル
 
@@ -129,6 +134,18 @@ const CorrectingScreen: ScreenType = ({
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      // プロフィールを取得
+      const newProfile = await getProfile(teachDiary.profile.uid);
+      if (newProfile) {
+        setTargetProfile(newProfile);
+      }
+      setIsProfileLoading(false);
+    };
+    f();
+  }, [teachDiary.profile.uid]);
 
   /**
    * コメントを追加する
@@ -617,7 +634,9 @@ const CorrectingScreen: ScreenType = ({
         <View style={styles.main}>
           <CorrectionOrigin
             isEmpty={!isCommentInput && infoComments.length === 0}
+            isProfileLoading={isProfileLoading}
             teachDiary={teachDiary}
+            targetProfile={targetProfile}
             onTimeUp={onTimeUp}
             setSelection={setSelection}
           />

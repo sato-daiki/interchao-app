@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
   },
   img: {
-    width: 160,
-    height: 160,
+    width: 120,
+    height: 120,
   },
 });
 

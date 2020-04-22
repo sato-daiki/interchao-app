@@ -2,12 +2,13 @@ import React, { useCallback } from 'react';
 import { FlatList } from 'react-native';
 import { connectInfiniteHits } from 'react-instantsearch-native';
 import { Diary } from '../../types';
-import SearchMyDiaryList from './SearchMyDiaryList';
+import SearchDiaryList from './SearchDiaryList';
 import { GrayHeader } from '../atoms';
 import { EmptyList } from '../molecules';
 import I18n from '../../utils/I18n';
 
 interface Props {
+  me: boolean;
   isEmpty: boolean;
   onPressItem: (objectID: string) => void;
   hits: Diary[];
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const DiaryHitList: React.FC<Props & any> = ({
+  me,
   isEmpty,
   onPressItem,
   hits,
@@ -42,13 +44,14 @@ const DiaryHitList: React.FC<Props & any> = ({
   const renderItem = useCallback(
     ({ item }: { item: Diary }): JSX.Element => {
       return (
-        <SearchMyDiaryList
+        <SearchDiaryList
+          me={me}
           item={item}
           onPressItem={(): void => onPressItem(item.objectID!)}
         />
       );
     },
-    [onPressItem]
+    [me, onPressItem]
   );
 
   const onEndReached = useCallback((): void => {
