@@ -1,6 +1,6 @@
 import { Language } from '.';
 
-interface Reviewer {
+export interface Reviewer {
   uid: string;
   userName: string;
   photoUrl: string | null;
