@@ -12,7 +12,7 @@ import {
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { borderLightColor, primaryColor, fontSizeM } from '../styles/Common';
-import { openCameraRoll } from '../utils/CameraRoll';
+import { openCameraRoll, uploadImageAsync } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';
 import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -87,6 +87,14 @@ const EditMyProfileScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       if (isLoading) return;
       setIsLoading(true);
+      // 画像のuodate
+      let newPhotoUrl = '';
+      const postIndex = Date.now().toString();
+      const path = `${profile.uid}/profileImages/${postIndex}`;
+      if (photoUrl) {
+        newPhotoUrl = await uploadImageAsync(photoUrl, path, 300);
+      }
+
       const ref = firebase
         .firestore()
         .collection('profiles')
@@ -96,7 +104,7 @@ const EditMyProfileScreen: ScreenType = ({
         name,
         userName,
         introduction,
-        photoUrl,
+        photoUrl: newPhotoUrl || photoUrl,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
       await ref.update({
