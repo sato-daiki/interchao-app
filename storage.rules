@@ -1,0 +1,12 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /profileImages/{userId}/{imageId} {
+      // 誰でも閲覧可能
+      allow read: if request.auth != null;
+      
+      // 自分のみ可能
+      allow write: if request.auth.uid == userId
+        && request.resource.contentType.match("image/.*")
+    }
+  }
+}
