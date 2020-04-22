@@ -93,7 +93,6 @@ const TeachDiaryScreen: ScreenType = ({
   const [proCorrection, setProCorrection] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
   const { correctionStatus, correctionStatusPro } = teachDiary;
-  const { confirmCorrection } = user;
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -166,7 +165,7 @@ const TeachDiaryScreen: ScreenType = ({
           correctingObjectID: teachDiary.objectID,
         });
 
-        // //  添削中一覧に追加する
+        //  添削中一覧に追加する
         const correctingRef = firebase
           .firestore()
           .doc(`correctings/${teachDiary.objectID}`);
@@ -175,7 +174,7 @@ const TeachDiaryScreen: ScreenType = ({
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
-        // //  日記のステータスを添削中に変更する
+        //  日記のステータスを添削中に変更する
         const diaryRef = firebase
           .firestore()
           .doc(`diaries/${teachDiary.objectID}`);
@@ -200,12 +199,12 @@ const TeachDiaryScreen: ScreenType = ({
 
   const onPressCorrection = useCallback(() => {
     // 添削モーダルはチェックを入れると２回目以降表示されなくなる
-    if (confirmCorrection) {
+    if (user.confirmCorrection) {
       onPressSubmitCorrection(false);
     } else {
       setIsModalCorrection(true);
     }
-  }, [confirmCorrection, onPressSubmitCorrection]);
+  }, [user.confirmCorrection, onPressSubmitCorrection]);
 
   useEffect(() => {
     navigation.setParams({
@@ -214,7 +213,14 @@ const TeachDiaryScreen: ScreenType = ({
       isYet: correctionStatus === 'yet' && user && !isModalCorrection,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [correctionStatus, user]);
+  }, [
+    correctionStatus,
+    isModalCorrection,
+    // navigation,
+    // onPressCorrection,
+    teachDiary.title,
+    user,
+  ]);
 
   const onPressUser = useCallback(
     (uid: string): void => {

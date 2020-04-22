@@ -155,6 +155,7 @@ service cloud.firestore {
       && "userName" in reviewer && reviewer.userName is string
       && "photoUrl" in reviewer
     	&& (reviewer.photoUrl == null || reviewer.photoUrl is string)
+      && "nativeLanguage" in reviewer && reviewer.nativeLanguage is string
   }
 
   // reviews
