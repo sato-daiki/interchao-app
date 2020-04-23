@@ -76,6 +76,7 @@ export const checkDuplicatedUserName = async (
 
 // 入力された文字チェック
 export const checkTypeUserName = (text: string): boolean => {
+  // eslint-disable-next-line no-useless-escape
   const letters = /^[a-zA-Z0-9\_\.]+$/;
   if (text.match(letters)) {
     return true;
@@ -86,6 +87,7 @@ export const checkTypeUserName = (text: string): boolean => {
 // 先頭チェック
 export const checkInitialUserName = (text: string): boolean => {
   const initialText = text.slice(0, 1);
+  // eslint-disable-next-line no-useless-escape
   const letters = /^[_\.]+$/;
   if (initialText.match(letters)) {
     return false;

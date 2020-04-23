@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
 const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { currentUser } = firebase.auth();
 
-  const onPressPrivacy = useCallback(() => {
-    navigation.navigate('Privacy');
-  }, [navigation]);
+  // const onPressPrivacy = useCallback(() => {
+  //   navigation.navigate('Privacy');
+  // }, [navigation]);
 
-  const onPressManagement = useCallback(() => {
-    navigation.navigate('Management');
-  }, [navigation]);
+  // const onPressManagement = useCallback(() => {
+  //   navigation.navigate('Management');
+  // }, [navigation]);
 
   const onPressLogout = useCallback(() => {
     const f = async (): Promise<void> => {

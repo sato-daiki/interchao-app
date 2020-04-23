@@ -29,8 +29,7 @@ import {
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 
-interface Props {
-  user: User;
+export interface Props {
   profile: Profile;
 }
 

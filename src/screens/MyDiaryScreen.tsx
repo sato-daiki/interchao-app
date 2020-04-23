@@ -33,14 +33,19 @@ import { getCorrection } from '../utils/corrections';
 import { LoadingModal } from '../components/atoms';
 import I18n from '../utils/I18n';
 
-interface Props {
+export interface Props {
   diary?: Diary;
   profile: Profile;
+}
+
+interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
   deleteDiary: (objectID: string) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -88,12 +93,12 @@ const styles = StyleSheet.create({
 const MyDiaryScreen: ScreenType = ({
   navigation,
   diary,
-  editDiary,
+  // editDiary,
   deleteDiary,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [correction, setCorrection] = useState<Correction>();
-  const [proCorrection, setProCorrection] = useState<Correction>();
+  // const [proCorrection, setProCorrection] = useState<Correction>();
   const [isLoading, setIsLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
   // const [isModalPublic, setIsModalPublic] = useState(false);
@@ -249,7 +254,7 @@ const MyDiaryScreen: ScreenType = ({
             }}
           />
         ) : null}
-        {proCorrection ? (
+        {/* {proCorrection ? (
           <MyDiaryCorrection
             isReview={isReview}
             correction={proCorrection}
@@ -260,7 +265,7 @@ const MyDiaryScreen: ScreenType = ({
               navigation.navigate('Review');
             }}
           />
-        ) : null}
+        ) : null} */}
       </ScrollView>
     </View>
   );

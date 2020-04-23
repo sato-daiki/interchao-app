@@ -33,7 +33,7 @@ const generateNotificationHandler = (
   navigation: NavigationStackProp,
   onRefresh: () => void
 ) => {
-  return async function notificationHandler(notification) {
+  return async function notificationHandler(notification): Promise<void> {
     const { origin, data } = notification;
     if (origin !== 'selected' || !data.navigate) {
       return;

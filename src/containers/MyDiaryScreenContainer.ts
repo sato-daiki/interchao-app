@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { NavigationStackProp } from 'react-navigation-stack';
-import MyDiaryScreen from '../screens/MyDiaryScreen';
+import MyDiaryScreen, { Props } from '../screens/MyDiaryScreen';
 import { State } from '../types/state';
 import { deleteDiary, editDiary } from '../stores/actions/diaryList';
 
@@ -8,7 +8,7 @@ interface OwnProps {
   navigation: NavigationStackProp;
 }
 
-const mapStateToProps = (state: State, ownProps: OwnProps) => {
+const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
   const { diaries } = state.rootReducer.diaryList;
   const { profile } = state.rootReducer;
 

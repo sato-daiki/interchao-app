@@ -10,7 +10,7 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { SubmitButton, WhiteButton, Space, Checkbox } from '../atoms';
+import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
@@ -36,15 +36,15 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkboxText: {
-    paddingLeft: 8,
-    fontSize: fontSizeS,
-    color: subTextColor,
-  },
+  // row: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  // },
+  // checkboxText: {
+  //   paddingLeft: 8,
+  //   fontSize: fontSizeS,
+  //   color: subTextColor,
+  // },
   icon: {
     alignSelf: 'center',
   },

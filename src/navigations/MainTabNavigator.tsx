@@ -176,8 +176,9 @@ const MainTab = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons name="pencil" size={25} color={tintColor} />
         ),
-        tabBarOnPress: ({ navigation }) =>
-          navigation.navigate('ModalPostDiary'),
+        tabBarOnPress: ({ navigation }): void => {
+          navigation.navigate('ModalPostDiary');
+        },
       },
     },
     TeachDiary: {

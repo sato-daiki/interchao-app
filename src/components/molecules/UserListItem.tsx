@@ -25,7 +25,6 @@ const UserListItem = ({
   photoUrl,
   nativeLanguage,
   onPressUser,
-  onPressButton,
 }: Props): JSX.Element => {
   return (
     <View style={styles.container}>

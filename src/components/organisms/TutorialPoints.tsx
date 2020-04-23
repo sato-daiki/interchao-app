@@ -33,7 +33,7 @@ const TutorialPoints: React.FC<Props> = ({
   isLoading = false,
   displayed,
   buttonText = I18n.t('tutorialPoints.buttonText'),
-  onPress = (): void => {},
+  onPress = (): void => undefined,
 }: Props): JSX.Element | null => {
   return (
     <Tutorial

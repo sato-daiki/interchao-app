@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { useSelector, shallowEqual } from 'react-redux';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Badge } from 'react-native-elements';
-import { User } from '../../types';
 import { State } from '../../types/state';
 
 interface Props {

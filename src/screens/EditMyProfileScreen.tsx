@@ -19,12 +19,17 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
 
-interface Props {
+export interface Props {
   profile: Profile;
+}
+
+interface DispatchProps {
   setProfile: (profile: Profile) => {};
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

@@ -22,11 +22,16 @@ export interface Props {
   profile: Profile;
   user: User;
   teachDiaries: Diary[];
+}
+
+interface DispatchProps {
   setUser: (user: User) => void;
   setTeachDiaries: (teachDiaries: Diary[]) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

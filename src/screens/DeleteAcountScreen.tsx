@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const DeleteAcountScreen: NavigationStackScreenComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [password, setPassword] = useState('');
