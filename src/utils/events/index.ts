@@ -30,4 +30,10 @@ export default {
 
   // 日記投稿
   CREATED_DIARY: 'CREATED_DIARY',
+  // 添削開始
+  CREATED_CORRECTING: 'CREATED_CORRECTING',
+  // 添削完了
+  CREATED_CORRECTION: 'CREATED_CORRECTION',
+  // レビュー作成
+  CREATED_REVIEW: 'CREATED_REVIEW',
 };

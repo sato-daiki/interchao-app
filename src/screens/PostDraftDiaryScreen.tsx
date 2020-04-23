@@ -91,7 +91,10 @@ const PostDraftDiaryScreen: ScreenType = ({
         const diary = getDiary('draft');
         const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
         await refDiary.update(diary);
-        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+        track(events.CREATED_DIARY, {
+          characters: text.length,
+          diaryStatus: 'draft',
+        });
         navigation.navigate('MyDiaryList');
         setIsLoading(false);
         setIsModalAlert(false);
@@ -101,7 +104,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       }
     };
     f();
-  }, [getDiary, isLoading, isModalLack, navigation]);
+  }, [getDiary, isLoading, isModalLack, navigation, text.length]);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
@@ -164,7 +167,11 @@ const PostDraftDiaryScreen: ScreenType = ({
           alert({ err });
         });
 
-      track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+      track(events.CREATED_DIARY, {
+        usePoints,
+        characters: text.length,
+        diaryStatus: 'publish',
+      });
 
       // reduxに追加
       addDiary({

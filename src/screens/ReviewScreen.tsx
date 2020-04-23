@@ -13,6 +13,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
+import { track, events } from '../utils/Analytics';
 
 interface Props {
   diary?: Diary;
@@ -124,7 +125,11 @@ const ReviewScreen: ScreenType = ({
     batch.set(refReview, newReview);
 
     batch.commit();
-
+    track(events.CREATED_REVIEW, {
+      objectID: diary.objectID,
+      characters: comment.length,
+      rating,
+    });
     editDiary(diary.objectID, {
       ...diary,
       isReview: true,

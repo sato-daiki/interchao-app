@@ -36,6 +36,7 @@ import { Correction } from '../types/correction';
 import Algolia from '../utils/Algolia';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
+import { track, events } from '../utils/Analytics';
 
 interface Props {
   user: User;
@@ -208,6 +209,7 @@ const TeachDiaryScreen: ScreenType = ({
           correctionStatus: 'correcting',
         });
         batch.commit();
+        track(events.CREATED_CORRECTING);
         navigation.navigate('Correcting', { objectID: teachDiary.objectID });
         setIsLoading(false);
         setIsModalCorrection(false);
