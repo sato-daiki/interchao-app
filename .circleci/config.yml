@@ -23,7 +23,7 @@ commands:
     steps:
       - checkout
       - restore_module_cache: { module_path: ./ }
-      - run: yarn
+      - run: yarn install
       - save_module_cache: { module_path: ./ }
       - run: yarn type-check # type-checkを実施する
       - run: yarn lint # lintを実施する
@@ -38,7 +38,7 @@ commands:
 jobs:
   test:
     docker:
-      - image: circleci/node:8.11.3
+      - image: circleci/node:10
     working_directory: ~/app
     steps:
       - setup_and_test
