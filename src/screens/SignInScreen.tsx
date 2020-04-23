@@ -9,7 +9,7 @@ import { CheckTextInput } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
-import { emailInputError, emailValidate } from '../utils/InputCheck';
+import { emailInputError, emailValidate } from '../utils/common';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 
