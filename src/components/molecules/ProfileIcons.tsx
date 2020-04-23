@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProfileIcon } from '../atoms';
-import { Correction } from '../../types';
+import { DisplaCorrection } from '../../types';
 
 interface Props {
-  correction: Correction | null;
-  proCorrection: Correction | null;
+  correction: DisplaCorrection | null;
+  proCorrection: DisplaCorrection | null;
   onPressUser: (uid: string) => void;
 }
 
@@ -55,13 +55,15 @@ const ProfileIcons: React.FC<Props> = ({
       <View style={styles.right}>
         <ProfileIcon
           size={24}
-          photoUrl={proCorrection!.profile.photoUrl}
-          onPress={(): void => onPressUser(proCorrection!.profile.uid)}
+          photoUrl={correction!.profile.photoUrl}
+          nativeLanguage={correction!.profile.nativeLanguage}
+          onPress={(): void => onPressUser(correction!.profile.uid)}
         />
       </View>
       <ProfileIcon
         size={24}
         photoUrl={proCorrection!.profile.photoUrl}
+        nativeLanguage={proCorrection!.profile.nativeLanguage}
         onPress={(): void => onPressUser(proCorrection!.profile.uid)}
       />
     </View>
