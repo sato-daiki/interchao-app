@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
-import TeachDiarySearchScreen from '../screens/TeachDiarySearchScreen';
+import { State } from '../types/state';
+import TeachDiarySearchScreen, {
+  Props,
+} from '../screens/TeachDiarySearchScreen';
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: State): Props => {
   const { profile } = state.rootReducer;
   return {
     profile,

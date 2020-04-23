@@ -1,7 +1,9 @@
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 import {
-  ALGOLIA_API_KEY, // APPLICATION_ID
+  ALGOLIA_API_KEY,
   ALGOLIA_ADMIN_API_KEY,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
 } from '@env';
 
 type SortType = 'createdAt' | 'updatedAt';
@@ -21,7 +23,7 @@ class Algolia {
     }
   }
 
-  public getDiaryIndex = async (clean = false): SearchIndex => {
+  public getDiaryIndex = async (clean = false): Promise<SearchIndex> => {
     if (clean) {
       this.client.clearCache();
     }

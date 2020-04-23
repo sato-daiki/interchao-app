@@ -1,9 +1,12 @@
 import firebase from 'firebase';
 import '@firebase/firestore';
 import Constants from 'expo-constants';
+
 import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
 } from '@env';
 
 const isProduction = Constants.manifest.releaseChannel === 'production';

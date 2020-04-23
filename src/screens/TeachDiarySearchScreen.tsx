@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
 import algoliasearch from 'algoliasearch';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '@env';
 import {
   NavigationStackOptions,

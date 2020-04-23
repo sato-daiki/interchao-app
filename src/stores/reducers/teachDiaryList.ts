@@ -33,7 +33,10 @@ const editTeachDiary = (
   };
 };
 
-const teachDiaryList = (state = initialState, action: Actions) => {
+const teachDiaryList = (
+  state = initialState,
+  action: Actions
+): TeachDiaryListState => {
   switch (action.type) {
     case Types.SET_TEACH_DIARIES:
       return {

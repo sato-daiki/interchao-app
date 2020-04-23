@@ -48,7 +48,7 @@ const deleteDiary = (
   };
 };
 
-const diaryList = (state = initialState, action: Actions) => {
+const diaryList = (state = initialState, action: Actions): DiaryListState => {
   switch (action.type) {
     case Types.SET_DIARIES:
       return {
