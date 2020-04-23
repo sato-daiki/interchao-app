@@ -28,7 +28,6 @@ export interface State {
     user: User;
     profile: Profile;
     diaryList: DiaryListState;
-    draftDiaryList: DraftDiaryListState;
     teachDiaryList: TeachDiaryListState;
   };
 }

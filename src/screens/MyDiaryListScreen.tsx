@@ -37,6 +37,9 @@ export interface Props {
   diaries: Diary[];
   diaryTotalNum: number;
   localStatus: LocalStatus;
+}
+
+interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
   setUser: (user: User) => void;
   setDiaries: (diaries: Diary[]) => void;
@@ -44,7 +47,9 @@ export interface Props {
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

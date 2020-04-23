@@ -38,14 +38,19 @@ import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 
-interface Props {
+export interface Props {
   user: User;
   teachDiary: Diary;
+}
+
+interface DispatchProps {
   editTeachDiary: (objectID: string, diary: Diary) => void;
   setUser: (user: User) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

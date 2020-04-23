@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { borderLightColor } from '../styles/Common';
 import { EmptyFavoriteUser, UserListItem } from '../components/molecules';
-import { Profile } from '../types';
+import { Profile, Diary } from '../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +30,7 @@ const FavoriteUserListScreen: NavigationStackScreenComponent = ({
   const onPressFavorite = useCallback(() => {}, []);
 
   const renderItem = useCallback(
-    ({ item }: { item: Profile }): JSX.Element => {
+    ({ item }): JSX.Element => {
       const { userName, photoUrl, nativeLanguage } = item;
       return (
         <View style={styles.item}>

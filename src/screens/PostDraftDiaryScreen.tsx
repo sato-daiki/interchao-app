@@ -145,7 +145,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       setIsLoading(true);
 
       const { params = {} } = navigation.state;
-      const { item }: { item: Diary } = params;
+      const { item } = params;
       const usePoints = getUsePoints(text.length, profile.learnLanguage);
       const newPoints = user.points - usePoints;
       const diary = getDiary('publish');

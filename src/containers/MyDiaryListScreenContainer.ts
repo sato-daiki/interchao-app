@@ -7,9 +7,9 @@ import {
 import { setLocalStatus } from '../stores/actions/localStatus';
 import { setUser } from '../stores/actions/user';
 import { State } from '../types/state';
-import MyDiaryListScreen from '../screens/MyDiaryListScreen';
+import MyDiaryListScreen, { Props } from '../screens/MyDiaryListScreen';
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: State): Props => {
   const { diaries, diaryTotalNum } = state.rootReducer.diaryList;
   return {
     localStatus: state.rootReducer.localStatus,

@@ -4,6 +4,8 @@ import { firestore } from 'firebase';
 import {
   DEVELOPMENT_AMPLITUDE_API_KEY,
   PRODUCTION_AMPLITUDE_API_KEY,
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
 } from '@env';
 import { User, Profile, Language } from '../types';
 
