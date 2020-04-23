@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { setProfile } from '../stores/actions/profile';
-import InputUserNameScreen from '../screens/InputUserNameScreen';
+import InputUserNameScreen, { Props } from '../screens/InputUserNameScreen';
 import { State } from '../types/state';
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: State): Props => ({
   profile: state.rootReducer.profile,
 });
 

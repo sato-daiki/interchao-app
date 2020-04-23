@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeS, subTextColor } from '../../styles/Common';
 import { Diary } from '../../types';
 import { getMyDiaryStatus } from '../../utils/diary';
@@ -26,7 +25,6 @@ const styles = StyleSheet.create({
 
 const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
   const {
-    isPublic,
     diaryStatus,
     correctionStatus,
     isReview,

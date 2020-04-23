@@ -11,12 +11,17 @@ import { User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 
-interface Props {
+export interface Props {
   user: User;
+}
+
+interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
  * 通知画面
  */
 const NoticeScreen: ScreenType = ({ user, setUser }) => {
-  const { notificationReview, notificationCorrection } = user;
+  const { notificationCorrection } = user;
   const onPressCorrection = useCallback(() => {
     const f = async (): Promise<void> => {
       await firebase
@@ -52,22 +57,22 @@ const NoticeScreen: ScreenType = ({ user, setUser }) => {
     f();
   }, [notificationCorrection, setUser, user]);
 
-  const onPressReview = useCallback(() => {
-    const f = async (): Promise<void> => {
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({
-          notificationReview: !notificationReview,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      setUser({
-        ...user,
-        notificationReview: !notificationReview,
-      });
-    };
-    f();
-  }, [notificationReview, setUser, user]);
+  // const onPressReview = useCallback(() => {
+  //   const f = async (): Promise<void> => {
+  //     await firebase
+  //       .firestore()
+  //       .doc(`users/${user.uid}`)
+  //       .update({
+  //         notificationReview: !notificationReview,
+  //         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //       });
+  //     setUser({
+  //       ...user,
+  //       notificationReview: !notificationReview,
+  //     });
+  //   };
+  //   f();
+  // }, [notificationReview, setUser, user]);
 
   return (
     <View style={styles.container}>

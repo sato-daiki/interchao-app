@@ -19,14 +19,19 @@ import {
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 
-interface Props {
+export interface Props {
   user: User;
   profile: Profile;
+}
+
+interface DispatchProps {
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

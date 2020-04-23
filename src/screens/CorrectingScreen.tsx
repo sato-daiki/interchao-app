@@ -48,15 +48,20 @@ interface ButtonInfo {
   color: string;
 }
 
-interface Props {
+export interface Props {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
+}
+
+interface DispatchProps {
   setUser: (user: User) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

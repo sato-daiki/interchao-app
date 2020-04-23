@@ -1,6 +1,6 @@
 // global __DEV__
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
-import { persistStore } from 'redux-persist';
+import { persistStore, Persistor } from 'redux-persist';
 
 import thunk from 'redux-thunk';
 import reduxLogger from 'redux-logger'; // eslint-disable-line import/no-extraneous-dependencies
@@ -21,9 +21,9 @@ export const store = createStore(
   composeEnhancers(middlewares)
 );
 
-export function configureStore() {
+export const configureStore = () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   const persistor = persistStore(store);
   return { persistor, store };
-}
+};

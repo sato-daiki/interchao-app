@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { State } from '../types/state';
 import { setUser } from '../stores/actions/user';
 import { addDiary } from '../stores/actions/diaryList';
-import PostDraftDiaryScreen from '../screens/PostDraftDiaryScreen';
+import PostDraftDiaryScreen, { Props } from '../screens/PostDraftDiaryScreen';
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: State): Props => {
   return {
     user: state.rootReducer.user,
     profile: state.rootReducer.profile,

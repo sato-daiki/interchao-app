@@ -71,7 +71,7 @@ class Algolia {
 
 let instance: Algolia | null = null;
 
-const AlgoliaClient = () => {
+const AlgoliaClient = (): Algolia => {
   if (!instance) {
     instance = new Algolia();
   }

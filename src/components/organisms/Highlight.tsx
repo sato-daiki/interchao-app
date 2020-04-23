@@ -34,6 +34,7 @@ const Highlight: React.FC<Props & any> = ({
   const highligtedHit = parsedHit.map((part: any, index: number) => {
     if (part.isHighlighted) {
       return (
+        // eslint-disable-next-line react/no-array-index-key
         <Text key={index} style={styles.text}>
           {part.value}
         </Text>

@@ -27,11 +27,6 @@ const MyDiaryListMenu = ({
     onClose();
   }, [navigation, onClose]);
 
-  const onPressModalPremium = useCallback(() => {
-    navigation.navigate('ModalPremium');
-    onClose();
-  }, [navigation, onClose]);
-
   const onPressReviewList = useCallback(() => {
     navigation.navigate('ReviewList', { uid });
     onClose();

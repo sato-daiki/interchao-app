@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import * as Amplitude from 'expo-analytics-amplitude';
+import * as Sentry from 'sentry-expo';
 import { firestore } from 'firebase';
 import {
   DEVELOPMENT_AMPLITUDE_API_KEY,
@@ -48,7 +49,7 @@ export const track = (eventName: string, properties?: any): void => {
       Amplitude.logEvent(eventName);
     }
   } catch (err) {
-    console.log(err);
+    Sentry.captureException(err);
   }
 };
 

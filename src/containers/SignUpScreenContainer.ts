@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
-import SignUpScreen from '../screens/SignUpScreen';
+import SignUpScreen, { Props } from '../screens/SignUpScreen';
 import { State } from '../types/state';
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: State): Props => ({
   profile: state.rootReducer.profile,
 });
 

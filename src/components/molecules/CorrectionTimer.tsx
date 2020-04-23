@@ -38,6 +38,7 @@ const getRemaining = (time: number): Time => {
 
 const CorrectionTimer: React.FC<Props> = ({ onTimeUp }): JSX.Element => {
   const [fontsLoaded] = useFonts({
+    // eslint-disable-next-line global-require
     RobotoMono: require('../../styles/fonts/RobotoMono-Regular.ttf'),
   });
 

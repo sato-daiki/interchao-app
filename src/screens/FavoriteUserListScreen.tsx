@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { NavigationStackScreenComponent } from 'react-navigation-stack';
 import { borderLightColor } from '../styles/Common';
 import { EmptyFavoriteUser, UserListItem } from '../components/molecules';
-import { Profile, Diary } from '../types';
+import { Diary } from '../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     borderBottomColor: borderLightColor,
   },
 });
+const profiles = [];
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
@@ -26,8 +27,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 const FavoriteUserListScreen: NavigationStackScreenComponent = ({
   navigation,
 }) => {
-  const [profiles, setProfiles] = useState();
-  const onPressFavorite = useCallback(() => {}, []);
+  const onPressFavorite = useCallback(() => undefined, []);
 
   const renderItem = useCallback(
     ({ item }): JSX.Element => {

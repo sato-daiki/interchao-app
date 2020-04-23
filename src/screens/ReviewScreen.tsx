@@ -15,11 +15,22 @@ import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
 
-interface Props {
+export interface Props {
   diary?: Diary;
   profile: Profile;
+}
+
+interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
 }
+
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -39,12 +50,6 @@ const styles = StyleSheet.create({
   },
 });
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
-
 const ReviewScreen: ScreenType = ({
   navigation,
   diary,
@@ -54,7 +59,7 @@ const ReviewScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const onPressFavorite = useCallback(() => {}, []);
+  const onPressFavorite = useCallback(() => undefined, []);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();

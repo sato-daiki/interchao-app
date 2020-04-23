@@ -23,12 +23,17 @@ import {
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 
-interface Props {
+export interface Props {
   profile: Profile;
+}
+
+interface DispatchProps {
   setProfile: (profile: Profile) => void;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);

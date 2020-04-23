@@ -16,9 +16,8 @@ import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
 
-interface Props {
+export interface Props {
   profile: Profile;
-  setProfile: (profile: Profile) => void;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
