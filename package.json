@@ -6,7 +6,9 @@
     "ios": "expo start --ios",
     "lint": "eslint ./app --ext .js,.jsx,.ts,.tsx",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "node node_modules/jest/bin/jest.js --watch",
+    "type-check": "tsc --noEmit"
   },
   "husky": {
     "hooks": {
