@@ -8,7 +8,7 @@ import {
   emailInputError,
   emailValidate,
   emaillExistCheck,
-} from '../utils/InputCheck';
+} from '../utils/common';
 import firebase from '../constants/firebase';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';

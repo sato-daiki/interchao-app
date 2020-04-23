@@ -8,7 +8,7 @@ import {
   emailInputError,
   emailValidate,
   emaillExistCheck,
-} from '../utils/InputCheck';
+} from '../utils/common';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { Profile, UserReview } from '../types';
