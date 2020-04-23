@@ -39,6 +39,7 @@ import {
 import { getUuid } from '../utils/common';
 import { mainColor, green, primaryColor } from '../styles/Common';
 import { getProfile } from '../utils/profile';
+import { track, events } from '../utils/Analytics';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
@@ -237,6 +238,13 @@ const CorrectingScreen: ScreenType = ({
           .firestore()
           .doc(`correctings/${teachDiary.objectID}`);
         transaction.delete(correctingRef);
+
+        track(events.CREATED_CORRECTION, {
+          objectID: teachDiary.objectID,
+          getPoints,
+          commentNum: infoComments.length,
+          summaryCharacters: summary.length,
+        });
 
         // reduxに追加
         editTeachDiary(teachDiary.objectID, {
