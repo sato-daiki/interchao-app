@@ -4,7 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { emailInputError, emailValidate } from '../utils/InputCheck';
+import { emailInputError, emailValidate } from '../utils/common';
 import firebase from '../constants/firebase';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
