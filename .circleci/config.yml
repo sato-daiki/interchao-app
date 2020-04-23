@@ -27,14 +27,6 @@ commands:
       - save_module_cache: { module_path: ./ }
       - run: yarn type-check # type-checkを実施する
       - run: yarn lint # lintを実施する
-      - run:
-          name: 'Build Storybook' # storybook を生成する
-          command: yarn storybook:build
-      - store_artifacts:
-          path: storybook-static # 生成したStorybookをArtifactに保存する
-      - run:
-          name: 'Notify Storybook in PR' # ArtifactをPull Requestに通知する
-          command: yarn klank
 jobs:
   test:
     docker:
