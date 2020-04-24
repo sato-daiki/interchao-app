@@ -232,6 +232,7 @@ const TeachDiaryListScreen: ScreenType = ({
       <LoadingModal visible={isLoading} />
       <TutorialTeachDiaryList
         isLoading={isTutorialLoading}
+        nativeLanguage={profile.nativeLanguage}
         displayed={user.tutorialTeachDiaryList}
         onPress={onPressTutorial}
       />

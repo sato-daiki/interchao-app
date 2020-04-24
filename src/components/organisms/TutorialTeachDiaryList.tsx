@@ -5,6 +5,7 @@ import { Space } from '../atoms';
 import { People } from '../../images';
 import Tutorial from '../template/Tutorial';
 import I18n from '../../utils/I18n';
+import { Language } from '../../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
 interface Props {
   isLoading?: boolean;
   displayed: boolean;
+  nativeLanguage: Language;
   buttonText?: string;
   onPress?: () => void;
 }
@@ -35,6 +37,7 @@ interface Props {
 const TutorialTeachDiaryList: React.FC<Props> = ({
   isLoading = false,
   displayed,
+  nativeLanguage,
   buttonText = I18n.t('tutorialTeachDiaryList.buttonText'),
   onPress = (): void => undefined,
 }: Props): JSX.Element | null => {
@@ -50,11 +53,11 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
         <Image style={styles.img} source={People} resizeMode="contain" />
         <Space size={24} />
         <Text style={styles.text}>
-          {I18n.t('tutorialTeachDiaryList.text1')}
+          {I18n.t('tutorialTeachDiaryList.text1', { language: nativeLanguage })}
           <Text style={styles.main}>
             {I18n.t('tutorialTeachDiaryList.textMainColor')}
           </Text>
-          {I18n.t('tutorialTeachDiaryList.text2')}
+          {I18n.t('tutorialTeachDiaryList.text2', { language: nativeLanguage })}
         </Text>
       </View>
     </Tutorial>

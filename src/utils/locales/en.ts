@@ -1,402 +1,405 @@
 // 共通のワード
 const common = {
-  cancel: 'キャンセル',
-  close: '閉じる',
-  confirmation: '確認',
-  error: 'エラー',
-  done: '完了',
-  edit: '編集',
-  register: '登録',
-  sending: '送信',
-  next: '次へ',
-  publish: '投稿',
-  draft: '下書き保存',
-  skip: 'スキップ',
-  add: '追加',
-  delete: '削除',
+  cancel: 'Cancel',
+  close: 'Close',
+  confirmation: 'Confirmation',
+  error: 'Error',
+  done: '　Done',
+  edit: 'Edit',
+  register: 'Register',
+  sending: 'Send',
+  next: 'Next',
+  publish: 'Publish',
+  draft: 'Save as Draft',
+  skip: 'Skip',
+  add: 'Add',
+  delete: 'Delete',
 };
 
 // タブ
 const mainTab = {
-  myDiary: 'マイ日記',
-  postDiary: '日記を書く',
-  teachDiary: 'みんなの日記',
+  myDiary: 'My Journal Entries',
+  postDiary: 'Write a Journal Entry',
+  teachDiary: 'Everyone’s Entries',
 };
 
 // 共通のエラーメッセージ
 const errorMessage = {
-  other: 'エラーが発生しました',
-  wrongPassword: 'パスワードが違います',
-  invalidEmail: 'メールアドレスの形式が正しくありません',
-  weakPassword: 'パスワードは6桁以上で入力してください',
-  userNotFound: 'メールアドレスが存在しません',
-  emailAlreadyInUse: 'このメールアドレスはすでに登録されています',
+  other: 'There is an error.',
+  wrongPassword: 'This password is incorrect.',
+  invalidEmail: 'Please enter a valid email address',
+  weakPassword: 'Please enter a password with at least 6 digits',
+  userNotFound: 'This email address does not exist.',
+  emailAlreadyInUse: 'This email address is already registered',
   tooManyRequests:
-    'エラーの数が一定数を超えました。時間をおいてから再度お試しください',
-  network: '通信エラーが発生しました。時間をおいて再度お試し下さい。',
-  defaultError: 'エラーが発生しました。{{message}}',
-  emptyUserName: 'ユーザネームを入力してください',
+    'You have made too many failed attempts. Please try again later.',
+  network: 'There has been a network error.',
+  defaultError: 'There is an error. {{message}}',
+  emptyUserName: 'Please enter a username.',
   invalidUserName:
-    'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません',
-  initialUserName: '先頭の文字は半角英数字以外使えません',
-  userNameAlreadyInUse:
-    'すでにこのユーザーネームを使用しているユーザーがいます',
-  notFound: 'ページが開けません。エラーが発生しました',
-  cantLogout: 'メールアドレスが登録されていないため、ログアウトできません。',
-  invalidRaiting: '評価は1〜5で入力してください',
+    'Only alphanumeric characters, _ (the underbar), and . (period) can be used.',
+  initialUserName: 'The first character must be an alphanumeric character.',
+  userNameAlreadyInUse: 'This username has already been taken.',
+  notFound: 'This page cannot be opened. There is an error.',
+  cantLogout:
+    'Because you have not registered an email address, you cannot logout.',
+  invalidRaiting: 'Please rate between 1~5.',
   correctionAlready:
-    'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
-  deleteTargetUser:
-    'このページは開けません。対象のユーザは削除された可能性があります。',
-  emptyTitile: 'タイトルが入力されていません',
-  emptyText: '本文が入力されていません',
-  lackPointsTitle: 'ポイント不足',
+    'Someone else has started correcting this entry. Please search for another entry.',
+  deleteTargetUser: 'This page cannot be opened. The user may have deleted it.',
+  emptyTitile: 'There is no title.',
+  emptyText: 'There is no text.',
+  lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
-    '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは日本語の日記を添削することで溜めることができます。',
+    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{language}}.',
 };
 
 // 各画面ごとの文字
 const correcting = {
-  deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
-  summaryAlert: 'まとめが編集中です',
-  headerTitle: '添削する',
-  titleComment: 'コメントする',
-  titleSummary: 'まとめを書く',
-  titleDone: '投稿する',
-  menuEdit: '編集する',
-  menuCommentDelete: 'コメントを削除する',
-  menuSummaryDelete: 'まとめを削除する',
-  commentList: 'コメント一覧',
+  headerTitle: 'Make Corrections',
+  deleteAlert:
+    'All of your corrections will be deleted. Would you like to proceed?',
+  summaryAlert: 'The summary is being edited.',
+  titleComment: 'Write Comment',
+  titleSummary: 'Write a Summary',
+  titleDone: 'Publish',
+  menuEdit: 'Edit',
+  menuCommentDelete: 'Erase Comment',
+  menuSummaryDelete: 'Erase Summary',
+  commentList: 'List of Comments',
 };
 
 const deleteAcount = {
-  headerTitle: '退会について',
+  headerTitle: 'About Account Deletion',
   text:
-    '退会すると投稿した日記の情報が完全に消去され、復元することはできません。\n\nそれでも退会を希望する方は下のボタンから退会してください。',
-  withdrawal: '退会する',
+    'If you delete your account, all information about the journal entries you published will be deleted and cannot be retrieved. If you would still like to delete your account, please tap the button below.',
+  withdrawal: 'Delete Account',
 };
 
 const draftDiary = {
-  headerTitle: '下書き',
+  headerTitle: 'Drafts',
   diaryList: {
-    one: '下書き一覧{{count}}件',
-    other: '下書き一覧{{count}}件',
-    zero: '下書き一覧',
+    one: 'List of Drafts: {{count}} entry',
+    other: 'List of Drafts: {{count}} entries',
+    zero: 'List of Drafts',
   },
-  empty: '下書き一覧はありません',
+  empty: 'You do not have any drafts.',
 };
 
 const editCorrectionComment = {
-  headerTitle: 'コメントを編集する',
+  headerTitle: 'Edit Comment',
 };
 
 const editCorrectionSummary = {
-  headerTitle: 'まとめを編集する',
+  headerTitle: 'Edit Summary',
 };
 
 const editEmail = {
-  headerTitle: 'メールアドレス変更',
-  title: '新しいメールアドレスを入力してください',
-  labelEmail: '新しいメールアドレス',
-  labelPassword: '現在のパスワード',
+  headerTitle: 'Edit Email Address',
+  title: 'Please enter a new email address.',
+  labelEmail: 'New Email Address',
+  labelPassword: 'Current Password',
 };
 
 const editMyProfile = {
-  headerTitle: 'プロフィール変更',
-  name: '名前',
-  userName: 'ユーザネーム',
-  placeholderIntroduction: '自己紹介(200字以内)',
+  headerTitle: 'Edit Profile',
+  name: 'Name',
+  userName: 'Username',
+  placeholderIntroduction: 'Self Introduction (200 characters or less)',
 };
 
 const editPassword = {
-  headerTitle: 'パスワード変更',
-  forgetText: 'パスワードをお忘れの方は',
-  link: 'こちら',
-  currentPassword: '現在のパスワード',
-  newPassword: '新しいパスワード（６ケタ以上）',
+  headerTitle: 'Edit Password',
+  forgetText: '',
+  link: 'Forgot password?',
+  currentPassword: 'Current Password',
+  newPassword: 'New Password (6 or more characters)',
 };
 
 const editUserName = {
-  headerTitle: 'ユーザーネーム',
-  userName: 'ユーザーネーム',
+  headerTitle: 'Username',
+  userName: 'Username',
 };
 
 const foregetPassword = {
-  headerTitle: 'パスワード再設定',
-  email: 'メールアドレス',
-  title: 'メールアドレスを入力してください',
-  subText: 'メールアドレスにパスワードの変更URLを送ります',
+  headerTitle: 'Change Password',
+  email: 'Email',
+  title: 'Please enter your email address.',
+  subText:
+    'We will send a URL to your email address for you to change your password.',
 };
 
 const initialize = {
-  start: 'はじめる',
-  acount: 'アカウントをお持ちの方は',
-  link: 'こちら',
+  start: 'Create Account',
+  acount: 'Have an account already?',
+  link: 'Login',
 };
 
 const inputUserName = {
-  headerTitle: 'ユーザーネーム登録',
-  title: 'ユーザーネームを入力してください',
-  subText: 'このユーザネームはいつでも変更できます',
+  headerTitle: 'Username Registration',
+  title: 'Please enter your username.',
+  subText: 'You can change your username at any time.',
 };
 
 const myDiary = {
-  menuDelete: '削除する',
+  menuDelete: 'Delete',
   menuChangePublic: '公開設定を変更する',
-  confirmMessage: '本当に削除してよろしいでしょうか？',
+  confirmMessage: 'Are you sure you want to delete this journal entry?',
 };
 
 const myDiaryList = {
-  headerTitle: 'マイ日記を探す',
+  headerTitle: 'Search My Journal',
   diaryList: {
-    one: 'マイ日記一覧{{count}}件',
-    other: 'マイ日記一覧{{count}}件',
-    zero: 'マイ日記一覧',
+    one: 'My Journal Entries: {{count}} entry',
+    other: 'My Journal Entries: {{count}} entries',
+    zero: 'My Journal Entries',
   },
 };
 
 const myDiarySerch = {
-  placeholder: 'タイトルと本文で検索',
+  placeholder: 'Search by title or keywords',
 };
 
 const myPage = {
-  headerTitle: 'マイページ',
-  editButton: '編集する',
+  headerTitle: 'My Page',
+  editButton: 'Edit',
 };
 
 const notice = {
-  headerTitle: '通知',
-  finishCorrection: 'マイ日記の添削が完了',
-  finishReview: 'レビューが届く',
+  headerTitle: 'Notifications',
+  finishCorrection: 'When my journal entries are corrected',
+  finishReview: 'When I get reviews',
 };
 
 const postDiary = {
-  headerTitle: '新規日記',
+  headerTitle: 'New Journal Entry',
 };
 
 const postDraftDiary = {
-  headerTitle: '下書を編集',
+  headerTitle: 'Edit Your Draft',
 };
 
 const registerEmailPassword = {
-  headerTitle: 'メールアドレス/パスワード登録',
-  title: 'メールアドレスとパスワードを入力してください',
+  headerTitle: 'Register Email Address/Password',
+  title: 'Please enter your email address and password',
   subText:
-    '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
-  email: 'メールアドレス',
-  password: 'パスワード（６ケタ以上）',
+    'You will need this data when switching devices. You can also register at a later time.',
+  email: 'Email Address',
+  password: 'Password (6 or more characters)',
 };
 
 const reviewList = {
-  headerTitle: 'レビュー一覧',
-  reviewList: 'レビュー一覧',
+  headerTitle: 'List of Reviews',
+  reviewList: 'List of Reviews',
 };
 
 const review = {
-  headerTitle: 'レビューする',
-  placeholder: 'コメント',
-  confirmation: '編集中のレビューは全て削除されますが、よろしいでしょうか？',
+  headerTitle: 'Review',
+  placeholder: 'Comment',
+  confirmation:
+    'The draft of your review will be deleted. Would you like to proceed?',
 };
 
 const selectLanguage = {
-  headerTitle: '言語の選択',
-  title: '言語を選択してください',
-  learn: '学びたい言語',
-  native: 'ネイティブ言語',
+  headerTitle: 'Language Selection',
+  title: 'Please choose your languages.',
+  learn: 'Language you want to learn',
+  native: 'Native language',
 };
 
 const setting = {
-  headerTitle: '設定',
-  title: '基本設定',
-  notice: '通知',
-  editEmail: 'メールアドレスの変更',
-  editPassword: 'パスワードの変更',
-  registerEmailPassword: 'メールアドレス/パスワードの登録',
-  tutorial: 'チュートリアル',
-  management: '運営',
-  privacy: 'プライバシーポリシー',
-  deleteAcount: '退会について',
-  logout: 'ログアウト',
+  headerTitle: 'Settings',
+  title: 'Basic',
+  notice: 'Notifications',
+  editEmail: 'Edit Email Address',
+  editPassword: 'Edit Password',
+  registerEmailPassword: 'Register Email Address/Password',
+  tutorial: 'Tutorial',
+  management: 'Management',
+  privacy: 'Privacy Policy',
+  deleteAcount: 'About Account Deletion',
+  logout: 'Logout',
 };
 
 const signIn = {
-  headerTitle: 'ログイン',
-  email: 'メールアドレス',
-  password: 'パスワード',
-  login: 'ログイン',
-  forgetText: 'パスワードをお忘れの方は',
-  link: 'こちら',
+  headerTitle: 'Login',
+  email: 'Email Address',
+  password: 'Password',
+  login: 'Login',
+  forgetText: '',
+  link: 'Forgot password?',
 };
 
 const signUp = {
-  headerTitle: 'メールアドレス登録',
-  title: 'メールアドレスとパスワードを入力してください',
+  headerTitle: 'Email Address Registration',
+  title: 'Please enter your email address and password.',
   subText:
-    '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
-  email: 'メールアドレス',
-  password: 'パスワード（６ケタ以上）',
+    'You will need this data when switching devices. You can also register at a later time.',
+  email: 'Email Address',
+  password: 'Password (6 or more characters)',
 };
 
 const teachDiary = {
-  correcting: '添削する',
+  correcting: 'Correct',
 };
 
 const teachDiaryList = {
-  headerTitle: 'みんなの日記を探す',
-  diaryList: '日本語を勉強している人の日記一覧',
-  empty: 'みんなの日記一覧がありません',
+  headerTitle: 'Search Everyone’s Entries',
+  diaryList: 'List of Entries for People Studying Japanese',
+  empty: 'There are no entries from other people.',
 };
 
 const teachDiarySerch = {
-  searchBar: 'タイトルと本文で検索',
+  searchBar: 'Search by title or keywords',
 };
 
 const tutorialList = {
-  headerTitle: 'チュートリアル一覧',
-  correcting: '添削の仕方',
-  postDiary: '日記の書き方',
-  points: 'ポイントについて',
+  headerTitle: 'List of Tutorials',
+  correcting: 'How to Make Corrections',
+  postDiary: 'How to Write Entries',
+  points: 'About Points',
 };
 
 const userProfile = {
-  headerTitle: 'プロフィール',
-  moreRead: '{{count}}件のレビューを全部見る',
-  blocked: 'ブロック',
-  unBlocked: 'ブロックを解除する',
-  report: '報告する',
+  headerTitle: 'Profile',
+  moreRead: 'View All {{count}} Reviews',
+  blocked: 'Block',
+  unBlocked: 'Unblock',
+  report: 'Report',
   diaryList: {
-    one: '日記一覧{{count}}件',
-    other: '日記一覧{{count}}件',
-    zero: '日記一覧',
+    one: '{{count}} Journal Entry',
+    other: '{{count}} Journal Entries',
+    zero: 'Journal Entries',
   },
-  topReview: 'トップレビュー',
+  topReview: 'Top Reviews',
 };
 
 // atoms
 const commentCard = {
-  original: '原文',
-  fix: '修正文',
-  detail: 'コメント',
+  original: 'Original',
+  fix: 'Edit',
+  detail: 'Comment',
 };
 
 const summaryCard = {
-  title: 'まとめ',
+  title: 'Summary',
 };
 
 const userPoints = {
-  points: 'ポイント',
+  points: 'Points',
 };
 
 const userPointsBig = {
-  points: '現在のポイント',
+  points: 'Current Points',
 };
 
 //  molecules
 const commentInput = {
-  original: '原文',
-  fix: '修正文',
-  detail: 'コメント',
+  original: 'Original',
+  fix: 'Edit',
+  detail: 'Comment',
 };
 
 const correctionFooterButton = {
-  correction: '添削の仕方',
+  correction: 'How to Make Corrections',
 };
 
 const emptyDiary = {
-  empty: '日記がまだ投稿されていません。',
+  empty: 'You haven’t posted any journal entries.',
 };
 
 const emptyReview = {
-  empty: 'レビューはまだありません',
+  empty: 'There are no reviews yet.',
 };
 
 const languageRadioBox = {
-  ja: '日本語',
-  en: '英語',
+  ja: 'Japanese',
+  en: 'English',
 };
 
 const myDiaryCorrectionFooter = {
-  finText: 'この日記はレビュー済みです',
-  title: '添削のレビューをする',
-  promptText: '添削のお礼と評価をお願いします',
+  finText: 'This journal entry has been reviewed.',
+  title: 'Review the Correction',
+  promptText: 'Please leave a thank you and your appraisal of the correction.',
 };
 
 const profileLanguage = {
-  learn: '勉強中の言語',
-  native: 'ネイティブの言語',
+  learn: 'Learning',
+  native: 'Native',
 };
 
 const summaryInput = {
-  title: 'まとめ',
+  title: 'Summary',
 };
 
 // organisms
 const correctionOrigin = {
-  message: '文章をタップして添削を始めましょう',
+  message: 'Tap the entry to begin making corrections.',
 };
 
 const diaryHitList = {
-  empty: '検索条件の日記がありません',
-  header: '検索結果',
+  empty: 'No journal entries matched your search.',
+  header: 'Search Results',
 };
 
 const draftListItem = {
-  draft: '下書き',
+  draft: 'Draft',
 };
 
 const emptyMyDiaryList = {
   text:
-    '日記がまだ投稿されていません。\n日記を書いてネィティブに添削してもらおう！',
-  hint: 'まずはここから！\n日記を無料で\n添削してもらえるよ！',
+    'You haven’t posted any journal entries.\nWrite an entry and have a native speaker correct it!',
+  hint: 'Start here!\nYour entry will be proofread\nfor free!',
 };
 
 const modalAlertCorrection = {
   text:
-    '添削は30分以内で行ってください。30分をすぎると添削は破棄されます。\n\n添削を始めると、ロックがかかり他の人は添削できなくなります。',
-  start: '添削を始める',
-  checkboxText: '以後、このメッセージを表示しない',
+    'Please finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
+  start: 'Begin Corrections',
+  checkboxText: 'Don’t show this message again.',
 };
 
 const modalAlertPublish = {
   confirmation:
-    'ポイントを使い日記を投稿します。一度投稿すると、編集ができませんが、よろしいですか？',
+    'It will cost {{usePoints}} points to publish this entry. Once an entry has been published, it cannot be edited. Would you like to proceed?',
   subTitle: '公開設定',
   description:
     'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。',
   publish: 'Webで公開',
-  submit: '投稿する',
+  submit: 'Publish',
 };
 
 const modalBlock = {
-  blockedQuestion: '{{userName}}をブロックしますか？',
-  blockedSuccess: '{{userName}}をブロックしました',
-  unblockedQuestion: '{{userName}}のブロックを解除しますか？',
-  unblockedSuccess: '{{userName}}のブロックを解除しました',
+  blockedQuestion: 'Block {{userName}}?',
+  blockedSuccess: '{{userName}} Blocked',
+  unblockedQuestion: 'Unblock {{userName}}?',
+  unblockedSuccess: '{{userName}} Unblocked',
   blockedMessage:
-    'ブロックした人はあなたのプロフィールや日記を見られなくなります。ブロックしたことは、相手に通知されません。',
+    "They won't be able to find your profile or journal entries on Interchao. Interchao won't let them know you blocked them",
   unblockedMessage:
-    'ブロックを解除すると、この人はあなたの日記を見たり、フォローできるようになります。ブロックが解除されたことは、相手に通知されません。',
-  blockedButton: 'ブロックする',
-  unblockedButton: 'ブロックを解除',
-  blockedEndMessage:
-    'ブロックした相手のプロフィールから、いつでもブロックを解除できます。',
-  unblockedEndMessage: '相手のプロフィールからいつでもブロックができます。',
+    "They will now be able to see your profile or journal entries on Interchao. Interchao won't let them know you unblocked them.",
+  blockedButton: 'Block',
+  unblockedButton: 'Unblock',
+  blockedEndMessage: 'You can unblock them anytime from their profile.',
+  unblockedEndMessage: 'You can block them anytime from their profile.',
 };
 
 const modalCorrectingDone = {
-  title: '添削完了',
-  text: '添削ありがとうございます。{{getPoints}}ポイント獲得。',
+  title: 'Complete Corrections',
+  text:
+    'Thank you for correcting the entry. You have received {{getPoints}} points.',
 };
 
 const modalDeleteAcount = {
-  title: '退会',
-  text: 'パスワードを入力して確定ボタンを押してください。',
-  button: '退会する',
+  title: 'Delete Account',
+  text: 'Please enter your password and tap the “Confirm” button.',
+  button: 'Delete Account',
 };
 
 const modalDiaryCancel = {
-  message: '保存されていない変更は失われます。閉じてよろしいですか？',
-  button: '下書きとして保存',
+  message:
+    'Any edits that have not been saved will be lost. Would you like to exit?',
+  button: 'Save as a Draft',
 };
 
 const modalEditPublic = {
@@ -408,133 +411,137 @@ const modalEditPublic = {
 };
 
 const modalLackPoint = {
-  title: 'ポイント不足',
+  title: 'Not Enough Points',
   text:
-    ' ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。\n\n日本語の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
-  submit: '続ける',
-  close: '添削する日記を探す',
+    'You don’t have enough points! 10 points are needed to publish an entry 600 characters long. \n\nYou can earn 10 points by correcting a Japanese journal entry.\n\nDrafts can be saved without needing to use points.',
+  submit: 'Continue',
+  close: 'Look for Entries to Correct',
 };
 
 const modalSendEmail = {
-  title: 'メール送信',
+  title: 'Mail Sent',
   text:
-    'メールを送信しました。メールのリンクからパスワードを再設定してください。',
+    'The email has been sent. Please click the link in the email to change your password.',
 };
 
 const modalStillCorrecting = {
-  text: '途中で添削が中断されました。',
+  text: 'Your corrections have been interrupted.',
 };
 
 const modalTimeUp = {
-  title: 'タイムアップ',
-  text: '30分が経過したため、添削のロックを解除しました。',
+  title: 'Time Up',
+  text: '30 minutes have passed, so the lock on corrections will be removed.',
 };
 
 const myDiaryCorrection = {
-  header: '添削結果',
+  header: 'Correction Results',
 };
 
 const myDiaryListMenu = {
-  myPage: 'マイページ',
-  draftList: '下書き一覧',
-  reviewList: 'レビュー一覧',
+  myPage: 'My Page',
+  draftList: 'List of Drafts',
+  reviewList: 'List of Reviews',
 };
 
 const report = {
-  title: '報告',
-  subTitle: 'このアカウントを報告する理由',
+  title: 'Report',
+  subTitle: 'Why are you reporting this account?',
   description:
-    'どのアクションを実行しても、相手に通知されることはありません。差し迫った危険に直面する人がいた場合は、今すぐ地域の警察または消防機関に緊急通報してください。',
-  spam: 'スパムである',
-  inappropriate: '不適切である',
-  reportedTitle: 'ご報告ありがとうございます',
+    "We won't let them know if you take any of these actions. If someone is in immediate danger, call local emergency services. Don't wait.",
+  spam: "It's spam",
+  inappropriate: "It's inappropriate",
+  reportedTitle: 'Thanks for letting us know',
   reportedDescription:
-    'いただいた情報はInterchaoをより安全なものにするために役立たせていただきます。',
+    'Your feedback is important in helping us keep the Interchao community safe.',
 };
 
 const postDiaryComponent = {
-  usePoints: '消費ポイント',
-  textLength: '文字数',
-  points: '所持ポイント',
-  textPlaceholder: '本文',
-  draft: '下書き保存',
+  usePoints: 'Points Needed',
+  textLength: 'Character Count',
+  points: 'Your Points',
+  textPlaceholder: 'Entry',
+  draft: 'Save as Draft',
 };
 
 const signInUpForm = {
-  email: 'メールアドレス',
-  password: 'パスワード（６ケタ以上）',
-  login: 'ログイン',
-  forgetText: 'パスワードをお忘れの方は',
-  link: 'こちら',
+  email: 'Email Address',
+  password: 'Password (6 or more characters)',
+  login: 'Login',
+  forgetText: '',
+  link: 'Forgot password?',
 };
 
 const teachDiaryCorrection = {
-  header: '添削結果',
+  header: 'Correction Results',
 };
 
 const tutorialCorrecting = {
-  subTitle: 'やり方',
-  title: '添削方法',
+  subTitle: 'Instructions',
+  title: 'How to Make Corrections',
   text1:
-    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て日本語で行ってください。',
+    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{language}}.',
   subText1:
-    '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある"コメントする"をクリック',
-  text2: '正しい文章を教えてあげましょう。',
+    '1) Tap and hold down on the word or phrase, then set the span.\n2) Tap the “Comment” button at the top right hand side of the screen.',
+  text2: 'Correct the sentence.',
   subText2:
-    '① 修正文に正しい表現/自然な表現を書く\n② コメントに補足を書く\n③ "追加"をクリック',
+    '1) Write the correct/natural phrase in the “Edit” section.\n2) Write your explanation in the “Comment” section.\n3) Tap the “Add” button.',
   text3:
-    'コメントは600文字に対して3つを目安に書きましょう。\nコメントの記載が終わったら画面の右上にある"まとめを書く"をクリック',
-  text4: '日記の全体の感想などを書きましょう。',
-  subText4: '① まとめを書く\n② "追加"をクリック',
-  text5: '修正や削除はカードの右上のメニューアイコンをクリックするとできます',
-  text6: '添削内容を確認して、最後に画面の右上にある"投稿する"をクリック',
-  text7: '以上です！早速添削を始めましょう。',
+    'Please aim to write at least 3 comments for every 600 characters.\nWhen you’ve finished writing your comments, tap the “Write a Summary” button at the top right hand side of the screen.',
+  text4: 'Write a summary of your thoughts on the overall journey entry.',
+  subText4: '1) Write the summary\n2) Tap the “Add” button.',
+  text5:
+    'You can edit or delete comments by tapping the Menu icon at the top right hand side of the screen.',
+  text6:
+    'After confirming your corrections, tap the “Publish” button on the top right hand side of the screen.',
+  text7: 'That’s all! Let’s get started correcting entries right away.',
 };
 
 const tutorialPoints = {
-  title: 'ポイントについて',
-  buttonText: '始める',
+  title: 'About Points',
+  buttonText: 'Begin',
   text:
-    '日記を投稿するには10ポイント〜が必要です。\nレビューをすると10ポイント〜を獲得できます。\n\n消費、獲得するポイントは文字数と言語により異なります。',
+    'A minimum of 10 points is needed to publish a journal entry. You can get 10+ points by writing reviews. The number of points used and received is based on the language and character count.',
 };
 
 const tutorialPostDiary = {
-  title: '日記の書き方',
-  buttonText: '始める',
+  title: 'How to Write a Journal Entry',
+  buttonText: 'Begin',
   text:
-    '英語で日記を書いてみよう。 600文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？日本語を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
+    'Try writing a journal entry in English. 10 points are needed for 600 characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! When someone who is studying Japanese corrects it, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
-  title: 'みんなの日記とは',
-  buttonText: '始める',
-  text1: '日本語を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: 'の日記を添削して10ポイントをゲットしよう。',
-  textMainColor: '未添削',
+  title: 'What is “Everyone’s Entries”?',
+  buttonText: 'Begin',
+  text1:
+    'This is a list of all journal entries for users studying {{language}}. \n\nIf you make corrections on the entries that say',
+  text2: 'you can get 10 points.',
+  textMainColor: 'Not Yet Corrected',
 };
 
 // util
 const cameraRoll = {
-  permitTitle: 'アクセス許可が必要です',
-  permitMessage: '{{name}}にカメラロールのアクセス許可が必要です',
-  permitHowTo: '設定方法',
+  permitTitle: 'Access permission is needed.',
+  permitMessage:
+    'You must give Interchao permission to access your photo library.',
+  permitHowTo: 'How to Change Settings',
 };
 
 const myDiaryStatus = {
-  yet: '添削待ち',
-  correcting: '添削中',
-  unread: '未読',
-  yetReview: 'レビュー待ち',
+  yet: 'Waiting for Corrections',
+  correcting: 'Being Corrected',
+  unread: 'Unread',
+  yetReview: 'Waiting for Reviews',
 };
 
 const userDiaryStatus = {
-  yet: '未添削',
-  correcting: '添削中',
+  yet: 'Not Yet Corrected',
+  correcting: 'Being Corrected',
 };
 
 const language = {
-  ja: '日本語',
-  en: '英語',
+  ja: 'Japanese',
+  en: 'English',
 };
 
 const en = {
