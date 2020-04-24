@@ -175,7 +175,7 @@ const postDiary = {
 };
 
 const postDraftDiary = {
-  headerTitle: '下書を編集',
+  headerTitle: '下書きを編集',
 };
 
 const registerEmailPassword = {
@@ -359,7 +359,7 @@ const modalAlertCorrection = {
 
 const modalAlertPublish = {
   confirmation:
-    'ポイントを使い日記を投稿します。一度投稿すると、編集ができませんが、よろしいですか？',
+    '{{usePoints}}ポイントを使い日記を投稿します。一度投稿すると、編集ができませんが、よろしいですか？',
   subTitle: '公開設定',
   description:
     'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。',
@@ -375,7 +375,7 @@ const modalBlock = {
   blockedMessage:
     'ブロックした人はあなたのプロフィールや日記を見られなくなります。ブロックしたことは、相手に通知されません。',
   unblockedMessage:
-    'ブロックを解除すると、この人はあなたの日記を見たり、フォローできるようになります。ブロックが解除されたことは、相手に通知されません。',
+    'ブロックを解除すると、この人はあなたのプロフィールや日記を見ることができるようになります。ブロックが解除されたことは、相手に通知されません。',
   blockedButton: 'ブロックする',
   unblockedButton: 'ブロックを解除',
   blockedEndMessage:
@@ -410,7 +410,7 @@ const modalEditPublic = {
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
-    ' ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。\n\n日本語の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
+    'ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。\n\n日本語の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
   submit: '続ける',
   close: '添削する日記を探す',
 };
@@ -508,8 +508,8 @@ const tutorialPostDiary = {
 const tutorialTeachDiaryList = {
   title: 'みんなの日記とは',
   buttonText: '始める',
-  text1: '日本語を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: 'の日記を添削して10ポイントをゲットしよう。',
+  text1: '{{language}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
+  text2: '{{language}}の日記を添削して10ポイントをゲットしよう。',
   textMainColor: '未添削',
 };
 

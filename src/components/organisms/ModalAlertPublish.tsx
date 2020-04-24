@@ -99,8 +99,7 @@ const ModalAlertPublish: React.FC<Props> = ({
         <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
         <View style={styles.line} />
         <Text style={styles.text}>
-          {usePoints}
-          {I18n.t('modalAlertPublish.confirmation')}
+          {I18n.t('modalAlertPublish.confirmation', { usePoints })}
         </Text>
         <View style={styles.points}>
           <UserPointsBig points={points} />
