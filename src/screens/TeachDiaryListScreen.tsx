@@ -75,6 +75,7 @@ const TeachDiaryListScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({
       onPressSearch,
+      nativeLanguage: getlanguage(profile.nativeLanguage),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -260,11 +261,13 @@ TeachDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const onPressSearch = navigation.getParam('onPressSearch');
+  const nativeLanguage = navigation.getParam('nativeLanguage');
+
   return {
     ...DefaultNavigationOptions,
     headerTitle: (): JSX.Element => (
       <SearchBarButton
-        title={I18n.t('teachDiaryList.headerTitle')}
+        title={I18n.t('teachDiaryList.headerTitle', { nativeLanguage })}
         onPress={onPressSearch}
       />
     ),

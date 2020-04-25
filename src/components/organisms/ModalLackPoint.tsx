@@ -10,11 +10,12 @@ import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
 import { SavePoints } from '../../images';
-import { getlanguage } from '../../utils/diary';
+import { getlanguage, getBasePoints } from '../../utils/diary';
 import { Language } from '../../types';
 
 interface Props {
   visible: boolean;
+  learnLanguage: Language;
   nativeLanguage: Language;
   onPressSubmit: () => void;
   onPressClose: () => void;
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
 
 const ModalLackPoint: React.FC<Props> = ({
   visible,
+  learnLanguage,
   nativeLanguage,
   onPressSubmit,
   onPressClose,
@@ -66,6 +68,7 @@ const ModalLackPoint: React.FC<Props> = ({
         <Space size={32} />
         <Text style={styles.text}>
           {I18n.t('modalLackPoint.text', {
+            learnCharacters: getBasePoints(learnLanguage),
             nativeLanguage: getlanguage(nativeLanguage),
           })}
         </Text>

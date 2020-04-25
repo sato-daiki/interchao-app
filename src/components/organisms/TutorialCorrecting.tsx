@@ -20,7 +20,7 @@ import {
 import I18n from '../../utils/I18n';
 import { Star } from '../../images';
 import { Space, SubmitButton, SmallButtonBlue } from '../atoms';
-import { getlanguage } from '../../utils/diary';
+import { getlanguage, getBasePoints } from '../../utils/diary';
 import { Language } from '../../types';
 
 const { width } = Dimensions.get('window');
@@ -123,7 +123,9 @@ const TutorialCorrecting: React.FC<Props> = ({
       image: Star,
     },
     {
-      text: I18n.t('tutorialCorrecting.text3'),
+      text: I18n.t('tutorialCorrecting.text3', {
+        nativeCharacters: getBasePoints(nativeLanguage),
+      }),
 
       image: Star,
     },

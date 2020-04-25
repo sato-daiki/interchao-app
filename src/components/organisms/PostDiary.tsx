@@ -182,6 +182,7 @@ const PostDiary = ({
       />
       <ModalLackPoint
         visible={isModalLack}
+        learnLanguage={learnLanguage}
         nativeLanguage={nativeLanguage}
         onPressSubmit={onPressSubmitModalLack}
         onPressClose={onPressCloseModalLack}

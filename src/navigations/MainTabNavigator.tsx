@@ -34,7 +34,7 @@ import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen'
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
 import ReviewListScreen from '../screens/ReviewListScreen';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
-import { TabIcon } from '../components/molecules';
+import { TabIcon, TabLabel } from '../components/molecules';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -184,7 +184,9 @@ const MainTab = createBottomTabNavigator(
     TeachDiary: {
       screen: TeachDiaryTabStack,
       navigationOptions: {
-        tabBarLabel: I18n.t('mainTab.teachDiary'),
+        tabBarLabel: ({ tintColor }: { tintColor: string }): JSX.Element => (
+          <TabLabel color={tintColor} />
+        ),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons
             name="account-multiple"

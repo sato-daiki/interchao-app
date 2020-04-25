@@ -20,7 +20,7 @@ const common = {
 const mainTab = {
   myDiary: 'マイ日記',
   postDiary: '日記を書く',
-  teachDiary: 'みんなの日記',
+  teachDiary: '{{nativeLanguage}}の日記',
 };
 
 // 共通のエラーメッセージ
@@ -242,9 +242,9 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: 'みんなの日記を探す',
+  headerTitle: '{{nativeLanguage}}の日記を探す',
   diaryList: '{{nativeLanguage}}を勉強している人の日記一覧',
-  empty: 'みんなの日記一覧がありません',
+  empty: '日記がありません',
 };
 
 const teachDiarySerch = {
@@ -410,7 +410,7 @@ const modalEditPublic = {
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
-    'ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。\n\n{{nativeLanguage}}の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
+    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n{{nativeLanguage}}の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
   submit: '続ける',
   close: '添削する日記を探す',
 };
@@ -483,7 +483,7 @@ const tutorialCorrecting = {
   subText2:
     '① 修正文に正しい表現/自然な表現を書く\n② コメントに補足を書く\n③ "追加"をクリック',
   text3:
-    'コメントは600文字に対して3つを目安に書きましょう。\nコメントの記載が終わったら画面の右上にある"まとめを書く"をクリック',
+    'コメントは{{nativeCharacters}}文字に対して3つを目安に書きましょう。\nコメントの記載が終わったら画面の右上にある"まとめを書く"をクリック',
   text4: '日記の全体の感想などを書きましょう。',
   subText4: '① まとめを書く\n② "追加"をクリック',
   text5: '修正や削除はカードの右上のメニューアイコンをクリックするとできます',
@@ -502,11 +502,11 @@ const tutorialPostDiary = {
   title: '日記の書き方',
   buttonText: '始める',
   text:
-    '{{learnLanguage}}で日記を書いてみよう。 600文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？{{nativeLanguage}}を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
+    '{{learnLanguage}}で日記を書いてみよう。{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？{{nativeLanguage}}を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
 };
 
 const tutorialTeachDiaryList = {
-  title: 'みんなの日記とは',
+  title: '{{nativeLanguage}}の日記とは',
   buttonText: '始める',
   text1:
     '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
