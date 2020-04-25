@@ -19,3 +19,4 @@ export { default as SummaryInput } from './SummaryInput';
 export { default as UserDiaryStatus } from './UserDiaryStatus';
 export { default as UserListItem } from './UserListItem';
 export { default as TabIcon } from './TabIcon';
+export { default as TabLabel } from './TabLabel';
