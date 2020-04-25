@@ -6,7 +6,8 @@ service firebase.storage {
       
       // 自分のみ可能
       allow write: if request.auth.uid == userId
-        && request.resource.contentType.match("image/.*")
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
     }
   }
 }
