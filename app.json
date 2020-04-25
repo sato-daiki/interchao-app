@@ -19,7 +19,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "app.interchao",
+      "buildNumber": "1.0.0"
     },
     "extra": {
       "production": {

@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as Random from 'expo-random';
+import Constants from 'expo-constants';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
 import { alert } from './ErrorAlert';
@@ -71,4 +72,19 @@ export const passwordInputError = (
       alert({ err });
       clearErrorMessage();
   }
+};
+
+export const getVersionText = (): string => {
+  const {
+    version,
+    extra: { revision },
+  } = Constants.manifest;
+  let versionText = `version ${version}`;
+  if (revision > 0) {
+    versionText = `${versionText} rev. ${revision}`;
+  }
+  if (Constants.manifest.releaseChannel !== 'production') {
+    versionText = `${versionText} (development)`;
+  }
+  return versionText;
 };

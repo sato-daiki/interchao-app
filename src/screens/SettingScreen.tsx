@@ -19,6 +19,7 @@ import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import { getVersionText } from '../utils/common';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +44,11 @@ const styles = StyleSheet.create({
   logout: {
     color: primaryColor,
     fontSize: fontSizeM,
+  },
+  versionText: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+    textAlign: 'center',
   },
 });
 
@@ -135,6 +141,8 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
         <Text style={styles.logout}>{I18n.t('setting.logout')}</Text>
       </TouchableOpacity>
+      <Space size={16} />
+      <Text style={styles.versionText}>{getVersionText()}</Text>
     </View>
   );
 };
