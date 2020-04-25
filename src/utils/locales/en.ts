@@ -10,7 +10,7 @@ const common = {
   sending: 'Send',
   next: 'Next',
   publish: 'Publish',
-  draft: 'Save as Draft',
+  draft: 'Save',
   skip: 'Skip',
   add: 'Add',
   delete: 'Delete',
@@ -18,9 +18,9 @@ const common = {
 
 // タブ
 const mainTab = {
-  myDiary: 'My Journal Entries',
-  postDiary: 'Write a Journal Entry',
-  teachDiary: 'Everyone’s Entries',
+  myDiary: 'My Entries',
+  postDiary: 'Write a Entry',
+  teachDiary: 'Everyone’s',
 };
 
 // 共通のエラーメッセージ
@@ -51,7 +51,7 @@ const errorMessage = {
   emptyText: 'There is no text.',
   lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
-    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{language}}.',
+    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{nativeLanguage}}.',
 };
 
 // 各画面ごとの文字
@@ -131,7 +131,7 @@ const foregetPassword = {
 
 const initialize = {
   start: 'Create Account',
-  acount: 'Have an account already?',
+  acount: 'Have an account already?  ',
   link: 'Login',
 };
 
@@ -148,7 +148,7 @@ const myDiary = {
 };
 
 const myDiaryList = {
-  headerTitle: 'Search My Journal',
+  headerTitle: 'Search My Journal Entries',
   diaryList: {
     one: 'My Journal Entries: {{count}} entry',
     other: 'My Journal Entries: {{count}} entries',
@@ -180,7 +180,7 @@ const postDraftDiary = {
 };
 
 const registerEmailPassword = {
-  headerTitle: 'Register Email Address/Password',
+  headerTitle: 'Register Email and Password',
   title: 'Please enter your email address and password',
   subText:
     'You will need this data when switching devices. You can also register at a later time.',
@@ -213,7 +213,7 @@ const setting = {
   notice: 'Notifications',
   editEmail: 'Edit Email Address',
   editPassword: 'Edit Password',
-  registerEmailPassword: 'Register Email Address/Password',
+  registerEmailPassword: 'Register Email and Password',
   tutorial: 'Tutorial',
   management: 'Management',
   privacy: 'Privacy Policy',
@@ -245,7 +245,7 @@ const teachDiary = {
 
 const teachDiaryList = {
   headerTitle: 'Search Everyone’s Entries',
-  diaryList: 'List of Entries for People Studying Japanese',
+  diaryList: 'List of Entries for People Studying {{nativeLanguage}}',
   empty: 'There are no entries from other people.',
 };
 
@@ -413,7 +413,7 @@ const modalEditPublic = {
 const modalLackPoint = {
   title: 'Not Enough Points',
   text:
-    'You don’t have enough points! 10 points are needed to publish an entry 600 characters long. \n\nYou can earn 10 points by correcting a Japanese journal entry.\n\nDrafts can be saved without needing to use points.',
+    'You don’t have enough points! 10 points are needed to publish an entry 600 characters long. \n\nYou can earn 10 points by correcting a {{nativeLanguage}} journal entry.\n\nDrafts can be saved without needing to use points.',
   submit: 'Continue',
   close: 'Look for Entries to Correct',
 };
@@ -479,7 +479,7 @@ const tutorialCorrecting = {
   subTitle: 'Instructions',
   title: 'How to Make Corrections',
   text1:
-    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{language}}.',
+    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{nativeLanguage}}.',
   subText1:
     '1) Tap and hold down on the word or phrase, then set the span.\n2) Tap the “Comment” button at the top right hand side of the screen.',
   text2: 'Correct the sentence.',
@@ -507,16 +507,16 @@ const tutorialPostDiary = {
   title: 'How to Write a Journal Entry',
   buttonText: 'Begin',
   text:
-    'Try writing a journal entry in English. 10 points are needed for 600 characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! When someone who is studying Japanese corrects it, you will get 10 points. Let’s teach each other languages!',
+    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for 600 characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! When someone who is studying {{nativeLanguage}} corrects it, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
   title: 'What is “Everyone’s Entries”?',
   buttonText: 'Begin',
   text1:
-    'This is a list of all journal entries for users studying {{language}}. \n\nIf you make corrections on the entries that say',
+    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nIf you make corrections on the entries that say',
   text2: 'you can get 10 points.',
-  textMainColor: 'Not Yet Corrected',
+  textMainColor: ' Not Yet Corrected ',
 };
 
 // util

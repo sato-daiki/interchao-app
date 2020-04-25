@@ -52,7 +52,7 @@ const errorMessage = {
   emptyText: '本文が入力されていません',
   lackPointsTitle: 'ポイント不足',
   lackPointsText:
-    '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは日本語の日記を添削することで溜めることができます。',
+    '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは{{nativeLanguage}}の日記を添削することで溜めることができます。',
 };
 
 // 各画面ごとの文字
@@ -243,7 +243,7 @@ const teachDiary = {
 
 const teachDiaryList = {
   headerTitle: 'みんなの日記を探す',
-  diaryList: '日本語を勉強している人の日記一覧',
+  diaryList: '{{nativeLanguage}}を勉強している人の日記一覧',
   empty: 'みんなの日記一覧がありません',
 };
 
@@ -410,7 +410,7 @@ const modalEditPublic = {
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
-    'ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。\n\n日本語の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
+    'ポイントが足りません。日記を投稿するには600文字ごとに10ポイントが必要です。\n\n{{nativeLanguage}}の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
   submit: '続ける',
   close: '添削する日記を探す',
 };
@@ -476,7 +476,7 @@ const tutorialCorrecting = {
   subTitle: 'やり方',
   title: '添削方法',
   text1:
-    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て日本語で行ってください。',
+    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{nativeLanguage}}で行ってください。',
   subText1:
     '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある"コメントする"をクリック',
   text2: '正しい文章を教えてあげましょう。',
@@ -502,21 +502,22 @@ const tutorialPostDiary = {
   title: '日記の書き方',
   buttonText: '始める',
   text:
-    '英語で日記を書いてみよう。 600文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？日本語を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
+    '{{learnLanguage}}で日記を書いてみよう。 600文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？{{nativeLanguage}}を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
 };
 
 const tutorialTeachDiaryList = {
   title: 'みんなの日記とは',
   buttonText: '始める',
-  text1: '{{language}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: '{{language}}の日記を添削して10ポイントをゲットしよう。',
+  text1:
+    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
+  text2: '{{nativeLanguage}}の日記を添削して10ポイントをゲットしよう。',
   textMainColor: '未添削',
 };
 
 // util
 const cameraRoll = {
   permitTitle: 'アクセス許可が必要です',
-  permitMessage: '{{name}}にカメラロールのアクセス許可が必要です',
+  permitMessage: 'Interchaoにカメラロールのアクセス許可が必要です',
   permitHowTo: '設定方法',
 };
 

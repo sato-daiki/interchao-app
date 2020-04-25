@@ -20,6 +20,7 @@ import {
   primaryColor,
   fontSizeM,
 } from '../../styles/Common';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isEmpty: boolean;
@@ -108,7 +109,7 @@ const CorrectionOrigin: React.FC<Props> = ({
         <>
           <EmptyList
             iconName="cursor-pointer"
-            message="文章をタップして添削を始めましょう"
+            message={I18n.t('correctionOrigin.message')}
             paddingTop={0}
           />
           <Space size={32} />

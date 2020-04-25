@@ -5,6 +5,8 @@ import { Space } from '../atoms';
 import { Pen } from '../../images';
 import Tutorial from '../template/Tutorial';
 import I18n from '../../utils/I18n';
+import { getlanguage } from '../../utils/diary';
+import { Language } from '../../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,6 +27,8 @@ const styles = StyleSheet.create({
 interface Props {
   isLoading?: boolean;
   displayed: boolean;
+  learnLanguage: Language;
+  nativeLanguage: Language;
   buttonText?: string;
   onPress?: () => void;
 }
@@ -32,6 +36,8 @@ interface Props {
 const TutorialPostDiary: React.FC<Props> = ({
   isLoading = false,
   displayed,
+  learnLanguage,
+  nativeLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
   onPress = (): void => undefined,
 }: Props): JSX.Element | null => {
@@ -46,7 +52,12 @@ const TutorialPostDiary: React.FC<Props> = ({
       <View style={styles.container}>
         <Image style={styles.img} source={Pen} resizeMode="contain" />
         <Space size={24} />
-        <Text style={styles.text}>{I18n.t('tutorialPostDiary.text')}</Text>
+        <Text style={styles.text}>
+          {I18n.t('tutorialPostDiary.text', {
+            learnLanguage: getlanguage(learnLanguage),
+            nativeLanguage: getlanguage(nativeLanguage),
+          })}
+        </Text>
       </View>
     </Tutorial>
   );
