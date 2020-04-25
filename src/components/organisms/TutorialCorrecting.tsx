@@ -20,12 +20,15 @@ import {
 import I18n from '../../utils/I18n';
 import { Star } from '../../images';
 import { Space, SubmitButton, SmallButtonBlue } from '../atoms';
+import { getlanguage } from '../../utils/diary';
+import { Language } from '../../types';
 
 const { width } = Dimensions.get('window');
 
 interface Props {
   isLoading?: boolean;
   displayed: boolean;
+  nativeLanguage: Language;
   buttonText?: string;
   rightButtonText?: string;
   onPress: () => void;
@@ -98,39 +101,42 @@ const styles = StyleSheet.create({
   },
 });
 
-const entries = [
-  {
-    text: I18n.t('tutorialCorrecting.text1'),
-    subText: I18n.t('tutorialCorrecting.subText1'),
-    image: Star,
-  },
-  {
-    text: I18n.t('tutorialCorrecting.text2'),
-    subText: I18n.t('tutorialCorrecting.subText2'),
-    image: Star,
-  },
-  {
-    text: I18n.t('tutorialCorrecting.text3'),
-
-    image: Star,
-  },
-  {
-    text: I18n.t('tutorialCorrecting.text4'),
-    subText: I18n.t('tutorialCorrecting.subText4'),
-    image: Star,
-  },
-  { text: I18n.t('tutorialCorrecting.text5'), image: Star },
-  { text: I18n.t('tutorialCorrecting.text6'), image: Star },
-  { text: I18n.t('tutorialCorrecting.text7'), image: Star },
-];
-
 const TutorialCorrecting: React.FC<Props> = ({
   isLoading = false,
   displayed,
+  nativeLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
   rightButtonText = I18n.t('common.skip'),
   onPress,
 }: Props): JSX.Element | null => {
+  const entries = [
+    {
+      text: I18n.t('tutorialCorrecting.text1', {
+        nativeLanguage: getlanguage(nativeLanguage),
+      }),
+      subText: I18n.t('tutorialCorrecting.subText1'),
+      image: Star,
+    },
+    {
+      text: I18n.t('tutorialCorrecting.text2'),
+      subText: I18n.t('tutorialCorrecting.subText2'),
+      image: Star,
+    },
+    {
+      text: I18n.t('tutorialCorrecting.text3'),
+
+      image: Star,
+    },
+    {
+      text: I18n.t('tutorialCorrecting.text4'),
+      subText: I18n.t('tutorialCorrecting.subText4'),
+      image: Star,
+    },
+    { text: I18n.t('tutorialCorrecting.text5'), image: Star },
+    { text: I18n.t('tutorialCorrecting.text6'), image: Star },
+    { text: I18n.t('tutorialCorrecting.text7'), image: Star },
+  ];
+
   const [activeSlide, setActiveSlide] = useState(0);
   const refContainer = useRef(null);
 

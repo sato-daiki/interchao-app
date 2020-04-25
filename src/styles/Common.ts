@@ -11,6 +11,7 @@ export const facebook = '#1877f2';
 export const softRed = '#da5353';
 export const star = '#f1c40f';
 
+export const fontSizeSS = 11;
 export const fontSizeS = 13;
 export const fontSizeM = 14;
 export const fontSizeL = 18;

@@ -23,7 +23,7 @@ import {
   borderLightColor,
   offWhite,
   mainColor,
-  fontSizeS,
+  fontSizeSS,
 } from '../../styles/Common';
 import { Points } from '../../images';
 import { getUsePoints } from '../../utils/diary';
@@ -43,6 +43,7 @@ interface Props {
   text: string;
   points: number;
   learnLanguage: Language;
+  nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   // onValueChangePublic: () => void;
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
-    marginLeft: 16,
+    paddingLeft: 16,
     borderColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
@@ -86,12 +87,12 @@ const styles = StyleSheet.create({
   },
   headerLabel: {
     color: primaryColor,
-    fontSize: fontSizeS,
+    fontSize: fontSizeSS,
     marginRight: 4,
   },
   headerValue: {
     color: primaryColor,
-    fontSize: fontSizeS,
+    fontSize: fontSizeSS,
     marginRight: 16,
   },
   titleInput: {
@@ -140,6 +141,7 @@ const PostDiary = ({
   text,
   points,
   learnLanguage,
+  nativeLanguage,
   // onValueChangePublic,
   onPressSubmitModalLack,
   onPressCloseModalLack,
@@ -174,10 +176,13 @@ const PostDiary = ({
       <TutorialPostDiary
         isLoading={isTutorialLoading}
         displayed={tutorialPostDiary}
+        learnLanguage={learnLanguage}
+        nativeLanguage={nativeLanguage}
         onPress={onPressTutorial}
       />
       <ModalLackPoint
         visible={isModalLack}
+        nativeLanguage={nativeLanguage}
         onPressSubmit={onPressSubmitModalLack}
         onPressClose={onPressCloseModalLack}
       />

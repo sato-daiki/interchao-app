@@ -13,7 +13,7 @@ import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import SearchBarButton from '../components/molecules/SearchBarButton';
-import { getExceptUser } from '../utils/diary';
+import { getExceptUser, getlanguage } from '../utils/diary';
 import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -217,7 +217,11 @@ const TeachDiaryListScreen: ScreenType = ({
   );
 
   const listHeaderComponent = (
-    <GrayHeader title={I18n.t('teachDiaryList.diaryList')} />
+    <GrayHeader
+      title={I18n.t('teachDiaryList.diaryList', {
+        nativeLanguage: getlanguage(profile.nativeLanguage),
+      })}
+    />
   );
 
   const listEmptyComponent =

@@ -123,13 +123,14 @@ const PostDiaryScreen: ScreenType = ({
       title,
       text,
       user.points,
-      profile.learnLanguage
+      profile.learnLanguage,
+      profile.nativeLanguage
     );
     if (!res) {
       return;
     }
     setIsModalAlert(true);
-  }, [profile.learnLanguage, text, title, user.points]);
+  }, [profile.learnLanguage, profile.nativeLanguage, text, title, user.points]);
 
   useEffect(() => {
     navigation.setParams({
@@ -234,6 +235,7 @@ const PostDiaryScreen: ScreenType = ({
       text={text}
       points={user.points}
       learnLanguage={profile.learnLanguage}
+      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');

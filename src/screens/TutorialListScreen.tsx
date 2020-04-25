@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
-  NavigationStackScreenComponent,
   NavigationStackOptions,
+  NavigationStackScreenProps,
 } from 'react-navigation-stack';
 
 import { offWhite } from '../styles/Common';
@@ -12,6 +12,17 @@ import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
 import TutorialPostDiary from '../components/organisms/TutorialPostDiary';
 import TutorialPoints from '../components/organisms/TutorialPoints';
 import I18n from '../utils/I18n';
+import { Profile } from '../types';
+
+export interface Props {
+  profile: Profile;
+}
+
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +35,7 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const TutorialListScreen: NavigationStackScreenComponent = () => {
+const TutorialListScreen: ScreenType = ({ profile }) => {
   // trueの時が非表示
   const [tutorialCorrecting, setTutorialCorrecting] = useState(true);
   const [tutorialPostDiary, setTutorialPostDiary] = useState(true);
@@ -36,6 +47,7 @@ const TutorialListScreen: NavigationStackScreenComponent = () => {
     <View style={styles.container}>
       <TutorialCorrecting
         displayed={tutorialCorrecting}
+        nativeLanguage={profile.nativeLanguage}
         buttonText={buttonText}
         rightButtonText={buttonText}
         onPress={(): void => setTutorialCorrecting(true)}
@@ -43,6 +55,8 @@ const TutorialListScreen: NavigationStackScreenComponent = () => {
       <TutorialPostDiary
         displayed={tutorialPostDiary}
         buttonText={buttonText}
+        learnLanguage={profile.learnLanguage}
+        nativeLanguage={profile.nativeLanguage}
         onPress={(): void => setTutorialPostDiary(true)}
       />
       <TutorialPoints
