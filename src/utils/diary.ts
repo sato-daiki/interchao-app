@@ -90,6 +90,17 @@ export const getlanguage = (language: Language): string => {
   }
 };
 
+export const getBasePoints = (language: Language): number => {
+  switch (language) {
+    case 'ja':
+      return 600;
+    case 'en':
+      return 300;
+    default:
+      return 300;
+  }
+};
+
 export const getExceptUser = (uids: string[]): string => {
   if (!uids) return '';
 
@@ -133,10 +144,8 @@ export const getUsePoints = (
   length: number,
   learnLanguage: Language
 ): number => {
-  if (learnLanguage === 'en') {
-    return Math.ceil(length / 600) * 10;
-  }
-  return Math.ceil(length / 200) * 10;
+  const basePoints = getBasePoints(learnLanguage);
+  return Math.ceil(length / basePoints) * 10;
 };
 
 export const checkBeforePost = (

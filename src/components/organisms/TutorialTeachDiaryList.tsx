@@ -46,7 +46,9 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title={I18n.t('tutorialTeachDiaryList.title')}
+      title={I18n.t('tutorialTeachDiaryList.title', {
+        nativeLanguage: getlanguage(nativeLanguage),
+      })}
       buttonText={buttonText}
       onPress={onPress}
     >

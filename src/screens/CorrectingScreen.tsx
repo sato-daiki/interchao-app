@@ -40,7 +40,6 @@ import { getUuid } from '../utils/common';
 import { mainColor, green, primaryColor } from '../styles/Common';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
-import profile from '../stores/reducers/profile';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
