@@ -63,7 +63,6 @@ const EmptyMyDiaryList: React.FC = (): JSX.Element => {
         <View style={styles.left} />
         <View style={styles.right}>
           <MaterialCommunityIcons
-            style={styles.arrow}
             name="arrow-down-bold-outline"
             size={50}
             color={mainColor}
