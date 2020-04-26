@@ -349,7 +349,7 @@ const draftListItem = {
 const emptyMyDiaryList = {
   text:
     'You haven’t posted any journal entries.\nWrite an entry and have a native speaker correct it!',
-  hint: 'Start here!\nYour entry will be proofread\nfor free!',
+  hint: 'Start here!\nYour entry will be\nproofread for free!',
 };
 
 const modalAlertCorrection = {
