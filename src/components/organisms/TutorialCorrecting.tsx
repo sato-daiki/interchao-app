@@ -17,6 +17,12 @@ import {
   HowToCorrect4en,
   HowToCorrect5en,
   HowToCorrect6en,
+  HowToCorrect1ja,
+  HowToCorrect2ja,
+  HowToCorrect3ja,
+  HowToCorrect4ja,
+  HowToCorrect5ja,
+  HowToCorrect6ja,
 } from '../../images';
 import { HeaderText } from '../atoms';
 import { getlanguage, getBasePoints } from '../../utils/diary';
@@ -98,49 +104,68 @@ const TutorialCorrecting: React.FC<Props> = ({
   rightButtonText = I18n.t('common.skip'),
   onPress,
 }: Props): JSX.Element | null => {
+  const imagesEn = [
+    { image: HowToCorrect1en, width: 638, height: 396 },
+    { image: HowToCorrect2en, width: 642, height: 542 },
+    { image: HowToCorrect3en, width: 636, height: 210 },
+    { image: HowToCorrect4en, width: 637, height: 497 },
+    { image: HowToCorrect5en, width: 639, height: 471 },
+    { image: HowToCorrect6en, width: 646, height: 321 },
+  ];
+
+  const imagesJa = [
+    { image: HowToCorrect1ja, width: 624, height: 378 },
+    { image: HowToCorrect2ja, width: 624, height: 519 },
+    { image: HowToCorrect3ja, width: 629, height: 343 },
+    { image: HowToCorrect4ja, width: 622, height: 357 },
+    { image: HowToCorrect5ja, width: 631, height: 347 },
+    { image: HowToCorrect6ja, width: 631, height: 325 },
+  ];
+
+  const images = nativeLanguage === 'en' ? imagesEn : imagesJa;
   const entries = [
     {
       text: I18n.t('tutorialCorrecting.text1', {
         nativeLanguage: getlanguage(nativeLanguage),
       }),
       subText: I18n.t('tutorialCorrecting.subText1'),
-      image: HowToCorrect1en,
-      width: 638,
-      height: 396,
+      image: images[0].image,
+      width: images[0].width,
+      height: images[0].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text2'),
       subText: I18n.t('tutorialCorrecting.subText2'),
-      image: HowToCorrect2en,
-      width: 642,
-      height: 542,
+      image: images[1].image,
+      width: images[1].width,
+      height: images[1].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text3', {
         nativeCharacters: getBasePoints(nativeLanguage),
       }),
-      image: HowToCorrect3en,
-      width: 636,
-      height: 210,
+      image: images[2].image,
+      width: images[2].width,
+      height: images[2].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text4'),
       subText: I18n.t('tutorialCorrecting.subText4'),
-      image: HowToCorrect4en,
-      width: 637,
-      height: 497,
+      image: images[3].image,
+      width: images[3].width,
+      height: images[3].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text5'),
-      image: HowToCorrect5en,
-      width: 639,
-      height: 471,
+      image: images[4].image,
+      width: images[4].width,
+      height: images[4].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text6'),
-      image: HowToCorrect6en,
-      width: 646,
-      height: 321,
+      image: images[5].image,
+      width: images[5].width,
+      height: images[5].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text7'),

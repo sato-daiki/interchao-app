@@ -20,4 +20,10 @@ module.exports = {
   HowToCorrect4en: require('./howToCorrect-4en.png'),
   HowToCorrect5en: require('./howToCorrect-5en.png'),
   HowToCorrect6en: require('./howToCorrect-6en.png'),
+  HowToCorrect1ja: require('./howToCorrect-1ja.png'),
+  HowToCorrect2ja: require('./howToCorrect-2ja.png'),
+  HowToCorrect3ja: require('./howToCorrect-3ja.png'),
+  HowToCorrect4ja: require('./howToCorrect-4ja.png'),
+  HowToCorrect5ja: require('./howToCorrect-5ja.png'),
+  HowToCorrect6ja: require('./howToCorrect-6ja.png'),
 };
