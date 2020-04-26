@@ -4,6 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import * as Localization from 'expo-localization';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { primaryColor, fontSizeL } from '../styles/Common';
 import Space from '../components/atoms/Space';
@@ -52,7 +53,18 @@ const SelectLanguageScreen: ScreenType = ({
   profile,
   setProfile,
 }): JSX.Element => {
-  const [isCheckedJa, setIsCheckedJa] = useState(false);
+  const checkJapanese = (): boolean => {
+    if (
+      Localization.locale === 'ja' ||
+      Localization.locale === 'ja-US' ||
+      Localization.locale === 'ja-JP'
+    ) {
+      return true;
+    }
+    return false;
+  };
+  // 初期値はiPhoneの設定を取得して設定しておく
+  const [isNativeJa, setIsNativeJa] = useState(checkJapanese());
 
   useEffect((): void => {
     track(events.OPENED_SELECT_LANGUAGE);
@@ -61,8 +73,8 @@ const SelectLanguageScreen: ScreenType = ({
   const onPressNext = (): void => {
     setProfile({
       ...profile,
-      learnLanguage: isCheckedJa ? 'ja' : 'en',
-      nativeLanguage: isCheckedJa ? 'en' : 'ja',
+      learnLanguage: isNativeJa ? 'en' : 'ja',
+      nativeLanguage: isNativeJa ? 'ja' : 'en',
     });
     navigation.navigate('InputUserName');
   };
@@ -72,16 +84,16 @@ const SelectLanguageScreen: ScreenType = ({
       <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
       <LanguageRadioBox
         label={I18n.t('selectLanguage.learn')}
-        checkedJa={isCheckedJa}
-        onPressJa={(): void => setIsCheckedJa(true)}
-        onPressEn={(): void => setIsCheckedJa(false)}
+        isJa={!isNativeJa}
+        onPressJa={(): void => setIsNativeJa(false)}
+        onPressEn={(): void => setIsNativeJa(true)}
       />
       <Space size={16} />
       <LanguageRadioBox
         label={I18n.t('selectLanguage.native')}
-        checkedJa={!isCheckedJa}
-        onPressJa={(): void => setIsCheckedJa(false)}
-        onPressEn={(): void => setIsCheckedJa(true)}
+        isJa={isNativeJa}
+        onPressJa={(): void => setIsNativeJa(true)}
+        onPressEn={(): void => setIsNativeJa(false)}
       />
       <Space size={32} />
       <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />

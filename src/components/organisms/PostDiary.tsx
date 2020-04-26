@@ -230,6 +230,7 @@ const PostDiary = ({
         placeholder="Title"
         maxLength={100}
         autoCapitalize="none"
+        autoCorrect={false}
         keyboardType="default"
       />
       <TextInput
@@ -242,6 +243,7 @@ const PostDiary = ({
         underlineColorAndroid="transparent"
         multiline
         autoCapitalize="none"
+        autoCorrect={false}
         keyboardType="default"
       />
       {isForce ? (

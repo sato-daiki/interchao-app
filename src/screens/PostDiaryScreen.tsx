@@ -139,6 +139,7 @@ const PostDiaryScreen: ScreenType = ({
       onPressDraft,
       onPressPublic,
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
 

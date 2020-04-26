@@ -93,11 +93,11 @@ export const getlanguage = (language: Language): string => {
 export const getBasePoints = (language: Language): number => {
   switch (language) {
     case 'ja':
-      return 600;
+      return 300;
     case 'en':
-      return 300;
+      return 600;
     default:
-      return 300;
+      return 600;
   }
 };
 

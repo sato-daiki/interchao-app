@@ -7,7 +7,7 @@ import I18n from '../../utils/I18n';
 
 interface Props {
   label: string;
-  checkedJa: boolean;
+  isJa: boolean;
   onPressJa: () => void;
   onPressEn: () => void;
 }
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 
 const LanguageRadioBox: React.FC<Props> = ({
   label,
-  checkedJa,
+  isJa,
   onPressJa,
   onPressEn,
 }: Props): JSX.Element => {
@@ -45,13 +45,13 @@ const LanguageRadioBox: React.FC<Props> = ({
       <Text style={styles.label}>{label}</Text>
       <View style={styles.radioBoxWrapper}>
         <TouchableWithoutFeedback style={styles.radioBox} onPress={onPressJa}>
-          <RadioBox checked={checkedJa} color={mainColor} />
+          <RadioBox checked={isJa} color={mainColor} />
           <Text style={styles.radioBoxText}>
             {I18n.t('languageRadioBox.ja')}
           </Text>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback style={styles.radioBox} onPress={onPressEn}>
-          <RadioBox checked={!checkedJa} color={mainColor} />
+          <RadioBox checked={!isJa} color={mainColor} />
           <Text style={styles.radioBoxText}>
             {I18n.t('languageRadioBox.en')}
           </Text>
