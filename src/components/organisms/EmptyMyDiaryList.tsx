@@ -14,29 +14,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   emptyUpper: {
-    flex: 1,
     alignItems: 'center',
   },
   emptyText: {
     fontSize: fontSizeS,
     lineHeight: fontSizeS * 1.6,
     color: subTextColor,
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   emptyLower: {
-    flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: 'row',
     paddingBottom: 6,
   },
+  left: {
+    flex: 1,
+  },
+  right: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingRight: 44, // 中央に寄せるため
+  },
   emptyHintContainer: {
-    position: 'absolute',
-    bottom: 16,
-    alignItems: 'center',
-    paddingLeft: 190,
+    paddingLeft: 8,
   },
   emptyHintText: {
+    textAlign: 'left',
     fontWeight: '500',
     color: mainColor,
     fontSize: fontSizeS,
@@ -57,15 +60,19 @@ const EmptyMyDiaryList: React.FC = (): JSX.Element => {
         <Text style={styles.emptyText}>{I18n.t('emptyMyDiaryList.text')}</Text>
       </View>
       <View style={styles.emptyLower}>
-        <MaterialCommunityIcons
-          name="arrow-down-bold-outline"
-          size={50}
-          color={mainColor}
-        />
-        <View style={styles.emptyHintContainer}>
-          <Text style={styles.emptyHintText}>
-            {I18n.t('emptyMyDiaryList.hint')}
-          </Text>
+        <View style={styles.left} />
+        <View style={styles.right}>
+          <MaterialCommunityIcons
+            style={styles.arrow}
+            name="arrow-down-bold-outline"
+            size={50}
+            color={mainColor}
+          />
+          <View style={styles.emptyHintContainer}>
+            <Text style={styles.emptyHintText}>
+              {I18n.t('emptyMyDiaryList.hint')}
+            </Text>
+          </View>
         </View>
       </View>
     </View>

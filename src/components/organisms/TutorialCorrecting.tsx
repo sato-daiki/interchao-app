@@ -1,27 +1,27 @@
 import React, { useState, useRef } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  Image,
-  ImageProps,
-} from 'react-native';
+import { StyleSheet, View, Text, Dimensions, ImageProps } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Modal from '../template/Modal';
 import {
   fontSizeL,
   primaryColor,
   borderLightColor,
-  fontSizeM,
   mainColor,
   subTextColor,
 } from '../../styles/Common';
 import I18n from '../../utils/I18n';
-import { Star } from '../../images';
-import { Space, SubmitButton, SmallButtonBlue } from '../atoms';
+import {
+  HowToCorrect1en,
+  HowToCorrect2en,
+  HowToCorrect3en,
+  HowToCorrect4en,
+  HowToCorrect5en,
+  HowToCorrect6en,
+} from '../../images';
+import { HeaderText } from '../atoms';
 import { getlanguage, getBasePoints } from '../../utils/diary';
 import { Language } from '../../types';
+import { TutorialCorrectingListItem } from '../molecules';
 
 const { width } = Dimensions.get('window');
 
@@ -39,13 +39,15 @@ interface Item {
     text: string;
     subText?: string;
     image: ImageProps;
+    width: number;
+    height: number;
   };
   index: number;
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    backgroundColor: '#fff',
   },
   header: {
     paddingVertical: 16,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
   },
   skip: {
     position: 'absolute',
-    right: 0,
+    right: 12,
   },
   line: {
     width: '100%',
@@ -69,21 +71,8 @@ const styles = StyleSheet.create({
     borderBottomColor: borderLightColor,
     marginBottom: 24,
   },
-  text: {
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.3,
-    color: primaryColor,
-  },
-  subText: {
-    paddingTop: 16,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.7,
-    color: primaryColor,
-  },
-  image: {},
-  slide: {
+  carouselContainer: {
     alignItems: 'center',
-    paddingHorizontal: 16,
   },
   dotStyle: {
     width: 10,
@@ -115,52 +104,65 @@ const TutorialCorrecting: React.FC<Props> = ({
         nativeLanguage: getlanguage(nativeLanguage),
       }),
       subText: I18n.t('tutorialCorrecting.subText1'),
-      image: Star,
+      image: HowToCorrect1en,
+      width: 638,
+      height: 396,
     },
     {
       text: I18n.t('tutorialCorrecting.text2'),
       subText: I18n.t('tutorialCorrecting.subText2'),
-      image: Star,
+      image: HowToCorrect2en,
+      width: 642,
+      height: 542,
     },
     {
       text: I18n.t('tutorialCorrecting.text3', {
         nativeCharacters: getBasePoints(nativeLanguage),
       }),
-
-      image: Star,
+      image: HowToCorrect3en,
+      width: 636,
+      height: 210,
     },
     {
       text: I18n.t('tutorialCorrecting.text4'),
       subText: I18n.t('tutorialCorrecting.subText4'),
-      image: Star,
+      image: HowToCorrect4en,
+      width: 637,
+      height: 497,
     },
-    { text: I18n.t('tutorialCorrecting.text5'), image: Star },
-    { text: I18n.t('tutorialCorrecting.text6'), image: Star },
-    { text: I18n.t('tutorialCorrecting.text7'), image: Star },
+    {
+      text: I18n.t('tutorialCorrecting.text5'),
+      image: HowToCorrect5en,
+      width: 639,
+      height: 471,
+    },
+    {
+      text: I18n.t('tutorialCorrecting.text6'),
+      image: HowToCorrect6en,
+      width: 646,
+      height: 321,
+    },
+    {
+      text: I18n.t('tutorialCorrecting.text7'),
+      image: null,
+      width: 0,
+      height: 0,
+    },
   ];
 
   const [activeSlide, setActiveSlide] = useState(0);
   const refContainer = useRef(null);
 
-  const renderItem = ({ item, index }: Item): JSX.Element => {
-    return (
-      <View style={styles.slide}>
-        <Image source={item.image} style={styles.image} />
-        <Space size={32} />
-        <Text style={styles.text}>{item.text}</Text>
-        {item.subText ? (
-          <Text style={styles.subText}>{item.subText}</Text>
-        ) : null}
-        {index === entries.length ? (
-          <SubmitButton
-            isLoading={isLoading}
-            title={buttonText}
-            onPress={onPress}
-          />
-        ) : null}
-      </View>
-    );
-  };
+  const renderItem = ({ item, index }: Item): JSX.Element => (
+    <TutorialCorrectingListItem
+      index={index}
+      item={item}
+      isLoading={isLoading}
+      entriesLength={entries.length}
+      buttonText={buttonText}
+      onPress={onPress}
+    />
+  );
 
   return (
     <Modal visible={!displayed}>
@@ -168,22 +170,20 @@ const TutorialCorrecting: React.FC<Props> = ({
         <View style={styles.header}>
           <Text style={styles.title}>{I18n.t('tutorialCorrecting.title')}</Text>
           <View style={styles.skip}>
-            <SmallButtonBlue
-              isLoading={isLoading}
-              title={rightButtonText}
-              onPress={onPress}
-            />
+            <HeaderText title={rightButtonText} onPress={onPress} />
           </View>
         </View>
         <View style={styles.line} />
-        <Carousel
-          ref={refContainer}
-          data={entries}
-          renderItem={renderItem}
-          sliderWidth={width - 48}
-          itemWidth={width - 32}
-          onSnapToItem={(index: number): void => setActiveSlide(index)}
-        />
+        <View style={styles.carouselContainer}>
+          <Carousel
+            ref={refContainer}
+            data={entries}
+            renderItem={renderItem}
+            sliderWidth={width - 60}
+            itemWidth={width - 60}
+            onSnapToItem={(index: number): void => setActiveSlide(index)}
+          />
+        </View>
         <Pagination
           dotsLength={entries.length}
           activeDotIndex={activeSlide}
