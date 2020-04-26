@@ -510,7 +510,7 @@ const tutorialTeachDiaryList = {
   buttonText: '始める',
   text1:
     '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: '{{nativeLanguage}}の日記を添削して10ポイントをゲットしよう。',
+  text2: 'の{{nativeLanguage}}の日記を添削して10ポイントをゲットしよう。',
   textMainColor: '未添削',
 };
 
