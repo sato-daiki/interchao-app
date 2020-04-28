@@ -10,3 +10,9 @@ app to the App Store?　 → 　 Yes
 
 .env 　は渡して上げる必要ある
 firebase deploy --only firestore:rules
+
+## リリース
+
+## OTA Update
+
+expo publish --release-channel production
