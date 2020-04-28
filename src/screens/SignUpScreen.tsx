@@ -98,7 +98,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         tutorialPostDiary: false,
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
-        points: 100,
+        points: 10,
         expoPushToken: null,
         correctingObjectID: null,
         notificationCorrection: true,
