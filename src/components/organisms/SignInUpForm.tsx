@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Space, SubmitButton } from '../atoms';
 import { CheckTextInput } from '../molecules';
 import { primaryColor, fontSizeM, linkBlue } from '../../styles/Common';
@@ -67,56 +68,60 @@ const SignInUpForm: React.FC<Props> = ({
 }): JSX.Element => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{I18n.t('signInUpForm.email')}</Text>
-      <CheckTextInput
-        value={email}
-        onChangeText={onChangeTextEmail}
-        onEndEditing={onEndEditingEmail}
-        maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        isLoading={isEmailLoading}
-        isCheckOk={isEmailCheckOk}
-        errorMessage={errorEmail}
-      />
-      <Space size={16} />
-      <Text style={styles.label}>{I18n.t('signInUpForm.password')}</Text>
-      <CheckTextInput
-        value={password}
-        onChangeText={onChangePassword}
-        onEndEditing={onEndEditingPassword}
-        maxLength={20}
-        placeholder="Password"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        secureTextEntry
-        returnKeyType="done"
-        isCheckOk={isPasswordCheckOk}
-        errorMessage={errorPassword}
-      />
-      <Space size={32} />
-      <SubmitButton
-        title={isSignUp ? I18n.t('common.next') : I18n.t('signInUpForm.login')}
-        onPress={onPressSubmit}
-        isLoading={isSubmitLoading}
-        disable={!(isEmailCheckOk && isPasswordCheckOk)}
-      />
-      {isSignUp ? null : (
-        <>
-          <Space size={16} />
-          <Text style={styles.forgetText}>
-            {I18n.t('signInUpForm.forgetText')}
-            <Text style={styles.linkText} onPress={onPressForget}>
-              {I18n.t('signInUpForm.link')}
+      <KeyboardAwareScrollView style={styles.container}>
+        <Text style={styles.label}>{I18n.t('signInUpForm.email')}</Text>
+        <CheckTextInput
+          value={email}
+          onChangeText={onChangeTextEmail}
+          onEndEditing={onEndEditingEmail}
+          maxLength={50}
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="done"
+          isLoading={isEmailLoading}
+          isCheckOk={isEmailCheckOk}
+          errorMessage={errorEmail}
+        />
+        <Space size={16} />
+        <Text style={styles.label}>{I18n.t('signInUpForm.password')}</Text>
+        <CheckTextInput
+          value={password}
+          onChangeText={onChangePassword}
+          onEndEditing={onEndEditingPassword}
+          maxLength={20}
+          placeholder="Password"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          secureTextEntry
+          returnKeyType="done"
+          isCheckOk={isPasswordCheckOk}
+          errorMessage={errorPassword}
+        />
+        <Space size={32} />
+        <SubmitButton
+          title={
+            isSignUp ? I18n.t('common.next') : I18n.t('signInUpForm.login')
+          }
+          onPress={onPressSubmit}
+          isLoading={isSubmitLoading}
+          disable={!(isEmailCheckOk && isPasswordCheckOk)}
+        />
+        {isSignUp ? null : (
+          <>
+            <Space size={16} />
+            <Text style={styles.forgetText}>
+              {I18n.t('signInUpForm.forgetText')}
+              <Text style={styles.linkText} onPress={onPressForget}>
+                {I18n.t('signInUpForm.link')}
+              </Text>
             </Text>
-          </Text>
-        </>
-      )}
+          </>
+        )}
+      </KeyboardAwareScrollView>
     </View>
   );
 };

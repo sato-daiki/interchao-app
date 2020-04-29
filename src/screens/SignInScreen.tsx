@@ -4,6 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { LoadingModal, Space, SubmitButton } from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -111,54 +112,56 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
-      <CheckTextInput
-        autoFocus
-        value={email}
-        onChangeText={(text: string): void => setEmail(text)}
-        onEndEditing={onEndEditingEmail}
-        maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        errorMessage={errorEmail}
-      />
-      <Space size={16} />
-      <Text style={styles.label}>{I18n.t('signIn.password')}</Text>
-      <CheckTextInput
-        value={password}
-        onChangeText={(text: string): void => setPassword(text)}
-        onEndEditing={onEndEditingPassword}
-        maxLength={20}
-        placeholder="Password"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        secureTextEntry
-        returnKeyType="done"
-        errorMessage={errorPassword}
-      />
-      <Space size={32} />
-      <SubmitButton
-        title={I18n.t('signIn.login')}
-        onPress={onPressLogin}
-        disable={
-          errorEmail !== '' ||
-          errorPassword !== '' ||
-          email === '' ||
-          password === ''
-        }
-      />
-      <Space size={16} />
-      <View style={styles.row}>
-        <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
-        <TouchableOpacity onPress={onPressForget}>
-          <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
-        </TouchableOpacity>
-      </View>
+      <KeyboardAwareScrollView style={styles.container}>
+        <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
+        <CheckTextInput
+          autoFocus
+          value={email}
+          onChangeText={(text: string): void => setEmail(text)}
+          onEndEditing={onEndEditingEmail}
+          maxLength={50}
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="done"
+          errorMessage={errorEmail}
+        />
+        <Space size={16} />
+        <Text style={styles.label}>{I18n.t('signIn.password')}</Text>
+        <CheckTextInput
+          value={password}
+          onChangeText={(text: string): void => setPassword(text)}
+          onEndEditing={onEndEditingPassword}
+          maxLength={20}
+          placeholder="Password"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          secureTextEntry
+          returnKeyType="done"
+          errorMessage={errorPassword}
+        />
+        <Space size={32} />
+        <SubmitButton
+          title={I18n.t('signIn.login')}
+          onPress={onPressLogin}
+          disable={
+            errorEmail !== '' ||
+            errorPassword !== '' ||
+            email === '' ||
+            password === ''
+          }
+        />
+        <Space size={16} />
+        <View style={styles.row}>
+          <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
+          <TouchableOpacity onPress={onPressForget}>
+            <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
