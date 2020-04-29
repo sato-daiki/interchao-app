@@ -35,6 +35,7 @@ import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen'
 import ReviewListScreen from '../screens/ReviewListScreen';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import { TabIcon, TabLabel } from '../components/molecules';
+import UserDiaryScreen from '../screens/UserDiaryScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -72,6 +73,18 @@ const ModalEditMyProfileNavigator = createStackNavigator(
     initialRouteName: 'EditMyProfile',
   }
 );
+
+const commonDiaryNavigator = {
+  UserProfile: {
+    screen: UserProfileScreen,
+  },
+  UserDiary: {
+    screen: UserDiaryScreen,
+  },
+  ReviewList: {
+    screen: ReviewListScreen,
+  },
+};
 
 const MyDiaryTabStack = createStackNavigator(
   {
@@ -118,12 +131,7 @@ const MyDiaryTabStack = createStackNavigator(
     ForegetPassword: {
       screen: ForegetPasswordScreen,
     },
-    UserProfile: {
-      screen: UserProfileScreen,
-    },
-    ReviewList: {
-      screen: ReviewListScreen,
-    },
+    ...commonDiaryNavigator,
   },
   {
     initialRouteName: 'MyDiaryList',
@@ -141,12 +149,7 @@ const TeachDiaryTabStack = createStackNavigator(
     TeachDiary: {
       screen: TeachDiaryScreenContainer,
     },
-    UserProfile: {
-      screen: UserProfileScreen,
-    },
-    ReviewList: {
-      screen: ReviewListScreen,
-    },
+    ...commonDiaryNavigator,
   },
   {
     initialRouteName: 'TeachDiaryList',
