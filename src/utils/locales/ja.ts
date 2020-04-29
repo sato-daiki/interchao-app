@@ -48,6 +48,8 @@ const errorMessage = {
     'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
   deleteTargetUser:
     'このページは開けません。対象のユーザは削除された可能性があります。',
+  deleteTargetPage:
+    'このページは開けません。対象のページは削除された可能性があります。',
   emptyTitile: 'タイトルが入力されていません',
   emptyText: '本文が入力されていません',
   lackPointsTitle: 'ポイント不足',

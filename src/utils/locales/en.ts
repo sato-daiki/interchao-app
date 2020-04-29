@@ -46,6 +46,7 @@ const errorMessage = {
   invalidRaiting: 'Please rate between 1~5.',
   correctionAlready:
     'Someone else has started correcting this entry. Please search for another entry.',
+  deleteTargetPage: 'This page cannot be opened.',
   deleteTargetUser: 'This page cannot be opened. The user may have deleted it.',
   emptyTitile: 'There is no title.',
   emptyText: 'There is no text.',
