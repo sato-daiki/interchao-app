@@ -232,6 +232,7 @@ const PostDiary = ({
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType="default"
+        underlineColorAndroid="transparent"
       />
       <TextInput
         style={styles.textInput}

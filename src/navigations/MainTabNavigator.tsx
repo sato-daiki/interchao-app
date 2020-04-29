@@ -189,7 +189,7 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons
-            name="account-multiple"
+            name="spellcheck"
             size={25}
             color={tintColor}
           />

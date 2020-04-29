@@ -104,6 +104,7 @@ const CorrectionOrigin: React.FC<Props> = ({
         }}
         contextMenuHidden
         scrollEnabled={false}
+        underlineColorAndroid="transparent"
       />
       {isEmpty ? (
         <>

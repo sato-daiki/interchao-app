@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View, Platform } from 'react-native';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { State } from '../../types/state';
@@ -11,8 +11,15 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   text: {
     fontSize: 11,
+    textAlign: 'center',
+    justifyContent: 'center',
+    padding: Platform.OS === 'ios' ? 2 : 0,
   },
 });
 
@@ -24,9 +31,11 @@ const TabLabel = ({ color }: Props): JSX.Element => {
   const nativeLanguage = getlanguage(profile.nativeLanguage);
 
   return (
-    <Text style={[styles.text, { color }]}>
-      {I18n.t('mainTab.teachDiary', { nativeLanguage })}
-    </Text>
+    <View style={styles.container}>
+      <Text style={[styles.text, { color }]}>
+        {I18n.t('mainTab.teachDiary', { nativeLanguage })}
+      </Text>
+    </View>
   );
 };
 

@@ -4,6 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   emailInputError,
   emailValidate,
@@ -120,46 +121,47 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.title}>{I18n.t('editEmail.title')}</Text>
-
-      <Text style={styles.label}>{I18n.t('editEmail.labelEmail')}</Text>
-      <CheckTextInput
-        value={email}
-        onChangeText={(text: string): void => setEmail(text)}
-        onEndEditing={onEndEditingEmail}
-        maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        isLoading={isEmailLoading}
-        isCheckOk={isEmailCheckOk}
-        errorMessage={errorEmail}
-      />
-      <Space size={16} />
-      <Text style={styles.label}>{I18n.t('editEmail.labelPassword')}</Text>
-      <CheckTextInput
-        value={password}
-        onChangeText={(text: string): void => setPassword(text)}
-        onEndEditing={onEndEditingPassword}
-        maxLength={20}
-        placeholder="Password"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        secureTextEntry
-        returnKeyType="done"
-        errorMessage={errorPassword}
-      />
-      <Space size={32} />
-      <SubmitButton
-        title={I18n.t('common.register')}
-        onPress={onPressSubmit}
-        disable={!isEmailCheckOk}
-      />
-      <Space size={16} />
+      <KeyboardAwareScrollView style={styles.container}>
+        <Text style={styles.title}>{I18n.t('editEmail.title')}</Text>
+        <Text style={styles.label}>{I18n.t('editEmail.labelEmail')}</Text>
+        <CheckTextInput
+          value={email}
+          onChangeText={(text: string): void => setEmail(text)}
+          onEndEditing={onEndEditingEmail}
+          maxLength={50}
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="done"
+          isLoading={isEmailLoading}
+          isCheckOk={isEmailCheckOk}
+          errorMessage={errorEmail}
+        />
+        <Space size={16} />
+        <Text style={styles.label}>{I18n.t('editEmail.labelPassword')}</Text>
+        <CheckTextInput
+          value={password}
+          onChangeText={(text: string): void => setPassword(text)}
+          onEndEditing={onEndEditingPassword}
+          maxLength={20}
+          placeholder="Password"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          secureTextEntry
+          returnKeyType="done"
+          errorMessage={errorPassword}
+        />
+        <Space size={32} />
+        <SubmitButton
+          title={I18n.t('common.register')}
+          onPress={onPressSubmit}
+          disable={!isEmailCheckOk}
+        />
+        <Space size={16} />
+      </KeyboardAwareScrollView>
     </View>
   );
 };
