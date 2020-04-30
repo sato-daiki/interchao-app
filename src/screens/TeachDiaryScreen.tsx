@@ -40,7 +40,8 @@ import { track, events } from '../utils/Analytics';
 
 export interface Props {
   user: User;
-  teachDiary: Diary;
+  profile: Profile;
+  teachDiary?: Diary;
 }
 
 interface DispatchProps {
@@ -61,6 +62,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingVertical: 16,
+  },
+  errContainer: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   correctionButton: {
     padding: 16,
@@ -97,6 +104,7 @@ const styles = StyleSheet.create({
  */
 const TeachDiaryScreen: ScreenType = ({
   user,
+  profile,
   navigation,
   teachDiary,
   editTeachDiary,
@@ -108,10 +116,10 @@ const TeachDiaryScreen: ScreenType = ({
   const [targetProfile, setTargetProfile] = useState<Profile>();
   const [correction, setCorrection] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
-  const { correctionStatus } = teachDiary;
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (!teachDiary) return;
       const newProfile = await getProfile(teachDiary.profile.uid);
       if (newProfile) {
         setTargetProfile(newProfile);
@@ -119,10 +127,11 @@ const TeachDiaryScreen: ScreenType = ({
       setIsProfileLoading(false);
     };
     f();
-  }, [teachDiary.profile.uid]);
+  }, [teachDiary]);
 
   const getNewCorrection = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (!teachDiary) return;
       if (teachDiary.correction) {
         const newCorrection = await getCorrection(teachDiary.correction.id);
         if (newCorrection) {
@@ -132,7 +141,7 @@ const TeachDiaryScreen: ScreenType = ({
       setIsCorrectionLoading(false);
     };
     f();
-  }, [teachDiary.correction]);
+  }, [teachDiary]);
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -140,12 +149,12 @@ const TeachDiaryScreen: ScreenType = ({
       await Promise.all([getNewProfile(), getNewCorrection()]);
     };
     f();
-  }, [getNewCorrection, getNewProfile]);
+  }, [getNewCorrection, getNewProfile, navigation.state.params]);
 
   const onPressSubmitCorrection = useCallback(
     checked => {
       const f = async (): Promise<void> => {
-        if (!teachDiary.objectID) return;
+        if (!teachDiary || !teachDiary.objectID) return;
         if (isLoading) return;
         setIsLoading(true);
 
@@ -229,18 +238,18 @@ const TeachDiaryScreen: ScreenType = ({
   }, []);
 
   useEffect(() => {
+    if (!teachDiary) return;
     navigation.setParams({
       title: teachDiary.title,
       onPressCorrection,
-      isYet: correctionStatus === 'yet' && !isModalCorrection,
+      isYet: teachDiary.correctionStatus === 'yet' && !isModalCorrection,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    correctionStatus,
+    teachDiary,
     isModalCorrection,
     // navigation,
     // onPressCorrection,
-    teachDiary.title,
     user.confirmCorrection,
   ]);
 
@@ -252,7 +261,12 @@ const TeachDiaryScreen: ScreenType = ({
   );
 
   const renderDiaryCorrection = (): ReactNode => {
-    if (correctionStatus === 'yet' && user) {
+    if (
+      teachDiary &&
+      teachDiary.correctionStatus === 'yet' &&
+      targetProfile &&
+      profile.nativeLanguage === targetProfile.learnLanguage
+    ) {
       return (
         <View style={styles.correctionButton}>
           <SubmitButton
@@ -268,6 +282,14 @@ const TeachDiaryScreen: ScreenType = ({
     }
     return null;
   };
+
+  if (!teachDiary) {
+    return (
+      <View style={styles.errContainer}>
+        <Text>{I18n.t('teachDiary.deleteTargetPage')}</Text>
+      </View>
+    );
+  }
 
   const { createdAt, title, text } = teachDiary;
   const postDate = getAlgoliaDate(createdAt);
