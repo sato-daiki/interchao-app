@@ -13,6 +13,8 @@ firebase deploy --only firestore:rules
 
 ## リリース
 
+expo upload:ios
+
 ## OTA Update
 
 expo publish --release-channel production

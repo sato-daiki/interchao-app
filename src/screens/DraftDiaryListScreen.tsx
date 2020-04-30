@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  ReactNode,
+} from 'react';
 import {
   View,
   StyleSheet,
@@ -87,11 +93,12 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
   useEffect(() => {
     navigation.setParams({
       preOpendIndex,
+      draftDiaryTotalNum,
       isEditing,
       onPressEdit,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [preOpendIndex, isEditing, onPressEdit]);
+  }, [draftDiaryTotalNum, preOpendIndex, isEditing, onPressEdit]);
 
   const getNewDraftDiary = useCallback((clean: boolean) => {
     const f = async (): Promise<void> => {
@@ -316,6 +323,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
 DraftDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
+  const draftDiaryTotalNum = navigation.getParam('draftDiaryTotalNum');
   const isEditing = navigation.getParam('isEditing');
   const preOpendIndex = navigation.getParam('preOpendIndex');
   const onPressEdit = navigation.getParam('onPressEdit');
@@ -323,16 +331,21 @@ DraftDiaryListScreen.navigationOptions = ({
   return {
     ...DefaultNavigationOptions,
     title: I18n.t('draftDiary.headerTitle'),
-    headerRight: (): JSX.Element => (
-      <HeaderText
-        title={
-          getIsEditMode(isEditing, preOpendIndex)
-            ? I18n.t('common.done')
-            : I18n.t('common.edit')
-        }
-        onPress={onPressEdit}
-      />
-    ),
+    headerRight: (): ReactNode => {
+      if (draftDiaryTotalNum > 0) {
+        return (
+          <HeaderText
+            title={
+              getIsEditMode(isEditing, preOpendIndex)
+                ? I18n.t('common.done')
+                : I18n.t('common.edit')
+            }
+            onPress={onPressEdit}
+          />
+        );
+      }
+      return null;
+    },
   };
 };
 
