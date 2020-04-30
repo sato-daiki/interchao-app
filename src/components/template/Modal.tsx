@@ -18,16 +18,24 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  animationIn?: any;
+  animationOut?: any;
   children: React.ReactNode;
 }
 
 const Modal1: React.FC<Props> = ({
   visible,
+  animationIn = 'zoomIn',
+  animationOut = 'zoomOut',
   children,
 }: Props): JSX.Element | null => {
   return (
     <View style={styles.container}>
-      <Modal isVisible={visible} animationIn="zoomIn" animationOut="zoomOut">
+      <Modal
+        isVisible={visible}
+        animationIn={animationIn}
+        animationOut={animationOut}
+      >
         <View style={styles.modal}>{children}</View>
       </Modal>
     </View>

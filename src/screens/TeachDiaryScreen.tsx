@@ -224,9 +224,9 @@ const TeachDiaryScreen: ScreenType = ({
         });
         batch.commit();
         track(events.CREATED_CORRECTING);
+        setIsModalCorrection(false);
         navigation.navigate('Correcting', { objectID: teachDiary.objectID });
         setIsLoading(false);
-        setIsModalCorrection(false);
       };
       f();
     },
@@ -299,6 +299,7 @@ const TeachDiaryScreen: ScreenType = ({
       <ModalAlertCorrection
         visible={isModalCorrection}
         isLoading={isLoading}
+        animationOut="flash"
         onPressSubmit={onPressSubmitCorrection}
         onPressClose={(): void => setIsModalCorrection(false)}
       />
