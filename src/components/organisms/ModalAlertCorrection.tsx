@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
+  animationOut?: any;
   isLoading: boolean;
   onPressSubmit: (checked: boolean) => void;
   onPressClose: () => void;
@@ -59,6 +60,7 @@ interface Props {
 
 const ModalAlertCorrection: React.FC<Props> = ({
   visible,
+  animationOut,
   isLoading,
   onPressSubmit,
   onPressClose,
@@ -66,7 +68,7 @@ const ModalAlertCorrection: React.FC<Props> = ({
   const [checked, setChecked] = useState(false);
 
   return (
-    <Modal visible={visible}>
+    <Modal visible={visible} animationOut={animationOut}>
       <View style={styles.container}>
         <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
         <View style={styles.line} />
