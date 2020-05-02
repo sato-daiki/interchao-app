@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
  */
 const MyDiaryScreen: ScreenType = ({
   navigation,
+  profile,
   diary,
   // editDiary,
   deleteDiary,
@@ -245,6 +246,7 @@ const MyDiaryScreen: ScreenType = ({
         {correction ? (
           <MyDiaryCorrection
             isReview={isReview}
+            learnLanguage={profile.learnLanguage}
             correction={correction}
             onPressUser={(uid): void => {
               navigation.navigate('UserProfile', { uid });

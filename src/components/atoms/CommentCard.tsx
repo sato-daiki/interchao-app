@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,8 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import I18n from '../../utils/I18n';
+import googleTranslate from '../../utils/googleTranslate';
+import { Language } from '../../types';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -24,6 +26,7 @@ interface Props {
   fix: string;
   detail: string;
   isEdit?: boolean;
+  learnLanguage?: Language;
   onPressMore?: () => void;
 }
 
@@ -90,6 +93,18 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  translation: {
+    color: mainColor,
+  },
+  italic: {
+    color: subTextColor,
+    fontStyle: 'italic',
+  },
 });
 
 const CommentCard = ({
@@ -99,8 +114,34 @@ const CommentCard = ({
   fix,
   detail,
   isEdit = false,
+  learnLanguage,
   onPressMore,
 }: Props): JSX.Element => {
+  const [displayDetail, setDisplayDetail] = useState(detail);
+  const [isTranslated, setIsTranslated] = useState(false);
+
+  const onPressTranslate = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (isTranslated) {
+        setDisplayDetail(fix);
+        setIsTranslated(false);
+      } else {
+        const mentionRemovedText = detail.replace(/@\w+\s/g, '');
+        if (learnLanguage) {
+          const translatedText = await googleTranslate(
+            mentionRemovedText,
+            learnLanguage
+          );
+          if (translatedText && translatedText.length > 0) {
+            setDisplayDetail(translatedText);
+            setIsTranslated(true);
+          }
+        }
+      }
+    };
+    f();
+  }, [detail, fix, isTranslated, learnLanguage]);
+
   const indexText = `${index + 1}.`;
   return (
     <View style={[styles.container, containerStyle]}>
@@ -124,8 +165,20 @@ const CommentCard = ({
       <Text style={styles.label}>{I18n.t('commentCard.fix')}</Text>
       <Text style={styles.fix}>{fix}</Text>
       <View style={styles.line} />
-      <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
-      <Text style={styles.detail}>{detail}</Text>
+      <View style={styles.row}>
+        <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
+        {learnLanguage ? (
+          <TouchableOpacity onPress={onPressTranslate}>
+            <Text style={styles.translation}>
+              {I18n.t('common.translation')}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
+
+      <Text style={[styles.detail, isTranslated ? styles.italic : undefined]}>
+        {displayDetail}
+      </Text>
     </View>
   );
 };

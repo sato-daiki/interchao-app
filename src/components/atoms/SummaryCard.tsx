@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,22 @@ import {
   ViewStyle,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
+import {
+  fontSizeM,
+  primaryColor,
+  borderLightColor,
+  mainColor,
+  subTextColor,
+} from '../../styles/Common';
 import I18n from '../../utils/I18n';
+import { Language } from '../../types';
+import googleTranslate from '../../utils/googleTranslate';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   summary: string;
   isEdit?: boolean;
+  learnLanguage?: Language;
   onPressMore?: () => void;
 }
 
@@ -59,17 +68,54 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  translation: {
+    color: mainColor,
+  },
+  italic: {
+    color: subTextColor,
+    fontStyle: 'italic',
+  },
 });
 
 const SummaryCard = ({
   containerStyle,
   summary,
   isEdit = false,
+  learnLanguage,
   onPressMore,
 }: Props): JSX.Element | null => {
+  const [displaySummary, setDisplaySummary] = useState(summary);
+  const [isTranslated, setIsTranslated] = useState(false);
+
+  const onPressTranslate = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (isTranslated) {
+        setDisplaySummary(summary);
+        setIsTranslated(false);
+      } else {
+        const mentionRemovedText = summary.replace(/@\w+\s/g, '');
+        if (learnLanguage) {
+          const translatedText = await googleTranslate(
+            mentionRemovedText,
+            learnLanguage
+          );
+          if (translatedText && translatedText.length > 0) {
+            setDisplaySummary(translatedText);
+            setIsTranslated(true);
+          }
+        }
+      }
+    };
+    f();
+  }, [isTranslated, learnLanguage, summary]);
   if (!summary || summary.length === 0) {
     return null;
   }
+
   return (
     <View style={[styles.container, containerStyle]}>
       {isEdit ? (
@@ -83,9 +129,20 @@ const SummaryCard = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
+      <View style={styles.row}>
+        <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
+        {learnLanguage ? (
+          <TouchableOpacity onPress={onPressTranslate}>
+            <Text style={styles.translation}>
+              {I18n.t('common.translation')}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
       <View style={styles.line} />
-      <Text style={styles.text}>{summary}</Text>
+      <Text style={[styles.text, isTranslated ? styles.italic : undefined]}>
+        {displaySummary}
+      </Text>
     </View>
   );
 };

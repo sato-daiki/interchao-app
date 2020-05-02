@@ -14,6 +14,7 @@ const common = {
   skip: 'スキップ',
   add: '追加',
   delete: '削除',
+  translation: '翻訳',
 };
 
 // タブ
