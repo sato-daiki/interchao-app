@@ -246,7 +246,7 @@ const MyDiaryScreen: ScreenType = ({
         {correction ? (
           <MyDiaryCorrection
             isReview={isReview}
-            learnLanguage={profile.learnLanguage}
+            nativeLanguage={profile.nativeLanguage}
             correction={correction}
             onPressUser={(uid): void => {
               navigation.navigate('UserProfile', { uid });
