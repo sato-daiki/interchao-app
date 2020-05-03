@@ -123,7 +123,7 @@ const CommentCard = ({
   const onPressTranslate = useCallback(() => {
     const f = async (): Promise<void> => {
       if (isTranslated) {
-        setDisplayDetail(fix);
+        setDisplayDetail(detail);
         setIsTranslated(false);
       } else {
         const mentionRemovedText = detail.replace(/@\w+\s/g, '');
@@ -140,7 +140,7 @@ const CommentCard = ({
       }
     };
     f();
-  }, [detail, fix, isTranslated, nativeLanguage]);
+  }, [detail, isTranslated, nativeLanguage]);
 
   const indexText = `${index + 1}.`;
   return (
