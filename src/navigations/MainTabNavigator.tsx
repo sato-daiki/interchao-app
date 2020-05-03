@@ -32,7 +32,7 @@ import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
 import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
-import ReviewListScreen from '../screens/ReviewListScreen';
+import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import { TabIcon, TabLabel } from '../components/molecules';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
@@ -82,7 +82,7 @@ const commonDiaryNavigator = {
     screen: UserDiaryScreen,
   },
   ReviewList: {
-    screen: ReviewListScreen,
+    screen: ReviewListScreenContainer,
   },
 };
 
