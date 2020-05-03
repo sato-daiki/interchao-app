@@ -10,7 +10,7 @@ import I18n from '../../utils/I18n';
 
 interface Props {
   isReview: boolean;
-  learnLanguage: Language;
+  nativeLanguage: Language;
   correction: Correction;
   onPressUser: (uid: string) => void;
   onPressReview: () => void;
@@ -39,7 +39,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  */
 const MyDiaryCorrection: React.FC<Props> = ({
   isReview,
-  learnLanguage,
+  nativeLanguage,
   correction,
   onPressUser,
   onPressReview,
@@ -48,7 +48,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
-      <SummaryCard learnLanguage={learnLanguage} summary={summary} />
+      <SummaryCard nativeLanguage={nativeLanguage} summary={summary} />
       <Space size={32} />
       <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
     </>
@@ -60,14 +60,14 @@ const MyDiaryCorrection: React.FC<Props> = ({
       return (
         <CommentCard
           index={index}
-          learnLanguage={learnLanguage}
+          nativeLanguage={nativeLanguage}
           original={original}
           fix={fix}
           detail={detail}
         />
       );
     },
-    [learnLanguage]
+    [nativeLanguage]
   );
 
   return (
