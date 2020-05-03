@@ -17,7 +17,7 @@ import I18n from '../../utils/I18n';
 
 interface Props {
   item: Review;
-  learnLanguage: Language;
+  learnLanguage?: Language;
   onPressUser: (uid: string) => void;
 }
 
