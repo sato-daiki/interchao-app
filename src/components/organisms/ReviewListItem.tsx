@@ -17,7 +17,7 @@ import I18n from '../../utils/I18n';
 
 interface Props {
   item: Review;
-  learnLanguage?: Language;
+  nativeLanguage?: Language;
   onPressUser: (uid: string) => void;
 }
 
@@ -62,11 +62,10 @@ const styles = StyleSheet.create({
 
 const ReviewListItem = ({
   item,
-  learnLanguage,
+  nativeLanguage,
   onPressUser,
 }: Props): JSX.Element => {
   const { rating, createdAt, comment, reviewer } = item;
-  const { uid, userName, photoUrl, nativeLanguage } = reviewer;
   const [displayReview, setDisplayReview] = useState(comment);
   const [isTranslated, setIsTranslated] = useState(false);
 
@@ -77,10 +76,10 @@ const ReviewListItem = ({
         setIsTranslated(false);
       } else {
         const mentionRemovedText = comment.replace(/@\w+\s/g, '');
-        if (learnLanguage) {
+        if (nativeLanguage) {
           const translatedText = await googleTranslate(
             mentionRemovedText,
-            learnLanguage
+            nativeLanguage
           );
           if (translatedText && translatedText.length > 0) {
             setDisplayReview(translatedText);
@@ -90,13 +89,13 @@ const ReviewListItem = ({
       }
     };
     f();
-  }, [comment, isTranslated, learnLanguage]);
+  }, [comment, isTranslated, nativeLanguage]);
 
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <Text style={styles.postDayText}>{getDay(createdAt)}</Text>
-        {learnLanguage ? (
+        {nativeLanguage ? (
           <TouchableOpacity onPress={onPressTranslate}>
             <Text style={styles.translation}>
               {I18n.t('common.translation')}
@@ -122,10 +121,10 @@ const ReviewListItem = ({
         </Text>
       ) : null}
       <ProfileIconHorizontal
-        userName={userName}
-        photoUrl={photoUrl}
-        nativeLanguage={nativeLanguage}
-        onPress={(): void => onPressUser(uid)}
+        userName={reviewer.userName}
+        photoUrl={reviewer.photoUrl}
+        nativeLanguage={reviewer.nativeLanguage}
+        onPress={(): void => onPressUser(reviewer.uid)}
       />
     </View>
   );

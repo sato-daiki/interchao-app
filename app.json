@@ -21,7 +21,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
-      "buildNumber": "1.0.4"
+      "buildNumber": "1.0.5"
     },
     "extra": {
       "production": {

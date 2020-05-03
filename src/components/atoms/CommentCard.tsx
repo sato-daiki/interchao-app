@@ -26,7 +26,7 @@ interface Props {
   fix: string;
   detail: string;
   isEdit?: boolean;
-  learnLanguage?: Language;
+  nativeLanguage?: Language;
   onPressMore?: () => void;
 }
 
@@ -114,7 +114,7 @@ const CommentCard = ({
   fix,
   detail,
   isEdit = false,
-  learnLanguage,
+  nativeLanguage,
   onPressMore,
 }: Props): JSX.Element => {
   const [displayDetail, setDisplayDetail] = useState(detail);
@@ -127,10 +127,10 @@ const CommentCard = ({
         setIsTranslated(false);
       } else {
         const mentionRemovedText = detail.replace(/@\w+\s/g, '');
-        if (learnLanguage) {
+        if (nativeLanguage) {
           const translatedText = await googleTranslate(
             mentionRemovedText,
-            learnLanguage
+            nativeLanguage
           );
           if (translatedText && translatedText.length > 0) {
             setDisplayDetail(translatedText);
@@ -140,7 +140,7 @@ const CommentCard = ({
       }
     };
     f();
-  }, [detail, fix, isTranslated, learnLanguage]);
+  }, [detail, fix, isTranslated, nativeLanguage]);
 
   const indexText = `${index + 1}.`;
   return (
@@ -167,7 +167,7 @@ const CommentCard = ({
       <View style={styles.line} />
       <View style={styles.row}>
         <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
-        {learnLanguage ? (
+        {nativeLanguage ? (
           <TouchableOpacity onPress={onPressTranslate}>
             <Text style={styles.translation}>
               {I18n.t('common.translation')}

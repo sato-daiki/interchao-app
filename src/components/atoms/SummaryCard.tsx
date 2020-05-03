@@ -23,7 +23,7 @@ interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   summary: string;
   isEdit?: boolean;
-  learnLanguage?: Language;
+  nativeLanguage?: Language;
   onPressMore?: () => void;
 }
 
@@ -85,7 +85,7 @@ const SummaryCard = ({
   containerStyle,
   summary,
   isEdit = false,
-  learnLanguage,
+  nativeLanguage,
   onPressMore,
 }: Props): JSX.Element | null => {
   const [displaySummary, setDisplaySummary] = useState(summary);
@@ -98,10 +98,10 @@ const SummaryCard = ({
         setIsTranslated(false);
       } else {
         const mentionRemovedText = summary.replace(/@\w+\s/g, '');
-        if (learnLanguage) {
+        if (nativeLanguage) {
           const translatedText = await googleTranslate(
             mentionRemovedText,
-            learnLanguage
+            nativeLanguage
           );
           if (translatedText && translatedText.length > 0) {
             setDisplaySummary(translatedText);
@@ -111,7 +111,7 @@ const SummaryCard = ({
       }
     };
     f();
-  }, [isTranslated, learnLanguage, summary]);
+  }, [isTranslated, nativeLanguage, summary]);
   if (!summary || summary.length === 0) {
     return null;
   }
@@ -131,7 +131,7 @@ const SummaryCard = ({
       ) : null}
       <View style={styles.row}>
         <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
-        {learnLanguage ? (
+        {nativeLanguage ? (
           <TouchableOpacity onPress={onPressTranslate}>
             <Text style={styles.translation}>
               {I18n.t('common.translation')}
