@@ -43,11 +43,7 @@ const App: React.SFC = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate
-        loading={<Loading />}
-        // onBeforeLift={() => {}}
-        persistor={persistor}
-      >
+      <PersistGate loading={<Loading />} persistor={persistor}>
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
           <AppNavigator />
