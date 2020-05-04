@@ -15,6 +15,7 @@ const common = {
   add: '追加',
   delete: '削除',
   translation: '翻訳',
+  back: '戻る',
 };
 
 // タブ
@@ -53,6 +54,8 @@ const errorMessage = {
     'このページは開けません。対象のページは削除された可能性があります。',
   emptyTitile: 'タイトルが入力されていません',
   emptyText: '本文が入力されていません',
+  emptyEmail: 'メールアドレスが入力されていません',
+  emptyMessage: 'メッセージが入力されていません',
   lackPointsTitle: 'ポイント不足',
   lackPointsText:
     '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは{{nativeLanguage}}の日記を添削することで溜めることができます。',
@@ -220,6 +223,7 @@ const setting = {
   privacy: 'プライバシーポリシー',
   deleteAcount: '退会について',
   logout: 'ログアウト',
+  inquiry: 'お問い合わせ',
 };
 
 const signIn = {
@@ -331,6 +335,14 @@ const profileLanguage = {
 
 const summaryInput = {
   title: 'まとめ',
+};
+
+const inquiry = {
+  headerTitle: '問合せ',
+  email: 'メールアドレス',
+  message: 'メッセージ',
+  title: 'お問い合わせありがとうございます。',
+  thanks: '確認次第すぐに返信いたいします。もうしばらくお待ちください',
 };
 
 // organisms
@@ -617,6 +629,7 @@ const ja = {
   myDiaryStatus,
   userDiaryStatus,
   language,
+  inquiry,
 };
 
 export default ja;
