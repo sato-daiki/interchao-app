@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     fontSize: fontSizeM,
     color: primaryColor,
+    lineHeight: fontSizeM * 1.3,
   },
   row: {
     flexDirection: 'row',
