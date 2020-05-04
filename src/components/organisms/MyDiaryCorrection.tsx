@@ -3,13 +3,14 @@ import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Space, GrayHeader, CommentCard, SummaryCard } from '../atoms';
 import { fontSizeM, subTextColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
-import { Correction, Comment } from '../../types';
+import { Correction, Comment, Language } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
 import I18n from '../../utils/I18n';
 
 interface Props {
   isReview: boolean;
+  nativeLanguage: Language;
   correction: Correction;
   onPressUser: (uid: string) => void;
   onPressReview: () => void;
@@ -38,16 +39,16 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  */
 const MyDiaryCorrection: React.FC<Props> = ({
   isReview,
+  nativeLanguage,
   correction,
   onPressUser,
   onPressReview,
 }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
-  const { userName, photoUrl, nativeLanguage, uid } = profile;
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
-      <SummaryCard summary={summary} />
+      <SummaryCard nativeLanguage={nativeLanguage} summary={summary} />
       <Space size={32} />
       <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
     </>
@@ -59,13 +60,14 @@ const MyDiaryCorrection: React.FC<Props> = ({
       return (
         <CommentCard
           index={index}
+          nativeLanguage={nativeLanguage}
           original={original}
           fix={fix}
           detail={detail}
         />
       );
     },
-    []
+    [nativeLanguage]
   );
 
   return (
@@ -74,10 +76,10 @@ const MyDiaryCorrection: React.FC<Props> = ({
       <View style={styles.main}>
         <View style={styles.header}>
           <ProfileIconHorizontal
-            userName={userName}
-            photoUrl={photoUrl}
-            nativeLanguage={nativeLanguage}
-            onPress={(): void => onPressUser(uid)}
+            userName={profile.userName}
+            photoUrl={profile.photoUrl}
+            nativeLanguage={profile.nativeLanguage}
+            onPress={(): void => onPressUser(profile.uid)}
           />
           <Text style={styles.daytext}>{postDate}</Text>
         </View>

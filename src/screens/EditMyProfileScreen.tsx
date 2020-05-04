@@ -95,7 +95,7 @@ const EditMyProfileScreen: ScreenType = ({
       // 画像のuodate
       let newPhotoUrl = '';
       const postIndex = Date.now().toString();
-      const path = `${profile.uid}/profileImages/${postIndex}`;
+      const path = `profileImages/${profile.uid}/${postIndex}`;
       if (photoUrl) {
         newPhotoUrl = await uploadImageAsync(photoUrl, path, 300);
       }

@@ -6,7 +6,7 @@ import {
 } from 'react-navigation-stack';
 
 import { firestore } from 'firebase';
-import { Review } from '../types';
+import { Review, Profile } from '../types';
 
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { LoadingModal, GrayHeader } from '../components/atoms';
@@ -16,7 +16,11 @@ import { EmptyReview } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
+export interface Props {
+  profile: Profile;
+}
+
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -33,7 +37,7 @@ const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Review, index: number): string => String(index);
 
-const ReviewListScreen: ScreenType = ({ navigation }) => {
+const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [readingNext, setReadingNext] = useState(false);
@@ -121,13 +125,14 @@ const ReviewListScreen: ScreenType = ({ navigation }) => {
       return (
         <ReviewListItem
           item={item}
+          nativeLanguage={profile.nativeLanguage}
           onPressUser={(uid: string): void => {
             navigation.navigate('UserProfile', { uid });
           }}
         />
       );
     },
-    [navigation]
+    [navigation, profile.nativeLanguage]
   );
 
   return (

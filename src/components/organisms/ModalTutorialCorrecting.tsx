@@ -33,7 +33,8 @@ const { width } = Dimensions.get('window');
 
 interface Props {
   isLoading?: boolean;
-  displayed: boolean;
+  visible: boolean;
+  animationIn?: any;
   nativeLanguage: Language;
   buttonText?: string;
   rightButtonText?: string;
@@ -96,9 +97,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const TutorialCorrecting: React.FC<Props> = ({
+const ModalTutorialCorrecting: React.FC<Props> = ({
   isLoading = false,
-  displayed,
+  animationIn,
+  visible,
   nativeLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
   rightButtonText = I18n.t('common.skip'),
@@ -190,7 +192,7 @@ const TutorialCorrecting: React.FC<Props> = ({
   );
 
   return (
-    <Modal visible={!displayed}>
+    <Modal visible={visible} animationIn={animationIn}>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>{I18n.t('tutorialCorrecting.title')}</Text>
@@ -222,4 +224,4 @@ const TutorialCorrecting: React.FC<Props> = ({
   );
 };
 
-export default TutorialCorrecting;
+export default ModalTutorialCorrecting;
