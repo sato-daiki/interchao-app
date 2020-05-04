@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { YellowBox, StatusBar } from 'react-native';
 import * as Sentry from 'sentry-expo';
+import { PersistGate } from 'redux-persist/es/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
@@ -9,11 +10,12 @@ import { Updates } from 'expo';
 import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
+import Loading from './screens/LoadingScreen';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
 
-const { store } = configureStore();
+const { store, persistor } = configureStore();
 
 // エラー監視
 Sentry.setRelease(Constants.manifest.revisionId || 'DEV');
@@ -41,10 +43,16 @@ const App: React.SFC = () => {
 
   return (
     <Provider store={store}>
-      <StatusBar barStyle="dark-content" />
-      <ActionSheetProvider>
-        <AppNavigator />
-      </ActionSheetProvider>
+      <PersistGate
+        loading={<Loading />}
+        // onBeforeLift={() => {}}
+        persistor={persistor}
+      >
+        <StatusBar barStyle="dark-content" />
+        <ActionSheetProvider>
+          <AppNavigator />
+        </ActionSheetProvider>
+      </PersistGate>
     </Provider>
   );
 };
