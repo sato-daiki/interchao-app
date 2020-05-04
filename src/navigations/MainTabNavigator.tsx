@@ -32,9 +32,11 @@ import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
 import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
-import ReviewListScreen from '../screens/ReviewListScreen';
+import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import { TabIcon, TabLabel } from '../components/molecules';
+import UserDiaryScreen from '../screens/UserDiaryScreen';
+import InquiryScreenContainer from '../containers/InquiryScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -73,6 +75,18 @@ const ModalEditMyProfileNavigator = createStackNavigator(
   }
 );
 
+const commonDiaryNavigator = {
+  UserProfile: {
+    screen: UserProfileScreen,
+  },
+  UserDiary: {
+    screen: UserDiaryScreen,
+  },
+  ReviewList: {
+    screen: ReviewListScreenContainer,
+  },
+};
+
 const MyDiaryTabStack = createStackNavigator(
   {
     MyDiaryList: {
@@ -99,6 +113,9 @@ const MyDiaryTabStack = createStackNavigator(
     Notice: {
       screen: NoticeScreenContainer,
     },
+    Inquiry: {
+      screen: InquiryScreenContainer,
+    },
     Premium: {
       screen: PremiumScreen,
     },
@@ -118,12 +135,7 @@ const MyDiaryTabStack = createStackNavigator(
     ForegetPassword: {
       screen: ForegetPasswordScreen,
     },
-    UserProfile: {
-      screen: UserProfileScreen,
-    },
-    ReviewList: {
-      screen: ReviewListScreen,
-    },
+    ...commonDiaryNavigator,
   },
   {
     initialRouteName: 'MyDiaryList',
@@ -141,12 +153,7 @@ const TeachDiaryTabStack = createStackNavigator(
     TeachDiary: {
       screen: TeachDiaryScreenContainer,
     },
-    UserProfile: {
-      screen: UserProfileScreen,
-    },
-    ReviewList: {
-      screen: ReviewListScreen,
-    },
+    ...commonDiaryNavigator,
   },
   {
     initialRouteName: 'TeachDiaryList',

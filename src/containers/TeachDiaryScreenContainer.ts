@@ -10,14 +10,15 @@ interface OwnProps {
 }
 
 const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
-  const { user } = state.rootReducer;
+  const { user, profile } = state.rootReducer;
   const { teachDiaries } = state.rootReducer.teachDiaryList;
 
   const objectID = ownProps.navigation.getParam('objectID');
   const teachDiary = teachDiaries.find(d => d.objectID === objectID);
   return {
     user,
-    teachDiary: teachDiary!,
+    profile,
+    teachDiary,
   };
 };
 

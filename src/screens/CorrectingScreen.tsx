@@ -20,7 +20,7 @@ import {
 } from '../components/atoms';
 import { CorrectionFooterButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
-import TutorialCorrecting from '../components/organisms/TutorialCorrecting';
+import ModalTutorialCorrecting from '../components/organisms/ModalTutorialCorrecting';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
 import CommentInputCard from '../components/organisms/CommentInputCard';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
@@ -115,8 +115,8 @@ const CorrectingScreen: ScreenType = ({
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
-  const [tutorialCorrectiong, setTutorialCorrectiong] = useState(
-    user.tutorialCorrectiong
+  const [isModalTutorialCorrectiong, setIsModalTutorialCorrectiong] = useState(
+    false
   );
 
   // Profile関連
@@ -561,33 +561,36 @@ const CorrectingScreen: ScreenType = ({
     setIsModalDone(false);
   }, [navigation]);
 
-  /**
-   * 初回チュートリアル
-   */
-  const onPressTutorial = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      if (isTutorialLoading) return;
-      if (user.tutorialCorrectiong) {
-        setTutorialCorrectiong(true);
-        return;
-      }
-      setIsTutorialLoading(true);
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({
-          tutorialCorrectiong: true,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      setUser({
-        ...user,
-        tutorialCorrectiong: true,
-      });
-      setIsTutorialLoading(false);
-      setTutorialCorrectiong(true);
-    };
-    f();
-  }, [isTutorialLoading, setUser, user]);
+  // /**
+  //  * 初回チュートリアル
+  //  */
+  // const onPressTutorial = useCallback((): void => {
+  //   const f = async (): Promise<void> => {
+  //     if (isTutorialLoading) return;
+  //     if (user.tutorialCorrectiong) {
+  //       // 画面下部の添削の仕方から呼ばれたときはここに入る
+  //       setIsModalTutorialCorrectiong(false);
+  //       return;
+  //     }
+  //     setIsTutorialLoading(true);
+  //     await firebase
+  //       .firestore()
+  //       .doc(`users/${user.uid}`)
+  //       .update({
+  //         tutorialCorrectiong: true,
+  //         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  //       });
+  //     setUser({
+  //       ...user,
+  //       tutorialCorrectiong: true,
+  //     });
+  //     console.log('user', user);
+  //     setIsTutorialLoading(false);
+  //     setIsModalTutorialCorrectiong(false);
+  //     setIsModalFirsttutorialCorrectiong(false);
+  //   };
+  //   f();
+  // }, [isTutorialLoading, setUser, user]);
 
   /**
    * 30分が経過した時の処理
@@ -626,84 +629,90 @@ const CorrectingScreen: ScreenType = ({
   );
   return (
     <SafeAreaView style={styles.safeAreaView}>
-      <LoadingModal visible={isLoading} />
-      <ModalTimeUp visible={isModalTimeUp} onPressClose={onPressCloseTimeUp} />
-      <ModalCorrectingDone
-        visible={isModalDone}
-        getPoints={getPoints}
-        points={user.points}
-        onPressClose={onPressCloseDone}
-      />
-      <TutorialCorrecting
-        isLoading={isTutorialLoading}
-        displayed={tutorialCorrectiong}
-        nativeLanguage={currentProfile.nativeLanguage}
-        onPress={onPressTutorial}
-      />
-      <KeyboardAwareScrollView
-        style={styles.container}
-        keyboardShouldPersistTaps="handled"
-        extraScrollHeight={32}
-      >
-        <View style={styles.main}>
-          <CorrectionOrigin
-            isEmpty={!isCommentInput && infoComments.length === 0}
-            isProfileLoading={isProfileLoading}
-            teachDiary={teachDiary}
-            targetProfile={targetProfile}
-            onTimeUp={onTimeUp}
-            setSelection={setSelection}
-          />
-          <Space size={32} />
-          {/* 新規でコメント追加 */}
-          {isCommentInput ? (
-            <CommentInputCard
-              containerStyle={styles.commentCard}
-              original={original}
-              onPressSubmit={onPressSubmitComment}
-              onPressClose={onPressCloseComment}
+      <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
+        <ModalTimeUp
+          visible={isModalTimeUp}
+          onPressClose={onPressCloseTimeUp}
+        />
+        <ModalCorrectingDone
+          visible={isModalDone}
+          getPoints={getPoints}
+          points={user.points}
+          onPressClose={onPressCloseDone}
+        />
+        {/* 初回起動 or 画面下部の添削の仕方クリックで開かれる */}
+        <ModalTutorialCorrecting
+          isLoading={false}
+          visible={isModalTutorialCorrectiong}
+          nativeLanguage={currentProfile.nativeLanguage}
+          onPress={(): void => setIsModalTutorialCorrectiong(false)}
+        />
+        <KeyboardAwareScrollView
+          style={styles.container}
+          keyboardShouldPersistTaps="handled"
+          extraScrollHeight={32}
+        >
+          <View style={styles.main}>
+            <CorrectionOrigin
+              isEmpty={!isCommentInput && infoComments.length === 0}
+              isProfileLoading={isProfileLoading}
+              teachDiary={teachDiary}
+              targetProfile={targetProfile}
+              onTimeUp={onTimeUp}
+              setSelection={setSelection}
             />
-          ) : null}
-          {/* 総評の追加 */}
-          {isSummary ? (
-            <SummaryInputCard
+            <Space size={32} />
+            {/* 新規でコメント追加 */}
+            {isCommentInput ? (
+              <CommentInputCard
+                containerStyle={styles.commentCard}
+                original={original}
+                onPressSubmit={onPressSubmitComment}
+                onPressClose={onPressCloseComment}
+              />
+            ) : null}
+            {/* 総評の追加 */}
+            {isSummary ? (
+              <SummaryInputCard
+                containerStyle={styles.commentCard}
+                onPressSubmit={onPressSubmitSummary}
+                onPressClose={onPressCloseSummary}
+              />
+            ) : null}
+            {/* コメント一覧 */}
+            {infoComments.length > 0 ? (
+              <>
+                <GrayHeader title={I18n.t('correcting.commentList')} />
+                <Space size={16} />
+              </>
+            ) : null}
+            {infoComments.map((item: InfoComment, index: number) => (
+              <CommentCard
+                containerStyle={styles.commentCard}
+                index={index}
+                original={item.original}
+                fix={item.fix}
+                detail={item.detail}
+                isEdit
+                onPressMore={(): void => onPressMoreComment(item)}
+              />
+            ))}
+            {/* まとめ */}
+            <SummaryCard
               containerStyle={styles.commentCard}
-              onPressSubmit={onPressSubmitSummary}
-              onPressClose={onPressCloseSummary}
-            />
-          ) : null}
-          {/* コメント一覧 */}
-          {infoComments.length > 0 ? (
-            <>
-              <GrayHeader title={I18n.t('correcting.commentList')} />
-              <Space size={16} />
-            </>
-          ) : null}
-          {infoComments.map((item: InfoComment, index: number) => (
-            <CommentCard
-              containerStyle={styles.commentCard}
-              index={index}
-              original={item.original}
-              fix={item.fix}
-              detail={item.detail}
+              summary={summary}
               isEdit
-              onPressMore={(): void => onPressMoreComment(item)}
+              onPressMore={onPressMoreSummary}
             />
-          ))}
-          {/* まとめ */}
-          <SummaryCard
-            containerStyle={styles.commentCard}
-            summary={summary}
-            isEdit
-            onPressMore={onPressMoreSummary}
-          />
-        </View>
-      </KeyboardAwareScrollView>
-      <CorrectionFooterButton
-        nextActionText={buttonInfo ? buttonInfo.title : ''}
-        onPressNextAction={onPressSubmitButton}
-        onPressHowTo={(): void => setTutorialCorrectiong(false)}
-      />
+          </View>
+        </KeyboardAwareScrollView>
+        <CorrectionFooterButton
+          nextActionText={buttonInfo ? buttonInfo.title : ''}
+          onPressNextAction={onPressSubmitButton}
+          onPressHowTo={(): void => setIsModalTutorialCorrectiong(true)}
+        />
+      </View>
     </SafeAreaView>
   );
 };

@@ -14,6 +14,8 @@ const common = {
   skip: 'Skip',
   add: 'Add',
   delete: 'Delete',
+  translation: 'Translation',
+  back: 'Back',
 };
 
 // タブ
@@ -46,9 +48,12 @@ const errorMessage = {
   invalidRaiting: 'Please rate between 1~5.',
   correctionAlready:
     'Someone else has started correcting this entry. Please search for another entry.',
+  deleteTargetPage: 'This page cannot be opened.',
   deleteTargetUser: 'This page cannot be opened. The user may have deleted it.',
   emptyTitile: 'There is no title.',
   emptyText: 'There is no text.',
+  emptyEmail: 'There is no email address.',
+  emptyMessage: 'There is no message.',
   lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
     '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{nativeLanguage}}.',
@@ -219,6 +224,7 @@ const setting = {
   privacy: 'Privacy Policy',
   deleteAcount: 'About Account Deletion',
   logout: 'Logout',
+  inquiry: 'Contact',
 };
 
 const signIn = {
@@ -330,6 +336,15 @@ const profileLanguage = {
 
 const summaryInput = {
   title: 'Summary',
+};
+
+const inquiry = {
+  headerTitle: 'Inquiry',
+  email: 'Email Address',
+  message: 'Message',
+  title: 'Thank you for your inquiry.',
+  thanks:
+    'We will reply to you within a few days.  Please kindly wait for a moment.',
 };
 
 // organisms
@@ -620,6 +635,7 @@ const en = {
   myDiaryStatus,
   userDiaryStatus,
   language,
+  inquiry,
 };
 
 export default en;

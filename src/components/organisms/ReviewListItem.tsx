@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
   fontSizeS,
@@ -7,13 +7,17 @@ import {
   primaryColor,
   borderLightColor,
   subTextColor,
+  mainColor,
 } from '../../styles/Common';
 import { getDay } from '../../utils/diary';
-import { Review } from '../../types';
+import { Review, Language } from '../../types';
 import { ProfileIconHorizontal } from '../atoms';
+import googleTranslate from '../../utils/googleTranslate';
+import I18n from '../../utils/I18n';
 
 interface Props {
   item: Review;
+  nativeLanguage?: Language;
   onPressUser: (uid: string) => void;
 }
 
@@ -30,6 +34,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   comment: {
+    paddingTop: 4,
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
@@ -42,15 +47,62 @@ const styles = StyleSheet.create({
   starStyle: {
     margin: 0,
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  translation: {
+    color: mainColor,
+  },
+  italic: {
+    color: subTextColor,
+    fontStyle: 'italic',
+  },
 });
 
-const ReviewListItem = ({ item, onPressUser }: Props): JSX.Element => {
+const ReviewListItem = ({
+  item,
+  nativeLanguage,
+  onPressUser,
+}: Props): JSX.Element => {
   const { rating, createdAt, comment, reviewer } = item;
-  const { uid, userName, photoUrl, nativeLanguage } = reviewer;
+  const [displayReview, setDisplayReview] = useState(comment);
+  const [isTranslated, setIsTranslated] = useState(false);
+
+  const onPressTranslate = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (isTranslated) {
+        setDisplayReview(comment);
+        setIsTranslated(false);
+      } else {
+        const mentionRemovedText = comment.replace(/@\w+\s/g, '');
+        if (nativeLanguage) {
+          const translatedText = await googleTranslate(
+            mentionRemovedText,
+            nativeLanguage
+          );
+          if (translatedText && translatedText.length > 0) {
+            setDisplayReview(translatedText);
+            setIsTranslated(true);
+          }
+        }
+      }
+    };
+    f();
+  }, [comment, isTranslated, nativeLanguage]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.postDayText}>{getDay(createdAt)}</Text>
+      <View style={styles.row}>
+        <Text style={styles.postDayText}>{getDay(createdAt)}</Text>
+        {nativeLanguage ? (
+          <TouchableOpacity onPress={onPressTranslate}>
+            <Text style={styles.translation}>
+              {I18n.t('common.translation')}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
       <View style={styles.rating}>
         <AirbnbRating
           isDisabled
@@ -61,12 +113,18 @@ const ReviewListItem = ({ item, onPressUser }: Props): JSX.Element => {
           starStyle={styles.starStyle}
         />
       </View>
-      {comment ? <Text style={styles.comment}>{comment}</Text> : null}
+      {displayReview ? (
+        <Text
+          style={[styles.comment, isTranslated ? styles.italic : undefined]}
+        >
+          {displayReview}
+        </Text>
+      ) : null}
       <ProfileIconHorizontal
-        userName={userName}
-        photoUrl={photoUrl}
-        nativeLanguage={nativeLanguage}
-        onPress={(): void => onPressUser(uid)}
+        userName={reviewer.userName}
+        photoUrl={reviewer.photoUrl}
+        nativeLanguage={reviewer.nativeLanguage}
+        onPress={(): void => onPressUser(reviewer.uid)}
       />
     </View>
   );
