@@ -19,4 +19,5 @@ expo upload:ios
 
 ## OTA Update
 
+firebase deploy --only firestore:rules -P product
 expo publish --release-channel production
