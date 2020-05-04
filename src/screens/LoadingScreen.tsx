@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { LoadingModal } from '../components/atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,9 +9,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const LoadingScreen: React.FC<{}> = (): JSX.Element => (
-  <View style={styles.container}>
-    <LoadingModal visible />
-  </View>
-);
+const LoadingScreen: React.FC<{}> = (): JSX.Element => {
+  return <View style={styles.container} />;
+};
 export default LoadingScreen;
