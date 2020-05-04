@@ -45,7 +45,7 @@ const App: React.SFC = () => {
     <Provider store={store}>
       <PersistGate
         loading={<Loading />}
-        onBeforeLift={() => {}}
+        // onBeforeLift={() => {}}
         persistor={persistor}
       >
         <StatusBar barStyle="dark-content" />
