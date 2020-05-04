@@ -10,3 +10,4 @@ export * from './correction';
 export * from './blockUser';
 export * from './report';
 export * from './localStatus';
+export * from './inquiry';
