@@ -36,6 +36,7 @@ import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import { TabIcon, TabLabel } from '../components/molecules';
 import UserDiaryScreen from '../screens/UserDiaryScreen';
+import InquiryScreenContainer from '../containers/InquiryScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -111,6 +112,9 @@ const MyDiaryTabStack = createStackNavigator(
     },
     Notice: {
       screen: NoticeScreenContainer,
+    },
+    Inquiry: {
+      screen: InquiryScreenContainer,
     },
     Premium: {
       screen: PremiumScreen,

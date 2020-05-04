@@ -177,9 +177,17 @@ service cloud.firestore {
       && "reason" in report && report.reason is string 
       && "createdAt" in report && report.createdAt is timestamp
   }
-  
 
-  
+  // inquiry
+  function isValidInquiries(inquiry) {
+    return inquiry.size() == 6
+      && "uid" in inquiry && inquiry.uid is string
+      && "userName" in inquiry && inquiry.userName is string 
+      && "nativeLanguage" in inquiry && inquiry.nativeLanguage is string 
+      && "email" in inquiry && inquiry.email is string 
+      && "message" in inquiry && inquiry.message is string 
+      && "createdAt" in inquiry && inquiry.createdAt is timestamp
+  }
   
   match /databases/{database}/documents {
   	function user(uid) {
@@ -508,6 +516,13 @@ service cloud.firestore {
         && request.auth.uid == request.resource.data.uid
         && request.resource.data.createdAt == request.time
         && isValidReports(request.resource.data)
+    }
+
+    match /inquiries/{id} {
+      allow create: if request.auth != null
+        && request.auth.uid == request.resource.data.uid
+        && request.resource.data.createdAt == request.time
+        && isValidInquiries(request.resource.data)
     }
   }
 }

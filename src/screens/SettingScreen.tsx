@@ -116,6 +116,12 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         />
       )}
       <OptionItem
+        title={I18n.t('setting.inquiry')}
+        onPress={(): void => {
+          navigation.navigate('Inquiry');
+        }}
+      />
+      <OptionItem
         title={I18n.t('setting.tutorial')}
         onPress={(): void => {
           navigation.navigate('TutorialList');
