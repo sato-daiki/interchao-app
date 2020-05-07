@@ -1,6 +1,6 @@
 // global __DEV__
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
-import { persistStore, Persistor } from 'redux-persist';
+import { persistStore } from 'redux-persist';
 
 import thunk from 'redux-thunk';
 import reduxLogger from 'redux-logger'; // eslint-disable-line import/no-extraneous-dependencies
