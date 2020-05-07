@@ -112,7 +112,7 @@ const SummaryCard = ({
     };
     f();
   }, [isTranslated, nativeLanguage, summary]);
-  if (!summary || summary.length === 0) {
+  if (!displaySummary || displaySummary.length === 0) {
     return null;
   }
 

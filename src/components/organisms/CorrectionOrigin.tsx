@@ -3,14 +3,14 @@ import {
   View,
   StyleSheet,
   Text,
-  TextInput,
   NativeSyntheticEvent,
   TextInputSelectionChangeEventData,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
-import { EmptyList } from '../molecules';
+import { OriginIOS, OriginAndroid } from '../molecules';
 import { Selection } from '../../types/correctingScreen';
-import { ProfileIconHorizontal, Space } from '../atoms';
+import { ProfileIconHorizontal } from '../atoms';
 import CorrectionTimer from '../molecules/CorrectionTimer';
 import { getAlgoliaDate } from '../../utils/diary';
 import { Diary, Profile } from '../../types';
@@ -20,7 +20,6 @@ import {
   primaryColor,
   fontSizeM,
 } from '../../styles/Common';
-import I18n from '../../utils/I18n';
 
 interface Props {
   isEmpty: boolean;
@@ -28,7 +27,7 @@ interface Props {
   teachDiary: Diary;
   targetProfile?: Profile;
   onTimeUp: () => void;
-  setSelection: (selection: Selection) => void;
+  setSelection?: (selection: Selection) => void;
 }
 
 const styles = StyleSheet.create({
@@ -56,11 +55,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     paddingBottom: 16,
   },
-  textInput: {
-    paddingHorizontal: 16,
-    lineHeight: fontSizeM * 1.3,
-    flex: 1,
-  },
 });
 
 const CorrectionOrigin: React.FC<Props> = ({
@@ -72,6 +66,14 @@ const CorrectionOrigin: React.FC<Props> = ({
   setSelection,
 }) => {
   const { createdAt, title, text } = teachDiary;
+
+  const onSelectionChange = (
+    e: NativeSyntheticEvent<TextInputSelectionChangeEventData>
+  ): void => {
+    if (setSelection) {
+      setSelection(e.nativeEvent.selection);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -91,31 +93,15 @@ const CorrectionOrigin: React.FC<Props> = ({
         <Text style={styles.postDayText}>{getAlgoliaDate(createdAt)}</Text>
         <Text style={styles.title}>{title}</Text>
       </View>
-      <TextInput
-        style={styles.textInput}
-        multiline
-        editable={false}
-        value={text}
-        selectTextOnFocus
-        onSelectionChange={(
-          e: NativeSyntheticEvent<TextInputSelectionChangeEventData>
-        ): void => {
-          setSelection(e.nativeEvent.selection);
-        }}
-        contextMenuHidden
-        scrollEnabled={false}
-        underlineColorAndroid="transparent"
-      />
-      {isEmpty ? (
-        <>
-          <EmptyList
-            iconName="cursor-pointer"
-            message={I18n.t('correctionOrigin.message')}
-            paddingTop={0}
-          />
-          <Space size={32} />
-        </>
-      ) : null}
+      {Platform.OS === 'ios' ? (
+        <OriginIOS
+          isEmpty={isEmpty}
+          text={text}
+          onSelectionChange={onSelectionChange}
+        />
+      ) : (
+        <OriginAndroid isEmpty={isEmpty} text={text} />
+      )}
     </View>
   );
 };

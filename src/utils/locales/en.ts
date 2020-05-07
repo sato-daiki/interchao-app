@@ -65,6 +65,7 @@ const correcting = {
   deleteAlert:
     'All of your corrections will be deleted. Would you like to proceed?',
   summaryAlert: 'The summary is being edited.',
+  commentAlert: 'The comment is being edited.',
   titleComment: 'Comment',
   titleSummary: 'Summarize',
   titleDone: 'Publish',

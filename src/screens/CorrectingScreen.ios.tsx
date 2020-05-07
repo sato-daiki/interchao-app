@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView, Platform } from 'react-native';
 import {
   connectActionSheet,
   useActionSheet,
@@ -22,7 +22,7 @@ import { CorrectionFooterButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTutorialCorrecting from '../components/organisms/ModalTutorialCorrecting';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
-import CommentInputCard from '../components/organisms/CommentInputCard';
+import CommentInputCardIOS from '../components/organisms/CommentInputCardIOS';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
   },
   commentCard: {
     marginHorizontal: 16,
+  },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
 });
 
@@ -247,7 +250,7 @@ const CorrectingScreen: ScreenType = ({
         track(events.CREATED_CORRECTION, {
           objectID: teachDiary.objectID,
           getPoints,
-          commentNum: infoComments.length,
+          commentNum: comments.length,
           summaryCharacters: summary.length,
         });
 
@@ -665,7 +668,7 @@ const CorrectingScreen: ScreenType = ({
             <Space size={32} />
             {/* 新規でコメント追加 */}
             {isCommentInput ? (
-              <CommentInputCard
+              <CommentInputCardIOS
                 containerStyle={styles.commentCard}
                 original={original}
                 onPressSubmit={onPressSubmitComment}
@@ -689,6 +692,7 @@ const CorrectingScreen: ScreenType = ({
             ) : null}
             {infoComments.map((item: InfoComment, index: number) => (
               <CommentCard
+                key={item.id}
                 containerStyle={styles.commentCard}
                 index={index}
                 original={item.original}
@@ -728,7 +732,11 @@ CorrectingScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('correcting.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
+      <HeaderText
+        containerStyle={styles.headerLeft}
+        title={I18n.t('common.close')}
+        onPress={onPressClose}
+      />
     ),
     headerRight: (): JSX.Element | null =>
       buttonInfo ? (
