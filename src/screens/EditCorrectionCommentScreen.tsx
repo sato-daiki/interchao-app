@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { HeaderText } from '../components/atoms';
-import { CommentInput } from '../components/molecules';
+import { CommentInputIOS } from '../components/molecules';
 import { mainColor } from '../styles/Common';
 import I18n from '../utils/I18n';
 
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 5,
   },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
+  },
 });
 
 /**
@@ -68,7 +71,7 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <CommentInput
+        <CommentInputIOS
           original={item.original}
           fix={fix}
           detail={detail}
@@ -89,6 +92,7 @@ EditCorrectionCommentScreen.navigationOptions = ({
     title: I18n.t('editCorrectionComment.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
+        containerStyle={styles.headerLeft}
         title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />
