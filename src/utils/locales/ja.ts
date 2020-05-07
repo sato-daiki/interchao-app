@@ -65,6 +65,7 @@ const errorMessage = {
 const correcting = {
   deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
   summaryAlert: 'まとめが編集中です',
+  commentAlert: 'コメントが編集中です',
   headerTitle: '添削する',
   titleComment: 'コメントする',
   titleSummary: 'まとめを書く',

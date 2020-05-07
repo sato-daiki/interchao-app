@@ -9,6 +9,7 @@ import {
   DisplayProfile,
   Comment,
   InfoComment,
+  InfoCommentAndroid,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -122,7 +123,7 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
   };
 };
 
-export const getComments = (infoComments: InfoComment[]): Comment[] => {
+export const getComments = (infoComments: any): Comment[] => {
   return infoComments.map(c => ({
     original: c.original,
     fix: c.fix,

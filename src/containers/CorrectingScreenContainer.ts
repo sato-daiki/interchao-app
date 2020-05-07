@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { setUser } from '../stores/actions/user';
+// eslint-disable-next-line import/extensions
 import CorrectingScreen, { Props } from '../screens/CorrectingScreen';
 import { State } from '../types/state';
 import { editTeachDiary } from '../stores/actions/teachDiaryList';
