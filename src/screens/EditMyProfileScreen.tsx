@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -71,6 +72,9 @@ const styles = StyleSheet.create({
     borderBottomColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 170,
+  },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
 });
 
@@ -215,6 +219,7 @@ EditMyProfileScreen.navigationOptions = ({
     title: I18n.t('editMyProfile.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
+        containerStyle={styles.headerLeft}
         title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />

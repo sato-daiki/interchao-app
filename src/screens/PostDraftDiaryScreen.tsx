@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, StyleSheet, Platform } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -29,6 +29,12 @@ interface DispatchProps {
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
 }
+
+const styles = StyleSheet.create({
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
+  },
+});
 
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
@@ -255,7 +261,11 @@ PostDraftDiaryScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('postDraftDiary.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
+      <HeaderText
+        containerStyle={styles.headerLeft}
+        title={I18n.t('common.close')}
+        onPress={onPressClose}
+      />
     ),
     headerRight: (): JSX.Element => {
       if (points >= 10) {
