@@ -15,8 +15,8 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingRight: 56,
-    marginLeft: 16,
+    paddingRight: Platform.OS === 'ios' ? 56 : 64,
+    marginLeft: Platform.OS === 'ios' ? 16 : 0,
     width,
   },
   button: {
