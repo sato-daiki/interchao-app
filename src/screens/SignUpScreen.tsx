@@ -243,7 +243,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <KeyboardAwareScrollView style={styles.container}>
+      <KeyboardAwareScrollView>
         <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
         <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
         <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
