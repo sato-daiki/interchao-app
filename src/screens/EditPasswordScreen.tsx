@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  main: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
   },
@@ -90,9 +93,9 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
   }, [setErrorNewPassword]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <KeyboardAwareScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.main}>
+        <LoadingModal visible={isLoading} />
         <Text style={styles.label}>
           {I18n.t('editPassword.currentPassword')}
         </Text>
@@ -147,8 +150,8 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
             {I18n.t('editPassword.link')}
           </Text>
         </Text>
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

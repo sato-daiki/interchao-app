@@ -27,19 +27,12 @@ import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import firebase from '../constants/firebase';
 import { User, Diary, InfoComment, Profile, Selection } from '../types';
 import I18n from '../utils/I18n';
-import {
-  getDisplayProfile,
-  getComments,
-  getUsePoints,
-  updateYet,
-} from '../utils/diary';
+import { getUsePoints, updateYet } from '../utils/diary';
 import { getUuid } from '../utils/common';
-import { mainColor, green, primaryColor } from '../styles/Common';
 import { getProfile } from '../utils/profile';
-import { track, events } from '../utils/Analytics';
+import { getStateButtonInfo, updateDone } from '../utils/correcting';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
@@ -89,21 +82,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
-  if (state === 'comment') {
-    return { title: I18n.t('correcting.titleComment'), color: mainColor };
-  }
-
-  if (state === 'summary') {
-    return { title: I18n.t('correcting.titleSummary'), color: primaryColor };
-  }
-
-  if (state === 'done') {
-    return { title: I18n.t('correcting.titleDone'), color: green };
-  }
-  return { title: '', color: '' };
-};
-
 /**
  * 添削中
  */
@@ -143,6 +121,28 @@ const CorrectingScreen: ScreenType = ({
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
+
+  /**
+   * 閉じる処理
+   */
+  const close = useCallback(() => {
+    if (isLoading || !teachDiary.objectID) return;
+
+    setIsLoading(true);
+    // ステータスを戻す
+    updateYet(teachDiary.objectID, user.uid);
+
+    editTeachDiary(teachDiary.objectID, {
+      ...teachDiary,
+      correctionStatus: 'yet',
+    });
+    setUser({
+      ...user,
+      correctingObjectID: null,
+    });
+    setIsLoading(false);
+    navigation.goBack(null);
+  }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -191,82 +191,17 @@ const CorrectingScreen: ScreenType = ({
    */
   const onDone = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (isLoading) return;
-      setIsLoading(true);
-
-      const displayProfile = getDisplayProfile(currentProfile);
-      const comments = getComments(infoComments);
-
-      const getPoints = getUsePoints(
-        teachDiary.text.length,
-        teachDiary.profile.learnLanguage
-      );
-      const newPoints = user.points + getPoints;
-
-      await firebase.firestore().runTransaction(async transaction => {
-        if (!teachDiary.objectID) return;
-
-        //  correctionsの更新
-        const correctionRef = firebase
-          .firestore()
-          .collection('corrections')
-          .doc();
-        transaction.set(correctionRef, {
-          objectID: teachDiary.objectID,
-          profile: displayProfile,
-          comments,
-          summary,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // // 日記のステータスを未読に変更する
-        const newCorrection = {
-          id: correctionRef.id,
-          profile: displayProfile,
-        };
-        const diaryRef = firebase
-          .firestore()
-          .doc(`diaries/${teachDiary.objectID}`);
-        transaction.update(diaryRef, {
-          correctionStatus: 'unread',
-          correction: newCorrection,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        //  添削をしたuserの更新 ポイントを増やす correctingObjectIDをnull
-        const currentUserRef = firebase.firestore().doc(`users/${user.uid}`);
-        transaction.update(currentUserRef, {
-          points: newPoints,
-          correctingObjectID: null,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // // correctingsの削除
-        const correctingRef = firebase
-          .firestore()
-          .doc(`correctings/${teachDiary.objectID}`);
-        transaction.delete(correctingRef);
-
-        track(events.CREATED_CORRECTION, {
-          objectID: teachDiary.objectID,
-          getPoints,
-          commentNum: comments.length,
-          summaryCharacters: summary.length,
-        });
-
-        // reduxに追加
-        editTeachDiary(teachDiary.objectID, {
-          ...teachDiary,
-          correctionStatus: 'unread',
-          correction: newCorrection,
-        });
-        setUser({
-          ...user,
-          points: newPoints,
-          correctingObjectID: null,
-        });
-        setIsLoading(false);
-        setIsModalDone(true);
+      await updateDone({
+        isLoading,
+        summary,
+        teachDiary,
+        currentProfile,
+        user,
+        infoComments,
+        setIsLoading,
+        setIsModalDone,
+        editTeachDiary,
+        setUser,
       });
     };
     f();
@@ -293,28 +228,6 @@ const CorrectingScreen: ScreenType = ({
       onDone();
     }
   }, [onAddComment, onAddSummary, onDone, state]);
-
-  /**
-   * 閉じる処理
-   */
-  const close = async (): Promise<void> => {
-    if (isLoading) return;
-    if (!teachDiary.objectID) return;
-    setIsLoading(true);
-    // ステータスを戻す
-    updateYet(teachDiary.objectID, user.uid);
-
-    editTeachDiary(teachDiary.objectID, {
-      ...teachDiary,
-      correctionStatus: 'yet',
-    });
-    setUser({
-      ...user,
-      correctingObjectID: null,
-    });
-    setIsLoading(false);
-    navigation.goBack(null);
-  };
 
   /**
    * 左上の閉じるボタンが押下された時の処理

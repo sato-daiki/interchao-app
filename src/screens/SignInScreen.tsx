@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  main: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
   },
@@ -110,9 +113,10 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
   }, [setErrorPassword]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <KeyboardAwareScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.main}>
+        <LoadingModal visible={isLoading} />
+
         <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
         <CheckTextInput
           autoFocus
@@ -161,8 +165,8 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
             <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

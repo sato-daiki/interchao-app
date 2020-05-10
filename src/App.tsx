@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
-import { Updates } from 'expo';
+import Updates from 'expo-updates';
 import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
@@ -34,7 +34,8 @@ const App: React.SFC = () => {
 
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {
-      Updates.reload();
+      await Updates.fetchUpdateAsync();
+      Updates.reloadAsync();
     }
   };
   useEffect(() => {

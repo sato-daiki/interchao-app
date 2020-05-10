@@ -119,7 +119,6 @@ const MyDiaryTabStack = createStackNavigator(
     Premium: {
       screen: PremiumScreen,
     },
-
     EditEmail: {
       screen: EditEmailScreen,
     },

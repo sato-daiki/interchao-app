@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: fontSizeM,
     paddingBottom: 16,
+    lineHeight: fontSizeM * 1.3,
   },
 });
 

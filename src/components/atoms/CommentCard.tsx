@@ -21,7 +21,7 @@ import { Language } from '../../types';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
-  index: number;
+  index?: number;
   original: string;
   fix: string;
   detail: string;
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
 
 const CommentCard = ({
   containerStyle,
-  index,
+  index = 0,
   original,
   fix,
   detail,

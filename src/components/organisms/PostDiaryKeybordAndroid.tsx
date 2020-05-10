@@ -70,7 +70,11 @@ const PostDiaryKeybordAndroid = ({
   onEndEditingText,
 }: Props): JSX.Element => {
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={20}
+      style={styles.container}
+      behavior="height"
+    >
       <TextInput
         style={styles.titleInput}
         value={title}
@@ -95,7 +99,6 @@ const PostDiaryKeybordAndroid = ({
         autoCorrect={false}
         keyboardType="default"
       />
-      {/* 画面下部がiOSX以上の時隠れてしまうのを対応 */}
       <SafeAreaView>
         <View style={styles.footer}>
           <TextButtun

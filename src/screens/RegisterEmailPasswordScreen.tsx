@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  main: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
   },
@@ -145,9 +148,9 @@ const RegisterEmailPasswordScreen: ScreenType = ({
   }, [password, setIsPasswordCheckOk, setErrorPassword]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <KeyboardAwareScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.main}>
+        <LoadingModal visible={isLoading} />
         <Text style={styles.title}>
           {I18n.t('registerEmailPassword.title')}
         </Text>
@@ -197,8 +200,8 @@ const RegisterEmailPasswordScreen: ScreenType = ({
           disable={!isEmailCheckOk}
         />
         <Space size={16} />
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

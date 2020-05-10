@@ -46,9 +46,10 @@ const OriginIOS = ({
       />
       {isEmpty ? (
         <>
+          <Space size={32} />
           <EmptyList
             iconName="cursor-pointer"
-            message={I18n.t('correctionOrigin.message')}
+            message={I18n.t('correctionOrigin.messageIOS')}
             paddingTop={0}
           />
           <Space size={32} />

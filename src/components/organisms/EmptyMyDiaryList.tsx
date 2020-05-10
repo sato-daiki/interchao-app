@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeS,
     lineHeight: fontSizeS * 1.6,
     color: subTextColor,
+    textAlign: 'center',
   },
   emptyLower: {
     justifyContent: 'flex-end',
