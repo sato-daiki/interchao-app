@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  main: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
   },
@@ -241,9 +244,10 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   }, [password, setIsPasswordCheckOk, setErrorPassword]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <KeyboardAwareScrollView>
+    <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.main}>
+        <LoadingModal visible={isLoading} />
+
         <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
         <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
         <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
@@ -286,8 +290,8 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
           disable={!(isEmailCheckOk && isPasswordCheckOk)}
         />
         <Space size={16} />
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

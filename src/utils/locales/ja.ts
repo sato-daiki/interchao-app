@@ -304,6 +304,7 @@ const commentInput = {
   original: '原文',
   fix: '修正文',
   detail: 'コメント',
+  paste: 'クリップボードの貼り付け',
 };
 
 const correctionFooterButton = {
@@ -348,7 +349,9 @@ const inquiry = {
 
 // organisms
 const correctionOrigin = {
-  message: '文章をタップして添削を始めましょう',
+  messageIOS: '修正する箇所を選択して、添削を始めましょう',
+  messageAndroid:
+    '修正する箇所をコピーして\n右下のPlusボタンを押して添削を始めましょう。',
 };
 
 const diaryHitList = {
@@ -474,14 +477,6 @@ const postDiaryComponent = {
   points: '所持ポイント',
   textPlaceholder: '本文',
   draft: '下書き保存',
-};
-
-const signInUpForm = {
-  email: 'メールアドレス',
-  password: 'パスワード（６ケタ以上）',
-  login: 'ログイン',
-  forgetText: 'パスワードをお忘れの方は',
-  link: 'こちら',
 };
 
 const teachDiaryCorrection = {
@@ -620,7 +615,6 @@ const ja = {
   myDiaryListMenu,
   report,
   postDiaryComponent,
-  signInUpForm,
   teachDiaryCorrection,
   tutorialCorrecting,
   tutorialPoints,

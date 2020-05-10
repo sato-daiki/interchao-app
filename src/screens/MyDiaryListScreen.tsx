@@ -5,12 +5,14 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { Notifications } from 'expo';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { User, Diary } from '../types';
@@ -89,8 +91,11 @@ const MyDiaryListScreen: ScreenType = ({
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
-
   const [isMenu, setIsMenu] = useState(false);
+
+  const [correctingObjectID, setCorrectingObjectID] = useState(
+    user.correctingObjectID
+  );
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('MyDiarySearch');
@@ -204,11 +209,13 @@ const MyDiaryListScreen: ScreenType = ({
       setIsStillLoading(true);
       // ステータスを戻す
       updateYet(user.correctingObjectID, user.uid);
+
       setUser({
         ...user,
         correctingObjectID: null,
       });
       setIsStillLoading(false);
+      setCorrectingObjectID(null);
     };
     f();
   }, [isStillLoading, setUser, user]);
@@ -225,7 +232,9 @@ const MyDiaryListScreen: ScreenType = ({
           if (localStatus.unreadCorrectionNum) {
             const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
             // アプリの通知数を設定
-            Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
+            if (Platform.OS === 'ios') {
+              Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
+            }
             setLocalStatus({
               ...localStatus,
               unreadCorrectionNum: newUnreadCorrectionNum,
@@ -291,7 +300,7 @@ const MyDiaryListScreen: ScreenType = ({
       />
       <LoadingModal visible={isLoading} />
       <ModalStillCorrecting
-        visible={!!user.correctingObjectID}
+        visible={!!correctingObjectID}
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />

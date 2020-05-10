@@ -6,7 +6,10 @@ import {
   SafeAreaView,
   Platform,
   TouchableOpacity,
+  Text,
+  BackHandler,
 } from 'react-native';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import {
   connectActionSheet,
   useActionSheet,
@@ -35,23 +38,17 @@ import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import firebase from '../constants/firebase';
 import { User, Diary, Profile, InfoCommentAndroid } from '../types';
 import I18n from '../utils/I18n';
-import {
-  getDisplayProfile,
-  getComments,
-  getUsePoints,
-  updateYet,
-} from '../utils/diary';
+import { getUsePoints, updateYet } from '../utils/diary';
 import { getUuid } from '../utils/common';
-import { mainColor, green, primaryColor } from '../styles/Common';
+import { mainColor, fontSizeM, offWhite } from '../styles/Common';
 import { getProfile } from '../utils/profile';
-import { track, events } from '../utils/Analytics';
+import { getStateButtonInfo, updateDone } from '../utils/correcting';
 
-type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
+type RightButtonState = 'summary' | 'done' | 'nothing';
 
-interface ButtonInfo {
+export interface ButtonInfo {
   title: string;
   color: string;
 }
@@ -90,39 +87,32 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   commentCard: {
-    marginHorizontal: 16,
+    margin: 16,
   },
   headerLeft: {
     paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
   addComment: {
     position: 'absolute',
+    flexDirection: 'row',
     zIndex: 1,
     bottom: 42,
-    right: 16,
-    backgroundColor: '#fff',
-    width: 34,
-    height: 34,
-    borderRadius: 18,
+    right: 8,
+    backgroundColor: offWhite,
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: mainColor,
+    borderWidth: 2,
+    borderRadius: 32,
+    paddingLeft: 4,
+    paddingRight: 8,
+  },
+  commentText: {
+    paddingLeft: 4,
+    fontSize: fontSizeM,
+    color: mainColor,
   },
 });
-
-const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
-  if (state === 'comment') {
-    return { title: I18n.t('correcting.titleComment'), color: mainColor };
-  }
-
-  if (state === 'summary') {
-    return { title: I18n.t('correcting.titleSummary'), color: primaryColor };
-  }
-
-  if (state === 'done') {
-    return { title: I18n.t('correcting.titleDone'), color: green };
-  }
-  return { title: '', color: '' };
-};
 
 /**
  * 添削中
@@ -160,6 +150,50 @@ const CorrectingScreen: ScreenType = ({
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
+
+  /**
+   * 閉じる処理
+   */
+  const close = useCallback(() => {
+    if (isLoading || !teachDiary.objectID) return;
+    setIsLoading(true);
+    // ステータスを戻す
+    updateYet(teachDiary.objectID, user.uid);
+
+    editTeachDiary(teachDiary.objectID, {
+      ...teachDiary,
+      correctionStatus: 'yet',
+    });
+    setUser({
+      ...user,
+      correctingObjectID: null,
+    });
+    setIsLoading(false);
+    navigation.goBack(null);
+  }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
+
+  useEffect(() => {
+    const backAction = (): boolean => {
+      Alert.alert(
+        I18n.t('common.confirmation'),
+        I18n.t('correcting.deleteAlert'),
+        [
+          {
+            text: I18n.t('common.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: close,
+          },
+        ]
+      );
+      return true;
+    };
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return (): void =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [close]);
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -204,94 +238,29 @@ const CorrectingScreen: ScreenType = ({
    */
   const onDone = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (isLoading) return;
-      setIsLoading(true);
-
-      const displayProfile = getDisplayProfile(currentProfile);
-      const comments = getComments(infoComments);
-
-      const getPoints = getUsePoints(
-        teachDiary.text.length,
-        teachDiary.profile.learnLanguage
-      );
-      const newPoints = user.points + getPoints;
-
-      await firebase.firestore().runTransaction(async transaction => {
-        if (!teachDiary.objectID) return;
-
-        //  correctionsの更新
-        const correctionRef = firebase
-          .firestore()
-          .collection('corrections')
-          .doc();
-        transaction.set(correctionRef, {
-          objectID: teachDiary.objectID,
-          profile: displayProfile,
-          comments,
-          summary,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // // 日記のステータスを未読に変更する
-        const newCorrection = {
-          id: correctionRef.id,
-          profile: displayProfile,
-        };
-        const diaryRef = firebase
-          .firestore()
-          .doc(`diaries/${teachDiary.objectID}`);
-        transaction.update(diaryRef, {
-          correctionStatus: 'unread',
-          correction: newCorrection,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        //  添削をしたuserの更新 ポイントを増やす correctingObjectIDをnull
-        const currentUserRef = firebase.firestore().doc(`users/${user.uid}`);
-        transaction.update(currentUserRef, {
-          points: newPoints,
-          correctingObjectID: null,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // // correctingsの削除
-        const correctingRef = firebase
-          .firestore()
-          .doc(`correctings/${teachDiary.objectID}`);
-        transaction.delete(correctingRef);
-
-        track(events.CREATED_CORRECTION, {
-          objectID: teachDiary.objectID,
-          getPoints,
-          commentNum: comments.length,
-          summaryCharacters: summary.length,
-        });
-
-        // reduxに追加
-        editTeachDiary(teachDiary.objectID, {
-          ...teachDiary,
-          correctionStatus: 'unread',
-          correction: newCorrection,
-        });
-        setUser({
-          ...user,
-          points: newPoints,
-          correctingObjectID: null,
-        });
-        setIsLoading(false);
-        setIsModalDone(true);
+      await updateDone({
+        isLoading,
+        summary,
+        teachDiary,
+        currentProfile,
+        user,
+        infoComments,
+        setIsLoading,
+        setIsModalDone,
+        editTeachDiary,
+        setUser,
       });
     };
     f();
   }, [
-    isLoading,
     currentProfile,
+    editTeachDiary,
     infoComments,
+    isLoading,
+    setUser,
+    summary,
     teachDiary,
     user,
-    summary,
-    editTeachDiary,
-    setUser,
   ]);
 
   /**
@@ -304,28 +273,6 @@ const CorrectingScreen: ScreenType = ({
       onDone();
     }
   }, [onAddSummary, onDone, state]);
-
-  /**
-   * 閉じる処理
-   */
-  const close = async (): Promise<void> => {
-    if (isLoading) return;
-    if (!teachDiary.objectID) return;
-    setIsLoading(true);
-    // ステータスを戻す
-    updateYet(teachDiary.objectID, user.uid);
-
-    editTeachDiary(teachDiary.objectID, {
-      ...teachDiary,
-      correctionStatus: 'yet',
-    });
-    setUser({
-      ...user,
-      correctingObjectID: null,
-    });
-    setIsLoading(false);
-    navigation.goBack(null);
-  };
 
   /**
    * 左上の閉じるボタンが押下された時の処理
@@ -557,37 +504,6 @@ const CorrectingScreen: ScreenType = ({
     setIsModalDone(false);
   }, [navigation]);
 
-  // /**
-  //  * 初回チュートリアル
-  //  */
-  // const onPressTutorial = useCallback((): void => {
-  //   const f = async (): Promise<void> => {
-  //     if (isTutorialLoading) return;
-  //     if (user.tutorialCorrectiong) {
-  //       // 画面下部の添削の仕方から呼ばれたときはここに入る
-  //       setIsModalTutorialCorrectiong(false);
-  //       return;
-  //     }
-  //     setIsTutorialLoading(true);
-  //     await firebase
-  //       .firestore()
-  //       .doc(`users/${user.uid}`)
-  //       .update({
-  //         tutorialCorrectiong: true,
-  //         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //       });
-  //     setUser({
-  //       ...user,
-  //       tutorialCorrectiong: true,
-  //     });
-  //     console.log('user', user);
-  //     setIsTutorialLoading(false);
-  //     setIsModalTutorialCorrectiong(false);
-  //     setIsModalFirsttutorialCorrectiong(false);
-  //   };
-  //   f();
-  // }, [isTutorialLoading, setUser, user]);
-
   /**
    * 30分が経過した時の処理
    */
@@ -623,6 +539,34 @@ const CorrectingScreen: ScreenType = ({
     teachDiary.text.length,
     teachDiary.profile.learnLanguage
   );
+
+  const onDragEnd = ({ data }): void => {
+    setInfoComments(data);
+  };
+
+  const renderItem = ({
+    item,
+    index,
+    drag,
+  }: {
+    item: InfoCommentAndroid;
+    index?: number;
+    drag: () => void;
+  }): JSX.Element => {
+    return (
+      <TouchableOpacity onLongPress={drag}>
+        <CommentCard
+          key={item.id}
+          index={index}
+          original={item.original}
+          fix={item.fix}
+          detail={item.detail}
+          isEdit
+          onPressMore={(): void => onPressMoreComment(item)}
+        />
+      </TouchableOpacity>
+    );
+  };
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -681,18 +625,14 @@ const CorrectingScreen: ScreenType = ({
                 <Space size={16} />
               </>
             ) : null}
-            {infoComments.map((item: InfoCommentAndroid, index: number) => (
-              <CommentCard
-                key={item.id}
-                containerStyle={styles.commentCard}
-                index={index}
-                original={item.original}
-                fix={item.fix}
-                detail={item.detail}
-                isEdit
-                onPressMore={(): void => onPressMoreComment(item)}
+            <View style={{ marginLeft: 16, marginRight: 32 }}>
+              <DraggableFlatList
+                data={infoComments || []}
+                onDragEnd={onDragEnd}
+                renderItem={renderItem}
+                keyExtractor={(item): string => `${item.id}`}
               />
-            ))}
+            </View>
             {/* まとめ */}
             <SummaryCard
               containerStyle={styles.commentCard}
@@ -702,19 +642,26 @@ const CorrectingScreen: ScreenType = ({
             />
           </View>
         </KeyboardAwareScrollView>
-        <TouchableOpacity style={styles.addComment} onPress={onAddComment}>
-          <MaterialCommunityIcons
-            size={36}
-            color={mainColor}
-            name="plus-circle"
-          />
-        </TouchableOpacity>
-        <TextButtun
-          isBorrderTop
-          isBorrderBottom
-          title={I18n.t('correctionFooterButton.correction')}
-          onPress={(): void => setIsModalTutorialCorrectiong(true)}
-        />
+        {isSummary || isCommentInput ? null : (
+          <>
+            <TouchableOpacity style={styles.addComment} onPress={onAddComment}>
+              <MaterialCommunityIcons
+                size={36}
+                color={mainColor}
+                name="plus-circle"
+              />
+              <Text style={styles.commentText}>
+                {I18n.t('correcting.titleComment')}
+              </Text>
+            </TouchableOpacity>
+            <TextButtun
+              isBorrderTop
+              isBorrderBottom
+              title={I18n.t('correctionFooterButton.correction')}
+              onPress={(): void => setIsModalTutorialCorrectiong(true)}
+            />
+          </>
+        )}
       </View>
     </SafeAreaView>
   );

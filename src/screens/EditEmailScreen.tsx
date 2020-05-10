@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  main: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
   },
@@ -119,9 +122,9 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
   }, [setErrorPassword]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <KeyboardAwareScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.main}>
+        <LoadingModal visible={isLoading} />
         <Text style={styles.title}>{I18n.t('editEmail.title')}</Text>
         <Text style={styles.label}>{I18n.t('editEmail.labelEmail')}</Text>
         <CheckTextInput
@@ -161,8 +164,8 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
           disable={!isEmailCheckOk}
         />
         <Space size={16} />
-      </KeyboardAwareScrollView>
-    </View>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

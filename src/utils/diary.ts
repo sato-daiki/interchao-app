@@ -22,10 +22,12 @@ interface Status {
 
 /** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
 export const getAlgoliaDay = (timestamp: any): string => {
-  if (!timestamp) {
+  // eslint-disable-next-line no-underscore-dangle
+  if (!timestamp || !timestamp._seconds) {
     return '';
   }
-  return moment(timestamp).format('Y-M-D');
+  // eslint-disable-next-line no-underscore-dangle
+  return moment.unix(timestamp._seconds).format('Y-M-D');
 };
 
 export const getDay = (timestamp: any): string => {

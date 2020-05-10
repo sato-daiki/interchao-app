@@ -305,6 +305,7 @@ const commentInput = {
   original: 'Original',
   fix: 'Edit',
   detail: 'Comment',
+  paste: 'Paste',
 };
 
 const correctionFooterButton = {
@@ -345,12 +346,14 @@ const inquiry = {
   message: 'Message',
   title: 'Thank you for your inquiry.',
   thanks:
-    'We will reply to you within a few days.  Please kindly wait for a moment.',
+    'We will reply to you within a few days. Please kindly wait for a moment.',
 };
 
 // organisms
 const correctionOrigin = {
-  message: 'Tap the entry to begin making corrections.',
+  messageIOS: 'Tap the entry to begin making corrections.',
+  messageAndroid:
+    'Copy the sentence to correct and press the Plus button at the bottom right to begin making corrections.',
 };
 
 const diaryHitList = {
@@ -477,14 +480,6 @@ const postDiaryComponent = {
   points: 'Your Points',
   textPlaceholder: 'Entry',
   draft: 'Save as Draft',
-};
-
-const signInUpForm = {
-  email: 'Email Address',
-  password: 'Password (6 or more characters)',
-  login: 'Login',
-  forgetText: '',
-  link: 'Forgot password?',
 };
 
 const teachDiaryCorrection = {
@@ -626,7 +621,6 @@ const en = {
   myDiaryListMenu,
   report,
   postDiaryComponent,
-  signInUpForm,
   teachDiaryCorrection,
   tutorialCorrecting,
   tutorialPoints,
