@@ -176,7 +176,7 @@ const MainTab = createBottomTabNavigator(
       },
     },
     PostDiary: {
-      screen: PostDiaryScreen,
+      screen: ModalPostDiaryNavigator,
       navigationOptions: {
         tabBarLabel: I18n.t('mainTab.postDiary'),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
