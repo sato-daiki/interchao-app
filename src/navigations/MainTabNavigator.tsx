@@ -176,7 +176,9 @@ const MainTab = createBottomTabNavigator(
       },
     },
     PostDiary: {
-      screen: ModalPostDiaryNavigator,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
+      screen: PostDiaryScreen,
       navigationOptions: {
         tabBarLabel: I18n.t('mainTab.postDiary'),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
