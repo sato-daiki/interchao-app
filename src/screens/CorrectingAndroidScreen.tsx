@@ -1,5 +1,15 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View, Alert, SafeAreaView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  SafeAreaView,
+  Platform,
+  TouchableOpacity,
+  Text,
+  BackHandler,
+} from 'react-native';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import {
   connectActionSheet,
   useActionSheet,
@@ -9,6 +19,7 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   HeaderText,
   HeaderButton,
@@ -17,38 +28,32 @@ import {
   CommentCard,
   SummaryCard,
   GrayHeader,
+  TextButtun,
 } from '../components/atoms';
-import { CorrectionFooterButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTutorialCorrecting from '../components/organisms/ModalTutorialCorrecting';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
-import CommentInputCard from '../components/organisms/CommentInputCard';
+import CommentInputCardAndroid from '../components/organisms/CommentInputCardAndroid';
 import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import firebase from '../constants/firebase';
-import { User, Diary, InfoComment, Profile, Selection } from '../types';
+import { User, Diary, Profile, InfoCommentAndroid } from '../types';
 import I18n from '../utils/I18n';
-import {
-  getDisplayProfile,
-  getComments,
-  getUsePoints,
-  updateYet,
-} from '../utils/diary';
+import { getUsePoints, updateYet } from '../utils/diary';
 import { getUuid } from '../utils/common';
-import { mainColor, green, primaryColor } from '../styles/Common';
+import { mainColor, fontSizeM, offWhite } from '../styles/Common';
 import { getProfile } from '../utils/profile';
-import { track, events } from '../utils/Analytics';
+import { getStateButtonInfo, updateDone } from '../utils/correcting';
 
-type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
+type RightButtonState = 'summary' | 'done' | 'nothing';
 
-interface ButtonInfo {
+export interface ButtonInfo {
   title: string;
   color: string;
 }
 
-export interface Props {
+export interface PropsAndroid {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
@@ -60,7 +65,7 @@ interface DispatchProps {
 }
 
 type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
+  PropsAndroid & DispatchProps & NavigationStackScreenProps
 > & {
   navigationOptions:
     | NavigationStackOptions
@@ -82,29 +87,41 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   commentCard: {
-    marginHorizontal: 16,
+    margin: 16,
+  },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
+  },
+  addComment: {
+    position: 'absolute',
+    flexDirection: 'row',
+    zIndex: 1,
+    bottom: 42,
+    right: 8,
+    backgroundColor: offWhite,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: mainColor,
+    borderWidth: 2,
+    borderRadius: 32,
+    paddingLeft: 4,
+    paddingRight: 8,
+  },
+  commentText: {
+    paddingLeft: 4,
+    fontSize: fontSizeM,
+    color: mainColor,
+  },
+  draggableFlatList: {
+    marginLeft: 16,
+    marginRight: 32,
   },
 });
-
-const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
-  if (state === 'comment') {
-    return { title: I18n.t('correcting.titleComment'), color: mainColor };
-  }
-
-  if (state === 'summary') {
-    return { title: I18n.t('correcting.titleSummary'), color: primaryColor };
-  }
-
-  if (state === 'done') {
-    return { title: I18n.t('correcting.titleDone'), color: green };
-  }
-  return { title: '', color: '' };
-};
 
 /**
  * 添削中
  */
-const CorrectingScreen: ScreenType = ({
+const CorrectingAndroidScreen: ScreenType = ({
   navigation,
   user,
   currentProfile,
@@ -131,15 +148,56 @@ const CorrectingScreen: ScreenType = ({
   const [buttonInfo, setButtonInfo] = useState<ButtonInfo>(); // ボタン
 
   /* コメント関連 */
-  const [selection, setSelection] = useState<Selection>(); // 選択中の文字の位置
-  const [original, setOriginal] = useState(''); // 新規追加時の修正文
-  const [correctingSelection, setCorrectingSelection] = useState<Selection>(); // 編集中のselection
+  const [infoComments, setInfoComments] = useState<InfoCommentAndroid[]>([]); // コメントをlistデータ
   const [isCommentInput, setIsCommentInput] = useState(false); // コメントの追加のon/offフラグ
-  const [infoComments, setInfoComments] = useState<InfoComment[]>([]); // コメントをlistデータ
 
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
+
+  /**
+   * 閉じる処理
+   */
+  const close = useCallback(() => {
+    if (isLoading || !teachDiary.objectID) return;
+    setIsLoading(true);
+    // ステータスを戻す
+    updateYet(teachDiary.objectID, user.uid);
+
+    editTeachDiary(teachDiary.objectID, {
+      ...teachDiary,
+      correctionStatus: 'yet',
+    });
+    setUser({
+      ...user,
+      correctingObjectID: null,
+    });
+    setIsLoading(false);
+    navigation.goBack(null);
+  }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
+
+  useEffect(() => {
+    const backAction = (): boolean => {
+      Alert.alert(
+        I18n.t('common.confirmation'),
+        I18n.t('correcting.deleteAlert'),
+        [
+          {
+            text: I18n.t('common.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: close,
+          },
+        ]
+      );
+      return true;
+    };
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return (): void =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [close]);
 
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -159,159 +217,66 @@ const CorrectingScreen: ScreenType = ({
   const onAddComment = useCallback((): void => {
     if (isSummary) {
       Alert.alert('', I18n.t('correcting.summaryAlert'));
-      setOriginal('');
-      setCorrectingSelection(undefined);
       setIsCommentInput(false);
       return;
     }
-    if (!selection) return;
-    const newOriginal = teachDiary.text.substring(
-      selection.start,
-      selection.end
-    );
 
     // 新規コメントを初期化して表示する
     setIsCommentInput(true);
-    setOriginal(newOriginal);
-    setCorrectingSelection(selection);
-  }, [isSummary, selection, teachDiary.text]);
+  }, [isSummary]);
 
   /**
    * 総評ボタンを追加する
    */
   const onAddSummary = useCallback(() => {
+    if (isCommentInput) {
+      Alert.alert('', I18n.t('correcting.commentAlert'));
+      setIsSummary(false);
+      return;
+    }
     setIsSummary(true);
-  }, []);
+  }, [isCommentInput]);
 
   /**
    * 完了する
    */
   const onDone = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (isLoading) return;
-      setIsLoading(true);
-
-      const displayProfile = getDisplayProfile(currentProfile);
-      const comments = getComments(infoComments);
-
-      const getPoints = getUsePoints(
-        teachDiary.text.length,
-        teachDiary.profile.learnLanguage
-      );
-      const newPoints = user.points + getPoints;
-
-      await firebase.firestore().runTransaction(async transaction => {
-        if (!teachDiary.objectID) return;
-
-        //  correctionsの更新
-        const correctionRef = firebase
-          .firestore()
-          .collection('corrections')
-          .doc();
-        transaction.set(correctionRef, {
-          objectID: teachDiary.objectID,
-          profile: displayProfile,
-          comments,
-          summary,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // // 日記のステータスを未読に変更する
-        const newCorrection = {
-          id: correctionRef.id,
-          profile: displayProfile,
-        };
-        const diaryRef = firebase
-          .firestore()
-          .doc(`diaries/${teachDiary.objectID}`);
-        transaction.update(diaryRef, {
-          correctionStatus: 'unread',
-          correction: newCorrection,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        //  添削をしたuserの更新 ポイントを増やす correctingObjectIDをnull
-        const currentUserRef = firebase.firestore().doc(`users/${user.uid}`);
-        transaction.update(currentUserRef, {
-          points: newPoints,
-          correctingObjectID: null,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // // correctingsの削除
-        const correctingRef = firebase
-          .firestore()
-          .doc(`correctings/${teachDiary.objectID}`);
-        transaction.delete(correctingRef);
-
-        track(events.CREATED_CORRECTION, {
-          objectID: teachDiary.objectID,
-          getPoints,
-          commentNum: infoComments.length,
-          summaryCharacters: summary.length,
-        });
-
-        // reduxに追加
-        editTeachDiary(teachDiary.objectID, {
-          ...teachDiary,
-          correctionStatus: 'unread',
-          correction: newCorrection,
-        });
-        setUser({
-          ...user,
-          points: newPoints,
-          correctingObjectID: null,
-        });
-        setIsLoading(false);
-        setIsModalDone(true);
+      await updateDone({
+        isLoading,
+        summary,
+        teachDiary,
+        currentProfile,
+        user,
+        infoComments,
+        setIsLoading,
+        setIsModalDone,
+        editTeachDiary,
+        setUser,
       });
     };
     f();
   }, [
-    teachDiary,
-    isLoading,
     currentProfile,
-    infoComments,
-    user,
-    summary,
     editTeachDiary,
+    infoComments,
+    isLoading,
     setUser,
+    summary,
+    teachDiary,
+    user,
   ]);
 
   /**
    * 右上or画面下のボタンが押下された時の処理
    */
   const onPressSubmitButton = useCallback((): void => {
-    if (state === 'comment') {
-      onAddComment();
-    } else if (state === 'summary') {
+    if (state === 'summary') {
       onAddSummary();
     } else if (state === 'done') {
       onDone();
     }
-  }, [onAddComment, onAddSummary, onDone, state]);
-
-  /**
-   * 閉じる処理
-   */
-  const close = async (): Promise<void> => {
-    if (isLoading) return;
-    if (!teachDiary.objectID) return;
-    setIsLoading(true);
-    // ステータスを戻す
-    updateYet(teachDiary.objectID, user.uid);
-
-    editTeachDiary(teachDiary.objectID, {
-      ...teachDiary,
-      correctionStatus: 'yet',
-    });
-    setUser({
-      ...user,
-      correctingObjectID: null,
-    });
-    setIsLoading(false);
-    navigation.goBack(null);
-  };
+  }, [onAddSummary, onDone, state]);
 
   /**
    * 左上の閉じるボタンが押下された時の処理
@@ -343,9 +308,7 @@ const CorrectingScreen: ScreenType = ({
   useEffect(() => {
     let newState = 'nothing' as RightButtonState;
 
-    if (selection && selection.start !== selection.end && !isCommentInput) {
-      newState = 'comment';
-    } else if (
+    if (
       !isSummary &&
       !isCommentInput &&
       infoComments.length > 0 &&
@@ -364,13 +327,7 @@ const CorrectingScreen: ScreenType = ({
     const newButtonInfo = getStateButtonInfo(newState);
     setState(newState);
     setButtonInfo(newButtonInfo);
-  }, [
-    isSummary,
-    isCommentInput,
-    summary.length,
-    infoComments.length,
-    selection,
-  ]);
+  }, [isSummary, isCommentInput, summary.length, infoComments.length]);
 
   /**
    * ヘッダーに初期値設定
@@ -440,9 +397,8 @@ const CorrectingScreen: ScreenType = ({
    * 新規追加のコメントを追加する
    */
   const onPressSubmitComment = useCallback(
-    (fix: string, detail: string): void => {
+    (original: string, fix: string, detail: string): void => {
       const f = async (): Promise<void> => {
-        if (!correctingSelection) return;
         const uuid = await getUuid();
         const newInfoComments = [
           ...infoComments,
@@ -451,29 +407,20 @@ const CorrectingScreen: ScreenType = ({
             original,
             fix,
             detail,
-            start: correctingSelection.start,
-            end: correctingSelection.end,
           },
         ];
-        newInfoComments.sort((a, b) => {
-          return a.start - b.start;
-        });
         setInfoComments(newInfoComments);
-        setOriginal('');
-        setCorrectingSelection(undefined);
         setIsCommentInput(false);
       };
       f();
     },
-    [correctingSelection, infoComments, original]
+    [infoComments]
   );
 
   /**
    * 新規追加のコメントを閉じる
    */
   const onPressCloseComment = useCallback((): void => {
-    setOriginal('');
-    setCorrectingSelection(undefined);
     setIsCommentInput(false);
   }, []);
 
@@ -501,7 +448,7 @@ const CorrectingScreen: ScreenType = ({
    * コメントのメニューアイコンをクリック後、編集するボタンをクリック
    */
   const onPressCommentEdit = useCallback(
-    (item: InfoComment) => {
+    (item: InfoCommentAndroid) => {
       navigation.navigate('EditCorrectionComment', {
         item,
         onPressSubmit: onPressSubmitEditComment,
@@ -525,7 +472,7 @@ const CorrectingScreen: ScreenType = ({
    * コメントのメニューアイコンをクリック
    */
   const onPressMoreComment = useCallback(
-    (item: InfoComment) => {
+    (item: InfoCommentAndroid) => {
       const options = [
         I18n.t('correcting.menuEdit'),
         I18n.t('correcting.menuCommentDelete'),
@@ -560,37 +507,6 @@ const CorrectingScreen: ScreenType = ({
     navigation.navigate('TeachDiaryList');
     setIsModalDone(false);
   }, [navigation]);
-
-  // /**
-  //  * 初回チュートリアル
-  //  */
-  // const onPressTutorial = useCallback((): void => {
-  //   const f = async (): Promise<void> => {
-  //     if (isTutorialLoading) return;
-  //     if (user.tutorialCorrectiong) {
-  //       // 画面下部の添削の仕方から呼ばれたときはここに入る
-  //       setIsModalTutorialCorrectiong(false);
-  //       return;
-  //     }
-  //     setIsTutorialLoading(true);
-  //     await firebase
-  //       .firestore()
-  //       .doc(`users/${user.uid}`)
-  //       .update({
-  //         tutorialCorrectiong: true,
-  //         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //       });
-  //     setUser({
-  //       ...user,
-  //       tutorialCorrectiong: true,
-  //     });
-  //     console.log('user', user);
-  //     setIsTutorialLoading(false);
-  //     setIsModalTutorialCorrectiong(false);
-  //     setIsModalFirsttutorialCorrectiong(false);
-  //   };
-  //   f();
-  // }, [isTutorialLoading, setUser, user]);
 
   /**
    * 30分が経過した時の処理
@@ -627,6 +543,34 @@ const CorrectingScreen: ScreenType = ({
     teachDiary.text.length,
     teachDiary.profile.learnLanguage
   );
+
+  const onDragEnd = ({ data }): void => {
+    setInfoComments(data);
+  };
+
+  const renderItem = ({
+    item,
+    index,
+    drag,
+  }: {
+    item: InfoCommentAndroid;
+    index?: number;
+    drag: () => void;
+  }): JSX.Element => {
+    return (
+      <TouchableOpacity onLongPress={drag}>
+        <CommentCard
+          key={item.id}
+          index={index}
+          original={item.original}
+          fix={item.fix}
+          detail={item.detail}
+          isEdit
+          onPressMore={(): void => onPressMoreComment(item)}
+        />
+      </TouchableOpacity>
+    );
+  };
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -660,14 +604,12 @@ const CorrectingScreen: ScreenType = ({
               teachDiary={teachDiary}
               targetProfile={targetProfile}
               onTimeUp={onTimeUp}
-              setSelection={setSelection}
             />
             <Space size={32} />
             {/* 新規でコメント追加 */}
             {isCommentInput ? (
-              <CommentInputCard
+              <CommentInputCardAndroid
                 containerStyle={styles.commentCard}
-                original={original}
                 onPressSubmit={onPressSubmitComment}
                 onPressClose={onPressCloseComment}
               />
@@ -687,17 +629,14 @@ const CorrectingScreen: ScreenType = ({
                 <Space size={16} />
               </>
             ) : null}
-            {infoComments.map((item: InfoComment, index: number) => (
-              <CommentCard
-                containerStyle={styles.commentCard}
-                index={index}
-                original={item.original}
-                fix={item.fix}
-                detail={item.detail}
-                isEdit
-                onPressMore={(): void => onPressMoreComment(item)}
+            <View style={styles.draggableFlatList}>
+              <DraggableFlatList
+                data={infoComments || []}
+                onDragEnd={onDragEnd}
+                renderItem={renderItem}
+                keyExtractor={(item): string => `${item.id}`}
               />
-            ))}
+            </View>
             {/* まとめ */}
             <SummaryCard
               containerStyle={styles.commentCard}
@@ -707,17 +646,32 @@ const CorrectingScreen: ScreenType = ({
             />
           </View>
         </KeyboardAwareScrollView>
-        <CorrectionFooterButton
-          nextActionText={buttonInfo ? buttonInfo.title : ''}
-          onPressNextAction={onPressSubmitButton}
-          onPressHowTo={(): void => setIsModalTutorialCorrectiong(true)}
-        />
+        {isSummary || isCommentInput ? null : (
+          <>
+            <TouchableOpacity style={styles.addComment} onPress={onAddComment}>
+              <MaterialCommunityIcons
+                size={36}
+                color={mainColor}
+                name="plus-circle"
+              />
+              <Text style={styles.commentText}>
+                {I18n.t('correcting.titleComment')}
+              </Text>
+            </TouchableOpacity>
+            <TextButtun
+              isBorrderTop
+              isBorrderBottom
+              title={I18n.t('correctionFooterButton.correction')}
+              onPress={(): void => setIsModalTutorialCorrectiong(true)}
+            />
+          </>
+        )}
       </View>
     </SafeAreaView>
   );
 };
 
-CorrectingScreen.navigationOptions = ({
+CorrectingAndroidScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const buttonInfo = navigation.getParam('buttonInfo');
@@ -728,7 +682,11 @@ CorrectingScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('correcting.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
+      <HeaderText
+        containerStyle={styles.headerLeft}
+        title={I18n.t('common.close')}
+        onPress={onPressClose}
+      />
     ),
     headerRight: (): JSX.Element | null =>
       buttonInfo ? (
@@ -741,4 +699,4 @@ CorrectingScreen.navigationOptions = ({
   };
 };
 
-export default connectActionSheet(CorrectingScreen);
+export default connectActionSheet(CorrectingAndroidScreen);

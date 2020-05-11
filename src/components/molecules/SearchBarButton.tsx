@@ -5,6 +5,7 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, subTextColor, offWhite } from '../../styles/Common';
@@ -14,8 +15,8 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingRight: 56,
-    marginLeft: 16,
+    paddingRight: Platform.OS === 'ios' ? 56 : 64,
+    marginLeft: Platform.OS === 'ios' ? 16 : 0,
     width,
   },
   button: {
@@ -27,6 +28,8 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     paddingHorizontal: 16,
     margin: 8,
+    marginLeft: Platform.OS === 'ios' ? 8 : 0,
+    height: 30,
   },
   icon: {
     paddingRight: 4,

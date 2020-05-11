@@ -1,5 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Text, Dimensions, ImageProps } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  ImageProps,
+  Platform,
+} from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Modal from '../template/Modal';
 import {
@@ -23,6 +30,14 @@ import {
   HowToCorrect4ja,
   HowToCorrect5ja,
   HowToCorrect6ja,
+  HowToCorrect1enAndroid,
+  HowToCorrect2enAndroid,
+  HowToCorrect3enAndroid,
+  HowToCorrect6enAndroid,
+  HowToCorrect1jaAndroid,
+  HowToCorrect2jaAndroid,
+  HowToCorrect3jaAndroid,
+  HowToCorrect6jaAndroid,
 } from '../../images';
 import { HeaderText } from '../atoms';
 import { getlanguage, getBasePoints } from '../../utils/diary';
@@ -106,7 +121,25 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
   rightButtonText = I18n.t('common.skip'),
   onPress,
 }: Props): JSX.Element | null => {
-  const imagesEn = [
+  const imagesAndroidEn = [
+    { image: HowToCorrect1enAndroid, width: 1080, height: 916 },
+    { image: HowToCorrect2enAndroid, width: 1018, height: 1045 },
+    { image: HowToCorrect3enAndroid, width: 1080, height: 776 },
+    { image: HowToCorrect4en, width: 637, height: 497 },
+    { image: HowToCorrect5en, width: 639, height: 471 },
+    { image: HowToCorrect6enAndroid, width: 1080, height: 803 },
+  ];
+
+  const imagesAndroidJa = [
+    { image: HowToCorrect1jaAndroid, width: 1080, height: 1037 },
+    { image: HowToCorrect2jaAndroid, width: 1018, height: 920 },
+    { image: HowToCorrect3jaAndroid, width: 1080, height: 801 },
+    { image: HowToCorrect4ja, width: 622, height: 357 },
+    { image: HowToCorrect5ja, width: 631, height: 347 },
+    { image: HowToCorrect6jaAndroid, width: 1080, height: 604 },
+  ];
+
+  const imagesIOSEn = [
     { image: HowToCorrect1en, width: 638, height: 396 },
     { image: HowToCorrect2en, width: 642, height: 542 },
     { image: HowToCorrect3en, width: 636, height: 210 },
@@ -115,7 +148,7 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
     { image: HowToCorrect6en, width: 646, height: 321 },
   ];
 
-  const imagesJa = [
+  const imagesIOSJa = [
     { image: HowToCorrect1ja, width: 624, height: 378 },
     { image: HowToCorrect2ja, width: 624, height: 519 },
     { image: HowToCorrect3ja, width: 629, height: 343 },
@@ -124,20 +157,36 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
     { image: HowToCorrect6ja, width: 631, height: 325 },
   ];
 
-  const images = nativeLanguage === 'en' ? imagesEn : imagesJa;
+  let images;
+  if (Platform.OS === 'android' && nativeLanguage === 'en') {
+    images = imagesAndroidEn;
+  } else if (Platform.OS === 'android' && nativeLanguage === 'ja') {
+    images = imagesAndroidJa;
+  } else if (Platform.OS === 'ios' && nativeLanguage === 'en') {
+    images = imagesIOSEn;
+  } else if (Platform.OS === 'ios' && nativeLanguage === 'ja') {
+    images = imagesIOSJa;
+  }
+
   const entries = [
     {
       text: I18n.t('tutorialCorrecting.text1', {
         nativeLanguage: getlanguage(nativeLanguage),
       }),
-      subText: I18n.t('tutorialCorrecting.subText1'),
+      subText:
+        Platform.OS === 'ios'
+          ? I18n.t('tutorialCorrecting.subText1IOS')
+          : I18n.t('tutorialCorrecting.subText1Android'),
       image: images[0].image,
       width: images[0].width,
       height: images[0].height,
     },
     {
       text: I18n.t('tutorialCorrecting.text2'),
-      subText: I18n.t('tutorialCorrecting.subText2'),
+      subText:
+        Platform.OS === 'ios'
+          ? I18n.t('tutorialCorrecting.subText2IOS')
+          : I18n.t('tutorialCorrecting.subText2Android'),
       image: images[1].image,
       width: images[1].width,
       height: images[1].height,

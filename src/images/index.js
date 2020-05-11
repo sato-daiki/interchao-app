@@ -26,4 +26,12 @@ module.exports = {
   HowToCorrect4ja: require('./howToCorrect-4ja.png'),
   HowToCorrect5ja: require('./howToCorrect-5ja.png'),
   HowToCorrect6ja: require('./howToCorrect-6ja.png'),
+  HowToCorrect1enAndroid: require('./howToCorrect-1enAndroid.png'),
+  HowToCorrect2enAndroid: require('./howToCorrect-2enAndroid.jpg'),
+  HowToCorrect3enAndroid: require('./howToCorrect-3enAndroid.jpg'),
+  HowToCorrect6enAndroid: require('./howToCorrect-6enAndroid.jpg'),
+  HowToCorrect1jaAndroid: require('./howToCorrect-1jaAndroid.png'),
+  HowToCorrect2jaAndroid: require('./howToCorrect-2jaAndroid.jpg'),
+  HowToCorrect3jaAndroid: require('./howToCorrect-3jaAndroid.jpg'),
+  HowToCorrect6jaAndroid: require('./howToCorrect-6jaAndroid.jpg'),
 };

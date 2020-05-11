@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -63,14 +64,20 @@ const styles = StyleSheet.create({
   textInput: {
     fontSize: fontSizeM,
     color: primaryColor,
-    textAlignVertical: 'top',
+    textAlignVertical: 'center',
     flex: 1,
   },
   introduction: {
-    padding: 16,
+    paddingHorizontal: 16,
+    // paddingとかくとpaddingTopがなぜか反応しない
+    paddingTop: 16,
+    paddingBottom: 16,
     borderBottomColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 170,
+  },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
 });
 
@@ -190,6 +197,7 @@ const EditMyProfileScreen: ScreenType = ({
           <Text>{userName}</Text>
         </TouchableOpacity>
         <TextInput
+          style={styles.introduction}
           value={introduction || ''}
           onChangeText={(text: string): void => setIntroduction(text)}
           maxLength={200}
@@ -199,7 +207,6 @@ const EditMyProfileScreen: ScreenType = ({
           autoCapitalize="none"
           autoCorrect={false}
           underlineColorAndroid="transparent"
-          style={styles.introduction}
         />
       </KeyboardAwareScrollView>
     </View>
@@ -215,6 +222,7 @@ EditMyProfileScreen.navigationOptions = ({
     title: I18n.t('editMyProfile.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
+        containerStyle={styles.headerLeft}
         title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />

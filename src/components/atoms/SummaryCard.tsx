@@ -68,7 +68,6 @@ const SummaryCard = ({
   containerStyle,
   summary,
   isEdit = false,
-
   onPressMore,
 }: Props): JSX.Element | null => {
   if (!summary || summary.length === 0) {

@@ -147,46 +147,44 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
   }, [checkValidate, email, isLoading, message, profile]);
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <LoadingModal visible={isLoading} />
 
       {!isSuccess ? (
-        <KeyboardAwareScrollView>
-          <View style={styles.main}>
-            <Text style={styles.label}>{I18n.t('inquiry.email')}</Text>
-            <TextInput
-              style={styles.textInput}
-              value={email}
-              onChangeText={(text: string): void => setEmail(text)}
-              maxLength={50}
-              placeholder="Enter your email address"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
-              returnKeyType="done"
-            />
-            <Text style={styles.label}>{I18n.t('inquiry.message')}</Text>
-            <TextInput
-              style={[styles.textInput, styles.message]}
-              multiline
-              value={message}
-              onChangeText={(text: string): void => setMessage(text)}
-              maxLength={500}
-              placeholder="Enter your message"
-              autoCapitalize="none"
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
-              returnKeyType="done"
-            />
-            <Space size={32} />
-            <SubmitButton
-              title={I18n.t('common.sending')}
-              onPress={onPressSend}
-              disable={!(email.length && message.length > 0)}
-            />
-          </View>
-        </KeyboardAwareScrollView>
+        <View style={styles.main}>
+          <Text style={styles.label}>{I18n.t('inquiry.email')}</Text>
+          <TextInput
+            style={styles.textInput}
+            value={email}
+            onChangeText={(text: string): void => setEmail(text)}
+            maxLength={50}
+            placeholder="Enter your email address"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+          />
+          <Text style={styles.label}>{I18n.t('inquiry.message')}</Text>
+          <TextInput
+            style={[styles.textInput, styles.message]}
+            multiline
+            value={message}
+            onChangeText={(text: string): void => setMessage(text)}
+            maxLength={500}
+            placeholder="Enter your message"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+          />
+          <Space size={32} />
+          <SubmitButton
+            title={I18n.t('common.sending')}
+            onPress={onPressSend}
+            disable={!(email.length && message.length > 0)}
+          />
+        </View>
       ) : (
         <View style={styles.successContainer}>
           <Text style={styles.thanksTitle}>{I18n.t('inquiry.title')}</Text>
@@ -199,7 +197,7 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
           />
         </View>
       )}
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

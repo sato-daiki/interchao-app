@@ -65,6 +65,7 @@ const correcting = {
   deleteAlert:
     'All of your corrections will be deleted. Would you like to proceed?',
   summaryAlert: 'The summary is being edited.',
+  commentAlert: 'The comment is being edited.',
   titleComment: 'Comment',
   titleSummary: 'Summarize',
   titleDone: 'Publish',
@@ -304,6 +305,7 @@ const commentInput = {
   original: 'Original',
   fix: 'Edit',
   detail: 'Comment',
+  paste: 'Paste',
 };
 
 const correctionFooterButton = {
@@ -344,12 +346,14 @@ const inquiry = {
   message: 'Message',
   title: 'Thank you for your inquiry.',
   thanks:
-    'We will reply to you within a few days.  Please kindly wait for a moment.',
+    'We will reply to you within a few days. Please kindly wait for a moment.',
 };
 
 // organisms
 const correctionOrigin = {
-  message: 'Tap the entry to begin making corrections.',
+  messageIOS: 'Tap the entry to begin making corrections.',
+  messageAndroid:
+    'Copy the sentence to correct and press the "Comment" button at the bottom right to begin making corrections.',
 };
 
 const diaryHitList = {
@@ -478,14 +482,6 @@ const postDiaryComponent = {
   draft: 'Save as Draft',
 };
 
-const signInUpForm = {
-  email: 'Email Address',
-  password: 'Password (6 or more characters)',
-  login: 'Login',
-  forgetText: '',
-  link: 'Forgot password?',
-};
-
 const teachDiaryCorrection = {
   header: 'Correction Results',
 };
@@ -495,15 +491,19 @@ const tutorialCorrecting = {
   title: 'How to Make Corrections',
   text1:
     'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{nativeLanguage}}.',
-  subText1:
-    '1) Tap and hold down on the word or phrase, then set the span.\n2) Tap the “Comment” button at the top right hand side of the screen.',
-  text2: 'Correct the sentence.',
-  subText2:
-    '1) Write the correct/natural phrase in the “Edit” section.\n2) Write your explanation in the “Comment” section.\n3) Tap the “Add” button.',
+  subText1IOS:
+    '1) Tap and hold down on the word or phrase, then set the span\n2) Tap the “Comment” button at the top right hand side of the screen',
+  subText1Android:
+    '1) Copy the word or phrasen2) Tap the “Comment” button at the bottom right hand side of the screen',
+  text2: 'Correct the sentence',
+  subText2IOS:
+    '1) Write the correct/natural phrase in the “Edit” section\n2) Write your explanation in the “Comment” section\n3) Tap the “Add” button',
+  subText2Android:
+    '1) Write the original(Tap the “Paste“ button)\n2) Write the correct/natural phrase in the “Edit” section\n3) Write your explanation in the “Comment” section\n4) Tap the “Add” button',
   text3:
-    'Please aim to write at least 3 comments for every {{nativeCharacters}} characters.\nWhen you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
-  text4: 'Write a summary of your thoughts on the overall journey entry.',
-  subText4: '1) Write the summary\n2) Tap the “Add” button.',
+    'Please aim to write at least 3 comments for every {{nativeCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
+  text4: 'Write a summary of your thoughts on the overall journey entry',
+  subText4: '1) Write the summary\n2) Tap the “Add” button',
   text5:
     'You can edit or delete comments by tapping the Menu icon at the top right hand side of the screen.',
   text6:
@@ -625,7 +625,6 @@ const en = {
   myDiaryListMenu,
   report,
   postDiaryComponent,
-  signInUpForm,
   teachDiaryCorrection,
   tutorialCorrecting,
   tutorialPoints,

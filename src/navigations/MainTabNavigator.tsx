@@ -119,7 +119,6 @@ const MyDiaryTabStack = createStackNavigator(
     Premium: {
       screen: PremiumScreen,
     },
-
     EditEmail: {
       screen: EditEmailScreen,
     },
@@ -177,7 +176,7 @@ const MainTab = createBottomTabNavigator(
       },
     },
     PostDiary: {
-      screen: PostDiaryScreen,
+      screen: ModalPostDiaryNavigator,
       navigationOptions: {
         tabBarLabel: I18n.t('mainTab.postDiary'),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
@@ -196,7 +195,7 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons
-            name="account-multiple"
+            name="spellcheck"
             size={25}
             color={tintColor}
           />

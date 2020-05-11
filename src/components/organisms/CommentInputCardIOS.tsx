@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { mainColor } from '../../styles/Common';
 import { Space } from '../atoms';
-import { CommentButton, CommentInput } from '../molecules';
+import { CommentButton, CommentInputIOS } from '../molecules';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CommentInputCard: React.FC<Props> = ({
+const CommentInputCardIOS: React.FC<Props> = ({
   containerStyle,
   original,
   onPressSubmit,
@@ -56,7 +56,7 @@ const CommentInputCard: React.FC<Props> = ({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <CommentInput
+      <CommentInputIOS
         original={original}
         fix={fix}
         detail={detail}
@@ -69,4 +69,4 @@ const CommentInputCard: React.FC<Props> = ({
   );
 };
 
-export default CommentInputCard;
+export default CommentInputCardIOS;
