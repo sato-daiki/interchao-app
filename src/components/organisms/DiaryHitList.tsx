@@ -13,10 +13,10 @@ interface Props {
   onPressItem: (objectID: string) => void;
   hits: Diary[];
   hasMore: boolean;
-  refine: any;
+  refine?: any;
 }
 
-const DiaryHitList: React.FC<Props & any> = ({
+const DiaryHitList = ({
   me,
   isEmpty,
   onPressItem,

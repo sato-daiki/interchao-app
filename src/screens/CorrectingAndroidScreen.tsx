@@ -53,7 +53,7 @@ export interface ButtonInfo {
   color: string;
 }
 
-export interface Props {
+export interface PropsAndroid {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
@@ -65,7 +65,7 @@ interface DispatchProps {
 }
 
 type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
+  PropsAndroid & DispatchProps & NavigationStackScreenProps
 > & {
   navigationOptions:
     | NavigationStackOptions
@@ -112,12 +112,16 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: mainColor,
   },
+  draggableFlatList: {
+    marginLeft: 16,
+    marginRight: 32,
+  },
 });
 
 /**
  * 添削中
  */
-const CorrectingScreen: ScreenType = ({
+const CorrectingAndroidScreen: ScreenType = ({
   navigation,
   user,
   currentProfile,
@@ -625,7 +629,7 @@ const CorrectingScreen: ScreenType = ({
                 <Space size={16} />
               </>
             ) : null}
-            <View style={{ marginLeft: 16, marginRight: 32 }}>
+            <View style={styles.draggableFlatList}>
               <DraggableFlatList
                 data={infoComments || []}
                 onDragEnd={onDragEnd}
@@ -667,7 +671,7 @@ const CorrectingScreen: ScreenType = ({
   );
 };
 
-CorrectingScreen.navigationOptions = ({
+CorrectingAndroidScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const buttonInfo = navigation.getParam('buttonInfo');
@@ -695,4 +699,4 @@ CorrectingScreen.navigationOptions = ({
   };
 };
 
-export default connectActionSheet(CorrectingScreen);
+export default connectActionSheet(CorrectingAndroidScreen);

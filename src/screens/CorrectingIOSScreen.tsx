@@ -41,7 +41,7 @@ interface ButtonInfo {
   color: string;
 }
 
-export interface Props {
+export interface PropsIOS {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
@@ -53,7 +53,7 @@ interface DispatchProps {
 }
 
 type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
+  PropsIOS & DispatchProps & NavigationStackScreenProps
 > & {
   navigationOptions:
     | NavigationStackOptions
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
 /**
  * 添削中
  */
-const CorrectingScreen: ScreenType = ({
+const CorrectingIOSScreen: ScreenType = ({
   navigation,
   user,
   currentProfile,
@@ -634,7 +634,7 @@ const CorrectingScreen: ScreenType = ({
   );
 };
 
-CorrectingScreen.navigationOptions = ({
+CorrectingIOSScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const buttonInfo = navigation.getParam('buttonInfo');
@@ -662,4 +662,4 @@ CorrectingScreen.navigationOptions = ({
   };
 };
 
-export default connectActionSheet(CorrectingScreen);
+export default connectActionSheet(CorrectingIOSScreen);
