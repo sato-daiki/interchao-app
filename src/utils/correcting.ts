@@ -10,7 +10,7 @@ import {
   User,
 } from '../types';
 import { primaryColor, mainColor, green } from '../styles/Common';
-import { ButtonInfo } from '../screens/CorrectingScreen.android';
+import { ButtonInfo } from '../screens/CorrectingAndroidScreen';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 

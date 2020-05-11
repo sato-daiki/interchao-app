@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Text, TextStyle, StyleProp, StyleSheet } from 'react-native';
 import { connectHighlight } from 'react-instantsearch-native';
 import { Diary } from '../../types';
@@ -19,13 +19,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Highlight: React.FC<Props & any> = ({
-  highlight,
-  attribute,
-  hit,
-  numberOfLines,
-  textStyle,
-}) => {
+// TODO: typescriptの記載方法がわからない
+const Highlight = ({ highlight, attribute, hit, numberOfLines, textStyle }) => {
   const parsedHit = highlight({
     attribute,
     hit,
