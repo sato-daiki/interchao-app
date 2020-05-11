@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Space, GrayHeader, CommentCard, SummaryCard } from '../atoms';
+import { Space, GrayHeader, CommentCard, SummaryCardTranslate } from '../atoms';
 import { fontSizeM, subTextColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment, Language } from '../../types';
@@ -48,7 +48,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
-      <SummaryCard nativeLanguage={nativeLanguage} summary={summary} />
+      <SummaryCardTranslate nativeLanguage={nativeLanguage} summary={summary} />
       <Space size={32} />
       <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
     </>

@@ -4,6 +4,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   emailInputError,
   emailValidate,
@@ -43,6 +44,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
+  },
+  main: {
+    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 32,
   },
@@ -240,51 +244,54 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   }, [password, setIsPasswordCheckOk, setErrorPassword]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
-      <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
-      <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
-      <CheckTextInput
-        autoFocus
-        value={email}
-        onChangeText={(text: string): void => setEmail(text)}
-        onEndEditing={onEndEditingEmail}
-        maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        isLoading={isEmailLoading}
-        isCheckOk={isEmailCheckOk}
-        errorMessage={errorEmail}
-      />
-      <Space size={16} />
-      <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
-      <CheckTextInput
-        value={password}
-        onChangeText={(text: string): void => setPassword(text)}
-        onEndEditing={onEndEditingPassword}
-        maxLength={20}
-        placeholder="Password"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        secureTextEntry
-        returnKeyType="done"
-        isCheckOk={isPasswordCheckOk}
-        errorMessage={errorPassword}
-      />
-      <Space size={32} />
-      <SubmitButton
-        title={I18n.t('common.register')}
-        onPress={onPressSubmit}
-        disable={!(isEmailCheckOk && isPasswordCheckOk)}
-      />
-      <Space size={16} />
-    </View>
+    <KeyboardAwareScrollView style={styles.container}>
+      <View style={styles.main}>
+        <LoadingModal visible={isLoading} />
+
+        <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
+        <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
+        <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
+        <CheckTextInput
+          autoFocus
+          value={email}
+          onChangeText={(text: string): void => setEmail(text)}
+          onEndEditing={onEndEditingEmail}
+          maxLength={50}
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="done"
+          isLoading={isEmailLoading}
+          isCheckOk={isEmailCheckOk}
+          errorMessage={errorEmail}
+        />
+        <Space size={16} />
+        <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
+        <CheckTextInput
+          value={password}
+          onChangeText={(text: string): void => setPassword(text)}
+          onEndEditing={onEndEditingPassword}
+          maxLength={20}
+          placeholder="Password"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          secureTextEntry
+          returnKeyType="done"
+          isCheckOk={isPasswordCheckOk}
+          errorMessage={errorPassword}
+        />
+        <Space size={32} />
+        <SubmitButton
+          title={I18n.t('common.register')}
+          onPress={onPressSubmit}
+          disable={!(isEmailCheckOk && isPasswordCheckOk)}
+        />
+        <Space size={16} />
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 

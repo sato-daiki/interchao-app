@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInputProps,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -45,8 +46,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     paddingLeft: 16,
     paddingRight: 46,
-    paddingVertical: 14,
-    textAlignVertical: 'top',
+    paddingVertical: Platform.OS === 'ios' ? 14 : 8,
     backgroundColor: offWhite,
     borderRadius: 6,
     borderColor: borderLightColor,

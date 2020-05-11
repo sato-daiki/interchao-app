@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { HeaderText } from '../components/atoms';
-import { CommentInput } from '../components/molecules';
+import { CommentInputIOS, CommentInputAndroid } from '../components/molecules';
 import { mainColor } from '../styles/Common';
 import I18n from '../utils/I18n';
 
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 5,
   },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
+  },
 });
 
 /**
@@ -45,10 +48,11 @@ const styles = StyleSheet.create({
  */
 const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
   const { item } = navigation.state.params!;
+  const [original, setOriginal] = useState(item.original); // 新規追加時の原文（Anroidのみ）
   const [fix, setFix] = useState(item.fix); // 新規追加時の修正文
   const [detail, setDetail] = useState(item.detail); // 新規追加時のコメント
 
-  const onPressSubmit = useCallback(
+  const onPressSubmitIOS = useCallback(
     (prmFix: string, prmDetail: string): void => {
       if (!navigation.state.params) return;
       navigation.state.params.onPressSubmit(item.id, prmFix, prmDetail);
@@ -58,23 +62,55 @@ const EditCorrectionCommentScreen: ScreenType = ({ navigation }) => {
     [item.id]
   );
 
+  const onPressSubmitAndroid = useCallback(
+    (prmOriginal: string, prmFix: string, prmDetail: string): void => {
+      if (!navigation.state.params) return;
+      navigation.state.params.onPressSubmit(
+        item.id,
+        prmOriginal,
+        prmFix,
+        prmDetail
+      );
+      navigation.goBack(null);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [item.id]
+  );
+
   useEffect(() => {
     navigation.setParams({
-      onPressSubmit: () => onPressSubmit(fix, detail),
+      onPressSubmit: () => {
+        if (Platform.OS === 'ios') {
+          onPressSubmitIOS(fix, detail);
+        } else {
+          onPressSubmitAndroid(original, fix, detail);
+        }
+      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fix, detail]);
+  }, [original, fix, detail]);
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <CommentInput
-          original={item.original}
-          fix={fix}
-          detail={detail}
-          onChangeTextFix={(text: string): void => setFix(text)}
-          onChangeTextDetail={(text: string): void => setDetail(text)}
-        />
+        {Platform.OS === 'ios' ? (
+          <CommentInputIOS
+            original={item.original}
+            fix={fix}
+            detail={detail}
+            onChangeTextFix={(text: string): void => setFix(text)}
+            onChangeTextDetail={(text: string): void => setDetail(text)}
+          />
+        ) : (
+          <CommentInputAndroid
+            original={original}
+            fix={fix}
+            detail={detail}
+            onChangeTextOriginal={(text: string): void => setOriginal(text)}
+            onChangeTextFix={(text: string): void => setFix(text)}
+            onChangeTextDetail={(text: string): void => setDetail(text)}
+          />
+        )}
       </View>
     </View>
   );
@@ -89,6 +125,7 @@ EditCorrectionCommentScreen.navigationOptions = ({
     title: I18n.t('editCorrectionComment.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
+        containerStyle={styles.headerLeft}
         title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />

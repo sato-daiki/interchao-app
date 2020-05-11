@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Platform } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
     elevation: 9,
     shadowOpacity: 0.4,
     shadowRadius: 5,
+  },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
 });
 
@@ -89,6 +92,7 @@ EditCorrectionSummaryScreen.navigationOptions = ({
     title: I18n.t('editCorrectionSummary.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderText
+        containerStyle={styles.headerLeft}
         title={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />

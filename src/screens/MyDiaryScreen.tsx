@@ -5,6 +5,8 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -56,6 +58,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingVertical: 8,
+  },
+  headerTitleStyle: {
+    width: Dimensions.get('window').width - 140,
+    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
   },
   diaryOriginal: {
     paddingHorizontal: 16,
@@ -279,6 +285,7 @@ MyDiaryScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
     title,
+    headerTitleStyle: styles.headerTitleStyle,
     headerRight: (): JSX.Element => (
       <TouchableOpacity onPress={onPressMore}>
         <MaterialCommunityIcons
