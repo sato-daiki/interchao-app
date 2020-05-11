@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,9 @@ import {
   ViewStyle,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  mainColor,
-  subTextColor,
-} from '../../styles/Common';
+import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 import { Language } from '../../types';
-import googleTranslate from '../../utils/googleTranslate';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -69,50 +62,14 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  translation: {
-    color: mainColor,
-  },
-  italic: {
-    color: subTextColor,
-    fontStyle: 'italic',
-  },
 });
 
 const SummaryCard = ({
   containerStyle,
   summary,
   isEdit = false,
-  nativeLanguage,
   onPressMore,
 }: Props): JSX.Element | null => {
-  const [displaySummary, setDisplaySummary] = useState(summary);
-  const [isTranslated, setIsTranslated] = useState(false);
-
-  const onPressTranslate = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isTranslated) {
-        setDisplaySummary(summary);
-        setIsTranslated(false);
-      } else {
-        const mentionRemovedText = summary.replace(/@\w+\s/g, '');
-        if (nativeLanguage) {
-          const translatedText = await googleTranslate(
-            mentionRemovedText,
-            nativeLanguage
-          );
-          if (translatedText && translatedText.length > 0) {
-            setDisplaySummary(translatedText);
-            setIsTranslated(true);
-          }
-        }
-      }
-    };
-    f();
-  }, [isTranslated, nativeLanguage, summary]);
   if (!summary || summary.length === 0) {
     return null;
   }
@@ -130,20 +87,9 @@ const SummaryCard = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      <View style={styles.row}>
-        <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
-        {nativeLanguage ? (
-          <TouchableOpacity onPress={onPressTranslate}>
-            <Text style={styles.translation}>
-              {I18n.t('common.translation')}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
+      <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
       <View style={styles.line} />
-      <Text style={[styles.text, isTranslated ? styles.italic : undefined]}>
-        {displaySummary}
-      </Text>
+      <Text style={styles.text}>{summary}</Text>
     </View>
   );
 };

@@ -16,15 +16,12 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import I18n from '../../utils/I18n';
-import googleTranslate from '../../utils/googleTranslate';
 import { Language } from '../../types';
+import googleTranslate from '../../utils/googleTranslate';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
-  index?: number;
-  original: string;
-  fix: string;
-  detail: string;
+  summary: string;
   isEdit?: boolean;
   nativeLanguage?: Language;
   onPressMore?: () => void;
@@ -45,7 +42,7 @@ const styles = StyleSheet.create({
     elevation: 9,
     shadowOpacity: 0.4,
     shadowRadius: 5,
-    borderColor: mainColor,
+    borderColor: primaryColor,
   },
   icon: {
     position: 'absolute',
@@ -53,49 +50,27 @@ const styles = StyleSheet.create({
     right: 12,
     zIndex: 1,
   },
-  label: {
-    color: subTextColor,
+  title: {
     fontSize: fontSizeM,
-    paddingBottom: 4,
-  },
-  originalContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  original: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    lineHeight: fontSizeM * 1.3,
-    paddingLeft: 4,
     fontWeight: 'bold',
-  },
-  index: {
-    fontSize: fontSizeM,
     color: primaryColor,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    paddingBottom: 16,
   },
   line: {
     alignSelf: 'center',
     width: '100%',
-    margin: 16,
+    marginHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
   },
-  fix: {
-    fontSize: fontSizeM,
-    fontWeight: 'bold',
-    color: primaryColor,
-    lineHeight: fontSizeM * 1.3,
-  },
-  detail: {
+  text: {
+    paddingTop: 16,
     fontSize: fontSizeM,
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
   },
   translation: {
@@ -107,42 +82,41 @@ const styles = StyleSheet.create({
   },
 });
 
-const CommentCard = ({
+const SummaryCardTranslate = ({
   containerStyle,
-  index = 0,
-  original,
-  fix,
-  detail,
+  summary,
   isEdit = false,
   nativeLanguage,
   onPressMore,
-}: Props): JSX.Element => {
-  const [displayDetail, setDisplayDetail] = useState(detail);
+}: Props): JSX.Element | null => {
+  const [displaySummary, setDisplaySummary] = useState(summary);
   const [isTranslated, setIsTranslated] = useState(false);
 
   const onPressTranslate = useCallback(() => {
     const f = async (): Promise<void> => {
       if (isTranslated) {
-        setDisplayDetail(detail);
+        setDisplaySummary(summary);
         setIsTranslated(false);
       } else {
-        const mentionRemovedText = detail.replace(/@\w+\s/g, '');
+        const mentionRemovedText = summary.replace(/@\w+\s/g, '');
         if (nativeLanguage) {
           const translatedText = await googleTranslate(
             mentionRemovedText,
             nativeLanguage
           );
           if (translatedText && translatedText.length > 0) {
-            setDisplayDetail(translatedText);
+            setDisplaySummary(translatedText);
             setIsTranslated(true);
           }
         }
       }
     };
     f();
-  }, [detail, isTranslated, nativeLanguage]);
+  }, [isTranslated, nativeLanguage, summary]);
+  if (!summary || summary.length === 0) {
+    return null;
+  }
 
-  const indexText = `${index + 1}.`;
   return (
     <View style={[styles.container, containerStyle]}>
       {isEdit ? (
@@ -156,17 +130,8 @@ const CommentCard = ({
           </TouchableOpacity>
         </View>
       ) : null}
-      <Text style={styles.label}>{I18n.t('commentCard.original')}</Text>
-      <View style={styles.originalContainer}>
-        <Text style={styles.index}>{indexText}</Text>
-        <Text style={styles.original}>{original}</Text>
-      </View>
-      <View style={styles.line} />
-      <Text style={styles.label}>{I18n.t('commentCard.fix')}</Text>
-      <Text style={styles.fix}>{fix}</Text>
-      <View style={styles.line} />
       <View style={styles.row}>
-        <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
+        <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
         {nativeLanguage ? (
           <TouchableOpacity onPress={onPressTranslate}>
             <Text style={styles.translation}>
@@ -175,12 +140,12 @@ const CommentCard = ({
           </TouchableOpacity>
         ) : null}
       </View>
-
-      <Text style={[styles.detail, isTranslated ? styles.italic : undefined]}>
-        {displayDetail}
+      <View style={styles.line} />
+      <Text style={[styles.text, isTranslated ? styles.italic : undefined]}>
+        {displaySummary}
       </Text>
     </View>
   );
 };
 
-export default CommentCard;
+export default SummaryCardTranslate;

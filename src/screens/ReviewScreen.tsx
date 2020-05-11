@@ -1,5 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput, Alert, Keyboard } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Alert,
+  Keyboard,
+  Platform,
+} from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
   NavigationStackOptions,
@@ -47,6 +54,9 @@ const styles = StyleSheet.create({
   },
   keyboardAwareScrollView: {
     flex: 1,
+  },
+  headerLeft: {
+    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
 });
 
@@ -210,7 +220,11 @@ ReviewScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     ...DefaultNavigationOptions,
     title: I18n.t('review.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.close')} onPress={onPressClose} />
+      <HeaderText
+        containerStyle={styles.headerLeft}
+        title={I18n.t('common.close')}
+        onPress={onPressClose}
+      />
     ),
     headerRight: (): JSX.Element => (
       <HeaderText title={I18n.t('common.sending')} onPress={onPressSubmit} />

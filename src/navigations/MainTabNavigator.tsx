@@ -119,7 +119,6 @@ const MyDiaryTabStack = createStackNavigator(
     Premium: {
       screen: PremiumScreen,
     },
-
     EditEmail: {
       screen: EditEmailScreen,
     },
@@ -177,6 +176,8 @@ const MainTab = createBottomTabNavigator(
       },
     },
     PostDiary: {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // @ts-ignore
       screen: PostDiaryScreen,
       navigationOptions: {
         tabBarLabel: I18n.t('mainTab.postDiary'),
@@ -196,7 +197,7 @@ const MainTab = createBottomTabNavigator(
         ),
         tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
           <MaterialCommunityIcons
-            name="account-multiple"
+            name="spellcheck"
             size={25}
             color={tintColor}
           />

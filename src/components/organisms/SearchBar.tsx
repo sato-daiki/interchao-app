@@ -44,13 +44,13 @@ interface Props {
   currentRefinement: string;
 }
 
-const SearchBar: React.FC<Props & any> = ({
+const SearchBar = ({
   placeholder,
   setIsEmpty,
   onPressClose,
   refine,
   currentRefinement,
-}) => {
+}: Props) => {
   const onChangeText = useCallback(
     (text: string): void => {
       if (!text) {

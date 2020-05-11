@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     color: subTextColor,
     fontSize: fontSizeS,
     lineHeight: fontSizeS * 1.3,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     paddingBottom: 16,
   },
   deleteButton: {

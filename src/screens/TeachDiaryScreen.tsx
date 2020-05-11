@@ -6,6 +6,8 @@ import {
   Text,
   Alert,
   ActivityIndicator,
+  Dimensions,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -38,6 +40,8 @@ import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 
+const { width } = Dimensions.get('window');
+
 export interface Props {
   user: User;
   profile: Profile;
@@ -62,6 +66,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingVertical: 16,
+  },
+  headerTitleStyle: {
+    width: width - 144,
+    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
   },
   errContainer: {
     flex: 1,
@@ -339,6 +347,7 @@ TeachDiaryScreen.navigationOptions = ({
   return {
     ...DefaultNavigationOptions,
     title,
+    headerTitleStyle: styles.headerTitleStyle,
     headerRight: (): JSX.Element | null =>
       isYet ? (
         <HeaderText

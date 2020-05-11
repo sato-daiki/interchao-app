@@ -65,6 +65,7 @@ const errorMessage = {
 const correcting = {
   deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
   summaryAlert: 'まとめが編集中です',
+  commentAlert: 'コメントが編集中です',
   headerTitle: '添削する',
   titleComment: 'コメントする',
   titleSummary: 'まとめを書く',
@@ -303,6 +304,7 @@ const commentInput = {
   original: '原文',
   fix: '修正文',
   detail: 'コメント',
+  paste: 'クリップボードの貼り付け',
 };
 
 const correctionFooterButton = {
@@ -347,7 +349,9 @@ const inquiry = {
 
 // organisms
 const correctionOrigin = {
-  message: '文章をタップして添削を始めましょう',
+  messageIOS: '修正する箇所を選択して、添削を始めましょう',
+  messageAndroid:
+    '修正する箇所をコピーして\n右下の"コメントする"ボタンを押して添削を始めましょう。',
 };
 
 const diaryHitList = {
@@ -475,14 +479,6 @@ const postDiaryComponent = {
   draft: '下書き保存',
 };
 
-const signInUpForm = {
-  email: 'メールアドレス',
-  password: 'パスワード（６ケタ以上）',
-  login: 'ログイン',
-  forgetText: 'パスワードをお忘れの方は',
-  link: 'こちら',
-};
-
 const teachDiaryCorrection = {
   header: '添削結果',
 };
@@ -491,19 +487,23 @@ const tutorialCorrecting = {
   subTitle: 'やり方',
   title: '添削方法',
   text1:
-    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{nativeLanguage}}で行ってください。',
-  subText1:
-    '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある"コメントする"をクリック',
-  text2: '正しい文章を教えてあげましょう。',
-  subText2:
-    '① 修正文に正しい表現/自然な表現を書く\n② コメントに補足を書く\n③ "追加"をクリック',
+    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{nativeLanguage}}で行ってください',
+  subText1IOS:
+    '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある“コメントする“をクリック',
+  subText1Android:
+    '① 対象の文章を選択して、コピー\n② 画面の右下にある“コメントする“をクリック',
+  text2: '正しい文章を教えてあげましょう',
+  subText2IOS:
+    '① 修正文に正しい表現/自然な表現を書く\n② コメントに補足を書く\n③ “追加“をクリック',
+  subText2Android:
+    '① 原文を書く（“クリップボードの貼り付け“をクリック）\n② 修正文に正しい表現/自然な表現を書く\n③ コメントに補足を書く\n④ “追加“をクリック',
   text3:
-    'コメントは{{nativeCharacters}}文字に対して3つを目安に書きましょう。\nコメントの記載が終わったら画面の右上にある"まとめを書く"をクリック',
-  text4: '日記の全体の感想などを書きましょう。',
-  subText4: '① まとめを書く\n② "追加"をクリック',
+    'コメントは{{nativeCharacters}}文字に対して3つを目安に書きましょう。コメントの記載が終わったら画面の右上にある“まとめを書く“をクリック',
+  text4: '日記の全体の感想などを書きましょう',
+  subText4: '① まとめを書く\n② “追加“をクリック',
   text5: '修正や削除はカードの右上のメニューアイコンをクリックするとできます',
-  text6: '添削内容を確認して、最後に画面の右上にある"投稿する"をクリック',
-  text7: '以上です！早速添削を始めましょう。',
+  text6: '添削内容を確認して、最後に画面の右上にある“投稿する“をクリック',
+  text7: '以上です！早速添削を始めましょう',
 };
 
 const tutorialPoints = {
@@ -619,7 +619,6 @@ const ja = {
   myDiaryListMenu,
   report,
   postDiaryComponent,
-  signInUpForm,
   teachDiaryCorrection,
   tutorialCorrecting,
   tutorialPoints,
