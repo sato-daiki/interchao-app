@@ -8,7 +8,7 @@ import {
   ImageProps,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { primaryColor, fontSizeM, offWhite } from '../../styles/Common';
+import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Space, SubmitButton } from '../atoms';
 
 const { width } = Dimensions.get('window');
@@ -38,12 +38,12 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: baseWidth + 8,
-    height: 280,
+    height: 320,
     borderWidth: 2,
     borderColor: primaryColor,
     borderRadius: 8,
-    paddingTop: 16,
-    backgroundColor: offWhite,
+    paddingTop: 8,
+    backgroundColor: '#fff',
   },
   text: {
     fontSize: fontSizeM,
@@ -89,7 +89,7 @@ const TutorialCorrectingListItem: React.FC<Props> = ({
             />
           </View>
         ) : null}
-        <Space size={32} />
+        <Space size={16} />
         <Text style={styles.text}>{item.text}</Text>
         {item.subText ? (
           <Text style={styles.subText}>{item.subText}</Text>

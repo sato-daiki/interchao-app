@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  TextInput,
   SafeAreaView,
   View,
   Text,
   Image,
-  Keyboard,
   Animated,
   Easing,
+  Platform,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { LoadingModal, TextButtun } from '../atoms';
+
+import { LoadingModal } from '../atoms';
 import ModalAlertPublish from './ModalAlertPublish';
 import ModalLackPoint from './ModalLackPoint';
 import ModalDiaryCancel from './ModalDiaryCancel';
 import {
-  fontSizeM,
   primaryColor,
   borderLightColor,
   offWhite,
-  mainColor,
   fontSizeSS,
 } from '../../styles/Common';
 import { Points } from '../../images';
@@ -30,6 +25,8 @@ import { getUsePoints } from '../../utils/diary';
 import { Language } from '../../types';
 import TutorialPostDiary from './TutorialPostDiary';
 import I18n from '../../utils/I18n';
+import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
+import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
 
 interface Props {
   isLoading: boolean;
@@ -95,38 +92,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizeSS,
     marginRight: 16,
   },
-  titleInput: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    padding: 16,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    backgroundColor: '#fff',
-  },
-  textInput: {
-    padding: 16,
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.7,
-    textAlignVertical: 'top',
-    flex: 1,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    backgroundColor: '#fff',
-  },
-  icon: {
-    alignItems: 'flex-end',
-    paddingRight: 16,
-    paddingTop: 4,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    height: 80,
-    justifyContent: 'flex-end',
-    width: '100%',
-    backgroundColor: offWhite,
-  },
 });
 
 const PostDiary = ({
@@ -164,7 +129,7 @@ const PostDiary = ({
     }).start();
   }, [fadeAnim]);
 
-  const onFocus = (): void => {
+  const onFocusText = (): void => {
     setFadeAnim(new Animated.Value(0));
     setIsForce(true);
   };
@@ -223,56 +188,29 @@ const PostDiary = ({
           <Text style={styles.headerValue}>{points}</Text>
         </View>
       </View>
-      <TextInput
-        style={styles.titleInput}
-        value={title}
-        onChangeText={onChangeTextTitle}
-        placeholder="Title"
-        maxLength={100}
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-      />
-      <TextInput
-        style={styles.textInput}
-        value={text}
-        onChangeText={onChangeTextText}
-        onFocus={onFocus}
-        onEndEditing={(): void => setIsForce(false)}
-        placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
-        underlineColorAndroid="transparent"
-        multiline
-        autoCapitalize="none"
-        autoCorrect={false}
-        keyboardType="default"
-      />
-      {isForce ? (
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-          }}
-        >
-          <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
-            <MaterialCommunityIcons
-              size={28}
-              color={mainColor}
-              name="keyboard-close"
-            />
-          </TouchableOpacity>
-        </Animated.View>
-      ) : null}
-      <KeyboardSpacer />
-      {/* 画面株がiOSX以上の時隠れてしまうのを対応 */}
-      <SafeAreaView>
-        <View style={styles.footer}>
-          <TextButtun
-            isBorrderTop
-            isBorrderBottom
-            title={I18n.t('postDiaryComponent.draft')}
-            onPress={onPressDraft}
-          />
-        </View>
-      </SafeAreaView>
+      {Platform.OS === 'ios' ? (
+        <PostDiaryKeyboardIOS
+          title={title}
+          text={text}
+          isForce={isForce}
+          fadeAnim={fadeAnim}
+          onChangeTextTitle={onChangeTextTitle}
+          onChangeTextText={onChangeTextText}
+          onPressDraft={onPressDraft}
+          onFocusText={onFocusText}
+          onEndEditingText={(): void => setIsForce(false)}
+        />
+      ) : (
+        <PostDiaryKeybordAndroid
+          title={title}
+          text={text}
+          onChangeTextTitle={onChangeTextTitle}
+          onChangeTextText={onChangeTextText}
+          onPressDraft={onPressDraft}
+          onFocusText={onFocusText}
+          onEndEditingText={(): void => setIsForce(false)}
+        />
+      )}
     </SafeAreaView>
   );
 };

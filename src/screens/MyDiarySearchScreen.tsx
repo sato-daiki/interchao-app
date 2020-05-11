@@ -58,7 +58,7 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
             navigation.goBack();
           }}
         />
-        <DiaryHitList isEmpty={isEmpty} onPressItem={onPressItem} />
+        <DiaryHitList me isEmpty={isEmpty} onPressItem={onPressItem} />
       </InstantSearch>
     </SafeAreaView>
   );
