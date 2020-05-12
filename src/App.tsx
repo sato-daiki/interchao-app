@@ -26,19 +26,21 @@ Sentry.init({
   debug: true,
 });
 
-firebase.initializeApp(firebaseConfig);
-const App: React.SFC = () => {
-  // OTAファイルの更新
-  const checkUpdate = async (): Promise<void> => {
-    if (__DEV__) return;
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-    const update = await Updates.checkForUpdateAsync();
-    if (update.isAvailable) {
-      await Updates.fetchUpdateAsync();
-      Updates.reloadAsync();
-    }
-  };
+const App: React.SFC = () => {
   useEffect(() => {
+    // OTAファイルの更新
+    const checkUpdate = async (): Promise<void> => {
+      if (__DEV__) return;
+      const update = await Updates.checkForUpdateAsync();
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        Updates.reloadAsync();
+      }
+    };
     checkUpdate();
   }, []);
 
