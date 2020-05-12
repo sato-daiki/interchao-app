@@ -22,8 +22,6 @@ Sentry.setRelease(Constants.manifest.revisionId || 'DEV');
 Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
-  enableInExpoDevelopment: true,
-  debug: true,
 });
 
 if (!firebase.apps.length) {
