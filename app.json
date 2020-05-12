@@ -20,14 +20,14 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
-      "buildNumber": "1.1.3",
+      "buildNumber": "1010300",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "This app access your photo gallery to share your photos in this app."
       }
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 2
+      "versionCode": 1010300
     },
     "extra": {
       "production": {
@@ -51,7 +51,8 @@
           "appId": "1:975945165729:web:04f22216a1d13f908fb9e0",
           "measurementId": "G-VV6Y43CCFX"
         }
-      }
+      },
+      "revision": 1
     },
     "hooks": {
       "postPublish": [
