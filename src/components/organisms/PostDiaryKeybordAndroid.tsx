@@ -81,10 +81,10 @@ const PostDiaryKeybordAndroid = ({
         onChangeText={onChangeTextTitle}
         placeholder="Title"
         maxLength={100}
-        autoCapitalize="none"
         autoCorrect={false}
         keyboardType="default"
         underlineColorAndroid="transparent"
+        spellCheck
       />
       <TextInput
         style={styles.textInput}
@@ -95,9 +95,9 @@ const PostDiaryKeybordAndroid = ({
         placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
         underlineColorAndroid="transparent"
         multiline
-        autoCapitalize="none"
         autoCorrect={false}
         keyboardType="default"
+        spellCheck
       />
       <SafeAreaView>
         <View style={styles.footer}>
