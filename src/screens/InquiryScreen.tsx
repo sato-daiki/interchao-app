@@ -173,8 +173,8 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
             onChangeText={(text: string): void => setMessage(text)}
             maxLength={500}
             placeholder="Enter your message"
-            autoCapitalize="none"
-            autoCorrect={false}
+            spellCheck
+            autoCorrect
             underlineColorAndroid="transparent"
             returnKeyType="done"
           />
