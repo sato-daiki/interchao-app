@@ -29,16 +29,15 @@ if (!firebase.apps.length) {
 }
 
 const App: React.SFC = () => {
+  // OTAファイルの更新
+  const checkUpdate = async (): Promise<void> => {
+    if (__DEV__) return;
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      Updates.reloadAsync();
+    }
+  };
   useEffect(() => {
-    // OTAファイルの更新
-    const checkUpdate = async (): Promise<void> => {
-      if (__DEV__) return;
-      const update = await Updates.checkForUpdateAsync();
-      if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        Updates.reloadAsync();
-      }
-    };
     checkUpdate();
   }, []);
 
