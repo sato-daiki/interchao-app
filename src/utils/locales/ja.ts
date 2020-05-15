@@ -351,7 +351,7 @@ const inquiry = {
 const correctionOrigin = {
   messageIOS: '修正する箇所を選択して、添削を始めましょう',
   messageAndroid:
-    '修正する箇所をコピーして\n右下の"コメントする"ボタンを押して添削を始めましょう。',
+    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう。',
 };
 
 const diaryHitList = {

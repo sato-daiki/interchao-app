@@ -51,8 +51,8 @@ const SummaryInput: React.FC<Props> = ({ summary, onChangeText }) => {
       <TextInput
         style={styles.textInput}
         autoFocus
-        autoCapitalize="none"
-        autoCorrect={false}
+        spellCheck
+        autoCorrect
         underlineColorAndroid="transparent"
         value={summary}
         onChangeText={onChangeText}
