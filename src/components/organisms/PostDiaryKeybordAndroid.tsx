@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   TextInput,
   SafeAreaView,
   View,
   KeyboardAvoidingView,
+  Keyboard,
 } from 'react-native';
 import { TextButtun } from '../atoms';
 import {
@@ -29,6 +30,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  inner: {
+    flex: 1,
+  },
   titleInput: {
     fontSize: fontSizeM,
     color: primaryColor,
@@ -51,9 +55,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    height: 40,
     justifyContent: 'flex-end',
     width: '100%',
     backgroundColor: offWhite,
@@ -69,47 +70,73 @@ const PostDiaryKeybordAndroid = ({
   onFocusText,
   onEndEditingText,
 }: Props): JSX.Element => {
+  const [isShowFooter, setIsShowFooter] = useState(true);
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+
+    // cleanup function
+    return (): void => {
+      Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
+    };
+  }, []);
+
+  const onKeyboardDidShow = (): void => {
+    setIsShowFooter(false);
+  };
+
+  const onKeyboardDidHide = (): void => {
+    setIsShowFooter(true);
+  };
+
   return (
-    <KeyboardAvoidingView
-      keyboardVerticalOffset={20}
-      style={styles.container}
-      behavior="height"
-    >
-      <TextInput
-        style={styles.titleInput}
-        value={title}
-        onChangeText={onChangeTextTitle}
-        placeholder="Title"
-        maxLength={100}
-        autoCorrect={false}
-        keyboardType="default"
-        underlineColorAndroid="transparent"
-        spellCheck
-      />
-      <TextInput
-        style={styles.textInput}
-        value={text}
-        onChangeText={onChangeTextText}
-        onFocus={onFocusText}
-        onEndEditing={onEndEditingText}
-        placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
-        underlineColorAndroid="transparent"
-        multiline
-        autoCorrect={false}
-        keyboardType="default"
-        spellCheck
-      />
-      <SafeAreaView>
-        <View style={styles.footer}>
-          <TextButtun
-            isBorrderTop
-            isBorrderBottom
-            title={I18n.t('postDiaryComponent.draft')}
-            onPress={onPressDraft}
+    <View style={styles.container}>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={-180}
+        style={styles.container}
+        behavior="height"
+      >
+        <View style={styles.inner}>
+          <TextInput
+            style={styles.titleInput}
+            value={title}
+            onChangeText={onChangeTextTitle}
+            placeholder="Title"
+            maxLength={100}
+            autoCorrect={false}
+            keyboardType="default"
+            underlineColorAndroid="transparent"
+            spellCheck
+          />
+          <TextInput
+            style={styles.textInput}
+            value={text}
+            onChangeText={onChangeTextText}
+            onFocus={onFocusText}
+            onEndEditing={onEndEditingText}
+            placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
+            underlineColorAndroid="transparent"
+            multiline
+            autoCorrect={false}
+            keyboardType="default"
+            spellCheck
           />
         </View>
+      </KeyboardAvoidingView>
+      <SafeAreaView>
+        {isShowFooter ? (
+          <View style={styles.footer}>
+            <TextButtun
+              isBorrderTop
+              isBorrderBottom
+              title={I18n.t('postDiaryComponent.draft')}
+              onPress={onPressDraft}
+            />
+          </View>
+        ) : null}
       </SafeAreaView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
