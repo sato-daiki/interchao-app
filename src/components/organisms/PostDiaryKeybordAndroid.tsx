@@ -71,6 +71,14 @@ const PostDiaryKeybordAndroid = ({
   onEndEditingText,
 }: Props): JSX.Element => {
   const [isShowFooter, setIsShowFooter] = useState(true);
+  const onKeyboardDidShow = (): void => {
+    setIsShowFooter(false);
+  };
+
+  const onKeyboardDidHide = (): void => {
+    setIsShowFooter(true);
+  };
+
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
     Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
@@ -81,14 +89,6 @@ const PostDiaryKeybordAndroid = ({
       Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
     };
   }, []);
-
-  const onKeyboardDidShow = (): void => {
-    setIsShowFooter(false);
-  };
-
-  const onKeyboardDidHide = (): void => {
-    setIsShowFooter(true);
-  };
 
   return (
     <View style={styles.container}>
