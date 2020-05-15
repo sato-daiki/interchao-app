@@ -204,8 +204,8 @@ const EditMyProfileScreen: ScreenType = ({
           placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
           multiline
           numberOfLines={3}
-          autoCapitalize="none"
-          autoCorrect={false}
+          spellCheck
+          autoCorrect
           underlineColorAndroid="transparent"
         />
       </KeyboardAwareScrollView>

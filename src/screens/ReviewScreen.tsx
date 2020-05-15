@@ -202,8 +202,8 @@ const ReviewScreen: ScreenType = ({
           placeholder={I18n.t('review.placeholder')}
           multiline
           numberOfLines={3}
-          autoCapitalize="none"
-          autoCorrect={false}
+          spellCheck
+          autoCorrect
           underlineColorAndroid="transparent"
           style={styles.review}
         />

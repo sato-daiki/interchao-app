@@ -119,8 +119,9 @@ const CommentInputAndroid: React.FC<Props> = ({
           }
         }}
         style={styles.textInput}
+        spellCheck
+        autoCorrect
         autoCapitalize="none"
-        autoCorrect={false}
         underlineColorAndroid="transparent"
         value={fix}
         onChangeText={onChangeTextFix}
@@ -134,8 +135,8 @@ const CommentInputAndroid: React.FC<Props> = ({
       <TextInput
         ref={refComment}
         style={styles.textInput}
-        autoCapitalize="none"
-        autoCorrect={false}
+        spellCheck
+        autoCorrect
         underlineColorAndroid="transparent"
         value={detail}
         onChangeText={onChangeTextDetail}
