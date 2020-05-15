@@ -59,6 +59,12 @@ const errorMessage = {
     '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{nativeLanguage}}.',
 };
 
+const app = {
+  updateTitle: 'New version is available',
+  updateMessage: 'Please update this app to the newest version',
+  updateOk: 'Update',
+};
+
 // 各画面ごとの文字
 const correcting = {
   headerTitle: 'Correct',
@@ -306,6 +312,7 @@ const commentInput = {
   fix: 'Edit',
   detail: 'Comment',
   paste: 'Paste',
+  optional: 'Optional',
 };
 
 const correctionFooterButton = {
@@ -563,6 +570,7 @@ const en = {
   common,
   errorMessage,
   mainTab,
+  app,
   correcting,
   deleteAcount,
   draftDiary,

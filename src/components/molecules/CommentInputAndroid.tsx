@@ -144,6 +144,7 @@ const CommentInputAndroid: React.FC<Props> = ({
         returnKeyType="done"
         blurOnSubmit
         scrollEnabled={false}
+        placeholder={I18n.t('commentInput.optional')}
       />
     </>
   );

@@ -60,6 +60,11 @@ const errorMessage = {
   lackPointsText:
     '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは{{nativeLanguage}}の日記を添削することで溜めることができます。',
 };
+const app = {
+  updateTitle: '最新版が利用可能です',
+  updateMessage: 'アプリを最新版に更新してください',
+  updateOk: 'アプリを更新',
+};
 
 // 各画面ごとの文字
 const correcting = {
@@ -305,6 +310,7 @@ const commentInput = {
   fix: '修正文',
   detail: 'コメント',
   paste: 'クリップボードの貼り付け',
+  optional: '任意',
 };
 
 const correctionFooterButton = {
@@ -557,6 +563,7 @@ const ja = {
   common,
   errorMessage,
   mainTab,
+  app,
   correcting,
   deleteAcount,
   draftDiary,
