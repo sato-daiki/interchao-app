@@ -1,5 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Keyboard, StyleSheet, Platform } from 'react-native';
+import {
+  Keyboard,
+  StyleSheet,
+  Platform,
+  BackHandler,
+  Alert,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -148,6 +154,33 @@ const PostDiaryScreen: ScreenType = ({
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
+
+  useEffect(() => {
+    // keybordでの戻るを制御する Androidのみ
+    const backAction = (): boolean => {
+      Alert.alert(
+        I18n.t('common.confirmation'),
+        I18n.t('modalDiaryCancel.message'),
+        [
+          {
+            text: I18n.t('common.cancel'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: (): void => {
+              navigation.goBack(null);
+            },
+          },
+        ]
+      );
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', backAction);
+    return (): void =>
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+  }, [navigation]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
