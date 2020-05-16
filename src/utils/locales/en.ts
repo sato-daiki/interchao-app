@@ -253,7 +253,7 @@ const signUp = {
 };
 
 const teachDiary = {
-  correcting: 'Correct',
+  start: 'Begin Corrections',
 };
 
 const teachDiaryList = {
