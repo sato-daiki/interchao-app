@@ -21,7 +21,8 @@ interface Props {
 const styles = StyleSheet.create({
   textInput: {
     paddingHorizontal: 16,
-    lineHeight: fontSizeM * 1.3,
+    lineHeight: fontSizeM * 1.7,
+    fontSize: fontSizeM,
     flex: 1,
   },
 });

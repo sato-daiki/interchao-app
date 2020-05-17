@@ -251,7 +251,7 @@ const signUp = {
 };
 
 const teachDiary = {
-  correcting: '添削する',
+  start: '添削する',
 };
 
 const teachDiaryList = {

@@ -24,7 +24,6 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
-  HeaderText,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -249,17 +248,9 @@ const TeachDiaryScreen: ScreenType = ({
     if (!teachDiary) return;
     navigation.setParams({
       title: teachDiary.title,
-      onPressCorrection,
-      isYet: teachDiary.correctionStatus === 'yet' && !isModalCorrection,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    teachDiary,
-    isModalCorrection,
-    // navigation,
-    // onPressCorrection,
-    user.confirmCorrection,
-  ]);
+  }, [teachDiary]);
 
   const onPressUser = useCallback(
     (uid: string): void => {
@@ -279,7 +270,7 @@ const TeachDiaryScreen: ScreenType = ({
         <View style={styles.correctionButton}>
           <SubmitButton
             isLoading={isLoading}
-            title={I18n.t('teachDiary.correcting')}
+            title={I18n.t('teachDiary.start')}
             onPress={onPressCorrection}
           />
         </View>
@@ -341,20 +332,11 @@ TeachDiaryScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const title = navigation.getParam('title');
-  const isYet = navigation.getParam('isYet');
-  const onPressCorrection = navigation.getParam('onPressCorrection');
 
   return {
     ...DefaultNavigationOptions,
     title,
     headerTitleStyle: styles.headerTitleStyle,
-    headerRight: (): JSX.Element | null =>
-      isYet ? (
-        <HeaderText
-          title={I18n.t('teachDiary.correcting')}
-          onPress={onPressCorrection}
-        />
-      ) : null,
   };
 };
 
