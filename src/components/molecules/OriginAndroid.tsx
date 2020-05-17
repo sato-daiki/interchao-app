@@ -13,7 +13,8 @@ interface Props {
 const styles = StyleSheet.create({
   text: {
     paddingHorizontal: 16,
-    lineHeight: fontSizeM * 1.3,
+    fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.7,
   },
   empty: {
     paddingHorizontal: 16,

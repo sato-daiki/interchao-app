@@ -12,25 +12,40 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    height: 16,
   },
-  cancel: {
-    fontSize: fontSizeM,
-    color: mainColor,
+  touchSpaceAdd: {
+    position: 'absolute',
+    top: -16,
+    left: -10,
+    paddingVertical: 16,
+    paddingHorizontal: 10,
+  },
+  touchSpaceCancel: {
+    position: 'absolute',
+    top: -16,
+    right: -10,
+    paddingVertical: 16,
+    paddingHorizontal: 10,
   },
   add: {
     fontSize: fontSizeM,
     color: mainColor,
     fontWeight: 'bold',
   },
+  cancel: {
+    fontSize: fontSizeM,
+    color: mainColor,
+  },
 });
 
 const CommentButton: React.FC<Props> = ({ onPressAdd, onPressCancel }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPressCancel}>
+      <TouchableOpacity onPress={onPressCancel} style={styles.touchSpaceAdd}>
         <Text style={styles.cancel}>{I18n.t('common.cancel')}</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={onPressAdd}>
+      <TouchableOpacity onPress={onPressAdd} style={styles.touchSpaceCancel}>
         <Text style={styles.add}>{I18n.t('common.add')}</Text>
       </TouchableOpacity>
     </View>
