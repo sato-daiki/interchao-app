@@ -2,6 +2,7 @@ export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as CommentCard } from './CommentCard';
 export { default as DiaryStatus } from './DiaryStatus';
+export { default as FirstDiary } from './FirstDiary';
 export { default as GrayHeader } from './GrayHeader';
 export { default as HeaderButton } from './HeaderButton';
 export { default as HeaderText } from './HeaderText';

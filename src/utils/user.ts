@@ -13,7 +13,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
     if (data) {
       const {
         premium,
-        confirmCorrection,
+        diaryPosted,
         tutorialPostDiary,
         tutorialTeachDiaryList,
         tutorialCorrectiong,
@@ -29,7 +29,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
       return {
         uid,
         premium,
-        confirmCorrection,
+        diaryPosted,
         tutorialPostDiary,
         tutorialTeachDiaryList,
         tutorialCorrectiong,

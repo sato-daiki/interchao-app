@@ -98,7 +98,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
     async (credentUser: firebase.User): Promise<void> => {
       const userInfo = {
         premium: false,
-        confirmCorrection: false,
+        diaryPosted: false,
         tutorialPostDiary: false,
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
