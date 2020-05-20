@@ -76,9 +76,10 @@ const PostDiaryScreen: ScreenType = ({
 
       return {
         premium: user.premium,
+        // 最初の日記かチェック
         firstDiary: !(
           user.diaryPosted === undefined || user.diaryPosted === true
-        ), // 最初の日記かチェック
+        ),
         hidden: false,
         isPublic: false,
         title,
