@@ -76,6 +76,10 @@ const PostDiaryScreen: ScreenType = ({
 
       return {
         premium: user.premium,
+        firstDiary: !(
+          user.diaryPosted === undefined || user.diaryPosted === true
+        ), // 最初の日記かチェック
+        hidden: false,
         isPublic: false,
         title,
         text,
@@ -91,7 +95,7 @@ const PostDiaryScreen: ScreenType = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, text, title, user.premium]
+    [profile, text, title, user.diaryPosted, user.premium]
   );
 
   const onPressDraft = useCallback(() => {
@@ -202,15 +206,21 @@ const PostDiaryScreen: ScreenType = ({
           transaction.set(diaryRef, diary);
 
           const refUser = firebase.firestore().doc(`users/${user.uid}`);
-          transaction.update(refUser, {
+          // 初回の場合はdiaryPostedを更新する
+          const updateUser = {
             points: newPoints,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          } as any;
+          if (!user.diaryPosted) {
+            updateUser.diaryPosted = true;
+          }
+          transaction.update(refUser, updateUser);
         })
         .catch(err => {
           setIsLoading(false);
           alert({ err });
         });
+
       track(events.CREATED_DIARY, { diaryStatus: 'publish' });
       // reduxに追加
       addDiary({
@@ -219,6 +229,7 @@ const PostDiaryScreen: ScreenType = ({
       });
       setUser({
         ...user,
+        diaryPosted: true,
         points: newPoints,
       });
 

@@ -158,87 +158,72 @@ const TeachDiaryScreen: ScreenType = ({
     f();
   }, [getNewCorrection, getNewProfile, navigation.state.params]);
 
-  const onPressSubmitCorrection = useCallback(
-    checked => {
-      const f = async (): Promise<void> => {
-        if (!teachDiary || !teachDiary.objectID) return;
-        if (isLoading) return;
-        setIsLoading(true);
+  const onPressSubmitCorrection = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!teachDiary || !teachDiary.objectID) return;
+      if (isLoading) return;
+      setIsLoading(true);
 
-        // 他の人が添削を開始していないかチェックする
-        const index = await Algolia.getDiaryIndex(true);
-        await Algolia.setSettings(index);
-        const res = await index.search('', {
-          filters: `objectID: ${teachDiary.objectID} AND correctionStatus: yet`,
-          page: 0,
-          hitsPerPage: 1,
-        });
+      // 他の人が添削を開始していないかチェックする
+      const index = await Algolia.getDiaryIndex(true);
+      await Algolia.setSettings(index);
+      const res = await index.search('', {
+        filters: `objectID: ${teachDiary.objectID} AND correctionStatus: yet`,
+        page: 0,
+        hitsPerPage: 1,
+      });
 
-        if (res.nbHits !== 1) {
-          Alert.alert(
-            I18n.t('common.error'),
-            I18n.t('errorMessage.correctionAlready')
-          );
-          setIsLoading(false);
-          return;
-        }
-        const batch = firebase.firestore().batch();
-        // 以後メッセージを表示しないにチェックが入っている時の処理
-        // if (checked) {
-        //   const userRef = firebase.firestore().doc(`users/${user.uid}`);
-        //   batch.update(userRef, {
-        //     confirmCorrection: true,
-        //     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        //   });
-        //   setUser({
-        //     ...user,
-        //     confirmCorrection: true,
-        //   });
-        // }
-
-        //  添削中のobjectIDを更新する
-        const userRef = firebase.firestore().doc(`users/${user.uid}`);
-        batch.update(userRef, {
-          correctingObjectID: teachDiary.objectID,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        setUser({
-          ...user,
-          correctingObjectID: teachDiary.objectID,
-        });
-
-        //  添削中一覧に追加する
-        const correctingRef = firebase
-          .firestore()
-          .doc(`correctings/${teachDiary.objectID}`);
-        batch.set(correctingRef, {
-          uid: user.uid,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        //  日記のステータスを添削中に変更する
-        const diaryRef = firebase
-          .firestore()
-          .doc(`diaries/${teachDiary.objectID}`);
-        batch.update(diaryRef, {
-          correctionStatus: 'correcting',
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        editTeachDiary(teachDiary.objectID, {
-          ...teachDiary,
-          correctionStatus: 'correcting',
-        });
-        batch.commit();
-        track(events.CREATED_CORRECTING);
-        setIsModalCorrection(false);
-        navigation.navigate('Correcting', { objectID: teachDiary.objectID });
+      if (res.nbHits !== 1) {
+        Alert.alert(
+          I18n.t('common.error'),
+          I18n.t('errorMessage.correctionAlready')
+        );
         setIsLoading(false);
-      };
-      f();
-    },
-    [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]
-  );
+        return;
+      }
+      const batch = firebase.firestore().batch();
+
+      //  添削中のobjectIDを更新する
+      const userRef = firebase.firestore().doc(`users/${user.uid}`);
+      batch.update(userRef, {
+        correctingObjectID: teachDiary.objectID,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      setUser({
+        ...user,
+        correctingObjectID: teachDiary.objectID,
+      });
+
+      //  添削中一覧に追加する
+      const correctingRef = firebase
+        .firestore()
+        .doc(`correctings/${teachDiary.objectID}`);
+      batch.set(correctingRef, {
+        uid: user.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      //  日記のステータスを添削中に変更する
+      const diaryRef = firebase
+        .firestore()
+        .doc(`diaries/${teachDiary.objectID}`);
+      batch.update(diaryRef, {
+        correctionStatus: 'correcting',
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+      editTeachDiary(teachDiary.objectID, {
+        ...teachDiary,
+        correctionStatus: 'correcting',
+      });
+      batch.commit();
+      track(events.CREATED_CORRECTING);
+      setIsModalCorrection(false);
+      navigation.navigate('Correcting', { objectID: teachDiary.objectID });
+      setIsLoading(false);
+    };
+    f();
+  }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
 
   const onPressCorrection = useCallback(() => {
     setIsModalCorrection(true);

@@ -2,9 +2,7 @@ rules_version = '2';
 service cloud.firestore {
 	// user
   function isValidUsers(user) {
-  	return user.size() == 12
-    	&& "premium" in user && user.premium is bool
-    	&& "confirmCorrection" in user && user.confirmCorrection is bool
+  	return "premium" in user && user.premium is bool
     	&& "tutorialPostDiary" in user && user.tutorialPostDiary is bool
     	&& "tutorialTeachDiaryList" in user && user.tutorialTeachDiaryList is bool
     	&& "tutorialCorrectiong" in user && user.tutorialCorrectiong is bool
@@ -65,7 +63,6 @@ service cloud.firestore {
   }
 
   // diary
-  // 初期日記投稿
   function isInitDiaryCreate(diary) {
     return diary.title.size() <= 100
       && diary.text.size() <= 3000
@@ -93,8 +90,7 @@ service cloud.firestore {
   }
   
   function isValidDiaries(diary) {
-  	return diary.size() == 14
-    	&& "premium" in diary && diary.premium is bool
+  	return "premium" in diary && diary.premium is bool
     	&& "isPublic" in diary && diary.isPublic is bool
     	&& "title" in diary && diary.title is string
     	&& "text" in diary && diary.text is string
@@ -220,7 +216,6 @@ service cloud.firestore {
         && isValidUsers(request.resource.data)
     		// 初期値
         && request.resource.data.premium == false
-        && request.resource.data.confirmCorrection == false
         && request.resource.data.tutorialPostDiary == false
         && request.resource.data.tutorialTeachDiaryList == false
         && request.resource.data.tutorialCorrectiong == false
@@ -247,7 +242,6 @@ service cloud.firestore {
         && isValidUsers(request.resource.data)
         // 他は変わらないこと
         && request.resource.data.premium == resource.data.premium
-        && request.resource.data.confirmCorrection == resource.data.confirmCorrection
         && request.resource.data.tutorialPostDiary == resource.data.tutorialPostDiary
         && request.resource.data.tutorialTeachDiaryList == resource.data.tutorialTeachDiaryList
         && request.resource.data.tutorialCorrectiong == resource.data.tutorialCorrectiong
@@ -269,7 +263,6 @@ service cloud.firestore {
         && isValidUsers(request.resource.data)
         // 他は変わらないこと
         && request.resource.data.premium == resource.data.premium
-        && request.resource.data.confirmCorrection == resource.data.confirmCorrection
         && request.resource.data.tutorialPostDiary == resource.data.tutorialPostDiary
         && request.resource.data.tutorialTeachDiaryList == resource.data.tutorialTeachDiaryList
         && request.resource.data.tutorialCorrectiong == resource.data.tutorialCorrectiong
