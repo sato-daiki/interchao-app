@@ -294,6 +294,10 @@ const commentCard = {
   detail: 'Comment',
 };
 
+const firstDiary = {
+  first: 'First entry',
+};
+
 const summaryCard = {
   title: 'Summary',
 };
@@ -603,6 +607,7 @@ const en = {
   tutorialList,
   userProfile,
   commentCard,
+  firstDiary,
   summaryCard,
   userPoints,
   userPointsBig,

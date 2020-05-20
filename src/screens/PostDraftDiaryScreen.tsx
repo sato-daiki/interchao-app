@@ -202,10 +202,15 @@ const PostDraftDiaryScreen: ScreenType = ({
           transaction.update(diaryRef, diary);
 
           const userRef = firebase.firestore().doc(`users/${user.uid}`);
-          transaction.update(userRef, {
+          // 初回の場合はdiaryPostedを更新する
+          const updateUser = {
             points: newPoints,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          } as any;
+          if (!user.diaryPosted) {
+            updateUser.diaryPosted = true;
+          }
+          transaction.update(userRef, updateUser);
         })
         .catch(err => {
           setIsLoading(false);
@@ -229,6 +234,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       });
       setUser({
         ...user,
+        diaryPosted: true,
         points: newPoints,
       });
 

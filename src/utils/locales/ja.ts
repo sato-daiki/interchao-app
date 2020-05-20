@@ -292,6 +292,10 @@ const commentCard = {
   detail: 'コメント',
 };
 
+const firstDiary = {
+  first: '初投稿',
+};
+
 const summaryCard = {
   title: 'まとめ',
 };
@@ -596,6 +600,7 @@ const ja = {
   tutorialList,
   userProfile,
   commentCard,
+  firstDiary,
   summaryCard,
   userPoints,
   userPointsBig,

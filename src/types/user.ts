@@ -3,7 +3,7 @@ import { firestore } from 'firebase';
 export interface User {
   uid: string;
   premium: boolean;
-  confirmCorrection: boolean;
+  diaryPosted: boolean;
   tutorialPostDiary: boolean;
   tutorialTeachDiaryList: boolean;
   tutorialCorrectiong: boolean;

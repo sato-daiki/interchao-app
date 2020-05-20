@@ -142,7 +142,7 @@ const TeachDiaryListScreen: ScreenType = ({
           setReadingNext(true);
 
           const fillterText = getExceptUser(blockUids);
-          const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND diaryStatus: publish ${fillterText}`;
+          const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND hidden: false AND diaryStatus: publish ${fillterText}`;
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
