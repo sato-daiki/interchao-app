@@ -33,6 +33,7 @@ publish する度に+1。新 version を build するときは 0 に戻す。
 .env を変更したときは`--clear`が必要
 
 ```
+expo publish --release-channel production
 expo publish --clear --release-channel production
 ```
 
