@@ -51,7 +51,7 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
       const uids = blockerUids.concat(blockeeUids);
       const fillterText = getExceptUser(uids);
       setFilters(
-        `profile.learnLanguage: ${profile.nativeLanguage} AND hidden: false AND diaryStatus: publish ${fillterText}`
+        `profile.learnLanguage: ${profile.nativeLanguage} AND NOT hidden: true AND diaryStatus: publish ${fillterText}`
       );
       setIsLoading(false);
     };
