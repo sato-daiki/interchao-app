@@ -154,7 +154,6 @@ const inputUserName = {
 
 const myDiary = {
   menuDelete: '削除する',
-  menuChangePublic: '公開設定を変更する',
   confirmMessage: '本当に削除してよろしいでしょうか？',
 };
 
@@ -389,10 +388,6 @@ const modalAlertCorrection = {
 const modalAlertPublish = {
   confirmation:
     '{{usePoints}}ポイントを使い日記を投稿します。一度投稿すると、編集ができませんが、よろしいですか？',
-  subTitle: '公開設定',
-  description:
-    'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。',
-  publish: 'Webで公開',
   submit: '投稿する',
 };
 
@@ -428,14 +423,6 @@ const modalDiaryCancel = {
   button: '下書きとして保存',
 };
 
-const modalEditPublic = {
-  title: '公開設定を変更する',
-  description:
-    'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると、TwitterやFacebookで添削結果を投稿することができます。また、他の学習者の手助けになります。',
-  publish: 'Webで公開',
-  button: '更新する',
-};
-
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
@@ -461,6 +448,8 @@ const modalTimeUp = {
 
 const myDiaryCorrection = {
   header: '添削結果',
+  hide: '隠す',
+  show: '表示する',
 };
 
 const myDiaryListMenu = {
@@ -556,6 +545,7 @@ const myDiaryStatus = {
 const userDiaryStatus = {
   yet: '未添削',
   correcting: '添削中',
+  done: '{{correctedNum}}/3 添削完了',
 };
 
 const language = {
@@ -622,7 +612,6 @@ const ja = {
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,
-  modalEditPublic,
   modalLackPoint,
   modalSendEmail,
   modalStillCorrecting,

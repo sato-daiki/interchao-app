@@ -13,10 +13,8 @@ import I18n from '../../utils/I18n';
 interface Props {
   visible: boolean;
   isLoading: boolean;
-  // isPublic: boolean;
   usePoints: number;
   points: number;
-  // onValueChangePublic: () => void;
   onPressSubmit: () => void;
   onPressClose: () => void;
 }
@@ -46,34 +44,6 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     lineHeight: fontSizeM * 1.3,
   },
-  // subTitle: {
-  //   fontSize: fontSizeM,
-  //   color: primaryColor,
-  //   fontWeight: 'bold',
-  //   paddingHorizontal: 16,
-  //   paddingBottom: 8,
-  // },
-  // description: {
-  //   fontSize: fontSizeM,
-  //   color: subTextColor,
-  //   paddingHorizontal: 16,
-  //   paddingBottom: 16,
-  //   lineHeight: fontSizeM * 1.3,
-  // },
-  // row: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   width: '100%',
-  //   paddingVertical: 12,
-  //   paddingHorizontal: 16,
-  //   borderColor: borderLightColor,
-  //   borderWidth: StyleSheet.hairlineWidth,
-  // },
-  // label: {
-  //   fontSize: fontSizeM,
-  //   color: primaryColor,
-  // },
   button: {
     paddingHorizontal: 16,
   },
@@ -104,19 +74,6 @@ const ModalAlertPublish: React.FC<Props> = ({
         <View style={styles.points}>
           <UserPointsBig points={points} />
         </View>
-        {/*
-        <Text style={styles.subTitle}>
-          {I18n.t('modalAlertPublish.subTitle')}
-        </Text>
-        <Text style={styles.description}>
-          {I18n.t('modalAlertPublish.description')}
-        </Text>
-        <View style={styles.row}>
-          <Text style={styles.label}>
-            {I18n.t('modalAlertPublish.publish')}
-          </Text>
-          <Switch onValueChange={onValueChangePublic} value={isPublic} />
-        </View> */}
         <Space size={32} />
         <View style={styles.button}>
           <SubmitButton
