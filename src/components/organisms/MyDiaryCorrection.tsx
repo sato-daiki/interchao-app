@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Space, GrayHeader, CommentCard, SummaryCardTranslate } from '../atoms';
-import { fontSizeM, subTextColor } from '../../styles/Common';
+import { Space, CommentCard, SummaryCardTranslate, HideButton } from '../atoms';
+import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment, Language } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
-import I18n from '../../utils/I18n';
 
 interface Props {
   isReview: boolean;
@@ -19,6 +18,8 @@ interface Props {
 const styles = StyleSheet.create({
   main: {
     padding: 16,
+    borderBottomColor: borderLightColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   header: {
     flexDirection: 'row',
@@ -45,6 +46,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
   onPressReview,
 }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
+  const [hidden, setHidden] = useState(false);
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
@@ -71,27 +73,29 @@ const MyDiaryCorrection: React.FC<Props> = ({
   );
 
   return (
-    <>
-      <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
-      <View style={styles.main}>
-        <View style={styles.header}>
-          <ProfileIconHorizontal
-            userName={profile.userName}
-            photoUrl={profile.photoUrl}
-            nativeLanguage={profile.nativeLanguage}
-            onPress={(): void => onPressUser(profile.uid)}
+    <View style={styles.main}>
+      <HideButton hidden={hidden} onPress={(): void => setHidden(!hidden)} />
+      {hidden ? null : (
+        <>
+          <View style={styles.header}>
+            <ProfileIconHorizontal
+              userName={profile.userName}
+              photoUrl={profile.photoUrl}
+              nativeLanguage={profile.nativeLanguage}
+              onPress={(): void => onPressUser(profile.uid)}
+            />
+            <Text style={styles.daytext}>{postDate}</Text>
+          </View>
+          <FlatList
+            data={comments}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ListFooterComponent={listFooterComponent}
+            scrollEnabled={false}
           />
-          <Text style={styles.daytext}>{postDate}</Text>
-        </View>
-        <FlatList
-          data={comments}
-          keyExtractor={keyExtractor}
-          renderItem={renderItem}
-          ListFooterComponent={listFooterComponent}
-          scrollEnabled={false}
-        />
-      </View>
-    </>
+        </>
+      )}
+    </View>
   );
 };
 

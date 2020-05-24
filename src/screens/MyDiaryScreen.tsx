@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, ReactNode } from 'react';
 import {
   StyleSheet,
   Text,
@@ -32,7 +32,7 @@ import {
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
-import { LoadingModal } from '../components/atoms';
+import { LoadingModal, GrayHeader } from '../components/atoms';
 import I18n from '../utils/I18n';
 
 export interface Props {
@@ -100,29 +100,21 @@ const MyDiaryScreen: ScreenType = ({
   navigation,
   profile,
   diary,
-  // editDiary,
   deleteDiary,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [correction, setCorrection] = useState<Correction>();
-  // const [proCorrection, setProCorrection] = useState<Correction>();
+  const [correction2, setCorrection2] = useState<Correction>();
+  const [correction3, setCorrection3] = useState<Correction>();
   const [isLoading, setIsLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
-  // const [isModalPublic, setIsModalPublic] = useState(false);
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
   }, []);
-  // const onPressPublicMenu = useCallback(() => {
-  //   setIsModalPublic(true);
-  // }, []);
 
   const onPressMore = useCallback(() => {
-    const options = [
-      I18n.t('myDiary.menuDelete'),
-      // I18n.t('myDiary.menuChangePublic'),
-      I18n.t('common.cancel'),
-    ];
+    const options = [I18n.t('myDiary.menuDelete'), I18n.t('common.cancel')];
     showActionSheetWithOptions(
       {
         options,
@@ -134,9 +126,6 @@ const MyDiaryScreen: ScreenType = ({
           case 0:
             onPressDeleteMenu();
             break;
-          // case 1:
-          //   onPressPublicMenu();
-          //   break;
           default:
         }
       }
@@ -155,49 +144,28 @@ const MyDiaryScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       if (!diary) return;
       // 添削がある場合データを取得
-
       if (diary.correction) {
         const newCorrection = await getCorrection(diary.correction.id);
         if (newCorrection) {
           setCorrection(newCorrection);
         }
       }
-      // if (diary.proCorrection) {
-      //   const newProCorrection = await getCorrection(diary.proCorrection.id);
-      //   if (newProCorrection) {
-      //     setProCorrection(newProCorrection);
-      //   }
-      // }
+      if (diary.correction2) {
+        const newCorrection = await getCorrection(diary.correction2.id);
+        if (newCorrection) {
+          setCorrection2(newCorrection);
+        }
+      }
+      if (diary.correction3) {
+        const newCorrection = await getCorrection(diary.correction3.id);
+        if (newCorrection) {
+          setCorrection3(newCorrection);
+        }
+      }
       setIsLoading(false);
     };
     f();
   }, [diary]);
-
-  // const onPressSubmitPublic = useCallback(
-  //   (changedIsPublic: boolean) => {
-  //     const f = async (): Promise<void> => {
-  //       if (!diary || !diary.objectID) return;
-  //       if (isLoading) return;
-  //       setIsLoading(true);
-  //       await firebase
-  //         .firestore()
-  //         .collection('diaries')
-  //         .doc(diary.objectID)
-  //         .update({
-  //           isPublic: changedIsPublic,
-  //           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //         });
-  //       editDiary(diary.objectID, {
-  //         ...diary,
-  //         isPublic: changedIsPublic,
-  //       });
-  //       setIsModalPublic(false);
-  //       setIsLoading(false);
-  //     };
-  //     f();
-  //   },
-  //   [diary, editDiary, isLoading]
-  // );
 
   const onPressDelete = useCallback(() => {
     if (!diary || !diary.objectID) return;
@@ -220,6 +188,29 @@ const MyDiaryScreen: ScreenType = ({
 
   const { createdAt, title, text, isReview } = diary;
   const postDate = getAlgoliaDate(createdAt);
+
+  const renderMyDiaryCorrection = (
+    prmCorrection: Correction,
+    correctedNum: number
+  ): ReactNode => {
+    return (
+      <MyDiaryCorrection
+        isReview={isReview}
+        nativeLanguage={profile.nativeLanguage}
+        correction={prmCorrection}
+        onPressUser={(uid): void => {
+          navigation.navigate('UserProfile', { uid });
+        }}
+        onPressReview={(): void => {
+          navigation.navigate('Review', {
+            objectID: diary.objectID,
+            correctedNum,
+          });
+        }}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -232,13 +223,6 @@ const MyDiaryScreen: ScreenType = ({
         onPressMain={onPressDelete}
         onPressClose={(): void => setIsModalDelete(false)}
       />
-      {/* <ModalEditPublic
-        visible={isModalPublic}
-        isLoading={isLoading}
-        isPublic={isPublic}
-        onPressSubmit={onPressSubmitPublic}
-        onPressClose={(): void => setIsModalPublic(false)}
-      /> */}
       <ScrollView style={styles.scrollView}>
         <View style={styles.diaryOriginal}>
           <View style={styles.header}>
@@ -248,32 +232,12 @@ const MyDiaryScreen: ScreenType = ({
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.text}>{text}</Text>
         </View>
-
         {correction ? (
-          <MyDiaryCorrection
-            isReview={isReview}
-            nativeLanguage={profile.nativeLanguage}
-            correction={correction}
-            onPressUser={(uid): void => {
-              navigation.navigate('UserProfile', { uid });
-            }}
-            onPressReview={(): void => {
-              navigation.navigate('Review', { objectID: diary.objectID });
-            }}
-          />
+          <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
         ) : null}
-        {/* {proCorrection ? (
-          <MyDiaryCorrection
-            isReview={isReview}
-            correction={proCorrection}
-            onPressUser={(uid): void => {
-              navigation.navigate('UserProfile', { uid });
-            }}
-            onPressReview={(): void => {
-              navigation.navigate('Review');
-            }}
-          />
-        ) : null} */}
+        {correction ? renderMyDiaryCorrection(correction, 1) : null}
+        {correction2 ? renderMyDiaryCorrection(correction2, 2) : null}
+        {correction3 ? renderMyDiaryCorrection(correction3, 3) : null}
       </ScrollView>
     </View>
   );
