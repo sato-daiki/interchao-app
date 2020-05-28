@@ -30,17 +30,19 @@ export interface Diary {
   premium: boolean;
   firstDiary: boolean;
   hidden: boolean;
-  isPublic: boolean;
   title: string;
   text: string;
   profile: DisplayProfile;
   diaryStatus: DiaryStatus;
   correction: DisplaCorrection | null;
-  proCorrection: DisplaCorrection | null;
+  correction2?: DisplaCorrection | null;
+  correction3?: DisplaCorrection | null;
   correctionStatus: CorrectionStatus;
-  correctionStatusPro: CorrectionStatus;
+  correctionStatus2?: CorrectionStatus;
+  correctionStatus3?: CorrectionStatus;
   isReview: boolean;
-  isReviewPro: boolean;
+  isReview2?: boolean;
+  isReview3?: boolean;
   createdAt: Timestamp | firebase.firestore.FieldValue;
   updatedAt: Timestamp | firebase.firestore.FieldValue;
 }

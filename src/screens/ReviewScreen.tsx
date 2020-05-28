@@ -107,15 +107,41 @@ const ReviewScreen: ScreenType = ({
       Alert.alert('', I18n.t('errorMessage.invalidRaiting'));
       return;
     }
+    if (!navigation.state.params) return;
+    console.log('navigation.state.params');
 
     setIsLoading(true);
     const batch = firebase.firestore().batch();
-
     const refDiary = firebase.firestore().doc(`diaries/${diary.objectID}`);
-    batch.update(refDiary, {
-      isReview: true,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+
+    const { correctedNum } = navigation.state.params;
+
+    let data;
+    let revieweeUid = '';
+    if (correctedNum === 1) {
+      data = {
+        isReview: true,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      } as any;
+      revieweeUid = diary.correction.profile.uid;
+    }
+    if (correctedNum === 2 && diary.correction2) {
+      data = {
+        isReview2: true,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      } as any;
+      revieweeUid = diary.correction2.profile.uid;
+    }
+    if (correctedNum === 3 && diary.correction3) {
+      data = {
+        isReview3: true,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      } as any;
+      revieweeUid = diary.correction3.profile.uid;
+    }
+
+    if (revieweeUid === '') return;
+    batch.update(refDiary, data);
 
     const reviewer = {
       uid: profile.uid,
@@ -127,7 +153,7 @@ const ReviewScreen: ScreenType = ({
     const newReview = {
       reviewer,
       objectID: diary.objectID,
-      revieweeUid: diary.correction.profile.uid,
+      revieweeUid,
       rating,
       comment,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -147,7 +173,7 @@ const ReviewScreen: ScreenType = ({
     });
     editDiary(diary.objectID, {
       ...diary,
-      isReview: true,
+      ...data,
     });
 
     navigation.goBack(null);

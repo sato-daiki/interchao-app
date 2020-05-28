@@ -105,6 +105,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         points: 100,
         expoPushToken: null,
         correctingObjectID: null,
+        correctingCorrectedNum: null,
         notificationCorrection: true,
         notificationReview: true,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),

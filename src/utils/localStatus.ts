@@ -8,10 +8,11 @@ export const getUnreadCorrectionNum = async (
     // 未読数を取得する
     const index = await Algolia.getDiaryIndex();
     const res = await index.search('', {
-      filters: `profile.uid: ${uid} AND correctionStatus: unread`,
+      filters: `profile.uid: ${uid} AND (correctionStatus: unread OR correctionStatus2: unread OR correctionStatus3: unread)`,
     });
     return res.nbHits;
   } catch (e) {
+    console.log(e);
     return null;
   }
 };

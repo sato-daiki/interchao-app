@@ -1,6 +1,11 @@
 import I18n from './I18n';
 import firebase from '../constants/firebase';
-import { getDisplayProfile, getComments, getUsePoints } from './diary';
+import {
+  getDisplayProfile,
+  getComments,
+  getUsePoints,
+  updateYet,
+} from './diary';
 import { track, events } from './Analytics';
 import {
   Diary,
@@ -8,6 +13,8 @@ import {
   InfoCommentAndroid,
   InfoComment,
   User,
+  CorrectionStatus,
+  DisplaCorrection,
 } from '../types';
 import { primaryColor, mainColor, green } from '../styles/Common';
 import { ButtonInfo } from '../screens/CorrectingAndroidScreen';
@@ -41,6 +48,60 @@ interface UpdateDoneProps {
   editTeachDiary: (objectID: string, diary: Diary) => void;
   setUser: (user: User) => void;
 }
+
+type DataCorrectionStatus =
+  | {
+      correctionStatus: CorrectionStatus;
+    }
+  | {
+      correctionStatus2: CorrectionStatus;
+    }
+  | {
+      correctionStatus3: CorrectionStatus;
+    };
+
+type DataCorrection =
+  | {
+      correction: DisplaCorrection;
+    }
+  | {
+      correction2: DisplaCorrection;
+    }
+  | {
+      correction3: DisplaCorrection;
+    };
+
+export const getDataCorrectionStatus = (
+  correctingCorrectedNum: number | null,
+  correctionStatus: CorrectionStatus
+): DataCorrectionStatus | null => {
+  if (correctingCorrectedNum === 1) {
+    return { correctionStatus };
+  }
+  if (correctingCorrectedNum === 2) {
+    return { correctionStatus2: correctionStatus };
+  }
+  if (correctingCorrectedNum === 3) {
+    return { correctionStatus3: correctionStatus };
+  }
+  return null;
+};
+
+export const getDataCorrection = (
+  correctingCorrectedNum: number | null,
+  newCorrection
+): DataCorrection | null => {
+  if (correctingCorrectedNum === 1) {
+    return { correction: newCorrection };
+  }
+  if (correctingCorrectedNum === 2) {
+    return { correction2: newCorrection };
+  }
+  if (correctingCorrectedNum === 3) {
+    return { correction3: newCorrection };
+  }
+  return null;
+};
 
 export const updateDone = async ({
   isLoading,
@@ -87,17 +148,28 @@ export const updateDone = async ({
       profile: displayProfile,
     };
     const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
+    const dataStatus = getDataCorrectionStatus(
+      user.correctingCorrectedNum,
+      'unread'
+    );
+
+    const dataCorrection = getDataCorrection(
+      user.correctingCorrectedNum,
+      newCorrection
+    );
+
     transaction.update(diaryRef, {
-      correctionStatus: 'unread',
-      correction: newCorrection,
+      ...dataStatus,
+      ...dataCorrection,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
-    //  添削をしたuserの更新 ポイントを増やす correctingObjectIDをnull
+    // 添削をしたuserの更新 ポイントを増やす correctingObjectIDをnull
     const currentUserRef = firebase.firestore().doc(`users/${user.uid}`);
     transaction.update(currentUserRef, {
       points: newPoints,
       correctingObjectID: null,
+      correctingCorrectedNum: null,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 
@@ -117,15 +189,75 @@ export const updateDone = async ({
     // reduxに追加
     editTeachDiary(teachDiary.objectID, {
       ...teachDiary,
-      correctionStatus: 'unread',
-      correction: newCorrection,
+      ...dataStatus,
+      ...dataCorrection,
     });
     setUser({
       ...user,
       points: newPoints,
       correctingObjectID: null,
+      correctingCorrectedNum: null,
     });
     setIsLoading(false);
     setIsModalDone(true);
   });
+};
+
+export const onUpdateTimeUp = async (
+  teachDiary: Diary,
+  user: User,
+  setIsLoading: Function,
+  editTeachDiary: (objectID: string, data: any) => void,
+  setUser: Function,
+  setIsModalTimeUp: Function
+): Promise<void> => {
+  if (!teachDiary.objectID) return;
+  setIsLoading(true);
+  // ステータスを戻す
+  const data = getDataCorrectionStatus(user.correctingCorrectedNum, 'yet');
+
+  if (!data) return;
+
+  updateYet(teachDiary.objectID, user.uid, data);
+  editTeachDiary(teachDiary.objectID, {
+    ...teachDiary,
+    ...data,
+  });
+
+  setUser({
+    ...user,
+    correctingObjectID: null,
+    correctingCorrectedNum: null,
+  });
+  setIsLoading(false);
+  setIsModalTimeUp(true);
+};
+
+export const onClose = (
+  isLoading,
+  teachDiary,
+  setIsLoading,
+  user,
+  editTeachDiary,
+  setUser,
+  navigation
+): void => {
+  if (isLoading || !teachDiary.objectID) return;
+  setIsLoading(true);
+
+  const data = getDataCorrectionStatus(user.correctingCorrectedNum, 'yet');
+  // ステータスを戻す
+  updateYet(teachDiary.objectID, user.uid, data);
+
+  editTeachDiary(teachDiary.objectID, {
+    ...teachDiary,
+    ...data,
+  });
+  setUser({
+    ...user,
+    correctingObjectID: null,
+    correctingCorrectedNum: null,
+  });
+  setIsLoading(false);
+  navigation.goBack(null);
 };

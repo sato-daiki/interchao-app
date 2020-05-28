@@ -4,7 +4,7 @@ const common = {
   close: 'Close',
   confirmation: 'Confirmation',
   error: 'Error',
-  done: '　Done',
+  done: 'Done',
   edit: 'Edit',
   register: 'Register',
   sending: 'Send',
@@ -68,6 +68,7 @@ const app = {
 // 各画面ごとの文字
 const correcting = {
   headerTitle: 'Correct',
+  header: 'List of corrections by others',
   deleteAlert:
     'All of your corrections will be deleted. Would you like to proceed?',
   summaryAlert: 'The summary is being edited.',
@@ -143,7 +144,7 @@ const foregetPassword = {
 
 const initialize = {
   start: 'Create Account',
-  acount: 'Have an account already?  ',
+  acount: 'Have an account already?',
   link: 'Login',
 };
 
@@ -155,7 +156,6 @@ const inputUserName = {
 
 const myDiary = {
   menuDelete: 'Delete',
-  menuChangePublic: '公開設定を変更する',
   confirmMessage: 'Are you sure you want to delete this journal entry?',
 };
 
@@ -392,10 +392,6 @@ const modalAlertCorrection = {
 const modalAlertPublish = {
   confirmation:
     'It will cost {{usePoints}} points to publish this entry. Once an entry has been published, it cannot be edited. Would you like to proceed?',
-  subTitle: '公開設定',
-  description:
-    'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。',
-  publish: 'Webで公開',
   submit: 'Publish',
 };
 
@@ -432,14 +428,6 @@ const modalDiaryCancel = {
   button: 'Save as a Draft',
 };
 
-const modalEditPublic = {
-  title: '公開設定を変更する',
-  description:
-    'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると、TwitterやFacebookで添削結果を投稿することができます。また、他の学習者の手助けになります。',
-  publish: 'Webで公開',
-  button: '更新する',
-};
-
 const modalLackPoint = {
   title: 'Not Enough Points',
   text:
@@ -465,6 +453,8 @@ const modalTimeUp = {
 
 const myDiaryCorrection = {
   header: 'Correction Results',
+  hide: 'Hide',
+  show: 'Show',
 };
 
 const myDiaryListMenu = {
@@ -540,9 +530,10 @@ const tutorialTeachDiaryList = {
   title: 'What is “{{nativeLanguage}} Entries”?',
   buttonText: 'Begin',
   text1:
-    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nIf you make corrections on the entries that say',
-  text2: 'you can get 10 points.',
-  textMainColor: ' Not Yet Corrected ',
+    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nUp to 3 people can be corrected per diary. Please give priority to the diary whose status is ',
+  text2: '. If you correct it, you will get 10 points.',
+  // Not Yet Correctedはスペースを開けておく
+  textMainColor: ' Not Yet Corrected',
 };
 
 // util
@@ -563,6 +554,7 @@ const myDiaryStatus = {
 const userDiaryStatus = {
   yet: 'Not Yet Corrected',
   correcting: 'Being Corrected',
+  done: '{{correctedNum}}/3 Corrected',
 };
 
 const language = {
@@ -629,7 +621,6 @@ const en = {
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,
-  modalEditPublic,
   modalLackPoint,
   modalSendEmail,
   modalStillCorrecting,

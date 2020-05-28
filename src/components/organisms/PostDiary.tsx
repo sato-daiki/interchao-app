@@ -33,7 +33,6 @@ interface Props {
   isModalLack: boolean;
   isModalAlert: boolean;
   isModalCancel: boolean;
-  // isPublic: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
   title: string;
@@ -43,7 +42,6 @@ interface Props {
   nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
-  // onValueChangePublic: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
   onChangeTextTitle: (txt: string) => void;
@@ -99,7 +97,6 @@ const PostDiary = ({
   isModalLack,
   isModalAlert,
   isModalCancel,
-  // isPublic,
   isTutorialLoading = false,
   tutorialPostDiary = true,
   title,
@@ -107,7 +104,6 @@ const PostDiary = ({
   points,
   learnLanguage,
   nativeLanguage,
-  // onValueChangePublic,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
@@ -155,10 +151,8 @@ const PostDiary = ({
       <ModalAlertPublish
         visible={isModalAlert}
         isLoading={isLoading}
-        // isPublic={isPublic}
         usePoints={usePoints}
         points={points}
-        // onValueChangePublic={onValueChangePublic}
         onPressSubmit={onPressSubmit}
         onPressClose={onPressCloseModalPublish}
       />
