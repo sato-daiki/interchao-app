@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
-import { fontSizeS, subTextColor } from '../../styles/Common';
+import { StyleSheet, View } from 'react-native';
 import { Diary } from '../../types';
 import { getMyDiaryStatus } from '../../utils/diary';
 import DiaryStatus from '../atoms/DiaryStatus';
@@ -14,67 +13,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  nothing: {
-    fontSize: fontSizeS,
-    color: subTextColor,
-  },
   padding: {
     paddingLeft: 8,
   },
 });
 
-const MyDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
-  const {
-    diaryStatus,
-    correctionStatus,
-    isReview,
-    premium,
-    correctionStatusPro,
-    isReviewPro,
-  } = diary;
-
-  const status = getMyDiaryStatus(diaryStatus, correctionStatus, isReview);
-
-  const statusPro = getMyDiaryStatus(
-    diaryStatus,
-    correctionStatusPro,
-    isReviewPro
-  );
-
-  // const publicIcon = isPublic ? null : (
-  //   <MaterialCommunityIcons size={14} color={subTextColor} name="lock" />
-  // );
-
-  if (premium) {
+const MyDiaryStatus: React.FC<Props> = ({ diary }) => {
+  const status = getMyDiaryStatus(diary);
+  if (status) {
     return (
-      <View style={styles.row}>
-        {/* {publicIcon} */}
+      <>
         <View style={styles.padding} />
-        {statusPro ? (
-          <DiaryStatus color={statusPro.color} text={statusPro.text} />
-        ) : (
-          <Text style={styles.nothing}>-</Text>
-        )}
-        {status ? (
-          <DiaryStatus color={status.color} text={status.text} />
-        ) : (
-          <Text style={styles.nothing}>-</Text>
-        )}
-      </View>
+        <DiaryStatus color={status.color} text={status.text} />
+      </>
     );
   }
-
-  return (
-    <View style={styles.row}>
-      {/* {publicIcon} */}
-      {status ? (
-        <>
-          <View style={styles.padding} />
-          <DiaryStatus color={status.color} text={status.text} />
-        </>
-      ) : null}
-    </View>
-  );
+  return null;
 };
 
 export default MyDiaryStatus;

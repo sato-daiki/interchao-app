@@ -68,10 +68,11 @@ const app = {
 
 // 各画面ごとの文字
 const correcting = {
+  headerTitle: '添削する',
+  header: '他の人の添削一覧',
   deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
   summaryAlert: 'まとめが編集中です',
   commentAlert: 'コメントが編集中です',
-  headerTitle: '添削する',
   titleComment: 'コメントする',
   titleSummary: 'まとめを書く',
   titleDone: '投稿する',
@@ -154,7 +155,6 @@ const inputUserName = {
 
 const myDiary = {
   menuDelete: '削除する',
-  menuChangePublic: '公開設定を変更する',
   confirmMessage: '本当に削除してよろしいでしょうか？',
 };
 
@@ -389,10 +389,6 @@ const modalAlertCorrection = {
 const modalAlertPublish = {
   confirmation:
     '{{usePoints}}ポイントを使い日記を投稿します。一度投稿すると、編集ができませんが、よろしいですか？',
-  subTitle: '公開設定',
-  description:
-    'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると他の学習者の手助けになります。公開設定は後からでも変更可能です。',
-  publish: 'Webで公開',
   submit: '投稿する',
 };
 
@@ -428,14 +424,6 @@ const modalDiaryCancel = {
   button: '下書きとして保存',
 };
 
-const modalEditPublic = {
-  title: '公開設定を変更する',
-  description:
-    'InterChaoはWeb上でも添削された日記を閲覧できます。Webで公開すると、TwitterやFacebookで添削結果を投稿することができます。また、他の学習者の手助けになります。',
-  publish: 'Webで公開',
-  button: '更新する',
-};
-
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
@@ -461,6 +449,8 @@ const modalTimeUp = {
 
 const myDiaryCorrection = {
   header: '添削結果',
+  hide: '隠す',
+  show: '表示する',
 };
 
 const myDiaryListMenu = {
@@ -534,8 +524,9 @@ const tutorialTeachDiaryList = {
   title: '{{nativeLanguage}}の日記とは',
   buttonText: '始める',
   text1:
-    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: 'の{{nativeLanguage}}の日記を添削して10ポイントをゲットしよう。',
+    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
+  text2:
+    'の{{nativeLanguage}}の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
   textMainColor: '未添削',
 };
 
@@ -556,6 +547,7 @@ const myDiaryStatus = {
 const userDiaryStatus = {
   yet: '未添削',
   correcting: '添削中',
+  done: '{{correctedNum}}/3 添削完了',
 };
 
 const language = {
@@ -622,7 +614,6 @@ const ja = {
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,
-  modalEditPublic,
   modalLackPoint,
   modalSendEmail,
   modalStillCorrecting,

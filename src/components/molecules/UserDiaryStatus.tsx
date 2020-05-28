@@ -19,26 +19,17 @@ const styles = StyleSheet.create({
 });
 
 const UserDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
-  const { correctionStatus, firstDiary } = diary;
-  const status = getUserDiaryStatus(correctionStatus);
-  // const statusPro = getUserDiaryStatus(correctionStatusPro);
-
-  // if (premium) {
-  //   return (
-  //     <View style={styles.container}>
-  //       {statusPro ? (
-  //         <DiaryStatus color={statusPro.color} text={statusPro.text} />
-  //       ) : (
-  //         <Text style={styles.nothing}>-</Text>
-  //       )}
-  //       {status ? (
-  //         <DiaryStatus color={status.color} text={status.text} />
-  //       ) : (
-  //         <Text style={styles.nothing}>-</Text>
-  //       )}
-  //     </View>
-  //   );
-  // }
+  const {
+    correctionStatus,
+    correctionStatus2,
+    correctionStatus3,
+    firstDiary,
+  } = diary;
+  const status = getUserDiaryStatus(
+    correctionStatus,
+    correctionStatus2,
+    correctionStatus3
+  );
 
   return (
     <View style={styles.container}>

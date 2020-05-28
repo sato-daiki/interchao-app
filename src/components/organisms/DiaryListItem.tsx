@@ -64,7 +64,7 @@ const DiaryListItem = ({
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text, correction, proCorrection } = item;
+  const { createdAt, title, text, correction, correction2, correction3 } = item;
   const postDay = getAlgoliaDay(createdAt);
 
   return (
@@ -88,11 +88,12 @@ const DiaryListItem = ({
         <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
           {text}
         </Text>
-        {correction || proCorrection ? (
+        {correction ? (
           <View style={styles.icon}>
             <ProfileIcons
               correction={correction}
-              proCorrection={proCorrection}
+              correction2={correction2}
+              correction3={correction3}
               onPressUser={onPressUser}
             />
           </View>
