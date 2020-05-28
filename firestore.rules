@@ -66,12 +66,6 @@ service cloud.firestore {
   function isInitDiaryCreate(diary) {
     return diary.title.size() <= 100
       && diary.text.size() <= 3000
-      && diary.correction == null
-      && diary.proCorrection == null
-      && diary.correctionStatus == "yet"
-      && diary.correctionStatusPro == "yet"
-      && diary.isReview == false
-      && diary.isReviewPro == false
       && diary.createdAt == request.time
       && diary.updatedAt == request.time
   }
@@ -81,41 +75,29 @@ service cloud.firestore {
     return request.resource.data.title.size() <= 100
       && request.resource.data.text.size() <= 3000 
       && request.resource.data.correction == resource.data.correction
-      && request.resource.data.proCorrection == resource.data.proCorrection
       && request.resource.data.correctionStatus == resource.data.correctionStatus
-      && request.resource.data.correctionStatusPro == resource.data.correctionStatusPro
       && request.resource.data.isReview == resource.data.isReview
-      && request.resource.data.isReviewPro == resource.data.isReviewPro
       && request.resource.data.createdAt == resource.data.createdAt
   }
   
   function isValidDiaries(diary) {
   	return "premium" in diary && diary.premium is bool
-    	&& "isPublic" in diary && diary.isPublic is bool
     	&& "title" in diary && diary.title is string
     	&& "text" in diary && diary.text is string
       && isValidDisplayProfiles(diary.profile)
     	&& "diaryStatus" in diary && diary.diaryStatus is string
       && (diary.correction == null || isValidDisplayCorrections(diary.correction))
-      && (diary.proCorrection == null || isValidDisplayCorrections(diary.proCorrection))
     	&& "correctionStatus" in diary && diary.correctionStatus is string
-      && "correctionStatusPro" in diary && diary.correctionStatusPro is string
     	&& "isReview" in diary && diary.isReview is bool
-    	&& "isReviewPro" in diary && diary.isReviewPro is bool
       && "createdAt" in diary && diary.createdAt is timestamp
     	&& "updatedAt" in diary && diary.updatedAt is timestamp  
   }
 
   function isNoChangeCorrectionStatus(request, resource) {
-    return request.resource.data.premium == resource.data.premium
-      && request.resource.data.isPublic == resource.data.isPublic
-      && request.resource.data.title == resource.data.title
+    return request.resource.data.title == resource.data.title
       && request.resource.data.text == resource.data.text
       && request.resource.data.profile == resource.data.profile
       && request.resource.data.diaryStatus == resource.data.diaryStatus
-      && request.resource.data.proCorrection == resource.data.proCorrection
-      && request.resource.data.correctionStatusPro == resource.data.correctionStatusPro
-      && request.resource.data.isReviewPro == resource.data.isReviewPro
       && request.resource.data.createdAt == resource.data.createdAt
   }
 
@@ -129,15 +111,13 @@ service cloud.firestore {
 
   // correcting
   function isValidCorrectings(correcting) {
-    return correcting.size() == 2
-      && "uid" in correcting && correcting.uid is string
+    return "uid" in correcting && correcting.uid is string
       && "createdAt" in correcting && correcting.createdAt is timestamp
   }
 
   // correction
   function isValidCorrections(correction) {
-    return correction.size() == 5
-      && "objectID" in correction && correction.objectID is string
+    return  "objectID" in correction && correction.objectID is string
       && isValidDisplayProfiles(correction.profile)
       && "comments" in correction && correction.comments is list
       && "summary" in correction && correction.summary is string
@@ -241,10 +221,8 @@ service cloud.firestore {
         && request.resource.data.points >= 0
         && isValidUsers(request.resource.data)
         // 他は変わらないこと
-        && request.resource.data.premium == resource.data.premium
         && request.resource.data.tutorialPostDiary == resource.data.tutorialPostDiary
         && request.resource.data.tutorialTeachDiaryList == resource.data.tutorialTeachDiaryList
-        && request.resource.data.tutorialCorrectiong == resource.data.tutorialCorrectiong
         && request.resource.data.expoPushToken == resource.data.expoPushToken
         && request.resource.data.correctingObjectID == resource.data.correctingObjectID
         && request.resource.data.notificationCorrection == resource.data.notificationCorrection
@@ -275,7 +253,6 @@ service cloud.firestore {
       allow update: if request.auth != null
         && request.auth.uid == uid
         && isValidUsers(request.resource.data)
-        && request.resource.data.premium == resource.data.premium
         && request.resource.data.points == resource.data.points
         && request.resource.data.createdAt == resource.data.createdAt;
     }
@@ -385,8 +362,11 @@ service cloud.firestore {
       // 添削を開始
       allow update: if request.auth != null
         // 日記のステータスを変更
-        && resource.data.correctionStatus == "yet" 
-        && request.resource.data.correctionStatus == "correcting" 
+        && (
+            (resource.data.correctionStatus == "yet" && request.resource.data.correctionStatus == "correcting") || 
+            (resource.data.correctionStatus2 == "yet" && request.resource.data.correctionStatus2 == "correcting") || 
+            (resource.data.correctionStatus3 == "yet" && request.resource.data.correctionStatus3 == "correcting")
+        )
         // 更新は誰でもできる
         && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
@@ -397,8 +377,11 @@ service cloud.firestore {
       // 添削を途中破棄
       allow update: if request.auth != null
       // 日記のステータスを変更
-        && resource.data.correctionStatus == "correcting" 
-        && request.resource.data.correctionStatus == "yet" 
+        && (
+          ( resource.data.correctionStatus == "correcting" && request.resource.data.correctionStatus == "yet" ) || 
+          ( resource.data.correctionStatus2 == "correcting" && request.resource.data.correctionStatus2 == "yet" ) || 
+          ( resource.data.correctionStatus3 == "correcting" && request.resource.data.correctionStatus3 == "yet")
+        )
         // 更新は誰でもできる
         && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
@@ -409,10 +392,16 @@ service cloud.firestore {
       // 添削完了
       allow update: if request.auth != null
         // 添削した人
-        && request.auth.uid == request.resource.data.correction.profile.uid
+        && ( request.auth.uid == request.resource.data.correction.profile.uid || 
+          request.auth.uid == request.resource.data.correction2.profile.uid || 
+          request.auth.uid == request.resource.data.correction3.profile.uid
+        )
         // 日記のステータスを変更
-        && resource.data.correctionStatus == "correcting" 
-        && request.resource.data.correctionStatus == "unread"
+        && (
+          ( resource.data.correctionStatus == "correcting" && request.resource.data.correctionStatus == "unread" ) || 
+          ( resource.data.correctionStatus2 == "correcting" && request.resource.data.correctionStatus2 == "unread" ) || 
+          ( resource.data.correctionStatus3 == "correcting" && request.resource.data.correctionStatus3 == "unread")
+        )
         && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
         && request.resource.data.isReview == resource.data.isReview
@@ -426,8 +415,11 @@ service cloud.firestore {
         // 日記を書いた人
       	&& request.auth.uid == request.resource.data.profile.uid
         // 日記のステータスを変更
-        && resource.data.correctionStatus == "unread" 
-        && request.resource.data.correctionStatus == "done"
+        && (
+          ( resource.data.correctionStatus == "unread" && request.resource.data.correctionStatus == "done" ) || 
+          ( resource.data.correctionStatus2 == "unread" && request.resource.data.correctionStatus2 == "done" ) || 
+          ( resource.data.correctionStatus3 == "unread" && request.resource.data.correctionStatus3 == "done")
+        )
         && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
         && request.resource.data.isReview == resource.data.isReview
@@ -439,8 +431,6 @@ service cloud.firestore {
         // 日記を書いた人
       	&& request.auth.uid == request.resource.data.profile.uid
         // 日記のステータスを変更
-        && resource.data.isReview == false 
-        && request.resource.data.isReview == true
         && isValidDiaries(request.resource.data)
         // 他のステータスが変更されないこと
         && request.resource.data.correction == resource.data.correction

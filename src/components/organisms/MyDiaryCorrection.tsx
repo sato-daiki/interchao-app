@@ -8,7 +8,7 @@ import { getAlgoliaDate } from '../../utils/diary';
 import { MyDiaryCorrectionFooter } from '../molecules';
 
 interface Props {
-  isReview: boolean;
+  isReview?: boolean;
   nativeLanguage: Language;
   correction: Correction;
   onPressUser: (uid: string) => void;
@@ -52,7 +52,9 @@ const MyDiaryCorrection: React.FC<Props> = ({
     <>
       <SummaryCardTranslate nativeLanguage={nativeLanguage} summary={summary} />
       <Space size={32} />
-      <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
+      {isReview !== undefined ? (
+        <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
+      ) : null}
     </>
   );
 

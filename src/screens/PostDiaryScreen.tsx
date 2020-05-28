@@ -68,7 +68,6 @@ const PostDiaryScreen: ScreenType = ({
   const [isModalCancel, setIsModalCancel] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  // const [isPublic, setIsPublic] = useState(false);
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
@@ -81,7 +80,6 @@ const PostDiaryScreen: ScreenType = ({
           user.diaryPosted === undefined || user.diaryPosted === true
         ),
         hidden: false,
-        isPublic: false,
         title,
         text,
         profile: displayProfile,
@@ -283,7 +281,6 @@ const PostDiaryScreen: ScreenType = ({
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
-      // isPublic={isPublic}
       isTutorialLoading={isTutorialLoading}
       tutorialPostDiary={user.tutorialPostDiary}
       title={title}
@@ -295,7 +292,6 @@ const PostDiaryScreen: ScreenType = ({
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');
       }}
-      // onValueChangePublic={(): void => setIsPublic(!isPublic)}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
       onChangeTextTitle={(txt: string): void => setTitle(txt)}

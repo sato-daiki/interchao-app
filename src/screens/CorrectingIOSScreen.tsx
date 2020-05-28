@@ -27,12 +27,26 @@ import SummaryInputCard from '../components/organisms/SummaryInputCard';
 import CorrectionOrigin from '../components/organisms/CorrectionOrigin';
 
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { User, Diary, InfoComment, Profile, Selection } from '../types';
+import {
+  User,
+  Diary,
+  InfoComment,
+  Profile,
+  Selection,
+  Correction,
+} from '../types';
 import I18n from '../utils/I18n';
-import { getUsePoints, updateYet } from '../utils/diary';
+import { getUsePoints } from '../utils/diary';
 import { getUuid } from '../utils/common';
 import { getProfile } from '../utils/profile';
-import { getStateButtonInfo, updateDone } from '../utils/correcting';
+import {
+  getStateButtonInfo,
+  updateDone,
+  onUpdateTimeUp,
+  onClose,
+} from '../utils/correcting';
+import { getCorrection } from '../utils/corrections';
+import Corrections from '../components/organisms/Corrections';
 
 type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
 
@@ -95,7 +109,6 @@ const CorrectingIOSScreen: ScreenType = ({
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
-  const [isTutorialLoading, setIsTutorialLoading] = useState(false);
   const [isModalTutorialCorrectiong, setIsModalTutorialCorrectiong] = useState(
     false
   );
@@ -103,6 +116,9 @@ const CorrectingIOSScreen: ScreenType = ({
   // Profile関連
   const [targetProfile, setTargetProfile] = useState<Profile>();
   const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
+  const [correction, setCorrection] = useState<Correction>();
+  const [correction2, setCorrection2] = useState<Correction>();
 
   const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalTimeUp, setIsModalTimeUp] = useState(false); // タイムアップモーダル
@@ -126,27 +142,23 @@ const CorrectingIOSScreen: ScreenType = ({
    * 閉じる処理
    */
   const close = useCallback(() => {
-    if (isLoading || !teachDiary.objectID) return;
-
-    setIsLoading(true);
-    // ステータスを戻す
-    updateYet(teachDiary.objectID, user.uid);
-
-    editTeachDiary(teachDiary.objectID, {
-      ...teachDiary,
-      correctionStatus: 'yet',
-    });
-    setUser({
-      ...user,
-      correctingObjectID: null,
-    });
-    setIsLoading(false);
-    navigation.goBack(null);
+    const f = async (): Promise<void> => {
+      await onClose(
+        isLoading,
+        teachDiary,
+        setIsLoading,
+        user,
+        editTeachDiary,
+        setUser,
+        navigation
+      );
+    };
+    f();
   }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
 
-  useEffect(() => {
+  const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
-      // プロフィールを取得
+      if (!teachDiary) return;
       const newProfile = await getProfile(teachDiary.profile.uid);
       if (newProfile) {
         setTargetProfile(newProfile);
@@ -154,7 +166,35 @@ const CorrectingIOSScreen: ScreenType = ({
       setIsProfileLoading(false);
     };
     f();
-  }, [teachDiary.profile.uid]);
+  }, [teachDiary]);
+
+  const getNewCorrection = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!teachDiary) return;
+      if (teachDiary.correction) {
+        const newCorrection = await getCorrection(teachDiary.correction.id);
+        if (newCorrection) {
+          setCorrection(newCorrection);
+        }
+      }
+      if (teachDiary.correction2) {
+        const newCorrection = await getCorrection(teachDiary.correction2.id);
+        if (newCorrection) {
+          setCorrection2(newCorrection);
+        }
+      }
+      setIsCorrectionLoading(false);
+    };
+    f();
+  }, [teachDiary]);
+
+  useEffect(() => {
+    const f = async (): Promise<void> => {
+      // プロフィールを取得
+      await Promise.all([getNewProfile(), getNewCorrection()]);
+    };
+    f();
+  }, [getNewCorrection, getNewProfile]);
 
   /**
    * コメントを追加する
@@ -477,57 +517,19 @@ const CorrectingIOSScreen: ScreenType = ({
     setIsModalDone(false);
   }, [navigation]);
 
-  // /**
-  //  * 初回チュートリアル
-  //  */
-  // const onPressTutorial = useCallback((): void => {
-  //   const f = async (): Promise<void> => {
-  //     if (isTutorialLoading) return;
-  //     if (user.tutorialCorrectiong) {
-  //       // 画面下部の添削の仕方から呼ばれたときはここに入る
-  //       setIsModalTutorialCorrectiong(false);
-  //       return;
-  //     }
-  //     setIsTutorialLoading(true);
-  //     await firebase
-  //       .firestore()
-  //       .doc(`users/${user.uid}`)
-  //       .update({
-  //         tutorialCorrectiong: true,
-  //         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //       });
-  //     setUser({
-  //       ...user,
-  //       tutorialCorrectiong: true,
-  //     });
-  //     console.log('user', user);
-  //     setIsTutorialLoading(false);
-  //     setIsModalTutorialCorrectiong(false);
-  //     setIsModalFirsttutorialCorrectiong(false);
-  //   };
-  //   f();
-  // }, [isTutorialLoading, setUser, user]);
-
   /**
    * 30分が経過した時の処理
    */
   const onTimeUp = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!teachDiary.objectID) return;
-      setIsLoading(true);
-      // ステータスを戻す
-      updateYet(teachDiary.objectID, user.uid);
-
-      editTeachDiary(teachDiary.objectID, {
-        ...teachDiary,
-        correctionStatus: 'yet',
-      });
-      setUser({
-        ...user,
-        correctingObjectID: null,
-      });
-      setIsLoading(false);
-      setIsModalTimeUp(true);
+      await onUpdateTimeUp(
+        teachDiary,
+        user,
+        setIsLoading,
+        editTeachDiary,
+        setUser,
+        setIsModalTimeUp
+      );
     };
     f();
   }, [editTeachDiary, setUser, teachDiary, user]);
@@ -543,6 +545,7 @@ const CorrectingIOSScreen: ScreenType = ({
     teachDiary.text.length,
     teachDiary.profile.learnLanguage
   );
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -577,6 +580,12 @@ const CorrectingIOSScreen: ScreenType = ({
               targetProfile={targetProfile}
               onTimeUp={onTimeUp}
               setSelection={setSelection}
+            />
+            {correction ? <Space size={32} /> : null}
+            <Corrections
+              headerTitle={I18n.t('correcting.header')}
+              correction={correction}
+              correction2={correction2}
             />
             <Space size={32} />
             {/* 新規でコメント追加 */}
