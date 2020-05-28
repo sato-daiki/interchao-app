@@ -186,16 +186,17 @@ const MyDiaryScreen: ScreenType = ({
     return null;
   }
 
-  const { createdAt, title, text, isReview } = diary;
+  const { createdAt, title, text, isReview, isReview2, isReview3 } = diary;
   const postDate = getAlgoliaDate(createdAt);
 
   const renderMyDiaryCorrection = (
+    correctedNum: number,
     prmCorrection: Correction,
-    correctedNum: number
+    prmIsReview: boolean | undefined
   ): ReactNode => {
     return (
       <MyDiaryCorrection
-        isReview={isReview}
+        isReview={prmIsReview}
         nativeLanguage={profile.nativeLanguage}
         correction={prmCorrection}
         onPressUser={(uid): void => {
@@ -235,9 +236,13 @@ const MyDiaryScreen: ScreenType = ({
         {correction ? (
           <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
         ) : null}
-        {correction ? renderMyDiaryCorrection(correction, 1) : null}
-        {correction2 ? renderMyDiaryCorrection(correction2, 2) : null}
-        {correction3 ? renderMyDiaryCorrection(correction3, 3) : null}
+        {correction ? renderMyDiaryCorrection(1, correction, isReview) : null}
+        {correction2
+          ? renderMyDiaryCorrection(2, correction2, isReview2)
+          : null}
+        {correction3
+          ? renderMyDiaryCorrection(3, correction3, isReview3)
+          : null}
       </ScrollView>
     </View>
   );

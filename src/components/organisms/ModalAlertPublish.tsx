@@ -56,10 +56,8 @@ const styles = StyleSheet.create({
 const ModalAlertPublish: React.FC<Props> = ({
   visible,
   isLoading,
-  // isPublic,
   usePoints,
   points,
-  // onValueChangePublic,
   onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {

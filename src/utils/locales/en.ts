@@ -68,6 +68,7 @@ const app = {
 // 各画面ごとの文字
 const correcting = {
   headerTitle: 'Correct',
+  header: 'List of corrections by others',
   deleteAlert:
     'All of your corrections will be deleted. Would you like to proceed?',
   summaryAlert: 'The summary is being edited.',
@@ -529,9 +530,10 @@ const tutorialTeachDiaryList = {
   title: 'What is “{{nativeLanguage}} Entries”?',
   buttonText: 'Begin',
   text1:
-    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nIf you make corrections on the entries that say',
-  text2: 'you can get 10 points.',
-  textMainColor: 'Not Yet Corrected',
+    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nUp to 3 people can be corrected per diary. Please give priority to the diary whose status is ',
+  text2: '. If you correct it, you will get 10 points.',
+  // Not Yet Correctedはスペースを開けておく
+  textMainColor: ' Not Yet Corrected',
 };
 
 // util
@@ -552,7 +554,7 @@ const myDiaryStatus = {
 const userDiaryStatus = {
   yet: 'Not Yet Corrected',
   correcting: 'Being Corrected',
-  done: '{{correctedNum}}/3 Complete Corrections',
+  done: '{{correctedNum}}/3 Corrected',
 };
 
 const language = {

@@ -68,10 +68,11 @@ const app = {
 
 // 各画面ごとの文字
 const correcting = {
+  headerTitle: '添削する',
+  header: '他の人の添削一覧',
   deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
   summaryAlert: 'まとめが編集中です',
   commentAlert: 'コメントが編集中です',
-  headerTitle: '添削する',
   titleComment: 'コメントする',
   titleSummary: 'まとめを書く',
   titleDone: '投稿する',
@@ -523,8 +524,9 @@ const tutorialTeachDiaryList = {
   title: '{{nativeLanguage}}の日記とは',
   buttonText: '始める',
   text1:
-    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。\n\nステータスが',
-  text2: 'の{{nativeLanguage}}の日記を添削して10ポイントをゲットしよう。',
+    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
+  text2:
+    'の{{nativeLanguage}}の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
   textMainColor: '未添削',
 };
 
