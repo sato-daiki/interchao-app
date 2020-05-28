@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 8,
   },
-
   postDayText: {
     color: subTextColor,
     fontSize: fontSizeS,

@@ -33,6 +33,7 @@ import { getUnreadCorrectionNum } from '../utils/localStatus';
 import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import { getDataCorrectionStatus } from '../utils/correcting';
 
 export interface Props {
   user: User;
@@ -128,7 +129,10 @@ const MyDiaryListScreen: ScreenType = ({
 
           // ユーザ情報も更新し直す（badgeのカウントの対応のため）
           const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
-          if (newUnreadCorrectionNum) {
+          if (newUnreadCorrectionNum !== null) {
+            if (Platform.OS === 'ios') {
+              Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
+            }
             setLocalStatus({
               ...localStatus,
               unreadCorrectionNum: newUnreadCorrectionNum,
@@ -208,11 +212,14 @@ const MyDiaryListScreen: ScreenType = ({
       if (isStillLoading || !user.correctingObjectID) return;
       setIsStillLoading(true);
       // ステータスを戻す
-      updateYet(user.correctingObjectID, user.uid);
+      const data = getDataCorrectionStatus(user.correctingCorrectedNum, 'yet');
+      if (!data) return;
+      updateYet(user.correctingObjectID, user.uid, data);
 
       setUser({
         ...user,
         correctingObjectID: null,
+        correctingCorrectedNum: null,
       });
       setIsStillLoading(false);
       setCorrectingObjectID(null);
@@ -224,7 +231,11 @@ const MyDiaryListScreen: ScreenType = ({
     (item: Diary) => {
       const f = async (): Promise<void> => {
         if (!item.objectID) return;
-        if (item.correctionStatus === 'unread') {
+        if (
+          item.correctionStatus === 'unread' ||
+          item.correctionStatus2 === 'unread' ||
+          item.correctionStatus3 === 'unread'
+        ) {
           // 未読の場合
           if (isLoading) return;
           setIsLoading(true);
@@ -241,12 +252,26 @@ const MyDiaryListScreen: ScreenType = ({
             });
           }
 
+          const data = {
+            correctionStatus:
+              item.correctionStatus === 'unread'
+                ? 'done'
+                : item.correctionStatus,
+            correctionStatus2:
+              item.correctionStatus2 === 'unread'
+                ? 'done'
+                : item.correctionStatus2,
+            correctionStatus3:
+              item.correctionStatus3 === 'unread'
+                ? 'done'
+                : item.correctionStatus3,
+          };
           // DBを更新
-          await updateUnread(item.objectID);
+          await updateUnread(item.objectID, data);
           // reduxを更新
           editDiary(item.objectID, {
             ...item,
-            correctionStatus: 'done',
+            ...data,
           });
 
           setIsLoading(false);

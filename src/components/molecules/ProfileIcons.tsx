@@ -5,7 +5,8 @@ import { DisplaCorrection } from '../../types';
 
 interface Props {
   correction: DisplaCorrection | null;
-  proCorrection: DisplaCorrection | null;
+  correction2?: DisplaCorrection | null;
+  correction3?: DisplaCorrection | null;
   onPressUser: (uid: string) => void;
 }
 
@@ -14,6 +15,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
+  center: {
+    alignSelf: 'center',
+  },
   right: {
     alignSelf: 'flex-end',
   },
@@ -21,15 +25,12 @@ const styles = StyleSheet.create({
 
 const ProfileIcons: React.FC<Props> = ({
   correction,
-  proCorrection,
+  correction2,
+  correction3,
   onPressUser,
 }: Props): JSX.Element | null => {
-  // 両方ない場合
-  if (!correction && !proCorrection) {
-    return null;
-  }
-  // 通常のみの場合
-  if (!!correction && !proCorrection) {
+  // 1個
+  if (!!correction && !correction2 && !correction3) {
     return (
       <ProfileIcon
         photoUrl={correction.profile.photoUrl}
@@ -39,35 +40,57 @@ const ProfileIcons: React.FC<Props> = ({
     );
   }
 
-  // プロのみの場合
-  if (!correction && !!proCorrection) {
+  // 2個
+  if (!!correction && !!correction2 && !correction3) {
     return (
-      <ProfileIcon
-        photoUrl={proCorrection.profile.photoUrl}
-        nativeLanguage={proCorrection.profile.nativeLanguage}
-        onPress={(): void => onPressUser(proCorrection.profile.uid)}
-      />
-    );
-  }
-  // 二つの場合
-  return (
-    <View style={styles.doubleContainer}>
-      <View style={styles.right}>
+      <View style={styles.doubleContainer}>
+        <View style={styles.right}>
+          <ProfileIcon
+            size={24}
+            photoUrl={correction.profile.photoUrl}
+            nativeLanguage={correction.profile.nativeLanguage}
+            onPress={(): void => onPressUser(correction.profile.uid)}
+          />
+        </View>
         <ProfileIcon
           size={24}
-          photoUrl={correction!.profile.photoUrl}
-          nativeLanguage={correction!.profile.nativeLanguage}
-          onPress={(): void => onPressUser(correction!.profile.uid)}
+          photoUrl={correction2.profile.photoUrl}
+          nativeLanguage={correction2.profile.nativeLanguage}
+          onPress={(): void => onPressUser(correction2.profile.uid)}
         />
       </View>
-      <ProfileIcon
-        size={24}
-        photoUrl={proCorrection!.profile.photoUrl}
-        nativeLanguage={proCorrection!.profile.nativeLanguage}
-        onPress={(): void => onPressUser(proCorrection!.profile.uid)}
-      />
-    </View>
-  );
+    );
+  }
+  if (!!correction && !!correction2 && !!correction3) {
+    // 3個
+    return (
+      <View style={styles.doubleContainer}>
+        <View style={styles.right}>
+          <ProfileIcon
+            size={18}
+            photoUrl={correction.profile.photoUrl}
+            nativeLanguage={correction.profile.nativeLanguage}
+            onPress={(): void => onPressUser(correction.profile.uid)}
+          />
+        </View>
+        <View style={styles.center}>
+          <ProfileIcon
+            size={18}
+            photoUrl={correction2.profile.photoUrl}
+            nativeLanguage={correction2.profile.nativeLanguage}
+            onPress={(): void => onPressUser(correction2.profile.uid)}
+          />
+        </View>
+        <ProfileIcon
+          size={18}
+          photoUrl={correction3.profile.photoUrl}
+          nativeLanguage={correction3.profile.nativeLanguage}
+          onPress={(): void => onPressUser(correction3.profile.uid)}
+        />
+      </View>
+    );
+  }
+  return null;
 };
 
 export default ProfileIcons;

@@ -2,14 +2,12 @@ import moment from 'moment';
 import 'moment/locale/ja';
 import { Alert } from 'react-native';
 import {
-  DiaryStatus,
   CorrectionStatus,
   Language,
   Profile,
   DisplayProfile,
   Comment,
-  InfoComment,
-  InfoCommentAndroid,
+  Diary,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -45,8 +43,12 @@ export const getDay = (timestamp: any): string => {
 
 export const getAlgoliaDate = (timestamp: any): string => {
   // eslint-disable-next-line no-underscore-dangle
-  if (!timestamp || !timestamp._seconds) {
+  if (!timestamp) {
     return '';
+  }
+  // eslint-disable-next-line no-underscore-dangle
+  if (!timestamp._seconds) {
+    return moment.unix(timestamp.seconds).format('Y-M-D HH:mm');
   }
   // eslint-disable-next-line no-underscore-dangle
   return moment.unix(timestamp._seconds).format('Y-M-D H:m');
@@ -54,37 +56,79 @@ export const getAlgoliaDate = (timestamp: any): string => {
 
 // 日記一覧に出力するステータスの取得
 export const getUserDiaryStatus = (
-  correctionStatus: CorrectionStatus
+  correctionStatus: CorrectionStatus,
+  correctionStatus2: CorrectionStatus | undefined,
+  correctionStatus3: CorrectionStatus | undefined
 ): Status | null => {
+  // 0添削の場合
   if (correctionStatus === 'yet') {
     return { text: I18n.t('userDiaryStatus.yet'), color: mainColor };
   }
 
-  if (correctionStatus === 'correcting') {
+  // 何か1つでも添削中の場合
+  if (
+    correctionStatus === 'correcting' ||
+    correctionStatus2 === 'correcting' ||
+    correctionStatus3 === 'correcting'
+  ) {
     return { text: I18n.t('userDiaryStatus.correcting'), color: subTextColor };
   }
 
+  // 添削が終わった数を取得
+  let correctedNum = 0;
+  if (correctionStatus === 'unread' || correctionStatus === 'done') {
+    correctedNum += 1;
+  }
+  if (correctionStatus2 === 'unread' || correctionStatus2 === 'done') {
+    correctedNum += 1;
+  }
+  if (correctionStatus3 === 'unread' || correctionStatus3 === 'done') {
+    correctedNum += 1;
+  }
+
+  if (correctedNum > 0) {
+    return {
+      text: I18n.t('userDiaryStatus.done', { correctedNum }),
+      color: subTextColor,
+    };
+  }
+  // ここに入ることはない
   return null;
 };
 
-export const getMyDiaryStatus = (
-  diaryStatus: DiaryStatus,
-  correctionStatus: CorrectionStatus,
-  isReview: boolean
-): Status | null => {
-  if (diaryStatus === 'publish') {
-    if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
-      return { text: I18n.t('myDiaryStatus.yet'), color: subTextColor };
-    }
-    if (correctionStatus === 'unread') {
-      return { text: I18n.t('myDiaryStatus.unread'), color: softRed };
-    }
-    if (correctionStatus === 'done') {
-      if (!isReview) {
-        return { text: I18n.t('myDiaryStatus.yetReview'), color: mainColor };
-      }
-    }
+export const getMyDiaryStatus = (diary: Diary): Status | null => {
+  const {
+    diaryStatus,
+    correctionStatus,
+    correctionStatus2,
+    correctionStatus3,
+    isReview,
+    isReview2,
+    isReview3,
+  } = diary;
+
+  if (diaryStatus === 'draft') return null;
+
+  if (
+    correctionStatus === 'unread' ||
+    correctionStatus2 === 'unread' ||
+    correctionStatus3 === 'unread'
+  ) {
+    return { text: I18n.t('myDiaryStatus.unread'), color: softRed };
   }
+
+  if (
+    (correctionStatus === 'done' && isReview === false) ||
+    (correctionStatus2 === 'done' && isReview2 === false) ||
+    (correctionStatus3 === 'done' && isReview3 === false)
+  ) {
+    return { text: I18n.t('myDiaryStatus.yetReview'), color: mainColor };
+  }
+
+  if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
+    return { text: I18n.t('myDiaryStatus.yet'), color: subTextColor };
+  }
+
   return null;
 };
 
@@ -139,12 +183,15 @@ export const getComments = (infoComments: any): Comment[] => {
   }));
 };
 
-export const updateUnread = async (objectID: string): Promise<void> => {
+export const updateUnread = async (
+  objectID: string,
+  data: any
+): Promise<void> => {
   await firebase
     .firestore()
     .doc(`diaries/${objectID}`)
     .update({
-      correctionStatus: 'done',
+      ...data,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
 };
@@ -191,13 +238,25 @@ export const checkBeforePost = (
 /**
  * 途中で日記をやめた時の処理
  */
+type Data =
+  | {
+      correctionStatus: CorrectionStatus;
+    }
+  | {
+      correctionStatus2: CorrectionStatus;
+    }
+  | {
+      correctionStatus3: CorrectionStatus;
+    };
+
 export const updateYet = async (
   objectID: string,
-  uid: string
+  uid: string,
+  data: any
 ): Promise<void> => {
   const batch = firebase.firestore().batch();
   batch.update(firebase.firestore().doc(`diaries/${objectID}`), {
-    correctionStatus: 'yet',
+    ...data,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
   });
 
@@ -205,6 +264,7 @@ export const updateYet = async (
 
   batch.update(firebase.firestore().doc(`users/${uid}`), {
     correctingObjectID: null,
+    correctingCorrectedNum: null,
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
   });
 

@@ -6,6 +6,7 @@ export { default as FirstDiary } from './FirstDiary';
 export { default as GrayHeader } from './GrayHeader';
 export { default as HeaderButton } from './HeaderButton';
 export { default as HeaderText } from './HeaderText';
+export { default as HideButton } from './HideButton';
 export { default as LoadingModal } from './LoadingModal';
 export { default as ProfileIcon } from './ProfileIcon';
 export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';
