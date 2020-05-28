@@ -11,10 +11,14 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { Profile } from '../types';
-import TeachDiaryCorrection from '../components/organisms/TeachDiaryCorrection';
 import { UserDiaryStatus } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { ProfileIconHorizontal, Space, HeaderText } from '../components/atoms';
+import {
+  ProfileIconHorizontal,
+  Space,
+  HeaderText,
+  GrayHeader,
+} from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
   subTextColor,
@@ -26,6 +30,7 @@ import { getCorrection } from '../utils/corrections';
 import { Correction } from '../types/correction';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
+import Corrections from '../components/organisms/Corrections';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -80,6 +85,9 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [targetProfile, setTargetProfile] = useState<Profile>();
   const [correction, setCorrection] = useState<Correction>();
+  const [correction2, setCorrection2] = useState<Correction>();
+  const [correction3, setCorrection3] = useState<Correction>();
+
   const { params = {} } = navigation.state;
   const { teachDiary } = params;
 
@@ -104,6 +112,18 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
           setCorrection(newCorrection);
         }
       }
+      if (teachDiary.correction2) {
+        const newCorrection = await getCorrection(teachDiary.correction2.id);
+        if (newCorrection) {
+          setCorrection2(newCorrection);
+        }
+      }
+      if (teachDiary.correction3) {
+        const newCorrection = await getCorrection(teachDiary.correction3.id);
+        if (newCorrection) {
+          setCorrection3(newCorrection);
+        }
+      }
       setIsCorrectionLoading(false);
     };
     f();
@@ -123,13 +143,6 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
     },
     [navigation]
   );
-
-  const renderDiaryCorrection = (): ReactNode => {
-    if (correction) {
-      return <TeachDiaryCorrection correction={correction} />;
-    }
-    return null;
-  };
 
   if (!teachDiary) {
     return (
@@ -163,7 +176,12 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.text}>{text}</Text>
         </View>
-        {renderDiaryCorrection()}
+        <Corrections
+          headerTitle={I18n.t('teachDiaryCorrection.header')}
+          correction={correction}
+          correction2={correction2}
+          correction3={correction3}
+        />
       </ScrollView>
     </View>
   );

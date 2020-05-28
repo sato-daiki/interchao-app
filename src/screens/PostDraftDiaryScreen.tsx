@@ -66,7 +66,6 @@ const PostDraftDiaryScreen: ScreenType = ({
   const [isModalCancel, setIsModalCancel] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
-  // const [isPublic, setIsPublic] = useState(false);
 
   useEffect(() => {
     // keybordでの戻るを制御する Androidのみ
@@ -111,7 +110,6 @@ const PostDraftDiaryScreen: ScreenType = ({
       const displayProfile = getDisplayProfile(profile);
       return {
         premium: user.premium,
-        isPublic: false,
         title,
         text,
         profile: displayProfile,
@@ -226,7 +224,6 @@ const PostDraftDiaryScreen: ScreenType = ({
       // reduxに追加
       addDiary({
         ...item,
-        isPublic: false,
         title,
         text,
         diaryStatus: 'publish',
@@ -266,7 +263,6 @@ const PostDraftDiaryScreen: ScreenType = ({
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
-      // isPublic={isPublic}
       title={title}
       text={text}
       points={user.points}
@@ -276,7 +272,6 @@ const PostDraftDiaryScreen: ScreenType = ({
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');
       }}
-      // onValueChangePublic={(): void => setIsPublic(!isPublic)}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
       onChangeTextTitle={(txt: string): void => setTitle(txt)}

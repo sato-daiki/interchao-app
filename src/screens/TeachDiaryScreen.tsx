@@ -15,7 +15,6 @@ import {
 } from 'react-navigation-stack';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
-import TeachDiaryCorrection from '../components/organisms/TeachDiaryCorrection';
 import { UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -38,6 +37,7 @@ import Algolia from '../utils/Algolia';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
+import Corrections from '../components/organisms/Corrections';
 
 const { width } = Dimensions.get('window');
 
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingVertical: 16,
+    paddingTop: 16,
   },
   headerTitleStyle: {
     width: width - 144,
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   correctionButton: {
+    marginTop: 16,
     padding: 16,
   },
   main: {
@@ -122,6 +123,8 @@ const TeachDiaryScreen: ScreenType = ({
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [targetProfile, setTargetProfile] = useState<Profile>();
   const [correction, setCorrection] = useState<Correction>();
+  const [correction2, setCorrection2] = useState<Correction>();
+  const [correction3, setCorrection3] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
 
   const getNewProfile = useCallback(() => {
@@ -143,6 +146,18 @@ const TeachDiaryScreen: ScreenType = ({
         const newCorrection = await getCorrection(teachDiary.correction.id);
         if (newCorrection) {
           setCorrection(newCorrection);
+        }
+      }
+      if (teachDiary.correction2) {
+        const newCorrection = await getCorrection(teachDiary.correction2.id);
+        if (newCorrection) {
+          setCorrection2(newCorrection);
+        }
+      }
+      if (teachDiary.correction3) {
+        const newCorrection = await getCorrection(teachDiary.correction3.id);
+        if (newCorrection) {
+          setCorrection3(newCorrection);
         }
       }
       setIsCorrectionLoading(false);
@@ -168,12 +183,12 @@ const TeachDiaryScreen: ScreenType = ({
       const index = await Algolia.getDiaryIndex(true);
       await Algolia.setSettings(index);
       const res = await index.search('', {
-        filters: `objectID: ${teachDiary.objectID} AND correctionStatus: yet`,
+        filters: `objectID: ${teachDiary.objectID} AND (correctionStatus: correcting OR correctionStatus2: correcting OR correctionStatus3: correcting)`,
         page: 0,
         hitsPerPage: 1,
       });
 
-      if (res.nbHits !== 1) {
+      if (res.nbHits > 0) {
         Alert.alert(
           I18n.t('common.error'),
           I18n.t('errorMessage.correctionAlready')
@@ -181,17 +196,52 @@ const TeachDiaryScreen: ScreenType = ({
         setIsLoading(false);
         return;
       }
+      const res2 = await index.search('', {
+        filters: `objectID: ${teachDiary.objectID} AND (correctionStatus: yet OR correctionStatus2: yet OR correctionStatus3: yet)`,
+        page: 0,
+        hitsPerPage: 1,
+      });
+
+      if (res2.nbHits !== 1) {
+        Alert.alert(
+          I18n.t('common.error'),
+          I18n.t('errorMessage.correctionAlready')
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      const diary = res2.hits[0] as Diary;
+      const data = {
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      } as any;
+      let correctingCorrectedNum: number;
+      if (diary.correctionStatus === 'yet') {
+        data.correctionStatus = 'correcting';
+        correctingCorrectedNum = 1;
+      } else if (diary.correctionStatus2 === 'yet') {
+        data.correctionStatus2 = 'correcting';
+        correctingCorrectedNum = 2;
+      } else if (diary.correctionStatus3 === 'yet') {
+        data.correctionStatus3 = 'correcting';
+        correctingCorrectedNum = 3;
+      } else {
+        return;
+      }
+      console.log('data', data);
       const batch = firebase.firestore().batch();
 
       //  添削中のobjectIDを更新する
       const userRef = firebase.firestore().doc(`users/${user.uid}`);
       batch.update(userRef, {
         correctingObjectID: teachDiary.objectID,
+        correctingCorrectedNum,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
       setUser({
         ...user,
         correctingObjectID: teachDiary.objectID,
+        correctingCorrectedNum,
       });
 
       //  添削中一覧に追加する
@@ -200,6 +250,7 @@ const TeachDiaryScreen: ScreenType = ({
         .doc(`correctings/${teachDiary.objectID}`);
       batch.set(correctingRef, {
         uid: user.uid,
+        correctedNum: correctingCorrectedNum,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
@@ -207,15 +258,13 @@ const TeachDiaryScreen: ScreenType = ({
       const diaryRef = firebase
         .firestore()
         .doc(`diaries/${teachDiary.objectID}`);
-      batch.update(diaryRef, {
-        correctionStatus: 'correcting',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
 
+      batch.update(diaryRef, data);
       editTeachDiary(teachDiary.objectID, {
         ...teachDiary,
-        correctionStatus: 'correcting',
+        ...data,
       });
+
       batch.commit();
       track(events.CREATED_CORRECTING);
       setIsModalCorrection(false);
@@ -244,12 +293,28 @@ const TeachDiaryScreen: ScreenType = ({
     [navigation]
   );
 
-  const renderDiaryCorrection = (): ReactNode => {
+  const isAlready = (): boolean => {
+    // すでに投稿したユーザの場合だめ
+    if (!teachDiary || !teachDiary.correction) return false;
+    if (teachDiary.correction.profile.uid === user.uid) return true;
+    if (!teachDiary.correction2) return false;
+    if (teachDiary.correction2.profile.uid === user.uid) return true;
+    if (!teachDiary.correction3) return false;
+    if (teachDiary.correction3.profile.uid === user.uid) return true;
+    return false;
+  };
+
+  const renderButton = (): ReactNode => {
+    // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
-      teachDiary &&
-      teachDiary.correctionStatus === 'yet' &&
       targetProfile &&
-      profile.nativeLanguage === targetProfile.learnLanguage
+      profile.nativeLanguage === targetProfile.learnLanguage &&
+      teachDiary &&
+      teachDiary.correctionStatus !== 'correcting' &&
+      teachDiary.correctionStatus2 !== 'correcting' &&
+      teachDiary.correctionStatus3 !== 'correcting' &&
+      teachDiary.correctionStatus3 === 'yet' &&
+      !isAlready()
     ) {
       return (
         <View style={styles.correctionButton}>
@@ -260,9 +325,6 @@ const TeachDiaryScreen: ScreenType = ({
           />
         </View>
       );
-    }
-    if (correction) {
-      return <TeachDiaryCorrection correction={correction} />;
     }
     return null;
   };
@@ -307,7 +369,14 @@ const TeachDiaryScreen: ScreenType = ({
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.text}>{text}</Text>
         </View>
-        {renderDiaryCorrection()}
+        <Corrections
+          headerTitle={I18n.t('teachDiaryCorrection.header')}
+          correction={correction}
+          correction2={correction2}
+          correction3={correction3}
+        />
+        {renderButton()}
+        <Space size={16} />
       </ScrollView>
     </View>
   );
