@@ -3,7 +3,7 @@
 yarn install
 
 .env 　は渡して上げる必要ある
-firebase deploy --only firestore:rules -P dev
+firebase deploy --only firestore:rules -P default
 
 ### Publish
 

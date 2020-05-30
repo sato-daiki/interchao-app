@@ -144,7 +144,8 @@ const foregetPassword = {
 
 const initialize = {
   start: 'Create Account',
-  acount: 'Have an account already?',
+  // 末尾にスペースを開ける
+  acount: 'Have an account already? ',
   link: 'Login',
 };
 

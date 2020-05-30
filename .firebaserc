@@ -1,6 +1,6 @@
 {
   "projects": {
-    "dev": "white-zebra-dev",
+    "default": "white-zebra-dev",
     "product": "white-zebra-5096f"
   }
 }
