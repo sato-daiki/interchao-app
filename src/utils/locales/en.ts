@@ -214,7 +214,7 @@ const review = {
 };
 
 const selectLanguage = {
-  headerTitle: 'Language and Nationality Selection',
+  headerTitle: 'Language Selection',
   title: 'Please choose your languages and nationality.',
   learn: 'Language you want to learn',
   native: 'Language you can speak',
