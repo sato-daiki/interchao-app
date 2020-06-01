@@ -84,6 +84,7 @@ const CorrectionOrigin: React.FC<Props> = ({
               userName={targetProfile.userName}
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
+              nationalityCode={targetProfile.nationalityCode}
             />
           ) : (
             <ActivityIndicator />

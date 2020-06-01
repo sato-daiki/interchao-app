@@ -1,10 +1,11 @@
-import { Language } from '.';
+import { Language, CountryCode } from '.';
 
 export interface Reviewer {
   uid: string;
   userName: string;
   photoUrl: string | null;
   nativeLanguage: Language;
+  nationalityCode?: CountryCode | null;
 }
 
 export interface Review {

@@ -304,6 +304,20 @@ const TeachDiaryScreen: ScreenType = ({
     return false;
   };
 
+  const isEnd = (): boolean => {
+    // 3人の添削が終わっている場合
+    if (!teachDiary) return false;
+    if (teachDiary.correction3) {
+      return true;
+    }
+    // 古いバージョンの時は1人しか添削できなかったので。
+    // teachDiary.correction3のチェックだと漏れてしまう
+    if (teachDiary.correction3 === undefined && teachDiary.correction) {
+      return true;
+    }
+    return false;
+  };
+
   const renderButton = (): ReactNode => {
     // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
@@ -313,8 +327,8 @@ const TeachDiaryScreen: ScreenType = ({
       teachDiary.correctionStatus !== 'correcting' &&
       teachDiary.correctionStatus2 !== 'correcting' &&
       teachDiary.correctionStatus3 !== 'correcting' &&
-      teachDiary.correctionStatus3 === 'yet' &&
-      !isAlready()
+      !isAlready() &&
+      !isEnd()
     ) {
       return (
         <View style={styles.correctionButton}>
@@ -356,6 +370,7 @@ const TeachDiaryScreen: ScreenType = ({
               userName={targetProfile.userName}
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
+              nationalityCode={targetProfile.nationalityCode}
               onPress={(): void => onPressUser(targetProfile.uid)}
             />
           ) : (
@@ -374,6 +389,9 @@ const TeachDiaryScreen: ScreenType = ({
           correction={correction}
           correction2={correction2}
           correction3={correction3}
+          onPressUser={(uid: string): void => {
+            navigation.push('UserProfile', { uid });
+          }}
         />
         {renderButton()}
         <Space size={16} />

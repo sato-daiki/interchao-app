@@ -84,6 +84,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
               userName={profile.userName}
               photoUrl={profile.photoUrl}
               nativeLanguage={profile.nativeLanguage}
+              nationalityCode={profile.nationalityCode}
               onPress={(): void => onPressUser(profile.uid)}
             />
             <Text style={styles.daytext}>{postDate}</Text>

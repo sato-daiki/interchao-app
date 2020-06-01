@@ -1,13 +1,15 @@
 import React from 'react';
 import { Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import Flag from 'react-native-flags';
 import { fontSizeS, primaryColor } from '../../styles/Common';
 import { getPhotoUrl } from '../../utils/profile';
-import { Language } from '../../types';
+import { Language, CountryCode } from '../../types';
 
 interface Props {
   userName: string;
   photoUrl: string | null;
   nativeLanguage: Language;
+  nationalityCode?: CountryCode | null;
   onPress?: () => void;
 }
 
@@ -20,11 +22,15 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    marginRight: 4,
   },
   userName: {
+    marginLeft: 8,
     fontSize: fontSizeS,
     color: primaryColor,
+  },
+  flag: {
+    marginLeft: 4,
+    marginTop: 3,
   },
 });
 
@@ -32,6 +38,7 @@ const ProfileIconHorizontal: React.FC<Props> = ({
   userName,
   photoUrl,
   nativeLanguage,
+  nationalityCode,
   onPress,
 }: Props): JSX.Element => {
   return (
@@ -44,8 +51,10 @@ const ProfileIconHorizontal: React.FC<Props> = ({
         style={styles.icon}
         source={getPhotoUrl(photoUrl, nativeLanguage)}
       />
-
       <Text style={styles.userName}>{userName}</Text>
+      {nationalityCode ? (
+        <Flag style={styles.flag} code={nationalityCode} size={16} />
+      ) : null}
     </TouchableOpacity>
   );
 };

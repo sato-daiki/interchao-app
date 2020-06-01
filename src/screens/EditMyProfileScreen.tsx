@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -94,6 +95,10 @@ const EditMyProfileScreen: ScreenType = ({
   const [introduction, setIntroduction] = useState(profile.introduction);
   const [photoUrl, setPhotoUrl] = useState(profile.photoUrl);
   const [isLoading, setIsLoading] = useState(false);
+  const [nationalityCode, setNationalityCode] = useState(
+    profile.nationalityCode
+  );
+  const [visible, setVisible] = useState(false);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -115,10 +120,12 @@ const EditMyProfileScreen: ScreenType = ({
       const profileInfo = {
         name,
         userName,
+        nationalityCode,
         introduction,
         photoUrl: newPhotoUrl || photoUrl,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
+
       await ref.update({
         ...profileInfo,
       });
@@ -133,10 +140,11 @@ const EditMyProfileScreen: ScreenType = ({
   }, [
     isLoading,
     profile,
+    photoUrl,
     name,
     userName,
+    nationalityCode,
     introduction,
-    photoUrl,
     setProfile,
     navigation,
   ]);
@@ -144,7 +152,7 @@ const EditMyProfileScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({ onPressSubmit });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, userName, introduction, photoUrl]);
+  }, [name, userName, nationalityCode, introduction, photoUrl]);
 
   const pickImage = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -166,6 +174,8 @@ const EditMyProfileScreen: ScreenType = ({
       setUserName: (text: string): void => setUserName(text),
     });
   }, [navigation, userName]);
+
+  const rowStyle = { paddingVertical: nationalityCode ? 6 : 16 };
 
   return (
     <View style={styles.container}>
@@ -195,6 +205,33 @@ const EditMyProfileScreen: ScreenType = ({
         >
           <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
           <Text>{userName}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.row, rowStyle]}
+          activeOpacity={1}
+          onPress={(): void => setVisible(true)}
+        >
+          <Text style={styles.label}>
+            {I18n.t('selectLanguage.nationality')}
+          </Text>
+          <CountryPicker
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            countryCode={nationalityCode}
+            placeholder={I18n.t('selectLanguage.placeholder')}
+            withFilter
+            withFlag
+            withCountryNameButton
+            withEmoji
+            withModal
+            withAlphaFilter
+            onSelect={(country: Country): void => {
+              setNationalityCode(country.cca2);
+            }}
+            onClose={(): void => setVisible(false)}
+            onOpen={(): void => setVisible(true)}
+            visible={visible}
+          />
         </TouchableOpacity>
         <TextInput
           style={styles.introduction}

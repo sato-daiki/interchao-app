@@ -1,4 +1,4 @@
-import { Language } from './profile';
+import { Language, CountryCode } from './profile';
 
 // algolia経由で取得するのでtimestamp型が他と異なる
 export type Timestamp = {
@@ -23,6 +23,7 @@ export interface DisplayProfile {
   photoUrl: string | null;
   learnLanguage: Language;
   nativeLanguage: Language;
+  nationalityCode?: CountryCode | null;
 }
 
 export interface Diary {

@@ -31,13 +31,14 @@ const FavoriteUserListScreen: NavigationStackScreenComponent = ({
 
   const renderItem = useCallback(
     ({ item }): JSX.Element => {
-      const { userName, photoUrl, nativeLanguage } = item;
+      const { userName, photoUrl, nativeLanguage, nationalityCode } = item;
       return (
         <View style={styles.item}>
           <UserListItem
             userName={userName}
             photoUrl={photoUrl}
             nativeLanguage={nativeLanguage}
+            nationalityCode={nationalityCode}
             onPressUser={(): void => {
               navigation.navigate('UserProfile', { uid: item.uid });
             }}

@@ -108,7 +108,6 @@ const ReviewScreen: ScreenType = ({
       return;
     }
     if (!navigation.state.params) return;
-    console.log('navigation.state.params');
 
     setIsLoading(true);
     const batch = firebase.firestore().batch();
@@ -148,6 +147,7 @@ const ReviewScreen: ScreenType = ({
       userName: profile.userName,
       photoUrl: profile.photoUrl,
       nativeLanguage: profile.nativeLanguage,
+      nationalityCode: profile.nationalityCode,
     } as Reviewer;
 
     const newReview = {
@@ -184,6 +184,7 @@ const ReviewScreen: ScreenType = ({
     editDiary,
     isLoading,
     navigation,
+    profile.nationalityCode,
     profile.nativeLanguage,
     profile.photoUrl,
     profile.uid,
@@ -211,6 +212,7 @@ const ReviewScreen: ScreenType = ({
         userName={diary.profile.userName}
         photoUrl={diary.profile.photoUrl}
         nativeLanguage={diary.profile.nativeLanguage}
+        nationalityCode={diary.profile.nationalityCode}
         onPressButton={onPressFavorite}
       />
       <Space size={24} />
