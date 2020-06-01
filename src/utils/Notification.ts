@@ -2,6 +2,7 @@ import { Notifications } from 'expo';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { NavigationStackProp } from 'react-navigation-stack';
+import { Platform } from 'react-native';
 import firebase from '../constants/firebase';
 
 export const registerForPushNotificationsAsync = async (
@@ -9,20 +10,22 @@ export const registerForPushNotificationsAsync = async (
 ): Promise<void> => {
   // 実機端末か否かを判定
   if (Constants.isDevice) {
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    // only asks if permissions have not already been determined, because
-    // iOS won't necessarily prompt the user a second time.
-    // On Android, permissions are granted on app installation, so
-    // `askAsync` will never prompt the user
+    const { status: existingStatus } = await Permissions.getAsync(
+      Permissions.NOTIFICATIONS
+    );
+    let finalStatus = existingStatus;
 
-    // Stop here if the user did not grant permissions
-    if (status !== 'granted') {
-      return;
+    if (existingStatus !== 'granted') {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      finalStatus = status;
     }
 
-    // Get the token that identifies this device
+    if (finalStatus !== 'granted') {
+      return;
+    }
     const expoPushToken = await Notifications.getExpoPushTokenAsync();
-    // POST the token to your backend server from where you can retrieve it to send push notifications.
+    console.log(expoPushToken);
+
     await firebase
       .firestore()
       .doc(`users/${uid}`)
@@ -30,6 +33,15 @@ export const registerForPushNotificationsAsync = async (
         expoPushToken,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.createChannelAndroidAsync('default', {
+      name: 'default',
+      sound: true,
+      priority: 'max',
+      vibrate: [0, 250, 250, 250],
+    });
   }
 };
 
