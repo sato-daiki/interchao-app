@@ -18,6 +18,7 @@ import {
 import I18n from '../../utils/I18n';
 import googleTranslate from '../../utils/googleTranslate';
 import { Language } from '../../types';
+import { CopyText } from '../atoms';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -159,11 +160,11 @@ const CommentCard = ({
       <Text style={styles.label}>{I18n.t('commentCard.original')}</Text>
       <View style={styles.originalContainer}>
         <Text style={styles.index}>{indexText}</Text>
-        <Text style={styles.original}>{original}</Text>
+        <CopyText style={styles.original} text={original} />
       </View>
       <View style={styles.line} />
       <Text style={styles.label}>{I18n.t('commentCard.fix')}</Text>
-      <Text style={styles.fix}>{fix}</Text>
+      <CopyText style={styles.fix} text={fix} />
       <View style={styles.line} />
       <View style={styles.row}>
         <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
@@ -175,10 +176,10 @@ const CommentCard = ({
           </TouchableOpacity>
         ) : null}
       </View>
-
-      <Text style={[styles.detail, isTranslated ? styles.italic : undefined]}>
-        {displayDetail}
-      </Text>
+      <CopyText
+        style={[styles.detail, isTranslated ? styles.italic : undefined]}
+        text={displayDetail}
+      />
     </View>
   );
 };
