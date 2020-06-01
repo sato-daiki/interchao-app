@@ -32,7 +32,7 @@ import {
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
-import { LoadingModal, GrayHeader } from '../components/atoms';
+import { LoadingModal, GrayHeader, CopyText } from '../components/atoms';
 import I18n from '../utils/I18n';
 
 export interface Props {
@@ -230,8 +230,8 @@ const MyDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <MyDiaryStatus diary={diary} />
           </View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{text}</Text>
+          <CopyText style={styles.title} text={title} />
+          <CopyText style={styles.text} text={text} />
         </View>
         {correction ? (
           <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
