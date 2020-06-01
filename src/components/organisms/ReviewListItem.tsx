@@ -11,7 +11,7 @@ import {
 } from '../../styles/Common';
 import { getDay } from '../../utils/diary';
 import { Review, Language } from '../../types';
-import { ProfileIconHorizontal } from '../atoms';
+import { ProfileIconHorizontal, CopyText } from '../atoms';
 import googleTranslate from '../../utils/googleTranslate';
 import I18n from '../../utils/I18n';
 
@@ -114,16 +114,16 @@ const ReviewListItem = ({
         />
       </View>
       {displayReview ? (
-        <Text
+        <CopyText
           style={[styles.comment, isTranslated ? styles.italic : undefined]}
-        >
-          {displayReview}
-        </Text>
+          text={displayReview}
+        />
       ) : null}
       <ProfileIconHorizontal
         userName={reviewer.userName}
         photoUrl={reviewer.photoUrl}
         nativeLanguage={reviewer.nativeLanguage}
+        nationalityCode={reviewer.nationalityCode}
         onPress={(): void => onPressUser(reviewer.uid)}
       />
     </View>

@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
 
 const OriginAndroid = ({ text, isEmpty }: Props): JSX.Element => {
   const [displayText, setDisplayText] = useState('');
+  // このような処理を入れないとコピーがうまく作動しない
   useEffect(() => {
     const timer = setTimeout(() => {
       setDisplayText(text);

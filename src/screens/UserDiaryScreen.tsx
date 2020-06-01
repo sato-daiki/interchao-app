@@ -13,12 +13,7 @@ import {
 import { Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import {
-  ProfileIconHorizontal,
-  Space,
-  HeaderText,
-  GrayHeader,
-} from '../components/atoms';
+import { ProfileIconHorizontal, Space, HeaderText } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
   subTextColor,
@@ -46,9 +41,11 @@ const styles = StyleSheet.create({
   },
   errContainer: {
     flex: 1,
+    paddingTop: 32,
+    paddingHorizontal: 16,
     backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
+    lineHeight: fontSizeM * 1.3,
   },
   main: {
     paddingHorizontal: 16,
@@ -139,7 +136,7 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
 
   const onPressUser = useCallback(
     (uid: string): void => {
-      navigation.navigate('UserProfile', { uid });
+      navigation.push('UserProfile', { uid });
     },
     [navigation]
   );
@@ -147,7 +144,7 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
   if (!teachDiary) {
     return (
       <View style={styles.errContainer}>
-        <Text>{I18n.t('teachDiary.deleteTargetPage')}</Text>
+        <Text>{I18n.t('errorMessage.deleteTargetPage')}</Text>
       </View>
     );
   }
@@ -163,6 +160,7 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
               userName={targetProfile.userName}
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
+              nationalityCode={targetProfile.nationalityCode}
               onPress={(): void => onPressUser(targetProfile.uid)}
             />
           ) : (
@@ -181,6 +179,9 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
           correction={correction}
           correction2={correction2}
           correction3={correction3}
+          onPressUser={(uid: string): void => {
+            navigation.push('UserProfile', { uid });
+          }}
         />
       </ScrollView>
     </View>

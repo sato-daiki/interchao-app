@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-// import OnOffSmallButton from './OnOffSmallButton';
 import { ProfileIconHorizontal } from '../atoms';
-import { Language } from '../../types';
+import { Language, CountryCode } from '../../types';
 
 interface Props {
   userName: string;
   photoUrl: string | null;
   nativeLanguage: Language;
+  nationalityCode?: CountryCode;
   onPressUser?: () => void;
   onPressButton: () => void;
 }
@@ -24,6 +24,7 @@ const UserListItem = ({
   userName,
   photoUrl,
   nativeLanguage,
+  nationalityCode,
   onPressUser,
 }: Props): JSX.Element => {
   return (
@@ -32,16 +33,9 @@ const UserListItem = ({
         userName={userName}
         photoUrl={photoUrl}
         nativeLanguage={nativeLanguage}
+        nationalityCode={nationalityCode}
         onPress={onPressUser}
       />
-      {/* <OnOffSmallButton
-        isOn={false}
-        isLoading={false}
-        disable={false}
-        titleOn="お気に入り済み"
-        titleOff="お気に入りに追加"
-        onPress={onPressButton}
-      /> */}
     </View>
   );
 };

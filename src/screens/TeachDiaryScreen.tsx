@@ -23,6 +23,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
+  CopyText,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -72,9 +73,11 @@ const styles = StyleSheet.create({
   },
   errContainer: {
     flex: 1,
+    paddingTop: 32,
+    paddingHorizontal: 16,
     backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
+    lineHeight: fontSizeM * 1.3,
   },
   correctionButton: {
     marginTop: 16,
@@ -228,7 +231,6 @@ const TeachDiaryScreen: ScreenType = ({
       } else {
         return;
       }
-      console.log('data', data);
       const batch = firebase.firestore().batch();
 
       //  添削中のobjectIDを更新する
@@ -304,6 +306,20 @@ const TeachDiaryScreen: ScreenType = ({
     return false;
   };
 
+  const isEnd = (): boolean => {
+    // 3人の添削が終わっている場合
+    if (!teachDiary) return false;
+    if (teachDiary.correction3) {
+      return true;
+    }
+    // 古いバージョンの時は1人しか添削できなかったので。
+    // teachDiary.correction3のチェックだと漏れてしまう
+    if (teachDiary.correction3 === undefined && teachDiary.correction) {
+      return true;
+    }
+    return false;
+  };
+
   const renderButton = (): ReactNode => {
     // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
@@ -313,8 +329,8 @@ const TeachDiaryScreen: ScreenType = ({
       teachDiary.correctionStatus !== 'correcting' &&
       teachDiary.correctionStatus2 !== 'correcting' &&
       teachDiary.correctionStatus3 !== 'correcting' &&
-      teachDiary.correctionStatus3 === 'yet' &&
-      !isAlready()
+      !isAlready() &&
+      !isEnd()
     ) {
       return (
         <View style={styles.correctionButton}>
@@ -332,7 +348,7 @@ const TeachDiaryScreen: ScreenType = ({
   if (!teachDiary) {
     return (
       <View style={styles.errContainer}>
-        <Text>{I18n.t('teachDiary.deleteTargetPage')}</Text>
+        <Text>{I18n.t('errorMessage.deleteTargetPage')}</Text>
       </View>
     );
   }
@@ -356,6 +372,7 @@ const TeachDiaryScreen: ScreenType = ({
               userName={targetProfile.userName}
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
+              nationalityCode={targetProfile.nationalityCode}
               onPress={(): void => onPressUser(targetProfile.uid)}
             />
           ) : (
@@ -366,14 +383,17 @@ const TeachDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{text}</Text>
+          <CopyText style={styles.title} text={title} />
+          <CopyText style={styles.text} text={text} />
         </View>
         <Corrections
           headerTitle={I18n.t('teachDiaryCorrection.header')}
           correction={correction}
           correction2={correction2}
           correction3={correction3}
+          onPressUser={(uid: string): void => {
+            navigation.push('UserProfile', { uid });
+          }}
         />
         {renderButton()}
         <Space size={16} />

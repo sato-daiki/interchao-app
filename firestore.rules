@@ -19,8 +19,7 @@ service cloud.firestore {
   
   // profile
   function isValidProfiles(profile) {
-  	return profile.size() == 9
-    	&& "name" in profile
+  	return "name" in profile
     	&& (profile.name == null || profile.name is string)
     	&& "userName" in profile && profile.userName is string
     	&& "photoUrl" in profile 
@@ -46,8 +45,7 @@ service cloud.firestore {
   
   // displayProfiles
   function isValidDisplayProfiles(profile) {
-  	return profile.size() == 6
-    	&& "uid" in profile && profile.uid is string
+  	return "uid" in profile && profile.uid is string
       && "pro" in profile && profile.pro is bool
       && "userName" in profile && profile.userName is string
       && "photoUrl" in profile
@@ -126,8 +124,7 @@ service cloud.firestore {
 
   // review
   function isValidReviewers(reviewer) {
-    return reviewer.size() == 4
-      && "uid" in reviewer && reviewer.uid is string
+    return "uid" in reviewer && reviewer.uid is string
       && "userName" in reviewer && reviewer.userName is string
       && "photoUrl" in reviewer
     	&& (reviewer.photoUrl == null || reviewer.photoUrl is string)
@@ -156,8 +153,7 @@ service cloud.firestore {
 
   // inquiry
   function isValidInquiries(inquiry) {
-    return inquiry.size() == 6
-      && "uid" in inquiry && inquiry.uid is string
+    return  "uid" in inquiry && inquiry.uid is string
       && "userName" in inquiry && inquiry.userName is string 
       && "nativeLanguage" in inquiry && inquiry.nativeLanguage is string 
       && "email" in inquiry && inquiry.email is string 
