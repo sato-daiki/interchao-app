@@ -12,7 +12,7 @@ export interface Profile {
   pro: boolean;
   learnLanguage: Language;
   nativeLanguage: Language;
-  nationalityCode?: CountryCode | null;
+  nationalityCode?: CountryCode;
   introduction: string | null;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;

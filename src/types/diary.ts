@@ -23,7 +23,7 @@ export interface DisplayProfile {
   photoUrl: string | null;
   learnLanguage: Language;
   nativeLanguage: Language;
-  nationalityCode?: CountryCode | null;
+  nationalityCode?: CountryCode;
 }
 
 export interface Diary {
