@@ -18,6 +18,7 @@ export { default as OriginAndroid } from './OriginAndroid';
 export { default as OriginIOS } from './OriginIOS';
 export { default as ProfileIcons } from './ProfileIcons';
 export { default as ProfileLanguage } from './ProfileLanguage';
+export { default as ProfileNationalityCode } from './ProfileNationalityCode';
 export { default as SummaryInput } from './SummaryInput';
 export { default as UserDiaryStatus } from './UserDiaryStatus';
 export { default as UserListItem } from './UserListItem';

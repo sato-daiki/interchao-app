@@ -124,6 +124,7 @@ const ReviewListItem = ({
         userName={reviewer.userName}
         photoUrl={reviewer.photoUrl}
         nativeLanguage={reviewer.nativeLanguage}
+        nationalityCode={reviewer.nationalityCode}
         onPress={(): void => onPressUser(reviewer.uid)}
       />
     </View>

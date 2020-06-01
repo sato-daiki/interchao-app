@@ -8,6 +8,7 @@ interface Props {
   correction?: Correction;
   correction2?: Correction;
   correction3?: Correction;
+  onPressUser?: (uid: string) => void;
 }
 
 const Corrections: React.FC<Props> = ({
@@ -15,9 +16,15 @@ const Corrections: React.FC<Props> = ({
   correction,
   correction2,
   correction3,
+  onPressUser,
 }) => {
   const renderDiaryCorrection = (prmCorrection: Correction): ReactNode => {
-    return <TeachDiaryCorrection correction={prmCorrection} />;
+    return (
+      <TeachDiaryCorrection
+        correction={prmCorrection}
+        onPressUser={onPressUser}
+      />
+    );
   };
   return (
     <>

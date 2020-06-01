@@ -1,5 +1,7 @@
 import { firestore } from 'firebase';
+import { CountryCode as CountryCodeOrigin } from 'react-native-country-picker-modal/lib/types';
 
+export type CountryCode = CountryCodeOrigin;
 export type Language = 'ja' | 'en';
 
 export interface Profile {
@@ -10,6 +12,7 @@ export interface Profile {
   pro: boolean;
   learnLanguage: Language;
   nativeLanguage: Language;
+  nationalityCode?: CountryCode | null;
   introduction: string | null;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;

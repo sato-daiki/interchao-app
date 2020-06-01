@@ -5,12 +5,13 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import * as Localization from 'expo-localization';
+import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import SubmitButton from '../components/atoms/SubmitButton';
-import { primaryColor, fontSizeL } from '../styles/Common';
+import { primaryColor, fontSizeL, fontSizeM } from '../styles/Common';
 import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { Profile } from '../types';
+import { Profile, CountryCode } from '../types';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 
@@ -43,6 +44,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 16,
   },
+  label: {
+    color: primaryColor,
+    fontWeight: 'bold',
+    fontSize: fontSizeM,
+    paddingBottom: 6,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  change: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    marginLeft: 40,
+  },
 });
 
 /**
@@ -65,7 +81,10 @@ const SelectLanguageScreen: ScreenType = ({
   };
   // 初期値はiPhoneの設定を取得して設定しておく
   const [isNativeJa, setIsNativeJa] = useState(checkJapanese());
-
+  const [nationalityCode, setNationalityCode] = useState<
+    CountryCode | undefined
+  >(checkJapanese() ? 'JP' : undefined);
+  const [visible, setVisible] = useState(false);
   useEffect((): void => {
     track(events.OPENED_SELECT_LANGUAGE);
   }, []);
@@ -75,6 +94,7 @@ const SelectLanguageScreen: ScreenType = ({
       ...profile,
       learnLanguage: isNativeJa ? 'en' : 'ja',
       nativeLanguage: isNativeJa ? 'ja' : 'en',
+      nationalityCode,
     });
     navigation.navigate('InputUserName');
   };
@@ -95,6 +115,33 @@ const SelectLanguageScreen: ScreenType = ({
         onPressJa={(): void => setIsNativeJa(true)}
         onPressEn={(): void => setIsNativeJa(false)}
       />
+      <Space size={16} />
+      <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
+      <View style={styles.row}>
+        <CountryPicker
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          countryCode={nationalityCode}
+          placeholder={I18n.t('selectLanguage.placeholder')}
+          withFilter
+          withFlag
+          withCountryNameButton
+          withEmoji
+          withModal
+          withAlphaFilter
+          onSelect={(country: Country): void => {
+            setNationalityCode(country.cca2);
+          }}
+          onClose={(): void => setVisible(false)}
+          onOpen={(): void => setVisible(true)}
+          visible={visible}
+        />
+        {nationalityCode ? (
+          <Text style={styles.change} onPress={(): void => setVisible(true)}>
+            {I18n.t('selectLanguage.change')}
+          </Text>
+        ) : null}
+      </View>
       <Space size={32} />
       <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
     </View>

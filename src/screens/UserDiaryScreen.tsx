@@ -13,12 +13,7 @@ import {
 import { Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import {
-  ProfileIconHorizontal,
-  Space,
-  HeaderText,
-  GrayHeader,
-} from '../components/atoms';
+import { ProfileIconHorizontal, Space, HeaderText } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
   subTextColor,
@@ -139,7 +134,7 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
 
   const onPressUser = useCallback(
     (uid: string): void => {
-      navigation.navigate('UserProfile', { uid });
+      navigation.push('UserProfile', { uid });
     },
     [navigation]
   );
@@ -163,6 +158,7 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
               userName={targetProfile.userName}
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
+              nationalityCode={targetProfile.nationalityCode}
               onPress={(): void => onPressUser(targetProfile.uid)}
             />
           ) : (
@@ -181,6 +177,9 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
           correction={correction}
           correction2={correction2}
           correction3={correction3}
+          onPressUser={(uid: string): void => {
+            navigation.push('UserProfile', { uid });
+          }}
         />
       </ScrollView>
     </View>

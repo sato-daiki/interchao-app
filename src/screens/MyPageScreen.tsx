@@ -15,7 +15,10 @@ import {
   ScoreStar,
   UserPoints,
 } from '../components/atoms';
-import { ProfileLanguage } from '../components/molecules';
+import {
+  ProfileLanguage,
+  ProfileNationalityCode,
+} from '../components/molecules';
 import { getUserReview } from '../utils/userReview';
 import I18n from '../utils/I18n';
 
@@ -71,6 +74,7 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
     introduction,
     nativeLanguage,
     learnLanguage,
+    nationalityCode,
   } = profile;
 
   useEffect(() => {
@@ -114,6 +118,9 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
         nativeLanguage={nativeLanguage}
         learnLanguage={learnLanguage}
       />
+      {nationalityCode ? (
+        <ProfileNationalityCode nationalityCode={nationalityCode} />
+      ) : null}
     </View>
   );
 };

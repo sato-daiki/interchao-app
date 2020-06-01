@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import { Profile, UserReview } from '../../types';
-import { ProfileLanguage } from '../molecules';
+import { ProfileLanguage, ProfileNationalityCode } from '../molecules';
 import { ScoreStar, Space, ProfileIconHorizontal } from '../atoms';
 
 interface Props {
@@ -48,6 +48,9 @@ const UserProfileHeader = ({ profile, userReview }: Props): JSX.Element => {
         nativeLanguage={profile.nativeLanguage}
         learnLanguage={profile.learnLanguage}
       />
+      {profile.nationalityCode ? (
+        <ProfileNationalityCode nationalityCode={profile.nationalityCode} />
+      ) : null}
     </View>
   );
 };

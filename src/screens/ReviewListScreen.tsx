@@ -127,7 +127,7 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
           item={item}
           nativeLanguage={profile.nativeLanguage}
           onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+            navigation.push('UserProfile', { uid });
           }}
         />
       );
