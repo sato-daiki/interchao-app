@@ -72,9 +72,11 @@ const styles = StyleSheet.create({
   },
   errContainer: {
     flex: 1,
+    paddingTop: 32,
+    paddingHorizontal: 16,
     backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
+    lineHeight: fontSizeM * 1.3,
   },
   correctionButton: {
     marginTop: 16,
@@ -346,7 +348,7 @@ const TeachDiaryScreen: ScreenType = ({
   if (!teachDiary) {
     return (
       <View style={styles.errContainer}>
-        <Text>{I18n.t('teachDiary.deleteTargetPage')}</Text>
+        <Text>{I18n.t('errorMessage.deleteTargetPage')}</Text>
       </View>
     );
   }
