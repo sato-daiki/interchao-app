@@ -218,6 +218,7 @@ const selectLanguage = {
   nationality: '国籍',
   placeholder: '国籍を選択してください',
   change: '変更する',
+  nationalityCodeAlert: '国籍を選択してください',
 };
 
 const setting = {

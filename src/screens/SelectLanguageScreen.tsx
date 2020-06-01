@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -90,6 +90,10 @@ const SelectLanguageScreen: ScreenType = ({
   }, []);
 
   const onPressNext = (): void => {
+    if (!nationalityCode) {
+      Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
+      return;
+    }
     setProfile({
       ...profile,
       learnLanguage: isNativeJa ? 'en' : 'ja',
