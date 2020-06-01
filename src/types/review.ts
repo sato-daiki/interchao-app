@@ -5,7 +5,7 @@ export interface Reviewer {
   userName: string;
   photoUrl: string | null;
   nativeLanguage: Language;
-  nationalityCode?: CountryCode | null;
+  nationalityCode?: CountryCode;
 }
 
 export interface Review {
