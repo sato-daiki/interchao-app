@@ -221,6 +221,7 @@ const selectLanguage = {
   nationality: 'Nationality',
   placeholder: 'Please select your nationality',
   change: 'Change',
+  nationalityCodeAlert: 'Please select your nationality',
 };
 
 const setting = {
