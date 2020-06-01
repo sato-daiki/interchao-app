@@ -11,6 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 import { Language } from '../../types';
+import CopyText from './CopyText';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -89,7 +90,7 @@ const SummaryCard = ({
       ) : null}
       <Text style={styles.title}>{I18n.t('summaryCard.title')}</Text>
       <View style={styles.line} />
-      <Text style={styles.text}>{summary}</Text>
+      <CopyText style={styles.text} text={summary} />
     </View>
   );
 };

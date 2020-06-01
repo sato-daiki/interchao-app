@@ -206,15 +206,19 @@ const reviewList = {
 
 const review = {
   headerTitle: 'レビューする',
-  placeholder: 'コメント',
+  placeholder: 'コメント （任意）',
   confirmation: '編集中のレビューは全て削除されますが、よろしいでしょうか？',
 };
 
 const selectLanguage = {
-  headerTitle: '言語の選択',
-  title: '言語を選択してください',
+  headerTitle: '言語と国籍の選択',
+  title: '言語と国籍を選択してください',
   learn: '学びたい言語',
   native: 'ネイティブ言語',
+  nationality: '国籍',
+  placeholder: '国籍を選択してください',
+  change: '変更する',
+  nationalityCodeAlert: '国籍を選択してください',
 };
 
 const setting = {
@@ -343,6 +347,10 @@ const myDiaryCorrectionFooter = {
 const profileLanguage = {
   learn: '勉強中の言語',
   native: 'ネイティブの言語',
+};
+
+const profileNationality = {
+  nationality: '国籍',
 };
 
 const summaryInput = {
@@ -603,6 +611,7 @@ const ja = {
   languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
+  profileNationality,
   summaryInput,
   correctionOrigin,
   diaryHitList,

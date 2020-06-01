@@ -26,7 +26,7 @@ Expo クライアントアプリで PUBLISHED PROJECT から interchao を選択
 `app.json`の`revision`を更新する。  
 publish する度に+1。新 version を build するときは 0 に戻す。
 
-### 3. Publish
+### 3-1. Publish
 
 ターミナルで publish。（Expo XDE にて予めログインしておくこと)
 
@@ -35,6 +35,12 @@ publish する度に+1。新 version を build するときは 0 に戻す。
 ```
 expo publish --release-channel production
 expo publish --clear --release-channel production
+```
+
+### 3-2. UpdateFirebae
+
+```
+firebase deploy --only firestore:rules -P product
 ```
 
 ### 4. Build

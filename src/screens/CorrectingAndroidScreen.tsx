@@ -25,7 +25,6 @@ import {
   HeaderButton,
   LoadingModal,
   Space,
-  CommentCard,
   SummaryCard,
   GrayHeader,
   TextButtun,
@@ -52,6 +51,7 @@ import {
 } from '../utils/correcting';
 import { getCorrection } from '../utils/corrections';
 import Corrections from '../components/organisms/Corrections';
+import { CommentCard } from '../components/molecules';
 
 type RightButtonState = 'summary' | 'done' | 'nothing';
 

@@ -260,7 +260,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const onPressMoreReview = useCallback((): void => {
     if (!profile) return;
-    navigation.navigate('ReviewList', { uid: profile.uid });
+    navigation.push('ReviewList', { uid: profile.uid });
   }, [navigation, profile]);
 
   const onPressBlockSubmit = useCallback((): void => {
@@ -383,10 +383,10 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         <DiaryListItem
           item={item}
           onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+            navigation.push('UserProfile', { uid });
           }}
           onPressItem={(): void => {
-            navigation.navigate('UserDiary', { teachDiary: item });
+            navigation.push('UserDiary', { teachDiary: item });
           }}
         />
       );
@@ -400,7 +400,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         <ReviewListItem
           item={item}
           onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+            navigation.push('UserProfile', { uid });
           }}
         />
       );

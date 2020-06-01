@@ -144,7 +144,8 @@ const foregetPassword = {
 
 const initialize = {
   start: 'Create Account',
-  acount: 'Have an account already?',
+  // 末尾にスペースを開ける
+  acount: 'Have an account already? ',
   link: 'Login',
 };
 
@@ -207,16 +208,20 @@ const reviewList = {
 
 const review = {
   headerTitle: 'Review',
-  placeholder: 'Comment',
+  placeholder: 'Comment (Optional)',
   confirmation:
     'The draft of your review will be deleted. Would you like to proceed?',
 };
 
 const selectLanguage = {
   headerTitle: 'Language Selection',
-  title: 'Please choose your languages.',
+  title: 'Please choose your languages and nationality.',
   learn: 'Language you want to learn',
-  native: 'Native language',
+  native: 'Language you can speak',
+  nationality: 'Nationality',
+  placeholder: 'Please select your nationality',
+  change: 'Change',
+  nationalityCodeAlert: 'Please select your nationality',
 };
 
 const setting = {
@@ -345,6 +350,10 @@ const myDiaryCorrectionFooter = {
 const profileLanguage = {
   learn: 'Learning',
   native: 'Native',
+};
+
+const profileNationality = {
+  nationality: 'Nationality',
 };
 
 const summaryInput = {
@@ -610,6 +619,7 @@ const en = {
   languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
+  profileNationality,
   summaryInput,
   correctionOrigin,
   diaryHitList,

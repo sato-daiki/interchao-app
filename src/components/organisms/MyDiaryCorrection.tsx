@@ -1,11 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { Space, CommentCard, SummaryCardTranslate, HideButton } from '../atoms';
+import { Space, HideButton } from '../atoms';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment, Language } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
-import { MyDiaryCorrectionFooter } from '../molecules';
+import {
+  MyDiaryCorrectionFooter,
+  CommentCard,
+  SummaryCardTranslate,
+} from '../molecules';
 
 interface Props {
   isReview?: boolean;
@@ -84,6 +88,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
               userName={profile.userName}
               photoUrl={profile.photoUrl}
               nativeLanguage={profile.nativeLanguage}
+              nationalityCode={profile.nationalityCode}
               onPress={(): void => onPressUser(profile.uid)}
             />
             <Text style={styles.daytext}>{postDate}</Text>

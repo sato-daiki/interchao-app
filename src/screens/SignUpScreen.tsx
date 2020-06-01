@@ -119,6 +119,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         pro: false,
         learnLanguage: profile.learnLanguage,
         nativeLanguage: profile.nativeLanguage,
+        nationalityCode: profile.nationalityCode,
         introduction: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -144,7 +145,12 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       );
       batch.commit();
     },
-    [profile.learnLanguage, profile.nativeLanguage, profile.userName]
+    [
+      profile.learnLanguage,
+      profile.nationalityCode,
+      profile.nativeLanguage,
+      profile.userName,
+    ]
   );
 
   const onPressSkip = useCallback(() => {
