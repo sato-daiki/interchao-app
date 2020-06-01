@@ -14,11 +14,10 @@ import {
   HeaderButton,
   LoadingModal,
   Space,
-  CommentCard,
   SummaryCard,
   GrayHeader,
 } from '../components/atoms';
-import { CorrectionFooterButton } from '../components/molecules';
+import { CorrectionFooterButton, CommentCard } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTutorialCorrecting from '../components/organisms/ModalTutorialCorrecting';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';

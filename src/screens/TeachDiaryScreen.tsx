@@ -23,6 +23,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
+  CopyText,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -72,9 +73,11 @@ const styles = StyleSheet.create({
   },
   errContainer: {
     flex: 1,
+    paddingTop: 32,
+    paddingHorizontal: 16,
     backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
+    lineHeight: fontSizeM * 1.3,
   },
   correctionButton: {
     marginTop: 16,
@@ -228,7 +231,6 @@ const TeachDiaryScreen: ScreenType = ({
       } else {
         return;
       }
-      console.log('data', data);
       const batch = firebase.firestore().batch();
 
       //  添削中のobjectIDを更新する
@@ -346,7 +348,7 @@ const TeachDiaryScreen: ScreenType = ({
   if (!teachDiary) {
     return (
       <View style={styles.errContainer}>
-        <Text>{I18n.t('teachDiary.deleteTargetPage')}</Text>
+        <Text>{I18n.t('errorMessage.deleteTargetPage')}</Text>
       </View>
     );
   }
@@ -381,8 +383,8 @@ const TeachDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{text}</Text>
+          <CopyText style={styles.title} text={title} />
+          <CopyText style={styles.text} text={text} />
         </View>
         <Corrections
           headerTitle={I18n.t('teachDiaryCorrection.header')}

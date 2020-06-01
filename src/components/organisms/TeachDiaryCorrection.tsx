@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { CommentCard, SummaryCard, HideButton } from '../atoms';
+import { SummaryCard, HideButton } from '../atoms';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
+import { CommentCard } from '../molecules';
 
 interface Props {
   correction: Correction;

@@ -18,6 +18,7 @@ import {
 import I18n from '../../utils/I18n';
 import { Language } from '../../types';
 import googleTranslate from '../../utils/googleTranslate';
+import { CopyText } from '../atoms';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -141,9 +142,10 @@ const SummaryCardTranslate = ({
         ) : null}
       </View>
       <View style={styles.line} />
-      <Text style={[styles.text, isTranslated ? styles.italic : undefined]}>
-        {displaySummary}
-      </Text>
+      <CopyText
+        style={[styles.text, isTranslated ? styles.italic : undefined]}
+        text={displaySummary}
+      />
     </View>
   );
 };
