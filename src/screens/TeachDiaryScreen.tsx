@@ -23,6 +23,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
+  CopyText,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -230,7 +231,6 @@ const TeachDiaryScreen: ScreenType = ({
       } else {
         return;
       }
-      console.log('data', data);
       const batch = firebase.firestore().batch();
 
       //  添削中のobjectIDを更新する
@@ -383,8 +383,8 @@ const TeachDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{text}</Text>
+          <CopyText style={styles.title} text={title} />
+          <CopyText style={styles.text} text={text} />
         </View>
         <Corrections
           headerTitle={I18n.t('teachDiaryCorrection.header')}
