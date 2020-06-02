@@ -8,10 +8,13 @@ import {
   DisplayProfile,
   Comment,
   Diary,
+  User,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
+import Algolia from './Algolia';
+import { track, events } from './Analytics';
 
 interface Status {
   text: string;
@@ -270,4 +273,107 @@ export const updateYet = async (
   });
 
   batch.commit();
+};
+
+// 添削チェックしてOK次へすすむ
+export const onStatusCheck = async (
+  isLoading: boolean,
+  user: User,
+  teachDiary: Diary | undefined,
+  goToCorrecting: () => void,
+  setIsModalCorrection: Function,
+  setIsLoading: Function,
+  setRedux: (userInfo, diaryInfo) => void
+): Promise<void> => {
+  if (!teachDiary || !teachDiary.objectID) return;
+  if (isLoading) return;
+  setIsLoading(true);
+
+  // 他の人が添削を開始していないかチェックする
+  const index = await Algolia.getDiaryIndex(true);
+  await Algolia.setSettings(index);
+  const res = await index.search('', {
+    filters: `objectID: ${teachDiary.objectID} AND (correctionStatus: correcting OR correctionStatus2: correcting OR correctionStatus3: correcting)`,
+    page: 0,
+    hitsPerPage: 1,
+  });
+
+  if (res.nbHits > 0) {
+    Alert.alert(
+      I18n.t('common.error'),
+      I18n.t('errorMessage.correctionAlready')
+    );
+    setIsLoading(false);
+    return;
+  }
+  const res2 = await index.search('', {
+    filters: `objectID: ${teachDiary.objectID} AND (correctionStatus: yet OR correctionStatus2: yet OR correctionStatus3: yet)`,
+    page: 0,
+    hitsPerPage: 1,
+  });
+
+  if (res2.nbHits !== 1) {
+    Alert.alert(
+      I18n.t('common.error'),
+      I18n.t('errorMessage.correctionAlready')
+    );
+    setIsLoading(false);
+    return;
+  }
+
+  const diary = res2.hits[0] as Diary;
+  const data = {
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  } as any;
+  let correctingCorrectedNum: number;
+  if (diary.correctionStatus === 'yet') {
+    data.correctionStatus = 'correcting';
+    correctingCorrectedNum = 1;
+  } else if (diary.correctionStatus2 === 'yet') {
+    data.correctionStatus2 = 'correcting';
+    correctingCorrectedNum = 2;
+  } else if (diary.correctionStatus3 === 'yet') {
+    data.correctionStatus3 = 'correcting';
+    correctingCorrectedNum = 3;
+  } else {
+    return;
+  }
+  const batch = firebase.firestore().batch();
+
+  //  添削中のobjectIDを更新する
+  const userRef = firebase.firestore().doc(`users/${user.uid}`);
+  batch.update(userRef, {
+    correctingObjectID: teachDiary.objectID,
+    correctingCorrectedNum,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+  //  添削中一覧に追加する
+  const correctingRef = firebase
+    .firestore()
+    .doc(`correctings/${teachDiary.objectID}`);
+  batch.set(correctingRef, {
+    uid: user.uid,
+    correctedNum: correctingCorrectedNum,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+  });
+
+  //  日記のステータスを添削中に変更する
+  const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
+
+  batch.update(diaryRef, data);
+  batch.commit();
+  const userInfo = {
+    ...user,
+    correctingObjectID: teachDiary.objectID,
+    correctingCorrectedNum,
+  };
+  const diaryInfo = {
+    ...teachDiary,
+    ...data,
+  };
+  setRedux(userInfo, diaryInfo);
+  track(events.CREATED_CORRECTING);
+  setIsModalCorrection(false);
+  setIsLoading(false);
+  goToCorrecting();
 };

@@ -39,7 +39,7 @@ export const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
 interface UpdateDoneProps {
   isLoading: boolean;
   summary: string;
-  teachDiary: Diary;
+  teachDiary: Diary | undefined;
   currentProfile: Profile;
   user: User;
   infoComments: InfoCommentAndroid[] | InfoComment[];
@@ -204,14 +204,14 @@ export const updateDone = async ({
 };
 
 export const onUpdateTimeUp = async (
-  teachDiary: Diary,
+  teachDiary: Diary | undefined,
   user: User,
   setIsLoading: Function,
   editTeachDiary: (objectID: string, data: any) => void,
   setUser: Function,
   setIsModalTimeUp: Function
 ): Promise<void> => {
-  if (!teachDiary.objectID) return;
+  if (!teachDiary || !teachDiary.objectID) return;
   setIsLoading(true);
   // ステータスを戻す
   const data = getDataCorrectionStatus(user.correctingCorrectedNum, 'yet');

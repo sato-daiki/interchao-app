@@ -64,11 +64,12 @@ export interface PropsAndroid {
   user: User;
   currentProfile: Profile;
   teachDiary: Diary;
+  caller: 'Teach' | 'User';
 }
 
 interface DispatchProps {
   setUser: (user: User) => void;
-  editTeachDiary: (objectID: string, diary: Diary) => void;
+  editTeachDiary?: (objectID: string, diary: Diary) => void;
 }
 
 type ScreenType = React.ComponentType<
@@ -131,10 +132,11 @@ const styles = StyleSheet.create({
 const CorrectingAndroidScreen: ScreenType = ({
   navigation,
   user,
+  caller,
   currentProfile,
   teachDiary,
   setUser,
-  editTeachDiary,
+  editTeachDiary = (): void => undefined,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
@@ -538,9 +540,13 @@ const CorrectingAndroidScreen: ScreenType = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('TeachDiaryList');
+    if (caller === 'User') {
+      navigation.navigate('UserProfile', { uid: teachDiary.profile.uid });
+    } else {
+      navigation.navigate('TeachDiaryList');
+    }
     setIsModalDone(false);
-  }, [navigation]);
+  }, [caller, navigation, teachDiary.profile.uid]);
 
   /**
    * 30分が経過した時の処理

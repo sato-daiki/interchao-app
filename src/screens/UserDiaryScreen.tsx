@@ -1,122 +1,93 @@
-import React, { useCallback, useState, useEffect, ReactNode } from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useCallback, useState, useEffect } from 'react';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { Profile } from '../types';
-import { UserDiaryStatus } from '../components/molecules';
+import Algolia from '../utils/Algolia';
+import { Profile, Diary, Correction, User } from '../types';
+import DiaryCommon from '../components/organisms/DiaryCommon';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { ProfileIconHorizontal, Space, HeaderText } from '../components/atoms';
-import { getAlgoliaDate } from '../utils/diary';
-import {
-  subTextColor,
-  fontSizeS,
-  primaryColor,
-  fontSizeM,
-} from '../styles/Common';
 import { getCorrection } from '../utils/corrections';
-import { Correction } from '../types/correction';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
-import Corrections from '../components/organisms/Corrections';
+import { onStatusCheck } from '../utils/diary';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
+const { width } = Dimensions.get('window');
+
+export interface Props {
+  user: User;
+  profile: Profile;
+}
+
+interface DispatchProps {
+  setUser: (user: User) => void;
+}
+
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    paddingVertical: 16,
-  },
-  errContainer: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 16,
-    backgroundColor: '#FFF',
-    alignItems: 'center',
-    lineHeight: fontSizeM * 1.3,
-  },
-  main: {
-    paddingHorizontal: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 4,
-  },
-  postDayText: {
-    color: subTextColor,
-    fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 16,
-  },
-  text: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    paddingBottom: 32,
-    lineHeight: fontSizeM * 1.3,
+  headerTitleStyle: {
+    width: width - 144,
+    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
   },
 });
 
 /**
  * 日記詳細
  */
-const UserDiaryScreen: ScreenType = ({ navigation }) => {
+const UserDiaryScreen: ScreenType = ({
+  user,
+  profile,
+  setUser,
+  navigation,
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(true);
+  const [isDiaryLoading, setIsDiaryLoading] = useState(true);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
+  const [isModalCorrection, setIsModalCorrection] = useState(false);
+  const [teachDiary, setTeachDiary] = useState<Diary>();
   const [targetProfile, setTargetProfile] = useState<Profile>();
   const [correction, setCorrection] = useState<Correction>();
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
 
-  const { params = {} } = navigation.state;
-  const { teachDiary } = params;
-
-  const getNewProfile = useCallback(() => {
+  const getNewProfile = useCallback((diary: Diary) => {
     const f = async (): Promise<void> => {
-      if (!teachDiary) return;
-      const newProfile = await getProfile(teachDiary.profile.uid);
+      if (!diary) return;
+      const newProfile = await getProfile(diary.profile.uid);
       if (newProfile) {
         setTargetProfile(newProfile);
       }
       setIsProfileLoading(false);
     };
     f();
-  }, [teachDiary]);
+  }, []);
 
-  const getNewCorrection = useCallback(() => {
+  const getNewCorrection = useCallback((diary: Diary) => {
     const f = async (): Promise<void> => {
-      if (!teachDiary) return;
-      if (teachDiary.correction) {
-        const newCorrection = await getCorrection(teachDiary.correction.id);
+      if (!diary) return;
+      if (diary.correction) {
+        const newCorrection = await getCorrection(diary.correction.id);
         if (newCorrection) {
           setCorrection(newCorrection);
         }
       }
-      if (teachDiary.correction2) {
-        const newCorrection = await getCorrection(teachDiary.correction2.id);
+      if (diary.correction2) {
+        const newCorrection = await getCorrection(diary.correction2.id);
         if (newCorrection) {
           setCorrection2(newCorrection);
         }
       }
-      if (teachDiary.correction3) {
-        const newCorrection = await getCorrection(teachDiary.correction3.id);
+      if (diary.correction3) {
+        const newCorrection = await getCorrection(diary.correction3.id);
         if (newCorrection) {
           setCorrection3(newCorrection);
         }
@@ -124,15 +95,74 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
       setIsCorrectionLoading(false);
     };
     f();
-  }, [teachDiary]);
+  }, []);
 
   useEffect(() => {
     const f = async (): Promise<void> => {
+      const { params = {} } = navigation.state;
+      const { objectID } = params;
+      if (!objectID) {
+        setIsDiaryLoading(false);
+        return;
+      }
+
+      // 日記を取得
+      const index = await Algolia.getDiaryIndex();
+      const res = await index.search('', {
+        filters: `objectID: ${objectID}`,
+        page: 0,
+        hitsPerPage: 1,
+      });
+      if (res.nbHits !== 1) {
+        setIsDiaryLoading(false);
+        return;
+      }
+      const diary = res.hits[0] as Diary;
+      setTeachDiary(diary);
+      setIsDiaryLoading(false);
       // プロフィールを取得
-      await Promise.all([getNewProfile(), getNewCorrection()]);
+      await Promise.all([getNewProfile(diary), getNewCorrection(diary)]);
     };
     f();
-  }, [getNewCorrection, getNewProfile, navigation.state.params]);
+  }, [
+    getNewCorrection,
+    getNewProfile,
+    navigation.state,
+    navigation.state.params,
+  ]);
+
+  const setRedux = useCallback(
+    (userInfo, diaryInfo): void => {
+      setUser(userInfo);
+    },
+    [setUser]
+  );
+
+  const goToCorrecting = useCallback((): void => {
+    if (!teachDiary) return;
+    navigation.navigate('UserCorrecting', {
+      teachDiary,
+    });
+  }, [navigation, teachDiary]);
+
+  const onPressSubmitCorrection = useCallback(() => {
+    const f = async (): Promise<void> => {
+      await onStatusCheck(
+        isLoading,
+        user,
+        teachDiary,
+        goToCorrecting,
+        setIsModalCorrection,
+        setIsLoading,
+        setRedux
+      );
+    };
+    f();
+  }, [goToCorrecting, isLoading, setRedux, teachDiary, user]);
+
+  const onPressCorrection = useCallback(() => {
+    setIsModalCorrection(true);
+  }, []);
 
   const onPressUser = useCallback(
     (uid: string): void => {
@@ -141,70 +171,33 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
     [navigation]
   );
 
-  if (!teachDiary) {
-    return (
-      <View style={styles.errContainer}>
-        <Text>{I18n.t('errorMessage.deleteTargetPage')}</Text>
-      </View>
-    );
-  }
-
-  const { createdAt, title, text } = teachDiary;
-  const postDate = getAlgoliaDate(createdAt);
   return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container}>
-        <View style={styles.main}>
-          {targetProfile && !isProfileLoading ? (
-            <ProfileIconHorizontal
-              userName={targetProfile.userName}
-              photoUrl={targetProfile.photoUrl}
-              nativeLanguage={targetProfile.nativeLanguage}
-              nationalityCode={targetProfile.nationalityCode}
-              onPress={(): void => onPressUser(targetProfile.uid)}
-            />
-          ) : (
-            <ActivityIndicator />
-          )}
-          <Space size={8} />
-          <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDate}</Text>
-            <UserDiaryStatus diary={teachDiary} />
-          </View>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.text}>{text}</Text>
-        </View>
-        <Corrections
-          headerTitle={I18n.t('teachDiaryCorrection.header')}
-          correction={correction}
-          correction2={correction2}
-          correction3={correction3}
-          onPressUser={(uid: string): void => {
-            navigation.push('UserProfile', { uid });
-          }}
-        />
-      </ScrollView>
-    </View>
+    <DiaryCommon
+      isLoading={isLoading}
+      isModalCorrection={isModalCorrection}
+      isDiaryLoading={isDiaryLoading}
+      isProfileLoading={isProfileLoading}
+      isCorrectionLoading={isCorrectionLoading}
+      user={user}
+      targetProfile={targetProfile}
+      teachDiary={teachDiary}
+      profile={profile}
+      correction={correction}
+      correction2={correction2}
+      correction3={correction3}
+      onPressClose={(): void => setIsModalCorrection(false)}
+      onPressUser={onPressUser}
+      onPressCorrection={onPressCorrection}
+      onPressSubmitCorrection={onPressSubmitCorrection}
+    />
   );
 };
 
-UserDiaryScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const title = navigation.getParam('title');
-  const isYet = navigation.getParam('isYet');
-  const onPressCorrection = navigation.getParam('onPressCorrection');
-
+UserDiaryScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
-    title,
-    headerRight: (): JSX.Element | null =>
-      isYet ? (
-        <HeaderText
-          title={I18n.t('teachDiary.correcting')}
-          onPress={onPressCorrection}
-        />
-      ) : null,
+    title: I18n.t('teachDiary.headerTitle'),
+    headerTitleStyle: styles.headerTitleStyle,
   };
 };
 

@@ -57,12 +57,13 @@ interface ButtonInfo {
 export interface PropsIOS {
   user: User;
   currentProfile: Profile;
-  teachDiary: Diary;
+  teachDiary?: Diary;
+  caller: 'Teach' | 'User';
 }
 
 interface DispatchProps {
   setUser: (user: User) => void;
-  editTeachDiary: (objectID: string, diary: Diary) => void;
+  editTeachDiary?: (objectID: string, diary: Diary) => void;
 }
 
 type ScreenType = React.ComponentType<
@@ -101,10 +102,11 @@ const styles = StyleSheet.create({
 const CorrectingIOSScreen: ScreenType = ({
   navigation,
   user,
+  caller,
   currentProfile,
   teachDiary,
   setUser,
-  editTeachDiary,
+  editTeachDiary = (): void => undefined,
 }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
@@ -206,7 +208,7 @@ const CorrectingIOSScreen: ScreenType = ({
       setIsCommentInput(false);
       return;
     }
-    if (!selection) return;
+    if (!selection || !teachDiary) return;
     const newOriginal = teachDiary.text.substring(
       selection.start,
       selection.end
@@ -216,7 +218,7 @@ const CorrectingIOSScreen: ScreenType = ({
     setIsCommentInput(true);
     setOriginal(newOriginal);
     setCorrectingSelection(selection);
-  }, [isSummary, selection, teachDiary.text]);
+  }, [isSummary, selection, teachDiary]);
 
   /**
    * 総評ボタンを追加する
@@ -245,12 +247,12 @@ const CorrectingIOSScreen: ScreenType = ({
     };
     f();
   }, [
-    teachDiary,
     isLoading,
-    currentProfile,
-    infoComments,
-    user,
     summary,
+    teachDiary,
+    currentProfile,
+    user,
+    infoComments,
     editTeachDiary,
     setUser,
   ]);
@@ -512,9 +514,14 @@ const CorrectingIOSScreen: ScreenType = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('TeachDiaryList');
+    if (!teachDiary) return;
+    if (caller === 'User') {
+      navigation.navigate('UserProfile', { uid: teachDiary.profile.uid });
+    } else {
+      navigation.navigate('TeachDiaryList');
+    }
     setIsModalDone(false);
-  }, [navigation]);
+  }, [caller, navigation, teachDiary]);
 
   /**
    * 30分が経過した時の処理
@@ -540,10 +547,13 @@ const CorrectingIOSScreen: ScreenType = ({
     navigation.navigate('TeachDiaryList');
   }, [navigation]);
 
-  const getPoints = getUsePoints(
-    teachDiary.text.length,
-    teachDiary.profile.learnLanguage
-  );
+  const getPoints = teachDiary
+    ? getUsePoints(teachDiary.text.length, teachDiary.profile.learnLanguage)
+    : 0;
+
+  if (!teachDiary) {
+    return <View />;
+  }
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
