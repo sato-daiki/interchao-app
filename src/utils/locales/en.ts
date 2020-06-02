@@ -258,6 +258,7 @@ const signUp = {
 };
 
 const teachDiary = {
+  headerTitle: 'Entry',
   start: 'Begin Corrections',
 };
 
@@ -492,6 +493,10 @@ const postDiaryComponent = {
   draft: 'Save as Draft',
 };
 
+const sns = {
+  title: 'Share',
+};
+
 const teachDiaryCorrection = {
   header: 'Correction Results',
 };
@@ -639,6 +644,7 @@ const en = {
   myDiaryListMenu,
   report,
   postDiaryComponent,
+  sns,
   teachDiaryCorrection,
   tutorialCorrecting,
   tutorialPoints,

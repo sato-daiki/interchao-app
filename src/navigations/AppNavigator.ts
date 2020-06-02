@@ -14,7 +14,10 @@ const appContainer = createAppContainer(
         navigationOptions: { header: null },
       },
       AuthNavigator,
-      MainTabNavigator,
+      MainTabNavigator: {
+        screen: MainTabNavigator,
+        path: '',
+      },
     },
     {
       initialRouteName: 'AuthLoading',

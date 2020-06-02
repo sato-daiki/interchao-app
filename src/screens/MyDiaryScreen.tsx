@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Share,
+  Linking,
+  ActivityIndicator,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -32,8 +35,9 @@ import {
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
-import { LoadingModal, GrayHeader, CopyText } from '../components/atoms';
+import { LoadingModal, GrayHeader, CopyText, Space } from '../components/atoms';
 import I18n from '../utils/I18n';
+import Sns from '../components/organisms/Sns';
 
 export interface Props {
   diary?: Diary;
@@ -91,6 +95,13 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
+  snsContainer: {
+    paddingVertical: 56,
+    alignSelf: 'center',
+  },
+  activityIndicator: {
+    marginVertical: 16,
+  },
 });
 
 /**
@@ -106,8 +117,45 @@ const MyDiaryScreen: ScreenType = ({
   const [correction, setCorrection] = useState<Correction>();
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
+
+  const url =
+    profile.nativeLanguage === 'ja'
+      ? 'http://interchao.app/jp/share.html'
+      : 'http://interchao.app/en/share.html';
+  const shareMessage = encodeURI(url);
+
+  const objectID = 1;
+
+  const onPressShare = (): void => {
+    Share.share({
+      message: `${shareMessage}?objectID=${objectID}`,
+    });
+  };
+
+  const onPressFacebook = (): void => {
+    Linking.openURL(
+      `https://www.facebook.com/sharer/sharer.php?u=${shareMessage}?objectID=${objectID}`
+    );
+  };
+
+  const onPressTwitter = (): void => {
+    Linking.canOpenURL('twitter://post')
+      .then(() => {
+        Linking.openURL(
+          `twitter://post?message=${shareMessage}?objectID=${objectID}`
+        )
+          .then(() => undefined)
+          .catch(_ => {
+            Linking.openURL(
+              `http://twitter.com/share?text=${shareMessage}?objectID=${objectID}`
+            );
+          });
+      })
+      .catch(() => undefined);
+  };
 
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
@@ -162,7 +210,7 @@ const MyDiaryScreen: ScreenType = ({
           setCorrection3(newCorrection);
         }
       }
-      setIsLoading(false);
+      setIsCorrectionLoading(false);
     };
     f();
   }, [diary]);
@@ -233,16 +281,34 @@ const MyDiaryScreen: ScreenType = ({
           <CopyText style={styles.title} text={title} />
           <CopyText style={styles.text} text={text} />
         </View>
-        {correction ? (
-          <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
-        ) : null}
-        {correction ? renderMyDiaryCorrection(1, correction, isReview) : null}
-        {correction2
-          ? renderMyDiaryCorrection(2, correction2, isReview2)
-          : null}
-        {correction3
-          ? renderMyDiaryCorrection(3, correction3, isReview3)
-          : null}
+        {isCorrectionLoading ? (
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size="small" />
+          </View>
+        ) : (
+          <>
+            {correction ? (
+              <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
+            ) : null}
+            {correction
+              ? renderMyDiaryCorrection(1, correction, isReview)
+              : null}
+            {correction2
+              ? renderMyDiaryCorrection(2, correction2, isReview2)
+              : null}
+            {correction3
+              ? renderMyDiaryCorrection(3, correction3, isReview3)
+              : null}
+            <Space size={16} />
+            <Sns
+              containerStyle={styles.snsContainer}
+              onPressShare={onPressShare}
+              onPressFacebook={onPressFacebook}
+              onPressTwitter={onPressTwitter}
+            />
+            <Space size={16} />
+          </>
+        )}
       </ScrollView>
     </View>
   );

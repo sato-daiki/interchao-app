@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Interchao",
-    "scheme": "white-zebra",
+    "scheme": "interchao",
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],

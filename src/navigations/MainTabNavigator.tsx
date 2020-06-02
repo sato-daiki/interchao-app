@@ -35,7 +35,6 @@ import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen'
 import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import { TabIcon, TabLabel } from '../components/molecules';
-import UserDiaryScreen from '../screens/UserDiaryScreen';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
 
 /* components */
@@ -80,7 +79,8 @@ const commonDiaryNavigator = {
     screen: UserProfileScreen,
   },
   UserDiary: {
-    screen: UserDiaryScreen,
+    screen: UserDiaryScreenContainer,
+    path: 'userDiary/:objectID',
   },
   ReviewList: {
     screen: ReviewListScreenContainer,
@@ -161,7 +161,7 @@ const TeachDiaryTabStack = createStackNavigator(
 
 const MainTab = createBottomTabNavigator(
   {
-    MyDiary: {
+    MyDiaryTab: {
       screen: MyDiaryTabStack,
       navigationOptions: {
         tabBarLabel: I18n.t('mainTab.myDiary'),
@@ -175,7 +175,7 @@ const MainTab = createBottomTabNavigator(
         ),
       },
     },
-    PostDiary: {
+    PostDiaryTab: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       screen: PostDiaryScreen,
@@ -189,7 +189,7 @@ const MainTab = createBottomTabNavigator(
         },
       },
     },
-    TeachDiary: {
+    TeachDiaryTab: {
       screen: TeachDiaryTabStack,
       navigationOptions: {
         tabBarLabel: ({ tintColor }: { tintColor: string }): JSX.Element => (
@@ -203,6 +203,7 @@ const MainTab = createBottomTabNavigator(
           />
         ),
       },
+      path: 'teachDiaryTab',
     },
   },
   {
@@ -216,6 +217,7 @@ export default createStackNavigator(
   {
     Home: {
       screen: MainTab,
+      path: '',
     },
     ModalPostDiary: { screen: ModalPostDiaryNavigator },
     ModalEditMyProfile: {

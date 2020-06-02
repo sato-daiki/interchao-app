@@ -7,7 +7,7 @@ import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
 // import Updates from 'expo-updates';
-import { Updates } from 'expo';
+import { Updates, Linking } from 'expo';
 
 import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
@@ -57,12 +57,14 @@ const App: React.SFC = () => {
     checkUpdate();
   }, []);
 
+  const prefix = Linking.makeUrl('/');
+
   return (
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
-          <AppNavigator />
+          <AppNavigator uriPrefix={prefix} />
         </ActionSheetProvider>
       </PersistGate>
     </Provider>
