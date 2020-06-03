@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Interchao",
-    "scheme": "white-zebra",
+    "scheme": "interchao",
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
@@ -53,7 +53,7 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 9
+      "revision": 10
     },
     "hooks": {
       "postPublish": [
