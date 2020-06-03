@@ -255,6 +255,7 @@ const signUp = {
 };
 
 const teachDiary = {
+  headerTitle: '日記',
   start: '添削する',
 };
 
@@ -487,6 +488,10 @@ const postDiaryComponent = {
   draft: '下書き保存',
 };
 
+const sns = {
+  title: 'アプリをSNSでシェア',
+};
+
 const teachDiaryCorrection = {
   header: '添削結果',
 };
@@ -631,6 +636,7 @@ const ja = {
   myDiaryListMenu,
   report,
   postDiaryComponent,
+  sns,
   teachDiaryCorrection,
   tutorialCorrecting,
   tutorialPoints,

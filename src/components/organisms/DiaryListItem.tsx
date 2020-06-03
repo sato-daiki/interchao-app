@@ -9,7 +9,7 @@ import {
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
-import { MyDiaryStatus, ProfileIcons, UserDiaryStatus } from '../molecules';
+import { MyDiaryStatus, ProfileIcons } from '../molecules';
 
 interface Props {
   mine?: boolean;
@@ -74,11 +74,8 @@ const DiaryListItem = ({
     >
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        {mine ? (
-          <MyDiaryStatus diary={item} />
-        ) : (
-          <UserDiaryStatus diary={item} />
-        )}
+        {/* プロフィール画面からはステータスは表示しないようにする */}
+        {mine ? <MyDiaryStatus diary={item} /> : null}
       </View>
       <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
         {title}

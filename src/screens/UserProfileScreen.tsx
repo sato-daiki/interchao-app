@@ -386,7 +386,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             navigation.push('UserProfile', { uid });
           }}
           onPressItem={(): void => {
-            navigation.push('UserDiary', { teachDiary: item });
+            navigation.push('UserDiary', { objectID: item.objectID });
           }}
         />
       );

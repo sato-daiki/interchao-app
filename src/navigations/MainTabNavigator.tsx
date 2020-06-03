@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import I18n from '../utils/I18n';
 import { mainColor } from '../styles/Common';
+import { TabIcon, TabLabel } from '../components/molecules';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
@@ -34,9 +35,8 @@ import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen'
 import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
 import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
-import { TabIcon, TabLabel } from '../components/molecules';
-import UserDiaryScreen from '../screens/UserDiaryScreen';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
+import UserDiaryScreen from '../screens/UserDiaryScreen';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -161,7 +161,7 @@ const TeachDiaryTabStack = createStackNavigator(
 
 const MainTab = createBottomTabNavigator(
   {
-    MyDiary: {
+    MyDiaryTab: {
       screen: MyDiaryTabStack,
       navigationOptions: {
         tabBarLabel: I18n.t('mainTab.myDiary'),
@@ -175,7 +175,7 @@ const MainTab = createBottomTabNavigator(
         ),
       },
     },
-    PostDiary: {
+    PostDiaryTab: {
       // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore
       screen: PostDiaryScreen,
@@ -189,7 +189,7 @@ const MainTab = createBottomTabNavigator(
         },
       },
     },
-    TeachDiary: {
+    TeachDiaryTab: {
       screen: TeachDiaryTabStack,
       navigationOptions: {
         tabBarLabel: ({ tintColor }: { tintColor: string }): JSX.Element => (
