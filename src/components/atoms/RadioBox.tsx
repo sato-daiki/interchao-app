@@ -1,32 +1,44 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { View, StyleSheet } from 'react-native';
-import { mainColor } from '../../styles/Common';
+import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import { mainColor, fontSizeM, primaryColor } from '../../styles/Common';
 
 interface Props {
   checked: boolean;
   color: string;
+  text: string;
+  onPress: () => void;
 }
 
 const styles = StyleSheet.create({
   container: {
-    // 初期値で高さを指定しておかないとぱらつく
-    height: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioBoxText: {
+    fontSize: fontSizeM,
+    color: primaryColor,
+    paddingLeft: 8,
   },
 });
 
 const RadioBox: React.FC<Props> = ({
   checked,
   color = mainColor,
+  text,
+  onPress,
 }: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
-      <MaterialCommunityIcons
-        size={24}
-        color={color}
-        name={checked ? 'radiobox-marked' : 'radiobox-blank'}
-      />
-    </View>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.container}>
+        <MaterialCommunityIcons
+          size={24}
+          color={color}
+          name={checked ? 'radiobox-marked' : 'radiobox-blank'}
+        />
+        <Text style={styles.radioBoxText}>{text}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

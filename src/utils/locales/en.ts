@@ -119,6 +119,9 @@ const editMyProfile = {
   name: 'Name',
   userName: 'Username',
   placeholderIntroduction: 'Self Introduction (200 characters or less)',
+  learn: 'Leaning',
+  native: 'Native',
+  spoken: 'Spoken',
 };
 
 const editPassword = {
@@ -218,10 +221,12 @@ const selectLanguage = {
   title: 'Please choose your languages and nationality.',
   learn: 'Language you want to learn',
   native: 'Language you can speak',
+  spoken: 'Other Languages you can speak',
   nationality: 'Nationality',
   placeholder: 'Please select your nationality',
   change: 'Change',
   nationalityCodeAlert: 'Please select your nationality',
+  add: 'Add',
 };
 
 const setting = {
@@ -337,11 +342,6 @@ const emptyReview = {
   empty: 'There are no reviews yet.',
 };
 
-const languageRadioBox = {
-  ja: 'Japanese',
-  en: 'English',
-};
-
 const myDiaryCorrectionFooter = {
   finText: 'This journal entry has been reviewed.',
   title: 'Review the Correction',
@@ -349,8 +349,9 @@ const myDiaryCorrectionFooter = {
 };
 
 const profileLanguage = {
-  learn: 'Learning',
-  native: 'Native',
+  learn: 'Language you want to learn',
+  native: 'Language you can speak',
+  spoken: 'Other Languages you can speak',
 };
 
 const profileNationality = {
@@ -574,6 +575,7 @@ const userDiaryStatus = {
 const language = {
   ja: 'Japanese',
   en: 'English',
+  zh: 'Chinese',
 };
 
 const en = {
@@ -621,7 +623,6 @@ const en = {
   correctionFooterButton,
   emptyDiary,
   emptyReview,
-  languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,

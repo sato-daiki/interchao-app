@@ -119,6 +119,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         pro: false,
         learnLanguage: profile.learnLanguage,
         nativeLanguage: profile.nativeLanguage,
+        spokenLanguages: profile.spokenLanguages || null,
         nationalityCode: profile.nationalityCode,
         introduction: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -149,6 +150,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       profile.learnLanguage,
       profile.nationalityCode,
       profile.nativeLanguage,
+      profile.spokenLanguages,
       profile.userName,
     ]
   );

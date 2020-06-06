@@ -74,6 +74,7 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
     introduction,
     nativeLanguage,
     learnLanguage,
+    spokenLanguages,
     nationalityCode,
   } = profile;
 
@@ -117,6 +118,7 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
       <ProfileLanguage
         nativeLanguage={nativeLanguage}
         learnLanguage={learnLanguage}
+        spokenLanguages={spokenLanguages}
       />
       {nationalityCode ? (
         <ProfileNationalityCode nationalityCode={nationalityCode} />

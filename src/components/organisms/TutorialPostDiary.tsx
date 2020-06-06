@@ -5,7 +5,7 @@ import { Space } from '../atoms';
 import { Pen } from '../../images';
 import Tutorial from '../template/Tutorial';
 import I18n from '../../utils/I18n';
-import { getlanguage, getBasePoints } from '../../utils/diary';
+import { getLanguage, getBasePoints } from '../../utils/diary';
 import { Language } from '../../types';
 
 const styles = StyleSheet.create({
@@ -55,8 +55,8 @@ const TutorialPostDiary: React.FC<Props> = ({
         <Text style={styles.text}>
           {I18n.t('tutorialPostDiary.text', {
             learnCharacters: getBasePoints(learnLanguage),
-            learnLanguage: getlanguage(learnLanguage),
-            nativeLanguage: getlanguage(nativeLanguage),
+            learnLanguage: getLanguage(learnLanguage),
+            nativeLanguage: getLanguage(nativeLanguage),
           })}
         </Text>
       </View>
