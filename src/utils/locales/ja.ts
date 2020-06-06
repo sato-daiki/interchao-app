@@ -119,6 +119,9 @@ const editMyProfile = {
   name: '名前',
   userName: 'ユーザネーム',
   placeholderIntroduction: '自己紹介(200字以内)',
+  learn: '勉強中',
+  native: 'ネイティブ',
+  spoken: 'その他の\n話せる言語',
 };
 
 const editPassword = {
@@ -215,10 +218,12 @@ const selectLanguage = {
   title: '言語と国籍を選択してください',
   learn: '学びたい言語',
   native: 'ネイティブ言語',
+  spoken: '他のネイティブレベルの言語',
   nationality: '国籍',
   placeholder: '国籍を選択してください',
   change: '変更する',
   nationalityCodeAlert: '国籍を選択してください',
+  add: '追加する',
 };
 
 const setting = {
@@ -334,11 +339,6 @@ const emptyReview = {
   empty: 'レビューはまだありません',
 };
 
-const languageRadioBox = {
-  ja: '日本語',
-  en: '英語',
-};
-
 const myDiaryCorrectionFooter = {
   finText: 'この日記はレビュー済みです',
   title: '添削のレビューをする',
@@ -347,7 +347,8 @@ const myDiaryCorrectionFooter = {
 
 const profileLanguage = {
   learn: '勉強中の言語',
-  native: 'ネイティブの言語',
+  native: 'ネイティブ言語',
+  spoken: '他のネイティブレベルの言語',
 };
 
 const profileNationality = {
@@ -566,6 +567,7 @@ const userDiaryStatus = {
 const language = {
   ja: '日本語',
   en: '英語',
+  zh: '中国語',
 };
 
 const ja = {
@@ -613,7 +615,6 @@ const ja = {
   correctionFooterButton,
   emptyDiary,
   emptyReview,
-  languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
