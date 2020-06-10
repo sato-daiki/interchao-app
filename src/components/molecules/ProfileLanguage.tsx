@@ -61,7 +61,9 @@ const ProfileLanguage: React.FC<Props> = ({
           />
           <Text style={styles.label}>{I18n.t('profileLanguage.spoken')}</Text>
           {spokenLanguages.map(item => (
-            <Text style={[styles.language]}>{getLanguage(item)}</Text>
+            <Text key={item} style={styles.language}>
+              {getLanguage(item)}
+            </Text>
           ))}
         </View>
       ) : null}
