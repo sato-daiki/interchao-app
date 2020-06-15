@@ -13,7 +13,7 @@ export interface Profile {
   learnLanguage: Language;
   nativeLanguage: Language;
   spokenLanguages?: Language[] | null;
-  nationalityCode?: CountryCode;
+  nationalityCode?: CountryCode | null;
   introduction: string | null;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;
