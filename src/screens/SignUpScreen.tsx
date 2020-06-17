@@ -119,7 +119,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         pro: false,
         learnLanguage: profile.learnLanguage,
         nativeLanguage: profile.nativeLanguage,
-        nationalityCode: profile.nationalityCode,
+        nationalityCode: profile.nationalityCode || null,
         introduction: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
