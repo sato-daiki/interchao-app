@@ -45,7 +45,7 @@ const errorMessage = {
     'すでにこのユーザーネームを使用しているユーザーがいます',
   notFound: 'ページが開けません。エラーが発生しました',
   cantLogout: 'メールアドレスが登録されていないため、ログアウトできません。',
-  invalidRaiting: '評価は1〜5で入力してください',
+  invalidRaiting: '星は1〜5で入力してください',
   correctionAlready:
     'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
   deleteTargetUser:
@@ -120,7 +120,7 @@ const editMyProfile = {
   userName: 'ユーザネーム',
   placeholderIntroduction: '自己紹介(200字以内)',
   learn: '勉強中',
-  native: 'ネイティブ',
+  native: '話せる言語',
   spoken: 'その他の\n話せる言語',
 };
 
@@ -217,8 +217,8 @@ const selectLanguage = {
   headerTitle: '言語と国籍の選択',
   title: '言語と国籍を選択してください',
   learn: '学びたい言語',
-  native: 'ネイティブ言語',
-  spoken: '他のネイティブレベルの言語',
+  native: '話せる言語',
+  spoken: 'その他の話せる言語',
   nationality: '国籍',
   placeholder: '国籍を選択してください',
   change: '変更する',
@@ -234,8 +234,6 @@ const setting = {
   editPassword: 'パスワードの変更',
   registerEmailPassword: 'メールアドレス/パスワードの登録',
   tutorial: 'チュートリアル',
-  management: '運営',
-  privacy: 'プライバシーポリシー',
   deleteAcount: '退会について',
   logout: 'ログアウト',
   inquiry: 'お問い合わせ',
@@ -342,13 +340,13 @@ const emptyReview = {
 const myDiaryCorrectionFooter = {
   finText: 'この日記はレビュー済みです',
   title: '添削のレビューをする',
-  promptText: '添削のお礼と評価をお願いします',
+  promptText: '添削のお礼とレビューをお願いします',
 };
 
 const profileLanguage = {
   learn: '勉強中の言語',
-  native: 'ネイティブ言語',
-  spoken: '他のネイティブレベルの言語',
+  native: '話せる言語',
+  spoken: 'その他の話せる言語',
 };
 
 const profileNationality = {
@@ -371,7 +369,7 @@ const inquiry = {
 const correctionOrigin = {
   messageIOS: '修正する箇所を選択して、添削を始めましょう',
   messageAndroid:
-    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう。',
+    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう',
 };
 
 const diaryHitList = {
@@ -445,16 +443,16 @@ const modalLackPoint = {
 const modalSendEmail = {
   title: 'メール送信',
   text:
-    'メールを送信しました。メールのリンクからパスワードを再設定してください。',
+    'メールを送信しました。メールのリンクからパスワードを再設定してください',
 };
 
 const modalStillCorrecting = {
-  text: '途中で添削が中断されました。',
+  text: '途中で添削が中断されました',
 };
 
 const modalTimeUp = {
   title: 'タイムアップ',
-  text: '30分が経過したため、添削のロックを解除しました。',
+  text: '30分が経過したため、添削のロックを解除しました',
 };
 
 const myDiaryCorrection = {
@@ -531,16 +529,16 @@ const tutorialPostDiary = {
   title: '日記の書き方',
   buttonText: '始める',
   text:
-    '{{learnLanguage}}で日記を書いてみよう。{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？{{nativeLanguage}}を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
+    '{{learnLanguage}}で日記を書いてみよう。{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？また{{nativeLanguage}}の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
 };
 
 const tutorialTeachDiaryList = {
   title: '{{nativeLanguage}}の日記とは',
   buttonText: '始める',
   text1:
-    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
+    'あなたが教えることができる言語を勉強をしているユーザの日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
   text2:
-    'の{{nativeLanguage}}の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
+    'の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
   textMainColor: '未添削',
 };
 
@@ -567,7 +565,7 @@ const userDiaryStatus = {
 const language = {
   ja: '日本語',
   en: '英語',
-  zh: '中国語',
+  zh: '簡体中国語',
 };
 
 const ja = {
