@@ -147,7 +147,7 @@ const ReviewScreen: ScreenType = ({
       userName: profile.userName,
       photoUrl: profile.photoUrl,
       nativeLanguage: profile.nativeLanguage,
-      nationalityCode: profile.nationalityCode,
+      nationalityCode: profile.nationalityCode || null,
     } as Reviewer;
 
     const newReview = {
