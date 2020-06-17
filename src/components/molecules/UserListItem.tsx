@@ -7,7 +7,7 @@ interface Props {
   userName: string;
   photoUrl: string | null;
   nativeLanguage: Language;
-  nationalityCode?: CountryCode;
+  nationalityCode?: CountryCode | null;
   onPressUser?: () => void;
   onPressButton: () => void;
 }
