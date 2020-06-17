@@ -3,6 +3,7 @@ import I18n from 'i18n-js';
 
 import en from './locales/en';
 import ja from './locales/ja';
+import zh from './locales/zh';
 
 I18n.locale = Localization.locale;
 
@@ -12,6 +13,7 @@ I18n.fallbacks = true;
 I18n.translations = {
   en,
   ja,
+  zh,
 };
 
 export default I18n;
