@@ -172,7 +172,7 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
     photoUrl: profile.photoUrl,
     learnLanguage: profile.learnLanguage,
     nativeLanguage: profile.nativeLanguage,
-    nationalityCode: profile.nationalityCode,
+    nationalityCode: profile.nationalityCode || null,
   };
 };
 
