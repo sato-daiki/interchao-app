@@ -258,7 +258,6 @@ service cloud.firestore {
         && request.resource.data.name == null
         && request.resource.data.userName.size() <= 20
         && request.resource.data.photoUrl == null
-        && request.resource.data.pro == false
         && request.resource.data.learnLanguage in ["ja", "en", "zh", "ko"] 
         && request.resource.data.nativeLanguage in ["ja", "en", "zh", "ko"]
         && request.resource.data.learnLanguage != request.resource.data.nativeLanguage
