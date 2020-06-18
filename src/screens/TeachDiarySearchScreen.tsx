@@ -12,7 +12,7 @@ import {
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
-import { getExceptUser } from '../utils/diary';
+import { getExceptUser, getFillterLanguages } from '../utils/diary';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import { Profile } from '../types';
 import { LoadingModal } from '../components/atoms';
@@ -50,13 +50,17 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
       const blockeeUids = await getBlockees(currentUser.uid);
       const uids = blockerUids.concat(blockeeUids);
       const fillterText = getExceptUser(uids);
+      const fillterLanguages = getFillterLanguages(
+        profile.nativeLanguage,
+        profile.spokenLanguages
+      );
       setFilters(
-        `profile.learnLanguage: ${profile.nativeLanguage} AND NOT hidden: true AND diaryStatus: publish ${fillterText}`
+        `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterText}`
       );
       setIsLoading(false);
     };
     f();
-  }, [filters, profile.nativeLanguage]);
+  }, [filters, profile.nativeLanguage, profile.spokenLanguages]);
 
   const onPressItem = useCallback(
     (objectID: string) => {

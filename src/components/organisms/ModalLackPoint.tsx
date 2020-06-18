@@ -10,7 +10,7 @@ import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
 import { SavePoints } from '../../images';
-import { getlanguage, getBasePoints } from '../../utils/diary';
+import { getLanguage, getBasePoints } from '../../utils/diary';
 import { Language } from '../../types';
 
 interface Props {
@@ -69,7 +69,7 @@ const ModalLackPoint: React.FC<Props> = ({
         <Text style={styles.text}>
           {I18n.t('modalLackPoint.text', {
             learnCharacters: getBasePoints(learnLanguage),
-            nativeLanguage: getlanguage(nativeLanguage),
+            nativeLanguage: getLanguage(nativeLanguage),
           })}
         </Text>
         <Space size={32} />

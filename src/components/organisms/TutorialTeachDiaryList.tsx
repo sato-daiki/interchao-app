@@ -6,7 +6,7 @@ import { People } from '../../images';
 import Tutorial from '../template/Tutorial';
 import I18n from '../../utils/I18n';
 import { Language } from '../../types';
-import { getlanguage } from '../../utils/diary';
+import { getLanguage } from '../../utils/diary';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +47,7 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
       displayed={displayed}
       isLoading={isLoading}
       title={I18n.t('tutorialTeachDiaryList.title', {
-        nativeLanguage: getlanguage(nativeLanguage),
+        nativeLanguage: getLanguage(nativeLanguage),
       })}
       buttonText={buttonText}
       onPress={onPress}
@@ -57,13 +57,13 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
         <Space size={24} />
         <Text style={styles.text}>
           {I18n.t('tutorialTeachDiaryList.text1', {
-            nativeLanguage: getlanguage(nativeLanguage),
+            nativeLanguage: getLanguage(nativeLanguage),
           })}
           <Text style={styles.main}>
             {I18n.t('tutorialTeachDiaryList.textMainColor')}
           </Text>
           {I18n.t('tutorialTeachDiaryList.text2', {
-            nativeLanguage: getlanguage(nativeLanguage),
+            nativeLanguage: getLanguage(nativeLanguage),
           })}
         </Text>
       </View>

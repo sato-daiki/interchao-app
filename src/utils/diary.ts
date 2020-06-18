@@ -132,12 +132,38 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
   return null;
 };
 
-export const getlanguage = (language: Language): string => {
+export const getAllLanguage = (): Language[] => {
+  return ['ja', 'en', 'zh', 'ko'];
+};
+
+// すでに選択された言語、ネイティブ言語、勉強中の言語を除く
+export const getTargetLanguages = (
+  learnLanguage,
+  nativeLanguage,
+  spokenLanguages
+): Language[] => {
+  const allLanguage = getAllLanguage();
+  return allLanguage.filter(item => {
+    if (item === learnLanguage || item === nativeLanguage) return false;
+    if (spokenLanguages) {
+      for (let i = 0; i <= spokenLanguages.length; i += 1) {
+        if (spokenLanguages[i] === item) return false;
+      }
+    }
+    return true;
+  });
+};
+
+export const getLanguage = (language: Language): string => {
   switch (language) {
     case 'ja':
       return I18n.t('language.ja');
     case 'en':
       return I18n.t('language.en');
+    case 'zh':
+      return I18n.t('language.zh');
+    case 'ko':
+      return I18n.t('language.ko');
     default:
       return '';
   }
@@ -149,6 +175,10 @@ export const getBasePoints = (language: Language): number => {
       return 300;
     case 'en':
       return 600;
+    case 'zh':
+      return 300;
+    case 'ko':
+      return 300;
     default:
       return 600;
   }
@@ -161,6 +191,20 @@ export const getExceptUser = (uids: string[]): string => {
   for (let i = 0; i < uids.length; i += 1) {
     fillterText += ` AND NOT profile.uid: ${uids[i]}`;
   }
+  return fillterText;
+};
+
+export const getFillterLanguages = (
+  nativeLanguage: Language,
+  spokenLanguages: Language[] | null | undefined
+): string => {
+  let fillterText = `(profile.learnLanguage: ${nativeLanguage}`;
+  if (spokenLanguages) {
+    for (let i = 0; i < spokenLanguages.length; i += 1) {
+      fillterText += ` OR profile.learnLanguage: ${spokenLanguages[i]} `;
+    }
+  }
+  fillterText += ')';
   return fillterText;
 };
 
@@ -227,7 +271,7 @@ export const checkBeforePost = (
       I18n.t('errorMessage.lackPointsText', {
         textLength: text.length,
         usePoint,
-        nativeLanguage: getlanguage(nativeLanguage),
+        nativeLanguage: getLanguage(nativeLanguage),
       })
     );
     return false;

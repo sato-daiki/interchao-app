@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Platform } from 'react-native';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import { State } from '../../types/state';
-import { getlanguage } from '../../utils/diary';
+import { getLanguage } from '../../utils/diary';
 import I18n from '../../utils/I18n';
 
 interface Props {
@@ -28,7 +28,7 @@ const TabLabel = ({ color }: Props): JSX.Element => {
     (state: State) => state.rootReducer.profile,
     shallowEqual
   );
-  const nativeLanguage = getlanguage(profile.nativeLanguage);
+  const nativeLanguage = getLanguage(profile.nativeLanguage);
 
   return (
     <View style={styles.container}>

@@ -47,6 +47,7 @@ const UserProfileHeader = ({ profile, userReview }: Props): JSX.Element => {
       <ProfileLanguage
         nativeLanguage={profile.nativeLanguage}
         learnLanguage={profile.learnLanguage}
+        spokenLanguages={profile.spokenLanguages}
       />
       {profile.nationalityCode ? (
         <ProfileNationalityCode nationalityCode={profile.nationalityCode} />
