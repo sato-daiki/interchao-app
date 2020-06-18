@@ -40,7 +40,7 @@ import {
   HowToCorrect6jaAndroid,
 } from '../../images';
 import { HeaderText } from '../atoms';
-import { getlanguage, getBasePoints } from '../../utils/diary';
+import { getLanguage, getBasePoints } from '../../utils/diary';
 import { Language } from '../../types';
 import { TutorialCorrectingListItem } from '../molecules';
 
@@ -171,7 +171,7 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
   const entries = [
     {
       text: I18n.t('tutorialCorrecting.text1', {
-        nativeLanguage: getlanguage(nativeLanguage),
+        nativeLanguage: getLanguage(nativeLanguage),
       }),
       subText:
         Platform.OS === 'ios'

@@ -13,7 +13,11 @@ import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import SearchBarButton from '../components/molecules/SearchBarButton';
-import { getExceptUser, getlanguage } from '../utils/diary';
+import {
+  getExceptUser,
+  getLanguage,
+  getFillterLanguages,
+} from '../utils/diary';
 import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -75,7 +79,7 @@ const TeachDiaryListScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({
       onPressSearch,
-      nativeLanguage: getlanguage(profile.nativeLanguage),
+      nativeLanguage: getLanguage(profile.nativeLanguage),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -93,7 +97,12 @@ const TeachDiaryListScreen: ScreenType = ({
           await Algolia.setSettings(index);
 
           const fillterUids = getExceptUser(uids);
-          const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
+          const fillterLanguages = getFillterLanguages(
+            profile.nativeLanguage,
+            profile.spokenLanguages
+          );
+
+          const filters = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
           const res = await index.search('', {
             filters,
             page: 0,
@@ -114,7 +123,7 @@ const TeachDiaryListScreen: ScreenType = ({
       };
       f();
     },
-    [profile.nativeLanguage, setTeachDiaries, user.uid]
+    [profile.nativeLanguage, profile.spokenLanguages, setTeachDiaries, user.uid]
   );
 
   // 初期データの取得
@@ -142,7 +151,11 @@ const TeachDiaryListScreen: ScreenType = ({
           setReadingNext(true);
 
           const fillterText = getExceptUser(blockUids);
-          const filters = `profile.learnLanguage: ${profile.nativeLanguage} AND NOT hidden: true AND diaryStatus: publish ${fillterText}`;
+          const fillterLanguages = getFillterLanguages(
+            profile.nativeLanguage,
+            profile.spokenLanguages
+          );
+          const filters = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterText}`;
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
@@ -170,6 +183,7 @@ const TeachDiaryListScreen: ScreenType = ({
     blockUids,
     page,
     profile.nativeLanguage,
+    profile.spokenLanguages,
     readAllResults,
     readingNext,
     setTeachDiaries,
@@ -220,7 +234,7 @@ const TeachDiaryListScreen: ScreenType = ({
   const listHeaderComponent = (
     <GrayHeader
       title={I18n.t('teachDiaryList.diaryList', {
-        nativeLanguage: getlanguage(profile.nativeLanguage),
+        nativeLanguage: getLanguage(profile.nativeLanguage),
       })}
     />
   );

@@ -119,6 +119,9 @@ const editMyProfile = {
   name: 'Name',
   userName: 'Username',
   placeholderIntroduction: 'Self Introduction (200 characters or less)',
+  learn: 'Leaning',
+  native: 'Teaching',
+  spoken: 'Other Languages\nyou can speak',
 };
 
 const editPassword = {
@@ -218,10 +221,14 @@ const selectLanguage = {
   title: 'Please choose your languages and nationality.',
   learn: 'Language you want to learn',
   native: 'Language you can speak',
+  spoken: 'Other Languages you can speak',
   nationality: 'Nationality',
   placeholder: 'Please select your nationality',
   change: 'Change',
   nationalityCodeAlert: 'Please select your nationality',
+  sameLanguageAlert:
+    'Please choose another language for "Language you want to learn" and "Language you can speak"',
+  add: 'Add',
 };
 
 const setting = {
@@ -232,8 +239,6 @@ const setting = {
   editPassword: 'Edit Password',
   registerEmailPassword: 'Register Email and Password',
   tutorial: 'Tutorial',
-  management: 'Management',
-  privacy: 'Privacy Policy',
   deleteAcount: 'About Account Deletion',
   logout: 'Logout',
   inquiry: 'Contact',
@@ -337,11 +342,6 @@ const emptyReview = {
   empty: 'There are no reviews yet.',
 };
 
-const languageRadioBox = {
-  ja: 'Japanese',
-  en: 'English',
-};
-
 const myDiaryCorrectionFooter = {
   finText: 'This journal entry has been reviewed.',
   title: 'Review the Correction',
@@ -350,7 +350,8 @@ const myDiaryCorrectionFooter = {
 
 const profileLanguage = {
   learn: 'Learning',
-  native: 'Native',
+  native: 'Teaching',
+  spoken: 'Other Teaching',
 };
 
 const profileNationality = {
@@ -396,7 +397,6 @@ const modalAlertCorrection = {
   text:
     'Please finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
   start: 'Begin Corrections',
-  checkboxText: 'Don’t show this message again.',
 };
 
 const modalAlertPublish = {
@@ -537,14 +537,14 @@ const tutorialPostDiary = {
   title: 'How to Write a Journal Entry',
   buttonText: 'Begin',
   text:
-    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! When someone who is studying {{nativeLanguage}} corrects it, you will get 10 points. Let’s teach each other languages!',
+    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! If you correct {{nativeLanguage}} journal entries, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
   title: 'What is “{{nativeLanguage}} Entries”?',
   buttonText: 'Begin',
   text1:
-    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nUp to 3 people can be corrected per diary. Please give priority to the diary whose status is ',
+    'This is a list of journal entries in the languages ​​you can teach. \n\nUp to 3 people can be corrected per journal entry. Please give priority to the journal entry whose status is ',
   text2: '. If you correct it, you will get 10 points.',
   // Not Yet Correctedはスペースを開けておく
   textMainColor: ' Not Yet Corrected',
@@ -574,6 +574,8 @@ const userDiaryStatus = {
 const language = {
   ja: 'Japanese',
   en: 'English',
+  zh: 'Simplified Chinese',
+  ko: 'Korean',
 };
 
 const en = {
@@ -621,7 +623,6 @@ const en = {
   correctionFooterButton,
   emptyDiary,
   emptyReview,
-  languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,

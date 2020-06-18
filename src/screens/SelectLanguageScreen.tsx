@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import * as Localization from 'expo-localization';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import SubmitButton from '../components/atoms/SubmitButton';
-import { primaryColor, fontSizeL, fontSizeM } from '../styles/Common';
+import {
+  primaryColor,
+  fontSizeL,
+  fontSizeM,
+  subTextColor,
+} from '../styles/Common';
 import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { Profile, CountryCode } from '../types';
+import { Profile, CountryCode, Language } from '../types';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
+import { getLanguage, getTargetLanguages } from '../utils/diary';
 
 export interface Props {
   profile: Profile;
@@ -55,11 +63,66 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   change: {
-    color: primaryColor,
+    color: subTextColor,
     fontSize: fontSizeM,
     marginLeft: 40,
   },
+  rowSpoken: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  spoken: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    marginRight: 4,
+  },
+  trash: {
+    width: 40,
+    alignItems: 'center',
+  },
+  addText: {
+    color: subTextColor,
+    fontSize: fontSizeM,
+    marginLeft: 2,
+  },
 });
+
+const initLearnLanguage = (code: string): Language => {
+  // We will get back a string like "en-US". We
+  // return a string like "en" to match our language
+  if (code === 'en') {
+    return 'ja';
+  }
+  return 'en';
+};
+
+const initNativeLanguage = (code: string): Language => {
+  if (code === 'ja') {
+    return 'ja';
+  }
+  if (code === 'zh') {
+    return 'zh';
+  }
+  if (code === 'ko') {
+    return 'ko';
+  }
+  return 'en';
+};
+
+const initCountryCode = (code: string): CountryCode | undefined => {
+  if (code === 'ja') {
+    return 'JP';
+  }
+  if (code === 'zh') {
+    return 'CN';
+  }
+  if (code === 'ko') {
+    return 'KR';
+  }
+  return undefined;
+};
 
 /**
  * 概要：学びたい言語とネイティブの言語の登録
@@ -69,22 +132,21 @@ const SelectLanguageScreen: ScreenType = ({
   profile,
   setProfile,
 }): JSX.Element => {
-  const checkJapanese = (): boolean => {
-    if (
-      Localization.locale === 'ja' ||
-      Localization.locale === 'ja-US' ||
-      Localization.locale === 'ja-JP'
-    ) {
-      return true;
-    }
-    return false;
-  };
+  const code = Localization.locale.split('-')[0];
+  const [learnLanguage, setLearnLanguage] = useState<Language>(
+    initLearnLanguage(code)
+  );
+  const [nativeLanguage, setNativeLanguage] = useState<Language>(
+    initNativeLanguage(code)
+  );
+  const [spokenLanguages, setSpokenLanguages] = useState<Language[]>([]);
   // 初期値はiPhoneの設定を取得して設定しておく
-  const [isNativeJa, setIsNativeJa] = useState(checkJapanese());
   const [nationalityCode, setNationalityCode] = useState<
     CountryCode | undefined
-  >(checkJapanese() ? 'JP' : undefined);
-  const [visible, setVisible] = useState(false);
+  >(initCountryCode(code));
+  const [countryVisible, setCountryVisible] = useState(false);
+  const [spokenVisible, setSpokenVisible] = useState(false);
+
   useEffect((): void => {
     track(events.OPENED_SELECT_LANGUAGE);
   }, []);
@@ -94,32 +156,82 @@ const SelectLanguageScreen: ScreenType = ({
       Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
       return;
     }
+
+    if (learnLanguage === nativeLanguage) {
+      Alert.alert('', I18n.t('selectLanguage.sameLanguageAlert'));
+      return;
+    }
     setProfile({
       ...profile,
-      learnLanguage: isNativeJa ? 'en' : 'ja',
-      nativeLanguage: isNativeJa ? 'ja' : 'en',
+      learnLanguage,
+      nativeLanguage,
+      spokenLanguages,
       nationalityCode,
     });
     navigation.navigate('InputUserName');
   };
 
+  const onPressSpokenLanguages = (value: Language | undefined): void => {
+    if (value) {
+      setSpokenLanguages([...spokenLanguages, value]);
+    }
+    setSpokenVisible(false);
+  };
+
   return (
     <View style={styles.contaner}>
+      <ModalSpokenLanguages
+        visible={spokenVisible}
+        languages={getTargetLanguages(
+          learnLanguage,
+          nativeLanguage,
+          spokenLanguages
+        )}
+        onPressSubmit={onPressSpokenLanguages}
+        onPressClose={(): void => setSpokenVisible(false)}
+      />
       <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
       <LanguageRadioBox
         label={I18n.t('selectLanguage.learn')}
-        isJa={!isNativeJa}
-        onPressJa={(): void => setIsNativeJa(false)}
-        onPressEn={(): void => setIsNativeJa(true)}
+        value={learnLanguage}
+        onPress={(value: Language): void => setLearnLanguage(value)}
       />
       <Space size={16} />
       <LanguageRadioBox
         label={I18n.t('selectLanguage.native')}
-        isJa={isNativeJa}
-        onPressJa={(): void => setIsNativeJa(true)}
-        onPressEn={(): void => setIsNativeJa(false)}
+        value={nativeLanguage}
+        onPress={(value: Language): void => setNativeLanguage(value)}
       />
       <Space size={16} />
+      <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
+      <Space size={8} />
+      {spokenLanguages.map(item => (
+        <View style={styles.rowSpoken} key={item}>
+          <Text style={styles.spoken}>{getLanguage(item)}</Text>
+          <TouchableOpacity
+            style={styles.trash}
+            onPress={(): void => {
+              setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+            }}
+          >
+            <MaterialCommunityIcons
+              size={20}
+              color={primaryColor}
+              name="trash-can-outline"
+            />
+          </TouchableOpacity>
+        </View>
+      ))}
+      {spokenLanguages.length < 2 ? (
+        <TouchableOpacity
+          style={styles.row}
+          onPress={(): void => setSpokenVisible(true)}
+        >
+          <MaterialCommunityIcons size={24} color={subTextColor} name="plus" />
+          <Text style={styles.addText}>{I18n.t('selectLanguage.add')}</Text>
+        </TouchableOpacity>
+      ) : null}
+      <Space size={24} />
       <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
       <View style={styles.row}>
         <CountryPicker
@@ -136,12 +248,15 @@ const SelectLanguageScreen: ScreenType = ({
           onSelect={(country: Country): void => {
             setNationalityCode(country.cca2);
           }}
-          onClose={(): void => setVisible(false)}
-          onOpen={(): void => setVisible(true)}
-          visible={visible}
+          onClose={(): void => setCountryVisible(false)}
+          onOpen={(): void => setCountryVisible(true)}
+          visible={countryVisible}
         />
         {nationalityCode ? (
-          <Text style={styles.change} onPress={(): void => setVisible(true)}>
+          <Text
+            style={styles.change}
+            onPress={(): void => setCountryVisible(true)}
+          >
             {I18n.t('selectLanguage.change')}
           </Text>
         ) : null}
