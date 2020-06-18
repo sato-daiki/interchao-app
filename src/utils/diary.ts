@@ -133,7 +133,7 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
 };
 
 export const getAllLanguage = (): Language[] => {
-  return ['ja', 'en', 'zh'];
+  return ['ja', 'en', 'zh', 'ko'];
 };
 
 // すでに選択された言語、ネイティブ言語、勉強中の言語を除く
@@ -162,6 +162,8 @@ export const getLanguage = (language: Language): string => {
       return I18n.t('language.en');
     case 'zh':
       return I18n.t('language.zh');
+    case 'ko':
+      return I18n.t('language.ko');
     default:
       return '';
   }
@@ -174,6 +176,8 @@ export const getBasePoints = (language: Language): number => {
     case 'en':
       return 600;
     case 'zh':
+      return 300;
+    case 'ko':
       return 300;
     default:
       return 600;
