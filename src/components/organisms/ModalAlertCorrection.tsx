@@ -36,15 +36,6 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
-  // row: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  // },
-  // checkboxText: {
-  //   paddingLeft: 8,
-  //   fontSize: fontSizeS,
-  //   color: subTextColor,
-  // },
   icon: {
     alignSelf: 'center',
   },
@@ -87,16 +78,6 @@ const ModalAlertCorrection: React.FC<Props> = ({
           onPress={(): void => onPressSubmit(checked)}
         />
         <Space size={16} />
-        {/* <View style={styles.row}>
-          <Checkbox
-            checked={checked}
-            onPress={(): void => setChecked(!checked)}
-          />
-          <Text style={styles.checkboxText}>
-            {I18n.t('modalAlertCorrection.checkboxText')}
-          </Text>
-        </View> */}
-        {/* <Space size={24} /> */}
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
       </View>
     </Modal>

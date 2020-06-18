@@ -216,6 +216,7 @@ const selectLanguage = {
   placeholder: '请选择国籍',
   change: '更改',
   nationalityCodeAlert: '请选择国籍',
+  sameLanguageAlert: '请为 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
   add: '添加',
 };
 
@@ -381,7 +382,6 @@ const modalAlertCorrection = {
   text:
     '请在30分钟内完成批改。30分钟后，批改将被丢弃。\n\n开始批改后将会被锁定，其他人将无法对其进行批改。',
   start: '开始批改',
-  checkboxText: '以后不再提示',
 };
 
 const modalAlertPublish = {
@@ -549,6 +549,7 @@ const language = {
   ja: '日语',
   en: '英语',
   zh: '简体中文',
+  ko: '韩语',
 };
 
 const zh = {

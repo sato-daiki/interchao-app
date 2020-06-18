@@ -37,7 +37,7 @@ const errorMessage = {
     'エラーの数が一定数を超えました。時間をおいてから再度お試しください',
   network: '通信エラーが発生しました。時間をおいて再度お試し下さい。',
   defaultError: 'エラーが発生しました。{{message}}',
-  emptyUserName: 'ユーザネームを入力してください',
+  emptyUserName: 'ユーザーネームを入力してください',
   invalidUserName:
     'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません',
   initialUserName: '先頭の文字は半角英数字以外使えません',
@@ -117,7 +117,7 @@ const editEmail = {
 const editMyProfile = {
   headerTitle: 'プロフィール変更',
   name: '名前',
-  userName: 'ユーザネーム',
+  userName: 'ユーザーネーム',
   placeholderIntroduction: '自己紹介(200字以内)',
   learn: '勉強中',
   native: '話せる言語',
@@ -153,7 +153,7 @@ const initialize = {
 const inputUserName = {
   headerTitle: 'ユーザーネーム登録',
   title: 'ユーザーネームを入力してください',
-  subText: 'このユーザネームはいつでも変更できます',
+  subText: 'このユーザーネームはいつでも変更できます',
 };
 
 const myDiary = {
@@ -223,6 +223,7 @@ const selectLanguage = {
   placeholder: '国籍を選択してください',
   change: '変更する',
   nationalityCodeAlert: '国籍を選択してください',
+  sameLanguageAlert: '"学びたい言語"と"話せる言語"は別の言語を選択してください',
   add: '追加する',
 };
 
@@ -391,7 +392,6 @@ const modalAlertCorrection = {
   text:
     '添削は30分以内で行ってください。30分をすぎると添削は破棄されます。\n\n添削を始めると、ロックがかかり他の人は添削できなくなります。',
   start: '添削を始める',
-  checkboxText: '以後、このメッセージを表示しない',
 };
 
 const modalAlertPublish = {
@@ -566,6 +566,7 @@ const language = {
   ja: '日本語',
   en: '英語',
   zh: '簡体中国語',
+  ko: '韓国語',
 };
 
 const ja = {

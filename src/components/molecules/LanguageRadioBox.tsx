@@ -21,9 +21,11 @@ const styles = StyleSheet.create({
   radioBoxWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   radioBox: {
     marginRight: 24,
+    marginBottom: 8,
   },
 });
 
@@ -58,6 +60,14 @@ const LanguageRadioBox: React.FC<Props> = ({
             color={mainColor}
             text={I18n.t('language.zh')}
             onPress={(): void => onPress('zh')}
+          />
+        </View>
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={value === 'ko'}
+            color={mainColor}
+            text={I18n.t('language.ko')}
+            onPress={(): void => onPress('ko')}
           />
         </View>
       </View>

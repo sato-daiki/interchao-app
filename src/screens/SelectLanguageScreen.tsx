@@ -105,7 +105,23 @@ const initNativeLanguage = (code: string): Language => {
   if (code === 'zh') {
     return 'zh';
   }
+  if (code === 'ko') {
+    return 'ko';
+  }
   return 'en';
+};
+
+const initCountryCode = (code: string): CountryCode | undefined => {
+  if (code === 'ja') {
+    return 'JP';
+  }
+  if (code === 'zh') {
+    return 'CN';
+  }
+  if (code === 'ko') {
+    return 'KR';
+  }
+  return undefined;
 };
 
 /**
@@ -127,7 +143,7 @@ const SelectLanguageScreen: ScreenType = ({
   // 初期値はiPhoneの設定を取得して設定しておく
   const [nationalityCode, setNationalityCode] = useState<
     CountryCode | undefined
-  >(code === 'ja' ? 'JP' : undefined);
+  >(initCountryCode(code));
   const [countryVisible, setCountryVisible] = useState(false);
   const [spokenVisible, setSpokenVisible] = useState(false);
 
@@ -138,6 +154,11 @@ const SelectLanguageScreen: ScreenType = ({
   const onPressNext = (): void => {
     if (!nationalityCode) {
       Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
+      return;
+    }
+
+    if (learnLanguage === nativeLanguage) {
+      Alert.alert('', I18n.t('selectLanguage.sameLanguageAlert'));
       return;
     }
     setProfile({
@@ -175,13 +196,13 @@ const SelectLanguageScreen: ScreenType = ({
         value={learnLanguage}
         onPress={(value: Language): void => setLearnLanguage(value)}
       />
-      <Space size={24} />
+      <Space size={16} />
       <LanguageRadioBox
         label={I18n.t('selectLanguage.native')}
         value={nativeLanguage}
         onPress={(value: Language): void => setNativeLanguage(value)}
       />
-      <Space size={24} />
+      <Space size={16} />
       <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
       <Space size={8} />
       {spokenLanguages.map(item => (
@@ -201,7 +222,7 @@ const SelectLanguageScreen: ScreenType = ({
           </TouchableOpacity>
         </View>
       ))}
-      {spokenLanguages.length < 1 ? (
+      {spokenLanguages.length < 2 ? (
         <TouchableOpacity
           style={styles.row}
           onPress={(): void => setSpokenVisible(true)}

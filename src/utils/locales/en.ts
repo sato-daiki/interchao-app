@@ -226,6 +226,8 @@ const selectLanguage = {
   placeholder: 'Please select your nationality',
   change: 'Change',
   nationalityCodeAlert: 'Please select your nationality',
+  sameLanguageAlert:
+    'Please choose another language for "Language you want to learn" and "Language you can speak"',
   add: 'Add',
 };
 
@@ -395,7 +397,6 @@ const modalAlertCorrection = {
   text:
     'Please finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
   start: 'Begin Corrections',
-  checkboxText: 'Don’t show this message again.',
 };
 
 const modalAlertPublish = {
@@ -574,6 +575,7 @@ const language = {
   ja: 'Japanese',
   en: 'English',
   zh: 'Simplified Chinese',
+  ko: 'Korean',
 };
 
 const en = {
