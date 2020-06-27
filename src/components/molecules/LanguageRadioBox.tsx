@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { mainColor, primaryColor, fontSizeM } from '../../styles/Common';
 import { RadioBox } from '../atoms';
 import I18n from '../../utils/I18n';
+import { Language } from '../../types';
 
 interface Props {
   label: string;
-  isJa: boolean;
-  onPressJa: () => void;
-  onPressEn: () => void;
+  value: Language;
+  onPress: (value: Language) => void;
 }
 
 const styles = StyleSheet.create({
@@ -21,41 +20,56 @@ const styles = StyleSheet.create({
   },
   radioBoxWrapper: {
     flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
   radioBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 32,
-  },
-  radioBoxText: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingLeft: 8,
+    marginRight: 8,
+    marginBottom: 8,
   },
 });
 
 const LanguageRadioBox: React.FC<Props> = ({
   label,
-  isJa,
-  onPressJa,
-  onPressEn,
+  value,
+  onPress,
 }: Props): JSX.Element => {
   return (
     <>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.radioBoxWrapper}>
-        <TouchableWithoutFeedback style={styles.radioBox} onPress={onPressJa}>
-          <RadioBox checked={isJa} color={mainColor} />
-          <Text style={styles.radioBoxText}>
-            {I18n.t('languageRadioBox.ja')}
-          </Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.radioBox} onPress={onPressEn}>
-          <RadioBox checked={!isJa} color={mainColor} />
-          <Text style={styles.radioBoxText}>
-            {I18n.t('languageRadioBox.en')}
-          </Text>
-        </TouchableWithoutFeedback>
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={value === 'ja'}
+            color={mainColor}
+            text={I18n.t('language.ja')}
+            onPress={(): void => onPress('ja')}
+          />
+        </View>
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={value === 'en'}
+            color={mainColor}
+            text={I18n.t('language.en')}
+            onPress={(): void => onPress('en')}
+          />
+        </View>
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={value === 'zh'}
+            color={mainColor}
+            text={I18n.t('language.zh')}
+            onPress={(): void => onPress('zh')}
+          />
+        </View>
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={value === 'ko'}
+            color={mainColor}
+            text={I18n.t('language.ko')}
+            onPress={(): void => onPress('ko')}
+          />
+        </View>
       </View>
     </>
   );

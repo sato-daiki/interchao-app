@@ -22,7 +22,7 @@ const common = {
 const mainTab = {
   myDiary: 'My Entries',
   postDiary: 'Write an Entry',
-  teachDiary: '{{nativeLanguage}} Entries',
+  teachDiary: 'Entries to Correct',
 };
 
 // 共通のエラーメッセージ
@@ -56,7 +56,7 @@ const errorMessage = {
   emptyMessage: 'There is no message.',
   lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
-    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{nativeLanguage}}.',
+    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries.',
 };
 
 const app = {
@@ -119,6 +119,9 @@ const editMyProfile = {
   name: 'Name',
   userName: 'Username',
   placeholderIntroduction: 'Self Introduction (200 characters or less)',
+  learn: 'Leaning',
+  native: 'Teaching',
+  spoken: 'Other Languages\nyou can speak',
 };
 
 const editPassword = {
@@ -218,10 +221,14 @@ const selectLanguage = {
   title: 'Please choose your languages and nationality.',
   learn: 'Language you want to learn',
   native: 'Language you can speak',
+  spoken: 'Other Languages you can speak',
   nationality: 'Nationality',
   placeholder: 'Please select your nationality',
   change: 'Change',
   nationalityCodeAlert: 'Please select your nationality',
+  sameLanguageAlert:
+    'Please choose another language for "Language you want to learn" and "Language you can speak"',
+  add: 'Add',
 };
 
 const setting = {
@@ -232,8 +239,6 @@ const setting = {
   editPassword: 'Edit Password',
   registerEmailPassword: 'Register Email and Password',
   tutorial: 'Tutorial',
-  management: 'Management',
-  privacy: 'Privacy Policy',
   deleteAcount: 'About Account Deletion',
   logout: 'Logout',
   inquiry: 'Contact',
@@ -263,8 +268,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: 'Search {{nativeLanguage}} Entries',
-  diaryList: 'List of Entries for People Studying {{nativeLanguage}}',
+  headerTitle: 'Search Entries',
+  diaryList: 'List of Entries in Languages ​​You Can Speak',
   empty: 'There are no entries from other people.',
 };
 
@@ -337,11 +342,6 @@ const emptyReview = {
   empty: 'There are no reviews yet.',
 };
 
-const languageRadioBox = {
-  ja: 'Japanese',
-  en: 'English',
-};
-
 const myDiaryCorrectionFooter = {
   finText: 'This journal entry has been reviewed.',
   title: 'Review the Correction',
@@ -350,7 +350,8 @@ const myDiaryCorrectionFooter = {
 
 const profileLanguage = {
   learn: 'Learning',
-  native: 'Native',
+  native: 'Teaching',
+  spoken: 'Other Teaching',
 };
 
 const profileNationality = {
@@ -393,10 +394,10 @@ const emptyMyDiaryList = {
 };
 
 const modalAlertCorrection = {
-  text:
-    'Please finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
+  text1: 'Please write all of the corrections in ',
+  text2:
+    '.\n\nPlease finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
   start: 'Begin Corrections',
-  checkboxText: 'Don’t show this message again.',
 };
 
 const modalAlertPublish = {
@@ -441,7 +442,7 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'Not Enough Points',
   text:
-    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a {{nativeLanguage}} journal entry.\n\nDrafts can be saved without needing to use points.',
+    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry.\n\nDrafts can be saved without needing to use points.',
   submit: 'Continue',
   close: 'Look for Entries to Correct',
 };
@@ -505,7 +506,7 @@ const tutorialCorrecting = {
   subTitle: 'Instructions',
   title: 'How to Make Corrections',
   text1:
-    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{nativeLanguage}}.',
+    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{teachDiaryLanguage}}.',
   subText1IOS:
     '1) Tap and hold down on the word or phrase, then set the span\n2) Tap the “Comment” button at the top right hand side of the screen',
   subText1Android:
@@ -516,7 +517,7 @@ const tutorialCorrecting = {
   subText2Android:
     '1) Write the original(Tap the “Paste“ button)\n2) Write the correct/natural phrase in the “Edit” section\n3) Write your explanation in the “Comment” section\n4) Tap the “Add” button',
   text3:
-    'Please aim to write at least 3 comments for every {{nativeCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
+    'Please aim to write at least 3 comments for every {{teachDiaryCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
   text4: 'Write a summary of your thoughts on the overall journey entry',
   subText4: '1) Write the summary\n2) Tap the “Add” button',
   text5:
@@ -537,14 +538,14 @@ const tutorialPostDiary = {
   title: 'How to Write a Journal Entry',
   buttonText: 'Begin',
   text:
-    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! When someone who is studying {{nativeLanguage}} corrects it, you will get 10 points. Let’s teach each other languages!',
+    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! If you correct journal entries written in languages you can speak, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
-  title: 'What is “{{nativeLanguage}} Entries”?',
+  title: 'What is “Entries to Correct”?',
   buttonText: 'Begin',
   text1:
-    'This is a list of all journal entries for users studying {{nativeLanguage}}. \n\nUp to 3 people can be corrected per diary. Please give priority to the diary whose status is ',
+    'This is a list of journal entries in the languages ​​you can speak. \n\nUp to 3 people can be corrected per journal entry. Please give priority to the journal entry whose status is ',
   text2: '. If you correct it, you will get 10 points.',
   // Not Yet Correctedはスペースを開けておく
   textMainColor: ' Not Yet Corrected',
@@ -574,6 +575,8 @@ const userDiaryStatus = {
 const language = {
   ja: 'Japanese',
   en: 'English',
+  zh: 'Simplified Chinese',
+  ko: 'Korean',
 };
 
 const en = {
@@ -621,7 +624,6 @@ const en = {
   correctionFooterButton,
   emptyDiary,
   emptyReview,
-  languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,

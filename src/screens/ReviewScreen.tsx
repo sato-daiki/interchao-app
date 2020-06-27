@@ -140,6 +140,7 @@ const ReviewScreen: ScreenType = ({
     }
 
     if (revieweeUid === '') return;
+
     batch.update(refDiary, data);
 
     const reviewer = {

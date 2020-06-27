@@ -13,13 +13,25 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { borderLightColor, primaryColor, fontSizeM } from '../styles/Common';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  borderLightColor,
+  primaryColor,
+  fontSizeM,
+  subTextColor,
+} from '../styles/Common';
 import { openCameraRoll, uploadImageAsync } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';
 import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { Profile } from '../types';
+import { Profile, Language } from '../types';
 import I18n from '../utils/I18n';
+import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
+import {
+  getAllLanguage,
+  getLanguage,
+  getTargetLanguages,
+} from '../utils/diary';
 
 export interface Props {
   profile: Profile;
@@ -28,6 +40,8 @@ export interface Props {
 interface DispatchProps {
   setProfile: (profile: Profile) => {};
 }
+
+type PickerLanguage = 'native' | 'learn' | 'spoken';
 
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
@@ -51,7 +65,8 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   row: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: borderLightColor,
@@ -61,6 +76,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     width: 96,
+    lineHeight: fontSizeM * 1.3,
   },
   textInput: {
     fontSize: fontSizeM,
@@ -80,6 +96,40 @@ const styles = StyleSheet.create({
   headerLeft: {
     paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
+  spokenContainer: {
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: borderLightColor,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  right: {
+    flex: 1,
+  },
+  spokenRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  spoken: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    marginRight: 4,
+  },
+  trash: {
+    width: 40,
+    alignItems: 'center',
+  },
+  addRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  addText: {
+    color: subTextColor,
+    fontSize: fontSizeM,
+    marginLeft: 2,
+  },
 });
 
 /**
@@ -92,13 +142,21 @@ const EditMyProfileScreen: ScreenType = ({
 }) => {
   const [name, setName] = useState(profile.name);
   const [userName, setUserName] = useState(profile.userName);
+  const [isNative, setIsNative] = useState(false);
+  const [isLearn, setIsLearn] = useState(false);
+  const [isSpoken, setIsSpoken] = useState(false);
+  const [nativeLanguage, setNativeLanguage] = useState(profile.nativeLanguage);
+  const [learnLanguage, setLearnLanguage] = useState(profile.learnLanguage);
+  const [spokenLanguages, setSpokenLanguages] = useState(
+    profile.spokenLanguages || []
+  );
   const [introduction, setIntroduction] = useState(profile.introduction);
   const [photoUrl, setPhotoUrl] = useState(profile.photoUrl);
   const [isLoading, setIsLoading] = useState(false);
   const [nationalityCode, setNationalityCode] = useState(
     profile.nationalityCode
   );
-  const [visible, setVisible] = useState(false);
+  const [isNationality, setIsNationality] = useState(false);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -120,6 +178,9 @@ const EditMyProfileScreen: ScreenType = ({
       const profileInfo = {
         name,
         userName,
+        learnLanguage,
+        nativeLanguage,
+        spokenLanguages: spokenLanguages || null,
         nationalityCode,
         introduction,
         photoUrl: newPhotoUrl || photoUrl,
@@ -143,6 +204,9 @@ const EditMyProfileScreen: ScreenType = ({
     photoUrl,
     name,
     userName,
+    learnLanguage,
+    nativeLanguage,
+    spokenLanguages,
     nationalityCode,
     introduction,
     setProfile,
@@ -152,7 +216,16 @@ const EditMyProfileScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({ onPressSubmit });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, userName, nationalityCode, introduction, photoUrl]);
+  }, [
+    name,
+    userName,
+    learnLanguage,
+    nativeLanguage,
+    spokenLanguages,
+    nationalityCode,
+    introduction,
+    photoUrl,
+  ]);
 
   const pickImage = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -179,6 +252,39 @@ const EditMyProfileScreen: ScreenType = ({
 
   return (
     <View style={styles.container}>
+      <ModalSpokenLanguages
+        visible={isLearn}
+        defaultLanguage={learnLanguage}
+        languages={getAllLanguage()}
+        onPressSubmit={(language: Language): void => {
+          setLearnLanguage(language);
+          setIsLearn(false);
+        }}
+        onPressClose={(): void => setIsLearn(false)}
+      />
+      <ModalSpokenLanguages
+        visible={isNative}
+        defaultLanguage={nativeLanguage}
+        languages={getAllLanguage()}
+        onPressSubmit={(language: Language): void => {
+          setNativeLanguage(language);
+          setIsNative(false);
+        }}
+        onPressClose={(): void => setIsNative(false)}
+      />
+      <ModalSpokenLanguages
+        visible={isSpoken}
+        languages={getTargetLanguages(
+          learnLanguage,
+          nativeLanguage,
+          spokenLanguages
+        )}
+        onPressSubmit={(language: Language): void => {
+          setSpokenLanguages([...spokenLanguages, language]);
+          setIsSpoken(false);
+        }}
+        onPressClose={(): void => setIsSpoken(false)}
+      />
       <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
         <LoadingModal visible={isLoading} />
         <View style={styles.avatar}>
@@ -207,9 +313,64 @@ const EditMyProfileScreen: ScreenType = ({
           <Text>{userName}</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style={styles.row}
+          activeOpacity={1}
+          onPress={(): void => setIsLearn(true)}
+        >
+          <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
+          <Text>{getLanguage(learnLanguage)}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.row}
+          activeOpacity={1}
+          onPress={(): void => setIsNative(true)}
+        >
+          <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
+          <Text>{getLanguage(nativeLanguage)}</Text>
+        </TouchableOpacity>
+        <View style={styles.spokenContainer}>
+          <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
+          <View style={styles.right}>
+            {spokenLanguages.map(item => (
+              <View style={styles.spokenRow} key={item}>
+                <Text style={styles.spoken}>{getLanguage(item)}</Text>
+                <TouchableOpacity
+                  style={styles.trash}
+                  onPress={(): void => {
+                    setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    size={20}
+                    color={primaryColor}
+                    name="trash-can-outline"
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+
+            {spokenLanguages.length < 1 ? (
+              <TouchableOpacity
+                style={styles.addRow}
+                onPress={(): void => setIsSpoken(true)}
+              >
+                <MaterialCommunityIcons
+                  size={24}
+                  color={subTextColor}
+                  name="plus"
+                />
+                <Text style={styles.addText}>
+                  {I18n.t('selectLanguage.add')}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        </View>
+
+        <TouchableOpacity
           style={[styles.row, rowStyle]}
           activeOpacity={1}
-          onPress={(): void => setVisible(true)}
+          onPress={(): void => setIsNationality(true)}
         >
           <Text style={styles.label}>
             {I18n.t('selectLanguage.nationality')}
@@ -228,9 +389,9 @@ const EditMyProfileScreen: ScreenType = ({
             onSelect={(country: Country): void => {
               setNationalityCode(country.cca2);
             }}
-            onClose={(): void => setVisible(false)}
-            onOpen={(): void => setVisible(true)}
-            visible={visible}
+            onClose={(): void => setIsNationality(false)}
+            onOpen={(): void => setIsNationality(true)}
+            visible={isNationality}
           />
         </TouchableOpacity>
         <TextInput
