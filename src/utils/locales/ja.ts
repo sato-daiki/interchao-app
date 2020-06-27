@@ -22,7 +22,7 @@ const common = {
 const mainTab = {
   myDiary: 'マイ日記',
   postDiary: '日記を書く',
-  teachDiary: '{{nativeLanguage}}の日記',
+  teachDiary: '添削する日記',
 };
 
 // 共通のエラーメッセージ
@@ -37,7 +37,7 @@ const errorMessage = {
     'エラーの数が一定数を超えました。時間をおいてから再度お試しください',
   network: '通信エラーが発生しました。時間をおいて再度お試し下さい。',
   defaultError: 'エラーが発生しました。{{message}}',
-  emptyUserName: 'ユーザネームを入力してください',
+  emptyUserName: 'ユーザーネームを入力してください',
   invalidUserName:
     'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません',
   initialUserName: '先頭の文字は半角英数字以外使えません',
@@ -45,7 +45,7 @@ const errorMessage = {
     'すでにこのユーザーネームを使用しているユーザーがいます',
   notFound: 'ページが開けません。エラーが発生しました',
   cantLogout: 'メールアドレスが登録されていないため、ログアウトできません。',
-  invalidRaiting: '評価は1〜5で入力してください',
+  invalidRaiting: '星は1〜5で入力してください',
   correctionAlready:
     'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
   deleteTargetUser:
@@ -58,7 +58,7 @@ const errorMessage = {
   emptyMessage: 'メッセージが入力されていません',
   lackPointsTitle: 'ポイント不足',
   lackPointsText:
-    '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは{{nativeLanguage}}の日記を添削することで溜めることができます。',
+    '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは日記を添削することで溜めることができます',
 };
 const app = {
   updateTitle: '最新版が利用可能です',
@@ -117,8 +117,11 @@ const editEmail = {
 const editMyProfile = {
   headerTitle: 'プロフィール変更',
   name: '名前',
-  userName: 'ユーザネーム',
+  userName: 'ユーザーネーム',
   placeholderIntroduction: '自己紹介(200字以内)',
+  learn: '勉強中',
+  native: '話せる言語',
+  spoken: 'その他の\n話せる言語',
 };
 
 const editPassword = {
@@ -150,7 +153,7 @@ const initialize = {
 const inputUserName = {
   headerTitle: 'ユーザーネーム登録',
   title: 'ユーザーネームを入力してください',
-  subText: 'このユーザネームはいつでも変更できます',
+  subText: 'このユーザーネームはいつでも変更できます',
 };
 
 const myDiary = {
@@ -214,11 +217,14 @@ const selectLanguage = {
   headerTitle: '言語と国籍の選択',
   title: '言語と国籍を選択してください',
   learn: '学びたい言語',
-  native: 'ネイティブ言語',
+  native: '話せる言語',
+  spoken: 'その他の話せる言語',
   nationality: '国籍',
   placeholder: '国籍を選択してください',
   change: '変更する',
   nationalityCodeAlert: '国籍を選択してください',
+  sameLanguageAlert: '"学びたい言語"と"話せる言語"は別の言語を選択してください',
+  add: '追加する',
 };
 
 const setting = {
@@ -229,8 +235,6 @@ const setting = {
   editPassword: 'パスワードの変更',
   registerEmailPassword: 'メールアドレス/パスワードの登録',
   tutorial: 'チュートリアル',
-  management: '運営',
-  privacy: 'プライバシーポリシー',
   deleteAcount: '退会について',
   logout: 'ログアウト',
   inquiry: 'お問い合わせ',
@@ -260,8 +264,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '{{nativeLanguage}}の日記を探す',
-  diaryList: '{{nativeLanguage}}を勉強している人の日記一覧',
+  headerTitle: '日記を探す',
+  diaryList: 'あなたが話せる言語の日記一覧',
   empty: '日記がありません',
 };
 
@@ -334,20 +338,16 @@ const emptyReview = {
   empty: 'レビューはまだありません',
 };
 
-const languageRadioBox = {
-  ja: '日本語',
-  en: '英語',
-};
-
 const myDiaryCorrectionFooter = {
   finText: 'この日記はレビュー済みです',
   title: '添削のレビューをする',
-  promptText: '添削のお礼と評価をお願いします',
+  promptText: '添削のお礼とレビューをお願いします',
 };
 
 const profileLanguage = {
   learn: '勉強中の言語',
-  native: 'ネイティブの言語',
+  native: '話せる言語',
+  spoken: 'その他の話せる言語',
 };
 
 const profileNationality = {
@@ -370,7 +370,7 @@ const inquiry = {
 const correctionOrigin = {
   messageIOS: '修正する箇所を選択して、添削を始めましょう',
   messageAndroid:
-    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう。',
+    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう',
 };
 
 const diaryHitList = {
@@ -389,10 +389,10 @@ const emptyMyDiaryList = {
 };
 
 const modalAlertCorrection = {
-  text:
-    '添削は30分以内で行ってください。30分をすぎると添削は破棄されます。\n\n添削を始めると、ロックがかかり他の人は添削できなくなります。',
+  text1: '添削は全て',
+  text2:
+    'で行ってください。\n\n添削は30分以内で行ってください。30分をすぎると添削は破棄されます。\n\n添削を始めると、ロックがかかり他の人は添削できなくなります。',
   start: '添削を始める',
-  checkboxText: '以後、このメッセージを表示しない',
 };
 
 const modalAlertPublish = {
@@ -436,7 +436,7 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
-    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n{{nativeLanguage}}の日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
+    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
   submit: '続ける',
   close: '添削する日記を探す',
 };
@@ -444,16 +444,16 @@ const modalLackPoint = {
 const modalSendEmail = {
   title: 'メール送信',
   text:
-    'メールを送信しました。メールのリンクからパスワードを再設定してください。',
+    'メールを送信しました。メールのリンクからパスワードを再設定してください',
 };
 
 const modalStillCorrecting = {
-  text: '途中で添削が中断されました。',
+  text: '途中で添削が中断されました',
 };
 
 const modalTimeUp = {
   title: 'タイムアップ',
-  text: '30分が経過したため、添削のロックを解除しました。',
+  text: '30分が経過したため、添削のロックを解除しました',
 };
 
 const myDiaryCorrection = {
@@ -500,7 +500,7 @@ const tutorialCorrecting = {
   subTitle: 'やり方',
   title: '添削方法',
   text1:
-    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{nativeLanguage}}で行ってください',
+    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{teachDiaryLanguage}}で行ってください',
   subText1IOS:
     '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある“コメントする“をクリック',
   subText1Android:
@@ -511,7 +511,7 @@ const tutorialCorrecting = {
   subText2Android:
     '① 原文を書く（“クリップボードの貼り付け“をクリック）\n② 修正文に正しい表現/自然な表現を書く\n③ コメントに補足を書く\n④ “追加“をクリック',
   text3:
-    'コメントは{{nativeCharacters}}文字に対して3つを目安に書きましょう。コメントの記載が終わったら画面の右上にある“まとめを書く“をクリック',
+    'コメントは{{teachDiaryCharacters}}文字に対して3つを目安に書きましょう。コメントの記載が終わったら画面の右上にある“まとめを書く“をクリック',
   text4: '日記の全体の感想などを書きましょう',
   subText4: '① まとめを書く\n② “追加“をクリック',
   text5: '修正や削除はカードの右上のメニューアイコンをクリックするとできます',
@@ -530,16 +530,16 @@ const tutorialPostDiary = {
   title: '日記の書き方',
   buttonText: '始める',
   text:
-    '{{learnLanguage}}で日記を書いてみよう。{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？{{nativeLanguage}}を勉強している人の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
+    '{{learnLanguage}}で日記を書いてみよう。{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を投稿するとネイティブがあなたの日記を添削してくれるかも！？またあなたが話せる言語の日記を添削すると10ポイントがもらえます。お互いに言語を教え合いましょう！',
 };
 
 const tutorialTeachDiaryList = {
-  title: '{{nativeLanguage}}の日記とは',
+  title: '添削する日記とは',
   buttonText: '始める',
   text1:
-    '{{nativeLanguage}}を勉強をしているユーザの日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
+    'あなたが話せる言語の日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
   text2:
-    'の{{nativeLanguage}}の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
+    'の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
   textMainColor: '未添削',
 };
 
@@ -566,6 +566,8 @@ const userDiaryStatus = {
 const language = {
   ja: '日本語',
   en: '英語',
+  zh: '中国語（簡体字）',
+  ko: '韓国語',
 };
 
 const ja = {
@@ -613,7 +615,6 @@ const ja = {
   correctionFooterButton,
   emptyDiary,
   emptyReview,
-  languageRadioBox,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,

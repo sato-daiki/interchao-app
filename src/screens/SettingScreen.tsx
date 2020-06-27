@@ -58,14 +58,6 @@ const styles = StyleSheet.create({
 const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { currentUser } = firebase.auth();
 
-  // const onPressPrivacy = useCallback(() => {
-  //   navigation.navigate('Privacy');
-  // }, [navigation]);
-
-  // const onPressManagement = useCallback(() => {
-  //   navigation.navigate('Management');
-  // }, [navigation]);
-
   const onPressLogout = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
@@ -85,7 +77,6 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
-      {/* <OptionItem title="プレミアムサービス" onPress={onPressPremium} /> */}
       <OptionItem
         title={I18n.t('setting.notice')}
         onPress={(): void => {
@@ -127,16 +118,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
           navigation.navigate('TutorialList');
         }}
       />
-      {/* <OptionItem
-        title="お気に入りユーザ一覧"
-        onPress={onPressFavoriteUserList}
-      /> */}
       <Space size={16} />
-      {/* <OptionItem title={I18n.t('setting.privacy')} onPress={onPressPrivacy} />
-      <OptionItem
-        title={I18n.t('setting.management')}
-        onPress={onPressManagement}
-      /> */}
       <OptionItem
         title={I18n.t('setting.deleteAcount')}
         onPress={(): void => {

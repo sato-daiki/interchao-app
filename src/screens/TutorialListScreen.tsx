@@ -51,7 +51,7 @@ const TutorialListScreen: ScreenType = ({ profile }) => {
       {/** これだけ true/faseが逆 */}
       <ModalTutorialCorrecting
         visible={isModalTutorialCorrecting}
-        nativeLanguage={profile.nativeLanguage}
+        teachDiaryLanguage={profile.nativeLanguage}
         buttonText={buttonText}
         rightButtonText={buttonText}
         onPress={(): void => setIsModalTutorialCorrecting(false)}
@@ -60,7 +60,6 @@ const TutorialListScreen: ScreenType = ({ profile }) => {
         displayed={tutorialPostDiary}
         buttonText={buttonText}
         learnLanguage={profile.learnLanguage}
-        nativeLanguage={profile.nativeLanguage}
         onPress={(): void => setTutorialPostDiary(true)}
       />
       <TutorialPoints

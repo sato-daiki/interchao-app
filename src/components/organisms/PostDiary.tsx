@@ -138,13 +138,11 @@ const PostDiary = ({
         isLoading={isTutorialLoading}
         displayed={tutorialPostDiary}
         learnLanguage={learnLanguage}
-        nativeLanguage={nativeLanguage}
         onPress={onPressTutorial}
       />
       <ModalLackPoint
         visible={isModalLack}
         learnLanguage={learnLanguage}
-        nativeLanguage={nativeLanguage}
         onPressSubmit={onPressSubmitModalLack}
         onPressClose={onPressCloseModalLack}
       />
