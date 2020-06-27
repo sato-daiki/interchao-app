@@ -6,12 +6,12 @@ import {
   fontSizeL,
   borderLightColor,
   fontSizeM,
-  fontSizeS,
-  subTextColor,
 } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
+import { Language } from '../../types';
+import { getLanguage } from '../../utils/diary';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
+  bold: {
+    fontWeight: 'bold',
+  },
   icon: {
     alignSelf: 'center',
   },
@@ -43,16 +46,18 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
-  animationOut?: any;
   isLoading: boolean;
+  animationOut?: any;
+  teachDiaryLanguage: Language;
   onPressSubmit: (checked: boolean) => void;
   onPressClose: () => void;
 }
 
 const ModalAlertCorrection: React.FC<Props> = ({
   visible,
-  animationOut,
   isLoading,
+  animationOut,
+  teachDiaryLanguage,
   onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
@@ -70,7 +75,11 @@ const ModalAlertCorrection: React.FC<Props> = ({
           color={primaryColor}
         />
         <Space size={16} />
-        <Text style={styles.text}>{I18n.t('modalAlertCorrection.text')}</Text>
+        <Text style={styles.text}>
+          {I18n.t('modalAlertCorrection.text1')}
+          <Text style={styles.bold}>{getLanguage(teachDiaryLanguage)}</Text>
+          {I18n.t('modalAlertCorrection.text2')}
+        </Text>
         <Space size={32} />
         <SubmitButton
           isLoading={isLoading}

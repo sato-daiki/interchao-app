@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   radioBox: {
-    marginRight: 24,
+    marginRight: 8,
     marginBottom: 8,
   },
 });
