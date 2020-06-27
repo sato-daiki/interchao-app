@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   radioBoxText: {
     fontSize: fontSizeM,
     color: primaryColor,
-    paddingLeft: 8,
+    paddingLeft: 4,
   },
 });
 

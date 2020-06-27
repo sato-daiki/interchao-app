@@ -394,8 +394,9 @@ const emptyMyDiaryList = {
 };
 
 const modalAlertCorrection = {
-  text:
-    'Please finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
+  text1: 'Please write all of the corrections in ',
+  text2:
+    '.\n\nPlease finish making corrections within 30 minutes. Your corrections will be discarded if you take longer than 30 minutes.\n\nOnce you start, the entry will be locked and other people will be unable to make corrections.',
   start: 'Begin Corrections',
 };
 

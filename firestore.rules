@@ -278,9 +278,6 @@ service cloud.firestore {
         && request.resource.data.userName.size() <= 20
         && (request.resource.data.introduction == null || request.resource.data.introduction.size() <= 200)
    			// 修正箇所以外は変わっていないこと
-        && request.resource.data.pro == resource.data.pro
-        && request.resource.data.learnLanguage == resource.data.learnLanguage
-        && request.resource.data.nativeLanguage == resource.data.nativeLanguage
         && request.resource.data.learnLanguage != request.resource.data.nativeLanguage
         && request.resource.data.createdAt == resource.data.createdAt;
     }

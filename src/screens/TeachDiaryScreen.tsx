@@ -366,8 +366,7 @@ const TeachDiaryScreen: ScreenType = ({
     );
   }
 
-  const { createdAt, title, text } = teachDiary;
-  const postDate = getAlgoliaDate(createdAt);
+  const postDate = getAlgoliaDate(teachDiary.createdAt);
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -375,6 +374,7 @@ const TeachDiaryScreen: ScreenType = ({
         visible={isModalCorrection}
         isLoading={isLoading}
         animationOut="flash"
+        teachDiaryLanguage={teachDiary.profile.learnLanguage}
         onPressSubmit={onPressSubmitCorrection}
         onPressClose={(): void => setIsModalCorrection(false)}
       />
@@ -396,8 +396,8 @@ const TeachDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
-          <CopyText style={styles.title} text={title} />
-          <CopyText style={styles.text} text={text} />
+          <CopyText style={styles.title} text={teachDiary.title} />
+          <CopyText style={styles.text} text={teachDiary.text} />
         </View>
         <Corrections
           headerTitle={I18n.t('teachDiaryCorrection.header')}
