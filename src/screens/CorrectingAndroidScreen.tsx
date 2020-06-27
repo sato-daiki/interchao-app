@@ -616,7 +616,7 @@ const CorrectingAndroidScreen: ScreenType = ({
         <ModalTutorialCorrecting
           isLoading={false}
           visible={isModalTutorialCorrectiong}
-          nativeLanguage={currentProfile.nativeLanguage}
+          teachDiaryLanguage={teachDiary.profile.learnLanguage}
           onPress={(): void => setIsModalTutorialCorrectiong(false)}
         />
         <KeyboardAwareScrollView

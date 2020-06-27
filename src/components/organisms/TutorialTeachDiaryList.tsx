@@ -5,8 +5,6 @@ import { Space } from '../atoms';
 import { People } from '../../images';
 import Tutorial from '../template/Tutorial';
 import I18n from '../../utils/I18n';
-import { Language } from '../../types';
-import { getLanguage } from '../../utils/diary';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +28,6 @@ const styles = StyleSheet.create({
 interface Props {
   isLoading?: boolean;
   displayed: boolean;
-  nativeLanguage: Language;
   buttonText?: string;
   onPress?: () => void;
 }
@@ -38,7 +35,6 @@ interface Props {
 const TutorialTeachDiaryList: React.FC<Props> = ({
   isLoading = false,
   displayed,
-  nativeLanguage,
   buttonText = I18n.t('tutorialTeachDiaryList.buttonText'),
   onPress = (): void => undefined,
 }: Props): JSX.Element | null => {
@@ -46,9 +42,7 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
     <Tutorial
       displayed={displayed}
       isLoading={isLoading}
-      title={I18n.t('tutorialTeachDiaryList.title', {
-        nativeLanguage: getLanguage(nativeLanguage),
-      })}
+      title={I18n.t('tutorialTeachDiaryList.title')}
       buttonText={buttonText}
       onPress={onPress}
     >
@@ -56,15 +50,11 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
         <Image style={styles.img} source={People} resizeMode="contain" />
         <Space size={24} />
         <Text style={styles.text}>
-          {I18n.t('tutorialTeachDiaryList.text1', {
-            nativeLanguage: getLanguage(nativeLanguage),
-          })}
+          {I18n.t('tutorialTeachDiaryList.text1')}
           <Text style={styles.main}>
             {I18n.t('tutorialTeachDiaryList.textMainColor')}
           </Text>
-          {I18n.t('tutorialTeachDiaryList.text2', {
-            nativeLanguage: getLanguage(nativeLanguage),
-          })}
+          {I18n.t('tutorialTeachDiaryList.text2')}
         </Text>
       </View>
     </Tutorial>

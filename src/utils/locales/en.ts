@@ -22,7 +22,7 @@ const common = {
 const mainTab = {
   myDiary: 'My Entries',
   postDiary: 'Write an Entry',
-  teachDiary: '{{nativeLanguage}} Entries',
+  teachDiary: 'Entries to Correct',
 };
 
 // 共通のエラーメッセージ
@@ -56,7 +56,7 @@ const errorMessage = {
   emptyMessage: 'There is no message.',
   lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
-    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries in {{nativeLanguage}}.',
+    '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries.',
 };
 
 const app = {
@@ -268,8 +268,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: 'Search {{nativeLanguage}} Entries',
-  diaryList: 'List of Entries for People Studying {{nativeLanguage}}',
+  headerTitle: 'Search Entries',
+  diaryList: 'List of Entries in Languages ​​You Can Speak',
   empty: 'There are no entries from other people.',
 };
 
@@ -441,7 +441,7 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'Not Enough Points',
   text:
-    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a {{nativeLanguage}} journal entry.\n\nDrafts can be saved without needing to use points.',
+    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry.\n\nDrafts can be saved without needing to use points.',
   submit: 'Continue',
   close: 'Look for Entries to Correct',
 };
@@ -505,7 +505,7 @@ const tutorialCorrecting = {
   subTitle: 'Instructions',
   title: 'How to Make Corrections',
   text1:
-    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{nativeLanguage}}.',
+    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{teachDiaryLanguage}}.',
   subText1IOS:
     '1) Tap and hold down on the word or phrase, then set the span\n2) Tap the “Comment” button at the top right hand side of the screen',
   subText1Android:
@@ -516,7 +516,7 @@ const tutorialCorrecting = {
   subText2Android:
     '1) Write the original(Tap the “Paste“ button)\n2) Write the correct/natural phrase in the “Edit” section\n3) Write your explanation in the “Comment” section\n4) Tap the “Add” button',
   text3:
-    'Please aim to write at least 3 comments for every {{nativeCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
+    'Please aim to write at least 3 comments for every {{teachDiaryCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
   text4: 'Write a summary of your thoughts on the overall journey entry',
   subText4: '1) Write the summary\n2) Tap the “Add” button',
   text5:
@@ -537,14 +537,14 @@ const tutorialPostDiary = {
   title: 'How to Write a Journal Entry',
   buttonText: 'Begin',
   text:
-    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! If you correct {{nativeLanguage}} journal entries, you will get 10 points. Let’s teach each other languages!',
+    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! If you correct journal entries written in languages you can speak, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
-  title: 'What is “{{nativeLanguage}} Entries”?',
+  title: 'What is “Entries to Correct”?',
   buttonText: 'Begin',
   text1:
-    'This is a list of journal entries in the languages ​​you can teach. \n\nUp to 3 people can be corrected per journal entry. Please give priority to the journal entry whose status is ',
+    'This is a list of journal entries in the languages ​​you can speak. \n\nUp to 3 people can be corrected per journal entry. Please give priority to the journal entry whose status is ',
   text2: '. If you correct it, you will get 10 points.',
   // Not Yet Correctedはスペースを開けておく
   textMainColor: ' Not Yet Corrected',

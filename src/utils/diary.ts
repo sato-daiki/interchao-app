@@ -253,8 +253,7 @@ export const checkBeforePost = (
   title: string,
   text: string,
   points: number,
-  learnLanguage: Language,
-  nativeLanguage: Language
+  learnLanguage: Language
 ): boolean => {
   if (!title) {
     Alert.alert('', I18n.t('errorMessage.emptyTitile'));
@@ -271,7 +270,6 @@ export const checkBeforePost = (
       I18n.t('errorMessage.lackPointsText', {
         textLength: text.length,
         usePoint,
-        nativeLanguage: getLanguage(nativeLanguage),
       })
     );
     return false;

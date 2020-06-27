@@ -50,7 +50,7 @@ interface Props {
   isLoading?: boolean;
   visible: boolean;
   animationIn?: any;
-  nativeLanguage: Language;
+  teachDiaryLanguage: Language;
   buttonText?: string;
   rightButtonText?: string;
   onPress: () => void;
@@ -116,7 +116,7 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
   isLoading = false,
   animationIn,
   visible,
-  nativeLanguage,
+  teachDiaryLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
   rightButtonText = I18n.t('common.skip'),
   onPress,
@@ -158,20 +158,24 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
   ];
 
   let images;
-  if (Platform.OS === 'android' && nativeLanguage === 'en') {
+  if (Platform.OS === 'android' && teachDiaryLanguage === 'en') {
     images = imagesAndroidEn;
-  } else if (Platform.OS === 'android' && nativeLanguage === 'ja') {
+  } else if (Platform.OS === 'android' && teachDiaryLanguage === 'ja') {
     images = imagesAndroidJa;
-  } else if (Platform.OS === 'ios' && nativeLanguage === 'en') {
+  } else if (Platform.OS === 'ios' && teachDiaryLanguage === 'en') {
     images = imagesIOSEn;
-  } else if (Platform.OS === 'ios' && nativeLanguage === 'ja') {
+  } else if (Platform.OS === 'ios' && teachDiaryLanguage === 'ja') {
     images = imagesIOSJa;
+  } else if (Platform.OS === 'ios') {
+    images = imagesIOSEn;
+  } else {
+    images = imagesAndroidEn;
   }
 
   const entries = [
     {
       text: I18n.t('tutorialCorrecting.text1', {
-        nativeLanguage: getLanguage(nativeLanguage),
+        teachDiaryLanguage: getLanguage(teachDiaryLanguage),
       }),
       subText:
         Platform.OS === 'ios'
@@ -193,7 +197,7 @@ const ModalTutorialCorrecting: React.FC<Props> = ({
     },
     {
       text: I18n.t('tutorialCorrecting.text3', {
-        nativeCharacters: getBasePoints(nativeLanguage),
+        teachDiaryCharacters: getBasePoints(teachDiaryLanguage),
       }),
       image: images[2].image,
       width: images[2].width,
