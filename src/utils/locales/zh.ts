@@ -22,7 +22,7 @@ const common = {
 const mainTab = {
   myDiary: '我的日记',
   postDiary: '写日记',
-  teachDiary: '{{nativeLanguage}}日记',
+  teachDiary: '批改的日记',
 };
 
 // 共通のエラーメッセージ
@@ -52,7 +52,7 @@ const errorMessage = {
   emptyMessage: '没有输入消息',
   lackPointsTitle: '积分不足',
   lackPointsText:
-    '您需要{{usePoint}}个积分才能发布{{textLength}}个字符的日记。可以通过批改{{nativeLanguage}}的日记来累积积分',
+    '您需要{{usePoint}}个积分才能发布{{textLength}}个字符的日记。可以通过批改日记来累积积分',
 };
 const app = {
   updateTitle: '最新版本已经发布',
@@ -256,8 +256,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '查找{{nativeLanguage}}日记',
-  diaryList: '正在学习日语的人的日记列表',
+  headerTitle: '查找日记',
+  diaryList: '你说的语言的日记列表',
   empty: '日记还没有发布',
 };
 
@@ -423,7 +423,7 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: '积分不足',
   text:
-    '积分不足。发布日记每{{learnCharacters}}个字符需要10个积分。\n\n批改{{nativeLanguage}}的日记，将获取10个积分。\n\n保存草稿可以不消耗积分。',
+    '积分不足。发布日记每{{learnCharacters}}个字符需要10个积分。\n\n批改日记，将获取10个积分。\n\n保存草稿可以不消耗积分。',
   submit: '继续',
   close: '查找要批改的日记',
 };
@@ -485,7 +485,7 @@ const tutorialCorrecting = {
   subTitle: '做法',
   title: '如何批改',
   text1:
-    '在日记中找到错误的部分，或者从母语者角度感觉不自然的地方！请使用{{nativeLanguage}}进行所有批改',
+    '在日记中找到错误的部分，或者从母语者角度感觉不自然的地方！请使用{{teachDiaryLanguage}}进行所有批改',
   subText1IOS: '① 长按相应文章并指定范围\n② 点击屏幕右上方的“评论”按钮',
   subText1Android: '①选择要批改的文章并复制\n②点击画面右下方的“评论”',
   text2: '教您正确的句子',
@@ -494,7 +494,7 @@ const tutorialCorrecting = {
   subText2Android:
     '①写原文（点击“粘贴剪贴板”）\n②在修改后的句子中写出正确/自然的表达方式\n③在评论中写下补充内容\n④点击“添加”',
   text3:
-    '大致按{{nativeCharacters}}字写3条评论。填写评论后，点击屏幕右上方的“写总结”',
+    '大致按{{teachDiaryCharacters}}字写3条评论。填写评论后，点击屏幕右上方的“写总结”',
   text4: '写对下日记的总体感想吧',
   subText4: '① 写总结\n② 点击”添加”按钮',
   text5: '点击卡片右上角的菜单图标就可以进行修改或删除',
@@ -513,15 +513,15 @@ const tutorialPostDiary = {
   title: '如何写日记',
   buttonText: '开始',
   text:
-    '试着用{{learnLanguage}}写日记吧。每{{learnCharacters}}个字符需要10个积分。\n\n发布日记的话，可能会有母语者批改您的日记！？如果您批改了正在学习{{nativeLanguage}}的人的日记，您将获得10个积分。让我们互相教外语吧！',
+    '试着用{{learnLanguage}}写日记吧。每{{learnCharacters}}个字符需要10个积分。\n\n发布日记的话，可能会有母语者批改您的日记！？让我们互相教外语吧！',
 };
 
 const tutorialTeachDiaryList = {
-  title: '{{nativeLanguage}}日记',
+  title: '批改的日记',
   buttonText: '开始',
   text1:
     '这是正在学习你所能教的语言的用户日记列表。每份日记最多可以由三人修改。\n\n请优先修改状态为',
-  text2: '的{{nativeLanguage}}的日记。批改后您可以得到10个积分。',
+  text2: '的日记。批改后您可以得到10个积分。',
   textMainColor: '未批改',
 };
 

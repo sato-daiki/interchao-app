@@ -28,7 +28,6 @@ interface Props {
   isLoading?: boolean;
   displayed: boolean;
   learnLanguage: Language;
-  nativeLanguage: Language;
   buttonText?: string;
   onPress?: () => void;
 }
@@ -37,7 +36,6 @@ const TutorialPostDiary: React.FC<Props> = ({
   isLoading = false,
   displayed,
   learnLanguage,
-  nativeLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
   onPress = (): void => undefined,
 }: Props): JSX.Element | null => {
@@ -56,7 +54,6 @@ const TutorialPostDiary: React.FC<Props> = ({
           {I18n.t('tutorialPostDiary.text', {
             learnCharacters: getBasePoints(learnLanguage),
             learnLanguage: getLanguage(learnLanguage),
-            nativeLanguage: getLanguage(nativeLanguage),
           })}
         </Text>
       </View>

@@ -295,6 +295,20 @@ const TeachDiaryScreen: ScreenType = ({
     [navigation]
   );
 
+  const isTeachLanguages = (): boolean => {
+    // 教えることが可能な言語の場合true
+    if (!targetProfile) return false;
+    if (profile.nativeLanguage === targetProfile.learnLanguage) return true;
+    if (profile.spokenLanguages) {
+      for (let i = 0; i <= profile.spokenLanguages.length; i += 1) {
+        if (profile.spokenLanguages[i] === targetProfile.learnLanguage) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const isAlready = (): boolean => {
     // すでに投稿したユーザの場合だめ
     if (!teachDiary || !teachDiary.correction) return false;
@@ -323,8 +337,7 @@ const TeachDiaryScreen: ScreenType = ({
   const renderButton = (): ReactNode => {
     // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
-      targetProfile &&
-      profile.nativeLanguage === targetProfile.learnLanguage &&
+      isTeachLanguages() &&
       teachDiary &&
       teachDiary.correctionStatus !== 'correcting' &&
       teachDiary.correctionStatus2 !== 'correcting' &&

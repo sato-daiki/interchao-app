@@ -13,11 +13,7 @@ import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import SearchBarButton from '../components/molecules/SearchBarButton';
-import {
-  getExceptUser,
-  getLanguage,
-  getFillterLanguages,
-} from '../utils/diary';
+import { getExceptUser, getFillterLanguages } from '../utils/diary';
 import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -79,7 +75,6 @@ const TeachDiaryListScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({
       onPressSearch,
-      nativeLanguage: getLanguage(profile.nativeLanguage),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -232,11 +227,7 @@ const TeachDiaryListScreen: ScreenType = ({
   );
 
   const listHeaderComponent = (
-    <GrayHeader
-      title={I18n.t('teachDiaryList.diaryList', {
-        nativeLanguage: getLanguage(profile.nativeLanguage),
-      })}
-    />
+    <GrayHeader title={I18n.t('teachDiaryList.diaryList')} />
   );
 
   const listEmptyComponent =
@@ -251,7 +242,6 @@ const TeachDiaryListScreen: ScreenType = ({
       <LoadingModal visible={isLoading} />
       <TutorialTeachDiaryList
         isLoading={isTutorialLoading}
-        nativeLanguage={profile.nativeLanguage}
         displayed={user.tutorialTeachDiaryList}
         onPress={onPressTutorial}
       />
@@ -275,13 +265,12 @@ TeachDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const onPressSearch = navigation.getParam('onPressSearch');
-  const nativeLanguage = navigation.getParam('nativeLanguage');
 
   return {
     ...DefaultNavigationOptions,
     headerTitle: (): JSX.Element => (
       <SearchBarButton
-        title={I18n.t('teachDiaryList.headerTitle', { nativeLanguage })}
+        title={I18n.t('teachDiaryList.headerTitle')}
         onPress={onPressSearch}
       />
     ),

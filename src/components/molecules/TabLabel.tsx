@@ -1,9 +1,5 @@
 import React from 'react';
 import { Text, StyleSheet, View, Platform } from 'react-native';
-import { useSelector, shallowEqual } from 'react-redux';
-
-import { State } from '../../types/state';
-import { getLanguage } from '../../utils/diary';
 import I18n from '../../utils/I18n';
 
 interface Props {
@@ -24,16 +20,10 @@ const styles = StyleSheet.create({
 });
 
 const TabLabel = ({ color }: Props): JSX.Element => {
-  const profile = useSelector(
-    (state: State) => state.rootReducer.profile,
-    shallowEqual
-  );
-  const nativeLanguage = getLanguage(profile.nativeLanguage);
-
   return (
     <View style={styles.container}>
       <Text style={[styles.text, { color }]}>
-        {I18n.t('mainTab.teachDiary', { nativeLanguage })}
+        {I18n.t('mainTab.teachDiary')}
       </Text>
     </View>
   );
