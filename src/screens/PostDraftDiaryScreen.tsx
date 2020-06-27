@@ -162,14 +162,13 @@ const PostDraftDiaryScreen: ScreenType = ({
       title,
       text,
       user.points,
-      profile.learnLanguage,
-      profile.nativeLanguage
+      profile.learnLanguage
     );
     if (!res) {
       return;
     }
     setIsModalAlert(true);
-  }, [profile.learnLanguage, profile.nativeLanguage, text, title, user.points]);
+  }, [profile.learnLanguage, text, title, user.points]);
 
   useEffect(() => {
     navigation.setParams({
