@@ -22,7 +22,7 @@ const common = {
 const mainTab = {
   myDiary: '내 일기',
   postDiary: '일기 쓰기',
-  teachDiary: '{{nativeLanguage}} 일기',
+  teachDiary: '첨삭하는 일기',
 };
 
 // 共通のエラーメッセージ
@@ -56,7 +56,7 @@ const errorMessage = {
   emptyMessage: '메시지가 입력되지 않았습니다.',
   lackPointsTitle: '포인트 부족',
   lackPointsText:
-    '글자수{{textLength}인 일기를 업로드하려면 {{usePoint}}포인트가 필요합니다. 포인트는 {{language}}일기를 첨삭하면 얻을 수 있습니다.',
+    '글자수{{textLength}인 일기를 업로드하려면 {{usePoint}}포인트가 필요합니다. 포인트는 일기를 첨삭하면 얻을 수 있습니다.',
 };
 const app = {
   updateTitle: '최신버전으로 이용가능합니다',
@@ -73,7 +73,7 @@ const correcting = {
   commentAlert: '코멘트가 편집중입니다',
   titleComment: '코멘트하기',
   titleSummary: '총평 쓰기',
-  titleDone: '投稿する',
+  titleDone: '업로드하기',
   menuEdit: '편집하기',
   menuCommentDelete: '코멘트 삭제하기',
   menuSummaryDelete: '총평 삭제하기',
@@ -263,8 +263,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '{{nativeLanguage}} 일기 찾기',
-  diaryList: '{{nativeLanguage}}를 공부 하는 사용자의 일기 목록',
+  headerTitle: '일기 찾기',
+  diaryList: '당신이 원어민 언어의 일기 목록',
   empty: '일기가 없습니다',
 };
 
@@ -495,7 +495,7 @@ const tutorialCorrecting = {
   subTitle: '방법',
   title: '첨삭 방법',
   text1:
-    '일기 중에 잘못된 부분 혹은 어색한 부분을 찾아보세요! 첨삭은 모두 {{nativeLanguage}}로 해 주세요',
+    '일기 중에 잘못된 부분 혹은 어색한 부분을 찾아보세요! 첨삭은 모두 {{teachDiaryLanguage}}로 해 주세요',
   subText1IOS:
     '① 해당 문장을 길게 눌러 범위를 지정하기\n② 화면 오른쪽 위의 "코멘트하기" 버튼을 클릭하기',
   subText1Android:
@@ -506,7 +506,7 @@ const tutorialCorrecting = {
   subText2Android:
     '① 원문 쓰기 ("클립보드 붙여놓기"를 클릭)\n② "수정문"에 알맞은 표현/자연스러운 표현 쓰기\n③ "코멘트"에 해설 쓰기\n④ "추가하기" 버튼 클릭하기',
   text3:
-    '코멘트는 {{nativeCharacters}}글자에 대해 최대한 3개를 골라서 씁시다. 코멘트를 입력하면 회면 오른쪽 위의 "총평 쓰기" 클릭',
+    '코멘트는 {{teachDiaryCharacters}}글자에 대해 최대한 3개를 골라서 씁시다. 코멘트를 입력하면 회면 오른쪽 위의 "총평 쓰기" 클릭',
   text4: '일기에 대한 전체적인 소감을 씁시다.',
   subText4: '① 총평 쓰기\n② "추가하기" 버튼 클릭',
   text5:
@@ -527,16 +527,16 @@ const tutorialPostDiary = {
   title: '일기 작성 방법',
   buttonText: '시작하기',
   text:
-    '{{learnLanguage}}로 일기를 써보세요. {{learnCharacters}}글자마다 10포인트가 필요합니다. 일기를 업로드한 후에는 원어민이 첨삭을 해줍니다. {{nativeLanguage}}를 공부하고 있는 사람의 일기를 첨삭하면 10포인트를 받을 수 있습니다. 서로에게 든든한 언어 선생님이 되어주세요!',
+    '{{learnLanguage}}로 일기를 써보세요. {{learnCharacters}}글자마다 10포인트가 필요합니다. 일기를 업로드한 후에는 원어민이 첨삭을 해줍니다. 당신이 원어민 언어의 일기를 첨삭하면 10포인트를 받을 수 있습니다. 서로에게 든든한 언어 선생님이 되어주세요!',
 };
 
 const tutorialTeachDiaryList = {
-  title: '{{nativeLanguage}} 일기',
+  title: '첨삭하는 일기',
   buttonText: '시작하기',
   text1:
-    '{{nativeLanguage}}를 공부하는 사용자의 일기 목록입니다. 일기 한개당 최대 3명까지 첨삭이 가능합니다. \n\n상태가',
+    '당신이 원어민 언어의 일기 목록입니다. 일기 한개당 최대 3명까지 첨삭이 가능합니다. \n\n상태가',
   text2:
-    '인 {{nativeLanguage}} 일기를 우선적으로 첨삭해주세요. 첨삭을 완료하면 10포인트를 받을 수 있습니다.',
+    '인 일기를 우선적으로 첨삭해주세요. 첨삭을 완료하면 10포인트를 받을 수 있습니다.',
   textMainColor: ' {{status}}',
 };
 
