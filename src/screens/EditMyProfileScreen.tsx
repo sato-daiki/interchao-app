@@ -349,7 +349,7 @@ const EditMyProfileScreen: ScreenType = ({
               </View>
             ))}
 
-            {spokenLanguages.length < 1 ? (
+            {spokenLanguages.length < 2 ? (
               <TouchableOpacity
                 style={styles.addRow}
                 onPress={(): void => setIsSpoken(true)}
