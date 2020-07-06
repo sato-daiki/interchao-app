@@ -217,6 +217,8 @@ const selectLanguage = {
   change: '更改',
   nationalityCodeAlert: '请选择国籍',
   sameLanguageAlert: '请为 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
+  sameSpokenAlert:
+    '请为 "您会说的其他语言" 和 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
   add: '添加',
 };
 

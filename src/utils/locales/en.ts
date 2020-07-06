@@ -228,6 +228,8 @@ const selectLanguage = {
   nationalityCodeAlert: 'Please select your nationality',
   sameLanguageAlert:
     'Please choose another language for "Language you want to learn" and "Language you can speak"',
+  sameSpokenAlert:
+    'Please choose another language for "Language you want to learn", "Language you can speak" and "Other Languages you can speak"',
   add: 'Add',
 };
 
