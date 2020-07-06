@@ -566,7 +566,7 @@ const language = {
   ja: '일본어',
   en: '영어',
   zh: '중국어 간체',
-  ko: '한국',
+  ko: '한국어',
 };
 
 const ko = {
