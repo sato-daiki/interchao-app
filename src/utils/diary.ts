@@ -8,6 +8,7 @@ import {
   DisplayProfile,
   Comment,
   Diary,
+  CountryCode,
 } from '../types';
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -134,6 +135,10 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
 
 export const getAllLanguage = (): Language[] => {
   return ['ja', 'en', 'zh', 'ko'];
+};
+
+export const getLanguageNum = (): number => {
+  return getAllLanguage().length;
 };
 
 // すでに選択された言語、ネイティブ言語、勉強中の言語を除く
@@ -312,4 +317,36 @@ export const updateYet = async (
   });
 
   batch.commit();
+};
+
+export const checkSelectLanguage = (
+  nationalityCode: CountryCode | null | undefined,
+  learnLanguage: Language,
+  nativeLanguage: Language,
+  spokenLanguages: Language[]
+): boolean => {
+  if (!nationalityCode) {
+    Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
+    return false;
+  }
+
+  if (learnLanguage === nativeLanguage) {
+    Alert.alert('', I18n.t('selectLanguage.sameLanguageAlert'));
+    return false;
+  }
+
+  if (spokenLanguages) {
+    for (let i = 0; i < spokenLanguages.length; i += 1) {
+      if (spokenLanguages[i] === learnLanguage) {
+        Alert.alert('', I18n.t('selectLanguage.sameSpokenAlert'));
+        return false;
+      }
+
+      if (spokenLanguages[i] === nativeLanguage) {
+        Alert.alert('', I18n.t('selectLanguage.sameSpokenAlert'));
+        return false;
+      }
+    }
+  }
+  return true;
 };
