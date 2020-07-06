@@ -21,7 +21,12 @@ import { Profile, CountryCode, Language } from '../types';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
-import { getLanguage, getTargetLanguages } from '../utils/diary';
+import {
+  getLanguage,
+  getTargetLanguages,
+  getLanguageNum,
+  checkSelectLanguage,
+} from '../utils/diary';
 
 export interface Props {
   profile: Profile;
@@ -152,15 +157,17 @@ const SelectLanguageScreen: ScreenType = ({
   }, []);
 
   const onPressNext = (): void => {
-    if (!nationalityCode) {
-      Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
+    if (
+      !checkSelectLanguage(
+        nationalityCode,
+        learnLanguage,
+        nativeLanguage,
+        spokenLanguages
+      )
+    ) {
       return;
     }
 
-    if (learnLanguage === nativeLanguage) {
-      Alert.alert('', I18n.t('selectLanguage.sameLanguageAlert'));
-      return;
-    }
     setProfile({
       ...profile,
       learnLanguage,
@@ -222,7 +229,7 @@ const SelectLanguageScreen: ScreenType = ({
           </TouchableOpacity>
         </View>
       ))}
-      {spokenLanguages.length < 2 ? (
+      {spokenLanguages.length < getLanguageNum() - 2 ? (
         <TouchableOpacity
           style={styles.row}
           onPress={(): void => setSpokenVisible(true)}

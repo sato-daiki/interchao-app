@@ -223,6 +223,8 @@ const selectLanguage = {
   nationalityCodeAlert: '국적을 선택해 주세요',
   sameLanguageAlert:
     '"배우고 싶은 언어"와 "원어민 언어"는 다른 언어를 선택하십시오',
+  sameSpokenAlert:
+    '"기타 원어민 수준의 언어"와 "배우고 싶은 언어"와 "원어민 언어"는 다른 언어를 선택하십시오',
   add: '추가하기',
 };
 
@@ -566,7 +568,7 @@ const language = {
   ja: '일본어',
   en: '영어',
   zh: '중국어 간체',
-  ko: '한국',
+  ko: '한국어',
 };
 
 const ko = {

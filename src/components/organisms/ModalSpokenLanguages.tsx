@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Picker } from 'react-native';
 import { Modal } from '../template';
 import { Language } from '../../types';
@@ -28,6 +28,9 @@ const ModalSpokenLanguages: React.FC<Props> = ({
   onPressClose,
 }) => {
   const [value, setValue] = useState<Language>(defaultLanguage || languages[0]);
+  useEffect(() => {
+    setValue(languages[0]);
+  }, [languages]);
 
   return (
     <Modal visible={visible}>
@@ -40,7 +43,10 @@ const ModalSpokenLanguages: React.FC<Props> = ({
             <Picker.Item key={item} label={getLanguage(item)} value={item} />
           ))}
         </Picker>
-        <SubmitButton title="OK" onPress={(): void => onPressSubmit(value)} />
+        <SubmitButton
+          title="OK"
+          onPress={(): void => onPressSubmit(value || languages[0])}
+        />
         <Space size={16} />
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
       </View>
