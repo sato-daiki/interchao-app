@@ -24,7 +24,7 @@ import { openCameraRoll, uploadImageAsync } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';
 import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { Profile, Language } from '../types';
+import { Profile, Language, CountryCode } from '../types';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
 import {
@@ -32,6 +32,7 @@ import {
   getLanguage,
   getTargetLanguages,
   getLanguageNum,
+  checkSelectLanguage,
 } from '../utils/diary';
 
 export interface Props {
@@ -160,6 +161,17 @@ const EditMyProfileScreen: ScreenType = ({
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (isLoading) return;
+
+      if (
+        !checkSelectLanguage(
+          nationalityCode,
+          learnLanguage,
+          nativeLanguage,
+          spokenLanguages
+        )
+      ) {
+        return;
+      }
       setIsLoading(true);
       // 画像のuodate
       let newPhotoUrl = '';
@@ -348,7 +360,7 @@ const EditMyProfileScreen: ScreenType = ({
               </View>
             ))}
 
-            {spokenLanguages.length < getLanguageNum() - 1 ? (
+            {spokenLanguages.length < getLanguageNum() - 2 ? (
               <TouchableOpacity
                 style={styles.addRow}
                 onPress={(): void => setIsSpoken(true)}

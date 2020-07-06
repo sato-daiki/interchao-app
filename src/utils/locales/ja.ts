@@ -224,6 +224,8 @@ const selectLanguage = {
   change: '変更する',
   nationalityCodeAlert: '国籍を選択してください',
   sameLanguageAlert: '"学びたい言語"と"話せる言語"は別の言語を選択してください',
+  sameSpokenAlert:
+    '"学びたい言語"と"話せる言語"と"その他の話せる言語"は別の言語を選択してください',
   add: '追加する',
 };
 
