@@ -31,6 +31,7 @@ import {
   getAllLanguage,
   getLanguage,
   getTargetLanguages,
+  getLanguageNum,
 } from '../utils/diary';
 
 export interface Props {
@@ -40,8 +41,6 @@ export interface Props {
 interface DispatchProps {
   setProfile: (profile: Profile) => {};
 }
-
-type PickerLanguage = 'native' | 'learn' | 'spoken';
 
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
@@ -349,7 +348,7 @@ const EditMyProfileScreen: ScreenType = ({
               </View>
             ))}
 
-            {spokenLanguages.length < 2 ? (
+            {spokenLanguages.length < getLanguageNum() - 1 ? (
               <TouchableOpacity
                 style={styles.addRow}
                 onPress={(): void => setIsSpoken(true)}
