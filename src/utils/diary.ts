@@ -136,6 +136,10 @@ export const getAllLanguage = (): Language[] => {
   return ['ja', 'en', 'zh', 'ko'];
 };
 
+export const getLanguageNum = (): number => {
+  return getAllLanguage().length;
+};
+
 // すでに選択された言語、ネイティブ言語、勉強中の言語を除く
 export const getTargetLanguages = (
   learnLanguage,

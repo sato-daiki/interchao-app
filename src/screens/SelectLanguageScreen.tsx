@@ -21,7 +21,11 @@ import { Profile, CountryCode, Language } from '../types';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
-import { getLanguage, getTargetLanguages } from '../utils/diary';
+import {
+  getLanguage,
+  getTargetLanguages,
+  getLanguageNum,
+} from '../utils/diary';
 
 export interface Props {
   profile: Profile;
@@ -222,7 +226,7 @@ const SelectLanguageScreen: ScreenType = ({
           </TouchableOpacity>
         </View>
       ))}
-      {spokenLanguages.length < 2 ? (
+      {spokenLanguages.length < getLanguageNum() - 1 ? (
         <TouchableOpacity
           style={styles.row}
           onPress={(): void => setSpokenVisible(true)}
