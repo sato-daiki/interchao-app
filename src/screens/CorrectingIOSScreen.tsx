@@ -137,6 +137,10 @@ const CorrectingIOSScreen: ScreenType = ({
   const [summary, setSummary] = useState(''); // まとめ
   const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
 
+  /* 隠す */
+  const [hidden1, setHidden1] = useState(false);
+  const [hidden2, setHidden2] = useState(false);
+
   /**
    * 閉じる処理
    */
@@ -545,6 +549,11 @@ const CorrectingIOSScreen: ScreenType = ({
     teachDiary.profile.learnLanguage
   );
 
+  const onPressHidden = (prmCorrectedNum: number): void => {
+    if (prmCorrectedNum === 1) setHidden1(!hidden1);
+    if (prmCorrectedNum === 2) setHidden2(!hidden2);
+  };
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
@@ -585,6 +594,9 @@ const CorrectingIOSScreen: ScreenType = ({
               headerTitle={I18n.t('correcting.header')}
               correction={correction}
               correction2={correction2}
+              hidden1={hidden1}
+              hidden2={hidden2}
+              onPressHidden={onPressHidden}
             />
             <Space size={32} />
             {/* 新規でコメント追加 */}

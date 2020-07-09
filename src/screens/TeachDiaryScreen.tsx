@@ -39,6 +39,7 @@ import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
+import UnderLineText from '../components/organisms/UnderLineText';
 
 const { width } = Dimensions.get('window');
 
@@ -103,9 +104,8 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   text: {
-    color: primaryColor,
     fontSize: fontSizeM,
-    paddingBottom: 32,
+    color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
 });
@@ -129,6 +129,9 @@ const TeachDiaryScreen: ScreenType = ({
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
+  const [hidden1, setHidden1] = useState(false);
+  const [hidden2, setHidden2] = useState(false);
+  const [hidden3, setHidden3] = useState(false);
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -334,6 +337,12 @@ const TeachDiaryScreen: ScreenType = ({
     return false;
   };
 
+  const onPressHidden = (prmCorrectedNum: number): void => {
+    if (prmCorrectedNum === 1) setHidden1(!hidden1);
+    if (prmCorrectedNum === 2) setHidden2(!hidden2);
+    if (prmCorrectedNum === 3) setHidden3(!hidden3);
+  };
+
   const renderButton = (): ReactNode => {
     // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
@@ -397,16 +406,33 @@ const TeachDiaryScreen: ScreenType = ({
             <UserDiaryStatus diary={teachDiary} />
           </View>
           <CopyText style={styles.title} text={teachDiary.title} />
-          <CopyText style={styles.text} text={teachDiary.text} />
+          {isCorrectionLoading ? (
+            <Text style={styles.text}>{teachDiary.text}</Text>
+          ) : (
+            <UnderLineText
+              text={teachDiary.text}
+              textStyle={styles.text}
+              correction={correction}
+              correction2={correction2}
+              correction3={correction3}
+              hidden1={hidden1}
+              hidden2={hidden2}
+              hidden3={hidden3}
+            />
+          )}
         </View>
         <Corrections
           headerTitle={I18n.t('teachDiaryCorrection.header')}
           correction={correction}
           correction2={correction2}
           correction3={correction3}
+          hidden1={hidden1}
+          hidden2={hidden2}
+          hidden3={hidden3}
           onPressUser={(uid: string): void => {
             navigation.push('UserProfile', { uid });
           }}
+          onPressHidden={onPressHidden}
         />
         {renderButton()}
         <Space size={16} />

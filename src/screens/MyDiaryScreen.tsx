@@ -38,6 +38,7 @@ import { getCorrection } from '../utils/corrections';
 import { LoadingModal, GrayHeader, CopyText, Space } from '../components/atoms';
 import I18n from '../utils/I18n';
 import Sns from '../components/organisms/Sns';
+import UnderLineText from '../components/organisms/UnderLineText';
 
 export interface Props {
   diary?: Diary;
@@ -88,9 +89,9 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   text: {
-    lineHeight: fontSizeM * 1.3,
     fontSize: fontSizeM,
     color: primaryColor,
+    lineHeight: fontSizeM * 1.3,
   },
   scrollView: {
     flex: 1,
@@ -120,6 +121,9 @@ const MyDiaryScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
+  const [hidden1, setHidden1] = useState(false);
+  const [hidden2, setHidden2] = useState(false);
+  const [hidden3, setHidden3] = useState(false);
 
   const url =
     profile.nativeLanguage === 'ja'
@@ -224,6 +228,12 @@ const MyDiaryScreen: ScreenType = ({
     setIsLoading(false);
   }, [deleteDiary, diary, navigation]);
 
+  const onPressHidden = (prmCorrectedNum: number): void => {
+    if (prmCorrectedNum === 1) setHidden1(!hidden1);
+    if (prmCorrectedNum === 2) setHidden2(!hidden2);
+    if (prmCorrectedNum === 3) setHidden3(!hidden3);
+  };
+
   if (!diary) {
     return null;
   }
@@ -234,10 +244,12 @@ const MyDiaryScreen: ScreenType = ({
   const renderMyDiaryCorrection = (
     correctedNum: number,
     prmCorrection: Correction,
-    prmIsReview: boolean | undefined
+    prmIsReview: boolean | undefined,
+    prmHidden: boolean
   ): ReactNode => {
     return (
       <MyDiaryCorrection
+        hidden={prmHidden}
         isReview={prmIsReview}
         nativeLanguage={profile.nativeLanguage}
         correction={prmCorrection}
@@ -250,6 +262,7 @@ const MyDiaryScreen: ScreenType = ({
             correctedNum,
           });
         }}
+        onPressHidden={(): void => onPressHidden(correctedNum)}
       />
     );
   };
@@ -273,7 +286,20 @@ const MyDiaryScreen: ScreenType = ({
             <MyDiaryStatus diary={diary} />
           </View>
           <CopyText style={styles.title} text={title} />
-          <CopyText style={styles.text} text={text} />
+          {isCorrectionLoading ? (
+            <Text style={styles.text}>{text}</Text>
+          ) : (
+            <UnderLineText
+              text={text}
+              textStyle={styles.text}
+              correction={correction}
+              correction2={correction2}
+              correction3={correction3}
+              hidden1={hidden1}
+              hidden2={hidden2}
+              hidden3={hidden3}
+            />
+          )}
         </View>
         {isCorrectionLoading ? (
           <View style={styles.activityIndicator}>
@@ -285,13 +311,13 @@ const MyDiaryScreen: ScreenType = ({
               <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
             ) : null}
             {correction
-              ? renderMyDiaryCorrection(1, correction, isReview)
+              ? renderMyDiaryCorrection(1, correction, isReview, hidden1)
               : null}
             {correction2
-              ? renderMyDiaryCorrection(2, correction2, isReview2)
+              ? renderMyDiaryCorrection(2, correction2, isReview2, hidden2)
               : null}
             {correction3
-              ? renderMyDiaryCorrection(3, correction3, isReview3)
+              ? renderMyDiaryCorrection(3, correction3, isReview3, hidden3)
               : null}
             <Space size={64} />
             <Sns

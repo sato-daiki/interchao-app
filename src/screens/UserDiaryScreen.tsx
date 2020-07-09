@@ -11,7 +11,7 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import Algolia from '../utils/Algolia';
-import { Profile, Correction, User, Diary } from '../types';
+import { Profile, Correction, Diary } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { ProfileIconHorizontal, Space, CopyText } from '../components/atoms';
@@ -26,6 +26,7 @@ import { getCorrection } from '../utils/corrections';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import Corrections from '../components/organisms/Corrections';
+import UnderLineText from '../components/organisms/UnderLineText';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -85,6 +86,9 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
   const [correction, setCorrection] = useState<Correction>();
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
+  const [hidden1, setHidden1] = useState(false);
+  const [hidden2, setHidden2] = useState(false);
+  const [hidden3, setHidden3] = useState(false);
 
   const getNewProfile = useCallback((diary: Diary) => {
     const f = async (): Promise<void> => {
@@ -167,6 +171,12 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
     [navigation]
   );
 
+  const onPressHidden = (prmCorrectedNum: number): void => {
+    if (prmCorrectedNum === 1) setHidden1(!hidden1);
+    if (prmCorrectedNum === 2) setHidden2(!hidden2);
+    if (prmCorrectedNum === 3) setHidden3(!hidden3);
+  };
+
   if (!isDiaryLoading && !teachDiary) {
     return (
       <View style={styles.errContainer}>
@@ -200,7 +210,20 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
                 <UserDiaryStatus diary={teachDiary} />
               </View>
               <CopyText style={styles.title} text={teachDiary.title} />
-              <CopyText style={styles.text} text={teachDiary.text} />
+              {isCorrectionLoading ? (
+                <Text style={styles.text}>{teachDiary.text}</Text>
+              ) : (
+                <UnderLineText
+                  text={teachDiary.text}
+                  textStyle={styles.text}
+                  correction={correction}
+                  correction2={correction2}
+                  correction3={correction3}
+                  hidden1={hidden1}
+                  hidden2={hidden2}
+                  hidden3={hidden3}
+                />
+              )}
             </>
           ) : (
             <ActivityIndicator />
@@ -212,9 +235,13 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
             correction={correction}
             correction2={correction2}
             correction3={correction3}
+            hidden1={hidden1}
+            hidden2={hidden2}
+            hidden3={hidden3}
             onPressUser={(uid: string): void => {
               navigation.push('UserProfile', { uid });
             }}
+            onPressHidden={onPressHidden}
           />
         ) : (
           <ActivityIndicator />

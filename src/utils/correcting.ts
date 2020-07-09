@@ -1,11 +1,6 @@
 import I18n from './I18n';
 import firebase from '../constants/firebase';
-import {
-  getDisplayProfile,
-  getComments,
-  getUsePoints,
-  updateYet,
-} from './diary';
+import { getDisplayProfile, getUsePoints, updateYet } from './diary';
 import { track, events } from './Analytics';
 import {
   Diary,
@@ -120,7 +115,13 @@ export const updateDone = async ({
     setIsLoading(true);
 
     const displayProfile = getDisplayProfile(currentProfile);
-    const comments = getComments(infoComments);
+    const comments = infoComments.map(c => ({
+      original: c.original,
+      fix: c.fix,
+      detail: c.detail,
+      start: c.start,
+      end: c.end,
+    }));
 
     const getPoints = getUsePoints(
       teachDiary.text.length,

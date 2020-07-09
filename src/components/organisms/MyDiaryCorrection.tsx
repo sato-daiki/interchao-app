@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
 import { Space, HideButton } from '../atoms';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
@@ -12,11 +12,13 @@ import {
 } from '../molecules';
 
 interface Props {
+  hidden: boolean;
   isReview?: boolean;
   nativeLanguage: Language;
   correction: Correction;
   onPressUser: (uid: string) => void;
   onPressReview: () => void;
+  onPressHidden: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -43,14 +45,15 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  * 概要：添削一覧
  */
 const MyDiaryCorrection: React.FC<Props> = ({
+  hidden,
   isReview,
   nativeLanguage,
   correction,
   onPressUser,
   onPressReview,
+  onPressHidden,
 }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
-  const [hidden, setHidden] = useState(false);
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
@@ -80,7 +83,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
 
   return (
     <View style={styles.main}>
-      <HideButton hidden={hidden} onPress={(): void => setHidden(!hidden)} />
+      <HideButton hidden={hidden} onPress={onPressHidden} />
       {hidden ? null : (
         <>
           <View style={styles.header}>

@@ -8,7 +8,11 @@ interface Props {
   correction?: Correction;
   correction2?: Correction;
   correction3?: Correction;
+  hidden1: boolean;
+  hidden2: boolean;
+  hidden3?: boolean;
   onPressUser?: (uid: string) => void;
+  onPressHidden: (prmCorrectedNum: number) => void;
 }
 
 const Corrections: React.FC<Props> = ({
@@ -16,22 +20,34 @@ const Corrections: React.FC<Props> = ({
   correction,
   correction2,
   correction3,
+  hidden1,
+  hidden2,
+  hidden3,
   onPressUser,
+  onPressHidden,
 }) => {
-  const renderDiaryCorrection = (prmCorrection: Correction): ReactNode => {
+  const renderDiaryCorrection = (
+    prmCorrection: Correction,
+    prmHidden: boolean,
+    correctedNum: number
+  ): ReactNode => {
     return (
       <TeachDiaryCorrection
+        hidden={prmHidden}
         correction={prmCorrection}
         onPressUser={onPressUser}
+        onPressHidden={(): void => onPressHidden(correctedNum)}
       />
     );
   };
   return (
     <>
       {correction ? <GrayHeader title={headerTitle} /> : null}
-      {correction ? renderDiaryCorrection(correction) : null}
-      {correction2 ? renderDiaryCorrection(correction2) : null}
-      {correction3 ? renderDiaryCorrection(correction3) : null}
+      {correction ? renderDiaryCorrection(correction, hidden1, 1) : null}
+      {correction2 ? renderDiaryCorrection(correction2, hidden2, 2) : null}
+      {correction3 && hidden3 !== undefined
+        ? renderDiaryCorrection(correction3, hidden3, 3)
+        : null}
     </>
   );
 };

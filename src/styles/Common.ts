@@ -7,6 +7,7 @@ export const mainColor = '#2D9CDB';
 export const offWhite = '#f6f6f6';
 export const linkBlue = '#2469BB';
 export const green = '#27AE60';
+export const purple = '#C0A9D1';
 export const facebook = '#1877f2';
 export const softRed = '#da5353';
 export const star = '#f1c40f';
