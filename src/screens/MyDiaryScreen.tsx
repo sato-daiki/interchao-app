@@ -34,7 +34,7 @@ import {
 } from '../styles/Common';
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
-import { getCorrection } from '../utils/corrections';
+import { getCorrection, getColor } from '../utils/corrections';
 import { LoadingModal, GrayHeader, CopyText, Space } from '../components/atoms';
 import I18n from '../utils/I18n';
 import Sns from '../components/organisms/Sns';
@@ -250,6 +250,7 @@ const MyDiaryScreen: ScreenType = ({
     return (
       <MyDiaryCorrection
         hidden={prmHidden}
+        borderColor={getColor(correctedNum)}
         isReview={prmIsReview}
         nativeLanguage={profile.nativeLanguage}
         correction={prmCorrection}

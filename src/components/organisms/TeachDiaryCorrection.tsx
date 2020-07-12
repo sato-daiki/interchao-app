@@ -9,6 +9,7 @@ import { CommentCard } from '../molecules';
 
 interface Props {
   hidden: boolean;
+  borderColor?: string;
   correction: Correction;
   onPressUser?: (uid: string) => void;
   onPressHidden: () => void;
@@ -40,6 +41,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
 const TeachDiaryCorrection: React.FC<Props> = ({
   hidden,
   correction,
+  borderColor,
   onPressUser,
   onPressHidden,
 }): JSX.Element => {
@@ -58,10 +60,11 @@ const TeachDiaryCorrection: React.FC<Props> = ({
           original={original}
           fix={fix}
           detail={detail}
+          borderColor={borderColor}
         />
       );
     },
-    []
+    [borderColor]
   );
 
   return (

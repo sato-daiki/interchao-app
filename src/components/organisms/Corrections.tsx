@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Correction } from '../../types';
 import { GrayHeader } from '../atoms';
 import TeachDiaryCorrection from './TeachDiaryCorrection';
+import { getColor } from '../../utils/corrections';
 
 interface Props {
   headerTitle: string;
@@ -34,6 +35,7 @@ const Corrections: React.FC<Props> = ({
     return (
       <TeachDiaryCorrection
         hidden={prmHidden}
+        borderColor={getColor(correctedNum)}
         correction={prmCorrection}
         onPressUser={onPressUser}
         onPressHidden={(): void => onPressHidden(correctedNum)}

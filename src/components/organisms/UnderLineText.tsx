@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
-import { softRed, mainColor, purple, green } from '../../styles/Common';
 import { Correction, Chunk } from '../../types';
-import { findAll } from '../../utils/corrections';
+import { findAll, getColor } from '../../utils/corrections';
 
 interface Props {
   text: string;
@@ -15,14 +14,10 @@ interface Props {
   hidden3: boolean;
 }
 
-const color1 = mainColor;
-const color2 = purple;
-const color3 = green;
-
 const styles = StyleSheet.create({
   highlightStyle: {
     textDecorationLine: 'underline',
-    textDecorationColor: softRed,
+    textDecorationStyle: 'double',
   },
 });
 
@@ -48,13 +43,6 @@ const UnderLineText: React.FC<Props> = ({
     setChunks(newChunks);
   }, [correction, correction2, correction3, hidden1, hidden2, hidden3, text]);
 
-  const getColor = (correctionNum: number | null): string => {
-    if (correctionNum === 1) return color1;
-    if (correctionNum === 2) return color2;
-    if (correctionNum === 3) return color3;
-    return color1;
-  };
-
   return (
     <Text style={textStyle}>
       {chunks.map((chunk, index) => {
@@ -68,7 +56,9 @@ const UnderLineText: React.FC<Props> = ({
             key={index}
             style={[
               chunk.highlight && styles.highlightStyle,
-              { textDecorationColor: getColor(chunk.correctionNum) },
+              {
+                textDecorationColor: getColor(chunk.correctionNum),
+              },
             ]}
           >
             {substrText}

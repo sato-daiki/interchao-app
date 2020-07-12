@@ -1,6 +1,17 @@
 import { Correction, Chunk } from '../types/correction';
 import firebase from '../constants/firebase';
 
+const color1 = 'blue';
+const color2 = 'green';
+const color3 = 'purple';
+
+export const getColor = (correctionNum: number | null): string => {
+  if (correctionNum === 1) return color1;
+  if (correctionNum === 2) return color2;
+  if (correctionNum === 3) return color3;
+  return color1;
+};
+
 export const getCorrection = async (id: string): Promise<Correction | null> => {
   try {
     const doc = await firebase
@@ -90,7 +101,13 @@ const combineChunks = (chunks: Array<Chunk>): Array<Chunk> => {
   return chunks;
 };
 
+const escapeRegExpFn = (string: string): string => {
+  // eslint-disable-next-line no-useless-escape
+  return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+};
+
 const findChunks = (
+  text,
   correction?: Correction,
   correction2?: Correction,
   correction3?: Correction
@@ -106,6 +123,26 @@ const findChunks = (
           correctionNum,
           order,
         });
+      } else if (comment.original.length !== 0) {
+        const searchWord = escapeRegExpFn(comment.original);
+        const regex = new RegExp(searchWord, 'gi');
+
+        let match;
+        // eslint-disable-next-line no-cond-assign
+        while ((match = regex.exec(text))) {
+          const start = match.index;
+          const end = regex.lastIndex;
+          // We do not return zero-length matches
+          if (end > start) {
+            chunks.push({ highlight: false, start, end, correctionNum, order });
+          }
+
+          // Prevent browsers like Firefox from getting stuck in an infinite loop
+          // See http://www.regexguru.com/2008/04/watch-out-for-zero-length-matches/
+          if (match.index === regex.lastIndex) {
+            regex.lastIndex += 1;
+          }
+        }
       }
     });
   };
@@ -127,7 +164,7 @@ export const findAll = ({
   correction2?: Correction;
   correction3?: Correction;
 }): Array<Chunk> => {
-  const chunks = findChunks(correction, correction2, correction3);
+  const chunks = findChunks(text, correction, correction2, correction3);
   const chunksToHighlight = combineChunks(chunks);
   return fillInChunks(chunksToHighlight, text ? text.length : 0);
 };

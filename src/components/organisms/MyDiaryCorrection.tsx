@@ -13,6 +13,7 @@ import {
 
 interface Props {
   hidden: boolean;
+  borderColor?: string;
   isReview?: boolean;
   nativeLanguage: Language;
   correction: Correction;
@@ -46,6 +47,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  */
 const MyDiaryCorrection: React.FC<Props> = ({
   hidden,
+  borderColor,
   isReview,
   nativeLanguage,
   correction,
@@ -75,10 +77,11 @@ const MyDiaryCorrection: React.FC<Props> = ({
           original={original}
           fix={fix}
           detail={detail}
+          borderColor={borderColor}
         />
       );
     },
-    [nativeLanguage]
+    [borderColor, nativeLanguage]
   );
 
   return (

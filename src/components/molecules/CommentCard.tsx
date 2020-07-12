@@ -22,6 +22,7 @@ import { CopyText } from '../atoms';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
+  borderColor?: string;
   index?: number;
   original: string;
   fix: string;
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
     elevation: 9,
     shadowOpacity: 0.4,
     shadowRadius: 5,
-    borderColor: mainColor,
   },
   icon: {
     position: 'absolute',
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
 
 const CommentCard = ({
   containerStyle,
+  borderColor = mainColor,
   index = 0,
   original,
   fix,
@@ -145,7 +146,7 @@ const CommentCard = ({
 
   const indexText = `${index + 1}.`;
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[styles.container, { borderColor }, containerStyle]}>
       {isEdit ? (
         <View style={styles.icon}>
           <TouchableOpacity onPress={onPressMore}>
