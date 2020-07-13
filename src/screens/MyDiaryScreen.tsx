@@ -91,6 +91,12 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
     fontSize: fontSizeM,
     color: primaryColor,
+    paddingBottom: 16,
+  },
+  textLength: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+    textAlign: 'right',
   },
   scrollView: {
     flex: 1,
@@ -274,6 +280,10 @@ const MyDiaryScreen: ScreenType = ({
           </View>
           <CopyText style={styles.title} text={title} />
           <CopyText style={styles.text} text={text} />
+          <Text style={styles.textLength}>
+            {I18n.t('postDiaryComponent.textLength')}
+            {` ${text.length}`}
+          </Text>
         </View>
         {isCorrectionLoading ? (
           <View style={styles.activityIndicator}>

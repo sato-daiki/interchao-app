@@ -105,8 +105,14 @@ const styles = StyleSheet.create({
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
-    paddingBottom: 32,
     lineHeight: fontSizeM * 1.3,
+    paddingBottom: 16,
+  },
+  textLength: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+    textAlign: 'right',
+    paddingBottom: 12,
   },
 });
 
@@ -398,6 +404,10 @@ const TeachDiaryScreen: ScreenType = ({
           </View>
           <CopyText style={styles.title} text={teachDiary.title} />
           <CopyText style={styles.text} text={teachDiary.text} />
+          <Text style={styles.textLength}>
+            {I18n.t('postDiaryComponent.textLength')}
+            {` ${teachDiary.text.length}`}
+          </Text>
         </View>
         <Corrections
           headerTitle={I18n.t('teachDiaryCorrection.header')}
