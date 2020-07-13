@@ -12,6 +12,7 @@ import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
 import { UserDiaryStatus } from '../molecules';
 import { ProfileIcon } from '../atoms';
+import I18n from '../../utils/I18n';
 
 interface Props {
   mine?: boolean;
@@ -60,7 +61,16 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
   },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   postDay: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+  },
+  textLength: {
     color: subTextColor,
     fontSize: fontSizeS,
   },
@@ -97,7 +107,13 @@ const TeachDiaryListItem = ({
           <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
             {text}
           </Text>
-          <Text style={styles.postDay}>{postDay}</Text>
+          <View style={styles.footer}>
+            <Text style={styles.postDay}>{postDay}</Text>
+            <Text style={styles.textLength}>
+              {I18n.t('postDiaryComponent.textLength')}
+              {` ${text.length}`}
+            </Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
