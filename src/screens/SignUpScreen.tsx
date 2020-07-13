@@ -34,7 +34,14 @@ export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
+interface DispatchProps {
+  setUser: (user: User) => void;
+  setProfile: (profile: Profile) => void;
+}
+
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -73,7 +80,12 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
+const SignUpScreen: ScreenType = ({
+  navigation,
+  profile,
+  setUser,
+  setProfile,
+}): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -95,7 +107,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   }, []);
 
   const createUser = useCallback(
-    async (credentUser: firebase.User): Promise<void> => {
+    (credentUser: firebase.User): void => {
       const userInfo = {
         premium: false,
         diaryPosted: false,
@@ -145,14 +157,11 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         userReviewInfo
       );
       batch.commit();
+
+      setUser(userInfo);
+      setProfile(profileInfo);
     },
-    [
-      profile.learnLanguage,
-      profile.nationalityCode,
-      profile.nativeLanguage,
-      profile.spokenLanguages,
-      profile.userName,
-    ]
+    [profile, setProfile, setUser]
   );
 
   const onPressSkip = useCallback(() => {
@@ -192,8 +201,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
           .auth()
           .createUserWithEmailAndPassword(email, password);
         if (credent.user) {
-          await createUser(credent.user);
-
+          createUser(credent.user);
           track(events.CREATED_USER, { loginMethod: 'email' });
           setIsLoading(false);
         }
