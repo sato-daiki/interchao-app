@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Picker } from 'react-native';
+import { StyleSheet, View, Picker, Platform } from 'react-native';
 import { Modal } from '../template';
 import { Language } from '../../types';
 import { getLanguage } from '../../utils/diary';
@@ -43,6 +43,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
             <Picker.Item key={item} label={getLanguage(item)} value={item} />
           ))}
         </Picker>
+        {Platform.OS === 'ios' ? null : <Space size={16} />}
         <SubmitButton
           title="OK"
           onPress={(): void => onPressSubmit(value || languages[0])}
