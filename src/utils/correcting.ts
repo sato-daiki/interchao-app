@@ -1,20 +1,15 @@
 import I18n from './I18n';
 import firebase from '../constants/firebase';
-import {
-  getDisplayProfile,
-  getComments,
-  getUsePoints,
-  updateYet,
-} from './diary';
+import { getDisplayProfile, getUsePoints, updateYet } from './diary';
 import { track, events } from './Analytics';
 import {
   Diary,
   Profile,
-  InfoCommentAndroid,
-  InfoComment,
   User,
   CorrectionStatus,
   DisplaCorrection,
+  Comment,
+  TextInfo,
 } from '../types';
 import { primaryColor, mainColor, green } from '../styles/Common';
 import { ButtonInfo } from '../screens/CorrectingAndroidScreen';
@@ -42,7 +37,7 @@ interface UpdateDoneProps {
   teachDiary: Diary;
   currentProfile: Profile;
   user: User;
-  infoComments: InfoCommentAndroid[] | InfoComment[];
+  comments: Comment[];
   setIsLoading: (isLoading: boolean) => void;
   setIsModalDone: (isLoading: boolean) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
@@ -109,7 +104,7 @@ export const updateDone = async ({
   teachDiary,
   currentProfile,
   user,
-  infoComments,
+  comments,
   setIsLoading,
   setIsModalDone,
   editTeachDiary,
@@ -120,8 +115,6 @@ export const updateDone = async ({
     setIsLoading(true);
 
     const displayProfile = getDisplayProfile(currentProfile);
-    const comments = getComments(infoComments);
-
     const getPoints = getUsePoints(
       teachDiary.text.length,
       teachDiary.profile.learnLanguage

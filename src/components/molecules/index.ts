@@ -5,6 +5,7 @@ export { default as CommentButton } from './CommentButton';
 export { default as CommentCard } from './CommentCard';
 export { default as CommentInputIOS } from './CommentInputIOS';
 export { default as CommentInputAndroid } from './CommentInputAndroid';
+export { default as CorrectingHeader } from './CorrectingHeader';
 export { default as CorrectionFooterButton } from './CorrectionFooterButton';
 export { default as CorrectionTimer } from './CorrectionTimer';
 export { default as EmptyDiary } from './EmptyDiary';

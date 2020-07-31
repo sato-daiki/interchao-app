@@ -1,6 +1,9 @@
 export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as CopyText } from './CopyText';
+export { default as CorrectingFixText } from './CorrectingFixText';
+export { default as CorrectingOriginalText } from './CorrectingOriginalText';
+export { default as CorrectingRightIcon } from './CorrectingRightIcon';
 export { default as DiaryStatus } from './DiaryStatus';
 export { default as FirstDiary } from './FirstDiary';
 export { default as GrayHeader } from './GrayHeader';
