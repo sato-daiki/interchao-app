@@ -74,6 +74,7 @@ const correcting = {
   menuCommentDelete: '删除评论',
   menuSummaryDelete: '删除总结',
   commentList: '评论列表',
+  nothing: '没有修复',
 };
 
 const deleteAcount = {

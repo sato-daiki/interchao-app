@@ -78,6 +78,7 @@ const correcting = {
   menuCommentDelete: '코멘트 삭제하기',
   menuSummaryDelete: '총평 삭제하기',
   commentList: '코멘트 목록',
+  nothing: '수정이 없습니다',
 };
 
 const deleteAcount = {

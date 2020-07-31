@@ -80,6 +80,7 @@ const correcting = {
   menuCommentDelete: 'コメントを削除する',
   menuSummaryDelete: 'まとめを削除する',
   commentList: 'コメント一覧',
+  nothing: '修正がありません',
 };
 
 const deleteAcount = {

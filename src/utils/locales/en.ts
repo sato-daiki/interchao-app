@@ -80,6 +80,7 @@ const correcting = {
   menuCommentDelete: 'Erase Comment',
   menuSummaryDelete: 'Erase Summary',
   commentList: 'List of Comments',
+  nothing: 'No fix',
 };
 
 const deleteAcount = {
