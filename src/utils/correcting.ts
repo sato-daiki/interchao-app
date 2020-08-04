@@ -127,6 +127,7 @@ export const updateDone = async ({
       .firestore()
       .collection('corrections')
       .doc();
+
     transaction.set(correctionRef, {
       objectID: teachDiary.objectID,
       profile: displayProfile,

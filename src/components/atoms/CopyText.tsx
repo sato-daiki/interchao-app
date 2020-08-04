@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleProp, Text, TextInput, Platform, TextStyle } from 'react-native';
 
 interface Props {
-  style: StyleProp<TextStyle>;
-  text: string;
+  style?: StyleProp<TextStyle>;
+  text: string | null;
 }
 
 const CopyText = ({ style, text }: Props): JSX.Element => {
@@ -12,7 +12,7 @@ const CopyText = ({ style, text }: Props): JSX.Element => {
   useEffect(() => {
     if (Platform.OS === 'android') {
       const timer = setTimeout(() => {
-        setDisplayText(text);
+        setDisplayText(text || '');
       }, 100);
       return (): void => clearTimeout(timer);
     }
@@ -25,7 +25,7 @@ const CopyText = ({ style, text }: Props): JSX.Element => {
         style={style}
         multiline
         editable={false}
-        value={text}
+        value={text || ''}
         selectTextOnFocus
         scrollEnabled={false}
         underlineColorAndroid="transparent"

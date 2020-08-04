@@ -75,6 +75,8 @@ const correcting = {
   menuSummaryDelete: '删除总结',
   commentList: '评论列表',
   nothing: '没有修复',
+  notes: '备注信息',
+  summary: '总结',
 };
 
 const deleteAcount = {
@@ -270,7 +272,6 @@ const teachDiarySerch = {
 
 const tutorialList = {
   headerTitle: '教程列表',
-  correcting: '如何批改',
   postDiary: '如何写日记',
   points: '关于积分',
 };
@@ -294,6 +295,7 @@ const commentCard = {
   original: '原文',
   fix: '修改后的句子',
   detail: '评论',
+  optional: '可选的',
 };
 
 const firstDiary = {
@@ -313,14 +315,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const commentInput = {
-  original: '原文',
-  fix: '修改后的句子',
-  detail: '评论',
-  paste: '粘贴剪贴板',
-  optional: '可选的',
-};
-
 const correctionFooterButton = {
   correction: '如何批改',
 };
@@ -347,10 +341,6 @@ const profileLanguage = {
 
 const profileNationality = {
   nationality: '国籍',
-};
-
-const summaryInput = {
-  title: '总结',
 };
 
 const inquiry = {
@@ -485,27 +475,6 @@ const teachDiaryCorrection = {
   header: '批改结果',
 };
 
-const tutorialCorrecting = {
-  subTitle: '做法',
-  title: '如何批改',
-  text1:
-    '在日记中找到错误的部分，或者从母语者角度感觉不自然的地方！请使用{{teachDiaryLanguage}}进行所有批改',
-  subText1IOS: '① 长按相应文章并指定范围\n② 点击屏幕右上方的“评论”按钮',
-  subText1Android: '①选择要批改的文章并复制\n②点击画面右下方的“评论”',
-  text2: '教您正确的句子',
-  subText2IOS:
-    '① 在“修改后的句子”写下正确/自然的表达方式\n② 在“评论”中填写补充内容\n③ 点击”添加”按钮',
-  subText2Android:
-    '①写原文（点击“粘贴剪贴板”）\n②在修改后的句子中写出正确/自然的表达方式\n③在评论中写下补充内容\n④点击“添加”',
-  text3:
-    '大致按{{teachDiaryCharacters}}字写3条评论。填写评论后，点击屏幕右上方的“写总结”',
-  text4: '写对下日记的总体感想吧',
-  subText4: '① 写总结\n② 点击”添加”按钮',
-  text5: '点击卡片右上角的菜单图标就可以进行修改或删除',
-  text6: '确认批改内容，最后点击屏幕右上方的“发布”',
-  text7: '完成！马上开始批改吧',
-};
-
 const tutorialPoints = {
   title: '积分',
   buttonText: '开始',
@@ -597,14 +566,12 @@ const zh = {
   summaryCard,
   userPoints,
   userPointsBig,
-  commentInput,
   correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  summaryInput,
   correctionOrigin,
   diaryHitList,
   draftListItem,
@@ -625,7 +592,6 @@ const zh = {
   postDiaryComponent,
   sns,
   teachDiaryCorrection,
-  tutorialCorrecting,
   tutorialPoints,
   tutorialPostDiary,
   tutorialTeachDiaryList,

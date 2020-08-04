@@ -12,7 +12,7 @@ export interface TextInfo {
   original: string;
   fix: string | null;
   detail: string | null;
-  diff: Diff | null;
+  diffs: Diff[] | null;
 }
 
 export interface Comment {
@@ -20,7 +20,7 @@ export interface Comment {
   fix: string | null;
   detail: string | null;
   // 途中で追加した
-  diff?: Diff | null;
+  diffs?: Diff[] | null;
   rowNumber?: number;
 }
 

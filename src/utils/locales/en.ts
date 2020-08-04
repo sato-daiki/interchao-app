@@ -81,6 +81,8 @@ const correcting = {
   menuSummaryDelete: 'Erase Summary',
   commentList: 'List of Comments',
   nothing: 'No fix',
+  notes: 'Notes',
+  summary: 'Summary',
 };
 
 const deleteAcount = {
@@ -282,7 +284,6 @@ const teachDiarySerch = {
 
 const tutorialList = {
   headerTitle: 'List of Tutorials',
-  correcting: 'How to Make Corrections',
   postDiary: 'How to Write Entries',
   points: 'About Points',
 };
@@ -306,6 +307,7 @@ const commentCard = {
   original: 'Original',
   fix: 'Edit',
   detail: 'Comment',
+  optional: 'Optional',
 };
 
 const firstDiary = {
@@ -325,14 +327,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const commentInput = {
-  original: 'Original',
-  fix: 'Edit',
-  detail: 'Comment',
-  paste: 'Paste',
-  optional: 'Optional',
-};
-
 const correctionFooterButton = {
   correction: 'How to Make Corrections',
 };
@@ -359,10 +353,6 @@ const profileLanguage = {
 
 const profileNationality = {
   nationality: 'Nationality',
-};
-
-const summaryInput = {
-  title: 'Summary',
 };
 
 const inquiry = {
@@ -505,31 +495,6 @@ const teachDiaryCorrection = {
   header: 'Correction Results',
 };
 
-const tutorialCorrecting = {
-  subTitle: 'Instructions',
-  title: 'How to Make Corrections',
-  text1:
-    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{teachDiaryLanguage}}.',
-  subText1IOS:
-    '1) Tap and hold down on the word or phrase, then set the span\n2) Tap the “Comment” button at the top right hand side of the screen',
-  subText1Android:
-    '1) Copy the word or phrasen2) Tap the “Comment” button at the bottom right hand side of the screen',
-  text2: 'Correct the sentence',
-  subText2IOS:
-    '1) Write the correct/natural phrase in the “Edit” section\n2) Write your explanation in the “Comment” section\n3) Tap the “Add” button',
-  subText2Android:
-    '1) Write the original(Tap the “Paste“ button)\n2) Write the correct/natural phrase in the “Edit” section\n3) Write your explanation in the “Comment” section\n4) Tap the “Add” button',
-  text3:
-    'Please aim to write at least 3 comments for every {{teachDiaryCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
-  text4: 'Write a summary of your thoughts on the overall journey entry',
-  subText4: '1) Write the summary\n2) Tap the “Add” button',
-  text5:
-    'You can edit or delete comments by tapping the Menu icon at the top right hand side of the screen.',
-  text6:
-    'After confirming your corrections, tap the “Publish” button on the top right hand side of the screen.',
-  text7: 'That’s all! Let’s get started correcting entries right away.',
-};
-
 const tutorialPoints = {
   title: 'About Points',
   buttonText: 'Begin',
@@ -623,14 +588,12 @@ const en = {
   summaryCard,
   userPoints,
   userPointsBig,
-  commentInput,
   correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  summaryInput,
   correctionOrigin,
   diaryHitList,
   draftListItem,
@@ -651,7 +614,6 @@ const en = {
   postDiaryComponent,
   sns,
   teachDiaryCorrection,
-  tutorialCorrecting,
   tutorialPoints,
   tutorialPostDiary,
   tutorialTeachDiaryList,

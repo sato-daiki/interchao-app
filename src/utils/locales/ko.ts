@@ -79,6 +79,8 @@ const correcting = {
   menuSummaryDelete: '총평 삭제하기',
   commentList: '코멘트 목록',
   nothing: '수정이 없습니다',
+  notes: '메모',
+  summary: '총평',
 };
 
 const deleteAcount = {
@@ -277,7 +279,6 @@ const teachDiarySerch = {
 
 const tutorialList = {
   headerTitle: '튜토리얼 목록',
-  correcting: '첨삭 방법',
   postDiary: '일기를 쓰는 방법',
   points: '포인트에 대해서',
 };
@@ -301,6 +302,7 @@ const commentCard = {
   original: '원문',
   fix: '수정문',
   detail: '코멘트',
+  optional: '필수사항 아님',
 };
 
 const firstDiary = {
@@ -320,14 +322,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const commentInput = {
-  original: '원문',
-  fix: '수정문',
-  detail: '코멘트',
-  paste: '붙여넣기',
-  optional: '필수사항 아님',
-};
-
 const correctionFooterButton = {
   correction: '첨삭 방법',
 };
@@ -354,10 +348,6 @@ const profileLanguage = {
 
 const profileNationality = {
   nationality: '국적',
-};
-
-const summaryInput = {
-  title: '총평',
 };
 
 const inquiry = {
@@ -495,31 +485,6 @@ const teachDiaryCorrection = {
   header: '첨삭 결과',
 };
 
-const tutorialCorrecting = {
-  subTitle: '방법',
-  title: '첨삭 방법',
-  text1:
-    '일기 중에 잘못된 부분 혹은 어색한 부분을 찾아보세요! 첨삭은 모두 {{teachDiaryLanguage}}로 해 주세요',
-  subText1IOS:
-    '① 해당 문장을 길게 눌러 범위를 지정하기\n② 화면 오른쪽 위의 "코멘트하기" 버튼을 클릭하기',
-  subText1Android:
-    '① 해당 문장을 선택하여 복사하기\n② 화면 오른쪽 위의 "코멘트하기" 버튼을 클릭하기',
-  text2: '알맞은 문장으로 고쳐주세요!',
-  subText2IOS:
-    '① "수정문"에 알맞은 표현/자연스러운 표현 쓰기\n② "코멘트"에 해설 쓰기\n③ "추가하기" 버튼 클릭하기',
-  subText2Android:
-    '① 원문 쓰기 ("클립보드 붙여놓기"를 클릭)\n② "수정문"에 알맞은 표현/자연스러운 표현 쓰기\n③ "코멘트"에 해설 쓰기\n④ "추가하기" 버튼 클릭하기',
-  text3:
-    '코멘트는 {{teachDiaryCharacters}}글자에 대해 최대한 3개를 골라서 씁시다. 코멘트를 입력하면 회면 오른쪽 위의 "총평 쓰기" 클릭',
-  text4: '일기에 대한 전체적인 소감을 씁시다.',
-  subText4: '① 총평 쓰기\n② "추가하기" 버튼 클릭',
-  text5:
-    '수정 및 삭제는 오른쪽 상단의 메뉴 아이콘을 클릭하여 진행할 수 있습니다',
-  text6:
-    '첨삭 내용을 확인후, 마지막으로 화면 오른쪽 상단의 "업로드하기"를 클릭',
-  text7: '첨삭 방법 안내가 끝났습니다! 바로 첨삭을 시작해 보세요!',
-};
-
 const tutorialPoints = {
   title: '포인트에 대해서',
   buttonText: '시작하기',
@@ -613,14 +578,12 @@ const ko = {
   summaryCard,
   userPoints,
   userPointsBig,
-  commentInput,
   correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  summaryInput,
   correctionOrigin,
   diaryHitList,
   draftListItem,
@@ -641,7 +604,6 @@ const ko = {
   postDiaryComponent,
   sns,
   teachDiaryCorrection,
-  tutorialCorrecting,
   tutorialPoints,
   tutorialPostDiary,
   tutorialTeachDiaryList,

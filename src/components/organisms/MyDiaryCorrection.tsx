@@ -5,11 +5,7 @@ import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment, Language } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
-import {
-  MyDiaryCorrectionFooter,
-  CommentCard,
-  SummaryCardTranslate,
-} from '../molecules';
+import { MyDiaryCorrectionFooter, CorrectionItem, Summary } from '../molecules';
 
 interface Props {
   isReview?: boolean;
@@ -54,7 +50,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
-      <SummaryCardTranslate nativeLanguage={nativeLanguage} summary={summary} />
+      {summary ? <Summary summary={summary} /> : null}
       <Space size={32} />
       {isReview !== undefined ? (
         <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
@@ -63,15 +59,14 @@ const MyDiaryCorrection: React.FC<Props> = ({
   );
 
   const renderItem = useCallback(
-    ({ item, index }: { item: Comment; index: number }): JSX.Element => {
-      const { original, fix, detail } = item;
+    ({ item }: { item: Comment }): JSX.Element => {
+      const { original, fix, detail, diffs } = item;
       return (
-        <CommentCard
-          index={index}
-          nativeLanguage={nativeLanguage}
+        <CorrectionItem
           original={original}
           fix={fix}
           detail={detail}
+          diffs={diffs}
         />
       );
     },

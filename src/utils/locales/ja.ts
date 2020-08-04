@@ -81,6 +81,8 @@ const correcting = {
   menuSummaryDelete: 'まとめを削除する',
   commentList: 'コメント一覧',
   nothing: '修正がありません',
+  notes: '備考情報',
+  summary: 'まとめ',
 };
 
 const deleteAcount = {
@@ -278,7 +280,6 @@ const teachDiarySerch = {
 
 const tutorialList = {
   headerTitle: 'チュートリアル一覧',
-  correcting: '添削の仕方',
   postDiary: '日記の書き方',
   points: 'ポイントについて',
 };
@@ -302,6 +303,7 @@ const commentCard = {
   original: '原文',
   fix: '修正文',
   detail: 'コメント',
+  optional: '任意',
 };
 
 const firstDiary = {
@@ -321,14 +323,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const commentInput = {
-  original: '原文',
-  fix: '修正文',
-  detail: 'コメント',
-  paste: 'クリップボードの貼り付け',
-  optional: '任意',
-};
-
 const correctionFooterButton = {
   correction: '添削の仕方',
 };
@@ -355,10 +349,6 @@ const profileLanguage = {
 
 const profileNationality = {
   nationality: '国籍',
-};
-
-const summaryInput = {
-  title: 'まとめ',
 };
 
 const inquiry = {
@@ -499,29 +489,6 @@ const teachDiaryCorrection = {
   header: '添削結果',
 };
 
-const tutorialCorrecting = {
-  subTitle: 'やり方',
-  title: '添削方法',
-  text1:
-    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{teachDiaryLanguage}}で行ってください',
-  subText1IOS:
-    '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある“コメントする“をクリック',
-  subText1Android:
-    '① 対象の文章を選択して、コピー\n② 画面の右下にある“コメントする“をクリック',
-  text2: '正しい文章を教えてあげましょう',
-  subText2IOS:
-    '① 修正文に正しい表現/自然な表現を書く\n② コメントに補足を書く\n③ “追加“をクリック',
-  subText2Android:
-    '① 原文を書く（“クリップボードの貼り付け“をクリック）\n② 修正文に正しい表現/自然な表現を書く\n③ コメントに補足を書く\n④ “追加“をクリック',
-  text3:
-    'コメントは{{teachDiaryCharacters}}文字に対して3つを目安に書きましょう。コメントの記載が終わったら画面の右上にある“まとめを書く“をクリック',
-  text4: '日記の全体の感想などを書きましょう',
-  subText4: '① まとめを書く\n② “追加“をクリック',
-  text5: '修正や削除はカードの右上のメニューアイコンをクリックするとできます',
-  text6: '添削内容を確認して、最後に画面の右上にある“投稿する“をクリック',
-  text7: '以上です！早速添削を始めましょう',
-};
-
 const tutorialPoints = {
   title: 'ポイントについて',
   buttonText: '始める',
@@ -614,14 +581,12 @@ const ja = {
   summaryCard,
   userPoints,
   userPointsBig,
-  commentInput,
   correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  summaryInput,
   correctionOrigin,
   diaryHitList,
   draftListItem,
@@ -642,7 +607,6 @@ const ja = {
   postDiaryComponent,
   sns,
   teachDiaryCorrection,
-  tutorialCorrecting,
   tutorialPoints,
   tutorialPostDiary,
   tutorialTeachDiaryList,
