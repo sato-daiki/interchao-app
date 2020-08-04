@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { SummaryCard, HideButton } from '../atoms';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Comment } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
-import { CommentCard } from '../molecules';
+import { CorrectionItem, Summary } from '../molecules';
+import { HideButton } from '../atoms';
 
 interface Props {
   correction: Correction;
@@ -44,22 +44,24 @@ const TeachDiaryCorrection: React.FC<Props> = ({
   const [hidden, setHidden] = useState(false);
 
   const postDate = getAlgoliaDate(createdAt);
-  const listFooterComponent = <SummaryCard summary={summary} />;
+  const listFooterComponent = () => {
+    if (summary) {
+      return <Summary summary={summary} />;
+    }
+    return null;
+  };
 
-  const renderItem = useCallback(
-    ({ item, index }: { item: Comment; index: number }): JSX.Element => {
-      const { original, fix, detail } = item;
-      return (
-        <CommentCard
-          index={index}
-          original={original}
-          fix={fix}
-          detail={detail}
-        />
-      );
-    },
-    []
-  );
+  const renderItem = useCallback(({ item }: { item: Comment }): JSX.Element => {
+    const { original, fix, detail, diffs } = item;
+    return (
+      <CorrectionItem
+        original={original}
+        fix={fix}
+        detail={detail}
+        diffs={diffs}
+      />
+    );
+  }, []);
 
   return (
     <View style={styles.main}>

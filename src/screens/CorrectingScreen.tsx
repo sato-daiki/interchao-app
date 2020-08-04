@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,34 +6,42 @@ import {
   SafeAreaView,
   Platform,
   FlatList,
+  TouchableOpacity,
+  TextInput,
+  Text,
 } from 'react-native';
-import { split, Syntax } from 'sentence-splitter';
-import {
-  connectActionSheet,
-  useActionSheet,
-} from '@expo/react-native-action-sheet';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { split } from 'sentence-splitter';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { HeaderText, HeaderButton, LoadingModal } from '../components/atoms';
+import {
+  HeaderText,
+  HeaderButton,
+  LoadingModal,
+  Space,
+} from '../components/atoms';
 import { CorrectingHeader } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
 
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { User, Diary, Profile, Correction, TextInfo } from '../types';
+import { User, Diary, Profile, Correction, TextInfo, Diff } from '../types';
 import I18n from '../utils/I18n';
 import { getUsePoints } from '../utils/diary';
 import { getProfile } from '../utils/profile';
 import { updateDone, onUpdateTimeUp, onClose } from '../utils/correcting';
 import { getCorrection } from '../utils/corrections';
-import Corrections from '../components/organisms/Corrections';
 import CorrectingListItem from '../components/organisms/CorrectingListItem';
-import { mainColor } from '../styles/Common';
-
-type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
+import {
+  mainColor,
+  fontSizeM,
+  subTextColor,
+  primaryColor,
+} from '../styles/Common';
+import Corrections from '../components/organisms/Corrections';
 
 export interface Props {
   user: User;
@@ -45,6 +53,15 @@ interface DispatchProps {
   setUser: (user: User) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
+
+type Info =
+  | {
+      fix: string | null;
+      diffs: Diff[] | null;
+    }
+  | {
+      detail: string | null;
+    };
 
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
@@ -63,6 +80,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
+  scrollView: {
+    paddingBottom: 32,
+  },
   header: {
     paddingTop: 16,
   },
@@ -77,6 +97,25 @@ const styles = StyleSheet.create({
   headerLeft: {
     paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 16,
+    paddingLeft: 12,
+  },
+  label: {
+    fontSize: fontSizeM,
+    color: subTextColor,
+    marginLeft: 2,
+  },
+  textInputSummary: {
+    lineHeight: fontSizeM * 1,
+    fontSize: fontSizeM,
+    color: primaryColor,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 16,
+  },
 });
 
 /**
@@ -90,11 +129,7 @@ const CorrectingScreen: ScreenType = ({
   setUser,
   editTeachDiary,
 }) => {
-  const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalTutorialCorrectiong, setIsModalTutorialCorrectiong] = useState(
-    false
-  );
 
   // Profile関連
   const [targetProfile, setTargetProfile] = useState<Profile>();
@@ -106,30 +141,30 @@ const CorrectingScreen: ScreenType = ({
   const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalTimeUp, setIsModalTimeUp] = useState(false); // タイムアップモーダル
 
-  /* 右上と画面下のボタン関連 */
-  const [state, setState] = useState<RightButtonState>('nothing'); // 状態推移
-
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
-  const [isSummary, setIsSummary] = useState(false); // 総評の追加のon/offフラグ
 
   /* テキストの情報 */
   const [textInfos, setTextInfos] = useState<TextInfo[]>([]); // まとめ
 
   /* 一つでも修正したらたつフラグ */
-  const [isEdit, setIsEdit] = useState(false);
+  const [isFirstEdit, setIsFirstEdit] = useState(false);
+
+  const refSummary = useRef<any>(null);
 
   const initTextsInfo = () => {
     const splitTexts = split(teachDiary.text);
-    const newTextInfos = splitTexts.map((item, index) => {
-      return {
-        rowNumber: index,
-        original: item.raw,
-        fix: null,
-        detail: null,
-        diff: null,
-      };
-    });
+    const newTextInfos = splitTexts
+      .filter(i => i.raw.trim().length > 0)
+      .map((item, index) => {
+        return {
+          rowNumber: index,
+          original: item.raw,
+          fix: null,
+          detail: null,
+          diffs: null,
+        };
+      });
     setTextInfos(newTextInfos);
   };
   /**
@@ -137,6 +172,8 @@ const CorrectingScreen: ScreenType = ({
    */
   const close = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (isLoading) return;
+      setIsLoading(true);
       await onClose(
         isLoading,
         teachDiary,
@@ -146,6 +183,7 @@ const CorrectingScreen: ScreenType = ({
         setUser,
         navigation
       );
+      setIsLoading(false);
     };
     f();
   }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
@@ -193,21 +231,13 @@ const CorrectingScreen: ScreenType = ({
   }, [getNewCorrection, getNewProfile]);
 
   /**
-   * 総評ボタンを追加する
-   */
-  const onAddSummary = useCallback(() => {
-    setIsSummary(true);
-  }, []);
-
-  /**
    * 完了する
    */
   const onPressSubmitButton = useCallback(() => {
     const f = async (): Promise<void> => {
-      const comments = textInfos.filter(item => !!item.diff);
-
+      const comments = textInfos.filter(item => item.diffs !== null);
       if (comments.length === 0) {
-        Alert.alert('', I18n.t('common.nothing'));
+        Alert.alert('', I18n.t('correcting.nothing'));
         return;
       }
 
@@ -226,6 +256,7 @@ const CorrectingScreen: ScreenType = ({
     };
     f();
   }, [
+    textInfos,
     teachDiary,
     isLoading,
     currentProfile,
@@ -264,11 +295,11 @@ const CorrectingScreen: ScreenType = ({
    */
   useEffect(() => {
     navigation.setParams({
+      isFirstEdit,
       onPressClose,
       onPressSubmitButton,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isFirstEdit, onPressSubmitButton]);
 
   /*
    * 添削完了
@@ -307,12 +338,16 @@ const CorrectingScreen: ScreenType = ({
     teachDiary.profile.learnLanguage
   );
 
-  const editText = (index: number, textInfo: TextInfo) => {
+  const editText = (index: number, info: Info) => {
     const newTextInfos = textInfos.map(item => {
-      if (item.rowNumber !== index) {
-        return item;
+      if (item.rowNumber === index) {
+        console.log('rowNumber');
+        return {
+          ...item,
+          ...info,
+        };
       }
-      return textInfo;
+      return item;
     });
     setTextInfos(newTextInfos);
   };
@@ -322,12 +357,12 @@ const CorrectingScreen: ScreenType = ({
       return (
         <CorrectingListItem
           item={item}
-          editText={(textInfo: TextInfo) => editText(index, textInfo)}
-          editFirst={() => setIsEdit(true)}
+          editText={(info: Info) => editText(index, info)}
+          editFirst={() => setIsFirstEdit(true)}
         />
       );
     },
-    []
+    [editText]
   );
 
   const listHeaderComponent = useCallback(() => {
@@ -341,7 +376,7 @@ const CorrectingScreen: ScreenType = ({
         />
       </View>
     );
-  }, []);
+  }, [isProfileLoading, teachDiary, targetProfile, onTimeUp]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -358,7 +393,7 @@ const CorrectingScreen: ScreenType = ({
           onPressClose={onPressCloseDone}
         />
         <KeyboardAwareScrollView
-          style={styles.container}
+          style={styles.scrollView}
           keyboardShouldPersistTaps="handled"
           extraScrollHeight={32}
         >
@@ -368,7 +403,42 @@ const CorrectingScreen: ScreenType = ({
             renderItem={renderItem}
             ListHeaderComponent={listHeaderComponent}
           />
-          {/* TODO　他の人の修正 */}
+          {isFirstEdit ? (
+            <>
+              <TouchableOpacity
+                style={styles.buttonRow}
+                onPress={() => {
+                  refSummary.current.focus();
+                }}
+              >
+                <MaterialCommunityIcons
+                  size={22}
+                  color={subTextColor}
+                  name="plus"
+                />
+                <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
+              </TouchableOpacity>
+              <TextInput
+                ref={refSummary}
+                style={styles.textInputSummary}
+                autoCapitalize="none"
+                spellCheck
+                autoCorrect
+                underlineColorAndroid="transparent"
+                value={summary}
+                onChangeText={(text: string) => setSummary(text)}
+                multiline
+                scrollEnabled={false}
+              />
+            </>
+          ) : null}
+          {correction ? <Space size={32} /> : null}
+          <Corrections
+            headerTitle={I18n.t('correcting.header')}
+            correction={correction}
+            correction2={correction2}
+          />
+          <Space size={32} />
         </KeyboardAwareScrollView>
       </View>
     </SafeAreaView>
@@ -378,7 +448,7 @@ const CorrectingScreen: ScreenType = ({
 CorrectingScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
-  const isEdit = navigation.getParam('isEdit');
+  const isFirstEdit = navigation.getParam('isFirstEdit');
   const onPressSubmitButton = navigation.getParam('onPressSubmitButton');
   const onPressClose = navigation.getParam('onPressClose');
   return {
@@ -392,7 +462,7 @@ CorrectingScreen.navigationOptions = ({
       />
     ),
     headerRight: (): JSX.Element | null =>
-      isEdit ? (
+      isFirstEdit ? (
         <HeaderButton
           title={I18n.t('correcting.titleDone')}
           color={mainColor}
@@ -402,4 +472,4 @@ CorrectingScreen.navigationOptions = ({
   };
 };
 
-export default connectActionSheet(CorrectingScreen);
+export default CorrectingScreen;

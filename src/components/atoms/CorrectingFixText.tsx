@@ -5,19 +5,19 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Diff } from '../../types';
 
 interface Props {
-  diffs: Diff[];
+  fix: string | null;
+  diffs?: Diff[] | null;
 }
 
 const styles = StyleSheet.create({
   row: {
-    paddingTop: 8,
     flexDirection: 'row',
   },
   text: {
     fontSize: fontSizeM,
     color: primaryColor,
     lineHeight: fontSizeM * 1.1,
-    marginRight: 46,
+    marginRight: 38,
   },
   added: {
     fontSize: fontSizeM,
@@ -27,25 +27,29 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 6,
-    paddingHorizontal: 12,
     alignItems: 'center',
   },
 });
 
-const CorrectingFixText: React.FC<Props> = ({ diffs }) => {
+const CorrectingFixText: React.FC<Props> = ({ fix, diffs }) => {
+  let diffText;
   // 修正なしの場合
-  if (diffs.length === 0) {
-    return null;
+  if (!diffs) {
+    diffText = <Text style={styles.text}>{fix}</Text>;
+  } else {
+    diffText = diffs.map((part: Diff, id: number) => {
+      if (part.added) {
+        return (
+          <Text key={id} style={styles.added}>
+            {part.value}
+          </Text>
+        );
+      } else if (part.removed) {
+        return null;
+      }
+      return <Text key={id}>{part.value}</Text>;
+    });
   }
-
-  const diffText = diffs.map((part: Diff) => {
-    if (part.added) {
-      return <Text style={styles.added}>{part.value}</Text>;
-    } else if (part.removed) {
-      return null;
-    }
-    return <Text>{part.value}</Text>;
-  });
 
   return (
     <View style={styles.row}>
