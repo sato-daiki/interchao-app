@@ -437,6 +437,7 @@ const CorrectingScreen: ScreenType = ({
             headerTitle={I18n.t('correcting.header')}
             correction={correction}
             correction2={correction2}
+            nativeLanguage={currentProfile.nativeLanguage}
           />
           <Space size={32} />
         </KeyboardAwareScrollView>
