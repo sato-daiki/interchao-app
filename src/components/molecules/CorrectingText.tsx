@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, Text, View, Clipboard } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor, softRed, green } from '../../styles/Common';
 import { Diff, Language } from '../../types';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import googleTranslate from '../../utils/googleTranslate';
 import { OriginalText, FixText } from '../atoms';
 import TextMenu from '../template/TextMenu';
@@ -43,7 +43,7 @@ const CorrectingText: React.FC<Props> = ({
   const [displayText, setDisplayText] = useState(text);
   const [isTranslated, setIsTranslated] = useState(false);
 
-  const onPressCopy = () => {
+  const onPressCopy = (): void => {
     if (isTranslated) {
       Clipboard.setString(displayText);
     } else {

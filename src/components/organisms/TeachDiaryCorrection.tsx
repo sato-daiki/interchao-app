@@ -45,25 +45,28 @@ const TeachDiaryCorrection: React.FC<Props> = ({
   const [hidden, setHidden] = useState(false);
 
   const postDate = getAlgoliaDate(createdAt);
-  const listFooterComponent = () => {
+  const listFooterComponent = (): JSX.Element | null => {
     if (summary) {
       return <Summary summary={summary} />;
     }
     return null;
   };
 
-  const renderItem = useCallback(({ item }: { item: Comment }): JSX.Element => {
-    const { original, fix, detail, diffs } = item;
-    return (
-      <CorrectionItem
-        original={original}
-        fix={fix}
-        detail={detail}
-        diffs={diffs}
-        nativeLanguage={nativeLanguage}
-      />
-    );
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: { item: Comment }): JSX.Element => {
+      const { original, fix, detail, diffs } = item;
+      return (
+        <CorrectionItem
+          original={original}
+          fix={fix}
+          detail={detail}
+          diffs={diffs}
+          nativeLanguage={nativeLanguage}
+        />
+      );
+    },
+    [nativeLanguage]
+  );
 
   return (
     <View style={styles.main}>

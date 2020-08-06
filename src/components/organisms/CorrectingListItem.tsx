@@ -7,17 +7,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as jsdiff from 'diff';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import I18n from '../../utils/I18n';
 import {
   fontSizeM,
   primaryColor,
   borderLightColor,
   subTextColor,
-  offWhite,
 } from '../../styles/Common';
 import { CorrectingText, Space } from '../atoms';
 import { Diff, TextInfo } from '../../types';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type Info =
   | {
@@ -57,16 +56,6 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  rowEdited: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  original: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    lineHeight: fontSizeM * 1.1,
-    marginRight: 38,
-  },
   detailLabel: {
     fontSize: fontSizeM,
     color: subTextColor,
@@ -103,7 +92,7 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
   const [diffs, setDiffs] = useState<Diff[] | null>(null);
   const refDetail = useRef<any>(null);
 
-  const onEndEditingFix = () => {
+  const onEndEditingFix = (): void => {
     if (item.original === fix) {
       // 変更がない場合は初期化
       setDiffs([]);
@@ -138,7 +127,7 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setIsEdit(true)}>
+      <TouchableOpacity onPress={(): void => setIsEdit(true)}>
         {!diffs ? (
           <View style={styles.rowNoEdit}>
             <Text style={styles.text}>{item.original}</Text>
@@ -168,7 +157,7 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
             autoCorrect
             underlineColorAndroid="transparent"
             value={fix}
-            onChangeText={(text: string) => setFix(text)}
+            onChangeText={(text: string): void => setFix(text)}
             defaultValue={item.original}
             multiline
             blurOnSubmit
@@ -194,7 +183,7 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
         <>
           <TouchableOpacity
             style={styles.buttonRow}
-            onPress={() => {
+            onPress={(): void => {
               refDetail.current.focus();
             }}
           >
@@ -216,7 +205,7 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
             underlineColorAndroid="transparent"
             value={detail}
             onEndEditing={onEndEditingDetail}
-            onChangeText={(text: string) => setDetail(text)}
+            onChangeText={(text: string): void => setDetail(text)}
             multiline
             scrollEnabled={false}
           />

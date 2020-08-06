@@ -29,7 +29,7 @@ const RichText = ({ style, text, nativeLanguage }: Props): JSX.Element => {
   const [displayText, setDisplayText] = useState(text);
   const [isTranslated, setIsTranslated] = useState(false);
 
-  const onPressCopy = () => {
+  const onPressCopy = (): void => {
     Clipboard.setString(displayText || '');
   };
 

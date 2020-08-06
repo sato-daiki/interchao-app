@@ -286,7 +286,6 @@ const PostDiaryScreen: ScreenType = ({
       text={text}
       points={user.points}
       learnLanguage={profile.learnLanguage}
-      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('TeachDiaryList');

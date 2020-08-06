@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { clipboard } from '../../styles/Common';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import I18n from '../../utils/I18n';
 import {
   Menu,
   MenuOptions,
@@ -10,6 +8,8 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import I18n from '../../utils/I18n';
+import { clipboard } from '../../styles/Common';
 
 interface Props {
   children: React.ReactNode;
@@ -67,20 +67,20 @@ const TextMenu = ({
 }: Props): JSX.Element => {
   const copyButton = (
     <MenuOption style={[styles.menu, styles.border]} onSelect={onPressCopy}>
-      <MaterialCommunityIcons size={20} color={'white'} name="content-copy" />
+      <MaterialCommunityIcons size={20} color="white" name="content-copy" />
       <Text style={styles.menuText}>{I18n.t('common.copy')}</Text>
     </MenuOption>
   );
 
   const translateButton = (
     <MenuOption style={styles.menu} onSelect={onPressTranslate}>
-      <MaterialCommunityIcons size={20} color={'white'} name="translate" />
+      <MaterialCommunityIcons size={20} color="white" name="translate" />
       <Text style={styles.menuText}>{I18n.t('common.translation')}</Text>
     </MenuOption>
   );
 
-  /** AndroidのMenuOption　onSlectが機能しない為 */
-  const renderMenuButton = () => {
+  // AndroidのMenuOptionのonSlectが機能しない為
+  const renderMenuButton = (): JSX.Element => {
     if (Platform.OS === 'ios') {
       return (
         <View style={styles.row}>
