@@ -50,7 +50,9 @@ const MyDiaryCorrection: React.FC<Props> = ({
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (
     <>
-      {summary ? <Summary summary={summary} /> : null}
+      {summary ? (
+        <Summary summary={summary} nativeLanguage={nativeLanguage} />
+      ) : null}
       <Space size={32} />
       {isReview !== undefined ? (
         <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />

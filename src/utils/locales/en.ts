@@ -298,10 +298,6 @@ const firstDiary = {
   first: 'First entry',
 };
 
-const summaryCard = {
-  title: 'Summary',
-};
-
 const userPoints = {
   points: 'Points',
 };
@@ -557,7 +553,6 @@ const en = {
   userProfile,
   commentCard,
   firstDiary,
-  summaryCard,
   userPoints,
   userPointsBig,
   emptyDiary,
