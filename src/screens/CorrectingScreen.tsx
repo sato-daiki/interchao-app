@@ -86,14 +86,6 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 16,
   },
-  main: {
-    flex: 1,
-    paddingTop: 16,
-    backgroundColor: '#FFF',
-  },
-  commentCard: {
-    marginHorizontal: 16,
-  },
   headerLeft: {
     paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
@@ -152,7 +144,7 @@ const CorrectingScreen: ScreenType = ({
 
   const refSummary = useRef<any>(null);
 
-  const initTextsInfo = () => {
+  const initTextsInfo = useCallback((): void => {
     const splitTexts = split(teachDiary.text);
     const newTextInfos = splitTexts
       .filter(i => i.raw.trim().length > 0)
@@ -166,7 +158,8 @@ const CorrectingScreen: ScreenType = ({
         };
       });
     setTextInfos(newTextInfos);
-  };
+  }, [teachDiary.text]);
+
   /**
    * 閉じる処理
    */
@@ -195,7 +188,6 @@ const CorrectingScreen: ScreenType = ({
       if (newProfile) {
         setTargetProfile(newProfile);
       }
-      console.log('setIsProfileLoading');
       setIsProfileLoading(false);
     };
     f();
@@ -228,7 +220,7 @@ const CorrectingScreen: ScreenType = ({
       await Promise.all([getNewProfile(), getNewCorrection()]);
     };
     f();
-  }, [getNewCorrection, getNewProfile]);
+  }, [getNewCorrection, getNewProfile, initTextsInfo]);
 
   /**
    * 完了する
@@ -240,19 +232,21 @@ const CorrectingScreen: ScreenType = ({
         Alert.alert('', I18n.t('correcting.nothing'));
         return;
       }
+      if (isLoading) return;
+      setIsLoading(true);
 
       await updateDone({
-        isLoading,
         summary,
         teachDiary,
         currentProfile,
         user,
         comments,
-        setIsLoading,
-        setIsModalDone,
         editTeachDiary,
         setUser,
       });
+
+      setIsLoading(false);
+      setIsModalDone(true);
     };
     f();
   }, [
@@ -299,7 +293,7 @@ const CorrectingScreen: ScreenType = ({
       onPressClose,
       onPressSubmitButton,
     });
-  }, [isFirstEdit, onPressSubmitButton]);
+  }, [isFirstEdit, navigation, onPressClose, onPressSubmitButton]);
 
   /*
    * 添削完了
@@ -338,27 +332,29 @@ const CorrectingScreen: ScreenType = ({
     teachDiary.profile.learnLanguage
   );
 
-  const editText = (index: number, info: Info) => {
-    const newTextInfos = textInfos.map(item => {
-      if (item.rowNumber === index) {
-        console.log('rowNumber');
-        return {
-          ...item,
-          ...info,
-        };
-      }
-      return item;
-    });
-    setTextInfos(newTextInfos);
-  };
+  const editText = useCallback(
+    (index: number, info: Info): void => {
+      const newTextInfos = textInfos.map(item => {
+        if (item.rowNumber === index) {
+          return {
+            ...item,
+            ...info,
+          };
+        }
+        return item;
+      });
+      setTextInfos(newTextInfos);
+    },
+    [textInfos]
+  );
 
   const renderItem = useCallback(
     ({ item, index }: { item: TextInfo; index: number }): JSX.Element => {
       return (
         <CorrectingListItem
           item={item}
-          editText={(info: Info) => editText(index, info)}
-          editFirst={() => setIsFirstEdit(true)}
+          editText={(info: Info): void => editText(index, info)}
+          editFirst={(): void => setIsFirstEdit(true)}
         />
       );
     },
@@ -407,7 +403,7 @@ const CorrectingScreen: ScreenType = ({
             <>
               <TouchableOpacity
                 style={styles.buttonRow}
-                onPress={() => {
+                onPress={(): void => {
                   refSummary.current.focus();
                 }}
               >
@@ -426,7 +422,7 @@ const CorrectingScreen: ScreenType = ({
                 autoCorrect
                 underlineColorAndroid="transparent"
                 value={summary}
-                onChangeText={(text: string) => setSummary(text)}
+                onChangeText={(text: string): void => setSummary(text)}
                 multiline
                 scrollEnabled={false}
               />

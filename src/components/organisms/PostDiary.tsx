@@ -39,7 +39,6 @@ interface Props {
   text: string;
   points: number;
   learnLanguage: Language;
-  nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
@@ -103,7 +102,6 @@ const PostDiary = ({
   text,
   points,
   learnLanguage,
-  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,

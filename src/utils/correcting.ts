@@ -11,14 +11,11 @@ import {
 } from '../types';
 
 interface UpdateDoneProps {
-  isLoading: boolean;
   summary: string;
   teachDiary: Diary;
   currentProfile: Profile;
   user: User;
   comments: Comment[];
-  setIsLoading: (isLoading: boolean) => void;
-  setIsModalDone: (isLoading: boolean) => void;
   editTeachDiary: (objectID: string, diary: Diary) => void;
   setUser: (user: User) => void;
 }
@@ -78,21 +75,15 @@ export const getDataCorrection = (
 };
 
 export const updateDone = async ({
-  isLoading,
   summary,
   teachDiary,
   currentProfile,
   user,
   comments,
-  setIsLoading,
-  setIsModalDone,
   editTeachDiary,
   setUser,
 }: UpdateDoneProps): Promise<void> => {
   await firebase.firestore().runTransaction(async transaction => {
-    if (isLoading) return;
-    setIsLoading(true);
-
     const displayProfile = getDisplayProfile(currentProfile);
     const getPoints = getUsePoints(
       teachDiary.text.length,
@@ -171,8 +162,6 @@ export const updateDone = async ({
       correctingObjectID: null,
       correctingCorrectedNum: null,
     });
-    setIsLoading(false);
-    setIsModalDone(true);
   });
 };
 
