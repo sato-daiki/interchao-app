@@ -15,6 +15,7 @@ const common = {
   add: '追加',
   delete: '削除',
   translation: '翻訳',
+  copy: 'コピー',
   back: '戻る',
 };
 
@@ -71,15 +72,9 @@ const correcting = {
   headerTitle: '添削する',
   header: '他の人の添削一覧',
   deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
-  summaryAlert: 'まとめが編集中です',
-  commentAlert: 'コメントが編集中です',
-  titleComment: 'コメントする',
-  titleSummary: 'まとめを書く',
   titleDone: '投稿する',
-  menuEdit: '編集する',
-  menuCommentDelete: 'コメントを削除する',
-  menuSummaryDelete: 'まとめを削除する',
-  commentList: 'コメント一覧',
+  nothing: '修正がありません',
+  summary: 'まとめ',
 };
 
 const deleteAcount = {
@@ -97,14 +92,6 @@ const draftDiary = {
     zero: '下書き一覧',
   },
   empty: '下書き一覧はありません',
-};
-
-const editCorrectionComment = {
-  headerTitle: 'コメントを編集する',
-};
-
-const editCorrectionSummary = {
-  headerTitle: 'まとめを編集する',
 };
 
 const editEmail = {
@@ -277,7 +264,6 @@ const teachDiarySerch = {
 
 const tutorialList = {
   headerTitle: 'チュートリアル一覧',
-  correcting: '添削の仕方',
   postDiary: '日記の書き方',
   points: 'ポイントについて',
 };
@@ -301,14 +287,11 @@ const commentCard = {
   original: '原文',
   fix: '修正文',
   detail: 'コメント',
+  optional: '任意',
 };
 
 const firstDiary = {
   first: '初投稿',
-};
-
-const summaryCard = {
-  title: 'まとめ',
 };
 
 const userPoints = {
@@ -320,18 +303,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const commentInput = {
-  original: '原文',
-  fix: '修正文',
-  detail: 'コメント',
-  paste: 'クリップボードの貼り付け',
-  optional: '任意',
-};
-
-const correctionFooterButton = {
-  correction: '添削の仕方',
-};
-
 const emptyDiary = {
   empty: '日記がまだ投稿されていません。',
 };
@@ -356,10 +327,6 @@ const profileNationality = {
   nationality: '国籍',
 };
 
-const summaryInput = {
-  title: 'まとめ',
-};
-
 const inquiry = {
   headerTitle: '問合せ',
   email: 'メールアドレス',
@@ -369,12 +336,6 @@ const inquiry = {
 };
 
 // organisms
-const correctionOrigin = {
-  messageIOS: '修正する箇所を選択して、添削を始めましょう',
-  messageAndroid:
-    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう',
-};
-
 const diaryHitList = {
   empty: '検索条件の日記がありません',
   header: '検索結果',
@@ -498,29 +459,6 @@ const teachDiaryCorrection = {
   header: '添削結果',
 };
 
-const tutorialCorrecting = {
-  subTitle: 'やり方',
-  title: '添削方法',
-  text1:
-    '日記の中で誤っている箇所、またはネイティブから見ると違和感がある箇所を探しましょう！添削は全て{{teachDiaryLanguage}}で行ってください',
-  subText1IOS:
-    '① 対象の文章を長押しして、範囲を指定\n② 画面の右上にある“コメントする“をクリック',
-  subText1Android:
-    '① 対象の文章を選択して、コピー\n② 画面の右下にある“コメントする“をクリック',
-  text2: '正しい文章を教えてあげましょう',
-  subText2IOS:
-    '① 修正文に正しい表現/自然な表現を書く\n② コメントに補足を書く\n③ “追加“をクリック',
-  subText2Android:
-    '① 原文を書く（“クリップボードの貼り付け“をクリック）\n② 修正文に正しい表現/自然な表現を書く\n③ コメントに補足を書く\n④ “追加“をクリック',
-  text3:
-    'コメントは{{teachDiaryCharacters}}文字に対して3つを目安に書きましょう。コメントの記載が終わったら画面の右上にある“まとめを書く“をクリック',
-  text4: '日記の全体の感想などを書きましょう',
-  subText4: '① まとめを書く\n② “追加“をクリック',
-  text5: '修正や削除はカードの右上のメニューアイコンをクリックするとできます',
-  text6: '添削内容を確認して、最後に画面の右上にある“投稿する“をクリック',
-  text7: '以上です！早速添削を始めましょう',
-};
-
 const tutorialPoints = {
   title: 'ポイントについて',
   buttonText: '始める',
@@ -580,8 +518,6 @@ const ja = {
   correcting,
   deleteAcount,
   draftDiary,
-  editCorrectionComment,
-  editCorrectionSummary,
   editEmail,
   editMyProfile,
   editPassword,
@@ -610,18 +546,14 @@ const ja = {
   userProfile,
   commentCard,
   firstDiary,
-  summaryCard,
+
   userPoints,
   userPointsBig,
-  commentInput,
-  correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  summaryInput,
-  correctionOrigin,
   diaryHitList,
   draftListItem,
   emptyMyDiaryList,
@@ -641,7 +573,6 @@ const ja = {
   postDiaryComponent,
   sns,
   teachDiaryCorrection,
-  tutorialCorrecting,
   tutorialPoints,
   tutorialPostDiary,
   tutorialTeachDiaryList,

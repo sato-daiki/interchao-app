@@ -11,10 +11,10 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import Algolia from '../utils/Algolia';
-import { Profile, Correction, User, Diary } from '../types';
+import { Profile, Correction, Diary } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { ProfileIconHorizontal, Space, CopyText } from '../components/atoms';
+import { ProfileIconHorizontal, Space } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
   subTextColor,
@@ -26,8 +26,13 @@ import { getCorrection } from '../utils/corrections';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import Corrections from '../components/organisms/Corrections';
+import RichText from '../components/organisms/RichText';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
+export interface Props {
+  profile: Profile;
+}
+
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
 /**
  * 日記詳細
  */
-const UserDiaryScreen: ScreenType = ({ navigation }) => {
+const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
   const [isProfileLoading, setIsProfileLoading] = useState(true);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isDiaryLoading, setIsDiaryLoading] = useState(true);
@@ -199,8 +204,16 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
                 </Text>
                 <UserDiaryStatus diary={teachDiary} />
               </View>
-              <CopyText style={styles.title} text={teachDiary.title} />
-              <CopyText style={styles.text} text={teachDiary.text} />
+              <RichText
+                style={styles.title}
+                text={teachDiary.title}
+                nativeLanguage={profile.nativeLanguage}
+              />
+              <RichText
+                style={styles.text}
+                text={teachDiary.text}
+                nativeLanguage={profile.nativeLanguage}
+              />
             </>
           ) : (
             <ActivityIndicator />
@@ -212,6 +225,7 @@ const UserDiaryScreen: ScreenType = ({ navigation }) => {
             correction={correction}
             correction2={correction2}
             correction3={correction3}
+            nativeLanguage={profile.nativeLanguage}
             onPressUser={(uid: string): void => {
               navigation.push('UserProfile', { uid });
             }}

@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import Constants from 'expo-constants';
+import { MenuProvider } from 'react-native-popup-menu';
 // import Updates from 'expo-updates';
 import { Updates } from 'expo';
 
@@ -62,7 +63,9 @@ const App: React.SFC = () => {
       <PersistGate loading={<Loading />} persistor={persistor}>
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
-          <AppNavigator />
+          <MenuProvider>
+            <AppNavigator />
+          </MenuProvider>
         </ActionSheetProvider>
       </PersistGate>
     </Provider>
