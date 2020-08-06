@@ -293,10 +293,6 @@ const firstDiary = {
   first: '첫 업로드',
 };
 
-const summaryCard = {
-  title: '총평',
-};
-
 const userPoints = {
   points: '포인트',
 };
@@ -547,7 +543,6 @@ const ko = {
   userProfile,
   commentCard,
   firstDiary,
-  summaryCard,
   userPoints,
   userPointsBig,
   emptyDiary,

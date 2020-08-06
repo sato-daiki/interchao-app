@@ -47,7 +47,7 @@ const TeachDiaryCorrection: React.FC<Props> = ({
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (): JSX.Element | null => {
     if (summary) {
-      return <Summary summary={summary} />;
+      return <Summary summary={summary} nativeLanguage={nativeLanguage} />;
     }
     return null;
   };

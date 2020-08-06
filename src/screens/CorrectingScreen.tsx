@@ -293,7 +293,8 @@ const CorrectingScreen: ScreenType = ({
       onPressClose,
       onPressSubmitButton,
     });
-  }, [isFirstEdit, navigation, onPressClose, onPressSubmitButton]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFirstEdit, onPressSubmitButton]);
 
   /*
    * 添削完了

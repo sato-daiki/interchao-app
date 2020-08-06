@@ -286,10 +286,6 @@ const firstDiary = {
   first: '首次发布',
 };
 
-const summaryCard = {
-  title: '总结',
-};
-
 const userPoints = {
   points: '积分',
 };
@@ -536,7 +532,6 @@ const zh = {
   userProfile,
   commentCard,
   firstDiary,
-  summaryCard,
   userPoints,
   userPointsBig,
   emptyDiary,

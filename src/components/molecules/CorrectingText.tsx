@@ -93,7 +93,7 @@ const CorrectingText: React.FC<Props> = ({
         style={styles.icon}
         size={20}
         color={isOrigin ? softRed : green}
-        name="close"
+        name={isOrigin ? 'close' : 'circle-outline'}
       />
     </View>
   );
