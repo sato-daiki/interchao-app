@@ -1,50 +1,21 @@
-import I18n from './I18n';
 import firebase from '../constants/firebase';
-import {
-  getDisplayProfile,
-  getComments,
-  getUsePoints,
-  updateYet,
-} from './diary';
+import { getDisplayProfile, getUsePoints, updateYet } from './diary';
 import { track, events } from './Analytics';
 import {
   Diary,
   Profile,
-  InfoCommentAndroid,
-  InfoComment,
   User,
   CorrectionStatus,
   DisplaCorrection,
+  Comment,
 } from '../types';
-import { primaryColor, mainColor, green } from '../styles/Common';
-import { ButtonInfo } from '../screens/CorrectingAndroidScreen';
-
-type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
-
-export const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
-  if (state === 'comment') {
-    return { title: I18n.t('correcting.titleComment'), color: mainColor };
-  }
-
-  if (state === 'summary') {
-    return { title: I18n.t('correcting.titleSummary'), color: primaryColor };
-  }
-
-  if (state === 'done') {
-    return { title: I18n.t('correcting.titleDone'), color: green };
-  }
-  return { title: '', color: '' };
-};
 
 interface UpdateDoneProps {
-  isLoading: boolean;
   summary: string;
   teachDiary: Diary;
   currentProfile: Profile;
   user: User;
-  infoComments: InfoCommentAndroid[] | InfoComment[];
-  setIsLoading: (isLoading: boolean) => void;
-  setIsModalDone: (isLoading: boolean) => void;
+  comments: Comment[];
   editTeachDiary: (objectID: string, diary: Diary) => void;
   setUser: (user: User) => void;
 }
@@ -104,24 +75,16 @@ export const getDataCorrection = (
 };
 
 export const updateDone = async ({
-  isLoading,
   summary,
   teachDiary,
   currentProfile,
   user,
-  infoComments,
-  setIsLoading,
-  setIsModalDone,
+  comments,
   editTeachDiary,
   setUser,
 }: UpdateDoneProps): Promise<void> => {
   await firebase.firestore().runTransaction(async transaction => {
-    if (isLoading) return;
-    setIsLoading(true);
-
     const displayProfile = getDisplayProfile(currentProfile);
-    const comments = getComments(infoComments);
-
     const getPoints = getUsePoints(
       teachDiary.text.length,
       teachDiary.profile.learnLanguage
@@ -134,6 +97,7 @@ export const updateDone = async ({
       .firestore()
       .collection('corrections')
       .doc();
+
     transaction.set(correctionRef, {
       objectID: teachDiary.objectID,
       profile: displayProfile,
@@ -198,8 +162,6 @@ export const updateDone = async ({
       correctingObjectID: null,
       correctingCorrectedNum: null,
     });
-    setIsLoading(false);
-    setIsModalDone(true);
   });
 };
 

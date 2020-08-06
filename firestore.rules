@@ -462,11 +462,9 @@ service cloud.firestore {
 
       allow create: if request.auth != null
         && request.auth.uid == request.resource.data.profile.uid
-        && isValidCorrections(request.resource.data)
-        // コメントとまとめが入力されていること
+       && isValidCorrections(request.resource.data)
+      // コメントが入力されていること
         && request.resource.data.comments.size() > 0
-        && request.resource.data.summary.size() > 0
-        && request.resource.data.summary.size() <= 300
         && request.resource.data.createdAt == request.time
         // diaryが存在すること
         && exists(diary(request.resource.data.objectID))

@@ -10,6 +10,7 @@ export const green = '#27AE60';
 export const facebook = '#1877f2';
 export const softRed = '#da5353';
 export const star = '#f1c40f';
+export const clipboard = '#383838';
 
 export const fontSizeSS = 11;
 export const fontSizeS = 13;

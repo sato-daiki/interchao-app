@@ -1,13 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, FlatList } from 'react-native';
-import { SummaryCard, HideButton } from '../atoms';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
-import { Correction, Comment } from '../../types';
+import { Correction, Comment, Language } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
-import { CommentCard } from '../molecules';
+import { CorrectionItem, Summary } from '../molecules';
+import { HideButton } from '../atoms';
 
 interface Props {
+  nativeLanguage: Language;
   correction: Correction;
   onPressUser?: (uid: string) => void;
 }
@@ -36,29 +37,35 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  * 概要：添削一覧
  */
 const TeachDiaryCorrection: React.FC<Props> = ({
+  nativeLanguage,
   correction,
   onPressUser,
 }): JSX.Element => {
   const { profile, comments, summary, createdAt } = correction;
-  const { uid, userName, photoUrl, nativeLanguage, nationalityCode } = profile;
   const [hidden, setHidden] = useState(false);
 
   const postDate = getAlgoliaDate(createdAt);
-  const listFooterComponent = <SummaryCard summary={summary} />;
+  const listFooterComponent = (): JSX.Element | null => {
+    if (summary) {
+      return <Summary summary={summary} />;
+    }
+    return null;
+  };
 
   const renderItem = useCallback(
-    ({ item, index }: { item: Comment; index: number }): JSX.Element => {
-      const { original, fix, detail } = item;
+    ({ item }: { item: Comment }): JSX.Element => {
+      const { original, fix, detail, diffs } = item;
       return (
-        <CommentCard
-          index={index}
+        <CorrectionItem
           original={original}
           fix={fix}
           detail={detail}
+          diffs={diffs}
+          nativeLanguage={nativeLanguage}
         />
       );
     },
-    []
+    [nativeLanguage]
   );
 
   return (
@@ -68,11 +75,11 @@ const TeachDiaryCorrection: React.FC<Props> = ({
         <>
           <View style={styles.header}>
             <ProfileIconHorizontal
-              userName={userName}
-              photoUrl={photoUrl}
-              nativeLanguage={nativeLanguage}
-              nationalityCode={nationalityCode}
-              onPress={(): void => onPressUser && onPressUser(uid)}
+              userName={profile.userName}
+              photoUrl={profile.photoUrl}
+              nativeLanguage={profile.nativeLanguage}
+              nationalityCode={profile.nationalityCode}
+              onPress={(): void => onPressUser && onPressUser(profile.uid)}
             />
             <Text style={styles.daytext}>{postDate}</Text>
           </View>

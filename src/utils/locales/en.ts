@@ -15,6 +15,7 @@ const common = {
   add: 'Add',
   delete: 'Delete',
   translation: 'Translation',
+  copy: 'Copy',
   back: 'Back',
 };
 
@@ -71,15 +72,9 @@ const correcting = {
   header: 'List of corrections by others',
   deleteAlert:
     'All of your corrections will be deleted. Would you like to proceed?',
-  summaryAlert: 'The summary is being edited.',
-  commentAlert: 'The comment is being edited.',
-  titleComment: 'Comment',
-  titleSummary: 'Summarize',
   titleDone: 'Publish',
-  menuEdit: 'Edit',
-  menuCommentDelete: 'Erase Comment',
-  menuSummaryDelete: 'Erase Summary',
-  commentList: 'List of Comments',
+  nothing: 'No fix',
+  summary: 'Summary',
 };
 
 const deleteAcount = {
@@ -97,14 +92,6 @@ const draftDiary = {
     zero: 'List of Drafts',
   },
   empty: 'You do not have any drafts.',
-};
-
-const editCorrectionComment = {
-  headerTitle: 'Edit Comment',
-};
-
-const editCorrectionSummary = {
-  headerTitle: 'Edit Summary',
 };
 
 const editEmail = {
@@ -281,7 +268,6 @@ const teachDiarySerch = {
 
 const tutorialList = {
   headerTitle: 'List of Tutorials',
-  correcting: 'How to Make Corrections',
   postDiary: 'How to Write Entries',
   points: 'About Points',
 };
@@ -305,6 +291,7 @@ const commentCard = {
   original: 'Original',
   fix: 'Edit',
   detail: 'Comment',
+  optional: 'Optional',
 };
 
 const firstDiary = {
@@ -324,18 +311,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const commentInput = {
-  original: 'Original',
-  fix: 'Edit',
-  detail: 'Comment',
-  paste: 'Paste',
-  optional: 'Optional',
-};
-
-const correctionFooterButton = {
-  correction: 'How to Make Corrections',
-};
-
 const emptyDiary = {
   empty: 'You haven’t posted any journal entries.',
 };
@@ -360,10 +335,6 @@ const profileNationality = {
   nationality: 'Nationality',
 };
 
-const summaryInput = {
-  title: 'Summary',
-};
-
 const inquiry = {
   headerTitle: 'Inquiry',
   email: 'Email Address',
@@ -374,12 +345,6 @@ const inquiry = {
 };
 
 // organisms
-const correctionOrigin = {
-  messageIOS: 'Tap the entry to begin making corrections.',
-  messageAndroid:
-    'Copy the sentence to correct and press the "Comment" button at the bottom right to begin making corrections.',
-};
-
 const diaryHitList = {
   empty: 'No journal entries matched your search.',
   header: 'Search Results',
@@ -504,31 +469,6 @@ const teachDiaryCorrection = {
   header: 'Correction Results',
 };
 
-const tutorialCorrecting = {
-  subTitle: 'Instructions',
-  title: 'How to Make Corrections',
-  text1:
-    'Look for mistakes in the entry or places that sound strange to natives. Please write all of the corrections in {{teachDiaryLanguage}}.',
-  subText1IOS:
-    '1) Tap and hold down on the word or phrase, then set the span\n2) Tap the “Comment” button at the top right hand side of the screen',
-  subText1Android:
-    '1) Copy the word or phrasen2) Tap the “Comment” button at the bottom right hand side of the screen',
-  text2: 'Correct the sentence',
-  subText2IOS:
-    '1) Write the correct/natural phrase in the “Edit” section\n2) Write your explanation in the “Comment” section\n3) Tap the “Add” button',
-  subText2Android:
-    '1) Write the original(Tap the “Paste“ button)\n2) Write the correct/natural phrase in the “Edit” section\n3) Write your explanation in the “Comment” section\n4) Tap the “Add” button',
-  text3:
-    'Please aim to write at least 3 comments for every {{teachDiaryCharacters}} characters. When you’ve finished writing your comments, tap the “Summarize” button at the top right hand side of the screen.',
-  text4: 'Write a summary of your thoughts on the overall journey entry',
-  subText4: '1) Write the summary\n2) Tap the “Add” button',
-  text5:
-    'You can edit or delete comments by tapping the Menu icon at the top right hand side of the screen.',
-  text6:
-    'After confirming your corrections, tap the “Publish” button on the top right hand side of the screen.',
-  text7: 'That’s all! Let’s get started correcting entries right away.',
-};
-
 const tutorialPoints = {
   title: 'About Points',
   buttonText: 'Begin',
@@ -589,8 +529,6 @@ const en = {
   correcting,
   deleteAcount,
   draftDiary,
-  editCorrectionComment,
-  editCorrectionSummary,
   editEmail,
   editMyProfile,
   editPassword,
@@ -622,15 +560,11 @@ const en = {
   summaryCard,
   userPoints,
   userPointsBig,
-  commentInput,
-  correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  summaryInput,
-  correctionOrigin,
   diaryHitList,
   draftListItem,
   emptyMyDiaryList,
@@ -650,7 +584,6 @@ const en = {
   postDiaryComponent,
   sns,
   teachDiaryCorrection,
-  tutorialCorrecting,
   tutorialPoints,
   tutorialPostDiary,
   tutorialTeachDiaryList,

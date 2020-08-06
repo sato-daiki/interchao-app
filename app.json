@@ -4,8 +4,9 @@
     "scheme": "interchao",
     "slug": "white-zebra",
     "privacy": "public",
+    "sdkVersion": "37.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.2.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -20,11 +21,11 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
-      "buildNumber": "1020000"
+      "buildNumber": "1030000"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1020000
+      "versionCode": 1030000
     },
     "locales": {
       "ja": "./languages/ja.json",
