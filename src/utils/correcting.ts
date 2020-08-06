@@ -1,4 +1,3 @@
-import I18n from './I18n';
 import firebase from '../constants/firebase';
 import { getDisplayProfile, getUsePoints, updateYet } from './diary';
 import { track, events } from './Analytics';
@@ -9,27 +8,7 @@ import {
   CorrectionStatus,
   DisplaCorrection,
   Comment,
-  TextInfo,
 } from '../types';
-import { primaryColor, mainColor, green } from '../styles/Common';
-import { ButtonInfo } from '../screens/CorrectingAndroidScreen';
-
-type RightButtonState = 'comment' | 'summary' | 'done' | 'nothing';
-
-export const getStateButtonInfo = (state: RightButtonState): ButtonInfo => {
-  if (state === 'comment') {
-    return { title: I18n.t('correcting.titleComment'), color: mainColor };
-  }
-
-  if (state === 'summary') {
-    return { title: I18n.t('correcting.titleSummary'), color: primaryColor };
-  }
-
-  if (state === 'done') {
-    return { title: I18n.t('correcting.titleDone'), color: green };
-  }
-  return { title: '', color: '' };
-};
 
 interface UpdateDoneProps {
   isLoading: boolean;

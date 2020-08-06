@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
   fontSizeS,
@@ -7,13 +7,11 @@ import {
   primaryColor,
   borderLightColor,
   subTextColor,
-  mainColor,
 } from '../../styles/Common';
 import { getDay } from '../../utils/diary';
 import { Review, Language } from '../../types';
-import { ProfileIconHorizontal, CopyText } from '../atoms';
-import googleTranslate from '../../utils/googleTranslate';
-import I18n from '../../utils/I18n';
+import { ProfileIconHorizontal } from '../atoms';
+import RichText from './RichText';
 
 interface Props {
   item: Review;
@@ -47,17 +45,6 @@ const styles = StyleSheet.create({
   starStyle: {
     margin: 0,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  translation: {
-    color: mainColor,
-  },
-  italic: {
-    color: subTextColor,
-    fontStyle: 'italic',
-  },
 });
 
 const ReviewListItem = ({
@@ -66,43 +53,10 @@ const ReviewListItem = ({
   onPressUser,
 }: Props): JSX.Element => {
   const { rating, createdAt, comment, reviewer } = item;
-  const [displayReview, setDisplayReview] = useState(comment);
-  const [isTranslated, setIsTranslated] = useState(false);
-
-  const onPressTranslate = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isTranslated) {
-        setDisplayReview(comment);
-        setIsTranslated(false);
-      } else {
-        const mentionRemovedText = comment.replace(/@\w+\s/g, '');
-        if (nativeLanguage) {
-          const translatedText = await googleTranslate(
-            mentionRemovedText,
-            nativeLanguage
-          );
-          if (translatedText && translatedText.length > 0) {
-            setDisplayReview(translatedText);
-            setIsTranslated(true);
-          }
-        }
-      }
-    };
-    f();
-  }, [comment, isTranslated, nativeLanguage]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.postDayText}>{getDay(createdAt)}</Text>
-        {nativeLanguage ? (
-          <TouchableOpacity onPress={onPressTranslate}>
-            <Text style={styles.translation}>
-              {I18n.t('common.translation')}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
+      <Text style={styles.postDayText}>{getDay(createdAt)}</Text>
       <View style={styles.rating}>
         <AirbnbRating
           isDisabled
@@ -113,12 +67,11 @@ const ReviewListItem = ({
           starStyle={styles.starStyle}
         />
       </View>
-      {displayReview ? (
-        <CopyText
-          style={[styles.comment, isTranslated ? styles.italic : undefined]}
-          text={displayReview}
-        />
-      ) : null}
+      <RichText
+        style={styles.comment}
+        text={comment}
+        nativeLanguage={nativeLanguage}
+      />
       <ProfileIconHorizontal
         userName={reviewer.userName}
         photoUrl={reviewer.photoUrl}

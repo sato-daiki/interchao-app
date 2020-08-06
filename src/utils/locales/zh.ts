@@ -66,17 +66,8 @@ const correcting = {
   headerTitle: '批改',
   header: '其他人的更正清单',
   deleteAlert: '正在编辑的所有批改都会被删除，确定删除吗？',
-  summaryAlert: '正在编辑总结',
-  commentAlert: '评论正在编辑中',
-  titleComment: '评论',
-  titleSummary: '写总结',
   titleDone: '发布',
-  menuEdit: '编辑',
-  menuCommentDelete: '删除评论',
-  menuSummaryDelete: '删除总结',
-  commentList: '评论列表',
   nothing: '没有修复',
-  notes: '备注信息',
   summary: '总结',
 };
 
@@ -95,14 +86,6 @@ const draftDiary = {
     zero: '草稿列表',
   },
   empty: '没有草稿列表表',
-};
-
-const editCorrectionComment = {
-  headerTitle: '编辑评论',
-};
-
-const editCorrectionSummary = {
-  headerTitle: '编辑总结',
 };
 
 const editEmail = {
@@ -316,10 +299,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const correctionFooterButton = {
-  correction: '如何批改',
-};
-
 const emptyDiary = {
   empty: '日记还没有发布',
 };
@@ -353,11 +332,6 @@ const inquiry = {
 };
 
 // organisms
-const correctionOrigin = {
-  messageIOS: '选择要修改的地方，开始批改吧',
-  messageAndroid: '复制要修改的地方，点击右下角的“评论”按钮开始批改吧',
-};
-
 const diaryHitList = {
   empty: '没有符合搜索条件的日记',
   header: '搜索结果',
@@ -534,8 +508,6 @@ const zh = {
   correcting,
   deleteAcount,
   draftDiary,
-  editCorrectionComment,
-  editCorrectionSummary,
   editEmail,
   editMyProfile,
   editPassword,
@@ -567,13 +539,11 @@ const zh = {
   summaryCard,
   userPoints,
   userPointsBig,
-  correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  correctionOrigin,
   diaryHitList,
   draftListItem,
   emptyMyDiaryList,

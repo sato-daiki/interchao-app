@@ -72,17 +72,8 @@ const correcting = {
   headerTitle: '添削する',
   header: '他の人の添削一覧',
   deleteAlert: '編集中の添削は全て削除されますが、よろしいでしょうか？',
-  summaryAlert: 'まとめが編集中です',
-  commentAlert: 'コメントが編集中です',
-  titleComment: 'コメントする',
-  titleSummary: 'まとめを書く',
   titleDone: '投稿する',
-  menuEdit: '編集する',
-  menuCommentDelete: 'コメントを削除する',
-  menuSummaryDelete: 'まとめを削除する',
-  commentList: 'コメント一覧',
   nothing: '修正がありません',
-  notes: '備考情報',
   summary: 'まとめ',
 };
 
@@ -101,14 +92,6 @@ const draftDiary = {
     zero: '下書き一覧',
   },
   empty: '下書き一覧はありません',
-};
-
-const editCorrectionComment = {
-  headerTitle: 'コメントを編集する',
-};
-
-const editCorrectionSummary = {
-  headerTitle: 'まとめを編集する',
 };
 
 const editEmail = {
@@ -324,10 +307,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const correctionFooterButton = {
-  correction: '添削の仕方',
-};
-
 const emptyDiary = {
   empty: '日記がまだ投稿されていません。',
 };
@@ -361,12 +340,6 @@ const inquiry = {
 };
 
 // organisms
-const correctionOrigin = {
-  messageIOS: '修正する箇所を選択して、添削を始めましょう',
-  messageAndroid:
-    '修正する箇所をコピーして\n右下の“コメントする“ボタンを押して添削を始めましょう',
-};
-
 const diaryHitList = {
   empty: '検索条件の日記がありません',
   header: '検索結果',
@@ -549,8 +522,6 @@ const ja = {
   correcting,
   deleteAcount,
   draftDiary,
-  editCorrectionComment,
-  editCorrectionSummary,
   editEmail,
   editMyProfile,
   editPassword,
@@ -582,13 +553,11 @@ const ja = {
   summaryCard,
   userPoints,
   userPointsBig,
-  correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  correctionOrigin,
   diaryHitList,
   draftListItem,
   emptyMyDiaryList,

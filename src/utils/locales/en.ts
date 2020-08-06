@@ -72,17 +72,8 @@ const correcting = {
   header: 'List of corrections by others',
   deleteAlert:
     'All of your corrections will be deleted. Would you like to proceed?',
-  summaryAlert: 'The summary is being edited.',
-  commentAlert: 'The comment is being edited.',
-  titleComment: 'Comment',
-  titleSummary: 'Summarize',
   titleDone: 'Publish',
-  menuEdit: 'Edit',
-  menuCommentDelete: 'Erase Comment',
-  menuSummaryDelete: 'Erase Summary',
-  commentList: 'List of Comments',
   nothing: 'No fix',
-  notes: 'Notes',
   summary: 'Summary',
 };
 
@@ -101,14 +92,6 @@ const draftDiary = {
     zero: 'List of Drafts',
   },
   empty: 'You do not have any drafts.',
-};
-
-const editCorrectionComment = {
-  headerTitle: 'Edit Comment',
-};
-
-const editCorrectionSummary = {
-  headerTitle: 'Edit Summary',
 };
 
 const editEmail = {
@@ -328,10 +311,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const correctionFooterButton = {
-  correction: 'How to Make Corrections',
-};
-
 const emptyDiary = {
   empty: 'You haven’t posted any journal entries.',
 };
@@ -366,12 +345,6 @@ const inquiry = {
 };
 
 // organisms
-const correctionOrigin = {
-  messageIOS: 'Tap the entry to begin making corrections.',
-  messageAndroid:
-    'Copy the sentence to correct and press the "Comment" button at the bottom right to begin making corrections.',
-};
-
 const diaryHitList = {
   empty: 'No journal entries matched your search.',
   header: 'Search Results',
@@ -556,8 +529,6 @@ const en = {
   correcting,
   deleteAcount,
   draftDiary,
-  editCorrectionComment,
-  editCorrectionSummary,
   editEmail,
   editMyProfile,
   editPassword,
@@ -589,13 +560,11 @@ const en = {
   summaryCard,
   userPoints,
   userPointsBig,
-  correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  correctionOrigin,
   diaryHitList,
   draftListItem,
   emptyMyDiaryList,

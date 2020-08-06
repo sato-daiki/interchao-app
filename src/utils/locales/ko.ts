@@ -70,17 +70,8 @@ const correcting = {
   headerTitle: '첨삭하기',
   header: '다른 사용자의 첨삭 목록',
   deleteAlert: '편집중인 첨삭이 모두 삭제됩니다. 그래도 괜찮으십니까?',
-  summaryAlert: '총평이 편집중입니다',
-  commentAlert: '코멘트가 편집중입니다',
-  titleComment: '코멘트하기',
-  titleSummary: '총평 쓰기',
   titleDone: '업로드하기',
-  menuEdit: '편집하기',
-  menuCommentDelete: '코멘트 삭제하기',
-  menuSummaryDelete: '총평 삭제하기',
-  commentList: '코멘트 목록',
   nothing: '수정이 없습니다',
-  notes: '메모',
   summary: '총평',
 };
 
@@ -99,14 +90,6 @@ const draftDiary = {
     zero: '임시 보관함',
   },
   empty: '임시 보관함에 일기가 없습니다',
-};
-
-const editCorrectionComment = {
-  headerTitle: '코멘트 삭제하기',
-};
-
-const editCorrectionSummary = {
-  headerTitle: '총평 편집하기',
 };
 
 const editEmail = {
@@ -323,10 +306,6 @@ const userPointsBig = {
 };
 
 //  molecules
-const correctionFooterButton = {
-  correction: '첨삭 방법',
-};
-
 const emptyDiary = {
   empty: '일기가 아직 없습니다.',
 };
@@ -360,12 +339,6 @@ const inquiry = {
 };
 
 // organisms
-const correctionOrigin = {
-  messageIOS: '수정할 부분을 선택하여 첨삭을 시작합시다',
-  messageAndroid:
-    '수정할 부분을 복사하고 오른쪽 아래의\n"Plus"버튼을 눌러 첨삭을 시작합시다',
-};
-
 const diaryHitList = {
   empty: '검색한 조건에 맞는 일기를 찾을 수 없습니다',
   header: '검색 결과',
@@ -546,8 +519,6 @@ const ko = {
   correcting,
   deleteAcount,
   draftDiary,
-  editCorrectionComment,
-  editCorrectionSummary,
   editEmail,
   editMyProfile,
   editPassword,
@@ -579,13 +550,11 @@ const ko = {
   summaryCard,
   userPoints,
   userPointsBig,
-  correctionFooterButton,
   emptyDiary,
   emptyReview,
   myDiaryCorrectionFooter,
   profileLanguage,
   profileNationality,
-  correctionOrigin,
   diaryHitList,
   draftListItem,
   emptyMyDiaryList,
