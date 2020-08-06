@@ -7,19 +7,16 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import I18n from '../../utils/I18n';
-import { Diff } from '../../types';
-import {
-  CopyText,
-  CorrectingOriginalText,
-  CorrectingFixText,
-  Space,
-} from '../atoms';
+import { Diff, Language } from '../../types';
+import { CorrectingText, Space } from '../atoms';
+import RichText from '../organisms/RichText';
 
 interface Props {
   original: string;
   fix: string | null;
   detail: string | null;
   diffs?: Diff[] | null;
+  nativeLanguage: Language;
 }
 
 const styles = StyleSheet.create({
@@ -47,16 +44,33 @@ const CorrectionItem = ({
   fix,
   detail,
   diffs,
+  nativeLanguage,
 }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
-      <CorrectingOriginalText original={original} diffs={diffs} />
+      <CorrectingText
+        isOrigin
+        isMenu
+        text={original}
+        diffs={diffs}
+        nativeLanguage={nativeLanguage}
+      />
       <Space size={16} />
-      <CorrectingFixText fix={fix} diffs={diffs} />
+      <CorrectingText
+        isOrigin={false}
+        isMenu
+        text={fix || ''}
+        diffs={diffs}
+        nativeLanguage={nativeLanguage}
+      />
       {detail ? (
         <>
           <Text style={styles.label}>{I18n.t('commentCard.detail')}</Text>
-          <CopyText style={styles.detail} text={detail} />
+          <RichText
+            style={styles.detail}
+            text={detail}
+            nativeLanguage={nativeLanguage}
+          />
         </>
       ) : null}
     </View>

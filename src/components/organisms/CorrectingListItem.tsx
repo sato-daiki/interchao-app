@@ -15,7 +15,7 @@ import {
   subTextColor,
   offWhite,
 } from '../../styles/Common';
-import { CorrectingOriginalText, CorrectingFixText, Space } from '../atoms';
+import { CorrectingText, Space } from '../atoms';
 import { Diff, TextInfo } from '../../types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -151,7 +151,12 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
             </View>
           </View>
         ) : (
-          <CorrectingOriginalText original={item.original} diffs={diffs} />
+          <CorrectingText
+            isMenu={false}
+            isOrigin
+            text={item.original}
+            diffs={diffs}
+          />
         )}
         {isEdit ? (
           <TextInput
@@ -174,7 +179,12 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
             {!diffs ? null : (
               <>
                 <Space size={16} />
-                <CorrectingFixText fix={fix} diffs={diffs} />
+                <CorrectingText
+                  isOrigin={false}
+                  isMenu={false}
+                  text={fix || ''}
+                  diffs={diffs}
+                />
               </>
             )}
           </>

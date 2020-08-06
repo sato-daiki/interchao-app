@@ -34,7 +34,7 @@ import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScree
 import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
-import UserDiaryScreen from '../screens/UserDiaryScreen';
+import UserDiaryScreenContainer from '../containers/UserDiaryScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -76,7 +76,7 @@ const commonDiaryNavigator = {
     screen: UserProfileScreen,
   },
   UserDiary: {
-    screen: UserDiaryScreen,
+    screen: UserDiaryScreenContainer,
   },
   ReviewList: {
     screen: ReviewListScreenContainer,
