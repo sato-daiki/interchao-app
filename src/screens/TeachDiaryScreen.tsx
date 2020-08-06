@@ -23,7 +23,6 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
-  CopyText,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -39,6 +38,7 @@ import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
+import RichText from '../components/organisms/RichText';
 
 const { width } = Dimensions.get('window');
 
@@ -402,8 +402,16 @@ const TeachDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <UserDiaryStatus diary={teachDiary} />
           </View>
-          <CopyText style={styles.title} text={teachDiary.title} />
-          <CopyText style={styles.text} text={teachDiary.text} />
+          <RichText
+            style={styles.title}
+            text={teachDiary.title}
+            nativeLanguage={profile.nativeLanguage}
+          />
+          <RichText
+            style={styles.text}
+            text={teachDiary.text}
+            nativeLanguage={profile.nativeLanguage}
+          />
           <Text style={styles.textLength}>
             {I18n.t('postDiaryComponent.textLength')}
             {` ${teachDiary.text.length}`}
@@ -417,6 +425,7 @@ const TeachDiaryScreen: ScreenType = ({
           onPressUser={(uid: string): void => {
             navigation.push('UserProfile', { uid });
           }}
+          nativeLanguage={profile.nativeLanguage}
         />
         {renderButton()}
         <Space size={16} />

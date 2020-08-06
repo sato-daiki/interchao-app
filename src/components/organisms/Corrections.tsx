@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Correction } from '../../types';
+import { Correction, Language } from '../../types';
 import { GrayHeader } from '../atoms';
 import TeachDiaryCorrection from './TeachDiaryCorrection';
 
@@ -8,6 +8,7 @@ interface Props {
   correction?: Correction;
   correction2?: Correction;
   correction3?: Correction;
+  nativeLanguage: Language;
   onPressUser?: (uid: string) => void;
 }
 
@@ -16,11 +17,13 @@ const Corrections: React.FC<Props> = ({
   correction,
   correction2,
   correction3,
+  nativeLanguage,
   onPressUser,
 }) => {
   const renderDiaryCorrection = (prmCorrection: Correction): ReactNode => {
     return (
       <TeachDiaryCorrection
+        nativeLanguage={nativeLanguage}
         correction={prmCorrection}
         onPressUser={onPressUser}
       />

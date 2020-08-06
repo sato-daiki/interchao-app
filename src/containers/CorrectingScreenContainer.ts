@@ -1,11 +1,7 @@
 import { connect } from 'react-redux';
-import { Platform } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { setUser } from '../stores/actions/user';
-import CorrectingIOSScreen, { PropsIOS } from '../screens/CorrectingIOSScreen';
-import CorrectingAndroidScreen, {
-  PropsAndroid,
-} from '../screens/CorrectingAndroidScreen';
+import CorrectingScreen, { Props } from '../screens/CorrectingScreen';
 import { State } from '../types/state';
 import { editTeachDiary } from '../stores/actions/teachDiaryList';
 
@@ -13,10 +9,7 @@ interface OwnProps {
   navigation: NavigationStackProp;
 }
 
-const mapStateToProps = (
-  state: State,
-  ownProps: OwnProps
-): PropsIOS | PropsAndroid => {
+const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
   const { user, profile } = state.rootReducer;
   const { teachDiaries } = state.rootReducer.teachDiaryList;
 
@@ -34,7 +27,4 @@ const mapDispatchToProps = {
   editTeachDiary,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Platform.OS === 'ios' ? CorrectingIOSScreen : CorrectingAndroidScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CorrectingScreen);

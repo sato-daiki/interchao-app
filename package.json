@@ -43,6 +43,7 @@
     "axios": "^0.19.2",
     "babel-plugin-dotenv-import": "^2.0.0",
     "country-list": "^2.2.0",
+    "diff": "^4.0.2",
     "expo": "^37.0.0",
     "expo-analytics-amplitude": "~8.1.0",
     "expo-constants": "~9.0.0",
@@ -71,6 +72,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-modal": "^11.5.6",
+    "react-native-popup-menu": "^0.15.9",
     "react-native-ratings": "^6.5.0",
     "react-native-reanimated": "~1.7.0",
     "react-native-safe-area-context": "0.7.3",
@@ -88,6 +90,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rn-swipeable-panel": "^1.0.20",
+    "sentence-splitter": "^3.2.0",
     "sentry-expo": "^2.0.3",
     "uuid": "^7.0.2",
     "yarn": "^1.22.0"

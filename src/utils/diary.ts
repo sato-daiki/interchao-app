@@ -6,7 +6,6 @@ import {
   Language,
   Profile,
   DisplayProfile,
-  Comment,
   Diary,
   CountryCode,
 } from '../types';
@@ -223,14 +222,6 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
     nativeLanguage: profile.nativeLanguage,
     nationalityCode: profile.nationalityCode || null,
   };
-};
-
-export const getComments = (infoComments: any): Comment[] => {
-  return infoComments.map(c => ({
-    original: c.original,
-    fix: c.fix,
-    detail: c.detail,
-  }));
 };
 
 export const updateUnread = async (
