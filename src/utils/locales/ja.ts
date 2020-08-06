@@ -15,6 +15,7 @@ const common = {
   add: '追加',
   delete: '削除',
   translation: '翻訳',
+  copy: 'コピー',
   back: '戻る',
 };
 
