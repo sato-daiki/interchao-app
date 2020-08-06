@@ -15,6 +15,7 @@ const common = {
   add: '添加',
   delete: '删除',
   translation: '翻译',
+  copy: '复制',
   back: '返回',
 };
 
