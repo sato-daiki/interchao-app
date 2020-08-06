@@ -31,12 +31,10 @@ import DeleteAcountScreen from '../screens/DeleteAcountScreen';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 import MyDiarySerchScreen from '../screens/MyDiarySearchScreen';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
-import EditCorrectionCommentScreen from '../screens/EditCorrectionCommentScreen';
-import EditCorrectionSummaryScreen from '../screens/EditCorrectionSummaryScreen';
 import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
-import UserDiaryScreen from '../screens/UserDiaryScreen';
+import UserDiaryScreenContainer from '../containers/UserDiaryScreenContainer';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -54,8 +52,6 @@ const ModalReviewNavigator = createStackNavigator({
 const ModalCorrectingNavigator = createStackNavigator(
   {
     Correcting: { screen: CorrectingScreenContainer },
-    EditCorrectionComment: { screen: EditCorrectionCommentScreen },
-    EditCorrectionSummary: { screen: EditCorrectionSummaryScreen },
   },
   {
     initialRouteName: 'Correcting',
@@ -80,7 +76,7 @@ const commonDiaryNavigator = {
     screen: UserProfileScreen,
   },
   UserDiary: {
-    screen: UserDiaryScreen,
+    screen: UserDiaryScreenContainer,
   },
   ReviewList: {
     screen: ReviewListScreenContainer,

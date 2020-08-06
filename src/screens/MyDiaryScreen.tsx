@@ -35,9 +35,10 @@ import {
 import { getAlgoliaDate } from '../utils/diary';
 import { Correction } from '../types/correction';
 import { getCorrection } from '../utils/corrections';
-import { LoadingModal, GrayHeader, CopyText, Space } from '../components/atoms';
+import { LoadingModal, GrayHeader, Space } from '../components/atoms';
 import I18n from '../utils/I18n';
 import Sns from '../components/organisms/Sns';
+import RichText from '../components/organisms/RichText';
 
 export interface Props {
   diary?: Diary;
@@ -278,8 +279,16 @@ const MyDiaryScreen: ScreenType = ({
             <Text style={styles.postDayText}>{postDate}</Text>
             <MyDiaryStatus diary={diary} />
           </View>
-          <CopyText style={styles.title} text={title} />
-          <CopyText style={styles.text} text={text} />
+          <RichText
+            style={styles.title}
+            text={title}
+            nativeLanguage={profile.nativeLanguage}
+          />
+          <RichText
+            style={styles.text}
+            text={text}
+            nativeLanguage={profile.nativeLanguage}
+          />
           <Text style={styles.textLength}>
             {I18n.t('postDiaryComponent.textLength')}
             {` ${text.length}`}
