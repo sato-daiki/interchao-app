@@ -67,6 +67,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
           fix={fix}
           detail={detail}
           diffs={diffs}
+          nativeLanguage={nativeLanguage}
         />
       );
     },
