@@ -169,7 +169,7 @@ const TeachDiaryScreen: ScreenType = ({
 
   const onPressMore = useCallback(() => {
     const options = [
-      Platform.OS === 'ios' ? 'sns.diary' : 'sns.app',
+      I18n.t(Platform.OS === 'ios' ? 'sns.diary' : 'sns.app'),
       I18n.t('common.cancel'),
     ];
     showActionSheetWithOptions(
