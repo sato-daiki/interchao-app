@@ -452,7 +452,8 @@ const postDiaryComponent = {
 };
 
 const sns = {
-  title: 'アプリをSNSでシェア',
+  app: 'アプリをSNSでシェア',
+  diary: '日記をSNSでシェア',
 };
 
 const teachDiaryCorrection = {

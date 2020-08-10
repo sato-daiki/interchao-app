@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as Random from 'expo-random';
 import Constants from 'expo-constants';
+import { Share } from 'react-native';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
 import { alert } from './ErrorAlert';
+import { Language } from '../types';
 
 export const getUuid = async (): Promise<string> =>
   uuidv4({ random: await Random.getRandomBytesAsync(16) });
@@ -87,4 +89,37 @@ export const getVersionText = (): string => {
     versionText = `${versionText} (development)`;
   }
   return versionText;
+};
+
+export const getShareUrl = (nativeLanguage: Language): string => {
+  switch (nativeLanguage) {
+    case 'ja':
+      return 'https://interchao.app/jp/share.html';
+    case 'en':
+      return 'https://interchao.app/en/share.html';
+    default:
+      return 'https://interchao.app/en/share.html';
+  }
+};
+export const appShare = async (
+  nativeLanguage: Language,
+  imageUrl: string | null = null
+): Promise<void> => {
+  // androidは画像のシェアができない
+  const url = getShareUrl(nativeLanguage);
+  const shareUrl = encodeURI(url);
+
+  const message = `#Interchao ${shareUrl}`;
+  if (imageUrl) {
+    Share.share({
+      message,
+      url: imageUrl,
+    });
+
+    return;
+  }
+
+  Share.share({
+    message,
+  });
 };
