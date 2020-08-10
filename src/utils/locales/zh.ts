@@ -439,7 +439,8 @@ const postDiaryComponent = {
 };
 
 const sns = {
-  title: '在SNS上共享应用',
+  share: '在SNS上共享应用',
+  button: '在SNS上分享您的日记',
 };
 
 const teachDiaryCorrection = {
