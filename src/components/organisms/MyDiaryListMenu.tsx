@@ -61,7 +61,7 @@ const MyDiaryListMenu = ({
         title={I18n.t('myDiaryListMenu.reviewList')}
         onPress={onPressReviewList}
       />
-      <OptionItem title={I18n.t('sns.share')} onPress={onPressAppShare} />
+      <OptionItem title={I18n.t('sns.app')} onPress={onPressAppShare} />
     </SwipeablePanel>
   );
 };

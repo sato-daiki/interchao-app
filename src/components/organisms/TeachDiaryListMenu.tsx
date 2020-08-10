@@ -29,7 +29,7 @@ const TeachDiaryListMenu = ({
       onClose={onClose}
       onPressCloseButton={onClose}
     >
-      <OptionItem title={I18n.t('sns.share')} onPress={onPressAppShare} />
+      <OptionItem title={I18n.t('sns.app')} onPress={onPressAppShare} />
     </SwipeablePanel>
   );
 };
