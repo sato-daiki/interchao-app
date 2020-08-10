@@ -56,7 +56,7 @@ const ShareButton: React.FC<Props> = ({
         name="share-variant"
       />
       <Text style={styles.title}>
-        {I18n.t(Platform.OS === 'ios' ? 'sns.button' : 'sns.share')}
+        {I18n.t(Platform.OS === 'ios' ? 'sns.diary' : 'sns.app')}
       </Text>
     </TouchableOpacity>
   );
