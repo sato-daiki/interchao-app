@@ -448,7 +448,8 @@ const postDiaryComponent = {
 };
 
 const sns = {
-  title: '앱을 SNS로 공유하기',
+  share: '앱을 SNS로 공유하기',
+  button: '일기를 SNS로 공유',
 };
 
 const teachDiaryCorrection = {

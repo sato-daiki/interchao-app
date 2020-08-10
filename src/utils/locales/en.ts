@@ -458,7 +458,8 @@ const postDiaryComponent = {
 };
 
 const sns = {
-  title: 'Share the app on SNS',
+  share: 'Share the app on SNS',
+  button: 'Share your entry on SNS',
 };
 
 const teachDiaryCorrection = {

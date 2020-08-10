@@ -1,9 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
@@ -17,6 +24,8 @@ import { getExceptUser, getFillterLanguages } from '../utils/diary';
 import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import TeachDiaryListMenu from '../components/organisms/TeachDiaryListMenu';
+import { primaryColor } from '../styles/Common';
 
 export interface Props {
   profile: Profile;
@@ -67,6 +76,7 @@ const TeachDiaryListScreen: ScreenType = ({
   const [page, setPage] = useState(0);
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
+  const [isMenu, setIsMenu] = useState(false);
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('TeachDiarySearch');
@@ -74,6 +84,7 @@ const TeachDiaryListScreen: ScreenType = ({
 
   useEffect(() => {
     navigation.setParams({
+      onPressMenu: () => setIsMenu(true),
       onPressSearch,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -239,6 +250,11 @@ const TeachDiaryListScreen: ScreenType = ({
     ) : null;
   return (
     <View style={styles.container}>
+      <TeachDiaryListMenu
+        isMenu={isMenu}
+        nativeLanguage={profile.nativeLanguage}
+        onClose={(): void => setIsMenu(false)}
+      />
       <LoadingModal visible={isLoading} />
       <TutorialTeachDiaryList
         isLoading={isTutorialLoading}
@@ -264,6 +280,7 @@ const TeachDiaryListScreen: ScreenType = ({
 TeachDiaryListScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
+  const onPressMenu = navigation.getParam('onPressMenu');
   const onPressSearch = navigation.getParam('onPressSearch');
 
   return {
@@ -273,6 +290,15 @@ TeachDiaryListScreen.navigationOptions = ({
         title={I18n.t('teachDiaryList.headerTitle')}
         onPress={onPressSearch}
       />
+    ),
+    headerRight: (): JSX.Element => (
+      <TouchableOpacity onPress={onPressMenu}>
+        <MaterialCommunityIcons
+          size={28}
+          color={primaryColor}
+          name="dots-horizontal"
+        />
+      </TouchableOpacity>
     ),
   };
 };

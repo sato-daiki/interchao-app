@@ -3,10 +3,13 @@ import SwipeablePanel from 'rn-swipeable-panel';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { OptionItem } from '../molecules';
 import I18n from '../../utils/I18n';
+import { appShare } from '../../utils/common';
+import { Language } from '../../types';
 
 interface Props {
   isMenu: boolean;
   uid: string;
+  nativeLanguage: Language;
   onClose: () => void;
   navigation: NavigationStackProp;
 }
@@ -15,6 +18,7 @@ const MyDiaryListMenu = ({
   navigation,
   isMenu,
   uid,
+  nativeLanguage,
   onClose,
 }: Props): JSX.Element => {
   const onPressMyPage = useCallback(() => {
@@ -31,6 +35,10 @@ const MyDiaryListMenu = ({
     navigation.navigate('ReviewList', { uid });
     onClose();
   }, [navigation, onClose, uid]);
+
+  const onPressAppShare = useCallback(() => {
+    appShare(nativeLanguage);
+  }, [nativeLanguage]);
 
   return (
     <SwipeablePanel
@@ -53,7 +61,7 @@ const MyDiaryListMenu = ({
         title={I18n.t('myDiaryListMenu.reviewList')}
         onPress={onPressReviewList}
       />
-      {/* <OptionItem title="プレミアム会員" onPress={onPressModalPremium} /> */}
+      <OptionItem title={I18n.t('sns.share')} onPress={onPressAppShare} />
     </SwipeablePanel>
   );
 };
