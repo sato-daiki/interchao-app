@@ -15,7 +15,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Notifications } from 'expo';
 import { GrayHeader, LoadingModal } from '../components/atoms';
-import { User, Diary } from '../types';
+import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
@@ -37,6 +37,7 @@ import { getDataCorrectionStatus } from '../utils/correcting';
 
 export interface Props {
   user: User;
+  profile: Profile;
   diaries: Diary[];
   diaryTotalNum: number;
   localStatus: LocalStatus;
@@ -76,6 +77,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
  */
 const MyDiaryListScreen: ScreenType = ({
   user,
+  profile,
   diaries,
   diaryTotalNum,
   localStatus,
@@ -320,6 +322,7 @@ const MyDiaryListScreen: ScreenType = ({
       <MyDiaryListMenu
         navigation={navigation}
         isMenu={isMenu}
+        nativeLanguage={profile.nativeLanguage}
         uid={user.uid}
         onClose={onClose}
       />
