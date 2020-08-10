@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useEffect, ReactNode } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  ReactNode,
+  useRef,
+} from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,6 +21,7 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import ViewShot from 'react-native-view-shot';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   connectActionSheet,
@@ -127,6 +134,7 @@ const MyDiaryScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
+  const viewShotRef = useRef<any>(null);
 
   const url =
     profile.nativeLanguage === 'ja'
@@ -146,10 +154,13 @@ const MyDiaryScreen: ScreenType = ({
     );
   };
 
-  const onPressTwitter = (): void => {
+  const onPressTwitter = async (): Promise<void> => {
+    const imgUri = await viewShotRef.current.capture();
     Linking.canOpenURL('twitter://post')
       .then(() => {
-        Linking.openURL(`twitter://post?message=${shareMessage}`)
+        Linking.openURL(
+          `twitter://post?message=${shareMessage}&imgUri=${imgUri}`
+        )
           .then(() => undefined)
           .catch((): void => {
             Linking.openURL(`http://twitter.com/share?text=${shareMessage}`);
@@ -274,54 +285,56 @@ const MyDiaryScreen: ScreenType = ({
         onPressClose={(): void => setIsModalDelete(false)}
       />
       <ScrollView style={styles.scrollView}>
-        <View style={styles.diaryOriginal}>
-          <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDate}</Text>
-            <MyDiaryStatus diary={diary} />
-          </View>
-          <RichText
-            style={styles.title}
-            text={title}
-            nativeLanguage={profile.nativeLanguage}
-          />
-          <RichText
-            style={styles.text}
-            text={text}
-            nativeLanguage={profile.nativeLanguage}
-          />
-          <Text style={styles.textLength}>
-            {I18n.t('postDiaryComponent.textLength')}
-            {` ${text.length}`}
-          </Text>
-        </View>
-        {isCorrectionLoading ? (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator size="small" />
-          </View>
-        ) : (
-          <>
-            {correction ? (
-              <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
-            ) : null}
-            {correction
-              ? renderMyDiaryCorrection(1, correction, isReview)
-              : null}
-            {correction2
-              ? renderMyDiaryCorrection(2, correction2, isReview2)
-              : null}
-            {correction3
-              ? renderMyDiaryCorrection(3, correction3, isReview3)
-              : null}
-            <Space size={64} />
-            <Sns
-              containerStyle={styles.snsContainer}
-              onPressShare={onPressShare}
-              onPressFacebook={onPressFacebook}
-              onPressTwitter={onPressTwitter}
+        <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }}>
+          <View style={styles.diaryOriginal}>
+            <View style={styles.header}>
+              <Text style={styles.postDayText}>{postDate}</Text>
+              <MyDiaryStatus diary={diary} />
+            </View>
+            <RichText
+              style={styles.title}
+              text={title}
+              nativeLanguage={profile.nativeLanguage}
             />
-            <Space size={16} />
-          </>
-        )}
+            <RichText
+              style={styles.text}
+              text={text}
+              nativeLanguage={profile.nativeLanguage}
+            />
+            <Text style={styles.textLength}>
+              {I18n.t('postDiaryComponent.textLength')}
+              {` ${text.length}`}
+            </Text>
+          </View>
+          {isCorrectionLoading ? (
+            <View style={styles.activityIndicator}>
+              <ActivityIndicator size="small" />
+            </View>
+          ) : (
+            <>
+              {correction ? (
+                <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
+              ) : null}
+              {correction
+                ? renderMyDiaryCorrection(1, correction, isReview)
+                : null}
+              {correction2
+                ? renderMyDiaryCorrection(2, correction2, isReview2)
+                : null}
+              {correction3
+                ? renderMyDiaryCorrection(3, correction3, isReview3)
+                : null}
+              <Space size={64} />
+              <Sns
+                containerStyle={styles.snsContainer}
+                onPressShare={onPressShare}
+                onPressFacebook={onPressFacebook}
+                onPressTwitter={onPressTwitter}
+              />
+              <Space size={16} />
+            </>
+          )}
+        </ViewShot>
       </ScrollView>
     </View>
   );
