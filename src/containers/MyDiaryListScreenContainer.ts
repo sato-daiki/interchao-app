@@ -14,6 +14,7 @@ const mapStateToProps = (state: State): Props => {
   return {
     localStatus: state.rootReducer.localStatus,
     user: state.rootReducer.user,
+    profile: state.rootReducer.profile,
     diaries,
     diaryTotalNum,
   };
