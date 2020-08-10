@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useEffect, ReactNode } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  ReactNode,
+  useRef,
+} from 'react';
 import {
   StyleSheet,
   ScrollView,
@@ -8,11 +14,18 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import {
+  connectActionSheet,
+  useActionSheet,
+} from '@expo/react-native-action-sheet';
+import ViewShot from 'react-native-view-shot';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
@@ -39,6 +52,7 @@ import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
+import { appShare } from '../utils/common';
 
 const { width } = Dimensions.get('window');
 
@@ -66,6 +80,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingTop: 16,
+  },
+  scrollView: {
+    flex: 1,
   },
   headerTitleStyle: {
     width: width - 144,
@@ -127,6 +144,7 @@ const TeachDiaryScreen: ScreenType = ({
   editTeachDiary,
   setUser,
 }) => {
+  const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(true);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
@@ -135,6 +153,37 @@ const TeachDiaryScreen: ScreenType = ({
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
+  const viewShotRef = useRef<any>(null);
+
+  const onPressAppShare = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (Platform.OS === 'ios') {
+        const imageUrl = await viewShotRef.current.capture();
+        appShare(profile.nativeLanguage, imageUrl);
+      } else {
+        appShare(profile.nativeLanguage);
+      }
+    };
+    f();
+  }, [profile.nativeLanguage]);
+
+  const onPressMore = useCallback(() => {
+    const options = [I18n.t('sns.button'), I18n.t('common.cancel')];
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex: 1,
+      },
+      index => {
+        switch (index) {
+          case 0:
+            onPressAppShare();
+            break;
+          default:
+        }
+      }
+    );
+  }, [onPressAppShare, showActionSheetWithOptions]);
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -289,6 +338,7 @@ const TeachDiaryScreen: ScreenType = ({
   useEffect(() => {
     if (!teachDiary) return;
     navigation.setParams({
+      onPressMore,
       title: teachDiary.title,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -384,49 +434,52 @@ const TeachDiaryScreen: ScreenType = ({
         onPressSubmit={onPressSubmitCorrection}
         onPressClose={(): void => setIsModalCorrection(false)}
       />
-      <ScrollView style={styles.container}>
-        <View style={styles.main}>
-          {targetProfile && !isProfileLoading ? (
-            <ProfileIconHorizontal
-              userName={targetProfile.userName}
-              photoUrl={targetProfile.photoUrl}
-              nativeLanguage={targetProfile.nativeLanguage}
-              nationalityCode={targetProfile.nationalityCode}
-              onPress={(): void => onPressUser(targetProfile.uid)}
+      <ScrollView style={styles.scrollView}>
+        <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }}>
+          <Space size={12} />
+          <View style={styles.main}>
+            {targetProfile && !isProfileLoading ? (
+              <ProfileIconHorizontal
+                userName={targetProfile.userName}
+                photoUrl={targetProfile.photoUrl}
+                nativeLanguage={targetProfile.nativeLanguage}
+                nationalityCode={targetProfile.nationalityCode}
+                onPress={(): void => onPressUser(targetProfile.uid)}
+              />
+            ) : (
+              <ActivityIndicator />
+            )}
+            <Space size={8} />
+            <View style={styles.header}>
+              <Text style={styles.postDayText}>{postDate}</Text>
+              <UserDiaryStatus diary={teachDiary} />
+            </View>
+            <RichText
+              style={styles.title}
+              text={teachDiary.title}
+              nativeLanguage={profile.nativeLanguage}
             />
-          ) : (
-            <ActivityIndicator />
-          )}
-          <Space size={8} />
-          <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDate}</Text>
-            <UserDiaryStatus diary={teachDiary} />
+            <RichText
+              style={styles.text}
+              text={teachDiary.text}
+              nativeLanguage={profile.nativeLanguage}
+            />
+            <Text style={styles.textLength}>
+              {I18n.t('postDiaryComponent.textLength')}
+              {` ${teachDiary.text.length}`}
+            </Text>
           </View>
-          <RichText
-            style={styles.title}
-            text={teachDiary.title}
+          <Corrections
+            headerTitle={I18n.t('teachDiaryCorrection.header')}
+            correction={correction}
+            correction2={correction2}
+            correction3={correction3}
+            onPressUser={(uid: string): void => {
+              navigation.push('UserProfile', { uid });
+            }}
             nativeLanguage={profile.nativeLanguage}
           />
-          <RichText
-            style={styles.text}
-            text={teachDiary.text}
-            nativeLanguage={profile.nativeLanguage}
-          />
-          <Text style={styles.textLength}>
-            {I18n.t('postDiaryComponent.textLength')}
-            {` ${teachDiary.text.length}`}
-          </Text>
-        </View>
-        <Corrections
-          headerTitle={I18n.t('teachDiaryCorrection.header')}
-          correction={correction}
-          correction2={correction2}
-          correction3={correction3}
-          onPressUser={(uid: string): void => {
-            navigation.push('UserProfile', { uid });
-          }}
-          nativeLanguage={profile.nativeLanguage}
-        />
+        </ViewShot>
         {renderButton()}
         <Space size={16} />
       </ScrollView>
@@ -438,12 +491,22 @@ TeachDiaryScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const title = navigation.getParam('title');
+  const onPressMore = navigation.getParam('onPressMore');
 
   return {
     ...DefaultNavigationOptions,
     title,
     headerTitleStyle: styles.headerTitleStyle,
+    headerRight: (): JSX.Element => (
+      <TouchableOpacity onPress={onPressMore}>
+        <MaterialCommunityIcons
+          size={28}
+          color={primaryColor}
+          name="dots-horizontal"
+        />
+      </TouchableOpacity>
+    ),
   };
 };
 
-export default TeachDiaryScreen;
+export default connectActionSheet(TeachDiaryScreen);
