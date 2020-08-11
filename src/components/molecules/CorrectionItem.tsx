@@ -17,6 +17,7 @@ interface Props {
   detail: string | null;
   diffs?: Diff[] | null;
   nativeLanguage: Language;
+  textLanguage: Language;
 }
 
 const styles = StyleSheet.create({
@@ -45,6 +46,7 @@ const CorrectionItem = ({
   detail,
   diffs,
   nativeLanguage,
+  textLanguage,
 }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
@@ -54,6 +56,7 @@ const CorrectionItem = ({
         text={original}
         diffs={diffs}
         nativeLanguage={nativeLanguage}
+        textLanguage={textLanguage}
       />
       <Space size={16} />
       <CorrectingText
@@ -62,6 +65,7 @@ const CorrectionItem = ({
         text={fix || ''}
         diffs={diffs}
         nativeLanguage={nativeLanguage}
+        textLanguage={textLanguage}
       />
       {detail ? (
         <>
@@ -70,6 +74,7 @@ const CorrectionItem = ({
             style={styles.detail}
             text={detail}
             nativeLanguage={nativeLanguage}
+            textLanguage={textLanguage}
           />
         </>
       ) : null}

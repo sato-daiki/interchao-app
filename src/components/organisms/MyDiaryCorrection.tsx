@@ -10,6 +10,7 @@ import { MyDiaryCorrectionFooter, CorrectionItem, Summary } from '../molecules';
 interface Props {
   isReview?: boolean;
   nativeLanguage: Language;
+  textLanguage: Language;
   correction: Correction;
   onPressUser: (uid: string) => void;
   onPressReview: () => void;
@@ -41,6 +42,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
 const MyDiaryCorrection: React.FC<Props> = ({
   isReview,
   nativeLanguage,
+  textLanguage,
   correction,
   onPressUser,
   onPressReview,
@@ -51,7 +53,11 @@ const MyDiaryCorrection: React.FC<Props> = ({
   const listFooterComponent = (
     <>
       {summary ? (
-        <Summary summary={summary} nativeLanguage={nativeLanguage} />
+        <Summary
+          summary={summary}
+          nativeLanguage={nativeLanguage}
+          textLanguage={textLanguage}
+        />
       ) : null}
       <Space size={32} />
       {isReview !== undefined ? (
@@ -70,10 +76,11 @@ const MyDiaryCorrection: React.FC<Props> = ({
           detail={detail}
           diffs={diffs}
           nativeLanguage={nativeLanguage}
+          textLanguage={textLanguage}
         />
       );
     },
-    [nativeLanguage]
+    [nativeLanguage, textLanguage]
   );
 
   return (

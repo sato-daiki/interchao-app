@@ -226,6 +226,7 @@ const MyDiaryScreen: ScreenType = ({
       <MyDiaryCorrection
         isReview={prmIsReview}
         nativeLanguage={profile.nativeLanguage}
+        textLanguage={profile.learnLanguage}
         correction={prmCorrection}
         onPressUser={(uid): void => {
           navigation.navigate('UserProfile', { uid });
@@ -264,11 +265,13 @@ const MyDiaryScreen: ScreenType = ({
               style={styles.title}
               text={title}
               nativeLanguage={profile.nativeLanguage}
+              textLanguage={profile.learnLanguage}
             />
             <RichText
               style={styles.text}
               text={text}
               nativeLanguage={profile.nativeLanguage}
+              textLanguage={profile.learnLanguage}
             />
             <Text style={styles.textLength}>
               {I18n.t('postDiaryComponent.textLength')}

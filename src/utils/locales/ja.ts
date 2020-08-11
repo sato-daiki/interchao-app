@@ -15,7 +15,9 @@ const common = {
   add: '追加',
   delete: '削除',
   translation: '翻訳',
+  speech: '読む',
   copy: 'コピー',
+  slow: '遅く',
   back: '戻る',
 };
 

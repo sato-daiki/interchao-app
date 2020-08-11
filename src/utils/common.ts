@@ -97,6 +97,10 @@ export const getShareUrl = (nativeLanguage: Language): string => {
       return 'https://interchao.app/jp/share.html';
     case 'en':
       return 'https://interchao.app/en/share.html';
+    case 'zh':
+      return 'https://interchao.app/zh/share.html';
+    case 'ko':
+      return 'https://interchao.app/ko/share.html';
     default:
       return 'https://interchao.app/en/share.html';
   }

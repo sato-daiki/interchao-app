@@ -126,13 +126,14 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
         <ReviewListItem
           item={item}
           nativeLanguage={profile.nativeLanguage}
+          textLanguage={profile.learnLanguage}
           onPressUser={(uid: string): void => {
             navigation.push('UserProfile', { uid });
           }}
         />
       );
     },
-    [navigation, profile.nativeLanguage]
+    [navigation, profile.learnLanguage, profile.nativeLanguage]
   );
 
   return (

@@ -434,6 +434,7 @@ const CorrectingScreen: ScreenType = ({
             headerTitle={I18n.t('correcting.header')}
             correction={correction}
             correction2={correction2}
+            textLanguage={teachDiary.profile.learnLanguage}
             nativeLanguage={currentProfile.nativeLanguage}
           />
           <Space size={32} />
