@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { StyleSheet, Text, View, Clipboard } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor, softRed, green } from '../../styles/Common';
 import { Diff, Language } from '../../types';
@@ -13,6 +13,7 @@ interface Props {
   text: string;
   diffs?: Diff[] | null;
   nativeLanguage?: Language;
+  textLanguage?: Language;
 }
 
 const styles = StyleSheet.create({
@@ -39,17 +40,10 @@ const CorrectingText: React.FC<Props> = ({
   text,
   diffs,
   nativeLanguage,
+  textLanguage,
 }) => {
   const [displayText, setDisplayText] = useState(text);
   const [isTranslated, setIsTranslated] = useState(false);
-
-  const onPressCopy = (): void => {
-    if (isTranslated) {
-      Clipboard.setString(displayText);
-    } else {
-      Clipboard.setString(text);
-    }
-  };
 
   const onPressTranslate = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -103,7 +97,13 @@ const CorrectingText: React.FC<Props> = ({
   }
 
   return (
-    <TextMenu onPressCopy={onPressCopy} onPressTranslate={onPressTranslate}>
+    <TextMenu
+      isTranslated={isTranslated}
+      text={text}
+      displayText={displayText}
+      textLanguage={textLanguage}
+      onPressTranslate={onPressTranslate}
+    >
       {menu}
     </TextMenu>
   );

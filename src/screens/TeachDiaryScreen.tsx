@@ -461,11 +461,13 @@ const TeachDiaryScreen: ScreenType = ({
               style={styles.title}
               text={teachDiary.title}
               nativeLanguage={profile.nativeLanguage}
+              textLanguage={teachDiary.profile.learnLanguage}
             />
             <RichText
               style={styles.text}
               text={teachDiary.text}
               nativeLanguage={profile.nativeLanguage}
+              textLanguage={teachDiary.profile.learnLanguage}
             />
             <Text style={styles.textLength}>
               {I18n.t('postDiaryComponent.textLength')}
@@ -481,6 +483,7 @@ const TeachDiaryScreen: ScreenType = ({
               navigation.push('UserProfile', { uid });
             }}
             nativeLanguage={profile.nativeLanguage}
+            textLanguage={teachDiary.profile.learnLanguage}
           />
         </ViewShot>
         {renderButton()}

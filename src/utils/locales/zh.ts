@@ -15,7 +15,9 @@ const common = {
   add: '添加',
   delete: '删除',
   translation: '翻译',
+  speech: '朗读',
   copy: '复制',
+  slow: '放慢语速',
   back: '返回',
 };
 

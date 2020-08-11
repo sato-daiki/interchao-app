@@ -8,6 +8,7 @@ import { Language } from '../../types';
 interface Props {
   summary: string;
   nativeLanguage: Language;
+  textLanguage: Language;
 }
 
 const styles = StyleSheet.create({
@@ -27,13 +28,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const Summary = ({ summary, nativeLanguage }: Props): JSX.Element => (
+const Summary = ({
+  summary,
+  nativeLanguage,
+  textLanguage,
+}: Props): JSX.Element => (
   <View style={styles.container}>
     <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
     <RichText
       style={styles.value}
       text={summary}
       nativeLanguage={nativeLanguage}
+      textLanguage={textLanguage}
     />
   </View>
 );
