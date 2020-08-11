@@ -15,7 +15,9 @@ const common = {
   add: 'Add',
   delete: 'Delete',
   translation: 'Translation',
+  speech: 'Speak',
   copy: 'Copy',
+  slow: 'Slow',
   back: 'Back',
 };
 
