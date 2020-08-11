@@ -196,7 +196,7 @@ const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
             <ActivityIndicator />
           )}
           <Space size={8} />
-          {teachDiary && !isDiaryLoading ? (
+          {teachDiary && !isDiaryLoading && targetProfile ? (
             <>
               <View style={styles.header}>
                 <Text style={styles.postDayText}>
@@ -208,24 +208,27 @@ const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
                 style={styles.title}
                 text={teachDiary.title}
                 nativeLanguage={profile.nativeLanguage}
+                textLanguage={targetProfile.learnLanguage}
               />
               <RichText
                 style={styles.text}
                 text={teachDiary.text}
                 nativeLanguage={profile.nativeLanguage}
+                textLanguage={targetProfile.learnLanguage}
               />
             </>
           ) : (
             <ActivityIndicator />
           )}
         </View>
-        {!isCorrectionLoading ? (
+        {!isCorrectionLoading && targetProfile ? (
           <Corrections
             headerTitle={I18n.t('teachDiaryCorrection.header')}
             correction={correction}
             correction2={correction2}
             correction3={correction3}
             nativeLanguage={profile.nativeLanguage}
+            textLanguage={targetProfile.learnLanguage}
             onPressUser={(uid: string): void => {
               navigation.push('UserProfile', { uid });
             }}

@@ -9,6 +9,7 @@ import { HideButton } from '../atoms';
 
 interface Props {
   nativeLanguage: Language;
+  textLanguage: Language;
   correction: Correction;
   onPressUser?: (uid: string) => void;
 }
@@ -38,6 +39,7 @@ const keyExtractor = (item: Comment, index: number): string => String(index);
  */
 const TeachDiaryCorrection: React.FC<Props> = ({
   nativeLanguage,
+  textLanguage,
   correction,
   onPressUser,
 }): JSX.Element => {
@@ -47,7 +49,13 @@ const TeachDiaryCorrection: React.FC<Props> = ({
   const postDate = getAlgoliaDate(createdAt);
   const listFooterComponent = (): JSX.Element | null => {
     if (summary) {
-      return <Summary summary={summary} nativeLanguage={nativeLanguage} />;
+      return (
+        <Summary
+          summary={summary}
+          nativeLanguage={nativeLanguage}
+          textLanguage={textLanguage}
+        />
+      );
     }
     return null;
   };
@@ -62,10 +70,11 @@ const TeachDiaryCorrection: React.FC<Props> = ({
           detail={detail}
           diffs={diffs}
           nativeLanguage={nativeLanguage}
+          textLanguage={textLanguage}
         />
       );
     },
-    [nativeLanguage]
+    [nativeLanguage, textLanguage]
   );
 
   return (

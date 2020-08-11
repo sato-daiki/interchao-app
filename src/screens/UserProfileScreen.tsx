@@ -395,17 +395,21 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 
   const renderReview = useCallback(
-    ({ item }: { item: Review }): JSX.Element => {
-      return (
-        <ReviewListItem
-          item={item}
-          onPressUser={(uid: string): void => {
-            navigation.push('UserProfile', { uid });
-          }}
-        />
-      );
+    ({ item }: { item: Review }): JSX.Element | null => {
+      if (profile) {
+        return (
+          <ReviewListItem
+            item={item}
+            textLanguage={profile.learnLanguage}
+            onPressUser={(uid: string): void => {
+              navigation.push('UserProfile', { uid });
+            }}
+          />
+        );
+      }
+      return null;
     },
-    [navigation]
+    [navigation, profile]
   );
 
   return (
