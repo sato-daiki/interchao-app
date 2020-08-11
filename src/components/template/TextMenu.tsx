@@ -1,5 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  Clipboard,
+} from 'react-native';
+import * as Speech from 'expo-speech';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   Menu,
@@ -7,13 +15,17 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import I18n from '../../utils/I18n';
 import { clipboard } from '../../styles/Common';
+import ModalSpeech from '../organisms/ModalSpeech';
+import { Language } from '../../types';
 
 interface Props {
   children: React.ReactNode;
-  onPressCopy: () => void;
+  isTranslated: boolean;
+  text: string;
+  displayText: string;
+  textLanguage: Language;
   onPressTranslate: () => void;
 }
 
@@ -22,7 +34,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -66,
     left: 30,
-    width: 180,
+    width: 260,
   },
   row: {
     flexDirection: 'row',
@@ -60,11 +72,76 @@ const styles = StyleSheet.create({
   },
 });
 
+// 補足
+// ポーズから再生する時と、最初から再生するときの制御を行ったため、少し複雑になっている
 const TextMenu = ({
   children,
-  onPressCopy,
+  isTranslated,
+  text,
+  displayText,
+  textLanguage,
   onPressTranslate,
 }: Props): JSX.Element => {
+  const [visibleSpeech, setVisibleSpeech] = useState(false);
+  const [isSlow, setIsSlow] = useState(false);
+
+  // 再生中のアイコンを制御
+  const [playing, setPlaying] = useState(false);
+  // 一番最初から再生
+  const [initial, setInitial] = useState(false);
+
+  const onDone = (): void => {
+    setPlaying(false);
+    setInitial(true);
+  };
+
+  const onSpeak = (): void => {
+    const option = {
+      language: textLanguage,
+      rate: isSlow ? 0.6 : 1.0,
+      onDone,
+    };
+    if (isTranslated) {
+      Speech.speak(displayText, option);
+    } else {
+      Speech.speak(text, option);
+    }
+    setInitial(false);
+    setPlaying(true);
+  };
+
+  const onPressSpeech = (): void => {
+    setVisibleSpeech(true);
+  };
+
+  const onPressClose = (): void => {
+    Speech.stop();
+    setVisibleSpeech(false);
+    setPlaying(false);
+  };
+
+  const onPressSpeak = (): void => {
+    if (initial) {
+      onSpeak();
+    } else {
+      Speech.resume();
+      setPlaying(true);
+    }
+  };
+
+  const onPressPause = (): void => {
+    Speech.pause();
+    setPlaying(false);
+  };
+
+  const onPressCopy = (): void => {
+    if (isTranslated) {
+      Clipboard.setString(displayText);
+    } else {
+      Clipboard.setString(text);
+    }
+  };
+
   const copyButton = (
     <MenuOption style={[styles.menu, styles.border]} onSelect={onPressCopy}>
       <MaterialCommunityIcons size={20} color="white" name="content-copy" />
@@ -79,6 +156,13 @@ const TextMenu = ({
     </MenuOption>
   );
 
+  const speechButton = (
+    <MenuOption style={styles.menu} onSelect={onPressSpeech}>
+      <MaterialCommunityIcons size={20} color="white" name="volume-high" />
+      <Text style={styles.menuText}>{I18n.t('common.speech')}</Text>
+    </MenuOption>
+  );
+
   // AndroidのMenuOptionのonSlectが機能しない為
   const renderMenuButton = (): JSX.Element => {
     if (Platform.OS === 'ios') {
@@ -86,6 +170,7 @@ const TextMenu = ({
         <View style={styles.row}>
           {copyButton}
           {translateButton}
+          {speechButton}
         </View>
       );
     }
@@ -95,12 +180,26 @@ const TextMenu = ({
         <TouchableOpacity onPress={onPressTranslate}>
           {translateButton}
         </TouchableOpacity>
+        <TouchableOpacity onPress={onPressSpeech}>
+          {speechButton}
+        </TouchableOpacity>
       </View>
     );
   };
 
   return (
     <View>
+      <ModalSpeech
+        visible={visibleSpeech}
+        playing={playing}
+        isSlow={isSlow}
+        disabledSwitch={!initial}
+        onValueChange={(): void => setIsSlow(!isSlow)}
+        text={text}
+        onPressSpeak={onPressSpeak}
+        onPressPause={onPressPause}
+        onPressClose={onPressClose}
+      />
       <Menu>
         <MenuTrigger>{children}</MenuTrigger>
         <MenuOptions>

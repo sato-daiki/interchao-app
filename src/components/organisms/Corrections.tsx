@@ -9,6 +9,7 @@ interface Props {
   correction2?: Correction;
   correction3?: Correction;
   nativeLanguage: Language;
+  textLanguage: Language;
   onPressUser?: (uid: string) => void;
 }
 
@@ -18,12 +19,14 @@ const Corrections: React.FC<Props> = ({
   correction2,
   correction3,
   nativeLanguage,
+  textLanguage,
   onPressUser,
 }) => {
   const renderDiaryCorrection = (prmCorrection: Correction): ReactNode => {
     return (
       <TeachDiaryCorrection
         nativeLanguage={nativeLanguage}
+        textLanguage={textLanguage}
         correction={prmCorrection}
         onPressUser={onPressUser}
       />
