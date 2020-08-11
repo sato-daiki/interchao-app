@@ -13,7 +13,7 @@ interface Props {
   text: string;
   diffs?: Diff[] | null;
   nativeLanguage?: Language;
-  textLanguage: Language;
+  textLanguage?: Language;
 }
 
 const styles = StyleSheet.create({

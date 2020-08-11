@@ -25,7 +25,7 @@ interface Props {
   isTranslated: boolean;
   text: string;
   displayText: string;
-  textLanguage: Language;
+  textLanguage?: Language;
   onPressTranslate: () => void;
 }
 
