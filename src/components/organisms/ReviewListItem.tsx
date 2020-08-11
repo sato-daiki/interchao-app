@@ -16,6 +16,7 @@ import RichText from './RichText';
 interface Props {
   item: Review;
   nativeLanguage?: Language;
+  textLanguage: Language;
   onPressUser: (uid: string) => void;
 }
 
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
 const ReviewListItem = ({
   item,
   nativeLanguage,
+  textLanguage,
   onPressUser,
 }: Props): JSX.Element => {
   const { rating, createdAt, comment, reviewer } = item;
@@ -71,6 +73,7 @@ const ReviewListItem = ({
         style={styles.comment}
         text={comment}
         nativeLanguage={nativeLanguage}
+        textLanguage={textLanguage}
       />
       <ProfileIconHorizontal
         userName={reviewer.userName}
