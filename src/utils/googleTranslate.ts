@@ -11,7 +11,7 @@ const endpoint = 'https://translation.googleapis.com/language/translate/v2';
 
 const googleTranslate = async (
   text: string,
-  nativeLanguage: Language
+  targetLanguage: Language
 ): Promise<string> => {
   const options = {
     headers: {
@@ -20,7 +20,7 @@ const googleTranslate = async (
     params: {
       key: GOOGLE_TRANSLATE,
       q: text,
-      target: nativeLanguage,
+      target: targetLanguage,
     },
   };
   try {

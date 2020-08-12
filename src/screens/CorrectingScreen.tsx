@@ -418,14 +418,17 @@ const CorrectingScreen: ScreenType = ({
               <TextInput
                 ref={refSummary}
                 style={styles.textInputSummary}
+                value={summary}
+                multiline
+                blurOnSubmit
+                autoFocus
                 autoCapitalize="none"
                 spellCheck
                 autoCorrect
                 underlineColorAndroid="transparent"
-                value={summary}
-                onChangeText={(text: string): void => setSummary(text)}
-                multiline
+                returnKeyType="done"
                 scrollEnabled={false}
+                onChangeText={(text: string): void => setSummary(text)}
               />
             </>
           ) : null}
