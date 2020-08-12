@@ -3951,6 +3951,11 @@ expo-random@~8.1.0:
   dependencies:
     base64-js "^1.3.0"
 
+expo-speech@^8.2.1:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/expo-speech/-/expo-speech-8.2.1.tgz#ca0a18356ccc79f514c259587f12ba76941c0b36"
+  integrity sha512-hjzKatGp1TptXexsZizyEtJA29tXsRZTd1CVW3llC2OIiMWu1I8/p9zMRggvAvr93G0S//vBLtZI/CPSB3ACRg==
+
 expo-sqlite@~8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/expo-sqlite/-/expo-sqlite-8.1.0.tgz#858eb28e1143db281de8a49c99b4a953a81d0834"

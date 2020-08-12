@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-  Clipboard,
-} from 'react-native';
+import { View, Text, StyleSheet, Platform, Clipboard } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Speech from 'expo-speech';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -22,8 +16,6 @@ import { Language } from '../../types';
 
 interface Props {
   children: React.ReactNode;
-  isTranslated: boolean;
-  text: string;
   displayText: string;
   textLanguage?: Language;
   onPressTranslate: () => void;
@@ -76,8 +68,6 @@ const styles = StyleSheet.create({
 // ポーズから再生する時と、最初から再生するときの制御を行ったため、少し複雑になっている
 const TextMenu = ({
   children,
-  isTranslated,
-  text,
   displayText,
   textLanguage,
   onPressTranslate,
@@ -101,17 +91,14 @@ const TextMenu = ({
       rate: isSlow ? 0.6 : 1.0,
       onDone,
     };
-    if (isTranslated) {
-      Speech.speak(displayText, option);
-    } else {
-      Speech.speak(text, option);
-    }
+    Speech.speak(displayText, option);
     setInitial(false);
     setPlaying(true);
   };
 
   const onPressSpeech = (): void => {
     setVisibleSpeech(true);
+    setInitial(true);
   };
 
   const onPressClose = (): void => {
@@ -130,16 +117,19 @@ const TextMenu = ({
   };
 
   const onPressPause = (): void => {
-    Speech.pause();
-    setPlaying(false);
+    if (Platform.OS === 'ios') {
+      Speech.pause();
+      setPlaying(false);
+    } else {
+      // Androidはpauseとresumeをサポートしていない
+      Speech.stop();
+      setInitial(true);
+      setPlaying(false);
+    }
   };
 
   const onPressCopy = (): void => {
-    if (isTranslated) {
-      Clipboard.setString(displayText);
-    } else {
-      Clipboard.setString(text);
-    }
+    Clipboard.setString(displayText);
   };
 
   const copyButton = (
@@ -150,7 +140,10 @@ const TextMenu = ({
   );
 
   const translateButton = (
-    <MenuOption style={styles.menu} onSelect={onPressTranslate}>
+    <MenuOption
+      style={[styles.menu, styles.border]}
+      onSelect={onPressTranslate}
+    >
       <MaterialCommunityIcons size={20} color="white" name="translate" />
       <Text style={styles.menuText}>{I18n.t('common.translation')}</Text>
     </MenuOption>
@@ -195,7 +188,7 @@ const TextMenu = ({
         isSlow={isSlow}
         disabledSwitch={!initial}
         onValueChange={(): void => setIsSlow(!isSlow)}
-        text={text}
+        text={displayText}
         onPressSpeak={onPressSpeak}
         onPressPause={onPressPause}
         onPressClose={onPressClose}
