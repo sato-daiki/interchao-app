@@ -8,6 +8,7 @@ import {
   MenuOptions,
   MenuOption,
   MenuTrigger,
+  renderers,
 } from 'react-native-popup-menu';
 import I18n from '../../utils/I18n';
 import { clipboard } from '../../styles/Common';
@@ -22,12 +23,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  menuContainer: {
-    position: 'absolute',
-    top: -66,
-    left: 30,
-    width: 260,
-  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -47,20 +42,6 @@ const styles = StyleSheet.create({
   border: {
     borderRightWidth: 1,
     borderRightColor: 'black',
-  },
-  triangle: {
-    alignSelf: 'center',
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderLeftWidth: 10,
-    borderRightWidth: 10,
-    borderBottomWidth: 10,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: clipboard,
-    transform: [{ rotate: '180deg' }],
   },
 });
 
@@ -193,14 +174,16 @@ const TextMenu = ({
         onPressPause={onPressPause}
         onPressClose={onPressClose}
       />
-      <Menu>
-        <MenuTrigger>{children}</MenuTrigger>
-        <MenuOptions>
-          <View style={styles.menuContainer}>
-            {renderMenuButton()}
-            <View style={styles.triangle} />
-          </View>
-        </MenuOptions>
+      <Menu
+        renderer={renderers.Popover}
+        rendererProps={{
+          preferredPlacement: 'top',
+          placement: 'auto',
+          anchorStyle: { backgroundColor: clipboard },
+        }}
+      >
+        <MenuTrigger triggerOnLongPress>{children}</MenuTrigger>
+        <MenuOptions>{renderMenuButton()}</MenuOptions>
       </Menu>
     </View>
   );
