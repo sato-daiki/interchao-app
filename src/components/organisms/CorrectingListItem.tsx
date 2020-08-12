@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.1,
     marginRight: 38,
   },
-  icon: {
+  pen: {
     position: 'absolute',
     right: 0,
     alignItems: 'center',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: '#fff',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
     marginRight: 38,
   },
   buttonRow: {
@@ -95,7 +95,7 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
   const onEndEditingFix = (): void => {
     if (item.original === fix) {
       // 変更がない場合は初期化
-      setDiffs([]);
+      setDiffs(null);
       editText({
         fix: null,
         diffs: null,
@@ -128,10 +128,10 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={(): void => setIsEdit(true)}>
-        {!diffs ? (
+        {diffs === null ? (
           <View style={styles.rowNoEdit}>
             <Text style={styles.text}>{item.original}</Text>
-            <View style={styles.icon}>
+            <View style={styles.pen}>
               <MaterialCommunityIcons
                 size={28}
                 color={primaryColor}
@@ -149,19 +149,20 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
         )}
         {isEdit ? (
           <TextInput
-            onEndEditing={onEndEditingFix}
-            autoFocus
             style={styles.textInput}
+            defaultValue={item.original}
+            value={fix}
+            multiline
+            blurOnSubmit
+            autoFocus
             autoCapitalize="none"
             spellCheck
             autoCorrect
             underlineColorAndroid="transparent"
-            value={fix}
-            onChangeText={(text: string): void => setFix(text)}
-            defaultValue={item.original}
-            multiline
-            blurOnSubmit
+            returnKeyType="done"
             scrollEnabled={false}
+            onChangeText={(text: string): void => setFix(text)}
+            onEndEditing={onEndEditingFix}
           />
         ) : (
           <>
@@ -199,15 +200,17 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
           <TextInput
             ref={refDetail}
             style={styles.textInputDetail}
+            value={detail}
+            multiline
+            blurOnSubmit
             autoCapitalize="none"
             spellCheck
             autoCorrect
             underlineColorAndroid="transparent"
-            value={detail}
+            returnKeyType="done"
+            scrollEnabled={false}
             onEndEditing={onEndEditingDetail}
             onChangeText={(text: string): void => setDetail(text)}
-            multiline
-            scrollEnabled={false}
           />
         </>
       ) : null}
