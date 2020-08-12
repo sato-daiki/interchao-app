@@ -54,9 +54,11 @@ const CorrectingText: React.FC<Props> = ({
         if (!text) return;
         const mentionRemovedText = text.replace(/@\w+\s/g, '');
         if (nativeLanguage) {
+          const targetLanguage =
+            nativeLanguage === textLanguage ? textLanguage : nativeLanguage;
           const translatedText = await googleTranslate(
             mentionRemovedText,
-            nativeLanguage
+            targetLanguage
           );
           if (translatedText && translatedText.length > 0) {
             setDisplayText(translatedText);
@@ -66,7 +68,7 @@ const CorrectingText: React.FC<Props> = ({
       }
     };
     f();
-  }, [text, isTranslated, nativeLanguage]);
+  }, [isTranslated, text, nativeLanguage, textLanguage]);
 
   let diffText;
   // 修正なしの場合 or 翻訳済みの場合
@@ -98,10 +100,8 @@ const CorrectingText: React.FC<Props> = ({
 
   return (
     <TextMenu
-      isTranslated={isTranslated}
-      text={text}
       displayText={displayText}
-      textLanguage={textLanguage}
+      textLanguage={isTranslated ? nativeLanguage : textLanguage}
       onPressTranslate={onPressTranslate}
     >
       {menu}

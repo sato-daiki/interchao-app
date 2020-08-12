@@ -38,9 +38,11 @@ const RichText = ({
         if (!text) return;
         const mentionRemovedText = text.replace(/@\w+\s/g, '');
         if (nativeLanguage) {
+          const targetLanguage =
+            nativeLanguage === textLanguage ? textLanguage : nativeLanguage;
           const translatedText = await googleTranslate(
             mentionRemovedText,
-            nativeLanguage
+            targetLanguage
           );
           if (translatedText && translatedText.length > 0) {
             setDisplayText(translatedText);
@@ -50,14 +52,12 @@ const RichText = ({
       }
     };
     f();
-  }, [text, isTranslated, nativeLanguage]);
+  }, [isTranslated, text, nativeLanguage, textLanguage]);
 
   return (
     <TextMenu
-      isTranslated={isTranslated}
-      text={text || ''}
       displayText={displayText || ''}
-      textLanguage={textLanguage}
+      textLanguage={isTranslated ? nativeLanguage : textLanguage}
       onPressTranslate={onPressTranslate}
     >
       <Text style={[styles.text, style]}>{displayText}</Text>
