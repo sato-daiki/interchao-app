@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignItems: 'flex-end',
-    paddingRight: 16,
+    paddingRight: 8,
     paddingTop: 4,
   },
   footer: {
@@ -83,26 +83,28 @@ const PostDiaryKeyboardIOS = ({
       <TextInput
         style={styles.titleInput}
         value={title}
-        onChangeText={onChangeTextTitle}
         placeholder="Title"
         maxLength={100}
         autoCorrect={false}
         keyboardType="default"
         underlineColorAndroid="transparent"
         spellCheck
+        returnKeyType="done"
+        onFocus={onFocusText}
+        onChangeText={onChangeTextTitle}
       />
       <TextInput
         style={styles.textInput}
         value={text}
-        onChangeText={onChangeTextText}
-        onFocus={onFocusText}
-        onEndEditing={onEndEditingText}
         placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
         underlineColorAndroid="transparent"
         multiline
         autoCorrect={false}
         keyboardType="default"
         spellCheck
+        onChangeText={onChangeTextText}
+        onFocus={onFocusText}
+        onEndEditing={onEndEditingText}
       />
       {isForce ? (
         <Animated.View
