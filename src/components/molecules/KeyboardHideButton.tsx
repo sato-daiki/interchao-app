@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   StyleSheet,
-  KeyboardAvoidingView,
   TouchableOpacity,
-  Platform,
   Keyboard,
   View,
+  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { mainColor } from '../../styles/Common';
+
+interface Props {
+  isKeyboard: boolean;
+  setIsKeyboard: (isKeyboard: boolean) => void;
+}
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: Platform.OS === 'ios' ? 72 : 8,
-    alignSelf: 'flex-end',
-    right: 12,
-    paddingTop: 4,
+    position: 'absolute',
+    bottom: 2,
+    zIndex: 10,
+    right: 0,
   },
   keyboard: {
     width: 40,
@@ -23,44 +28,38 @@ const styles = StyleSheet.create({
   },
 });
 
-const KeyboardHideButton: React.FC = (): JSX.Element => {
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
+const KeyboardHideButton: React.FC<Props> = ({
+  isKeyboard,
+  setIsKeyboard,
+}): JSX.Element => {
   useEffect(() => {
-    const keyboardWillShowListener = Keyboard.addListener(
-      'keyboardWillShow',
+    // androidはwillShowをサポートしていない。 willじゃないと遅いのでiosのみwillにする
+    // hideはTextInputの方で管理しているから親から降りてくる
+    const keyboardShowListener = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
       () => {
-        setKeyboardVisible(true);
-      }
-    );
-    const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardWillHide',
-      () => {
-        setKeyboardVisible(false);
+        setIsKeyboard(true);
       }
     );
 
     return (): void => {
-      keyboardWillShowListener.remove();
-      keyboardWillHideListener.remove();
+      keyboardShowListener.remove();
     };
-  }, []);
+  }, [setIsKeyboard]);
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-      {isKeyboardVisible ? (
-        <View style={styles.container}>
-          <TouchableOpacity onPress={Keyboard.dismiss} style={styles.keyboard}>
-            <MaterialCommunityIcons
-              size={28}
-              color={mainColor}
-              name="keyboard-close"
-            />
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+      {isKeyboard ? (
+        <TouchableOpacity onPress={Keyboard.dismiss} style={styles.keyboard}>
+          <MaterialCommunityIcons
+            size={24}
+            color={mainColor}
+            name="keyboard-close"
+          />
+        </TouchableOpacity>
       ) : null}
-    </KeyboardAvoidingView>
+      {Platform.OS === 'ios' ? <KeyboardSpacer /> : null}
+    </View>
   );
 };
 

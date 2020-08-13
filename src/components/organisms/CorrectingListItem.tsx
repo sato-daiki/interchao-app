@@ -31,6 +31,7 @@ interface Props {
   item: TextInfo;
   editText: (info: Info) => void;
   editFirst: () => void;
+  onHideKeyboard: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -85,7 +86,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
+const CorrectingListItem: React.FC<Props> = ({
+  item,
+  editText,
+  editFirst,
+  onHideKeyboard,
+}) => {
   const [isEdit, setIsEdit] = useState(false);
   const [fix, setFix] = useState(item.original);
   const [detail, setDetail] = useState('');
@@ -117,12 +123,14 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst }) => {
       editFirst();
     }
     setIsEdit(false);
+    onHideKeyboard();
   };
 
   const onEndEditingDetail = (): void => {
     editText({
       detail,
     });
+    onHideKeyboard();
   };
 
   return (
