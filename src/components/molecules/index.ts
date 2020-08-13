@@ -6,6 +6,7 @@ export { default as CorrectionItem } from './CorrectionItem';
 export { default as CorrectionTimer } from './CorrectionTimer';
 export { default as EmptyDiary } from './EmptyDiary';
 export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
+export { default as KeyboardHideButton } from './KeyboardHideButton';
 export { default as EmptyList } from './EmptyList';
 export { default as EmptyReview } from './EmptyReview';
 export { default as MyDiaryCorrectionFooter } from './MyDiaryCorrectionFooter';

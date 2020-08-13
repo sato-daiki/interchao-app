@@ -6,13 +6,16 @@ import {
   View,
   KeyboardAvoidingView,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { TextButtun } from '../atoms';
 import {
   fontSizeM,
   primaryColor,
   borderLightColor,
   offWhite,
+  mainColor,
 } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 
@@ -54,6 +57,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     backgroundColor: '#fff',
   },
+  icon: {
+    alignItems: 'flex-end',
+    paddingRight: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
+  },
   footer: {
     justifyContent: 'flex-end',
     width: '100%',
@@ -70,13 +79,13 @@ const PostDiaryKeybordAndroid = ({
   onFocusText,
   onEndEditingText,
 }: Props): JSX.Element => {
-  const [isShowFooter, setIsShowFooter] = useState(true);
+  const [isKeyboard, setIsKeyboard] = useState(false);
   const onKeyboardDidShow = (): void => {
-    setIsShowFooter(false);
+    setIsKeyboard(true);
   };
 
   const onKeyboardDidHide = (): void => {
-    setIsShowFooter(true);
+    setIsKeyboard(false);
   };
 
   useEffect(() => {
@@ -125,7 +134,7 @@ const PostDiaryKeybordAndroid = ({
         </View>
       </KeyboardAvoidingView>
       <SafeAreaView>
-        {isShowFooter ? (
+        {isKeyboard ? null : (
           <View style={styles.footer}>
             <TextButtun
               isBorrderTop
@@ -134,8 +143,17 @@ const PostDiaryKeybordAndroid = ({
               onPress={onPressDraft}
             />
           </View>
-        ) : null}
+        )}
       </SafeAreaView>
+      {isKeyboard ? (
+        <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
+          <MaterialCommunityIcons
+            size={24}
+            color={mainColor}
+            name="keyboard-close"
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };
