@@ -112,7 +112,7 @@ const PostDiaryKeyboardIOS = ({
         >
           <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
             <MaterialCommunityIcons
-              size={28}
+              size={24}
               color={mainColor}
               name="keyboard-close"
             />

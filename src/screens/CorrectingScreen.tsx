@@ -23,7 +23,7 @@ import {
   LoadingModal,
   Space,
 } from '../components/atoms';
-import { CorrectingHeader } from '../components/molecules';
+import { CorrectingHeader, KeyboardHideButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
 
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   container: {
-    flex: 1,
     backgroundColor: '#FFF',
+    // flex: 1,
   },
   scrollView: {
     paddingBottom: 32,
@@ -122,6 +122,8 @@ const CorrectingScreen: ScreenType = ({
   editTeachDiary,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  // keyboardはshowはKeyboardのaddListenerで管理し、HideはTextInputのendeditingで管理
+  const [isKeyboard, setIsKeyboard] = useState(false);
 
   // Profile関連
   const [targetProfile, setTargetProfile] = useState<Profile>();
@@ -328,6 +330,11 @@ const CorrectingScreen: ScreenType = ({
     navigation.navigate('TeachDiaryList');
   }, [navigation]);
 
+  /* キーボード閉じる */
+  const onHideKeyboard = (): void => {
+    setIsKeyboard(false);
+  };
+
   const getPoints = getUsePoints(
     teachDiary.text.length,
     teachDiary.profile.learnLanguage
@@ -356,6 +363,7 @@ const CorrectingScreen: ScreenType = ({
           item={item}
           editText={(info: Info): void => editText(index, info)}
           editFirst={(): void => setIsFirstEdit(true)}
+          onHideKeyboard={onHideKeyboard}
         />
       );
     },
@@ -415,20 +423,19 @@ const CorrectingScreen: ScreenType = ({
                 />
                 <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
               </TouchableOpacity>
+              {/* まとめは改行がある。他のはない */}
               <TextInput
                 ref={refSummary}
                 style={styles.textInputSummary}
                 value={summary}
                 multiline
-                blurOnSubmit
-                autoFocus
                 autoCapitalize="none"
                 spellCheck
                 autoCorrect
                 underlineColorAndroid="transparent"
-                returnKeyType="done"
                 scrollEnabled={false}
                 onChangeText={(text: string): void => setSummary(text)}
+                onEndEditing={onHideKeyboard}
               />
             </>
           ) : null}
@@ -443,6 +450,10 @@ const CorrectingScreen: ScreenType = ({
           <Space size={32} />
         </KeyboardAwareScrollView>
       </View>
+      <KeyboardHideButton
+        isKeyboard={isKeyboard}
+        setIsKeyboard={setIsKeyboard}
+      />
     </SafeAreaView>
   );
 };
