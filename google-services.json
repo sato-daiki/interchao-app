@@ -1,41 +1,36 @@
 {
   "project_info": {
-    "project_number": "975945165729",
-    "firebase_url": "https://white-zebra-dev.firebaseio.com",
-    "project_id": "white-zebra-dev",
-    "storage_bucket": "white-zebra-dev.appspot.com"
+    "project_number": "862039416371",
+    "firebase_url": "https://white-zebra-5096f.firebaseio.com",
+    "project_id": "white-zebra-5096f",
+    "storage_bucket": "white-zebra-5096f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:975945165729:android:09253194bb3334d18fb9e0",
+        "mobilesdk_app_id": "1:862039416371:android:440d9ed15b0706ba9a4d46",
         "android_client_info": {
-          "package_name": "app.white_zebra"
+          "package_name": "app.interchao"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "975945165729-rm991uf7b91ntlqpfkbd82em8k0v1519.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCZuzphV_ejPyybVHC_KjmyvGBojreRcvs"
+          "current_key": "AIzaSyDIjxkIlxYB1Cot9d5TE2RIapUIalVC7gA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "975945165729-rm991uf7b91ntlqpfkbd82em8k0v1519.apps.googleusercontent.com",
+              "client_id": "862039416371-eln78idtrj1akho8ktsg5mk1ojrlh3iq.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "975945165729-hc3u7ndtcnd4fu6793jnarm8s3e6es2n.apps.googleusercontent.com",
+              "client_id": "862039416371-bp6s4vqqbqn18q9hi2k361m9ffq56642.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "app.white-zebra"
+                "bundle_id": "white-zebra.app"
               }
             }
           ]
