@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import Modal from 'react-native-modal';
+import ModalWeb from 'modal-enhanced-react-native-web';
 
 const { width } = Dimensions.get('window');
 
@@ -29,6 +30,19 @@ const Modal1: React.FC<Props> = ({
   animationOut = 'zoomOut',
   children,
 }: Props): JSX.Element | null => {
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <ModalWeb
+          isVisible={visible}
+          animationIn={animationIn}
+          animationOut={animationOut}
+        >
+          <View style={styles.modal}>{children}</View>
+        </ModalWeb>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <Modal
