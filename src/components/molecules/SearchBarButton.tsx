@@ -15,8 +15,9 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingRight: getEachOS({ ios: 56, android: 64, web: 70 }),
     marginLeft: getEachOS({ ios: 16, android: 0, web: 0 }),
-    width: width - getEachOS({ ios: 56, android: 64, web: 70 }),
+    width,
   },
   button: {
     flex: 1,
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: offWhite,
     borderRadius: 18,
     paddingHorizontal: 16,
+    margin: 8,
     marginLeft: getEachOS({ ios: 8, android: 0, web: 8 }),
     paddingVertical: getEachOS({ ios: 0, android: 0, web: 4 }),
     height: 30,

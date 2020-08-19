@@ -62,7 +62,7 @@ const ClearTextInput = ({
         defaultValue={defaultValue}
         onChangeText={onChangeText}
         onFocus={(): void => setIsDeleteButton(false)}
-        onEndEditing={(): void => setIsDeleteButton(true)}
+        onBlur={(): void => setIsDeleteButton(true)}
         multiline
         scrollEnabled={false}
       />

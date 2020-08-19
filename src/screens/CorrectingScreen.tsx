@@ -431,7 +431,7 @@ const CorrectingScreen: ScreenType = ({
                 underlineColorAndroid="transparent"
                 scrollEnabled={false}
                 onChangeText={(text: string): void => setSummary(text)}
-                onEndEditing={onHideKeyboard}
+                onBlur={onHideKeyboard}
               />
             </>
           ) : null}

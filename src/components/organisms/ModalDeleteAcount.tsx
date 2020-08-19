@@ -46,7 +46,7 @@ interface Props {
   password: string;
   errorMessage: string;
   onChangeText: (text: string) => void;
-  onEndEditing: () => void;
+  onBlur: () => void;
   onPressSubmit: () => void;
   onPressClose: () => void;
 }
@@ -57,7 +57,7 @@ const ModalDeleteAcount: React.FC<Props> = ({
   password,
   errorMessage,
   onChangeText,
-  onEndEditing,
+  onBlur,
   onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
@@ -70,7 +70,7 @@ const ModalDeleteAcount: React.FC<Props> = ({
         <CheckTextInput
           value={password}
           onChangeText={onChangeText}
-          onEndEditing={onEndEditing}
+          onBlur={onBlur}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"

@@ -96,7 +96,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
     navigation.navigate('ForegetPassword');
   }, [navigation]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     if (email.length === 0) {
       setErrorEmail('');
       return;
@@ -108,7 +108,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
     setErrorEmail('');
   }, [email, setErrorEmail]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     setErrorPassword('');
   }, [setErrorPassword]);
 
@@ -122,7 +122,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
           autoFocus
           value={email}
           onChangeText={(text: string): void => setEmail(text)}
-          onEndEditing={onEndEditingEmail}
+          onBlur={onBlurEmail}
           maxLength={50}
           placeholder="Email"
           keyboardType="email-address"
@@ -137,7 +137,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
         <CheckTextInput
           value={password}
           onChangeText={(text: string): void => setPassword(text)}
-          onEndEditing={onEndEditingPassword}
+          onBlur={onBlurPassword}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"

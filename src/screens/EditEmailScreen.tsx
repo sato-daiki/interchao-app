@@ -88,7 +88,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
     f();
   }, [password, email, navigation]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     const f = async (): Promise<void> => {
       if (email.length === 0) {
         setIsEmailCheckOk(false);
@@ -117,7 +117,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
     f();
   }, [email, setIsEmailCheckOk, setErrorEmail, setIsEmailLoading]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     setErrorPassword('');
   }, [setErrorPassword]);
 
@@ -130,7 +130,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
         <CheckTextInput
           value={email}
           onChangeText={(text: string): void => setEmail(text)}
-          onEndEditing={onEndEditingEmail}
+          onBlur={onBlurEmail}
           maxLength={50}
           placeholder="Email"
           keyboardType="email-address"
@@ -147,7 +147,7 @@ const EditEmailScreen: ScreenType = ({ navigation }): JSX.Element => {
         <CheckTextInput
           value={password}
           onChangeText={(text: string): void => setPassword(text)}
-          onEndEditing={onEndEditingPassword}
+          onBlur={onBlurPassword}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"
