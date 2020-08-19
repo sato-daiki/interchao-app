@@ -20,7 +20,7 @@ import {
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
@@ -334,8 +334,8 @@ DraftDiaryListScreen.navigationOptions = ({
     headerRight: (): ReactNode => {
       if (draftDiaryTotalNum > 0) {
         return (
-          <HeaderText
-            title={
+          <HeaderRight
+            text={
               getIsEditMode(isEditing, preOpendIndex)
                 ? I18n.t('common.done')
                 : I18n.t('common.edit')

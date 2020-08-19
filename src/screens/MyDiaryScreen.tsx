@@ -10,9 +10,7 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableOpacity,
   Dimensions,
-  Platform,
   ActivityIndicator,
 } from 'react-native';
 import {
@@ -20,7 +18,6 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import ViewShot from 'react-native-view-shot';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   connectActionSheet,
   useActionSheet,
@@ -45,9 +42,11 @@ import {
   GrayHeader,
   Space,
   ShareButton,
+  HeaderRight,
 } from '../components/atoms';
 import I18n from '../utils/I18n';
 import RichText from '../components/organisms/RichText';
+import { getEachOS } from '../utils/common';
 
 export interface Props {
   diary?: Diary;
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
   },
   headerTitleStyle: {
     width: Dimensions.get('window').width - 140,
-    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
+    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'center' }),
   },
   diaryOriginal: {
     paddingHorizontal: 16,
@@ -321,13 +320,7 @@ MyDiaryScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     title,
     headerTitleStyle: styles.headerTitleStyle,
     headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMore}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
+      <HeaderRight name="dots-horizontal" onPress={onPressMore} />
     ),
   };
 };

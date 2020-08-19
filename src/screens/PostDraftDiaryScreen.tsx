@@ -1,11 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  Keyboard,
-  StyleSheet,
-  Platform,
-  BackHandler,
-  Alert,
-} from 'react-native';
+import { Keyboard, BackHandler, Alert } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -13,7 +7,7 @@ import {
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 
-import { HeaderText } from '../components/atoms';
+import { HeaderRight, HeaderLeft } from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
@@ -35,12 +29,6 @@ interface DispatchProps {
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
 }
-
-const styles = StyleSheet.create({
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
-  },
-});
 
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
@@ -293,23 +281,19 @@ PostDraftDiaryScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('postDraftDiary.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => {
       if (points >= 10) {
         return (
-          <HeaderText
-            title={I18n.t('common.publish')}
+          <HeaderRight
+            text={I18n.t('common.publish')}
             onPress={onPressPublic}
           />
         );
       }
       return (
-        <HeaderText title={I18n.t('common.draft')} onPress={onPressDraft} />
+        <HeaderRight text={I18n.t('common.draft')} onPress={onPressDraft} />
       );
     },
   };

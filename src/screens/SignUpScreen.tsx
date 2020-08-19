@@ -18,7 +18,7 @@ import { CheckTextInput } from '../components/molecules';
 import {
   Space,
   SubmitButton,
-  HeaderText,
+  HeaderRight,
   LoadingModal,
 } from '../components/atoms';
 import {
@@ -318,7 +318,7 @@ SignUpScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     ...DefaultNavigationOptions,
     title: I18n.t('signUp.headerTitle'),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.skip')} onPress={onPressSkip} />
+      <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
     ),
   };
 };

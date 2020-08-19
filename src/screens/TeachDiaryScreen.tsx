@@ -14,7 +14,6 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
-  TouchableOpacity,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -25,7 +24,6 @@ import {
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
@@ -36,6 +34,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
+  HeaderRight,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -504,13 +503,7 @@ TeachDiaryScreen.navigationOptions = ({
     title,
     headerTitleStyle: styles.headerTitleStyle,
     headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMore}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
+      <HeaderRight name="dots-horizontal" onPress={onPressMore} />
     ),
   };
 };

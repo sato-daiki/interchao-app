@@ -8,7 +8,7 @@ import {
   fontSizeM,
   borderLightColor,
 } from '../../styles/Common';
-import { HeaderText } from '../atoms';
+import { HeaderRight } from '../atoms';
 import I18n from '../../utils/I18n';
 
 const { width } = Dimensions.get('window');
@@ -78,7 +78,7 @@ const SearchBar = ({
         value={currentRefinement}
         onChangeText={onChangeText}
       />
-      <HeaderText title={I18n.t('common.cancel')} onPress={onPressClose} />
+      <HeaderRight text={I18n.t('common.cancel')} onPress={onPressClose} />
     </View>
   );
 };

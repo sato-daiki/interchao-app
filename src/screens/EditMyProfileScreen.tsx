@@ -5,7 +5,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Platform,
 } from 'react-native';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import {
@@ -22,9 +21,14 @@ import {
 } from '../styles/Common';
 import { openCameraRoll, uploadImageAsync } from '../utils/CameraRoll';
 import firebase from '../constants/firebase';
-import { LoadingModal, Avatar, HeaderText } from '../components/atoms';
+import {
+  LoadingModal,
+  Avatar,
+  HeaderRight,
+  HeaderLeft,
+} from '../components/atoms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { Profile, Language, CountryCode } from '../types';
+import { Profile, Language } from '../types';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
 import {
@@ -92,9 +96,6 @@ const styles = StyleSheet.create({
     borderBottomColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 170,
-  },
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
   spokenContainer: {
     padding: 16,
@@ -430,14 +431,13 @@ EditMyProfileScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('editMyProfile.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
+      <HeaderLeft
+        text={I18n.t('common.close')}
         onPress={(): boolean => navigation.goBack(null)}
       />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
+      <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };

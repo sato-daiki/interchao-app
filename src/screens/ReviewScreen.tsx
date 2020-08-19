@@ -1,12 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Alert,
-  Keyboard,
-  Platform,
-} from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Keyboard } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
   NavigationStackOptions,
@@ -14,7 +7,12 @@ import {
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { borderLightColor, offWhite } from '../styles/Common';
-import { Space, HeaderText, LoadingModal } from '../components/atoms';
+import {
+  Space,
+  HeaderRight,
+  LoadingModal,
+  HeaderLeft,
+} from '../components/atoms';
 import { UserListItem } from '../components/molecules';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { Diary, Profile, Review, Reviewer } from '../types';
@@ -54,9 +52,6 @@ const styles = StyleSheet.create({
   },
   keyboardAwareScrollView: {
     flex: 1,
-  },
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
 });
 
@@ -249,14 +244,10 @@ ReviewScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     ...DefaultNavigationOptions,
     title: I18n.t('review.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.sending')} onPress={onPressSubmit} />
+      <HeaderRight text={I18n.t('common.sending')} onPress={onPressSubmit} />
     ),
   };
 };

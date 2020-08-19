@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile, UserReview, User } from '../types';
@@ -14,6 +13,7 @@ import {
   Space,
   ScoreStar,
   UserPoints,
+  HeaderRight,
 } from '../components/atoms';
 import {
   ProfileLanguage,
@@ -133,14 +133,7 @@ MyPageScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
     ...DefaultNavigationOptions,
     title: I18n.t('myPage.headerTitle'),
     headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressSetting}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="settings"
-          onPress={onPressSetting}
-        />
-      </TouchableOpacity>
+      <HeaderRight name="settings" onPress={onPressSetting} />
     ),
   };
 };
