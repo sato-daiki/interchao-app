@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import algoliasearch from 'algoliasearch';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '@env';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -13,6 +9,7 @@ import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
 import I18n from '../utils/I18n';
+import { getClient } from '../utils/Algolia';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -27,7 +24,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const searchClient = algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
+const searchClient = getClient();
 
 const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
   const { currentUser } = firebase.auth();
