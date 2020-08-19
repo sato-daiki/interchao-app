@@ -4,7 +4,6 @@ import {
   View,
   Alert,
   SafeAreaView,
-  Platform,
   FlatList,
   TouchableOpacity,
   TextInput,
@@ -18,7 +17,7 @@ import {
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
-  HeaderText,
+  HeaderLeft,
   HeaderButton,
   LoadingModal,
   Space,
@@ -85,9 +84,6 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 16,
-  },
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -468,11 +464,7 @@ CorrectingScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('correcting.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element | null =>
       isFirstEdit ? (

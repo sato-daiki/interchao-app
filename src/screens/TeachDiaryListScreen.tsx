@@ -1,18 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
@@ -292,13 +285,7 @@ TeachDiaryListScreen.navigationOptions = ({
       />
     ),
     headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMenu}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
+      <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
     ),
   };
 };

@@ -4,22 +4,19 @@ import {
   StyleSheet,
   FlatList,
   RefreshControl,
-  TouchableOpacity,
   Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { Notifications } from 'expo';
-import { GrayHeader, LoadingModal } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
-import { primaryColor } from '../styles/Common';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
@@ -364,13 +361,7 @@ MyDiaryListScreen.navigationOptions = ({
       />
     ),
     headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMenu}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
+      <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
     ),
   };
 };

@@ -11,7 +11,7 @@ import {
 } from '../utils/profile';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
-import { HeaderText } from '../components/atoms';
+import { HeaderRight } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
@@ -147,7 +147,7 @@ EditUserNameScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('editUserName.headerTitle'),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
+      <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };
