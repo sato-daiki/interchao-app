@@ -107,7 +107,7 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
     f();
   }, [password]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     setErrorPassword('');
   }, [setErrorPassword]);
 
@@ -126,7 +126,7 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
         errorMessage={errorPassword}
         onChangeText={(txt: string): void => setPassword(txt)}
         onPressSubmit={onPressSubmit}
-        onEndEditing={onEndEditingPassword}
+        onBlur={onBlurPassword}
         onPressClose={onPressClose}
       />
       <View style={styles.main}>

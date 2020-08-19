@@ -218,7 +218,7 @@ const SignUpScreen: ScreenType = ({
     f();
   }, [clearErrorMessage, createUser, email, password]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     const f = async (): Promise<void> => {
       if (email.length === 0) {
         setIsEmailCheckOk(false);
@@ -247,7 +247,7 @@ const SignUpScreen: ScreenType = ({
     f();
   }, [email, setIsEmailCheckOk, setErrorEmail, setIsEmailLoading]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     if (password.length === 0) {
       setIsPasswordCheckOk(false);
       setErrorPassword('');
@@ -272,7 +272,7 @@ const SignUpScreen: ScreenType = ({
           autoFocus
           value={email}
           onChangeText={(text: string): void => setEmail(text)}
-          onEndEditing={onEndEditingEmail}
+          onBlur={onBlurEmail}
           maxLength={50}
           placeholder="Email"
           keyboardType="email-address"
@@ -289,7 +289,7 @@ const SignUpScreen: ScreenType = ({
         <CheckTextInput
           value={password}
           onChangeText={(text: string): void => setPassword(text)}
-          onEndEditing={onEndEditingPassword}
+          onBlur={onBlurPassword}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"

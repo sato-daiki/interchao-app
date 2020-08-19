@@ -188,7 +188,7 @@ const PostDiary = ({
           onChangeTextText={onChangeTextText}
           onPressDraft={onPressDraft}
           onFocusText={onFocusText}
-          onEndEditingText={(): void => setIsForce(false)}
+          onBlurText={(): void => setIsForce(false)}
         />
       ) : (
         <PostDiaryKeybordAndroid
@@ -198,7 +198,7 @@ const PostDiary = ({
           onChangeTextText={onChangeTextText}
           onPressDraft={onPressDraft}
           onFocusText={onFocusText}
-          onEndEditingText={(): void => setIsForce(false)}
+          onBlurText={(): void => setIsForce(false)}
         />
       )}
     </SafeAreaView>

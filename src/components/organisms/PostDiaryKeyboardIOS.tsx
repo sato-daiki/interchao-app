@@ -29,7 +29,7 @@ interface Props {
   onChangeTextText: (txt: string) => void;
   onPressDraft: () => void;
   onFocusText: () => void;
-  onEndEditingText: () => void;
+  onBlurText: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -76,7 +76,7 @@ const PostDiaryKeyboardIOS = ({
   onChangeTextText,
   onPressDraft,
   onFocusText,
-  onEndEditingText,
+  onBlurText,
 }: Props): JSX.Element => {
   return (
     <>
@@ -104,7 +104,7 @@ const PostDiaryKeyboardIOS = ({
         spellCheck
         onChangeText={onChangeTextText}
         onFocus={onFocusText}
-        onEndEditing={onEndEditingText}
+        onBlur={onBlurText}
       />
       {isForce ? (
         <Animated.View

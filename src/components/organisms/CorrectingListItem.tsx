@@ -98,7 +98,7 @@ const CorrectingListItem: React.FC<Props> = ({
   const [diffs, setDiffs] = useState<Diff[] | null>(null);
   const refDetail = useRef<any>(null);
 
-  const onEndEditingFix = (): void => {
+  const onBlurFix = (): void => {
     if (item.original === fix) {
       // 変更がない場合は初期化
       setDiffs(null);
@@ -126,7 +126,7 @@ const CorrectingListItem: React.FC<Props> = ({
     onHideKeyboard();
   };
 
-  const onEndEditingDetail = (): void => {
+  const onBlurDetail = (): void => {
     editText({
       detail,
     });
@@ -170,7 +170,7 @@ const CorrectingListItem: React.FC<Props> = ({
             returnKeyType="done"
             scrollEnabled={false}
             onChangeText={(text: string): void => setFix(text)}
-            onEndEditing={onEndEditingFix}
+            onBlur={onBlurFix}
           />
         ) : (
           <>
@@ -217,7 +217,7 @@ const CorrectingListItem: React.FC<Props> = ({
             underlineColorAndroid="transparent"
             returnKeyType="done"
             scrollEnabled={false}
-            onEndEditing={onEndEditingDetail}
+            onBlur={onBlurDetail}
             onChangeText={(text: string): void => setDetail(text)}
           />
         </>

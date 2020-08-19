@@ -74,7 +74,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
     f();
   }, [email]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     const f = async (): Promise<void> => {
       if (email.length === 0) {
         setErrorEmail('');
@@ -101,7 +101,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       <CheckTextInput
         value={email}
         onChangeText={(text: string): void => setEmail(text)}
-        onEndEditing={onEndEditingEmail}
+        onBlur={onBlurEmail}
         maxLength={50}
         placeholder="Email"
         keyboardType="email-address"

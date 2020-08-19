@@ -26,7 +26,7 @@ interface Props {
   onChangeTextText: (txt: string) => void;
   onPressDraft: () => void;
   onFocusText: () => void;
-  onEndEditingText: () => void;
+  onBlurText: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -77,7 +77,7 @@ const PostDiaryKeybordAndroid = ({
   onChangeTextText,
   onPressDraft,
   onFocusText,
-  onEndEditingText,
+  onBlurText,
 }: Props): JSX.Element => {
   const [isKeyboard, setIsKeyboard] = useState(false);
   const onKeyboardDidShow = (): void => {
@@ -123,7 +123,7 @@ const PostDiaryKeybordAndroid = ({
             value={text}
             onChangeText={onChangeTextText}
             onFocus={onFocusText}
-            onEndEditing={onEndEditingText}
+            onBlur={onBlurText}
             placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
             underlineColorAndroid="transparent"
             multiline
