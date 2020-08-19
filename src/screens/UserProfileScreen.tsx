@@ -9,7 +9,6 @@ import {
   ScrollView,
   Text,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   NavigationStackScreenComponent,
   NavigationStackOptions,
@@ -20,7 +19,7 @@ import {
 } from '@expo/react-native-action-sheet';
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
-import { Space, GrayHeader } from '../components/atoms';
+import { Space, GrayHeader, HeaderRight } from '../components/atoms';
 import {
   Diary,
   Profile,
@@ -30,7 +29,7 @@ import {
   Report as ReportType,
 } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { primaryColor, linkBlue, fontSizeM } from '../styles/Common';
+import { linkBlue, fontSizeM } from '../styles/Common';
 import Report from '../components/organisms/Report';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
@@ -485,13 +484,7 @@ UserProfileScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     title: I18n.t('userProfile.headerTitle'),
     headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMore}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
+      <HeaderRight name="dots-horizontal" onPress={onPressMore} />
     ),
   };
 };

@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import * as Sentry from 'sentry-expo';
+import Sentry from '../constants/Sentry';
 import I18n from './I18n';
 
 interface ErrorAlert {

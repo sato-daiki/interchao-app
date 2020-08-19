@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { YellowBox, StatusBar, Alert } from 'react-native';
-import * as Sentry from 'sentry-expo';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
@@ -15,6 +14,7 @@ import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
 import I18n from './utils/I18n';
+import Sentry from './constants/Sentry';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -22,10 +22,11 @@ YellowBox.ignoreWarnings(['Setting a timer']);
 const { store, persistor } = configureStore();
 
 // エラー監視
-Sentry.setRelease(Constants.manifest.revisionId || 'DEV');
 Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
+  enableInExpoDevelopment: true,
+  debug: Constants.manifest.releaseChannel !== 'production',
 });
 
 if (!firebase.apps.length) {
