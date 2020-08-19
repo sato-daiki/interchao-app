@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import SwipeablePanel from 'rn-swipeable-panel';
+import { SwipeablePanel } from 'rn-swipeable-panel';
 import { OptionItem } from '../molecules';
 import I18n from '../../utils/I18n';
 import { appShare } from '../../utils/common';
@@ -22,7 +22,6 @@ const TeachDiaryListMenu = ({
 
   return (
     <SwipeablePanel
-      openLarge
       fullWidth
       closeOnTouchOutside
       isActive={isMenu}
