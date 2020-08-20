@@ -1,25 +1,26 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { NavigationStackProp } from 'react-navigation-stack';
+import {
+  View,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { minDeviceWidth, headerBlack, offWhite } from '../../styles/Common';
-import { Icon } from '../../images';
-
-interface Props {
-  navigation: NavigationStackProp;
-}
+import { maxWindowWidth, offBlack, offWhite } from '../../styles/Common';
 
 const styles = StyleSheet.create({
   warapper: {
     width: '100%',
-    backgroundColor: headerBlack,
+    backgroundColor: offBlack,
   },
   container: {
     width: '100%',
-    maxWidth: minDeviceWidth,
+    maxWidth: maxWindowWidth,
     marginLeft: 'auto',
     marginRight: 'auto',
     paddingVertical: 24,
+    paddingHorizontal: 16,
   },
   row: {
     flexDirection: 'row',
@@ -43,27 +44,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const Fotter = ({ navigation }: Props): JSX.Element => {
+const Fotter = (): JSX.Element => {
+  const onPressBlog = (): void => {
+    Linking.openURL('http://blog.interchao.app/');
+  };
+  const onPressTwitter = (): void => {
+    Linking.openURL('https://twitter.com/interchao');
+  };
+
   return (
     <View style={styles.warapper}>
       <View style={[styles.container]}>
         <View style={styles.row}>
           <Text style={styles.textSmall}>©2020 Interchao</Text>
           <View style={styles.right}>
-            <TouchableOpacity
-              onPress={() => {
-                console.log();
-              }}
-            >
+            <TouchableOpacity onPress={onPressBlog}>
               <Text style={styles.textMiddle}>Blog</Text>
             </TouchableOpacity>
             <MaterialCommunityIcons
               size={28}
               color={offWhite}
               name="twitter"
-              onPress={() => {
-                console.log();
-              }}
+              onPress={onPressTwitter}
             />
           </View>
         </View>

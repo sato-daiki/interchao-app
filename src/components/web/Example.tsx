@@ -3,6 +3,7 @@ import { StyleSheet, Text, Image } from 'react-native';
 import { primaryColor } from '../../styles/Common';
 import { EntryEn, CommentEn, SummaryEn } from '../../images/web/index';
 import { WebTemplate } from '.';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
@@ -38,35 +39,48 @@ const styles = StyleSheet.create({
     height: 200,
     marginBottom: 16,
   },
+  paddingBottom0: {
+    paddingBottom: 0,
+  },
+  paddingHorizontal0: {
+    paddingHorizontal: 0,
+  },
 });
 
 const Example = ({ isPcWidth }: Props): JSX.Element => {
   const renderTopCenter = (
     <>
-      <Text style={styles.title}>Example of a Correction</Text>
-      <Text style={styles.text}>Take a look at an actual example.</Text>
+      <Text style={styles.title}>{I18n.t('web.exampleTitle')}</Text>
+      <Text style={styles.text}>{I18n.t('web.exampleText')}</Text>
     </>
   );
 
   const renderLeft = (
     <>
-      <Text style={styles.titleDetail}>Your Journal Entry</Text>
-      <Text style={styles.textDetail}>Hurry up and publish an entry.</Text>
+      <Text style={styles.titleDetail}>
+        {I18n.t('web.exampleDetailTitle1')}
+      </Text>
+      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText1')}</Text>
       <Image resizeMode="contain" source={EntryEn} style={styles.image} />
     </>
   );
 
   const renderCenter = (
     <>
-      <Text style={styles.titleDetail}>Correction Results</Text>
-      <Text style={styles.textDetail}>Hurry up and publish an entry.</Text>
+      <Text style={styles.titleDetail}>
+        {I18n.t('web.exampleDetailTitle2')}
+      </Text>
+      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText2')}</Text>
       <Image resizeMode="contain" source={CommentEn} style={styles.image} />
     </>
   );
 
   const renderRight = (
     <>
-      <Text style={styles.titleDetail}>General Comments on the Entry</Text>
+      <Text style={styles.titleDetail}>
+        {I18n.t('web.exampleDetailTitle3')}
+      </Text>
+      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText3')}</Text>
       <Image resizeMode="contain" source={SummaryEn} style={styles.image} />
     </>
   );
@@ -85,9 +99,9 @@ const Example = ({ isPcWidth }: Props): JSX.Element => {
         renderLeft={renderLeft}
         renderCenter={renderCenter}
         renderRight={renderRight}
-        leftContainer={{ paddingHorizontal: 0 }}
-        centerContainer={{ paddingHorizontal: 0 }}
-        rightContainer={{ paddingHorizontal: 0 }}
+        leftContainer={styles.paddingBottom0}
+        centerContainer={styles.paddingHorizontal0}
+        rightContainer={styles.paddingHorizontal0}
       />
     </>
   );

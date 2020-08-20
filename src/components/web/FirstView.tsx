@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { maxWindowWidth, offBlack, maxButtonWidth } from '../../styles/Common';
 import { WhiteButton, Space, SubmitButton } from '../atoms';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
@@ -13,6 +14,7 @@ const styles = StyleSheet.create({
   warapper: {
     width: '100%',
     backgroundColor: offBlack,
+    marginBottom: 32,
   },
   container: {
     width: '100%',
@@ -99,16 +101,16 @@ const FirstView = ({ isPcWidth, navigation }: Props): JSX.Element => {
       >
         <View style={styles.textContainer}>
           <Text style={[styles.title, setLeft()]}>
-            “Speaking” starts from “Writing”
+            {I18n.t('web.firstViewTitle')}
           </Text>
           <Text style={[styles.text, setLeft()]}>
-            Interactive language learning app
+            {I18n.t('web.firstViewSubTitle')}
           </Text>
         </View>
         <View style={styles.loginContainer}>
           <Space size={36} />
           <Text style={[styles.loginText, setRight()]}>
-            Interchaoを始めよう
+            {I18n.t('web.firstViewStart')}
           </Text>
           <Space size={8} />
           <SubmitButton

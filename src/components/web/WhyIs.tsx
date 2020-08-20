@@ -3,6 +3,7 @@ import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
 import { Giar } from '../../images/web/index';
 import { WebTemplate } from '.';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
@@ -42,21 +43,17 @@ const styles = StyleSheet.create({
 const WhyIs = ({ isPcWidth }: Props): JSX.Element => {
   const renderLeft = (
     <>
-      <Text style={styles.title}>Why is it necessary to write?</Text>
-      <Text style={styles.text}>
-        Writing is the optimal language learning method
-      </Text>
+      <Text style={styles.title}>{I18n.t('web.whyTitle')}</Text>
+      <Text style={styles.text}>{I18n.t('web.whyText')}</Text>
     </>
   );
 
   const renderRight = (
     <View style={styles.row}>
       <View style={styles.textContainer}>
-        <Text style={styles.chatText}>「最近調子はどうですか？」</Text>
-        <Text style={styles.chatText}>「絶好調です。あなたは？」</Text>
-        <Text style={styles.chatText}>
-          「元気です...(Oh no, I can’t keep the conversation going...)」
-        </Text>
+        <Text style={styles.chatText}>{I18n.t('web.whyCnatText1')}</Text>
+        <Text style={styles.chatText}>{I18n.t('web.whyCnatText2')}</Text>
+        <Text style={styles.chatText}>{I18n.t('web.whyCnatText3')}</Text>
       </View>
       <View>
         <Image

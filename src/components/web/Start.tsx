@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, Image } from 'react-native';
 import { primaryColor } from '../../styles/Common';
 import { Zenny } from '../../images/web/index';
 import { WebTemplate } from '.';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
@@ -35,12 +36,8 @@ const Start = ({ isPcWidth }: Props): JSX.Element => {
 
   const renderLeft = (
     <>
-      <Text style={styles.title}>Start by writing a journalentry for free</Text>
-      <Text style={styles.text}>
-        By registering for a free account, you can receive 100 pts (10 journal
-        entry’s worth). Hurry and write a journal entry so you can have it
-        corrected!
-      </Text>
+      <Text style={styles.title}>{I18n.t('web.startTitle')}</Text>
+      <Text style={styles.text}>{I18n.t('web.startText')}</Text>
     </>
   );
 

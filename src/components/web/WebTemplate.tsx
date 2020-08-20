@@ -1,14 +1,15 @@
 import React, { ReactNode } from 'react';
-import { View, StyleSheet, StyleProp, ViewProps } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { maxWindowWidth, offWhite } from '../../styles/Common';
 
 interface Props {
   isPcWidth: boolean;
   leftTop: boolean;
-  container?: StyleProp<ViewProps>;
-  leftContainer?: StyleProp<ViewProps>;
-  centerContainer?: StyleProp<ViewProps>;
-  rightContainer?: StyleProp<ViewProps>;
+  warapper?: StyleProp<ViewStyle>;
+  container?: StyleProp<ViewStyle>;
+  leftContainer?: StyleProp<ViewStyle>;
+  centerContainer?: StyleProp<ViewStyle>;
+  rightContainer?: StyleProp<ViewStyle>;
   renderLeft?: ReactNode;
   renderCenter?: ReactNode;
   renderRight?: ReactNode;
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
   warapper: {
     width: '100%',
     backgroundColor: offWhite,
-    paddingBottom: 32,
+    paddingBottom: 64,
   },
   container: {
     width: '100%',
@@ -26,7 +27,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 'auto',
     marginRight: 'auto',
-    paddingVertical: 32,
     textAlign: 'center',
   },
   containerPc: {
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
 const WebTemplate = ({
   isPcWidth,
   leftTop,
+  warapper,
   container,
   leftContainer,
   centerContainer,
@@ -57,7 +58,7 @@ const WebTemplate = ({
   renderRight,
 }: Props): JSX.Element => {
   return (
-    <View style={styles.warapper}>
+    <View style={[styles.warapper, warapper]}>
       <View
         style={[
           styles.container,
