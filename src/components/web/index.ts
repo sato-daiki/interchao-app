@@ -1,0 +1,10 @@
+export { default as Header } from './Header';
+export { default as Fotter } from './Fotter';
+export { default as FirstView } from './FirstView';
+export { default as WebTemplate } from './WebTemplate';
+export { default as WhatIs } from './WhatIs';
+export { default as WhyIs } from './WhyIs';
+export { default as Reason } from './Reason';
+export { default as Correct } from './Correct';
+export { default as Example } from './Example';
+export { default as Start } from './Start';

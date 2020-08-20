@@ -4,10 +4,15 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
-import { mainColor, fontSizeM } from '../../styles/Common';
+import { mainColor, fontSizeM, maxButtonWidth } from '../../styles/Common';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   isLoading?: boolean;
   disable?: boolean;
   title: string;
@@ -19,7 +24,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: mainColor,
     width: '100%',
-    maxWidth: 600,
+    maxWidth: maxButtonWidth,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
@@ -37,17 +42,19 @@ const SubmitButton: React.FC<Props> = ({
   disable = false,
   title,
   onPress,
+  containerStyle,
+  textStyle,
 }: Props): JSX.Element => {
   return (
     <TouchableOpacity
-      style={styles.contaner}
+      style={[styles.contaner, containerStyle]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
         <ActivityIndicator size="small" color="#fff" />
       ) : (
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, textStyle]}>{title}</Text>
       )}
     </TouchableOpacity>
   );
