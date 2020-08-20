@@ -8,3 +8,4 @@ export { default as Reason } from './Reason';
 export { default as Correct } from './Correct';
 export { default as Example } from './Example';
 export { default as Start } from './Start';
+export { default as AppDownload } from './AppDownload';

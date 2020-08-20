@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { primaryColor } from '../../styles/Common';
 import { Zebra } from '../../images/web/index';
 import { WebTemplate } from '.';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
@@ -38,39 +39,21 @@ const Reason = ({ isPcWidth }: Props): JSX.Element => {
   const renderRight = (
     <>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>
-          You can’t speak more than what you can write
-        </Text>
-        <Text style={styles.text}>
-          You can’t talk what you cannot pen down.
-        </Text>
-        <Text style={styles.text}>Writing is a training for speaking.</Text>
+        <Text style={styles.title}>{I18n.t('web.reasonTitle1')}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText11')}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText12')}</Text>
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.title}>
-          Make your articles checked by native speakers
-        </Text>
-        <Text style={styles.text}>
-          Since you have written down something, you want to know if there were
-          mistakes.
-        </Text>
-        <Text style={styles.text}>
-          Are the words and grammar correct? Are you making sense? Let’s have
-          your articles checked by native speakers!
-        </Text>
+        <Text style={styles.title}>{I18n.t('web.reasonTitle2')}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText21')}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText22')}</Text>
       </View>
 
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Write in your own words</Text>
-        <Text style={styles.text}>
-          Textbooks and scripts from movies are sometimes not applicable in our
-          daily life.
-        </Text>
-        <Text style={styles.text}>
-          Through outputting something in your own words, you are able to learn
-          in a practical way.
-        </Text>
+        <Text style={styles.title}>{I18n.t('web.reasonTitle3')}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText31')}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText32')}</Text>
       </View>
     </>
   );

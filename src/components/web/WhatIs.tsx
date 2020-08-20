@@ -3,6 +3,7 @@ import { StyleSheet, Text, Image } from 'react-native';
 import { primaryColor } from '../../styles/Common';
 import { CorrectEn } from '../../images/web/index';
 import { WebTemplate } from '.';
+import I18n from '../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
@@ -27,22 +28,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhatIs = ({ isPcWidth }: Props): JSX.Element => {
+const WhatIs = ({ isPcWidth }: Props): JSX.Element | null => {
   const renderLeft = (
     <Image resizeMode="contain" style={styles.image} source={CorrectEn} />
   );
 
   const renderRight = (
     <>
-      <Text style={styles.title}>What is Interchao?</Text>
-      <Text style={styles.text}>
-        Interchao is a free, interactive language learning app for Japanese,
-        English, Chinese, and Korean learners.
-      </Text>
-      <Text style={styles.text}>
-        Your journal entry will be read and marked by native speakers. Let’s
-        mark others’ journal entry as a native teacher as a return!
-      </Text>
+      <Text style={styles.title}>{I18n.t('web.wahtTitle')}</Text>
+      <Text style={styles.text}>{I18n.t('web.wahtText1')}</Text>
+      <Text style={styles.text}>{I18n.t('web.wahtText2')}</Text>
     </>
   );
 
