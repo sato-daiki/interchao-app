@@ -15,6 +15,7 @@ import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
 import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
+import DefaultLayout from './components/template/DefaultLayout';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -62,12 +63,14 @@ const App: React.SFC = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
-        <StatusBar barStyle="dark-content" />
-        <ActionSheetProvider>
-          <MenuProvider>
-            <AppNavigator />
-          </MenuProvider>
-        </ActionSheetProvider>
+        <DefaultLayout>
+          <StatusBar barStyle="dark-content" />
+          <ActionSheetProvider>
+            <MenuProvider>
+              <AppNavigator />
+            </MenuProvider>
+          </ActionSheetProvider>
+        </DefaultLayout>
       </PersistGate>
     </Provider>
   );

@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: 16,
     paddingBottom: 32,
+    width: '100%',
   },
   row: {
     flexDirection: 'row',

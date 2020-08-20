@@ -105,6 +105,7 @@ export const getShareUrl = (nativeLanguage: Language): string => {
       return 'https://interchao.app/en/share.html';
   }
 };
+
 export const appShare = async (
   nativeLanguage: Language,
   imageUrl: string | null = null
@@ -126,6 +127,20 @@ export const appShare = async (
   Share.share({
     message,
   });
+};
+
+// TODO
+export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
+  const url = getShareUrl(nativeLanguage);
+  const shareMessage = encodeURI(url);
+};
+
+// TODO
+export const facebookShare = async (
+  nativeLanguage: Language
+): Promise<void> => {
+  const url = getShareUrl(nativeLanguage);
+  const shareMessage = encodeURI(url);
 };
 
 interface EachOS {
