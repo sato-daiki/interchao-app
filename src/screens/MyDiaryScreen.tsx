@@ -12,6 +12,7 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
@@ -25,7 +26,7 @@ import {
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
 import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
-import { MyDiaryStatus } from '../components/molecules';
+import { MyDiaryStatus, Sns } from '../components/molecules';
 import { ModalConfirm } from '../components/organisms';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import {
@@ -301,10 +302,14 @@ const MyDiaryScreen: ScreenType = ({
         </ViewShot>
         <Space size={48} />
         <View style={styles.shareButton}>
-          <ShareButton
-            viewShotRef={viewShotRef}
-            nativeLanguage={profile.nativeLanguage}
-          />
+          {Platform.OS !== 'web' ? (
+            <ShareButton
+              viewShotRef={viewShotRef}
+              nativeLanguage={profile.nativeLanguage}
+            />
+          ) : (
+            <Sns nativeLanguage={profile.nativeLanguage} />
+          )}
         </View>
         <Space size={32} />
       </ScrollView>

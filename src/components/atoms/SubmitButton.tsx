@@ -19,9 +19,11 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: mainColor,
     width: '100%',
+    maxWidth: 600,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
   },
   title: {
     color: '#fff',
