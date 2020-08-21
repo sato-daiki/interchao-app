@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
-import { EntryEn, CommentEn, SummaryEn, Sample } from '../../images/web';
+import { Sample } from '../../images/web';
 import { WebTemplate } from '.';
 import I18n from '../../utils/I18n';
+import { getImage } from '../../utils/web';
 
 interface Props {
   isPcWidth: boolean;
@@ -67,35 +68,38 @@ const Example = ({ isPcWidth }: Props): JSX.Element => {
     </>
   );
 
-  const renderLeft = (
+  const entry = getImage('entry');
+  const renderLeft = entry ? (
     <>
       <Text style={styles.titleDetail}>
         {I18n.t('web.exampleDetailTitle1')}
       </Text>
       <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText1')}</Text>
-      <Image resizeMode="contain" source={EntryEn} style={styles.image} />
+      <Image resizeMode="contain" source={entry} style={styles.image} />
     </>
-  );
+  ) : null;
 
-  const renderCenter = (
+  const comment = getImage('comment');
+  const renderCenter = comment ? (
     <>
       <Text style={styles.titleDetail}>
         {I18n.t('web.exampleDetailTitle2')}
       </Text>
       <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText2')}</Text>
-      <Image resizeMode="contain" source={CommentEn} style={styles.image} />
+      <Image resizeMode="contain" source={comment} style={styles.image} />
     </>
-  );
+  ) : null;
 
-  const renderRight = (
+  const summary = getImage('summary');
+  const renderRight = summary ? (
     <>
       <Text style={styles.titleDetail}>
         {I18n.t('web.exampleDetailTitle3')}
       </Text>
       <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText3')}</Text>
-      <Image resizeMode="contain" source={SummaryEn} style={styles.image} />
+      <Image resizeMode="contain" source={summary} style={styles.image} />
     </>
-  );
+  ) : null;
 
   return (
     <>
@@ -111,7 +115,7 @@ const Example = ({ isPcWidth }: Props): JSX.Element => {
         renderLeft={renderLeft}
         renderCenter={renderCenter}
         renderRight={renderRight}
-        leftContainer={styles.paddingBottom0}
+        leftContainer={styles.paddingHorizontal0}
         centerContainer={styles.paddingHorizontal0}
         rightContainer={styles.paddingHorizontal0}
       />
