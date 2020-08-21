@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { maxWindowWidth, offWhite } from '../../styles/Common';
+import { maxWindowWidth, offWhite } from '../../../styles/Common';
 
 interface Props {
   isPcWidth: boolean;

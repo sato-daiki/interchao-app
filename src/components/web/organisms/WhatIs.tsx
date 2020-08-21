@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
-import { primaryColor } from '../../styles/Common';
-import { App } from '../../images/web';
-import { WebTemplate } from '.';
-import I18n from '../../utils/I18n';
-import { getImage } from '../../utils/web';
+import { primaryColor } from '../../../styles/Common';
+import { App } from '../../../images/web';
+import WebTemplate from '../template/WebTemplate';
+import I18n from '../../../utils/I18n';
+import { getImage } from '../../../utils/web';
 
 interface Props {
   isPcWidth: boolean;

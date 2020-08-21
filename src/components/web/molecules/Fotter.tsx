@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { maxWindowWidth, offBlack, offWhite } from '../../styles/Common';
+import { maxWindowWidth, offBlack, offWhite } from '../../../styles/Common';
 
 const styles = StyleSheet.create({
   warapper: {
