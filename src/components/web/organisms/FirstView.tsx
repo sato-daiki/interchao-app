@@ -1,17 +1,15 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import {
-  maxWindowWidth,
-  offBlack,
-  maxButtonWidth,
-} from '../../../styles/Common';
+import { maxWindowWidth, offBlack, max375 } from '../../../styles/Common';
 import { WhiteButton, Space, SubmitButton } from '../../atoms';
 import I18n from '../../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
   navigation: NavigationStackProp;
+  onPressStart: () => void;
+  onPressLogin: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -46,7 +44,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     maxWidth: 300,
     alignItems: 'flex-start',
-    width: maxButtonWidth,
+    width: max375,
     flex: 1,
     paddingHorizontal: 16,
   },
@@ -73,15 +71,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const FirstView = ({ isPcWidth, navigation }: Props): JSX.Element => {
-  const onPressSignIn = useCallback((): void => {
-    navigation.navigate('SignIn');
-  }, [navigation]);
-
-  const onPressSignUp = useCallback((): void => {
-    navigation.navigate('SignIn');
-  }, [navigation]);
-
+const FirstView = ({
+  isPcWidth,
+  onPressStart,
+  onPressLogin,
+}: Props): JSX.Element => {
   const setLeft = (): StyleProp<TextStyle> => {
     return {
       alignSelf: isPcWidth ? 'flex-start' : 'center',
@@ -119,14 +113,14 @@ const FirstView = ({ isPcWidth, navigation }: Props): JSX.Element => {
           <Space size={8} />
           <SubmitButton
             containerStyle={styles.button}
-            title="Signin"
-            onPress={onPressSignIn}
+            title={I18n.t('initialize.start')}
+            onPress={onPressStart}
           />
           <Space size={16} />
           <WhiteButton
             containerStyle={styles.button}
-            title="Login"
-            onPress={onPressSignUp}
+            title={I18n.t('signIn.login')}
+            onPress={onPressLogin}
           />
         </View>
       </View>

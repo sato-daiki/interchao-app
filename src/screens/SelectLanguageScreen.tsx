@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -27,6 +27,7 @@ import {
   getLanguageNum,
   checkSelectLanguage,
 } from '../utils/diary';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
@@ -186,91 +187,97 @@ const SelectLanguageScreen: ScreenType = ({
   };
 
   return (
-    <View style={styles.contaner}>
-      <ModalSpokenLanguages
-        visible={spokenVisible}
-        languages={getTargetLanguages(
-          learnLanguage,
-          nativeLanguage,
-          spokenLanguages
-        )}
-        onPressSubmit={onPressSpokenLanguages}
-        onPressClose={(): void => setSpokenVisible(false)}
-      />
-      <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
-      <LanguageRadioBox
-        label={I18n.t('selectLanguage.learn')}
-        value={learnLanguage}
-        onPress={(value: Language): void => setLearnLanguage(value)}
-      />
-      <Space size={16} />
-      <LanguageRadioBox
-        label={I18n.t('selectLanguage.native')}
-        value={nativeLanguage}
-        onPress={(value: Language): void => setNativeLanguage(value)}
-      />
-      <Space size={16} />
-      <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
-      <Space size={8} />
-      {spokenLanguages.map(item => (
-        <View style={styles.rowSpoken} key={item}>
-          <Text style={styles.spoken}>{getLanguage(item)}</Text>
+    <DefaultLayout>
+      <View style={styles.contaner}>
+        <ModalSpokenLanguages
+          visible={spokenVisible}
+          languages={getTargetLanguages(
+            learnLanguage,
+            nativeLanguage,
+            spokenLanguages
+          )}
+          onPressSubmit={onPressSpokenLanguages}
+          onPressClose={(): void => setSpokenVisible(false)}
+        />
+        <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
+        <LanguageRadioBox
+          label={I18n.t('selectLanguage.learn')}
+          value={learnLanguage}
+          onPress={(value: Language): void => setLearnLanguage(value)}
+        />
+        <Space size={16} />
+        <LanguageRadioBox
+          label={I18n.t('selectLanguage.native')}
+          value={nativeLanguage}
+          onPress={(value: Language): void => setNativeLanguage(value)}
+        />
+        <Space size={16} />
+        <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
+        <Space size={8} />
+        {spokenLanguages.map(item => (
+          <View style={styles.rowSpoken} key={item}>
+            <Text style={styles.spoken}>{getLanguage(item)}</Text>
+            <TouchableOpacity
+              style={styles.trash}
+              onPress={(): void => {
+                setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+              }}
+            >
+              <MaterialCommunityIcons
+                size={20}
+                color={primaryColor}
+                name="trash-can-outline"
+              />
+            </TouchableOpacity>
+          </View>
+        ))}
+        {spokenLanguages.length < getLanguageNum() - 2 ? (
           <TouchableOpacity
-            style={styles.trash}
-            onPress={(): void => {
-              setSpokenLanguages(spokenLanguages.filter(s => s !== item));
-            }}
+            style={styles.row}
+            onPress={(): void => setSpokenVisible(true)}
           >
             <MaterialCommunityIcons
-              size={20}
-              color={primaryColor}
-              name="trash-can-outline"
+              size={24}
+              color={subTextColor}
+              name="plus"
             />
+            <Text style={styles.addText}>{I18n.t('selectLanguage.add')}</Text>
           </TouchableOpacity>
-        </View>
-      ))}
-      {spokenLanguages.length < getLanguageNum() - 2 ? (
-        <TouchableOpacity
-          style={styles.row}
-          onPress={(): void => setSpokenVisible(true)}
-        >
-          <MaterialCommunityIcons size={24} color={subTextColor} name="plus" />
-          <Text style={styles.addText}>{I18n.t('selectLanguage.add')}</Text>
-        </TouchableOpacity>
-      ) : null}
-      <Space size={24} />
-      <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
-      <View style={styles.row}>
-        <CountryPicker
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
-          countryCode={nationalityCode}
-          placeholder={I18n.t('selectLanguage.placeholder')}
-          withFilter
-          withFlag
-          withCountryNameButton
-          withEmoji
-          withModal
-          withAlphaFilter
-          onSelect={(country: Country): void => {
-            setNationalityCode(country.cca2);
-          }}
-          onClose={(): void => setCountryVisible(false)}
-          onOpen={(): void => setCountryVisible(true)}
-          visible={countryVisible}
-        />
-        {nationalityCode ? (
-          <Text
-            style={styles.change}
-            onPress={(): void => setCountryVisible(true)}
-          >
-            {I18n.t('selectLanguage.change')}
-          </Text>
         ) : null}
+        <Space size={24} />
+        <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
+        <View style={styles.row}>
+          <CountryPicker
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            countryCode={nationalityCode}
+            placeholder={I18n.t('selectLanguage.placeholder')}
+            withFilter
+            withFlag
+            withCountryNameButton
+            withEmoji
+            withModal
+            withAlphaFilter
+            onSelect={(country: Country): void => {
+              setNationalityCode(country.cca2);
+            }}
+            onClose={(): void => setCountryVisible(false)}
+            onOpen={(): void => setCountryVisible(true)}
+            visible={countryVisible}
+          />
+          {nationalityCode ? (
+            <Text
+              style={styles.change}
+              onPress={(): void => setCountryVisible(true)}
+            >
+              {I18n.t('selectLanguage.change')}
+            </Text>
+          ) : null}
+        </View>
+        <Space size={32} />
+        <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
       </View>
-      <Space size={32} />
-      <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
-    </View>
+    </DefaultLayout>
   );
 };
 

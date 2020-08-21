@@ -21,7 +21,9 @@ export const fontSizeS = 13;
 export const fontSizeM = 14;
 export const fontSizeL = 18;
 
+export const max375 = 375;
+export const max580 = 580;
+export const max700 = 700;
+
 export const minDeviceWidth = 1224;
 export const maxWindowWidth = 1024;
-export const maxButtonWidth = 375;
-export const maxModalWidth = 700;

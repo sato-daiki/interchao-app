@@ -1,35 +1,30 @@
 import * as React from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  ViewStyle,
-  StyleProp,
-} from 'react-native';
-import { offWhite, maxWindowWidth } from '../../styles/Common';
+import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native';
+import { max580 } from '../../styles/Common';
 
-const { width } = Dimensions.get('window');
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
 }
 
 const styles = StyleSheet.create({
+  warapper: {
+    flex: 1,
+    backgroundColor: '#fff',
+    width: '100%',
+  },
   container: {
     flex: 1,
-    backgroundColor: offWhite,
-    alignItems: 'center',
-  },
-  main: {
-    flex: 1,
-    width,
-    maxWidth: maxWindowWidth,
+    width: '100%',
+    maxWidth: max580,
+    marginLeft: 'auto',
+    marginRight: 'auto',
     backgroundColor: '#fff',
   },
 });
 
 const DefaultLayout: React.FC<Props> = ({ containerStyle, children }) => (
-  <View style={[styles.container]}>
-    <View style={[styles.main, containerStyle]}>{children}</View>
+  <View style={[styles.warapper]}>
+    <View style={[styles.container, containerStyle]}>{children}</View>
   </View>
 );
 

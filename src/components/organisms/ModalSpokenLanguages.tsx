@@ -5,6 +5,7 @@ import { Language } from '../../types';
 import { getLanguage } from '../../utils/diary';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
+import { max580 } from '../../styles/Common';
 
 export interface Props {
   visible: boolean;
@@ -17,6 +18,11 @@ export interface Props {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    alignItems: 'center',
+  },
+  picker: {
+    maxWidth: max580,
+    width: '100%',
   },
 });
 
@@ -36,6 +42,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
     <Modal visible={visible}>
       <View style={styles.container}>
         <Picker
+          style={styles.picker}
           selectedValue={value}
           onValueChange={(selected: Language): void => setValue(selected)}
         >
@@ -43,7 +50,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
             <Picker.Item key={item} label={getLanguage(item)} value={item} />
           ))}
         </Picker>
-        {Platform.OS === 'ios' ? null : <Space size={16} />}
+        {Platform.OS === 'ios' ? null : <Space size={32} />}
         <SubmitButton
           title="OK"
           onPress={(): void => onPressSubmit(value || languages[0])}
