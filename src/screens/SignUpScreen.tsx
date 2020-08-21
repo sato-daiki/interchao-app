@@ -162,7 +162,15 @@ const SignUpScreen: ScreenType = ({
       setUser(userInfo);
       setProfile(profileInfo);
     },
-    [profile, setProfile, setUser]
+    [
+      profile.learnLanguage,
+      profile.nationalityCode,
+      profile.nativeLanguage,
+      profile.spokenLanguages,
+      profile.userName,
+      setProfile,
+      setUser,
+    ]
   );
 
   const onPressSkip = useCallback(() => {
@@ -204,7 +212,6 @@ const SignUpScreen: ScreenType = ({
         if (credent.user) {
           createUser(credent.user);
           track(events.CREATED_USER, { loginMethod: 'email' });
-          setIsLoading(false);
         }
       } catch (err) {
         emailInputError(

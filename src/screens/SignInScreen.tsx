@@ -88,7 +88,6 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
         );
         setIsLoading(false);
       }
-      setIsLoading(false);
     };
     f();
   }, [email, password]);
