@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, Image } from 'react-native';
+import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
-import { Zenny } from '../../images/web/index';
+import { Zenny, Note } from '../../images/web/index';
 import { WebTemplate } from '.';
 import I18n from '../../utils/I18n';
 
@@ -10,13 +10,22 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
+  },
   title: {
     fontSize: 32,
     color: primaryColor,
     fontWeight: 'bold',
-    marginBottom: 8,
+    lineHeight: 32 * 1.3,
   },
-
   text: {
     fontSize: 20,
     color: primaryColor,
@@ -36,7 +45,10 @@ const Start = ({ isPcWidth }: Props): JSX.Element => {
 
   const renderLeft = (
     <>
-      <Text style={styles.title}>{I18n.t('web.startTitle')}</Text>
+      <View style={styles.row}>
+        <Image source={Note} resizeMode="contain" style={styles.icon} />
+        <Text style={styles.title}>{I18n.t('web.startTitle')}</Text>
+      </View>
       <Text style={styles.text}>{I18n.t('web.startText')}</Text>
     </>
   );

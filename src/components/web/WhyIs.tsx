@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
-import { Giar } from '../../images/web/index';
+import { Giar, Pen } from '../../images/web';
 import { WebTemplate } from '.';
 import I18n from '../../utils/I18n';
 
@@ -10,12 +10,21 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
+  },
   title: {
     fontSize: 32,
     color: primaryColor,
     fontWeight: 'bold',
-    lineHeight: 40 * 1.3,
-    marginBottom: 16,
+    lineHeight: 32 * 1.3,
   },
   text: {
     fontSize: 20,
@@ -27,7 +36,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: 18 * 1.3,
   },
-  row: {
+  rowChat: {
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: primaryColor,
@@ -43,13 +52,16 @@ const styles = StyleSheet.create({
 const WhyIs = ({ isPcWidth }: Props): JSX.Element => {
   const renderLeft = (
     <>
-      <Text style={styles.title}>{I18n.t('web.whyTitle')}</Text>
+      <View style={styles.row}>
+        <Image source={Pen} resizeMode="contain" style={styles.icon} />
+        <Text style={styles.title}>{I18n.t('web.whyTitle')}</Text>
+      </View>
       <Text style={styles.text}>{I18n.t('web.whyText')}</Text>
     </>
   );
 
   const renderRight = (
-    <View style={styles.row}>
+    <View style={styles.rowChat}>
       <View style={styles.textContainer}>
         <Text style={styles.chatText}>{I18n.t('web.whyCnatText1')}</Text>
         <Text style={styles.chatText}>{I18n.t('web.whyCnatText2')}</Text>

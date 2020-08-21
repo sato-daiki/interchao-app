@@ -5,8 +5,6 @@ import Constants from 'expo-constants';
 import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
 } from '@env';
 
 const isProduction = Constants.manifest.releaseChannel === 'production';
@@ -15,9 +13,12 @@ const extraConfig = isProduction
   : Constants.manifest.extra.development.firebase;
 
 export const firebaseConfig = {
+  // apiKey: isProduction
+  //   ? PRODUCTION_FIREBASE_API_KEY
+  //   : DEVELOPMENT_FIREBASE_API_KEY,
   apiKey: isProduction
-    ? PRODUCTION_FIREBASE_API_KEY
-    : DEVELOPMENT_FIREBASE_API_KEY,
+    ? 'AIzaSyDysrApwcn1GCRyjA_rhecZlQICmhR4poU'
+    : 'AIzaSyAlXZS45GPlrvyxkM81NsoKnj5D8fK5CKk',
   authDomain: extraConfig.authDomain,
   databaseURL: extraConfig.databaseURL,
   projectId: extraConfig.projectId,
