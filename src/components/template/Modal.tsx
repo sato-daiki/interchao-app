@@ -2,15 +2,25 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import ModalWeb from 'modal-enhanced-react-native-web';
+import { max700 } from '../../styles/Common';
 
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    width: width - 16,
+  },
+  modalWeb: {
+    width: '100%',
+    maxWidth: max700,
+    alignSelf: 'center',
+    borderRadius: 8,
+    marginHorizontal: 8,
+    paddingVertical: 32,
+    backgroundColor: '#fff',
   },
   modal: {
+    width: width - 16,
     borderRadius: 8,
     marginHorizontal: 8,
     backgroundColor: '#fff',
@@ -38,7 +48,7 @@ const Modal1: React.FC<Props> = ({
           animationIn={animationIn}
           animationOut={animationOut}
         >
-          <View style={styles.modal}>{children}</View>
+          <View style={styles.modalWeb}>{children}</View>
         </ModalWeb>
       </View>
     );

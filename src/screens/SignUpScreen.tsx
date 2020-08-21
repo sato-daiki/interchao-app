@@ -29,6 +29,7 @@ import {
 } from '../styles/Common';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
@@ -262,52 +263,54 @@ const SignUpScreen: ScreenType = ({
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.main}>
-        <LoadingModal visible={isLoading} />
+      <DefaultLayout>
+        <View style={styles.main}>
+          <LoadingModal visible={isLoading} />
 
-        <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
-        <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
-        <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
-        <CheckTextInput
-          autoFocus
-          value={email}
-          onChangeText={(text: string): void => setEmail(text)}
-          onBlur={onBlurEmail}
-          maxLength={50}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
-          isLoading={isEmailLoading}
-          isCheckOk={isEmailCheckOk}
-          errorMessage={errorEmail}
-        />
-        <Space size={16} />
-        <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
-        <CheckTextInput
-          value={password}
-          onChangeText={(text: string): void => setPassword(text)}
-          onBlur={onBlurPassword}
-          maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          secureTextEntry
-          returnKeyType="done"
-          isCheckOk={isPasswordCheckOk}
-          errorMessage={errorPassword}
-        />
-        <Space size={32} />
-        <SubmitButton
-          title={I18n.t('common.register')}
-          onPress={onPressSubmit}
-          disable={!(isEmailCheckOk && isPasswordCheckOk)}
-        />
-        <Space size={16} />
-      </View>
+          <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
+          <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
+          <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
+          <CheckTextInput
+            autoFocus
+            value={email}
+            onChangeText={(text: string): void => setEmail(text)}
+            onBlur={onBlurEmail}
+            maxLength={50}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            isLoading={isEmailLoading}
+            isCheckOk={isEmailCheckOk}
+            errorMessage={errorEmail}
+          />
+          <Space size={16} />
+          <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
+          <CheckTextInput
+            value={password}
+            onChangeText={(text: string): void => setPassword(text)}
+            onBlur={onBlurPassword}
+            maxLength={20}
+            placeholder="Password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            secureTextEntry
+            returnKeyType="done"
+            isCheckOk={isPasswordCheckOk}
+            errorMessage={errorPassword}
+          />
+          <Space size={32} />
+          <SubmitButton
+            title={I18n.t('common.register')}
+            onPress={onPressSubmit}
+            disable={!(isEmailCheckOk && isPasswordCheckOk)}
+          />
+          <Space size={16} />
+        </View>
+      </DefaultLayout>
     </KeyboardAwareScrollView>
   );
 };

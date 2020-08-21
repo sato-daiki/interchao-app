@@ -53,7 +53,16 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
               navigation.navigate('Initialize');
             }}
           />
-          <FirstView isPcWidth={isPcWidth} navigation={navigation} />
+          <FirstView
+            onPressStart={(): void => {
+              navigation.navigate('SelectLanguage');
+            }}
+            onPressLogin={(): void => {
+              navigation.navigate('SignIn');
+            }}
+            isPcWidth={isPcWidth}
+            navigation={navigation}
+          />
           {isDesktopOrLaptopDevice ? null : <AppDownload />}
           <WhatIs isPcWidth={isPcWidth} />
           <WhyIs isPcWidth={isPcWidth} />
