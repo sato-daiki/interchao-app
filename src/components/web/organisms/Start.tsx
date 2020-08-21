@@ -6,7 +6,7 @@ import WebTemplate from '../template/WebTemplate';
 import I18n from '../../../utils/I18n';
 
 interface Props {
-  isPcWidth: boolean;
+  isMaxLayoutChange: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Start = ({ isPcWidth }: Props): JSX.Element => {
+const Start = ({ isMaxLayoutChange }: Props): JSX.Element => {
   const renderRight = (
     <Image resizeMode="contain" style={styles.image} source={Zenny} />
   );
@@ -56,7 +56,7 @@ const Start = ({ isPcWidth }: Props): JSX.Element => {
   return (
     <WebTemplate
       leftTop
-      isPcWidth={isPcWidth}
+      isMaxLayoutChange={isMaxLayoutChange}
       renderLeft={renderLeft}
       renderRight={renderRight}
     />

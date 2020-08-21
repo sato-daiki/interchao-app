@@ -51,7 +51,7 @@ const AppDownload = (): JSX.Element => {
     <WebTemplate
       warapper={styles.warapper}
       leftTop={false}
-      isPcWidth={false}
+      isMaxLayoutChange={false}
       renderLeft={renderCenter}
     />
   );

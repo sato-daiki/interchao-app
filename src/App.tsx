@@ -8,8 +8,9 @@ import Constants from 'expo-constants';
 import { MenuProvider } from 'react-native-popup-menu';
 // import Updates from 'expo-updates';
 import { Updates } from 'expo';
-
-import AppNavigator from './navigations/AppNavigator';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
+import { createAppNavigator } from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
@@ -58,6 +59,12 @@ const App: React.SFC = () => {
   useEffect(() => {
     checkUpdate();
   }, []);
+
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
+
+  const AppNavigator = createAppNavigator(isDesktopOrLaptopDevice);
 
   return (
     <Provider store={store}>

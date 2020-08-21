@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native';
-import { max580 } from '../../styles/Common';
+import { maxAuth } from '../../styles/Common';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    maxWidth: max580,
+    maxWidth: maxAuth,
     marginLeft: 'auto',
     marginRight: 'auto',
     backgroundColor: '#fff',

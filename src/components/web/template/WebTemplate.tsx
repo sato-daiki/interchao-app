@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
-import { maxWindowWidth, offWhite } from '../../../styles/Common';
+import { maxLayoutChange, offWhite } from '../../../styles/Common';
 
 interface Props {
-  isPcWidth: boolean;
+  isMaxLayoutChange: boolean;
   leftTop: boolean;
   warapper?: StyleProp<ViewStyle>;
   container?: StyleProp<ViewStyle>;
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    maxWidth: maxWindowWidth,
+    maxWidth: maxLayoutChange,
     flex: 1,
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
 });
 
 const WebTemplate = ({
-  isPcWidth,
+  isMaxLayoutChange,
   leftTop,
   warapper,
   container,
@@ -61,7 +61,7 @@ const WebTemplate = ({
       <View
         style={[
           styles.container,
-          isPcWidth
+          isMaxLayoutChange
             ? styles.containerPc
             : {
                 ...styles.containerSp,
@@ -74,7 +74,7 @@ const WebTemplate = ({
           <View
             style={[
               styles.partContainer,
-              { paddingBottom: !isPcWidth && leftTop ? 32 : 0 },
+              { paddingBottom: !isMaxLayoutChange && leftTop ? 32 : 0 },
               leftContainer,
             ]}
           >
@@ -85,7 +85,7 @@ const WebTemplate = ({
           <View
             style={[
               styles.partContainer,
-              { paddingBottom: !isPcWidth ? 32 : 0 },
+              { paddingBottom: !isMaxLayoutChange ? 32 : 0 },
               centerContainer,
             ]}
           >
@@ -96,7 +96,7 @@ const WebTemplate = ({
           <View
             style={[
               styles.partContainer,
-              { paddingBottom: !isPcWidth && !leftTop ? 32 : 0 },
+              { paddingBottom: !isMaxLayoutChange && !leftTop ? 32 : 0 },
               rightContainer,
             ]}
           >
