@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { maxWindowWidth, offBlack, offWhite } from '../../../styles/Common';
+import { maxLayoutChange, offBlack, offWhite } from '../../../styles/Common';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    maxWidth: maxWindowWidth,
+    maxWidth: maxLayoutChange,
     marginLeft: 'auto',
     marginRight: 'auto',
     paddingVertical: 24,

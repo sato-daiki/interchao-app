@@ -8,7 +8,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { fontSizeM, max580, mainColor } from '../../styles/Common';
+import { fontSizeM, maxPartL, mainColor } from '../../styles/Common';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: mainColor,
     width: '100%',
-    maxWidth: max580,
+    maxWidth: maxPartL,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',

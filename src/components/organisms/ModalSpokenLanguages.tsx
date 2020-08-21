@@ -5,7 +5,7 @@ import { Language } from '../../types';
 import { getLanguage } from '../../utils/diary';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
-import { max580 } from '../../styles/Common';
+import { maxPartL } from '../../styles/Common';
 
 export interface Props {
   visible: boolean;
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   picker: {
-    maxWidth: max580,
+    maxWidth: maxPartL,
     width: '100%',
   },
 });

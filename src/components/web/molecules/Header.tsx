@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { minDeviceWidth, headerBlack } from '../../../styles/Common';
-import { Icon } from '../../../images';
+import { maxMain, headerBlack } from '../../../styles/Common';
 
 interface Props {
   onPress: () => void;
@@ -14,7 +13,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    maxWidth: minDeviceWidth,
+    maxWidth: maxMain,
     marginLeft: 'auto',
     marginRight: 'auto',
     paddingVertical: 8,

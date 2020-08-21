@@ -7,7 +7,7 @@ import I18n from '../../../utils/I18n';
 import { getImage } from '../../../utils/web';
 
 interface Props {
-  isPcWidth: boolean;
+  isMaxLayoutChange: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhatIs = ({ isPcWidth }: Props): JSX.Element | null => {
+const WhatIs = ({ isMaxLayoutChange }: Props): JSX.Element | null => {
   const source = getImage('correct');
   const renderLeft = source ? (
     <Image resizeMode="contain" style={styles.image} source={source} />
@@ -59,7 +59,7 @@ const WhatIs = ({ isPcWidth }: Props): JSX.Element | null => {
   return (
     <WebTemplate
       leftTop={false}
-      isPcWidth={isPcWidth}
+      isMaxLayoutChange={isMaxLayoutChange}
       renderLeft={renderLeft}
       renderRight={renderRight}
     />

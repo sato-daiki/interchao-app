@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import ModalWeb from 'modal-enhanced-react-native-web';
-import { max700 } from '../../styles/Common';
+import { maxModal } from '../../styles/Common';
 
 const { width } = Dimensions.get('window');
 
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   modalWeb: {
     width: '100%',
-    maxWidth: max700,
+    maxWidth: maxModal,
     alignSelf: 'center',
     borderRadius: 8,
     marginHorizontal: 8,

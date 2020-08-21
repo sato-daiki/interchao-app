@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { maxWindowWidth, offBlack, max375 } from '../../../styles/Common';
+import { maxLayoutChange, offBlack, maxPartS } from '../../../styles/Common';
 import { WhiteButton, Space, SubmitButton } from '../../atoms';
 import I18n from '../../../utils/I18n';
 
 interface Props {
-  isPcWidth: boolean;
+  isMaxLayoutChange: boolean;
   navigation: NavigationStackProp;
   onPressStart: () => void;
   onPressLogin: () => void;
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    maxWidth: maxWindowWidth,
+    maxWidth: maxLayoutChange,
     flex: 1,
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     maxWidth: 300,
     alignItems: 'flex-start',
-    width: max375,
+    width: maxPartS,
     flex: 1,
     paddingHorizontal: 16,
   },
@@ -72,20 +72,20 @@ const styles = StyleSheet.create({
 });
 
 const FirstView = ({
-  isPcWidth,
+  isMaxLayoutChange,
   onPressStart,
   onPressLogin,
 }: Props): JSX.Element => {
   const setLeft = (): StyleProp<TextStyle> => {
     return {
-      alignSelf: isPcWidth ? 'flex-start' : 'center',
-      textAlign: isPcWidth ? 'left' : 'center',
+      alignSelf: isMaxLayoutChange ? 'flex-start' : 'center',
+      textAlign: isMaxLayoutChange ? 'left' : 'center',
     };
   };
 
   const setRight = (): StyleProp<TextStyle> => {
     return {
-      alignSelf: isPcWidth ? 'flex-start' : 'center',
+      alignSelf: isMaxLayoutChange ? 'flex-start' : 'center',
     };
   };
 
@@ -94,7 +94,7 @@ const FirstView = ({
       <View
         style={[
           styles.container,
-          isPcWidth ? styles.containerPc : styles.containerSp,
+          isMaxLayoutChange ? styles.containerPc : styles.containerSp,
         ]}
       >
         <View style={styles.textContainer}>

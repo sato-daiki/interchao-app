@@ -6,7 +6,7 @@ import WebTemplate from '../template/WebTemplate';
 import I18n from '../../../utils/I18n';
 
 interface Props {
-  isPcWidth: boolean;
+  isMaxLayoutChange: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhyIs = ({ isPcWidth }: Props): JSX.Element => {
+const WhyIs = ({ isMaxLayoutChange }: Props): JSX.Element => {
   const renderLeft = (
     <>
       <View style={styles.row}>
@@ -72,8 +72,8 @@ const WhyIs = ({ isPcWidth }: Props): JSX.Element => {
         <Image
           resizeMode="cover"
           style={{
-            width: isPcWidth ? 150 : 75,
-            height: isPcWidth ? 150 : 75,
+            width: isMaxLayoutChange ? 150 : 75,
+            height: isMaxLayoutChange ? 150 : 75,
           }}
           source={Giar}
         />
@@ -84,7 +84,7 @@ const WhyIs = ({ isPcWidth }: Props): JSX.Element => {
   return (
     <WebTemplate
       leftTop
-      isPcWidth={isPcWidth}
+      isMaxLayoutChange={isMaxLayoutChange}
       renderLeft={renderLeft}
       renderRight={renderRight}
     />

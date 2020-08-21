@@ -6,12 +6,11 @@ import {
   NavigationStackOptions,
 } from 'react-navigation-stack';
 import { useMediaQuery } from 'react-responsive';
-import { maxWindowWidth, minDeviceWidth } from '../styles/Common';
+import { maxLayoutChange } from '../styles/Common';
 import { track, events } from '../utils/Analytics';
-import { Fotter, Header } from '../components/web/molecules';
+import { AppDownload, Fotter, Header } from '../components/web/molecules';
 import FirstView from '../components/web/organisms/FirstView';
 import WhatIs from '../components/web/organisms/WhatIs';
-import AppDownload from '../components/web/molecules/AppDownload';
 import WhyIs from '../components/web/organisms/WhyIs';
 import Reason from '../components/web/organisms/Reason';
 import Correct from '../components/web/organisms/Correct';
@@ -37,11 +36,10 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, []);
 
   // PCのサイズの時（ブラウザの横サイズ）
-  const isPcWidth = useMediaQuery({ minWidth: maxWindowWidth });
+  const isMaxLayoutChange = useMediaQuery({ minWidth: maxLayoutChange });
 
-  // 端末自体がスマホの時
-  const isDesktopOrLaptopDevice = useMediaQuery({
-    minDeviceWidth,
+  const isTabletOrMobileDevice = useMediaQuery({
+    maxDeviceWidth: 1224,
   });
 
   return (
@@ -60,17 +58,17 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
             onPressLogin={(): void => {
               navigation.navigate('SignIn');
             }}
-            isPcWidth={isPcWidth}
+            isMaxLayoutChange={isMaxLayoutChange}
             navigation={navigation}
           />
-          {isDesktopOrLaptopDevice ? null : <AppDownload />}
-          <WhatIs isPcWidth={isPcWidth} />
-          <WhyIs isPcWidth={isPcWidth} />
-          <Reason isPcWidth={isPcWidth} />
-          <Correct isPcWidth={isPcWidth} />
-          <Example isPcWidth={isPcWidth} />
-          <Start isPcWidth={isPcWidth} />
-          {isDesktopOrLaptopDevice ? null : <AppDownload />}
+          {isTabletOrMobileDevice ? <AppDownload /> : null}
+          <WhatIs isMaxLayoutChange={isMaxLayoutChange} />
+          <WhyIs isMaxLayoutChange={isMaxLayoutChange} />
+          <Reason isMaxLayoutChange={isMaxLayoutChange} />
+          <Correct isMaxLayoutChange={isMaxLayoutChange} />
+          <Example isMaxLayoutChange={isMaxLayoutChange} />
+          <Start isMaxLayoutChange={isMaxLayoutChange} />
+          {isTabletOrMobileDevice ? <AppDownload /> : null}
           <Fotter />
         </View>
       </SafeAreaView>
