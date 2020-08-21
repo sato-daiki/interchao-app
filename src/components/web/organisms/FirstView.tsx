@@ -1,9 +1,13 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import { NavigationStackProp } from 'react-navigation-stack';
-import { maxWindowWidth, offBlack, maxButtonWidth } from '../../styles/Common';
-import { WhiteButton, Space, SubmitButton } from '../atoms';
-import I18n from '../../utils/I18n';
+import {
+  maxWindowWidth,
+  offBlack,
+  maxButtonWidth,
+} from '../../../styles/Common';
+import { WhiteButton, Space, SubmitButton } from '../../atoms';
+import I18n from '../../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;

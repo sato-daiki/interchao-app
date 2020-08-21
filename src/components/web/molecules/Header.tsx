@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { minDeviceWidth, headerBlack } from '../../styles/Common';
-import { Icon } from '../../images';
+import { minDeviceWidth, headerBlack } from '../../../styles/Common';
+import { Icon } from '../../../images';
 
 interface Props {
   onPress: () => void;
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DownloadIcons = ({ onPress }: Props): JSX.Element => {
+const Header = ({ onPress }: Props): JSX.Element => {
   return (
     <View style={styles.warapper}>
       <View style={styles.container}>
@@ -49,4 +49,4 @@ const DownloadIcons = ({ onPress }: Props): JSX.Element => {
   );
 };
 
-export default DownloadIcons;
+export default Header;

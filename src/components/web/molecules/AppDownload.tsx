@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Linking } from 'expo';
-import { GooglePlayBadge, Appstore } from '../../images/web/index';
-import { WebTemplate } from '.';
+import { GooglePlayBadge, Appstore } from '../../../images/web/index';
+import WebTemplate from '../template/WebTemplate';
 
 const styles = StyleSheet.create({
   warapper: {

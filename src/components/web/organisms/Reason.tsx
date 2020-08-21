@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { primaryColor } from '../../styles/Common';
-import { Zebra } from '../../images/web/index';
-import { WebTemplate } from '.';
-import I18n from '../../utils/I18n';
+import { primaryColor } from '../../../styles/Common';
+import { Zebra } from '../../../images/web/index';
+import WebTemplate from '../template/WebTemplate';
+import I18n from '../../../utils/I18n';
 
 interface Props {
   isPcWidth: boolean;
