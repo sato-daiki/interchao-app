@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, Image } from 'react-native';
+import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
-import { GiarEn } from '../../images/web/index';
+import { GiarEn, PointGet } from '../../images/web/index';
 import { WebTemplate } from '.';
 import I18n from '../../utils/I18n';
 
@@ -10,12 +10,21 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
+  },
   title: {
     fontSize: 32,
     color: primaryColor,
     fontWeight: 'bold',
     lineHeight: 32 * 1.3,
-    marginBottom: 16,
   },
   text: {
     fontSize: 20,
@@ -32,7 +41,10 @@ const styles = StyleSheet.create({
 const Correct = ({ isPcWidth }: Props): JSX.Element => {
   const renderLeft = (
     <>
-      <Text style={styles.title}>{I18n.t('web.correctTitle')}</Text>
+      <View style={styles.row}>
+        <Image source={PointGet} resizeMode="contain" style={styles.icon} />
+        <Text style={styles.title}>{I18n.t('web.correctTitle')}</Text>
+      </View>
       <Text style={styles.text}>{I18n.t('web.correctText1')}</Text>
       <Text style={styles.text}>{I18n.t('web.correctText2')}</Text>
     </>

@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, Image } from 'react-native';
+import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
-import { EntryEn, CommentEn, SummaryEn } from '../../images/web/index';
+import { EntryEn, CommentEn, SummaryEn, Sample } from '../../images/web';
 import { WebTemplate } from '.';
 import I18n from '../../utils/I18n';
 
@@ -10,12 +10,21 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
+  },
   title: {
     fontSize: 32,
     color: primaryColor,
     fontWeight: 'bold',
-    lineHeight: 40 * 1.3,
-    marginBottom: 16,
+    lineHeight: 32 * 1.3,
   },
   text: {
     fontSize: 20,
@@ -50,7 +59,10 @@ const styles = StyleSheet.create({
 const Example = ({ isPcWidth }: Props): JSX.Element => {
   const renderTopCenter = (
     <>
-      <Text style={styles.title}>{I18n.t('web.exampleTitle')}</Text>
+      <View style={styles.row}>
+        <Image source={Sample} resizeMode="contain" style={styles.icon} />
+        <Text style={styles.title}>{I18n.t('web.exampleTitle')}</Text>
+      </View>
       <Text style={styles.text}>{I18n.t('web.exampleText')}</Text>
     </>
   );
