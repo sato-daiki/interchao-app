@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 'auto',
     marginRight: 'auto',
-    textAlign: 'center',
   },
   containerPc: {
     alignItems: 'center',
@@ -83,7 +82,13 @@ const WebTemplate = ({
           </View>
         ) : null}
         {renderCenter ? (
-          <View style={[styles.partContainer, centerContainer]}>
+          <View
+            style={[
+              styles.partContainer,
+              { paddingBottom: !isPcWidth ? 32 : 0 },
+              centerContainer,
+            ]}
+          >
             {renderCenter}
           </View>
         ) : null}

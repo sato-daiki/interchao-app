@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, Image, View } from 'react-native';
 import { primaryColor } from '../../styles/Common';
-import { GiarEn, PointGet } from '../../images/web/index';
+import { PointGet } from '../../images/web/index';
 import { WebTemplate } from '.';
 import I18n from '../../utils/I18n';
+import { getImage } from '../../utils/web';
 
 interface Props {
   isPcWidth: boolean;
@@ -50,8 +51,11 @@ const Correct = ({ isPcWidth }: Props): JSX.Element => {
     </>
   );
 
-  const renderRight = (
-    <Image resizeMode="contain" style={styles.image} source={GiarEn} />
+  const source = getImage('girl');
+  const renderRight = source ? (
+    <Image resizeMode="contain" style={styles.image} source={source} />
+  ) : (
+    <View />
   );
 
   return (
