@@ -33,3 +33,16 @@ export const DefaultSearchBarOptions: NavigationStackOptions = {
     marginRight: 64,
   },
 };
+
+export const DefaultDiaryOptions: NavigationStackOptions = {
+  headerTitleAlign: getEachOS({
+    ios: 'center',
+    android: 'left',
+    web: 'center',
+  }),
+  headerTitleContainerStyle: {
+    flex: 1,
+    marginRight: 64,
+    marginLeft: 64,
+  },
+};

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { maxMain, headerBlack } from '../../../styles/Common';
+import { Icon } from '../../../images/web';
 
 interface Props {
   onPress: () => void;

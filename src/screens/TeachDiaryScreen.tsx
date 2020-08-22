@@ -19,6 +19,8 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
 import {
   connectActionSheet,
   useActionSheet,
@@ -52,6 +54,7 @@ import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
 import { appShare } from '../utils/common';
+import TeachDiaryMenu from '../components/web/organisms/TeachDiaryMenu';
 
 const { width } = Dimensions.get('window');
 
@@ -153,6 +156,10 @@ const TeachDiaryScreen: ScreenType = ({
   const [correction3, setCorrection3] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
   const viewShotRef = useRef<any>(null);
+
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
 
   const onPressAppShare = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -341,7 +348,9 @@ const TeachDiaryScreen: ScreenType = ({
     if (!teachDiary) return;
     navigation.setParams({
       onPressMore,
+      onPressAppShare,
       title: teachDiary.title,
+      isDesktopOrLaptopDevice,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teachDiary]);
@@ -497,14 +506,20 @@ TeachDiaryScreen.navigationOptions = ({
 }): NavigationStackOptions => {
   const title = navigation.getParam('title');
   const onPressMore = navigation.getParam('onPressMore');
-
+  const onPressAppShare = navigation.getParam('onPressAppShare');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
   return {
     ...DefaultNavigationOptions,
     title,
     headerTitleStyle: styles.headerTitleStyle,
-    headerRight: (): JSX.Element => (
-      <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-    ),
+    headerRight: (): JSX.Element =>
+      isDesktopOrLaptopDevice ? (
+        <TeachDiaryMenu onPressAppShare={onPressAppShare} />
+      ) : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+      ),
   };
 };
 

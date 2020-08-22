@@ -10,7 +10,6 @@ import {
   Text,
   View,
   ScrollView,
-  Dimensions,
   ActivityIndicator,
   Platform,
 } from 'react-native';
@@ -18,6 +17,8 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
 import ViewShot from 'react-native-view-shot';
 import {
   connectActionSheet,
@@ -28,7 +29,10 @@ import { Diary, Profile } from '../types';
 import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
 import { MyDiaryStatus, Sns } from '../components/molecules';
 import { ModalConfirm } from '../components/organisms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultDiaryOptions,
+} from '../constants/NavigationOptions';
 import {
   primaryColor,
   subTextColor,
@@ -47,7 +51,7 @@ import {
 } from '../components/atoms';
 import I18n from '../utils/I18n';
 import RichText from '../components/organisms/RichText';
-import { getEachOS } from '../utils/common';
+import MyDiaryMenu from '../components/web/organisms/MyDiaryMenu';
 
 export interface Props {
   diary?: Diary;
@@ -71,10 +75,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-  },
-  headerTitleStyle: {
-    width: Dimensions.get('window').width - 140,
-    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'center' }),
   },
   diaryOriginal: {
     paddingHorizontal: 16,
@@ -137,6 +137,10 @@ const MyDiaryScreen: ScreenType = ({
   const [isModalDelete, setIsModalDelete] = useState(false);
   const viewShotRef = useRef<any>(null);
 
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
+
   const onPressDeleteMenu = useCallback(() => {
     setIsModalDelete(true);
   }, []);
@@ -163,7 +167,9 @@ const MyDiaryScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({
       onPressMore,
+      onPressDeleteMenu,
       title: diary ? diary.title : '',
+      isDesktopOrLaptopDevice,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diary]);
@@ -319,14 +325,21 @@ const MyDiaryScreen: ScreenType = ({
 
 MyDiaryScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
   const onPressMore = navigation.getParam('onPressMore');
+  const onPressDeleteMenu = navigation.getParam('onPressDeleteMenu');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
   const title = navigation.getParam('title');
   return {
     ...DefaultNavigationOptions,
+    ...DefaultDiaryOptions,
     title,
-    headerTitleStyle: styles.headerTitleStyle,
-    headerRight: (): JSX.Element => (
-      <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-    ),
+    headerRight: (): JSX.Element =>
+      isDesktopOrLaptopDevice ? (
+        <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />
+      ) : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+      ),
   };
 };
 
