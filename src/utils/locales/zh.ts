@@ -65,6 +65,7 @@ const mainTab = {
   myDiary: '我的日记',
   postDiary: '写日记',
   teachDiary: '批改的日记',
+  myPage: '我的页面',
 };
 
 // 共通のエラーメッセージ

@@ -83,6 +83,20 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
           navigation.navigate('Notice');
         }}
       />
+      {currentUser ? (
+        <OptionItem
+          title={I18n.t('myDiaryListMenu.reviewList')}
+          onPress={(): void => {
+            navigation.navigate('ReviewList', { uid: currentUser.uid });
+          }}
+        />
+      ) : null}
+      <OptionItem
+        title={I18n.t('setting.notice')}
+        onPress={(): void => {
+          navigation.navigate('Notice');
+        }}
+      />
       {currentUser && currentUser.email ? (
         <>
           <OptionItem

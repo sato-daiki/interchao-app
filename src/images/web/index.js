@@ -14,6 +14,7 @@ module.exports = {
   GiarZh: require('./girl_zh.png'),
   GooglePlayBadge: require('./google-play-badge.png'),
   Icon: require('./icon.png'),
+  IconSmall: require('./icon_small.png'),
   Note: require('./note.png'),
   Pen: require('./pen.png'),
   PointGet: require('./point_get.png'),
