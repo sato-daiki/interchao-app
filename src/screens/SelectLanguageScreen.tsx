@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -16,7 +22,10 @@ import {
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { Profile, CountryCode, Language } from '../types';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
@@ -28,6 +37,7 @@ import {
   checkSelectLanguage,
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { HeaderLeft } from '../components/atoms';
 
 export interface Props {
   profile: Profile;
@@ -281,9 +291,27 @@ const SelectLanguageScreen: ScreenType = ({
   );
 };
 
-SelectLanguageScreen.navigationOptions = (): NavigationStackOptions => {
+SelectLanguageScreen.navigationOptions = ({
+  navigation,
+}): NavigationStackOptions => {
+  const headerLeftOptions =
+    Platform.OS === 'web'
+      ? {
+          headerLeft: (): JSX.Element => (
+            <HeaderLeft
+              text={I18n.t('common.close')}
+              onPress={(): void => {
+                navigation.navigate('Initialize');
+              }}
+            />
+          ),
+        }
+      : {};
+
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
+    ...headerLeftOptions,
     title: I18n.t('selectLanguage.headerTitle'),
   };
 };

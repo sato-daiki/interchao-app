@@ -1,5 +1,5 @@
 import { NavigationStackOptions } from 'react-navigation-stack';
-import { primaryColor, fontSizeL } from '../styles/Common';
+import { primaryColor, fontSizeL, maxModal, maxAuth } from '../styles/Common';
 import { getEachOS } from '../utils/common';
 
 export const DefaultNavigationOptions: NavigationStackOptions = {
@@ -44,5 +44,23 @@ export const DefaultDiaryOptions: NavigationStackOptions = {
     flex: 1,
     marginRight: 64,
     marginLeft: 64,
+  },
+};
+
+export const DefaultModalLayoutOptions: NavigationStackOptions = {
+  cardStyle: {
+    width: '100%',
+    maxWidth: maxModal,
+    marginHorizontal: 'auto',
+    backgroundColor: '#fff',
+  },
+};
+
+export const DefaultAuthLayoutOptions: NavigationStackOptions = {
+  cardStyle: {
+    width: '100%',
+    maxWidth: maxAuth,
+    marginHorizontal: 'auto',
+    backgroundColor: '#fff',
   },
 };

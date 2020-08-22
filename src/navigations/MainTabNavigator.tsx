@@ -35,8 +35,6 @@ import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
 import UserDiaryScreenContainer from '../containers/UserDiaryScreenContainer';
-import SidebarTabs from '../components/web/molecules/SidebarTabs';
-import Sidebar from '../components/web/organisms/Sidebar';
 import createSidebarNavigator from './SidebarTabNavigator';
 
 /* components */
@@ -261,6 +259,11 @@ export const createMainTabNavigator = (isDesktopOrLaptopDevice: boolean) => {
     {
       headerMode: 'none',
       mode: 'modal',
+      defaultNavigationOptions: {
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+        },
+      },
     }
   );
 };

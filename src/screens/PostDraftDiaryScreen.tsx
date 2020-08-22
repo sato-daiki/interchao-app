@@ -8,7 +8,10 @@ import firebase from '../constants/firebase';
 import { User } from '../types/user';
 
 import { HeaderRight, HeaderLeft } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
@@ -279,6 +282,7 @@ PostDraftDiaryScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('postDraftDiary.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />

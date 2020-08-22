@@ -14,7 +14,10 @@ import {
 import Space from '../components/atoms/Space';
 import { CheckTextInput } from '../components/molecules';
 import { Profile } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import {
   checkDuplicatedUserName,
   checkTypeUserName,
@@ -167,6 +170,7 @@ const InputUserNameScreen: ScreenType = ({
 InputUserNameScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
     title: I18n.t('inputUserName.headerTitle'),
   };
 };

@@ -7,7 +7,7 @@ import {
 import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer';
 
 /* navigator */
-import AuthNavigator from './AuthNavigator';
+import { createAuthTabNavigator } from './AuthNavigator';
 import { createMainTabNavigator } from './MainTabNavigator';
 
 export const createAppNavigator = (
@@ -20,7 +20,7 @@ export const createAppNavigator = (
           screen: AuthLoadingScreenContainer,
           navigationOptions: { header: null },
         },
-        Auth: AuthNavigator,
+        Auth: createAuthTabNavigator(),
         MainTab: createMainTabNavigator(isDesktopOrLaptopDevice),
       },
       {

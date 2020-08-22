@@ -1,13 +1,27 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { LoadingModal, Space, SubmitButton } from '../components/atoms';
+import {
+  LoadingModal,
+  Space,
+  SubmitButton,
+  HeaderLeft,
+} from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
 import { emailInputError, emailValidate } from '../utils/common';
@@ -172,9 +186,25 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
   );
 };
 
-SignInScreen.navigationOptions = (): NavigationStackOptions => {
+SignInScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
+  const headerLeftOptions =
+    Platform.OS === 'web'
+      ? {
+          headerLeft: (): JSX.Element => (
+            <HeaderLeft
+              text={I18n.t('common.close')}
+              onPress={(): void => {
+                navigation.navigate('Initialize');
+              }}
+            />
+          ),
+        }
+      : {};
+
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
+    ...headerLeftOptions,
     title: I18n.t('signIn.headerTitle'),
   };
 };

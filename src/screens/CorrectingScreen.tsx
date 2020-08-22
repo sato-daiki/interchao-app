@@ -26,7 +26,10 @@ import { CorrectingHeader, KeyboardHideButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
 
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { User, Diary, Profile, Correction, TextInfo, Diff } from '../types';
 import I18n from '../utils/I18n';
 import { getUsePoints } from '../utils/diary';
@@ -41,6 +44,7 @@ import {
   primaryColor,
 } from '../styles/Common';
 import Corrections from '../components/organisms/Corrections';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   user: User;
@@ -380,77 +384,81 @@ const CorrectingScreen: ScreenType = ({
   }, [isProfileLoading, teachDiary, targetProfile, onTimeUp]);
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <LoadingModal visible={isLoading} />
-        <ModalTimeUp
-          visible={isModalTimeUp}
-          onPressClose={onPressCloseTimeUp}
-        />
-        <ModalCorrectingDone
-          visible={isModalDone}
-          getPoints={getPoints}
-          points={user.points}
-          onPressClose={onPressCloseDone}
-        />
-        <KeyboardAwareScrollView
-          style={styles.scrollView}
-          keyboardShouldPersistTaps="handled"
-          extraScrollHeight={32}
-        >
-          <FlatList
-            data={textInfos}
-            keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
-            renderItem={renderItem}
-            ListHeaderComponent={listHeaderComponent}
+    <DefaultLayout lSize>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <LoadingModal visible={isLoading} />
+          <ModalTimeUp
+            visible={isModalTimeUp}
+            onPressClose={onPressCloseTimeUp}
           />
-          {isFirstEdit ? (
-            <>
-              <TouchableOpacity
-                style={styles.buttonRow}
-                onPress={(): void => {
-                  refSummary.current.focus();
-                }}
-              >
-                <MaterialCommunityIcons
-                  size={22}
-                  color={subTextColor}
-                  name="plus"
+          <ModalCorrectingDone
+            visible={isModalDone}
+            getPoints={getPoints}
+            points={user.points}
+            onPressClose={onPressCloseDone}
+          />
+          <KeyboardAwareScrollView
+            style={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
+            extraScrollHeight={32}
+          >
+            <FlatList
+              data={textInfos}
+              keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
+              renderItem={renderItem}
+              ListHeaderComponent={listHeaderComponent}
+            />
+            {isFirstEdit ? (
+              <>
+                <TouchableOpacity
+                  style={styles.buttonRow}
+                  onPress={(): void => {
+                    refSummary.current.focus();
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    size={22}
+                    color={subTextColor}
+                    name="plus"
+                  />
+                  <Text style={styles.label}>
+                    {I18n.t('correcting.summary')}
+                  </Text>
+                </TouchableOpacity>
+                {/* まとめは改行がある。他のはない */}
+                <TextInput
+                  ref={refSummary}
+                  style={styles.textInputSummary}
+                  value={summary}
+                  multiline
+                  autoCapitalize="none"
+                  spellCheck
+                  autoCorrect
+                  underlineColorAndroid="transparent"
+                  scrollEnabled={false}
+                  onChangeText={(text: string): void => setSummary(text)}
+                  onBlur={onHideKeyboard}
                 />
-                <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
-              </TouchableOpacity>
-              {/* まとめは改行がある。他のはない */}
-              <TextInput
-                ref={refSummary}
-                style={styles.textInputSummary}
-                value={summary}
-                multiline
-                autoCapitalize="none"
-                spellCheck
-                autoCorrect
-                underlineColorAndroid="transparent"
-                scrollEnabled={false}
-                onChangeText={(text: string): void => setSummary(text)}
-                onBlur={onHideKeyboard}
-              />
-            </>
-          ) : null}
-          {correction ? <Space size={32} /> : null}
-          <Corrections
-            headerTitle={I18n.t('correcting.header')}
-            correction={correction}
-            correction2={correction2}
-            textLanguage={teachDiary.profile.learnLanguage}
-            nativeLanguage={currentProfile.nativeLanguage}
-          />
-          <Space size={32} />
-        </KeyboardAwareScrollView>
-      </View>
-      <KeyboardHideButton
-        isKeyboard={isKeyboard}
-        setIsKeyboard={setIsKeyboard}
-      />
-    </SafeAreaView>
+              </>
+            ) : null}
+            {correction ? <Space size={32} /> : null}
+            <Corrections
+              headerTitle={I18n.t('correcting.header')}
+              correction={correction}
+              correction2={correction2}
+              textLanguage={teachDiary.profile.learnLanguage}
+              nativeLanguage={currentProfile.nativeLanguage}
+            />
+            <Space size={32} />
+          </KeyboardAwareScrollView>
+        </View>
+        <KeyboardHideButton
+          isKeyboard={isKeyboard}
+          setIsKeyboard={setIsKeyboard}
+        />
+      </SafeAreaView>
+    </DefaultLayout>
   );
 };
 
@@ -460,8 +468,10 @@ CorrectingScreen.navigationOptions = ({
   const isFirstEdit = navigation.getParam('isFirstEdit');
   const onPressSubmitButton = navigation.getParam('onPressSubmitButton');
   const onPressClose = navigation.getParam('onPressClose');
+
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('correcting.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />

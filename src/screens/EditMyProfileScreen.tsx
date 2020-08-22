@@ -27,7 +27,10 @@ import {
   HeaderRight,
   HeaderLeft,
 } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { Profile, Language } from '../types';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
@@ -38,6 +41,7 @@ import {
   getLanguageNum,
   checkSelectLanguage,
 } from '../utils/diary';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
@@ -263,163 +267,167 @@ const EditMyProfileScreen: ScreenType = ({
   const rowStyle = { paddingVertical: nationalityCode ? 6 : 16 };
 
   return (
-    <View style={styles.container}>
-      <ModalSpokenLanguages
-        visible={isLearn}
-        defaultLanguage={learnLanguage}
-        languages={getAllLanguage()}
-        onPressSubmit={(language: Language): void => {
-          setLearnLanguage(language);
-          setIsLearn(false);
-        }}
-        onPressClose={(): void => setIsLearn(false)}
-      />
-      <ModalSpokenLanguages
-        visible={isNative}
-        defaultLanguage={nativeLanguage}
-        languages={getAllLanguage()}
-        onPressSubmit={(language: Language): void => {
-          setNativeLanguage(language);
-          setIsNative(false);
-        }}
-        onPressClose={(): void => setIsNative(false)}
-      />
-      <ModalSpokenLanguages
-        visible={isSpoken}
-        languages={getTargetLanguages(
-          learnLanguage,
-          nativeLanguage,
-          spokenLanguages
-        )}
-        onPressSubmit={(language: Language): void => {
-          setSpokenLanguages([...spokenLanguages, language]);
-          setIsSpoken(false);
-        }}
-        onPressClose={(): void => setIsSpoken(false)}
-      />
-      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
-        <LoadingModal visible={isLoading} />
-        <View style={styles.avatar}>
-          <Avatar photoUrl={photoUrl} pickImage={pickImage} />
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
-          <TextInput
-            value={name || ''}
-            onChangeText={(text: string): void => setName(text)}
-            maxLength={20}
-            placeholder="username"
-            keyboardType="default"
-            autoCapitalize="none"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            style={styles.textInput}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.row}
-          activeOpacity={1}
-          onPress={onPressUserName}
-        >
-          <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
-          <Text>{userName}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.row}
-          activeOpacity={1}
-          onPress={(): void => setIsLearn(true)}
-        >
-          <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
-          <Text>{getLanguage(learnLanguage)}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.row}
-          activeOpacity={1}
-          onPress={(): void => setIsNative(true)}
-        >
-          <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
-          <Text>{getLanguage(nativeLanguage)}</Text>
-        </TouchableOpacity>
-        <View style={styles.spokenContainer}>
-          <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
-          <View style={styles.right}>
-            {spokenLanguages.map(item => (
-              <View style={styles.spokenRow} key={item}>
-                <Text style={styles.spoken}>{getLanguage(item)}</Text>
+    <DefaultLayout lSize>
+      <View style={styles.container}>
+        <ModalSpokenLanguages
+          visible={isLearn}
+          defaultLanguage={learnLanguage}
+          languages={getAllLanguage()}
+          onPressSubmit={(language: Language): void => {
+            setLearnLanguage(language);
+            setIsLearn(false);
+          }}
+          onPressClose={(): void => setIsLearn(false)}
+        />
+        <ModalSpokenLanguages
+          visible={isNative}
+          defaultLanguage={nativeLanguage}
+          languages={getAllLanguage()}
+          onPressSubmit={(language: Language): void => {
+            setNativeLanguage(language);
+            setIsNative(false);
+          }}
+          onPressClose={(): void => setIsNative(false)}
+        />
+        <ModalSpokenLanguages
+          visible={isSpoken}
+          languages={getTargetLanguages(
+            learnLanguage,
+            nativeLanguage,
+            spokenLanguages
+          )}
+          onPressSubmit={(language: Language): void => {
+            setSpokenLanguages([...spokenLanguages, language]);
+            setIsSpoken(false);
+          }}
+          onPressClose={(): void => setIsSpoken(false)}
+        />
+        <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+          <LoadingModal visible={isLoading} />
+          <View style={styles.avatar}>
+            <Avatar photoUrl={photoUrl} pickImage={pickImage} />
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
+            <TextInput
+              value={name || ''}
+              onChangeText={(text: string): void => setName(text)}
+              maxLength={20}
+              placeholder="username"
+              keyboardType="default"
+              autoCapitalize="none"
+              autoCorrect={false}
+              underlineColorAndroid="transparent"
+              style={styles.textInput}
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.row}
+            activeOpacity={1}
+            onPress={onPressUserName}
+          >
+            <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
+            <Text>{userName}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.row}
+            activeOpacity={1}
+            onPress={(): void => setIsLearn(true)}
+          >
+            <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
+            <Text>{getLanguage(learnLanguage)}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.row}
+            activeOpacity={1}
+            onPress={(): void => setIsNative(true)}
+          >
+            <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
+            <Text>{getLanguage(nativeLanguage)}</Text>
+          </TouchableOpacity>
+          <View style={styles.spokenContainer}>
+            <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
+            <View style={styles.right}>
+              {spokenLanguages.map(item => (
+                <View style={styles.spokenRow} key={item}>
+                  <Text style={styles.spoken}>{getLanguage(item)}</Text>
+                  <TouchableOpacity
+                    style={styles.trash}
+                    onPress={(): void => {
+                      setSpokenLanguages(
+                        spokenLanguages.filter(s => s !== item)
+                      );
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      size={20}
+                      color={primaryColor}
+                      name="trash-can-outline"
+                    />
+                  </TouchableOpacity>
+                </View>
+              ))}
+
+              {spokenLanguages.length < getLanguageNum() - 2 ? (
                 <TouchableOpacity
-                  style={styles.trash}
-                  onPress={(): void => {
-                    setSpokenLanguages(spokenLanguages.filter(s => s !== item));
-                  }}
+                  style={styles.addRow}
+                  onPress={(): void => setIsSpoken(true)}
                 >
                   <MaterialCommunityIcons
-                    size={20}
-                    color={primaryColor}
-                    name="trash-can-outline"
+                    size={24}
+                    color={subTextColor}
+                    name="plus"
                   />
+                  <Text style={styles.addText}>
+                    {I18n.t('selectLanguage.add')}
+                  </Text>
                 </TouchableOpacity>
-              </View>
-            ))}
-
-            {spokenLanguages.length < getLanguageNum() - 2 ? (
-              <TouchableOpacity
-                style={styles.addRow}
-                onPress={(): void => setIsSpoken(true)}
-              >
-                <MaterialCommunityIcons
-                  size={24}
-                  color={subTextColor}
-                  name="plus"
-                />
-                <Text style={styles.addText}>
-                  {I18n.t('selectLanguage.add')}
-                </Text>
-              </TouchableOpacity>
-            ) : null}
+              ) : null}
+            </View>
           </View>
-        </View>
 
-        <TouchableOpacity
-          style={[styles.row, rowStyle]}
-          activeOpacity={1}
-          onPress={(): void => setIsNationality(true)}
-        >
-          <Text style={styles.label}>
-            {I18n.t('selectLanguage.nationality')}
-          </Text>
-          <CountryPicker
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            countryCode={nationalityCode}
-            placeholder={I18n.t('selectLanguage.placeholder')}
-            withFilter
-            withFlag
-            withCountryNameButton
-            withEmoji
-            withModal
-            withAlphaFilter
-            onSelect={(country: Country): void => {
-              setNationalityCode(country.cca2);
-            }}
-            onClose={(): void => setIsNationality(false)}
-            onOpen={(): void => setIsNationality(true)}
-            visible={isNationality}
+          <TouchableOpacity
+            style={[styles.row, rowStyle]}
+            activeOpacity={1}
+            onPress={(): void => setIsNationality(true)}
+          >
+            <Text style={styles.label}>
+              {I18n.t('selectLanguage.nationality')}
+            </Text>
+            <CountryPicker
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
+              countryCode={nationalityCode}
+              placeholder={I18n.t('selectLanguage.placeholder')}
+              withFilter
+              withFlag
+              withCountryNameButton
+              withEmoji
+              withModal
+              withAlphaFilter
+              onSelect={(country: Country): void => {
+                setNationalityCode(country.cca2);
+              }}
+              onClose={(): void => setIsNationality(false)}
+              onOpen={(): void => setIsNationality(true)}
+              visible={isNationality}
+            />
+          </TouchableOpacity>
+          <TextInput
+            style={styles.introduction}
+            value={introduction || ''}
+            onChangeText={(text: string): void => setIntroduction(text)}
+            maxLength={200}
+            placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
+            multiline
+            numberOfLines={3}
+            spellCheck
+            autoCorrect
+            underlineColorAndroid="transparent"
           />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.introduction}
-          value={introduction || ''}
-          onChangeText={(text: string): void => setIntroduction(text)}
-          maxLength={200}
-          placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
-          multiline
-          numberOfLines={3}
-          spellCheck
-          autoCorrect
-          underlineColorAndroid="transparent"
-        />
-      </KeyboardAwareScrollView>
-    </View>
+        </KeyboardAwareScrollView>
+      </View>
+    </DefaultLayout>
   );
 };
 
@@ -429,11 +437,14 @@ EditMyProfileScreen.navigationOptions = ({
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('editMyProfile.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderLeft
         text={I18n.t('common.close')}
-        onPress={(): boolean => navigation.goBack(null)}
+        onPress={(): void => {
+          navigation.goBack(null);
+        }}
       />
     ),
     headerRight: (): JSX.Element => (
