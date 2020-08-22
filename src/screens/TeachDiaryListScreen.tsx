@@ -8,7 +8,10 @@ import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultSearchBarOptions,
+} from '../constants/NavigationOptions';
 import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
@@ -278,6 +281,7 @@ TeachDiaryListScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultSearchBarOptions,
     headerTitle: (): JSX.Element => (
       <SearchBarButton
         title={I18n.t('teachDiaryList.headerTitle')}

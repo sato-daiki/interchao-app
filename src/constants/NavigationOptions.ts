@@ -2,7 +2,6 @@ import { NavigationStackOptions } from 'react-navigation-stack';
 import { primaryColor, fontSizeL } from '../styles/Common';
 import { getEachOS } from '../utils/common';
 
-// eslint-disable-next-line import/prefer-default-export
 export const DefaultNavigationOptions: NavigationStackOptions = {
   headerStyle: {
     backgroundColor: '#fff',
@@ -24,5 +23,13 @@ export const DefaultNavigationOptions: NavigationStackOptions = {
   },
   headerBackTitleStyle: {
     display: 'none',
+  },
+};
+
+export const DefaultSearchBarOptions: NavigationStackOptions = {
+  headerTitleAlign: 'center',
+  headerTitleContainerStyle: {
+    flex: 1,
+    marginRight: 64,
   },
 };
