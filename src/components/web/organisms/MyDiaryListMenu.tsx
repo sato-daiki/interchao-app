@@ -7,7 +7,6 @@ import { Language } from '../../../types';
 import MenuTemplate from '../template/MenuTemplate';
 
 interface Props {
-  uid: string;
   navigation: NavigationStackProp;
   nativeLanguage: Language;
 }
@@ -15,20 +14,11 @@ interface Props {
 // スマホ版もある
 const MyDiaryListMenu = ({
   navigation,
-  uid,
   nativeLanguage,
 }: Props): JSX.Element => {
-  const onPressMyPage = useCallback(() => {
-    navigation.navigate('MyPage');
-  }, [navigation]);
-
   const onPressDraftList = useCallback(() => {
     navigation.navigate('DraftDiaryList');
   }, [navigation]);
-
-  const onPressReviewList = useCallback(() => {
-    navigation.navigate('ReviewList', { uid });
-  }, [navigation, uid]);
 
   const onPressAppShare = useCallback(() => {
     appShare(nativeLanguage);
@@ -37,16 +27,8 @@ const MyDiaryListMenu = ({
   return (
     <MenuTemplate>
       <MenuOption
-        onSelect={onPressMyPage}
-        text={I18n.t('myDiaryListMenu.myPage')}
-      />
-      <MenuOption
         onSelect={onPressDraftList}
         text={I18n.t('myDiaryListMenu.draftList')}
-      />
-      <MenuOption
-        onSelect={onPressReviewList}
-        text={I18n.t('myDiaryListMenu.reviewList')}
       />
       <MenuOption onSelect={onPressAppShare} text={I18n.t('sns.app')} />
     </MenuTemplate>

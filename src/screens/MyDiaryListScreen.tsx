@@ -118,7 +118,6 @@ const MyDiaryListScreen: ScreenType = ({
       onPressMenu: () => setIsMenu(true),
       onPressSearch,
       isDesktopOrLaptopDevice,
-      uid: user.uid,
       nativeLanguage: profile.nativeLanguage,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -334,7 +333,6 @@ const MyDiaryListScreen: ScreenType = ({
         navigation={navigation}
         isMenu={isMenu}
         nativeLanguage={profile.nativeLanguage}
-        uid={user.uid}
         onClose={onClose}
       />
       <LoadingModal visible={isLoading} />
@@ -370,7 +368,6 @@ MyDiaryListScreen.navigationOptions = ({
     'isDesktopOrLaptopDevice'
   );
   const nativeLanguage = navigation.getParam('nativeLanguage');
-  const uid = navigation.getParam('uid');
 
   return {
     ...DefaultNavigationOptions,
@@ -385,7 +382,6 @@ MyDiaryListScreen.navigationOptions = ({
       isDesktopOrLaptopDevice ? (
         <MyDiaryListMenuWebPc
           navigation={navigation}
-          uid={uid}
           nativeLanguage={nativeLanguage}
         />
       ) : (

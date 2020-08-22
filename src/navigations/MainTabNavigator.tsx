@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { mainColor } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
@@ -98,6 +98,33 @@ const MyDiaryTabStack = createStackNavigator(
     MyDiary: {
       screen: MyDiaryScreenContainer,
     },
+    ...commonDiaryNavigator,
+  },
+  {
+    initialRouteName: 'MyDiaryList',
+  }
+);
+
+const TeachDiaryTabStack = createStackNavigator(
+  {
+    TeachDiaryList: {
+      screen: TeachDiaryListScreenContainer,
+    },
+    TeachDiarySearch: {
+      screen: TeachDiarySearchScreenContainer,
+    },
+    TeachDiary: {
+      screen: TeachDiaryScreenContainer,
+    },
+    ...commonDiaryNavigator,
+  },
+  {
+    initialRouteName: 'TeachDiaryList',
+  }
+);
+
+const MyPageTabStack = createStackNavigator(
+  {
     MyPage: {
       screen: MyPageScreenContainer,
     },
@@ -134,25 +161,7 @@ const MyDiaryTabStack = createStackNavigator(
     ...commonDiaryNavigator,
   },
   {
-    initialRouteName: 'MyDiaryList',
-  }
-);
-
-const TeachDiaryTabStack = createStackNavigator(
-  {
-    TeachDiaryList: {
-      screen: TeachDiaryListScreenContainer,
-    },
-    TeachDiarySearch: {
-      screen: TeachDiarySearchScreenContainer,
-    },
-    TeachDiary: {
-      screen: TeachDiaryScreenContainer,
-    },
-    ...commonDiaryNavigator,
-  },
-  {
-    initialRouteName: 'TeachDiaryList',
+    initialRouteName: 'MyPage',
   }
 );
 
@@ -163,17 +172,19 @@ const createHomeTabNavigator = (isDesktopOrLaptopDevice: boolean) => {
         Home: {
           screen: MyDiaryTabStack,
           params: {
-            icon: 'book-open',
-            tabName: I18n.t('mainTab.myDiary'),
-            badge: true,
+            tabName: 'myDiary',
           },
         },
         TeachDiaryTab: {
           screen: TeachDiaryTabStack,
           params: {
-            icon: 'spellcheck',
-            tabName: I18n.t('mainTab.teachDiary'),
-            badge: false,
+            tabName: 'teachDiary',
+          },
+        },
+        MyPageTab: {
+          screen: MyPageTabStack,
+          params: {
+            tabName: 'myPage',
           },
         },
       },
@@ -182,6 +193,7 @@ const createHomeTabNavigator = (isDesktopOrLaptopDevice: boolean) => {
       }
     );
   }
+
   return createBottomTabNavigator(
     {
       MyDiaryTab: {
@@ -224,6 +236,15 @@ const createHomeTabNavigator = (isDesktopOrLaptopDevice: boolean) => {
               size={25}
               color={tintColor}
             />
+          ),
+        },
+      },
+      MyPageTab: {
+        screen: MyPageTabStack,
+        navigationOptions: {
+          tabBarLabel: I18n.t('mainTab.myPage'),
+          tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+            <MaterialIcons name="person" size={25} color={tintColor} />
           ),
         },
       },
