@@ -13,6 +13,7 @@ module.exports = {
   GiarKo: require('./girl_ko.png'),
   GiarZh: require('./girl_zh.png'),
   GooglePlayBadge: require('./google-play-badge.png'),
+  Icon: require('./icon.png'),
   Note: require('./note.png'),
   Pen: require('./pen.png'),
   PointGet: require('./point_get.png'),

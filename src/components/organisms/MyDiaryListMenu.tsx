@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { OptionItem } from '../molecules';
@@ -14,6 +14,7 @@ interface Props {
   navigation: NavigationStackProp;
 }
 
+// web版もある
 const MyDiaryListMenu = ({
   navigation,
   isMenu,

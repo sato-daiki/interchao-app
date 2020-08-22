@@ -10,8 +10,10 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-
 import { Notifications } from 'expo';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
+
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -20,6 +22,7 @@ import {
   DefaultSearchBarOptions,
 } from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
+import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
@@ -97,6 +100,10 @@ const MyDiaryListScreen: ScreenType = ({
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
+
   const [correctingObjectID, setCorrectingObjectID] = useState(
     user.correctingObjectID
   );
@@ -110,6 +117,9 @@ const MyDiaryListScreen: ScreenType = ({
     navigation.setParams({
       onPressMenu: () => setIsMenu(true),
       onPressSearch,
+      isDesktopOrLaptopDevice,
+      uid: user.uid,
+      nativeLanguage: profile.nativeLanguage,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -356,6 +366,12 @@ MyDiaryListScreen.navigationOptions = ({
 }): NavigationStackOptions => {
   const onPressMenu = navigation.getParam('onPressMenu');
   const onPressSearch = navigation.getParam('onPressSearch');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
+  const nativeLanguage = navigation.getParam('nativeLanguage');
+  const uid = navigation.getParam('uid');
+
   return {
     ...DefaultNavigationOptions,
     ...DefaultSearchBarOptions,
@@ -365,9 +381,16 @@ MyDiaryListScreen.navigationOptions = ({
         onPress={onPressSearch}
       />
     ),
-    headerRight: (): JSX.Element => (
-      <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
-    ),
+    headerRight: (): JSX.Element =>
+      isDesktopOrLaptopDevice ? (
+        <MyDiaryListMenuWebPc
+          navigation={navigation}
+          uid={uid}
+          nativeLanguage={nativeLanguage}
+        />
+      ) : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
+      ),
   };
 };
 
