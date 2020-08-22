@@ -15,7 +15,10 @@ import { Notifications } from 'expo';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultSearchBarOptions,
+} from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
@@ -31,6 +34,7 @@ import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
+import { getEachOS } from '../utils/common';
 
 export interface Props {
   user: User;
@@ -354,6 +358,7 @@ MyDiaryListScreen.navigationOptions = ({
   const onPressSearch = navigation.getParam('onPressSearch');
   return {
     ...DefaultNavigationOptions,
+    ...DefaultSearchBarOptions,
     headerTitle: (): JSX.Element => (
       <SearchBarButton
         title={I18n.t('myDiaryList.headerTitle')}

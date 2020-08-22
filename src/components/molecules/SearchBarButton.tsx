@@ -1,25 +1,13 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, subTextColor, offWhite } from '../../styles/Common';
 import { getEachOS } from '../../utils/common';
 
-const { width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingRight: getEachOS({ ios: 56, android: 64, web: 70 }),
-    marginLeft: getEachOS({ ios: 16, android: 0, web: 0 }),
-    width,
-  },
   button: {
+    width: '100%',
+    paddingVertical: getEachOS({ ios: 0, android: 0, web: 4 }),
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -27,10 +15,8 @@ const styles = StyleSheet.create({
     backgroundColor: offWhite,
     borderRadius: 18,
     paddingHorizontal: 16,
-    margin: 8,
-    marginLeft: getEachOS({ ios: 8, android: 0, web: 8 }),
-    paddingVertical: getEachOS({ ios: 0, android: 0, web: 4 }),
-    height: 30,
+    marginVertical: getEachOS({ ios: 8, android: 12, web: 0 }),
+    marginLeft: 0,
   },
   icon: {
     paddingRight: 4,
@@ -38,7 +24,6 @@ const styles = StyleSheet.create({
   label: {
     color: subTextColor,
     fontSize: fontSizeM,
-    lineHeight: 20,
   },
 });
 
@@ -49,20 +34,14 @@ interface Props {
 
 const SearchBarButton: React.FC<Props> = ({ title, onPress }) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <View style={styles.icon}>
-          <MaterialCommunityIcons
-            color={subTextColor}
-            size={18}
-            name="magnify"
-          />
-        </View>
-        <Text style={styles.label} numberOfLines={1}>
-          {title}
-        </Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <View style={styles.icon}>
+        <MaterialCommunityIcons color={subTextColor} size={18} name="magnify" />
+      </View>
+      <Text style={styles.label} numberOfLines={1}>
+        {title}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
