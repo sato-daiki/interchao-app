@@ -14,11 +14,15 @@ import {
   HeaderLeft,
 } from '../components/atoms';
 import { UserListItem } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   diary?: Diary;
@@ -202,37 +206,39 @@ const ReviewScreen: ScreenType = ({
   }
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <UserListItem
-        userName={diary.profile.userName}
-        photoUrl={diary.profile.photoUrl}
-        nativeLanguage={diary.profile.nativeLanguage}
-        nationalityCode={diary.profile.nationalityCode}
-        onPressButton={onPressFavorite}
-      />
-      <Space size={24} />
-      <AirbnbRating
-        showRating={false}
-        defaultRating={0}
-        onFinishRating={(num: number): void => setRating(num)}
-      />
-      <Space size={24} />
-      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
-        <TextInput
-          value={comment}
-          onChangeText={(text: string): void => setComment(text)}
-          maxLength={140}
-          placeholder={I18n.t('review.placeholder')}
-          multiline
-          numberOfLines={3}
-          spellCheck
-          autoCorrect
-          underlineColorAndroid="transparent"
-          style={styles.review}
+    <DefaultLayout lSize>
+      <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
+        <UserListItem
+          userName={diary.profile.userName}
+          photoUrl={diary.profile.photoUrl}
+          nativeLanguage={diary.profile.nativeLanguage}
+          nationalityCode={diary.profile.nationalityCode}
+          onPressButton={onPressFavorite}
         />
-      </KeyboardAwareScrollView>
-    </View>
+        <Space size={24} />
+        <AirbnbRating
+          showRating={false}
+          defaultRating={0}
+          onFinishRating={(num: number): void => setRating(num)}
+        />
+        <Space size={24} />
+        <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+          <TextInput
+            value={comment}
+            onChangeText={(text: string): void => setComment(text)}
+            maxLength={140}
+            placeholder={I18n.t('review.placeholder')}
+            multiline
+            numberOfLines={3}
+            spellCheck
+            autoCorrect
+            underlineColorAndroid="transparent"
+            style={styles.review}
+          />
+        </KeyboardAwareScrollView>
+      </View>
+    </DefaultLayout>
   );
 };
 
@@ -242,6 +248,7 @@ ReviewScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('review.headerTitle'),
     headerLeft: (): JSX.Element => (
       <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />

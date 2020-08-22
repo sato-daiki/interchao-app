@@ -6,7 +6,10 @@ import {
 } from 'react-navigation-stack';
 import { emailInputError, emailValidate } from '../utils/common';
 import firebase from '../constants/firebase';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import {
@@ -128,6 +131,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
 ForegetPasswordScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
     title: I18n.t('foregetPassword.headerTitle'),
   };
 };

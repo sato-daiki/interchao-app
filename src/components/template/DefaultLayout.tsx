@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native';
-import { maxAuth } from '../../styles/Common';
+import { maxAuth, maxModal } from '../../styles/Common';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
+  lSize?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -22,9 +23,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const DefaultLayout: React.FC<Props> = ({ containerStyle, children }) => (
-  <View style={[styles.warapper]}>
-    <View style={[styles.container, containerStyle]}>{children}</View>
+const DefaultLayout: React.FC<Props> = ({
+  containerStyle,
+  lSize = false,
+  children,
+}) => (
+  <View style={styles.warapper}>
+    <View
+      style={[
+        styles.container,
+        { maxWidth: lSize ? maxModal : maxAuth },
+        containerStyle,
+      ]}
+    >
+      {children}
+    </View>
   </View>
 );
 

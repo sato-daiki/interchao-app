@@ -27,6 +27,7 @@ import TutorialPostDiary from './TutorialPostDiary';
 import I18n from '../../utils/I18n';
 import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
 import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
+import DefaultLayout from '../template/DefaultLayout';
 
 interface Props {
   isLoading: boolean;
@@ -131,76 +132,78 @@ const PostDiary = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <TutorialPostDiary
-        isLoading={isTutorialLoading}
-        displayed={tutorialPostDiary}
-        learnLanguage={learnLanguage}
-        onPress={onPressTutorial}
-      />
-      <ModalLackPoint
-        visible={isModalLack}
-        learnLanguage={learnLanguage}
-        onPressSubmit={onPressSubmitModalLack}
-        onPressClose={onPressCloseModalLack}
-      />
-      <ModalAlertPublish
-        visible={isModalAlert}
-        isLoading={isLoading}
-        usePoints={usePoints}
-        points={points}
-        onPressSubmit={onPressSubmit}
-        onPressClose={onPressCloseModalPublish}
-      />
-      <ModalDiaryCancel
-        visible={isModalCancel}
-        isLoading={isLoading}
-        onPressSave={onPressDraft}
-        onPressNotSave={onPressNotSave}
-        onPressClose={onPressCloseModalCancel}
-      />
-      <View style={styles.header}>
-        <View style={styles.left}>
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.usePoints')}
-          </Text>
-          <Text style={styles.headerValue}>{usePoints}</Text>
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.textLength')}
-          </Text>
-          <Text style={styles.headerValue}>{text.length}</Text>
-        </View>
-        <View style={styles.right}>
-          <Image style={styles.points} source={Points} />
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.points')}
-          </Text>
-          <Text style={styles.headerValue}>{points}</Text>
-        </View>
-      </View>
-      {Platform.OS === 'ios' ? (
-        <PostDiaryKeyboardIOS
-          title={title}
-          text={text}
-          isForce={isForce}
-          fadeAnim={fadeAnim}
-          onChangeTextTitle={onChangeTextTitle}
-          onChangeTextText={onChangeTextText}
-          onPressDraft={onPressDraft}
-          onFocusText={onFocusText}
-          onBlurText={(): void => setIsForce(false)}
+      <DefaultLayout lSize>
+        <LoadingModal visible={isLoading} />
+        <TutorialPostDiary
+          isLoading={isTutorialLoading}
+          displayed={tutorialPostDiary}
+          learnLanguage={learnLanguage}
+          onPress={onPressTutorial}
         />
-      ) : (
-        <PostDiaryKeybordAndroid
-          title={title}
-          text={text}
-          onChangeTextTitle={onChangeTextTitle}
-          onChangeTextText={onChangeTextText}
-          onPressDraft={onPressDraft}
-          onFocusText={onFocusText}
-          onBlurText={(): void => setIsForce(false)}
+        <ModalLackPoint
+          visible={isModalLack}
+          learnLanguage={learnLanguage}
+          onPressSubmit={onPressSubmitModalLack}
+          onPressClose={onPressCloseModalLack}
         />
-      )}
+        <ModalAlertPublish
+          visible={isModalAlert}
+          isLoading={isLoading}
+          usePoints={usePoints}
+          points={points}
+          onPressSubmit={onPressSubmit}
+          onPressClose={onPressCloseModalPublish}
+        />
+        <ModalDiaryCancel
+          visible={isModalCancel}
+          isLoading={isLoading}
+          onPressSave={onPressDraft}
+          onPressNotSave={onPressNotSave}
+          onPressClose={onPressCloseModalCancel}
+        />
+        <View style={styles.header}>
+          <View style={styles.left}>
+            <Text style={styles.headerLabel}>
+              {I18n.t('postDiaryComponent.usePoints')}
+            </Text>
+            <Text style={styles.headerValue}>{usePoints}</Text>
+            <Text style={styles.headerLabel}>
+              {I18n.t('postDiaryComponent.textLength')}
+            </Text>
+            <Text style={styles.headerValue}>{text.length}</Text>
+          </View>
+          <View style={styles.right}>
+            <Image style={styles.points} source={Points} />
+            <Text style={styles.headerLabel}>
+              {I18n.t('postDiaryComponent.points')}
+            </Text>
+            <Text style={styles.headerValue}>{points}</Text>
+          </View>
+        </View>
+        {Platform.OS === 'ios' ? (
+          <PostDiaryKeyboardIOS
+            title={title}
+            text={text}
+            isForce={isForce}
+            fadeAnim={fadeAnim}
+            onChangeTextTitle={onChangeTextTitle}
+            onChangeTextText={onChangeTextText}
+            onPressDraft={onPressDraft}
+            onFocusText={onFocusText}
+            onBlurText={(): void => setIsForce(false)}
+          />
+        ) : (
+          <PostDiaryKeybordAndroid
+            title={title}
+            text={text}
+            onChangeTextTitle={onChangeTextTitle}
+            onChangeTextText={onChangeTextText}
+            onPressDraft={onPressDraft}
+            onFocusText={onFocusText}
+            onBlurText={(): void => setIsForce(false)}
+          />
+        )}
+      </DefaultLayout>
     </SafeAreaView>
   );
 };

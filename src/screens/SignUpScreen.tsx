@@ -13,7 +13,10 @@ import {
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { Profile, UserReview } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import {
   Space,
@@ -326,6 +329,7 @@ SignUpScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
   const onPressSkip = navigation.getParam('onPressSkip');
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
     title: I18n.t('signUp.headerTitle'),
     headerRight: (): JSX.Element => (
       <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
