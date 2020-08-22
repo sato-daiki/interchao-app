@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, TextInput, StyleSheet, Dimensions } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import { connectSearchBox } from 'react-instantsearch-native';
 import {
   subTextColor,
@@ -11,22 +11,20 @@ import {
 import { HeaderRight } from '../atoms';
 import I18n from '../../utils/I18n';
 
-const { width } = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
     paddingHorizontal: 16,
-    width,
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
+    height: 58,
   },
   searchBarInput: {
-    marginVertical: 8,
     marginRight: 16,
-    borderRadius: 20,
+    borderRadius: 18,
     backgroundColor: offWhite,
     color: primaryColor,
     fontSize: fontSizeM,
