@@ -30,7 +30,10 @@ import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection } from '../components/organisms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultDiaryOptions,
+} from '../constants/NavigationOptions';
 import {
   LoadingModal,
   SubmitButton,
@@ -85,10 +88,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  headerTitleStyle: {
-    width: width - 144,
-    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
   },
   errContainer: {
     flex: 1,
@@ -512,8 +511,8 @@ TeachDiaryScreen.navigationOptions = ({
   );
   return {
     ...DefaultNavigationOptions,
+    ...DefaultDiaryOptions,
     title,
-    headerTitleStyle: styles.headerTitleStyle,
     headerRight: (): JSX.Element =>
       isDesktopOrLaptopDevice ? (
         <TeachDiaryMenu onPressAppShare={onPressAppShare} />
