@@ -1,10 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import ModalWeb from 'modal-enhanced-react-native-web';
 import { maxModal } from '../../styles/Common';
-
-const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -20,9 +18,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   modal: {
-    width: width - 16,
+    width: '100%',
     borderRadius: 8,
-    marginHorizontal: 8,
     backgroundColor: '#fff',
   },
 });
