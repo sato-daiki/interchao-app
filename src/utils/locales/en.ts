@@ -133,6 +133,7 @@ const deleteAcount = {
   text:
     'If you delete your account, all information about the journal entries you published will be deleted and cannot be retrieved. If you would still like to delete your account, please tap the button below.',
   withdrawal: 'Delete Account',
+  confirmation: 'Are you sure you want to delete this account?',
 };
 
 const draftDiary = {

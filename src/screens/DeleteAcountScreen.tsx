@@ -18,6 +18,7 @@ import { track, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import { ModalConfirm } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
 const DeleteAcountScreen: NavigationStackScreenComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [isModalConfirm, setIsModalConfirm] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
 
@@ -119,6 +121,15 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
 
   return (
     <View style={styles.container}>
+      <ModalConfirm
+        visible={isModalConfirm}
+        isLoading={isLoading}
+        title={I18n.t('common.confirmation')}
+        message={I18n.t('deleteAcount.confirmation')}
+        mainButtonText={I18n.t('deleteAcount.withdrawal')}
+        onPressMain={onPressDelete}
+        onPressClose={(): void => setIsModalConfirm(false)}
+      />
       <ModalDeleteAcount
         visible={isModal}
         isLoading={isLoading}
@@ -131,7 +142,10 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
       />
       <View style={styles.main}>
         <Text style={styles.text}>{I18n.t('deleteAcount.text')}</Text>
-        <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={(): void => setIsModalConfirm(true)}
+        >
           <Text style={styles.delete}>{I18n.t('deleteAcount.withdrawal')}</Text>
         </TouchableOpacity>
       </View>

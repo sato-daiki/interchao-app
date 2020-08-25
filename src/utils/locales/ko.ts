@@ -126,6 +126,7 @@ const deleteAcount = {
   text:
     '회원을 탈퇴하면 업로드된 일기 정보가 완전히 삭제되어 복원할 수 없습니다.\n\n그래도 회원 탈퇴를 원하시는 분은 하단에 있는 버튼을 눌러 탈퇴해주세요.',
   withdrawal: '탈퇴하기',
+  confirmation: '정말 삭제하시겠습니까?',
 };
 
 const draftDiary = {
@@ -189,7 +190,7 @@ const inputUserName = {
 
 const myDiary = {
   menuDelete: '삭제하기',
-  confirmMessage: '정말로 삭제하시겠습니까?',
+  confirmMessage: '정말 삭제하시겠습니까?',
 };
 
 const myDiaryList = {
