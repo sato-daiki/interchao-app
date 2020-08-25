@@ -2,7 +2,6 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   SafeAreaView,
   FlatList,
   TouchableOpacity,
@@ -45,6 +44,7 @@ import {
 } from '../styles/Common';
 import Corrections from '../components/organisms/Corrections';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   user: User;
@@ -134,6 +134,8 @@ const CorrectingScreen: ScreenType = ({
 
   const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalTimeUp, setIsModalTimeUp] = useState(false); // タイムアップモーダル
+  const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
+  const [isModalNoComment, setIsModalNoComment] = useState(false); // コメントがない場合のアラート
 
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
@@ -179,6 +181,7 @@ const CorrectingScreen: ScreenType = ({
         navigation
       );
       setIsLoading(false);
+      setIsModalConfirmation(false);
     };
     f();
   }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
@@ -231,7 +234,7 @@ const CorrectingScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       const comments = textInfos.filter(item => item.diffs !== null);
       if (comments.length === 0) {
-        Alert.alert('', I18n.t('correcting.nothing'));
+        setIsModalNoComment(true);
         return;
       }
       if (isLoading) return;
@@ -266,23 +269,7 @@ const CorrectingScreen: ScreenType = ({
    * 左上の閉じるボタンが押下された時の処理
    */
   const onPressClose = useCallback(() => {
-    Alert.alert(
-      I18n.t('common.confirmation'),
-      I18n.t('correcting.deleteAlert'),
-      [
-        {
-          text: I18n.t('common.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: async (): Promise<void> => {
-            await close();
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+    setIsModalConfirmation(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -397,6 +384,24 @@ const CorrectingScreen: ScreenType = ({
             getPoints={getPoints}
             points={user.points}
             onPressClose={onPressCloseDone}
+          />
+          <ModalConfirm
+            visible={isModalConfirmation}
+            isLoading={isLoading}
+            title={I18n.t('common.confirmation')}
+            message={I18n.t('correcting.deleteAlert')}
+            mainButtonText="OK"
+            onPressMain={async (): Promise<void> => {
+              await close();
+            }}
+            onPressClose={(): void => setIsModalConfirmation(false)}
+          />
+          <ModalConfirm
+            visible={isModalNoComment}
+            title={I18n.t('common.error')}
+            message={I18n.t('correcting.nothing')}
+            mainButtonText={I18n.t('common.close')}
+            onPressMain={(): void => setIsModalNoComment(false)}
           />
           <KeyboardAwareScrollView
             style={styles.scrollView}

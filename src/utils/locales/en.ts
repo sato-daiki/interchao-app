@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 // 共通のワード
 const common = {
   cancel: 'Cancel',
@@ -70,8 +72,8 @@ const web = {
 // タブ
 const mainTab = {
   myDiary: 'My Entries',
-  postDiary: 'Write an Entry',
-  teachDiary: 'Entries to Correct',
+  postDiary: Platform.OS === 'web' ? 'Write an Entry' : 'Write',
+  teachDiary: Platform.OS === 'web' ? 'Entries to Correct' : 'Correct',
   myPage: 'My Page',
 };
 

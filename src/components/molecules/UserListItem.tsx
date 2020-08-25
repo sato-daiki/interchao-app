@@ -9,7 +9,7 @@ interface Props {
   nativeLanguage: Language;
   nationalityCode?: CountryCode | null;
   onPressUser?: () => void;
-  onPressButton: () => void;
+  onPressButton?: () => void;
 }
 
 const styles = StyleSheet.create({

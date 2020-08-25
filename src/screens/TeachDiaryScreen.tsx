@@ -10,7 +10,6 @@ import {
   ScrollView,
   View,
   Text,
-  Alert,
   ActivityIndicator,
   Dimensions,
   Platform,
@@ -29,7 +28,7 @@ import ViewShot from 'react-native-view-shot';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
-import { ModalAlertCorrection } from '../components/organisms';
+import { ModalAlertCorrection, ModalConfirm } from '../components/organisms';
 import {
   DefaultNavigationOptions,
   DefaultDiaryOptions,
@@ -154,6 +153,9 @@ const TeachDiaryScreen: ScreenType = ({
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const viewShotRef = useRef<any>(null);
 
   const isDesktopOrLaptopDevice = useMediaQuery({
@@ -255,10 +257,9 @@ const TeachDiaryScreen: ScreenType = ({
       });
 
       if (res.nbHits > 0) {
-        Alert.alert(
-          I18n.t('common.error'),
-          I18n.t('errorMessage.correctionAlready')
-        );
+        setErrorMessage(I18n.t('errorMessage.correctionAlready'));
+        setIsModalError(true);
+        setIsModalCorrection(false);
         setIsLoading(false);
         return;
       }
@@ -269,10 +270,9 @@ const TeachDiaryScreen: ScreenType = ({
       });
 
       if (res2.nbHits !== 1) {
-        Alert.alert(
-          I18n.t('common.error'),
-          I18n.t('errorMessage.correctionAlready')
-        );
+        setErrorMessage(I18n.t('errorMessage.correctionAlready'));
+        setIsModalError(true);
+        setIsModalCorrection(false);
         setIsLoading(false);
         return;
       }
@@ -400,6 +400,11 @@ const TeachDiaryScreen: ScreenType = ({
     return false;
   };
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   const renderButton = (): ReactNode => {
     // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
@@ -443,6 +448,13 @@ const TeachDiaryScreen: ScreenType = ({
         teachDiaryLanguage={teachDiary.profile.learnLanguage}
         onPressSubmit={onPressSubmitCorrection}
         onPressClose={(): void => setIsModalCorrection(false)}
+      />
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={errorMessage}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={onPressCloseError}
       />
       <ScrollView style={styles.scrollView}>
         <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }}>
