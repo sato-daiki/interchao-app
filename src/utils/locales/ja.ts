@@ -128,6 +128,7 @@ const deleteAcount = {
   text:
     '退会すると投稿した日記の情報が完全に消去され、復元することはできません。\n\nそれでも退会を希望する方は下のボタンから退会してください。',
   withdrawal: '退会する',
+  confirmation: '本当に退会してもよろしいですか？',
 };
 
 const draftDiary = {

@@ -118,6 +118,7 @@ const deleteAcount = {
   text:
     '账户注销后所发布的日记信息将被完全删除并且无法恢复。\n\n如果您仍要账户注销，请点击下面的按钮账户注销。',
   withdrawal: '账户注销',
+  confirmation: '确定要删除吗？',
 };
 
 const draftDiary = {
