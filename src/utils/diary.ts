@@ -1,6 +1,5 @@
 import moment from 'moment';
 import 'moment/locale/ja';
-import { Alert } from 'react-native';
 import {
   CorrectionStatus,
   Language,
@@ -315,29 +314,40 @@ export const checkSelectLanguage = (
   learnLanguage: Language,
   nativeLanguage: Language,
   spokenLanguages: Language[]
-): boolean => {
+): { result: boolean; errorMessage: string } => {
   if (!nationalityCode) {
-    Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
-    return false;
+    return {
+      result: false,
+      errorMessage: I18n.t('selectLanguage.nationalityCodeAlert'),
+    };
   }
 
   if (learnLanguage === nativeLanguage) {
-    Alert.alert('', I18n.t('selectLanguage.sameLanguageAlert'));
-    return false;
+    return {
+      result: false,
+      errorMessage: I18n.t('selectLanguage.sameLanguageAlert'),
+    };
   }
 
   if (spokenLanguages) {
     for (let i = 0; i < spokenLanguages.length; i += 1) {
       if (spokenLanguages[i] === learnLanguage) {
-        Alert.alert('', I18n.t('selectLanguage.sameSpokenAlert'));
-        return false;
+        return {
+          result: false,
+          errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
+        };
       }
 
       if (spokenLanguages[i] === nativeLanguage) {
-        Alert.alert('', I18n.t('selectLanguage.sameSpokenAlert'));
-        return false;
+        return {
+          result: false,
+          errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
+        };
       }
     }
   }
-  return true;
+  return {
+    result: true,
+    errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
+  };
 };
