@@ -1,4 +1,4 @@
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import Sentry from '../constants/Sentry';
 import I18n from './I18n';
 
@@ -27,11 +27,19 @@ export const alert = ({ err, onPressOk }: ErrorAlert): void => {
   } else {
     message = I18n.t('errorMessage.defaultError', { message });
   }
-  Alert.alert(title, message, [
-    {
-      text: 'OK',
-      onPress: onPressOk,
-    },
-  ]);
+  if (Platform.OS === 'web') {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
+    const res = window.confirm(`${title}\n${message}`);
+    if (res && onPressOk) onPressOk();
+  } else {
+    Alert.alert(title, message, [
+      {
+        text: 'OK',
+        onPress: onPressOk,
+      },
+    ]);
+  }
+
   Sentry.captureException(err);
 };
