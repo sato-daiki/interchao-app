@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { View, StyleSheet, TextInput, Alert, Keyboard } from 'react-native';
+import { View, StyleSheet, TextInput, Keyboard } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
   NavigationStackOptions,
@@ -23,6 +23,7 @@ import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   diary?: Diary;
@@ -68,28 +69,13 @@ const ReviewScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const onPressFavorite = useCallback(() => undefined, []);
+  const [isModalConfirmation, setIsModalConfirmation] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
     if (rating > 0 || comment.length > 0) {
-      Alert.alert(
-        I18n.t('common.confirmation'),
-        I18n.t('review.confirmation'),
-        [
-          {
-            text: I18n.t('common.cancel'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: (): void => {
-              navigation.goBack(null);
-            },
-          },
-        ],
-        { cancelable: true }
-      );
+      setIsModalConfirmation(true);
     } else {
       navigation.goBack(null);
     }
@@ -103,7 +89,7 @@ const ReviewScreen: ScreenType = ({
     }
     if (isLoading) return;
     if (rating === 0) {
-      Alert.alert('', I18n.t('errorMessage.invalidRaiting'));
+      setIsModalError(true);
       return;
     }
     if (!navigation.state.params) return;
@@ -201,20 +187,49 @@ const ReviewScreen: ScreenType = ({
   }, [rating, comment]);
 
   if (!diary) {
-    Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.notFound'));
-    return null;
+    return (
+      <View style={styles.container}>
+        <ModalConfirm
+          visible
+          title={I18n.t('common.error')}
+          message={I18n.t('errorMessage.notFound')}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={(): void => {
+            navigation.goBack(null);
+          }}
+        />
+      </View>
+    );
   }
 
   return (
     <DefaultLayout lSize>
       <View style={styles.container}>
         <LoadingModal visible={isLoading} />
+        <ModalConfirm
+          visible={isModalError}
+          title={I18n.t('common.error')}
+          message={I18n.t('errorMessage.invalidRaiting')}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={(): void => setIsModalError(false)}
+        />
+        <ModalConfirm
+          visible={isModalConfirmation}
+          title={I18n.t('common.confirmation')}
+          message={I18n.t('review.confirmation')}
+          mainButtonText="OK"
+          onPressMain={(): void => {
+            navigation.goBack(null);
+          }}
+          onPressClose={(): void => {
+            setIsModalConfirmation(false);
+          }}
+        />
         <UserListItem
           userName={diary.profile.userName}
           photoUrl={diary.profile.photoUrl}
           nativeLanguage={diary.profile.nativeLanguage}
           nationalityCode={diary.profile.nationalityCode}
-          onPressButton={onPressFavorite}
         />
         <Space size={24} />
         <AirbnbRating

@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {
   NavigationStackScreenComponent,
   NavigationStackOptions,
@@ -20,6 +20,7 @@ import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getVersionText } from '../utils/common';
+import { ModalConfirm } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,6 +58,7 @@ const styles = StyleSheet.create({
  */
 const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const { currentUser } = firebase.auth();
+  const [isModalError, setIsModalError] = useState(false);
 
   const onPressLogout = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -64,7 +66,8 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
         if (currentUser && currentUser.email) {
           await firebase.auth().signOut();
         } else {
-          Alert.alert('', I18n.t('errorMessage.cantLogout'));
+          setIsModalError(true);
+          return;
         }
         track(events.SIGN_OUT);
       } catch (err) {
@@ -76,6 +79,13 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={I18n.t('errorMessage.cantLogout')}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={(): void => setIsModalError(false)}
+      />
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
       <OptionItem
         title={I18n.t('setting.notice')}

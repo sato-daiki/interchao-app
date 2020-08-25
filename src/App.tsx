@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { YellowBox, StatusBar, Alert } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { YellowBox, StatusBar } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
@@ -16,6 +16,7 @@ import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
 import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
+import { ModalConfirm } from './components/organisms';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -35,24 +36,14 @@ if (!firebase.apps.length) {
 }
 
 const App: React.SFC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
   const checkUpdate = async (): Promise<void> => {
     if (__DEV__) return;
 
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {
-      Alert.alert(
-        I18n.t('app.updateTitle'),
-        I18n.t('app.updateMessage'),
-        [
-          {
-            text: I18n.t('app.updateOk'),
-            onPress: (): void => {
-              Updates.reload();
-            },
-          },
-        ],
-        { cancelable: false }
-      );
+      setIsVisible(true);
     }
   };
 
@@ -72,6 +63,13 @@ const App: React.SFC = () => {
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
           <MenuProvider>
+            <ModalConfirm
+              visible={isVisible}
+              title={I18n.t('app.updateTitle')}
+              message={I18n.t('app.updateMessage')}
+              mainButtonText={I18n.t('app.updateOk')}
+              onPressMain={(): void => Updates.reload()}
+            />
             <AppNavigator />
           </MenuProvider>
         </ActionSheetProvider>

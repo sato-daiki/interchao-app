@@ -12,7 +12,7 @@ export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatu
   return status;
 };
 
-export const openAlert = (): void => {
+const openAlert = (): void => {
   Alert.alert(
     I18n.t('cameraRoll.permitTitle'),
     I18n.t('cameraRoll.permitMessage', {
