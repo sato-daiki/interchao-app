@@ -250,28 +250,28 @@ export const checkBeforePost = (
   text: string,
   points: number,
   learnLanguage: Language
-): boolean => {
+): { result: boolean; errorMessage: string } => {
   if (!title) {
-    Alert.alert('', I18n.t('errorMessage.emptyTitile'));
-    return false;
+    return { result: false, errorMessage: I18n.t('errorMessage.emptyTitile') };
   }
   if (!text) {
-    Alert.alert('', I18n.t('errorMessage.emptyText'));
-    return false;
+    return { result: false, errorMessage: I18n.t('errorMessage.emptyText') };
   }
   const usePoint = getUsePoints(text.length, learnLanguage);
   if (usePoint > points) {
-    Alert.alert(
-      I18n.t('errorMessage.lackPointsTitle'),
-      I18n.t('errorMessage.lackPointsText', {
+    return {
+      result: false,
+      errorMessage: I18n.t('errorMessage.lackPointsText', {
         textLength: text.length,
         usePoint,
-      })
-    );
-    return false;
+      }),
+    };
   }
 
-  return true;
+  return {
+    result: true,
+    errorMessage: '',
+  };
 };
 
 /**

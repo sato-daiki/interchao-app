@@ -28,14 +28,17 @@ import I18n from '../../utils/I18n';
 import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
 import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
 import DefaultLayout from '../template/DefaultLayout';
+import { ModalConfirm } from '.';
 
 interface Props {
   isLoading: boolean;
   isModalLack: boolean;
   isModalAlert: boolean;
   isModalCancel: boolean;
+  isModalError: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
+  errorMessage: string;
   title: string;
   text: string;
   points: number;
@@ -50,6 +53,7 @@ interface Props {
   onPressDraft: () => void;
   onPressNotSave: () => void;
   onPressTutorial?: () => void;
+  onPressCloseError: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -97,8 +101,10 @@ const PostDiary = ({
   isModalLack,
   isModalAlert,
   isModalCancel,
+  isModalError,
   isTutorialLoading = false,
   tutorialPostDiary = true,
+  errorMessage,
   title,
   text,
   points,
@@ -113,6 +119,7 @@ const PostDiary = ({
   onPressDraft,
   onPressNotSave,
   onPressTutorial,
+  onPressCloseError,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
@@ -128,12 +135,20 @@ const PostDiary = ({
     setFadeAnim(new Animated.Value(0));
     setIsForce(true);
   };
+
   const usePoints = getUsePoints(text.length, learnLanguage);
 
   return (
     <SafeAreaView style={styles.container}>
       <DefaultLayout lSize>
         <LoadingModal visible={isLoading} />
+        <ModalConfirm
+          visible={isModalError}
+          title={I18n.t('common.error')}
+          message={errorMessage}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={onPressCloseError}
+        />
         <TutorialPostDiary
           isLoading={isTutorialLoading}
           displayed={tutorialPostDiary}

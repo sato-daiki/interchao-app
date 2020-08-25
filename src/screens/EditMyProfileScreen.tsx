@@ -42,6 +42,7 @@ import {
   checkSelectLanguage,
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   profile: Profile;
@@ -162,19 +163,27 @@ const EditMyProfileScreen: ScreenType = ({
     profile.nationalityCode
   );
   const [isNationality, setIsNationality] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (isLoading) return;
 
-      if (
-        !checkSelectLanguage(
-          nationalityCode,
-          learnLanguage,
-          nativeLanguage,
-          spokenLanguages
-        )
-      ) {
+      const checked = checkSelectLanguage(
+        nationalityCode,
+        learnLanguage,
+        nativeLanguage,
+        spokenLanguages
+      );
+      if (!checked.result) {
+        setErrorMessage(checked.errorMessage);
+        setIsModalError(true);
         return;
       }
       setIsLoading(true);
@@ -269,6 +278,13 @@ const EditMyProfileScreen: ScreenType = ({
   return (
     <DefaultLayout lSize>
       <View style={styles.container}>
+        <ModalConfirm
+          visible={isModalError}
+          title={I18n.t('common.error')}
+          message={errorMessage}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={onPressCloseError}
+        />
         <ModalSpokenLanguages
           visible={isLearn}
           defaultLanguage={learnLanguage}
