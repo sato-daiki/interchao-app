@@ -295,7 +295,7 @@ const signIn = {
 };
 
 const signUp = {
-  headerTitle: 'Email Address Registration',
+  headerTitle: 'Email Registration',
   title: 'Please enter your email address and password.',
   subText:
     'You will need this data when switching devices. You can also register at a later time.',
