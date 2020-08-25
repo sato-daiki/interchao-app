@@ -38,6 +38,7 @@ import {
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { HeaderLeft } from '../components/atoms';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   profile: Profile;
@@ -162,20 +163,28 @@ const SelectLanguageScreen: ScreenType = ({
   >(initCountryCode(code));
   const [countryVisible, setCountryVisible] = useState(false);
   const [spokenVisible, setSpokenVisible] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
 
   useEffect((): void => {
     track(events.OPENED_SELECT_LANGUAGE);
   }, []);
 
   const onPressNext = (): void => {
-    if (
-      !checkSelectLanguage(
-        nationalityCode,
-        learnLanguage,
-        nativeLanguage,
-        spokenLanguages
-      )
-    ) {
+    const checked = checkSelectLanguage(
+      nationalityCode,
+      learnLanguage,
+      nativeLanguage,
+      spokenLanguages
+    );
+    if (!checked.result) {
+      setErrorMessage(checked.errorMessage);
+      setIsModalError(true);
       return;
     }
 
@@ -199,6 +208,13 @@ const SelectLanguageScreen: ScreenType = ({
   return (
     <DefaultLayout>
       <View style={styles.contaner}>
+        <ModalConfirm
+          visible={isModalError}
+          title={I18n.t('common.error')}
+          message={errorMessage}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={onPressCloseError}
+        />
         <ModalSpokenLanguages
           visible={spokenVisible}
           languages={getTargetLanguages(

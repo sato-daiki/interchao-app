@@ -52,6 +52,8 @@ const PostDiaryScreen: ScreenType = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // ポイントが足りない時アラートをだす
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
@@ -128,13 +130,15 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressPublic = useCallback((): void => {
     Keyboard.dismiss();
-    const res = checkBeforePost(
+    const checked = checkBeforePost(
       title,
       text,
       user.points,
       profile.learnLanguage
     );
-    if (!res) {
+    if (!checked.result) {
+      setErrorMessage(checked.errorMessage);
+      setIsModalError(true);
       return;
     }
     setIsModalAlert(true);
@@ -265,14 +269,21 @@ const PostDiaryScreen: ScreenType = ({
     f();
   }, [setUser, user]);
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   return (
     <PostDiary
       isLoading={isLoading}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
+      isModalError={isModalError}
       isTutorialLoading={isTutorialLoading}
       tutorialPostDiary={user.tutorialPostDiary}
+      errorMessage={errorMessage}
       title={title}
       text={text}
       points={user.points}
@@ -289,6 +300,7 @@ const PostDiaryScreen: ScreenType = ({
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
       onPressTutorial={onPressTutorial}
+      onPressCloseError={onPressCloseError}
     />
   );
 };

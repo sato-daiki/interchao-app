@@ -55,6 +55,9 @@ const PostDraftDiaryScreen: ScreenType = ({
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isModalCancel, setIsModalCancel] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
 
@@ -149,13 +152,15 @@ const PostDraftDiaryScreen: ScreenType = ({
   }, [navigation, text.length, title.length]);
 
   const onPressPublic = useCallback((): void => {
-    const res = checkBeforePost(
+    const checked = checkBeforePost(
       title,
       text,
       user.points,
       profile.learnLanguage
     );
-    if (!res) {
+    if (!checked.result) {
+      setErrorMessage(checked.errorMessage);
+      setIsModalError(true);
       return;
     }
     setIsModalAlert(true);
@@ -247,12 +252,19 @@ const PostDraftDiaryScreen: ScreenType = ({
     navigation.goBack(null);
   }, [navigation]);
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   return (
     <PostDiary
       isLoading={isLoading}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
+      isModalError={isModalError}
+      errorMessage={errorMessage}
       title={title}
       text={text}
       points={user.points}
@@ -268,6 +280,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       onPressSubmit={onPressSubmit}
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
+      onPressCloseError={onPressCloseError}
     />
   );
 };
