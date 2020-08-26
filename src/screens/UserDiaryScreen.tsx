@@ -221,8 +221,9 @@ const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
             <ActivityIndicator />
           )}
         </View>
-        {!isCorrectionLoading && targetProfile ? (
+        {targetProfile ? (
           <Corrections
+            isLoading={isCorrectionLoading}
             headerTitle={I18n.t('teachDiaryCorrection.header')}
             correction={correction}
             correction2={correction2}

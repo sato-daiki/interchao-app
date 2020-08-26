@@ -11,7 +11,6 @@ import {
   View,
   Text,
   ActivityIndicator,
-  Dimensions,
   Platform,
 } from 'react-native';
 import {
@@ -57,8 +56,6 @@ import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
 import { appShare } from '../utils/common';
 import TeachDiaryMenu from '../components/web/organisms/TeachDiaryMenu';
-
-const { width } = Dimensions.get('window');
 
 export interface Props {
   user: User;
@@ -494,6 +491,7 @@ const TeachDiaryScreen: ScreenType = ({
             </Text>
           </View>
           <Corrections
+            isLoading={isCorrectionLoading}
             headerTitle={I18n.t('teachDiaryCorrection.header')}
             correction={correction}
             correction2={correction2}
