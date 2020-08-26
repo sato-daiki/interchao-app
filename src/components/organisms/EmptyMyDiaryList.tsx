@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   right: {
-    flex: 1,
+    flex: 3,
     flexDirection: 'row',
-    paddingRight: 44, // 中央に寄せるため
+    paddingLeft: 36,
   },
   emptyHintContainer: {
     paddingLeft: 8,

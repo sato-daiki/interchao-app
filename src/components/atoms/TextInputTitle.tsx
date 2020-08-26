@@ -33,12 +33,13 @@ const TextInputTitle: React.FC<Props> = ({
       placeholder="Title"
       maxLength={100}
       autoCorrect={false}
+      blurOnSubmit
       keyboardType="default"
       spellCheck
       returnKeyType="done"
+      underlineColorAndroid="transparent"
       onFocus={onFocus}
       onChangeText={onChangeText}
-      underlineColorAndroid="transparent"
     />
   );
 };

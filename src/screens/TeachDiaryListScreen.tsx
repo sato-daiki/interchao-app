@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  Platform,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -302,11 +308,15 @@ TeachDiaryListScreen.navigationOptions = ({
         onPress={onPressSearch}
       />
     ),
-    headerRight: (): JSX.Element =>
-      isDesktopOrLaptopDevice ? (
-        <TeachDiaryListMenuWebPc nativeLanguage={nativeLanguage} />
-      ) : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
+    // headerRight: (): JSX.Element =>
+    //   isDesktopOrLaptopDevice ? (
+    //     <TeachDiaryListMenuWebPc nativeLanguage={nativeLanguage} />
+    //   ) : (
+    //     <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
+    //   ),
+    headerRight: (): JSX.Element | null =>
+      Platform.OS === 'web' ? null : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
       ),
   };
 };

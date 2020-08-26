@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import {
@@ -26,6 +27,8 @@ import {
   Avatar,
   HeaderRight,
   HeaderLeft,
+  SubmitButton,
+  Space,
 } from '../components/atoms';
 import {
   DefaultNavigationOptions,
@@ -92,6 +95,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     textAlignVertical: 'center',
     flex: 1,
+    paddingVertical: Platform.OS === 'web' ? 8 : 0,
   },
   introduction: {
     paddingHorizontal: 16,
@@ -191,7 +195,8 @@ const EditMyProfileScreen: ScreenType = ({
       let newPhotoUrl = '';
       const postIndex = Date.now().toString();
       const path = `profileImages/${profile.uid}/${postIndex}`;
-      if (photoUrl) {
+      if (photoUrl && profile.photoUrl !== photoUrl) {
+        // 変更があった場合のみ
         newPhotoUrl = await uploadImageAsync(photoUrl, path, 300);
       }
 
@@ -239,7 +244,9 @@ const EditMyProfileScreen: ScreenType = ({
   ]);
 
   useEffect(() => {
-    navigation.setParams({ onPressSubmit });
+    if (Platform.OS !== 'web') {
+      navigation.setParams({ onPressSubmit });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     name,
@@ -251,7 +258,6 @@ const EditMyProfileScreen: ScreenType = ({
     introduction,
     photoUrl,
   ]);
-
   const pickImage = useCallback(() => {
     const f = async (): Promise<void> => {
       const result: any = await openCameraRoll({
@@ -326,15 +332,18 @@ const EditMyProfileScreen: ScreenType = ({
           <View style={styles.row}>
             <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
             <TextInput
-              value={name || ''}
-              onChangeText={(text: string): void => setName(text)}
-              maxLength={20}
-              placeholder="username"
-              keyboardType="default"
-              autoCapitalize="none"
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
               style={styles.textInput}
+              value={name || ''}
+              placeholder="username"
+              maxLength={20}
+              autoCorrect={false}
+              blurOnSubmit
+              keyboardType="default"
+              spellCheck
+              returnKeyType="done"
+              autoCapitalize="none"
+              underlineColorAndroid="transparent"
+              onChangeText={(text: string): void => setName(text)}
             />
           </View>
           <TouchableOpacity
@@ -441,6 +450,14 @@ const EditMyProfileScreen: ScreenType = ({
             autoCorrect
             underlineColorAndroid="transparent"
           />
+          <Space size={32} />
+          {Platform.OS === 'web' ? (
+            <SubmitButton
+              isLoading={isLoading}
+              title={I18n.t('common.done')}
+              onPress={onPressSubmit}
+            />
+          ) : null}
         </KeyboardAwareScrollView>
       </View>
     </DefaultLayout>
@@ -463,9 +480,10 @@ EditMyProfileScreen.navigationOptions = ({
         }}
       />
     ),
-    headerRight: (): JSX.Element => (
-      <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
-    ),
+    headerRight: (): JSX.Element | null =>
+      Platform.OS === 'web' ? null : (
+        <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
+      ),
   };
 };
 

@@ -1,15 +1,23 @@
 import React, { useCallback } from 'react';
 import { NavigationStackProp } from 'react-navigation-stack';
 import { MenuOption } from 'react-native-popup-menu';
+import { StyleSheet, View } from 'react-native';
 import I18n from '../../../utils/I18n';
-import { appShare } from '../../../utils/common';
 import { Language } from '../../../types';
 import MenuTemplate from '../template/MenuTemplate';
+import { Sns } from '../../molecules';
 
 interface Props {
   navigation: NavigationStackProp;
   nativeLanguage: Language;
 }
+
+const styles = StyleSheet.create({
+  sns: {
+    padding: 16,
+    paddingTop: 64,
+  },
+});
 
 // スマホ版もある
 const MyDiaryListMenu = ({
@@ -20,17 +28,15 @@ const MyDiaryListMenu = ({
     navigation.navigate('DraftDiaryList');
   }, [navigation]);
 
-  const onPressAppShare = useCallback(() => {
-    appShare(nativeLanguage);
-  }, [nativeLanguage]);
-
   return (
     <MenuTemplate>
       <MenuOption
         onSelect={onPressDraftList}
         text={I18n.t('myDiaryListMenu.draftList')}
       />
-      <MenuOption onSelect={onPressAppShare} text={I18n.t('sns.app')} />
+      {/* <View style={styles.sns}>
+        <Sns nativeLanguage={nativeLanguage} />
+      </View> */}
     </MenuTemplate>
   );
 };

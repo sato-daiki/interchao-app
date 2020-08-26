@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import { NavigationStackProp } from 'react-navigation-stack';
+import { Platform } from 'react-native';
 import { OptionItem } from '../molecules';
 import I18n from '../../utils/I18n';
 import { appShare } from '../../utils/common';
@@ -41,7 +42,9 @@ const MyDiaryListMenu = ({
         title={I18n.t('myDiaryListMenu.draftList')}
         onPress={onPressDraftList}
       />
-      <OptionItem title={I18n.t('sns.app')} onPress={onPressAppShare} />
+      {Platform.OS === 'web' ? null : (
+        <OptionItem title={I18n.t('sns.app')} onPress={onPressAppShare} />
+      )}
     </SwipeablePanel>
   );
 };

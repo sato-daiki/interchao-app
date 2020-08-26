@@ -81,7 +81,7 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
     <View style={styles.container}>
       <ModalConfirm
         visible={isModalError}
-        title={I18n.t('common.error')}
+        title={I18n.t('common.confirmation')}
         message={I18n.t('errorMessage.cantLogout')}
         mainButtonText={I18n.t('common.close')}
         onPressMain={(): void => setIsModalError(false)}
