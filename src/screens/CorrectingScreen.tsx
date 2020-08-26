@@ -1,14 +1,11 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
   SafeAreaView,
   FlatList,
-  TouchableOpacity,
-  TextInput,
-  Text,
+  Platform,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { split } from 'sentence-splitter';
 import {
   NavigationStackOptions,
@@ -36,15 +33,12 @@ import { getProfile } from '../utils/profile';
 import { updateDone, onUpdateTimeUp, onClose } from '../utils/correcting';
 import { getCorrection } from '../utils/corrections';
 import CorrectingListItem from '../components/organisms/CorrectingListItem';
-import {
-  mainColor,
-  fontSizeM,
-  subTextColor,
-  primaryColor,
-} from '../styles/Common';
+import { mainColor } from '../styles/Common';
 import Corrections from '../components/organisms/Corrections';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
+import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
+import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
 
 export interface Props {
   user: User;
@@ -81,32 +75,13 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: '#FFF',
-    // flex: 1,
+    flex: 1,
   },
   scrollView: {
     paddingBottom: 32,
   },
   header: {
     paddingTop: 16,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 16,
-    paddingLeft: 12,
-  },
-  label: {
-    fontSize: fontSizeM,
-    color: subTextColor,
-    marginLeft: 2,
-  },
-  textInputSummary: {
-    lineHeight: fontSizeM * 1,
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingHorizontal: 16,
   },
 });
 
@@ -145,8 +120,6 @@ const CorrectingScreen: ScreenType = ({
 
   /* 一つでも修正したらたつフラグ */
   const [isFirstEdit, setIsFirstEdit] = useState(false);
-
-  const refSummary = useRef<any>(null);
 
   const initTextsInfo = useCallback((): void => {
     const splitTexts = split(teachDiary.text);
@@ -370,6 +343,28 @@ const CorrectingScreen: ScreenType = ({
     );
   }, [isProfileLoading, teachDiary, targetProfile, onTimeUp]);
 
+  const renderSummary = (): JSX.Element | null => {
+    if (!isFirstEdit) return null;
+
+    if (Platform.OS === 'web') {
+      return (
+        <CorrectingSummaryWeb
+          summary={summary}
+          onHideKeyboard={onHideKeyboard}
+          onChangeText={(text: string): void => setSummary(text)}
+        />
+      );
+    }
+
+    return (
+      <CorrectingSummaryNative
+        summary={summary}
+        onHideKeyboard={onHideKeyboard}
+        onChangeText={(text: string): void => setSummary(text)}
+      />
+    );
+  };
+
   return (
     <DefaultLayout lSize>
       <SafeAreaView style={styles.safeAreaView}>
@@ -414,41 +409,10 @@ const CorrectingScreen: ScreenType = ({
               renderItem={renderItem}
               ListHeaderComponent={listHeaderComponent}
             />
-            {isFirstEdit ? (
-              <>
-                <TouchableOpacity
-                  style={styles.buttonRow}
-                  onPress={(): void => {
-                    refSummary.current.focus();
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    size={22}
-                    color={subTextColor}
-                    name="plus"
-                  />
-                  <Text style={styles.label}>
-                    {I18n.t('correcting.summary')}
-                  </Text>
-                </TouchableOpacity>
-                {/* まとめは改行がある。他のはない */}
-                <TextInput
-                  ref={refSummary}
-                  style={styles.textInputSummary}
-                  value={summary}
-                  multiline
-                  autoCapitalize="none"
-                  spellCheck
-                  autoCorrect
-                  underlineColorAndroid="transparent"
-                  scrollEnabled={false}
-                  onChangeText={(text: string): void => setSummary(text)}
-                  onBlur={onHideKeyboard}
-                />
-              </>
-            ) : null}
+            {renderSummary()}
             {correction ? <Space size={32} /> : null}
             <Corrections
+              isLoading={isCorrectionLoading}
               headerTitle={I18n.t('correcting.header')}
               correction={correction}
               correction2={correction2}

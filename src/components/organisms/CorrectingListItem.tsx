@@ -1,22 +1,23 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
-  TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import * as jsdiff from 'diff';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import I18n from '../../utils/I18n';
 import {
   fontSizeM,
   primaryColor,
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { CorrectingText, Space } from '../atoms';
+import { CorrectingText, Space, AutoHeightTextInput } from '../atoms';
 import { Diff, TextInfo } from '../../types';
+import CorrectingCommentNative from './CorrectingCommentNative';
+import CorrectingCommentWeb from './CorrectingCommentWeb';
 
 type Info =
   | {
@@ -57,32 +58,16 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  detailLabel: {
-    fontSize: fontSizeM,
-    color: subTextColor,
-  },
   textInput: {
-    lineHeight: fontSizeM * 1,
+    lineHeight: fontSizeM * 1.1,
     fontSize: fontSizeM,
     color: subTextColor,
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: '#fff',
-    // flexWrap: 'wrap',
+    marginVertical: Platform.OS === 'web' ? 16 : 0,
+    paddingHorizontal: Platform.OS === 'web' ? 8 : 0,
     marginRight: 38,
-  },
-  buttonRow: {
-    marginLeft: -4,
-    paddingTop: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  textInputDetail: {
-    marginRight: 16,
-    lineHeight: fontSizeM * 1,
-    fontSize: fontSizeM,
-    color: primaryColor,
   },
 });
 
@@ -96,7 +81,6 @@ const CorrectingListItem: React.FC<Props> = ({
   const [fix, setFix] = useState(item.original);
   const [detail, setDetail] = useState('');
   const [diffs, setDiffs] = useState<Diff[] | null>(null);
-  const refDetail = useRef<any>(null);
 
   const onBlurFix = (): void => {
     if (item.original === fix) {
@@ -133,10 +117,30 @@ const CorrectingListItem: React.FC<Props> = ({
     onHideKeyboard();
   };
 
+  const renderComment = (): JSX.Element | null => {
+    if (!diffs) return null;
+
+    if (Platform.OS === 'web') {
+      return (
+        <CorrectingCommentWeb
+          detail={detail}
+          onChangeText={(text: string): void => setDetail(text)}
+        />
+      );
+    }
+    return (
+      <CorrectingCommentNative
+        detail={detail}
+        onBlurDetail={onBlurDetail}
+        onChangeText={(text: string): void => setDetail(text)}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={(): void => setIsEdit(true)}>
-        {diffs === null ? (
+        {!diffs ? (
           <View style={styles.rowNoEdit}>
             <Text style={styles.text}>{item.original}</Text>
             <View style={styles.pen}>
@@ -156,7 +160,7 @@ const CorrectingListItem: React.FC<Props> = ({
           />
         )}
         {isEdit ? (
-          <TextInput
+          <AutoHeightTextInput
             style={styles.textInput}
             defaultValue={item.original}
             value={fix}
@@ -188,40 +192,7 @@ const CorrectingListItem: React.FC<Props> = ({
           </>
         )}
       </TouchableOpacity>
-      {!isEdit && diffs ? (
-        <>
-          <TouchableOpacity
-            style={styles.buttonRow}
-            onPress={(): void => {
-              refDetail.current.focus();
-            }}
-          >
-            <MaterialCommunityIcons
-              size={22}
-              color={subTextColor}
-              name="plus"
-            />
-            <Text style={styles.detailLabel}>
-              {I18n.t('commentCard.detail')}
-            </Text>
-          </TouchableOpacity>
-          <TextInput
-            ref={refDetail}
-            style={styles.textInputDetail}
-            value={detail}
-            multiline
-            blurOnSubmit
-            autoCapitalize="none"
-            spellCheck
-            autoCorrect
-            underlineColorAndroid="transparent"
-            returnKeyType="done"
-            scrollEnabled={false}
-            onBlur={onBlurDetail}
-            onChangeText={(text: string): void => setDetail(text)}
-          />
-        </>
-      ) : null}
+      {renderComment()}
     </View>
   );
 };

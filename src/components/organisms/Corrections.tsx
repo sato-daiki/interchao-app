@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { Correction, Language } from '../../types';
 import { GrayHeader } from '../atoms';
 import TeachDiaryCorrection from './TeachDiaryCorrection';
 
 interface Props {
+  isLoading: boolean;
   headerTitle: string;
   correction?: Correction;
   correction2?: Correction;
@@ -12,8 +14,13 @@ interface Props {
   textLanguage: Language;
   onPressUser?: (uid: string) => void;
 }
-
+const styles = StyleSheet.create({
+  activityIndicator: {
+    marginVertical: 16,
+  },
+});
 const Corrections: React.FC<Props> = ({
+  isLoading,
   headerTitle,
   correction,
   correction2,
@@ -22,6 +29,14 @@ const Corrections: React.FC<Props> = ({
   textLanguage,
   onPressUser,
 }) => {
+  if (isLoading) {
+    return (
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }
+
   const renderDiaryCorrection = (prmCorrection: Correction): ReactNode => {
     return (
       <TeachDiaryCorrection
