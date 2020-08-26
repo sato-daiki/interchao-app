@@ -523,10 +523,15 @@ TeachDiaryScreen.navigationOptions = ({
     ...DefaultNavigationOptions,
     ...DefaultDiaryOptions,
     title,
-    headerRight: (): JSX.Element =>
-      isDesktopOrLaptopDevice ? (
-        <TeachDiaryMenu onPressAppShare={onPressAppShare} />
-      ) : (
+    // headerRight: (): JSX.Element =>
+    //   isDesktopOrLaptopDevice ? (
+    //     <TeachDiaryMenu onPressAppShare={onPressAppShare} />
+    //   ) : (
+    //     <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+    //   ),
+    // TODO: シェア機能ができてから
+    headerRight: (): JSX.Element | null =>
+      Platform.OS === 'web' ? null : (
         <HeaderRight name="dots-horizontal" onPress={onPressMore} />
       ),
   };
