@@ -10,6 +10,8 @@ import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import { getName } from 'country-list';
+import Flag from 'react-native-flags';
 import * as Localization from 'expo-localization';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -39,6 +41,7 @@ import {
 import DefaultLayout from '../components/template/DefaultLayout';
 import { HeaderLeft } from '../components/atoms';
 import { ModalConfirm } from '../components/organisms';
+import ModalCountryPicker from '../components/web/organisms/ModalCountryPicker';
 
 export interface Props {
   profile: Profile;
@@ -104,6 +107,15 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     marginLeft: 2,
   },
+  pleaseText: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+  },
+  nationality: {
+    marginLeft: 8,
+    color: primaryColor,
+    fontSize: fontSizeM,
+  },
 });
 
 const initLearnLanguage = (code: string): Language => {
@@ -166,6 +178,13 @@ const SelectLanguageScreen: ScreenType = ({
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  useEffect(() => {
+    navigation.setParams({
+      headerDissabele: Platform.OS === 'web' && countryVisible,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countryVisible]);
+
   const onPressCloseError = (): void => {
     setErrorMessage('');
     setIsModalError(false);
@@ -204,6 +223,30 @@ const SelectLanguageScreen: ScreenType = ({
     }
     setSpokenVisible(false);
   };
+
+  const onCloseCountry = (): void => {
+    setCountryVisible(false);
+  };
+
+  const onOpenCountry = (): void => {
+    setCountryVisible(true);
+  };
+
+  const onSelectCountry = (country: Country): void => {
+    setNationalityCode(country.cca2);
+  };
+
+  if (Platform.OS === 'web' && countryVisible) {
+    return (
+      <ModalCountryPicker
+        visible={countryVisible}
+        nationalityCode={nationalityCode}
+        onSelect={onSelectCountry}
+        onClose={onCloseCountry}
+        onOpen={onOpenCountry}
+      />
+    );
+  }
 
   return (
     <DefaultLayout>
@@ -272,34 +315,58 @@ const SelectLanguageScreen: ScreenType = ({
         ) : null}
         <Space size={24} />
         <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
-        <View style={styles.row}>
-          <CountryPicker
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-            // @ts-ignore
-            countryCode={nationalityCode}
-            placeholder={I18n.t('selectLanguage.placeholder')}
-            withFilter
-            withFlag
-            withCountryNameButton
-            withEmoji
-            withModal
-            withAlphaFilter
-            onSelect={(country: Country): void => {
-              setNationalityCode(country.cca2);
-            }}
-            onClose={(): void => setCountryVisible(false)}
-            onOpen={(): void => setCountryVisible(true)}
-            visible={countryVisible}
-          />
-          {nationalityCode ? (
-            <Text
-              style={styles.change}
-              onPress={(): void => setCountryVisible(true)}
-            >
-              {I18n.t('selectLanguage.change')}
-            </Text>
-          ) : null}
-        </View>
+        {Platform.OS === 'web' ? (
+          <TouchableOpacity onPress={onOpenCountry}>
+            {nationalityCode ? (
+              <View style={styles.row}>
+                <Flag code={nationalityCode} size={24} />
+                <Text style={styles.nationality}>
+                  {getName(nationalityCode)}
+                </Text>
+                <Text style={styles.change}>
+                  {I18n.t('selectLanguage.change')}
+                </Text>
+              </View>
+            ) : (
+              <Text style={styles.pleaseText}>
+                {I18n.t('selectLanguage.placeholder')}
+              </Text>
+            )}
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.row}>
+            {nationalityCode ? null : (
+              <TouchableOpacity onPress={onOpenCountry}>
+                <Text style={styles.pleaseText}>
+                  {I18n.t('selectLanguage.placeholder')}
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            <CountryPicker
+              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+              // @ts-ignore
+              countryCode={nationalityCode}
+              placeholder=""
+              withFilter
+              withFlag
+              withCountryNameButton
+              withEmoji
+              withModal
+              withAlphaFilter
+              onSelect={onSelectCountry}
+              onClose={onCloseCountry}
+              onOpen={onOpenCountry}
+              visible={countryVisible}
+            />
+
+            {nationalityCode ? (
+              <Text style={styles.change} onPress={onOpenCountry}>
+                {I18n.t('selectLanguage.change')}
+              </Text>
+            ) : null}
+          </View>
+        )}
         <Space size={32} />
         <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
       </View>
@@ -310,6 +377,8 @@ const SelectLanguageScreen: ScreenType = ({
 SelectLanguageScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
+  const headerDissabele = navigation.getParam('headerDissabele');
+
   const headerLeftOptions =
     Platform.OS === 'web'
       ? {
@@ -324,6 +393,11 @@ SelectLanguageScreen.navigationOptions = ({
         }
       : {};
 
+  if (headerDissabele) {
+    return {
+      headerShown: false,
+    };
+  }
   return {
     ...DefaultNavigationOptions,
     ...DefaultAuthLayoutOptions,

@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   warapper: {
     width: '100%',
     backgroundColor: offBlack,
-    marginBottom: 32,
   },
   container: {
     width: '100%',

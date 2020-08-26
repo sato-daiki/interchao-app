@@ -11,6 +11,9 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
+  warapper: {
+    paddingTop: 32,
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -58,6 +61,7 @@ const WhatIs = ({ isMaxLayoutChange }: Props): JSX.Element | null => {
 
   return (
     <WebTemplate
+      warapper={styles.warapper}
       leftTop={false}
       isMaxLayoutChange={isMaxLayoutChange}
       renderLeft={renderLeft}
