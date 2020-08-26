@@ -29,6 +29,7 @@ import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
 import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
 import DefaultLayout from '../template/DefaultLayout';
 import { ModalConfirm } from '.';
+import PostDiaryKeybordWeb from './PostDiaryKeybordWeb';
 
 interface Props {
   isLoading: boolean;
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
+    backgroundColor: offWhite,
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 12,
@@ -138,6 +140,48 @@ const PostDiary = ({
 
   const usePoints = getUsePoints(text.length, learnLanguage);
 
+  const renderKeyboard = (): JSX.Element => {
+    if (Platform.OS === 'ios') {
+      return (
+        <PostDiaryKeyboardIOS
+          title={title}
+          text={text}
+          isForce={isForce}
+          fadeAnim={fadeAnim}
+          onChangeTextTitle={onChangeTextTitle}
+          onChangeTextText={onChangeTextText}
+          onPressDraft={onPressDraft}
+          onFocusText={onFocusText}
+          onBlurText={(): void => setIsForce(false)}
+        />
+      );
+    }
+
+    if (Platform.OS === 'web') {
+      return (
+        <PostDiaryKeybordWeb
+          title={title}
+          text={text}
+          onChangeTextTitle={onChangeTextTitle}
+          onChangeTextText={onChangeTextText}
+          onPressDraft={onPressDraft}
+        />
+      );
+    }
+
+    return (
+      <PostDiaryKeybordAndroid
+        title={title}
+        text={text}
+        onChangeTextTitle={onChangeTextTitle}
+        onChangeTextText={onChangeTextText}
+        onPressDraft={onPressDraft}
+        onFocusText={onFocusText}
+        onBlurText={(): void => setIsForce(false)}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <DefaultLayout lSize>
@@ -195,29 +239,7 @@ const PostDiary = ({
             <Text style={styles.headerValue}>{points}</Text>
           </View>
         </View>
-        {Platform.OS === 'ios' ? (
-          <PostDiaryKeyboardIOS
-            title={title}
-            text={text}
-            isForce={isForce}
-            fadeAnim={fadeAnim}
-            onChangeTextTitle={onChangeTextTitle}
-            onChangeTextText={onChangeTextText}
-            onPressDraft={onPressDraft}
-            onFocusText={onFocusText}
-            onBlurText={(): void => setIsForce(false)}
-          />
-        ) : (
-          <PostDiaryKeybordAndroid
-            title={title}
-            text={text}
-            onChangeTextTitle={onChangeTextTitle}
-            onChangeTextText={onChangeTextText}
-            onPressDraft={onPressDraft}
-            onFocusText={onFocusText}
-            onBlurText={(): void => setIsForce(false)}
-          />
-        )}
+        {renderKeyboard()}
       </DefaultLayout>
     </SafeAreaView>
   );
