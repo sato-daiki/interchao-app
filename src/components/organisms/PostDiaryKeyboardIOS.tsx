@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   StyleSheet,
-  TextInput,
   SafeAreaView,
   View,
   Keyboard,
@@ -10,14 +9,8 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TextButtun } from '../atoms';
-import {
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  offWhite,
-  mainColor,
-} from '../../styles/Common';
+import { TextButtun, TextInputTitle, TextInputText } from '../atoms';
+import { offWhite, mainColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 
 interface Props {
@@ -33,25 +26,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  titleInput: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    padding: 16,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    backgroundColor: '#fff',
-  },
-  textInput: {
-    padding: 16,
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.7,
-    textAlignVertical: 'top',
-    flex: 1,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    backgroundColor: '#fff',
-  },
   icon: {
     alignItems: 'flex-end',
     paddingRight: 8,
@@ -80,30 +54,15 @@ const PostDiaryKeyboardIOS = ({
 }: Props): JSX.Element => {
   return (
     <>
-      <TextInput
-        style={styles.titleInput}
+      <TextInputTitle
         value={title}
-        placeholder="Title"
-        maxLength={100}
-        autoCorrect={false}
-        keyboardType="default"
-        underlineColorAndroid="transparent"
-        spellCheck
-        returnKeyType="done"
         onFocus={onFocusText}
         onChangeText={onChangeTextTitle}
       />
-      <TextInput
-        style={styles.textInput}
+      <TextInputText
         value={text}
-        placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
-        underlineColorAndroid="transparent"
-        multiline
-        autoCorrect={false}
-        keyboardType="default"
-        spellCheck
-        onChangeText={onChangeTextText}
         onFocus={onFocusText}
+        onChangeText={onChangeTextText}
         onBlur={onBlurText}
       />
       {isForce ? (
