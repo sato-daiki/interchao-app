@@ -10,6 +10,7 @@ import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
 import I18n from '../utils/I18n';
 import { getClient } from '../utils/Algolia';
+import { getIndexName } from '../utils/common';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -41,10 +42,7 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <InstantSearch
-        searchClient={searchClient}
-        indexName={__DEV__ ? 'dev_diaries' : 'prod_diaries'}
-      >
+      <InstantSearch searchClient={searchClient} indexName={getIndexName()}>
         <Configure
           filters={`profile.uid:${currentUser.uid} AND diaryStatus: publish`}
         />

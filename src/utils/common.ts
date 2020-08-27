@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as Random from 'expo-random';
 import Constants from 'expo-constants';
-import { Share, Platform } from 'react-native';
+import { Share, Platform, Linking } from 'react-native';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
 import { alert } from './ErrorAlert';
@@ -76,6 +76,14 @@ export const passwordInputError = (
   }
 };
 
+export const getIsProduction = (): boolean => {
+  return Constants.manifest.releaseChannel === 'production';
+};
+
+export const getIndexName = (): string => {
+  return getIsProduction() ? 'prod_diaries' : 'dev_diaries';
+};
+
 export const getVersionText = (): string => {
   const {
     version,
@@ -85,7 +93,7 @@ export const getVersionText = (): string => {
   if (revision > 0) {
     versionText = `${versionText} rev. ${revision}`;
   }
-  if (Constants.manifest.releaseChannel !== 'production') {
+  if (!getIsProduction()) {
     versionText = `${versionText} (development)`;
   }
   return versionText;
@@ -129,18 +137,28 @@ export const appShare = async (
   });
 };
 
-// TODO
 export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
   const url = getShareUrl(nativeLanguage);
   const shareMessage = encodeURI(url);
+  Linking.openURL(
+    `https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`
+  );
 };
 
-// TODO
 export const facebookShare = async (
   nativeLanguage: Language
 ): Promise<void> => {
   const url = getShareUrl(nativeLanguage);
   const shareMessage = encodeURI(url);
+  Linking.canOpenURL('twitter://post')
+    .then(() => {
+      Linking.openURL(`twitter://post?message=${shareMessage}`)
+        .then(() => undefined)
+        .catch((): void => {
+          Linking.openURL(`http://twitter.com/share?text=${shareMessage}`);
+        });
+    })
+    .catch(() => undefined);
 };
 
 interface EachOS {
