@@ -76,12 +76,8 @@ export const passwordInputError = (
   }
 };
 
-export const getIsProduction = (): boolean => {
-  return Constants.manifest.releaseChannel === 'production';
-};
-
 export const getIndexName = (): string => {
-  return getIsProduction() ? 'prod_diaries' : 'dev_diaries';
+  return __DEV__ ? 'dev_diaries' : 'prod_diaries';
 };
 
 export const getVersionText = (): string => {
@@ -93,7 +89,7 @@ export const getVersionText = (): string => {
   if (revision > 0) {
     versionText = `${versionText} rev. ${revision}`;
   }
-  if (!getIsProduction()) {
+  if (__DEV__) {
     versionText = `${versionText} (development)`;
   }
   return versionText;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { YellowBox, StatusBar } from 'react-native';
+import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
@@ -17,7 +17,6 @@ import Loading from './screens/LoadingScreen';
 import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
 import { ModalConfirm } from './components/organisms';
-import { getIsProduction } from './utils/common';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -29,7 +28,7 @@ Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
   enableInExpoDevelopment: true,
-  debug: !getIsProduction(),
+  debug: __DEV__,
 });
 
 if (!firebase.apps.length) {
@@ -40,7 +39,7 @@ const App: React.SFC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const checkUpdate = async (): Promise<void> => {
-    if (__DEV__) return;
+    if (__DEV__ || Platform.OS === 'web') return;
 
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {

@@ -10,7 +10,7 @@ import teachDiaryList from './teachDiaryList';
 const rootPersistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['localStatus', 'user'],
+  whitelist: ['localStatus', 'user', 'profile'],
 };
 
 const rootReducer = combineReducers({
