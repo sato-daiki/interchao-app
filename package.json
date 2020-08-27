@@ -8,7 +8,9 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "node node_modules/jest/bin/jest.js --watch",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "predeploy": "expo build:web --no-pwa",
+    "deploy-hosting": "yarn predeploy && firebase deploy --only hosting"
   },
   "husky": {
     "hooks": {
@@ -68,7 +70,6 @@
     "react-instantsearch-native": "^6.3.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
     "react-native-country-picker-modal": "^1.10.0",
-    "react-native-dotenv": "^2.3.0",
     "react-native-draggable-flatlist": "^2.3.2",
     "react-native-elements": "^1.2.7",
     "react-native-flags": "^1.0.0",
@@ -127,6 +128,7 @@
     "install": "^0.13.0",
     "lint-staged": "^10.0.2",
     "prettier": "^1.19.1",
+    "react-native-dotenv": "^2.3.0",
     "redux-devtools-extension": "^2.13.8",
     "typescript": "^3.8.3"
   },

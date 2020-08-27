@@ -14,6 +14,7 @@ import { Profile } from '../types';
 import { LoadingModal } from '../components/atoms';
 import I18n from '../utils/I18n';
 import { getClient } from '../utils/Algolia';
+import { getIndexName } from '../utils/common';
 
 export interface Props {
   profile: Profile;
@@ -76,10 +77,7 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <InstantSearch
-        searchClient={searchClient}
-        indexName={__DEV__ ? 'dev_diaries' : 'prod_diaries'}
-      >
+      <InstantSearch searchClient={searchClient} indexName={getIndexName()}>
         <Configure filters={filters} />
         <SearchBar
           placeholder={I18n.t('teachDiarySerch.searchBar')}

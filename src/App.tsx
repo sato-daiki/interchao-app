@@ -17,6 +17,7 @@ import Loading from './screens/LoadingScreen';
 import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
 import { ModalConfirm } from './components/organisms';
+import { getIsProduction } from './utils/common';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -28,7 +29,7 @@ Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
   enableInExpoDevelopment: true,
-  debug: Constants.manifest.releaseChannel !== 'production',
+  debug: !getIsProduction(),
 });
 
 if (!firebase.apps.length) {
