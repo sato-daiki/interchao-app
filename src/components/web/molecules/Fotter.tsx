@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 
 const Fotter = (): JSX.Element => {
   const onPressBlog = (): void => {
-    Linking.openURL('http://blog.interchao.app/');
+    Linking.openURL('https://note.com/interchao');
   };
   const onPressTwitter = (): void => {
     Linking.openURL('https://twitter.com/interchao');

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, ViewProps } from 'react-native';
 import { primaryColor } from '../../../styles/Common';
 import { Zebra } from '../../../images/web/index';
 import WebTemplate from '../template/WebTemplate';
@@ -36,21 +36,27 @@ const Reason = ({ isMaxLayoutChange }: Props): JSX.Element => {
     <Image resizeMode="contain" style={styles.image} source={Zebra} />
   );
 
+  const textContainer = [
+    styles.textContainer,
+    { alignSelf: isMaxLayoutChange ? 'flex-start' : 'center' },
+    { textAlign: isMaxLayoutChange ? 'left' : 'center' },
+  ] as ViewProps;
+
   const renderRight = (
     <>
-      <View style={styles.textContainer}>
+      <View style={textContainer}>
         <Text style={styles.title}>{I18n.t('web.reasonTitle1')}</Text>
         <Text style={styles.text}>{I18n.t('web.reasonText11')}</Text>
         <Text style={styles.text}>{I18n.t('web.reasonText12')}</Text>
       </View>
 
-      <View style={styles.textContainer}>
+      <View style={textContainer}>
         <Text style={styles.title}>{I18n.t('web.reasonTitle2')}</Text>
         <Text style={styles.text}>{I18n.t('web.reasonText21')}</Text>
         <Text style={styles.text}>{I18n.t('web.reasonText22')}</Text>
       </View>
 
-      <View style={styles.textContainer}>
+      <View style={textContainer}>
         <Text style={styles.title}>{I18n.t('web.reasonTitle3')}</Text>
         <Text style={styles.text}>{I18n.t('web.reasonText31')}</Text>
         <Text style={styles.text}>{I18n.t('web.reasonText32')}</Text>

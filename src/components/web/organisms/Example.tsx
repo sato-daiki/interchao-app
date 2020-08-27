@@ -5,9 +5,11 @@ import { Sample } from '../../../images/web';
 import WebTemplate from '../template/WebTemplate';
 import I18n from '../../../utils/I18n';
 import { getImage } from '../../../utils/web';
+import { Title, BodyText } from '../atoms';
 
 interface Props {
   isMaxLayoutChange: boolean;
+  isMobileDevice: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -57,14 +59,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const Example = ({ isMaxLayoutChange }: Props): JSX.Element => {
+const Example = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
   const renderTopCenter = (
     <>
       <View style={styles.row}>
         <Image source={Sample} resizeMode="contain" style={styles.icon} />
-        <Text style={styles.title}>{I18n.t('web.exampleTitle')}</Text>
+        <Title
+          isMobileDevice={isMobileDevice}
+          text={I18n.t('web.exampleTitle')}
+        />
       </View>
-      <Text style={styles.text}>{I18n.t('web.exampleText')}</Text>
+      <BodyText
+        isMobileDevice={isMobileDevice}
+        text={I18n.t('web.exampleText')}
+      />
     </>
   );
 

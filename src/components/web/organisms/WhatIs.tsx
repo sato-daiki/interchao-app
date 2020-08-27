@@ -1,13 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, Image, View } from 'react-native';
-import { primaryColor } from '../../../styles/Common';
+import { StyleSheet, Image, View } from 'react-native';
 import { App } from '../../../images/web';
 import WebTemplate from '../template/WebTemplate';
 import I18n from '../../../utils/I18n';
 import { getImage } from '../../../utils/web';
+import { Title, BodyText } from '../atoms';
 
 interface Props {
   isMaxLayoutChange: boolean;
+  isMobileDevice: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -19,20 +20,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  title: {
-    fontSize: 32,
-    color: primaryColor,
-    fontWeight: 'bold',
-  },
   icon: {
     width: 32,
     height: 32,
     marginRight: 12,
-  },
-  text: {
-    fontSize: 20,
-    color: primaryColor,
-    lineHeight: 20 * 1.3,
   },
   image: {
     width: 300,
@@ -40,7 +31,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhatIs = ({ isMaxLayoutChange }: Props): JSX.Element | null => {
+const WhatIs = ({
+  isMaxLayoutChange,
+  isMobileDevice,
+}: Props): JSX.Element | null => {
   const source = getImage('correct');
   const renderLeft = source ? (
     <Image resizeMode="contain" style={styles.image} source={source} />
@@ -52,10 +46,16 @@ const WhatIs = ({ isMaxLayoutChange }: Props): JSX.Element | null => {
     <>
       <View style={styles.row}>
         <Image source={App} resizeMode="contain" style={styles.icon} />
-        <Text style={styles.title}>{I18n.t('web.wahtTitle')}</Text>
+        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.wahtTitle')} />
       </View>
-      <Text style={styles.text}>{I18n.t('web.wahtText1')}</Text>
-      <Text style={styles.text}>{I18n.t('web.wahtText2')}</Text>
+      <BodyText
+        isMobileDevice={isMobileDevice}
+        text={I18n.t('web.wahtText1')}
+      />
+      <BodyText
+        isMobileDevice={isMobileDevice}
+        text={I18n.t('web.wahtText2')}
+      />
     </>
   );
 
