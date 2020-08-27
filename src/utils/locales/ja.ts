@@ -49,8 +49,7 @@ const web = {
     'あなたの言葉をアウトプットすることにより、あなたが普段使う言葉を学習することができます',
   correctTitle: '日記を添削してポイントGET！',
   correctText1:
-    ' あなたのネイティブな言語の日記を添削すると10ポイント貯まります',
-  correctText2: ' この10ポイントを使って日記を書こう！',
+    ' あなたのネイティブな言語の日記を添削すると10ポイント貯まります。この10ポイントを使って日記を書こう！',
   exampleTitle: '添削事例',
   exampleText: '実際の添削事例をご紹介​',
   exampleDetailTitle1: 'あなたが作成した日記​',
@@ -59,7 +58,7 @@ const web = {
   exampleDetailText2: '間違った表現を箇所を指摘してもらいました',
   exampleDetailTitle3: '日記の総評​​',
   exampleDetailText3: '最後に総評をもらいました',
-  startTitle: 'まずは無料で日記を書いてみよう​',
+  startTitle: 'さっそく始めてみよう',
   startText:
     'アプリインストールで100pt（10日記分）が貰えます。早速日記を書いて添削してもらおう！',
 };

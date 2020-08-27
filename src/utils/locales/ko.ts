@@ -49,8 +49,8 @@ const web = {
   reasonText32:
     '내가 원하는 문장을 쓰면 자연스럽게 평상시에 사용하는 표현을 학습할 수 있습니다.',
   correctTitle: '일기를 첨삭해서 포인트를 GET!',
-  correctText1: '당신의 모국어로 쓰인 일기를 첨삭하면 10포인트가 쌓입니다.',
-  correctText2: '이 10포인트를 사용해서 일기를 써 봅시다!',
+  correctText1:
+    '당신의 모국어로 쓰인 일기를 첨삭하면 10포인트가 쌓입니다. 이 10포인트를 사용해서 일기를 써 봅시다!',
   exampleTitle: '첨삭 사례',
   exampleText: '실제 첨삭 사례를 소개',
   exampleDetailTitle1: '당신이 작성한 일기',

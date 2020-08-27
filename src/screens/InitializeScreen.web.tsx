@@ -42,6 +42,10 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
     maxDeviceWidth: 1224,
   });
 
+  const isMobileDevice = useMediaQuery({
+    maxDeviceWidth: 767,
+  });
+
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView style={styles.container}>
@@ -59,15 +63,30 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
               navigation.navigate('SignIn');
             }}
             isMaxLayoutChange={isMaxLayoutChange}
-            navigation={navigation}
+            isMobileDevice={isMobileDevice}
           />
           {isTabletOrMobileDevice ? <AppDownload /> : null}
-          <WhatIs isMaxLayoutChange={isMaxLayoutChange} />
-          <WhyIs isMaxLayoutChange={isMaxLayoutChange} />
+          <WhatIs
+            isMaxLayoutChange={isMaxLayoutChange}
+            isMobileDevice={isMobileDevice}
+          />
+          <WhyIs
+            isMaxLayoutChange={isMaxLayoutChange}
+            isMobileDevice={isMobileDevice}
+          />
           <Reason isMaxLayoutChange={isMaxLayoutChange} />
-          <Correct isMaxLayoutChange={isMaxLayoutChange} />
-          <Example isMaxLayoutChange={isMaxLayoutChange} />
-          <Start isMaxLayoutChange={isMaxLayoutChange} />
+          <Correct
+            isMaxLayoutChange={isMaxLayoutChange}
+            isMobileDevice={isMobileDevice}
+          />
+          <Example
+            isMaxLayoutChange={isMaxLayoutChange}
+            isMobileDevice={isMobileDevice}
+          />
+          <Start
+            isMaxLayoutChange={isMaxLayoutChange}
+            isMobileDevice={isMobileDevice}
+          />
           {isTabletOrMobileDevice ? <AppDownload /> : null}
           <Fotter />
         </View>

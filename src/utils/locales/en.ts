@@ -54,8 +54,7 @@ const web = {
     'Through outputting something in your own words, you are able to learn in a practical way.',
   correctTitle: 'Correct entries to get points',
   correctText1:
-    'Mark a journal entry in your native language and get 10 points.',
-  correctText2: 'Use the points for writing your own journal entry!',
+    'Mark a journal entry in your native language and get 10 points. Use the points for writing your own journal entry!',
   exampleTitle: 'Example of a Correction',
   exampleText: 'Take a look at an actual example.',
   exampleDetailTitle1: 'Your Journal Entry',

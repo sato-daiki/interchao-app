@@ -4,9 +4,11 @@ import { primaryColor } from '../../../styles/Common';
 import { Giar, Pen } from '../../../images/web';
 import WebTemplate from '../template/WebTemplate';
 import I18n from '../../../utils/I18n';
+import { Title, BodyText } from '../atoms';
 
 interface Props {
   isMaxLayoutChange: boolean;
+  isMobileDevice: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -19,17 +21,6 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     marginRight: 12,
-  },
-  title: {
-    fontSize: 32,
-    color: primaryColor,
-    fontWeight: 'bold',
-    lineHeight: 32 * 1.3,
-  },
-  text: {
-    fontSize: 20,
-    color: primaryColor,
-    lineHeight: 20 * 1.3,
   },
   chatText: {
     fontSize: 18,
@@ -50,14 +41,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhyIs = ({ isMaxLayoutChange }: Props): JSX.Element => {
+const WhyIs = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
   const renderLeft = (
     <>
       <View style={styles.row}>
         <Image source={Pen} resizeMode="contain" style={styles.icon} />
-        <Text style={styles.title}>{I18n.t('web.whyTitle')}</Text>
+        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.whyTitle')} />
       </View>
-      <Text style={styles.text}>{I18n.t('web.whyText')}</Text>
+      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.whyText')} />
     </>
   );
 

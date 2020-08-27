@@ -1,13 +1,20 @@
 import React from 'react';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
-import { NavigationStackProp } from 'react-navigation-stack';
-import { maxLayoutChange, offBlack, maxPartS } from '../../../styles/Common';
+import {
+  maxLayoutChange,
+  offBlack,
+  maxPartS,
+  fontSizeLLL,
+  fontSizeLL,
+  fontSizeTitle,
+} from '../../../styles/Common';
 import { WhiteButton, Space, SubmitButton } from '../../atoms';
 import I18n from '../../../utils/I18n';
+import { getSize } from '../../../utils/responsibleCss';
 
 interface Props {
   isMaxLayoutChange: boolean;
-  navigation: NavigationStackProp;
+  isMobileDevice: boolean;
   onPressStart: () => void;
   onPressLogin: () => void;
 }
@@ -48,22 +55,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   title: {
-    fontSize: 40,
     color: '#fff',
     fontWeight: 'bold',
-    lineHeight: 40 * 1.3,
     marginBottom: 16,
   },
   text: {
-    fontSize: 20,
     color: '#fff',
-    lineHeight: 20 * 1.3,
   },
   loginText: {
-    fontSize: 18,
     fontWeight: 'bold',
     color: '#fff',
-    lineHeight: 20 * 1.3,
   },
   button: {
     alignSelf: 'flex-start',
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
 
 const FirstView = ({
   isMaxLayoutChange,
+  isMobileDevice,
   onPressStart,
   onPressLogin,
 }: Props): JSX.Element => {
@@ -97,16 +99,43 @@ const FirstView = ({
         ]}
       >
         <View style={styles.textContainer}>
-          <Text style={[styles.title, setLeft()]}>
+          <Text
+            style={[
+              styles.title,
+              {
+                fontSize: getSize(isMobileDevice, fontSizeTitle),
+                lineHeight: getSize(isMobileDevice, fontSizeTitle) * 1.3,
+              },
+              setLeft(),
+            ]}
+          >
             {I18n.t('web.firstViewTitle')}
           </Text>
-          <Text style={[styles.text, setLeft()]}>
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: getSize(isMobileDevice, fontSizeLLL),
+                lineHeight: getSize(isMobileDevice, fontSizeLLL) * 1.3,
+              },
+              setLeft(),
+            ]}
+          >
             {I18n.t('web.firstViewSubTitle')}
           </Text>
         </View>
         <View style={styles.loginContainer}>
           <Space size={36} />
-          <Text style={[styles.loginText, setRight()]}>
+          <Text
+            style={[
+              styles.loginText,
+              {
+                fontSize: getSize(isMobileDevice, fontSizeLL),
+                lineHeight: getSize(isMobileDevice, fontSizeLL) * 1.3,
+              },
+              setRight(),
+            ]}
+          >
             {I18n.t('web.firstViewStart')}
           </Text>
           <Space size={8} />
