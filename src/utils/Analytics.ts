@@ -1,13 +1,10 @@
-import Constants from 'expo-constants';
 import * as Amplitude from 'expo-analytics-amplitude';
 import { firestore } from 'firebase';
 import { Platform } from 'react-native';
 import {
   DEVELOPMENT_AMPLITUDE_API_KEY,
   PRODUCTION_AMPLITUDE_API_KEY,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-} from '@env';
+} from '../../envConfig';
 import Sentry from '../constants/Sentry';
 import { User, Profile, Language } from '../types';
 
@@ -18,7 +15,7 @@ interface Property {
   createdAt: firestore.FieldValue;
 }
 
-const isProduction = Constants.manifest.releaseChannel === 'production';
+const isProduction = !__DEV__;
 const apiKey = isProduction
   ? PRODUCTION_AMPLITUDE_API_KEY
   : DEVELOPMENT_AMPLITUDE_API_KEY;

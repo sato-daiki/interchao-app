@@ -1,12 +1,12 @@
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
-import {
-  ALGOLIA_API_KEY,
-  ALGOLIA_ADMIN_API_KEY,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-} from '@env';
+import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '../../envConfig';
+import { getIndexName } from './common';
 
 type SortType = 'createdAt' | 'updatedAt';
+
+export const getClient = (): SearchClient => {
+  return algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
+};
 
 class Algolia {
   private client: SearchClient;
@@ -14,7 +14,7 @@ class Algolia {
   private isProd = false;
 
   constructor() {
-    this.client = algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
+    this.client = getClient();
 
     if (__DEV__) {
       this.isProd = false;
@@ -27,10 +27,7 @@ class Algolia {
     if (clean) {
       this.client.clearCache();
     }
-    if (this.isProd) {
-      return this.client.initIndex('prod_diaries');
-    }
-    return this.client.initIndex('dev_diaries');
+    return this.client.initIndex(getIndexName());
   };
 
   public setSettings = async (
