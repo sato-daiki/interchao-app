@@ -64,6 +64,8 @@ node_modules
 /third-party
 
 .env
+# 一時的
+envConfig.ts
 
 # storybook static file
 storybook-static
