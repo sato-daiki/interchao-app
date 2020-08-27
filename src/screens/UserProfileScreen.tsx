@@ -443,23 +443,13 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onPressSubmit={!isBlocked ? onPressBlockSubmit : onPressUnblockSubmit}
         onPressClose={(): void => setIsModalBlock(false)}
       />
-      {isDesktopOrLaptopDevice ? (
-        <ModalReport
-          visible={isReport}
-          isSuccess={isReportSuccess}
-          isLoading={isLoading}
-          onReportSubmit={onReportSubmit}
-          onReportClose={(): void => setIsReport(false)}
-        />
-      ) : (
-        <Report
-          isReport={isReport}
-          isSuccess={isReportSuccess}
-          isLoading={isLoading}
-          onReportSubmit={onReportSubmit}
-          onReportClose={(): void => setIsReport(false)}
-        />
-      )}
+      <ModalReport
+        visible={isReport}
+        isSuccess={isReportSuccess}
+        isLoading={isLoading}
+        onReportSubmit={onReportSubmit}
+        onReportClose={(): void => setIsReport(false)}
+      />
       <ScrollView
         style={styles.container}
         refreshControl={
@@ -469,7 +459,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         {profile && !loadingProfile ? (
           <UserProfileHeader profile={profile} userReview={userReview} />
         ) : (
-          <ActivityIndicator />
+          <>
+            <Space size={16} />
+            <ActivityIndicator />
+            <Space size={16} />
+          </>
         )}
         <FlatList
           data={topReviews}
