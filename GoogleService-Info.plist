@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>975945165729-hc3u7ndtcnd4fu6793jnarm8s3e6es2n.apps.googleusercontent.com</string>
+	<string>862039416371-bp6s4vqqbqn18q9hi2k361m9ffq56642.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.975945165729-hc3u7ndtcnd4fu6793jnarm8s3e6es2n</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>975945165729-l58crudfj4bqs737hi2a8m9use1asjrg.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.862039416371-bp6s4vqqbqn18q9hi2k361m9ffq56642</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCoXPkOriKDuEHYn-6L1xuzGpo3-LtrZO4</string>
+	<string>AIzaSyBGsUVka5H4lXQJd3xSdydz8n-NOJHjk7w</string>
 	<key>GCM_SENDER_ID</key>
-	<string>975945165729</string>
+	<string>862039416371</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>app.white-zebra</string>
+	<string>white-zebra.app</string>
 	<key>PROJECT_ID</key>
-	<string>white-zebra-dev</string>
+	<string>white-zebra-5096f</string>
 	<key>STORAGE_BUCKET</key>
-	<string>white-zebra-dev.appspot.com</string>
+	<string>white-zebra-5096f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:975945165729:ios:9f83bba04f5223118fb9e0</string>
+	<string>1:862039416371:ios:1639594f9a27191b9a4d46</string>
 	<key>DATABASE_URL</key>
-	<string>https://white-zebra-dev.firebaseio.com</string>
+	<string>https://white-zebra-5096f.firebaseio.com</string>
 </dict>
 </plist>

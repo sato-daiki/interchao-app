@@ -60,6 +60,13 @@ expo upload:ios
 expo upload:android
 ```
 
+## Publish（web）
+## ビルド
+```
+npx expo-optimize  
+yarn deploy-hosting  
+```
+
 ## メモ
 
 firebase deploy --only firestore:rules -P product

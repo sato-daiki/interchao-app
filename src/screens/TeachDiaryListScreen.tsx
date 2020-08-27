@@ -316,7 +316,7 @@ TeachDiaryListScreen.navigationOptions = ({
     //   ),
     headerRight: (): JSX.Element | null =>
       Platform.OS === 'web' ? null : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
       ),
   };
 };
