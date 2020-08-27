@@ -5,51 +5,80 @@ import {
   TextStyle,
   NativeSyntheticEvent,
   TextInputChangeEventData,
-  Platform,
-  TextInputProps,
+  StyleSheet,
 } from 'react-native';
+import {
+  fontSizeM,
+  primaryColor,
+  offWhite,
+  borderLightColor,
+} from '../../styles/Common';
 
-interface Props extends TextInputProps {
+interface Props {
   style?: StyleProp<TextStyle>;
-  onFocus?: () => void;
-  onChange?: () => void;
+  defaultValue?: string;
+  value: string;
+  placeholder?: string;
+  onChangeText: (text: string) => void;
+  onBlur?: () => void;
 }
 
+const styles = StyleSheet.create({
+  textInput: {
+    lineHeight: fontSizeM * 1.1,
+    fontSize: fontSizeM,
+    color: primaryColor,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    marginVertical: 2,
+    backgroundColor: offWhite,
+    borderColor: borderLightColor,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
+  },
+});
+
 const AutoHeightTextInput: React.FC<Props> = ({
-  style,
-  onFocus,
-  onChange,
-  ...props
+  style = {},
+  defaultValue,
+  value,
+  placeholder,
+  onChangeText,
+  onBlur,
 }: Props): JSX.Element => {
   const [scrollHeight, setScrollHeight] = useState(null);
 
   const handleFocus = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
   ): void => {
-    if (onFocus) onFocus();
     setScrollHeight(e.target.scrollHeight);
   };
 
   const handleChange = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
   ): void => {
-    if (onChange) onChange();
     setScrollHeight(e.target.scrollHeight);
   };
 
-  if (Platform.OS === 'web') {
-    return (
-      <TextInput
-        style={[style, { height: scrollHeight }]}
-        onFocus={handleFocus}
-        onChange={handleChange}
-        {...props}
-      />
-    );
-  }
-
   return (
-    <TextInput style={style} onFocus={onFocus} onChange={onChange} {...props} />
+    <TextInput
+      style={[styles.textInput, style, { height: scrollHeight }]}
+      defaultValue={defaultValue}
+      placeholder={placeholder}
+      value={value}
+      multiline
+      blurOnSubmit
+      autoCapitalize="none"
+      spellCheck
+      autoCorrect
+      returnKeyType="done"
+      scrollEnabled={false}
+      underlineColorAndroid="transparent"
+      onChangeText={onChangeText}
+      onFocus={handleFocus}
+      onChange={handleChange}
+      onBlur={onBlur}
+    />
   );
 };
 

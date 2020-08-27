@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  TextInput,
 } from 'react-native';
 import * as jsdiff from 'diff';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -65,9 +66,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: '#fff',
-    marginVertical: Platform.OS === 'web' ? 16 : 0,
-    paddingHorizontal: Platform.OS === 'web' ? 8 : 0,
     marginRight: 38,
+  },
+  textInputWeb: {
+    marginTop: 12,
   },
 });
 
@@ -117,6 +119,56 @@ const CorrectingListItem: React.FC<Props> = ({
     onHideKeyboard();
   };
 
+  const renderFix = (): JSX.Element | null => {
+    if (!isEdit) {
+      return (
+        <>
+          {!diffs ? null : (
+            <>
+              <Space size={16} />
+              <CorrectingText
+                isOrigin={false}
+                isMenu={false}
+                text={fix || ''}
+                diffs={diffs}
+              />
+            </>
+          )}
+        </>
+      );
+    }
+
+    if (Platform.OS === 'web') {
+      return (
+        <AutoHeightTextInput
+          style={styles.textInputWeb}
+          defaultValue={item.original}
+          value={fix}
+          onChangeText={(text: string): void => setFix(text)}
+          onBlur={onBlurFix}
+        />
+      );
+    }
+    return (
+      <TextInput
+        style={styles.textInput}
+        defaultValue={item.original}
+        value={fix}
+        multiline
+        blurOnSubmit
+        autoFocus
+        autoCapitalize="none"
+        spellCheck
+        autoCorrect
+        underlineColorAndroid="transparent"
+        returnKeyType="done"
+        scrollEnabled={false}
+        onChangeText={(text: string): void => setFix(text)}
+        onBlur={onBlurFix}
+      />
+    );
+  };
+
   const renderComment = (): JSX.Element | null => {
     if (!diffs) return null;
 
@@ -159,38 +211,7 @@ const CorrectingListItem: React.FC<Props> = ({
             diffs={diffs}
           />
         )}
-        {isEdit ? (
-          <AutoHeightTextInput
-            style={styles.textInput}
-            defaultValue={item.original}
-            value={fix}
-            multiline
-            blurOnSubmit
-            autoFocus
-            autoCapitalize="none"
-            spellCheck
-            autoCorrect
-            underlineColorAndroid="transparent"
-            returnKeyType="done"
-            scrollEnabled={false}
-            onChangeText={(text: string): void => setFix(text)}
-            onBlur={onBlurFix}
-          />
-        ) : (
-          <>
-            {!diffs ? null : (
-              <>
-                <Space size={16} />
-                <CorrectingText
-                  isOrigin={false}
-                  isMenu={false}
-                  text={fix || ''}
-                  diffs={diffs}
-                />
-              </>
-            )}
-          </>
-        )}
+        {renderFix()}
       </TouchableOpacity>
       {renderComment()}
     </View>

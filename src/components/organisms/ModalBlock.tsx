@@ -59,11 +59,11 @@ const ModalBlock: React.FC<Props> = ({
   if (!isBlocked) {
     title = !isSuccess
       ? I18n.t('modalBlock.blockedQuestion', { userName })
-      : I18n.t('modalBlock.blockedSuccess', { userName });
+      : I18n.t('modalBlock.unblockedSuccess', { userName });
   } else {
     title = !isSuccess
       ? I18n.t('modalBlock.unblockedQuestion', { userName })
-      : I18n.t('modalBlock.unblockedSuccess', { userName });
+      : I18n.t('modalBlock.blockedSuccess', { userName });
   }
 
   return (
