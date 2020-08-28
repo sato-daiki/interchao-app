@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const InitializeWebScreen: NavigationStackScreenComponent = ({ navigation }) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);
@@ -95,8 +95,8 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 };
 
-InitializeScreen.navigationOptions = (): NavigationStackOptions => ({
+InitializeWebScreen.navigationOptions = (): NavigationStackOptions => ({
   headerShown: false,
 });
 
-export default InitializeScreen;
+export default InitializeWebScreen;
