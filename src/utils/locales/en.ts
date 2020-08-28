@@ -72,8 +72,6 @@ const modalAppSuggestion = {
   title: 'Interchao is better on the app',
   text:
     'Never miss an correction. Open this in the Interchao app to get the full experience',
-  yes: 'Switch to the app',
-  no: 'Not now',
 };
 
 // タブ
