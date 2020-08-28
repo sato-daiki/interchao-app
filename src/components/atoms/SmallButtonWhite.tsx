@@ -10,6 +10,7 @@ import { mainColor, fontSizeM } from '../../styles/Common';
 interface Props {
   isLoading?: boolean;
   disable?: boolean;
+  color?: string;
   title: string;
   onPress: () => void;
 }
@@ -17,7 +18,6 @@ interface Props {
 const styles = StyleSheet.create({
   contaner: {
     borderRadius: 8,
-    borderColor: mainColor,
     borderWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    color: mainColor,
     fontSize: fontSizeM,
     fontWeight: 'bold',
   },
@@ -34,19 +33,20 @@ const styles = StyleSheet.create({
 const SmallButtonWhite: React.FC<Props> = ({
   isLoading = false,
   disable = false,
+  color = mainColor,
   title,
   onPress,
 }: Props): JSX.Element => {
   return (
     <TouchableOpacity
-      style={styles.contaner}
+      style={[styles.contaner, { borderColor: color }]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
         <ActivityIndicator size="small" />
       ) : (
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, { color }]}>{title}</Text>
       )}
     </TouchableOpacity>
   );

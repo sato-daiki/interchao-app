@@ -2,7 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Random from 'expo-random';
 import Constants from 'expo-constants';
 import { Share, Platform, Linking } from 'react-native';
-import firebase from '../constants/firebase';
+import moment from 'moment';
+import firebase from 'firebase';
 import I18n from './I18n';
 import { alert } from './ErrorAlert';
 import { Language } from '../types';
@@ -175,4 +176,9 @@ export const getEachOS = ({ ios, android, web, other }: EachOS): any => {
     return web;
   }
   return other || ios;
+};
+
+// 何日前かをチェックする
+export const getIsAfterDay = (targetAt: any, days: number): boolean => {
+  return moment(targetAt.toDate()).isAfter(moment().add(days, 'days'));
 };

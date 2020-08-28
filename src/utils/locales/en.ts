@@ -68,6 +68,14 @@ const web = {
     'By registering for a free account, you can receive 100 pts (10 journal entry’s worth). Hurry and write a journal entry so you can have it corrected!',
 };
 
+const modalAppSuggestion = {
+  title: 'Interchao is better on the app',
+  text:
+    'Never miss an correction. Open this in the Interchao app to get the full experience',
+  yes: 'Switch to the app',
+  no: 'Not now',
+};
+
 // タブ
 const mainTab = {
   myDiary: 'My Entries',
@@ -572,6 +580,7 @@ const language = {
 const en = {
   common,
   web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,

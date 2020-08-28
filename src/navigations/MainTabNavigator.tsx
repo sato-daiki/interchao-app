@@ -165,103 +165,108 @@ const MyPageTabStack = createStackNavigator(
   }
 );
 
-const createHomeTabNavigator = (isDesktopOrLaptopDevice: boolean) => {
-  if (isDesktopOrLaptopDevice) {
-    return createSidebarNavigator(
+const createHomeTabNavigator = (isTabletOrMobileDevice: boolean) => {
+  if (isTabletOrMobileDevice) {
+    return createBottomTabNavigator(
       {
-        Home: {
+        MyDiaryTab: {
           screen: MyDiaryTabStack,
-          params: {
-            tabName: 'myDiary',
+          navigationOptions: {
+            tabBarLabel: I18n.t('mainTab.myDiary'),
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <TabIcon
+                name="book-open"
+                size={25}
+                color={tintColor}
+                badgeMode="myDiary"
+              />
+            ),
+          },
+        },
+        PostDiaryTab: {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+          // @ts-ignore
+          screen: PostDiaryScreen,
+          navigationOptions: {
+            tabBarLabel: I18n.t('mainTab.postDiary'),
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <MaterialCommunityIcons
+                name="pencil"
+                size={25}
+                color={tintColor}
+              />
+            ),
+            tabBarOnPress: ({ navigation }): void => {
+              navigation.navigate('ModalPostDiary');
+            },
           },
         },
         TeachDiaryTab: {
           screen: TeachDiaryTabStack,
-          params: {
-            tabName: 'teachDiary',
+          navigationOptions: {
+            tabBarLabel: ({
+              tintColor,
+            }: {
+              tintColor: string;
+            }): JSX.Element => <TabLabel color={tintColor} />,
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <MaterialCommunityIcons
+                name="spellcheck"
+                size={25}
+                color={tintColor}
+              />
+            ),
           },
         },
         MyPageTab: {
           screen: MyPageTabStack,
-          params: {
-            tabName: 'myPage',
+          navigationOptions: {
+            tabBarLabel: I18n.t('mainTab.myPage'),
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <MaterialIcons name="person" size={25} color={tintColor} />
+            ),
           },
         },
       },
       {
-        initialRouteName: 'Home',
+        tabBarOptions: {
+          activeTintColor: mainColor,
+        },
       }
     );
   }
-
-  return createBottomTabNavigator(
+  return createSidebarNavigator(
     {
-      MyDiaryTab: {
+      Home: {
         screen: MyDiaryTabStack,
-        navigationOptions: {
-          tabBarLabel: I18n.t('mainTab.myDiary'),
-          tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-            <TabIcon
-              name="book-open"
-              size={25}
-              color={tintColor}
-              badgeMode="myDiary"
-            />
-          ),
-        },
-      },
-      PostDiaryTab: {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        screen: PostDiaryScreen,
-        navigationOptions: {
-          tabBarLabel: I18n.t('mainTab.postDiary'),
-          tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-            <MaterialCommunityIcons name="pencil" size={25} color={tintColor} />
-          ),
-          tabBarOnPress: ({ navigation }): void => {
-            navigation.navigate('ModalPostDiary');
-          },
+        params: {
+          tabName: 'myDiary',
         },
       },
       TeachDiaryTab: {
         screen: TeachDiaryTabStack,
-        navigationOptions: {
-          tabBarLabel: ({ tintColor }: { tintColor: string }): JSX.Element => (
-            <TabLabel color={tintColor} />
-          ),
-          tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-            <MaterialCommunityIcons
-              name="spellcheck"
-              size={25}
-              color={tintColor}
-            />
-          ),
+        params: {
+          tabName: 'teachDiary',
         },
       },
       MyPageTab: {
         screen: MyPageTabStack,
-        navigationOptions: {
-          tabBarLabel: I18n.t('mainTab.myPage'),
-          tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-            <MaterialIcons name="person" size={25} color={tintColor} />
-          ),
+        params: {
+          tabName: 'myPage',
         },
       },
     },
     {
-      tabBarOptions: {
-        activeTintColor: mainColor,
-      },
+      initialRouteName: 'Home',
     }
   );
 };
 
-export const createMainTabNavigator = (isDesktopOrLaptopDevice: boolean) => {
+export const createMainTabNavigator = (isTabletOrMobileDevice: boolean) => {
   return createStackNavigator(
     {
       Home: {
-        screen: createHomeTabNavigator(isDesktopOrLaptopDevice),
+        screen: createHomeTabNavigator(isTabletOrMobileDevice),
       },
       ModalPostDiary: { screen: ModalPostDiaryNavigator },
       ModalEditMyProfile: {
