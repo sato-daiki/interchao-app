@@ -1,7 +1,8 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import { Platform } from 'react-native';
 /* screens */
-import InitializeScreen from '../screens/InitializeScreen';
+import InitializeWebScreen from '../screens/InitializeWebScreen';
+import InitializeNativeScreen from '../screens/InitializeNativeScreen';
 import SignUpScreenContainer from '../containers/SignUpScreenContainer';
 import SignInScreen from '../screens/SignInScreen';
 import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
@@ -33,7 +34,7 @@ export const createAuthTabNavigator = () => {
     return createStackNavigator(
       {
         Initialize: {
-          screen: InitializeScreen,
+          screen: InitializeWebScreen,
         },
         ModalAuth: {
           screen: ModalAuthNavigator,
@@ -53,7 +54,7 @@ export const createAuthTabNavigator = () => {
 
   return createStackNavigator({
     Initialize: {
-      screen: InitializeScreen,
+      screen: InitializeNativeScreen,
     },
     ...routeConfigMap,
   });
