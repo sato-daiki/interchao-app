@@ -64,6 +64,11 @@ const web = {
     '앱 설치시 100pt(일기 10일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
 };
 
+const modalAppSuggestion = {
+  title: 'Interchao는 앱에서 사용하는 것이 더 좋습니다',
+  text: 'Interchao 앱에서 열어 전체 기능을 활용하세요.',
+};
+
 // タブ
 const mainTab = {
   myDiary: '내 일기',
@@ -558,6 +563,7 @@ const language = {
 const ko = {
   common,
   web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,
