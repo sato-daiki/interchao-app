@@ -63,6 +63,7 @@ node_modules
 /coverage
 /third-party
 
+.firebase
 .env
 # 一時的
 envConfig.ts
