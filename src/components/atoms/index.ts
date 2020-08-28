@@ -17,7 +17,7 @@ export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';
 export { default as RadioBox } from './RadioBox';
 export { default as ScoreStar } from './ScoreStar';
 export { default as ShareButton } from './ShareButton';
-export { default as SmallButtonBlue } from './SmallButtonBlue';
+export { default as SmallButtonSubmit } from './SmallButtonSubmit';
 export { default as SmallButtonWhite } from './SmallButtonWhite';
 export { default as Space } from './Space';
 export { default as SubmitButton } from './SubmitButton';

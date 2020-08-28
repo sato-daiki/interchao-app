@@ -4,7 +4,6 @@ import { PersistGate } from 'redux-persist/es/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import Constants from 'expo-constants';
 import { MenuProvider } from 'react-native-popup-menu';
 // import Updates from 'expo-updates';
 import { Updates } from 'expo';
@@ -51,11 +50,11 @@ const App: React.SFC = () => {
     checkUpdate();
   }, []);
 
-  const isDesktopOrLaptopDevice = useMediaQuery({
-    minDeviceWidth: 1224,
+  const isTabletOrMobileDevice = useMediaQuery({
+    maxDeviceWidth: 1224,
   });
 
-  const AppNavigator = createAppNavigator(isDesktopOrLaptopDevice);
+  const AppNavigator = createAppNavigator(isTabletOrMobileDevice);
 
   return (
     <Provider store={store}>

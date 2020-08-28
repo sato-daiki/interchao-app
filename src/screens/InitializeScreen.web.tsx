@@ -65,7 +65,7 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
           />
-          {isTabletOrMobileDevice ? <AppDownload /> : null}
+          {isTabletOrMobileDevice ? <AppDownload isWhite /> : null}
           <WhatIs
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
@@ -87,7 +87,7 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
           />
-          {isTabletOrMobileDevice ? <AppDownload /> : null}
+          {isTabletOrMobileDevice ? <AppDownload isWhite={false} /> : null}
           <Fotter />
         </View>
       </SafeAreaView>

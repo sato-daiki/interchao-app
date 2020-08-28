@@ -11,7 +11,7 @@ import { createAuthTabNavigator } from './AuthNavigator';
 import { createMainTabNavigator } from './MainTabNavigator';
 
 export const createAppNavigator = (
-  isDesktopOrLaptopDevice: boolean
+  isTabletOrMobileDevice: boolean
 ): NavigationContainer => {
   return createAppContainer(
     createSwitchNavigator(
@@ -21,7 +21,7 @@ export const createAppNavigator = (
           navigationOptions: { header: null },
         },
         Auth: createAuthTabNavigator(),
-        MainTab: createMainTabNavigator(isDesktopOrLaptopDevice),
+        MainTab: createMainTabNavigator(isTabletOrMobileDevice),
       },
       {
         initialRouteName: 'AuthLoading',

@@ -124,6 +124,7 @@ const SignUpScreen: ScreenType = ({
         correctingCorrectedNum: null,
         notificationCorrection: true,
         notificationReview: true,
+        lastModalAppSuggestionAt: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as User;

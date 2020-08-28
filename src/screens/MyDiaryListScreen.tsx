@@ -38,6 +38,7 @@ import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
 import { getEachOS } from '../utils/common';
+import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
 
 export interface Props {
   user: User;
@@ -341,6 +342,7 @@ const MyDiaryListScreen: ScreenType = ({
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />
+      <ModalAppSuggestion user={user} />
       <FlatList
         // emptyの時のレイアウトのため
         contentContainerStyle={isEmpty ? styles.flatList : null}
