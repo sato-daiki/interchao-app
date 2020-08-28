@@ -203,7 +203,7 @@ const SignUpScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({ onPressSkip });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onPressSkip]);
+  }, []);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
