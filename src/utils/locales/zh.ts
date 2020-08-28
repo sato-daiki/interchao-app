@@ -59,6 +59,11 @@ const web = {
     '安装应用程式可以获得100pt（10篇日记）. 赶快来写日记让人帮你批改吧！',
 };
 
+const modalAppSuggestion = {
+  title: 'Interchao 在应用上更好',
+  text: '在 Interchao 应用中打开它，享受完整体验。',
+};
+
 // タブ
 const mainTab = {
   myDiary: '我的日记',
@@ -542,6 +547,7 @@ const language = {
 const zh = {
   common,
   web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,

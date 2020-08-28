@@ -63,6 +63,14 @@ const web = {
     'アプリインストールで100pt（10日記分）が貰えます。早速日記を書いて添削してもらおう！',
 };
 
+const modalAppSuggestion = {
+  title: 'Interchaoアプリがおすすめ',
+  text:
+    '届いた添削を見逃さない。Interchaoアプリで開くと全ての機能をより快適に使えます。',
+  yes: 'Switch to the app',
+  no: 'Not now',
+};
+
 // タブ
 const mainTab = {
   myDiary: 'マイ日記',
@@ -560,6 +568,7 @@ const language = {
 const ja = {
   common,
   web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,
