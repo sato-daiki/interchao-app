@@ -64,7 +64,9 @@ expo upload:android
 ## ビルド
 ```
 npx expo-optimize  
-yarn deploy-hosting  
+expo build:web --no-pwa  
+firebase deploy --only hosting -P product  
+
 ```
 
 ## メモ

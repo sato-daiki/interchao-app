@@ -8,10 +8,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "node node_modules/jest/bin/jest.js --watch",
-    "type-check": "tsc --noEmit",
-    "optimize": "npx expo-optimize",
-    "predeploy": "expo build:web --no-pwa",
-    "deploy-hosting": "yarn predeploy && firebase deploy --only hosting -P product"
+    "type-check": "tsc --noEmit"
   },
   "husky": {
     "hooks": {

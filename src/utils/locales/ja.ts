@@ -67,8 +67,6 @@ const modalAppSuggestion = {
   title: 'Interchaoアプリがおすすめ',
   text:
     '届いた添削を見逃さない。Interchaoアプリで開くと全ての機能をより快適に使えます。',
-  yes: 'Switch to the app',
-  no: 'Not now',
 };
 
 // タブ
