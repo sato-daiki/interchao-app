@@ -3,8 +3,6 @@ import {
   TextInput,
   StyleProp,
   TextStyle,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
   StyleSheet,
 } from 'react-native';
 import {
@@ -49,20 +47,20 @@ const AutoHeightTextInput: React.FC<Props> = ({
   const [scrollHeight, setScrollHeight] = useState(null);
 
   const handleFocus = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>
+    e: any
   ): void => {
     setScrollHeight(e.target.scrollHeight);
   };
 
   const handleChange = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>
+    e: any
   ): void => {
     setScrollHeight(e.target.scrollHeight);
   };
 
   return (
     <TextInput
-      style={[styles.textInput, style, { height: scrollHeight }]}
+      style={[styles.textInput, style, { height: scrollHeight || 100 }]}
       defaultValue={defaultValue}
       placeholder={placeholder}
       value={value}
