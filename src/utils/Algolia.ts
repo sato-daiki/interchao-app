@@ -1,5 +1,6 @@
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
 // @ts-ignore
+// eslint-disable-next-line import/no-unresolved, import/extensions
 import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '../../envConfig';
 import { getIndexName } from './common';
 

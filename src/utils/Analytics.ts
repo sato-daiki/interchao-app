@@ -5,6 +5,7 @@ import {
   DEVELOPMENT_AMPLITUDE_API_KEY,
   PRODUCTION_AMPLITUDE_API_KEY,
   // @ts-ignore
+  // eslint-disable-next-line import/no-unresolved, import/extensions
 } from '../../envConfig';
 import Sentry from '../constants/Sentry';
 import { User, Profile, Language } from '../types';
