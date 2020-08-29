@@ -1,5 +1,6 @@
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
-import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '../../envConfig';
+// eslint-disable-next-line import/extensions
+import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '../../envConfig.js';
 import { getIndexName } from './common';
 
 type SortType = 'createdAt' | 'updatedAt';
