@@ -1,4 +1,5 @@
 import axios from 'axios';
+// @ts-ignore
 import { GOOGLE_TRANSLATE } from '../../envConfig';
 import Sentry from '../constants/Sentry';
 import { Language } from '../types';

@@ -35,6 +35,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, {extensions: ['.js', '.jsx', '.tsx']}],
     'react-native/no-unused-styles': 2,
     'react-native/no-inline-styles': 2,
+    '@typescript-eslint/ban-ts-ignore': 1,
     '@typescript-eslint/explicit-function-return-type': [
       1,
       {
