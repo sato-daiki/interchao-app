@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 // 共通のワード
 const common = {
   cancel: 'Cancel',
@@ -21,11 +23,63 @@ const common = {
   back: 'Back',
 };
 
+// web
+const web = {
+  firstViewTitle: '“Speaking” starts from “Writing”',
+  firstViewSubTitle: 'Interactive language learning app',
+  firstViewStart: 'Join Interchao today.',
+  wahtTitle: 'What is Interchao?',
+  wahtText1:
+    'Interchao is a free, interactive language learning app for Japanese, English, Chinese, and Korean learners.',
+  wahtText2:
+    'Your journal entry will be read and marked by native speakers. Let’s mark others’ journal entry as a native teacher as a return!',
+  whyTitle: 'Why is it necessary to write?',
+  whyText: 'Writing is the optimal language learning method',
+  whyCnatText1: '「最近調子はどうですか？」',
+  whyCnatText2: '「絶好調です。あなたは？」',
+  whyCnatText3:
+    '「元気です...(Oh no, I can’t keep the conversation going...)」',
+  reasonTitle1: 'You can’t speak more than what you can write',
+  reasonText11: 'You can’t talk what you cannot pen down.',
+  reasonText12: 'Writing is a training for speaking.',
+  reasonTitle2: 'Make your articles checked by native speakers',
+  reasonText21:
+    'Since you have written down something, you want to know if there were mistakes.',
+  reasonText22:
+    'Are the words and grammar correct? Are you making sense? Let’s have your articles checked by native speakers!',
+  reasonTitle3: 'Write in your own words',
+  reasonText31:
+    'Textbooks and scripts from movies are sometimes not applicable in our daily life.',
+  reasonText32:
+    'Through outputting something in your own words, you are able to learn in a practical way.',
+  correctTitle: 'Correct entries to get points',
+  correctText1:
+    'Mark a journal entry in your native language and get 10 points. Use the points for writing your own journal entry!',
+  exampleTitle: 'Example of a Correction',
+  exampleText: 'Take a look at an actual example.',
+  exampleDetailTitle1: 'Your Journal Entry',
+  exampleDetailText1: 'Hurry up and publish an entry.',
+  exampleDetailTitle2: 'Correction Results',
+  exampleDetailText2: 'The incorrect phrases or areas will be listed here.',
+  exampleDetailTitle3: 'General Comments on the Entry',
+  exampleDetailText3: '',
+  startTitle: 'Start by writing a journal entry for free',
+  startText:
+    'By registering for a free account, you can receive 100 pts (10 journal entry’s worth). Hurry and write a journal entry so you can have it corrected!',
+};
+
+const modalAppSuggestion = {
+  title: 'Interchao is better on the app',
+  text:
+    'Never miss an correction. Open this in the Interchao app to get the full experience',
+};
+
 // タブ
 const mainTab = {
   myDiary: 'My Entries',
-  postDiary: 'Write an Entry',
-  teachDiary: 'Entries to Correct',
+  postDiary: Platform.OS === 'web' ? 'Write an Entry' : 'Write',
+  teachDiary: Platform.OS === 'web' ? 'Entries to Correct' : 'Correct',
+  myPage: 'My Page',
 };
 
 // 共通のエラーメッセージ
@@ -84,6 +138,7 @@ const deleteAcount = {
   text:
     'If you delete your account, all information about the journal entries you published will be deleted and cannot be retrieved. If you would still like to delete your account, please tap the button below.',
   withdrawal: 'Delete Account',
+  confirmation: 'Are you sure you want to delete this account?',
 };
 
 const draftDiary = {
@@ -245,7 +300,7 @@ const signIn = {
 };
 
 const signUp = {
-  headerTitle: 'Email Address Registration',
+  headerTitle: 'Email Registration',
   title: 'Please enter your email address and password.',
   subText:
     'You will need this data when switching devices. You can also register at a later time.',
@@ -522,6 +577,8 @@ const language = {
 
 const en = {
   common,
+  web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,

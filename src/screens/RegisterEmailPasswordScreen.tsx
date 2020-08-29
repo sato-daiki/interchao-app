@@ -105,7 +105,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
     f();
   }, [email, navigation, password]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     const f = async (): Promise<void> => {
       if (email.length === 0) {
         setIsEmailCheckOk(false);
@@ -134,7 +134,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
     f();
   }, [email, setIsEmailCheckOk, setErrorEmail, setIsEmailLoading]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     if (password.length === 0) {
       setIsPasswordCheckOk(false);
       setErrorPassword('');
@@ -163,7 +163,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
         <CheckTextInput
           value={email}
           onChangeText={(text: string): void => setEmail(text)}
-          onEndEditing={onEndEditingEmail}
+          onBlur={onBlurEmail}
           maxLength={50}
           placeholder="Email"
           keyboardType="email-address"
@@ -182,7 +182,7 @@ const RegisterEmailPasswordScreen: ScreenType = ({
         <CheckTextInput
           value={password}
           onChangeText={(text: string): void => setPassword(text)}
-          onEndEditing={onEndEditingPassword}
+          onBlur={onBlurPassword}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"

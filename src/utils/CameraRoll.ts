@@ -1,18 +1,17 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Permissions from 'expo-permissions';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import firebase from '../constants/firebase';
 import { SERVICE_NAME } from '../constants';
 import I18n from './I18n';
 
 export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatus> => {
-  // await Permissions.askAsync(Permissions.CAMERA);
   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
   return status;
 };
 
-export const openAlert = (): void => {
+const openAlert = (): void => {
   Alert.alert(
     I18n.t('cameraRoll.permitTitle'),
     I18n.t('cameraRoll.permitMessage', {
@@ -56,11 +55,14 @@ export const uploadImageAsync = async (
 export async function openCameraRoll(
   options = {}
 ): Promise<ImagePicker.ImagePickerResult> {
-  const status = await askPermissionsAsync();
-  if (status !== 'granted') {
-    openAlert();
-    return { cancelled: true };
+  if (Platform.OS !== 'web') {
+    const status = await askPermissionsAsync();
+    if (status !== 'granted') {
+      openAlert();
+      return { cancelled: true };
+    }
   }
+
   const result = await ImagePicker.launchImageLibraryAsync(options);
   return result;
 }

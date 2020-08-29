@@ -1,18 +1,33 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { LoadingModal, Space, SubmitButton } from '../components/atoms';
+import {
+  LoadingModal,
+  Space,
+  SubmitButton,
+  HeaderLeft,
+} from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
 import { emailInputError, emailValidate } from '../utils/common';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -87,7 +102,6 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
         );
         setIsLoading(false);
       }
-      setIsLoading(false);
     };
     f();
   }, [email, password]);
@@ -96,7 +110,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
     navigation.navigate('ForegetPassword');
   }, [navigation]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     if (email.length === 0) {
       setErrorEmail('');
       return;
@@ -108,71 +122,89 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
     setErrorEmail('');
   }, [email, setErrorEmail]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     setErrorPassword('');
   }, [setErrorPassword]);
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.main}>
-        <LoadingModal visible={isLoading} />
+      <DefaultLayout>
+        <View style={styles.main}>
+          <LoadingModal visible={isLoading} />
 
-        <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
-        <CheckTextInput
-          autoFocus
-          value={email}
-          onChangeText={(text: string): void => setEmail(text)}
-          onEndEditing={onEndEditingEmail}
-          maxLength={50}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
-          errorMessage={errorEmail}
-        />
-        <Space size={16} />
-        <Text style={styles.label}>{I18n.t('signIn.password')}</Text>
-        <CheckTextInput
-          value={password}
-          onChangeText={(text: string): void => setPassword(text)}
-          onEndEditing={onEndEditingPassword}
-          maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          secureTextEntry
-          returnKeyType="done"
-          errorMessage={errorPassword}
-        />
-        <Space size={32} />
-        <SubmitButton
-          title={I18n.t('signIn.login')}
-          onPress={onPressLogin}
-          disable={
-            errorEmail !== '' ||
-            errorPassword !== '' ||
-            email === '' ||
-            password === ''
-          }
-        />
-        <Space size={16} />
-        <View style={styles.row}>
-          <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
-          <TouchableOpacity onPress={onPressForget}>
-            <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
-          </TouchableOpacity>
+          <Text style={styles.label}>{I18n.t('signIn.email')}</Text>
+          <CheckTextInput
+            autoFocus
+            value={email}
+            onChangeText={(text: string): void => setEmail(text)}
+            onBlur={onBlurEmail}
+            maxLength={50}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            errorMessage={errorEmail}
+          />
+          <Space size={16} />
+          <Text style={styles.label}>{I18n.t('signIn.password')}</Text>
+          <CheckTextInput
+            value={password}
+            onChangeText={(text: string): void => setPassword(text)}
+            onBlur={onBlurPassword}
+            maxLength={20}
+            placeholder="Password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            secureTextEntry
+            returnKeyType="done"
+            errorMessage={errorPassword}
+          />
+          <Space size={32} />
+          <SubmitButton
+            title={I18n.t('signIn.login')}
+            onPress={onPressLogin}
+            disable={
+              errorEmail !== '' ||
+              errorPassword !== '' ||
+              email === '' ||
+              password === ''
+            }
+          />
+          <Space size={16} />
+          <View style={styles.row}>
+            <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
+            <TouchableOpacity onPress={onPressForget}>
+              <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </DefaultLayout>
     </KeyboardAwareScrollView>
   );
 };
 
-SignInScreen.navigationOptions = (): NavigationStackOptions => {
+SignInScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
+  const headerLeftOptions =
+    Platform.OS === 'web'
+      ? {
+          headerLeft: (): JSX.Element => (
+            <HeaderLeft
+              text={I18n.t('common.close')}
+              onPress={(): void => {
+                navigation.navigate('Initialize');
+              }}
+            />
+          ),
+        }
+      : {};
+
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
+    ...headerLeftOptions,
     title: I18n.t('signIn.headerTitle'),
   };
 };

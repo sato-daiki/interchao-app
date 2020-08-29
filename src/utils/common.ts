@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as Random from 'expo-random';
 import Constants from 'expo-constants';
-import { Share } from 'react-native';
-import firebase from '../constants/firebase';
+import { Share, Platform, Linking } from 'react-native';
+import moment from 'moment';
+import firebase from 'firebase';
 import I18n from './I18n';
 import { alert } from './ErrorAlert';
 import { Language } from '../types';
@@ -76,6 +77,10 @@ export const passwordInputError = (
   }
 };
 
+export const getIndexName = (): string => {
+  return __DEV__ ? 'dev_diaries' : 'prod_diaries';
+};
+
 export const getVersionText = (): string => {
   const {
     version,
@@ -85,7 +90,7 @@ export const getVersionText = (): string => {
   if (revision > 0) {
     versionText = `${versionText} rev. ${revision}`;
   }
-  if (Constants.manifest.releaseChannel !== 'production') {
+  if (__DEV__) {
     versionText = `${versionText} (development)`;
   }
   return versionText;
@@ -105,6 +110,7 @@ export const getShareUrl = (nativeLanguage: Language): string => {
       return 'https://interchao.app/en/share.html';
   }
 };
+
 export const appShare = async (
   nativeLanguage: Language,
   imageUrl: string | null = null
@@ -126,4 +132,53 @@ export const appShare = async (
   Share.share({
     message,
   });
+};
+
+export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
+  const url = getShareUrl(nativeLanguage);
+  const shareMessage = encodeURI(url);
+  Linking.openURL(
+    `https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`
+  );
+};
+
+export const facebookShare = async (
+  nativeLanguage: Language
+): Promise<void> => {
+  const url = getShareUrl(nativeLanguage);
+  const shareMessage = encodeURI(url);
+  Linking.canOpenURL('twitter://post')
+    .then(() => {
+      Linking.openURL(`twitter://post?message=${shareMessage}`)
+        .then(() => undefined)
+        .catch((): void => {
+          Linking.openURL(`http://twitter.com/share?text=${shareMessage}`);
+        });
+    })
+    .catch(() => undefined);
+};
+
+interface EachOS {
+  ios: any;
+  android: any;
+  web: any;
+  other?: any;
+}
+
+export const getEachOS = ({ ios, android, web, other }: EachOS): any => {
+  if (Platform.OS === 'ios') {
+    return ios;
+  }
+  if (Platform.OS === 'android') {
+    return android;
+  }
+  if (Platform.OS === 'web') {
+    return web;
+  }
+  return other || ios;
+};
+
+// 何日前かをチェックする
+export const getIsAfterDay = (targetAt: any, days: number): boolean => {
+  return moment(targetAt.toDate()).isAfter(moment().add(days, 'days'));
 };

@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
-  TextInput,
   SafeAreaView,
   View,
   KeyboardAvoidingView,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
-import { TextButtun } from '../atoms';
-import {
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  offWhite,
-} from '../../styles/Common';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TextButtun, TextInputTitle, TextInputText } from '../atoms';
+import { offWhite, mainColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 
 interface Props {
@@ -23,7 +19,7 @@ interface Props {
   onChangeTextText: (txt: string) => void;
   onPressDraft: () => void;
   onFocusText: () => void;
-  onEndEditingText: () => void;
+  onBlurText: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -34,25 +30,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleInput: {
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingHorizontal: 16,
     paddingVertical: 8,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    backgroundColor: '#fff',
   },
   textInput: {
-    padding: 16,
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.7,
-    textAlignVertical: 'top',
-    flex: 1,
     height: 400,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    backgroundColor: '#fff',
+  },
+  icon: {
+    alignItems: 'flex-end',
+    paddingRight: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   footer: {
     justifyContent: 'flex-end',
@@ -68,15 +55,15 @@ const PostDiaryKeybordAndroid = ({
   onChangeTextText,
   onPressDraft,
   onFocusText,
-  onEndEditingText,
+  onBlurText,
 }: Props): JSX.Element => {
-  const [isShowFooter, setIsShowFooter] = useState(true);
+  const [isKeyboard, setIsKeyboard] = useState(false);
   const onKeyboardDidShow = (): void => {
-    setIsShowFooter(false);
+    setIsKeyboard(true);
   };
 
   const onKeyboardDidHide = (): void => {
-    setIsShowFooter(true);
+    setIsKeyboard(false);
   };
 
   useEffect(() => {
@@ -98,34 +85,22 @@ const PostDiaryKeybordAndroid = ({
         behavior="height"
       >
         <View style={styles.inner}>
-          <TextInput
+          <TextInputTitle
             style={styles.titleInput}
             value={title}
             onChangeText={onChangeTextTitle}
-            placeholder="Title"
-            maxLength={100}
-            autoCorrect={false}
-            keyboardType="default"
-            underlineColorAndroid="transparent"
-            spellCheck
           />
-          <TextInput
+          <TextInputText
             style={styles.textInput}
             value={text}
             onChangeText={onChangeTextText}
             onFocus={onFocusText}
-            onEndEditing={onEndEditingText}
-            placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
-            underlineColorAndroid="transparent"
-            multiline
-            autoCorrect={false}
-            keyboardType="default"
-            spellCheck
+            onBlur={onBlurText}
           />
         </View>
       </KeyboardAvoidingView>
       <SafeAreaView>
-        {isShowFooter ? (
+        {isKeyboard ? null : (
           <View style={styles.footer}>
             <TextButtun
               isBorrderTop
@@ -134,8 +109,17 @@ const PostDiaryKeybordAndroid = ({
               onPress={onPressDraft}
             />
           </View>
-        ) : null}
+        )}
       </SafeAreaView>
+      {isKeyboard ? (
+        <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
+          <MaterialCommunityIcons
+            size={24}
+            color={mainColor}
+            name="keyboard-close"
+          />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 };

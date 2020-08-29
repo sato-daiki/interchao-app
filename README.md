@@ -60,6 +60,15 @@ expo upload:ios
 expo upload:android
 ```
 
+## Publish（web）
+## ビルド
+```
+npx expo-optimize  
+expo build:web --no-pwa  
+firebase deploy --only hosting -P product  
+
+```
+
 ## メモ
 
 firebase deploy --only firestore:rules -P product

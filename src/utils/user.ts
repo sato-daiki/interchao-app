@@ -23,6 +23,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
         correctingCorrectedNum,
         notificationCorrection,
         notificationReview,
+        lastModalAppSuggestionAt,
         createdAt,
         updatedAt,
       } = data;
@@ -40,6 +41,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
         correctingCorrectedNum,
         notificationCorrection,
         notificationReview,
+        lastModalAppSuggestionAt,
         createdAt,
         updatedAt,
       };

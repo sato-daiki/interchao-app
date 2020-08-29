@@ -44,7 +44,7 @@ interface Props {
   mainButtonText?: string;
   cancelButtonText?: string;
   onPressMain?: () => void;
-  onPressClose: () => void;
+  onPressClose?: () => void;
 }
 
 const ModalConfirm: React.FC<Props> = ({
@@ -74,7 +74,9 @@ const ModalConfirm: React.FC<Props> = ({
             <Space size={16} />
           </>
         ) : null}
-        <WhiteButton title={cancelButtonText} onPress={onPressClose} />
+        {onPressClose ? (
+          <WhiteButton title={cancelButtonText} onPress={onPressClose} />
+        ) : null}
       </View>
     </Modal>
   );

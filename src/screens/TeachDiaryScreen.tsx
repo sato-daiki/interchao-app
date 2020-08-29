@@ -10,32 +10,34 @@ import {
   ScrollView,
   View,
   Text,
-  Alert,
   ActivityIndicator,
-  Dimensions,
   Platform,
-  TouchableOpacity,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
 import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
-import { ModalAlertCorrection } from '../components/organisms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { ModalAlertCorrection, ModalConfirm } from '../components/organisms';
+import {
+  DefaultNavigationOptions,
+  DefaultDiaryOptions,
+} from '../constants/NavigationOptions';
 import {
   LoadingModal,
   SubmitButton,
   ProfileIconHorizontal,
   Space,
+  HeaderRight,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -53,8 +55,7 @@ import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
 import { appShare } from '../utils/common';
-
-const { width } = Dimensions.get('window');
+import TeachDiaryMenu from '../components/web/organisms/TeachDiaryMenu';
 
 export interface Props {
   user: User;
@@ -83,10 +84,6 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-  },
-  headerTitleStyle: {
-    width: width - 144,
-    textAlign: Platform.OS === 'ios' ? 'center' : 'left',
   },
   errContainer: {
     flex: 1,
@@ -153,7 +150,14 @@ const TeachDiaryScreen: ScreenType = ({
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
   const [isModalCorrection, setIsModalCorrection] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const viewShotRef = useRef<any>(null);
+
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
 
   const onPressAppShare = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -250,10 +254,9 @@ const TeachDiaryScreen: ScreenType = ({
       });
 
       if (res.nbHits > 0) {
-        Alert.alert(
-          I18n.t('common.error'),
-          I18n.t('errorMessage.correctionAlready')
-        );
+        setErrorMessage(I18n.t('errorMessage.correctionAlready'));
+        setIsModalError(true);
+        setIsModalCorrection(false);
         setIsLoading(false);
         return;
       }
@@ -264,10 +267,9 @@ const TeachDiaryScreen: ScreenType = ({
       });
 
       if (res2.nbHits !== 1) {
-        Alert.alert(
-          I18n.t('common.error'),
-          I18n.t('errorMessage.correctionAlready')
-        );
+        setErrorMessage(I18n.t('errorMessage.correctionAlready'));
+        setIsModalError(true);
+        setIsModalCorrection(false);
         setIsLoading(false);
         return;
       }
@@ -342,7 +344,9 @@ const TeachDiaryScreen: ScreenType = ({
     if (!teachDiary) return;
     navigation.setParams({
       onPressMore,
+      onPressAppShare,
       title: teachDiary.title,
+      isDesktopOrLaptopDevice,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teachDiary]);
@@ -393,6 +397,11 @@ const TeachDiaryScreen: ScreenType = ({
     return false;
   };
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   const renderButton = (): ReactNode => {
     // 添削中でなく、自分がすでに添削を終えたやつじゃなく3つめの添削が終わっていない場合
     if (
@@ -437,6 +446,13 @@ const TeachDiaryScreen: ScreenType = ({
         onPressSubmit={onPressSubmitCorrection}
         onPressClose={(): void => setIsModalCorrection(false)}
       />
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={errorMessage}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={onPressCloseError}
+      />
       <ScrollView style={styles.scrollView}>
         <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }}>
           <Space size={12} />
@@ -475,6 +491,7 @@ const TeachDiaryScreen: ScreenType = ({
             </Text>
           </View>
           <Corrections
+            isLoading={isCorrectionLoading}
             headerTitle={I18n.t('teachDiaryCorrection.header')}
             correction={correction}
             correction2={correction2}
@@ -498,20 +515,25 @@ TeachDiaryScreen.navigationOptions = ({
 }): NavigationStackOptions => {
   const title = navigation.getParam('title');
   const onPressMore = navigation.getParam('onPressMore');
-
+  const onPressAppShare = navigation.getParam('onPressAppShare');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
   return {
     ...DefaultNavigationOptions,
+    ...DefaultDiaryOptions,
     title,
-    headerTitleStyle: styles.headerTitleStyle,
-    headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMore}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
-    ),
+    // headerRight: (): JSX.Element =>
+    //   isDesktopOrLaptopDevice ? (
+    //     <TeachDiaryMenu onPressAppShare={onPressAppShare} />
+    //   ) : (
+    //     <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+    //   ),
+    // TODO: シェア機能ができてから
+    headerRight: (): JSX.Element | null =>
+      Platform.OS === 'web' ? null : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+      ),
   };
 };
 

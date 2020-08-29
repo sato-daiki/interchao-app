@@ -4,18 +4,22 @@ import {
   StyleSheet,
   FlatList,
   RefreshControl,
-  TouchableOpacity,
+  Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultSearchBarOptions,
+} from '../constants/NavigationOptions';
 import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
@@ -25,6 +29,8 @@ import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryLi
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import TeachDiaryListMenu from '../components/organisms/TeachDiaryListMenu';
+import TeachDiaryListMenuWebPc from '../components/web/organisms/TeachDiaryListMenu';
+
 import { primaryColor } from '../styles/Common';
 
 export interface Props {
@@ -78,6 +84,10 @@ const TeachDiaryListScreen: ScreenType = ({
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
+
   const onPressSearch = useCallback(() => {
     navigation.navigate('TeachDiarySearch');
   }, [navigation]);
@@ -86,6 +96,8 @@ const TeachDiaryListScreen: ScreenType = ({
     navigation.setParams({
       onPressMenu: () => setIsMenu(true),
       onPressSearch,
+      isDesktopOrLaptopDevice,
+      nativeLanguage: profile.nativeLanguage,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -222,8 +234,9 @@ const TeachDiaryListScreen: ScreenType = ({
     f();
   }, [setUser, user]);
 
+  type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <TeachDiaryListItem
           item={item}
@@ -282,24 +295,30 @@ TeachDiaryListScreen.navigationOptions = ({
 }): NavigationStackOptions => {
   const onPressMenu = navigation.getParam('onPressMenu');
   const onPressSearch = navigation.getParam('onPressSearch');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
+  const nativeLanguage = navigation.getParam('nativeLanguage');
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultSearchBarOptions,
     headerTitle: (): JSX.Element => (
       <SearchBarButton
         title={I18n.t('teachDiaryList.headerTitle')}
         onPress={onPressSearch}
       />
     ),
-    headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMenu}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
-        />
-      </TouchableOpacity>
-    ),
+    // headerRight: (): JSX.Element =>
+    //   isDesktopOrLaptopDevice ? (
+    //     <TeachDiaryListMenuWebPc nativeLanguage={nativeLanguage} />
+    //   ) : (
+    //     <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
+    //   ),
+    headerRight: (): JSX.Element | null =>
+      Platform.OS === 'web' ? null : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
+      ),
   };
 };
 
