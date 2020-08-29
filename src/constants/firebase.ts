@@ -5,6 +5,7 @@ import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
   // @ts-ignore
+  // eslint-disable-next-line import/no-unresolved, import/extensions
 } from '../../envConfig';
 
 const isProduction = !__DEV__;
