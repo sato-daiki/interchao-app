@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
+  // eslint-disable-next-line import/extensions
 } from '../../envConfig';
 
 const isProduction = !__DEV__;

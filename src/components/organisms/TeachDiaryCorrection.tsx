@@ -60,8 +60,9 @@ const TeachDiaryCorrection: React.FC<Props> = ({
     return null;
   };
 
+  type RenderItemProps = { item: Comment };
   const renderItem = useCallback(
-    ({ item }: { item: Comment }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       const { original, fix, detail, diffs } = item;
       return (
         <CorrectionItem

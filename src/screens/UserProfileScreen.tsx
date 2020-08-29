@@ -28,11 +28,10 @@ import {
   UserReview,
   Review,
   BlockUser,
-  Report as ReportType,
+  Report,
 } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { linkBlue, fontSizeM } from '../styles/Common';
-import Report from '../components/organisms/Report';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -347,7 +346,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             targetUid: profile.uid,
             reason,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as ReportType);
+          } as Report);
         setIsLoading(false);
         setIsReportSuccess(true);
       };
@@ -390,8 +389,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       </>
     ) : null;
 
+  type RenderItemProps = { item: Diary };
   const renderDiary = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <DiaryListItem
           item={item}
@@ -407,8 +407,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     [navigation]
   );
 
+  type RenderReviewProps = { item: Review };
   const renderReview = useCallback(
-    ({ item }: { item: Review }): JSX.Element | null => {
+    ({ item }: RenderReviewProps): JSX.Element | null => {
       if (profile) {
         return (
           <ReviewListItem

@@ -296,8 +296,9 @@ const MyDiaryListScreen: ScreenType = ({
     [editDiary, isLoading, localStatus, navigation, setLocalStatus]
   );
 
+  type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <DiaryListItem
           mine

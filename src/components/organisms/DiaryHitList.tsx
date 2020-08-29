@@ -41,8 +41,9 @@ const DiaryHitList = ({
     [isEmpty]
   );
 
+  type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <SearchDiaryList
           me={me}

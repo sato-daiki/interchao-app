@@ -316,8 +316,9 @@ const CorrectingScreen: ScreenType = ({
     [textInfos]
   );
 
+  type RenderItemProps = { item: TextInfo; index: number };
   const renderItem = useCallback(
-    ({ item, index }: { item: TextInfo; index: number }): JSX.Element => {
+    ({ item, index }: RenderItemProps): JSX.Element => {
       return (
         <CorrectingListItem
           item={item}

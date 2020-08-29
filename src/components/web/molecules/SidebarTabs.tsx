@@ -73,8 +73,9 @@ const SidebarTabs = ({ navigation }: Props): JSX.Element => {
   const { routes, index } = navigation.state;
   const isMaxLayoutChange = useMediaQuery({ minWidth: maxLayoutChange });
 
+  const viewStyle = { width: isMaxLayoutChange ? 220 : 60 };
   return (
-    <View style={[styles.container, { width: isMaxLayoutChange ? 220 : 60 }]}>
+    <View style={[styles.container, viewStyle]}>
       <TouchableOpacity
         onPress={(): void => {
           navigation.navigate('MyDiaryList');

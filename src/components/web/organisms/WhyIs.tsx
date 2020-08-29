@@ -42,6 +42,10 @@ const styles = StyleSheet.create({
 });
 
 const WhyIs = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
+  const imageStyle = {
+    width: isMaxLayoutChange ? 150 : 75,
+    height: isMaxLayoutChange ? 150 : 75,
+  };
   const renderLeft = (
     <>
       <View style={styles.row}>
@@ -60,14 +64,7 @@ const WhyIs = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
         <Text style={styles.chatText}>{I18n.t('web.whyCnatText3')}</Text>
       </View>
       <View>
-        <Image
-          resizeMode="cover"
-          style={{
-            width: isMaxLayoutChange ? 150 : 75,
-            height: isMaxLayoutChange ? 150 : 75,
-          }}
-          source={Giar}
-        />
+        <Image resizeMode="cover" style={imageStyle} source={Giar} />
       </View>
     </View>
   );
