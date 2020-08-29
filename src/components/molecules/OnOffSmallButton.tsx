@@ -1,5 +1,5 @@
 import React from 'react';
-import { SmallButtonBlue, SmallButtonWhite } from '../atoms';
+import { SmallButtonSubmit, SmallButtonWhite } from '../atoms';
 
 interface Props {
   isOn?: boolean;
@@ -20,7 +20,7 @@ const OnOffSmallButton: React.FC<Props> = ({
 }: Props): JSX.Element => {
   if (isOn) {
     return (
-      <SmallButtonBlue
+      <SmallButtonSubmit
         isLoading={isLoading}
         disable={disable}
         title={titleOn}

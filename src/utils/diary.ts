@@ -1,6 +1,5 @@
 import moment from 'moment';
 import 'moment/locale/ja';
-import { Alert } from 'react-native';
 import {
   CorrectionStatus,
   Language,
@@ -12,6 +11,7 @@ import {
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
+import { DataCorrectionStatus } from './correcting';
 
 interface Status {
   text: string;
@@ -42,7 +42,6 @@ export const getDay = (timestamp: any): string => {
 };
 
 export const getAlgoliaDate = (timestamp: any): string => {
-  // eslint-disable-next-line no-underscore-dangle
   if (!timestamp) {
     return '';
   }
@@ -226,7 +225,7 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
 
 export const updateUnread = async (
   objectID: string,
-  data: any
+  data: DataCorrectionStatus | null
 ): Promise<void> => {
   await firebase
     .firestore()
@@ -250,28 +249,28 @@ export const checkBeforePost = (
   text: string,
   points: number,
   learnLanguage: Language
-): boolean => {
+): { result: boolean; errorMessage: string } => {
   if (!title) {
-    Alert.alert('', I18n.t('errorMessage.emptyTitile'));
-    return false;
+    return { result: false, errorMessage: I18n.t('errorMessage.emptyTitile') };
   }
   if (!text) {
-    Alert.alert('', I18n.t('errorMessage.emptyText'));
-    return false;
+    return { result: false, errorMessage: I18n.t('errorMessage.emptyText') };
   }
   const usePoint = getUsePoints(text.length, learnLanguage);
   if (usePoint > points) {
-    Alert.alert(
-      I18n.t('errorMessage.lackPointsTitle'),
-      I18n.t('errorMessage.lackPointsText', {
+    return {
+      result: false,
+      errorMessage: I18n.t('errorMessage.lackPointsText', {
         textLength: text.length,
         usePoint,
-      })
-    );
-    return false;
+      }),
+    };
   }
 
-  return true;
+  return {
+    result: true,
+    errorMessage: '',
+  };
 };
 
 /**
@@ -291,7 +290,7 @@ type Data =
 export const updateYet = async (
   objectID: string,
   uid: string,
-  data: any
+  data: DataCorrectionStatus | null
 ): Promise<void> => {
   const batch = firebase.firestore().batch();
   batch.update(firebase.firestore().doc(`diaries/${objectID}`), {
@@ -315,29 +314,40 @@ export const checkSelectLanguage = (
   learnLanguage: Language,
   nativeLanguage: Language,
   spokenLanguages: Language[]
-): boolean => {
+): { result: boolean; errorMessage: string } => {
   if (!nationalityCode) {
-    Alert.alert('', I18n.t('selectLanguage.nationalityCodeAlert'));
-    return false;
+    return {
+      result: false,
+      errorMessage: I18n.t('selectLanguage.nationalityCodeAlert'),
+    };
   }
 
   if (learnLanguage === nativeLanguage) {
-    Alert.alert('', I18n.t('selectLanguage.sameLanguageAlert'));
-    return false;
+    return {
+      result: false,
+      errorMessage: I18n.t('selectLanguage.sameLanguageAlert'),
+    };
   }
 
   if (spokenLanguages) {
     for (let i = 0; i < spokenLanguages.length; i += 1) {
       if (spokenLanguages[i] === learnLanguage) {
-        Alert.alert('', I18n.t('selectLanguage.sameSpokenAlert'));
-        return false;
+        return {
+          result: false,
+          errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
+        };
       }
 
       if (spokenLanguages[i] === nativeLanguage) {
-        Alert.alert('', I18n.t('selectLanguage.sameSpokenAlert'));
-        return false;
+        return {
+          result: false,
+          errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
+        };
       }
     }
   }
-  return true;
+  return {
+    result: true,
+    errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
+  };
 };

@@ -1,19 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  Keyboard,
-  StyleSheet,
-  Platform,
-  BackHandler,
-  Alert,
-} from 'react-native';
+import { Keyboard, BackHandler, Alert } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
-import { HeaderText } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { HeaderRight, HeaderLeft } from '../components/atoms';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
@@ -35,12 +32,6 @@ interface DispatchProps {
   addDiary: (diary: Diary) => void;
 }
 
-const styles = StyleSheet.create({
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
-  },
-});
-
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
 > & {
@@ -61,6 +52,8 @@ const PostDiaryScreen: ScreenType = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // ポイントが足りない時アラートをだす
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
@@ -137,13 +130,15 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressPublic = useCallback((): void => {
     Keyboard.dismiss();
-    const res = checkBeforePost(
+    const checked = checkBeforePost(
       title,
       text,
       user.points,
       profile.learnLanguage
     );
-    if (!res) {
+    if (!checked.result) {
+      setErrorMessage(checked.errorMessage);
+      setIsModalError(true);
       return;
     }
     setIsModalAlert(true);
@@ -274,14 +269,21 @@ const PostDiaryScreen: ScreenType = ({
     f();
   }, [setUser, user]);
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   return (
     <PostDiary
       isLoading={isLoading}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
+      isModalError={isModalError}
       isTutorialLoading={isTutorialLoading}
       tutorialPostDiary={user.tutorialPostDiary}
+      errorMessage={errorMessage}
       title={title}
       text={text}
       points={user.points}
@@ -298,6 +300,7 @@ const PostDiaryScreen: ScreenType = ({
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
       onPressTutorial={onPressTutorial}
+      onPressCloseError={onPressCloseError}
     />
   );
 };
@@ -312,25 +315,22 @@ PostDiaryScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('postDiary.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => {
       if (points >= 10) {
         return (
-          <HeaderText
-            title={I18n.t('common.publish')}
+          <HeaderRight
+            text={I18n.t('common.publish')}
             onPress={onPressPublic}
           />
         );
       }
       return (
-        <HeaderText title={I18n.t('common.draft')} onPress={onPressDraft} />
+        <HeaderRight text={I18n.t('common.draft')} onPress={onPressDraft} />
       );
     },
   };

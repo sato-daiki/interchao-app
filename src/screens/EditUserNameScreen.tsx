@@ -9,12 +9,16 @@ import {
   checkTypeUserName,
   checkInitialUserName,
 } from '../utils/profile';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
-import { HeaderText } from '../components/atoms';
+import { HeaderRight } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
@@ -119,23 +123,25 @@ const EditUserNameScreen: ScreenType = ({
     [profile.userName]
   );
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{I18n.t('editUserName.userName')}</Text>
-      <CheckTextInput
-        autoFocus
-        value={userName}
-        onChangeText={onChangeText}
-        maxLength={20}
-        placeholder="username"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        isLoading={isUserNameLoading}
-        isCheckOk={isUserNameCheckOk}
-        errorMessage={errorMessage}
-      />
-    </View>
+    <DefaultLayout lSize>
+      <View style={styles.container}>
+        <Text style={styles.label}>{I18n.t('editUserName.userName')}</Text>
+        <CheckTextInput
+          autoFocus
+          value={userName}
+          onChangeText={onChangeText}
+          maxLength={20}
+          placeholder="username"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="done"
+          isLoading={isUserNameLoading}
+          isCheckOk={isUserNameCheckOk}
+          errorMessage={errorMessage}
+        />
+      </View>
+    </DefaultLayout>
   );
 };
 
@@ -145,9 +151,10 @@ EditUserNameScreen.navigationOptions = ({
   const onPressSubmit = navigation.getParam('onPressSubmit');
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('editUserName.headerTitle'),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.done')} onPress={onPressSubmit} />
+      <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
     ),
   };
 };

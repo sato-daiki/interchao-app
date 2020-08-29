@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: 16,
     paddingBottom: 32,
+    width: '100%',
   },
   row: {
     flexDirection: 'row',
@@ -59,7 +60,9 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const InitializeNativeScreen: NavigationStackScreenComponent = ({
+  navigation,
+}) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);
@@ -95,8 +98,8 @@ const InitializeScreen: NavigationStackScreenComponent = ({ navigation }) => {
   );
 };
 
-InitializeScreen.navigationOptions = (): NavigationStackOptions => ({
+InitializeNativeScreen.navigationOptions = (): NavigationStackOptions => ({
   headerShown: false,
 });
 
-export default InitializeScreen;
+export default InitializeNativeScreen;

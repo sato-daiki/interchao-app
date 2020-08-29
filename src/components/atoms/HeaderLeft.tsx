@@ -7,30 +7,37 @@ import {
   ViewStyle,
 } from 'react-native';
 import { fontSizeM, mainColor } from '../../styles/Common';
+import { getEachOS } from '../../utils/common';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
-  title: string;
+  text: string;
   onPress: () => void;
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: getEachOS({ ios: 0, android: 16, web: 16 }),
+  },
   title: {
     color: mainColor,
     fontSize: fontSizeM,
   },
 });
 
-const HeaderText: React.FC<Props> = ({
+const HeaderLeft: React.FC<Props> = ({
   containerStyle,
-  title,
+  text,
   onPress,
 }: Props): JSX.Element => {
   return (
-    <TouchableOpacity onPress={onPress} style={containerStyle}>
-      <Text style={styles.title}>{title}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.container, containerStyle]}
+    >
+      <Text style={styles.title}>{text}</Text>
     </TouchableOpacity>
   );
 };
 
-export default HeaderText;
+export default HeaderLeft;

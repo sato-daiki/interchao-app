@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import I18n from '../utils/I18n';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { mainColor } from '../styles/Common';
+import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
 
 /* screens */
@@ -35,6 +35,7 @@ import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
 import UserDiaryScreenContainer from '../containers/UserDiaryScreenContainer';
+import createSidebarNavigator from './SidebarTabNavigator';
 
 /* components */
 const ModalPostDiaryNavigator = createStackNavigator({
@@ -97,6 +98,33 @@ const MyDiaryTabStack = createStackNavigator(
     MyDiary: {
       screen: MyDiaryScreenContainer,
     },
+    ...commonDiaryNavigator,
+  },
+  {
+    initialRouteName: 'MyDiaryList',
+  }
+);
+
+const TeachDiaryTabStack = createStackNavigator(
+  {
+    TeachDiaryList: {
+      screen: TeachDiaryListScreenContainer,
+    },
+    TeachDiarySearch: {
+      screen: TeachDiarySearchScreenContainer,
+    },
+    TeachDiary: {
+      screen: TeachDiaryScreenContainer,
+    },
+    ...commonDiaryNavigator,
+  },
+  {
+    initialRouteName: 'TeachDiaryList',
+  }
+);
+
+const MyPageTabStack = createStackNavigator(
+  {
     MyPage: {
       screen: MyPageScreenContainer,
     },
@@ -133,102 +161,134 @@ const MyDiaryTabStack = createStackNavigator(
     ...commonDiaryNavigator,
   },
   {
-    initialRouteName: 'MyDiaryList',
+    initialRouteName: 'MyPage',
   }
 );
 
-const TeachDiaryTabStack = createStackNavigator(
-  {
-    TeachDiaryList: {
-      screen: TeachDiaryListScreenContainer,
-    },
-    TeachDiarySearch: {
-      screen: TeachDiarySearchScreenContainer,
-    },
-    TeachDiary: {
-      screen: TeachDiaryScreenContainer,
-    },
-    ...commonDiaryNavigator,
-  },
-  {
-    initialRouteName: 'TeachDiaryList',
-  }
-);
-
-const MainTab = createBottomTabNavigator(
-  {
-    MyDiaryTab: {
-      screen: MyDiaryTabStack,
-      navigationOptions: {
-        tabBarLabel: I18n.t('mainTab.myDiary'),
-        tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-          <TabIcon
-            name="book-open"
-            size={25}
-            color={tintColor}
-            badgeMode="myDiary"
-          />
-        ),
+const createHomeTabNavigator = (isTabletOrMobileDevice: boolean) => {
+  if (isTabletOrMobileDevice) {
+    return createBottomTabNavigator(
+      {
+        MyDiaryTab: {
+          screen: MyDiaryTabStack,
+          navigationOptions: {
+            tabBarLabel: I18n.t('mainTab.myDiary'),
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <TabIcon
+                name="book-open"
+                size={25}
+                color={tintColor}
+                badgeMode="myDiary"
+              />
+            ),
+          },
+        },
+        PostDiaryTab: {
+          // @ts-ignore
+          screen: PostDiaryScreen,
+          navigationOptions: {
+            tabBarLabel: I18n.t('mainTab.postDiary'),
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <MaterialCommunityIcons
+                name="pencil"
+                size={25}
+                color={tintColor}
+              />
+            ),
+            tabBarOnPress: ({ navigation }): void => {
+              navigation.navigate('ModalPostDiary');
+            },
+          },
+        },
+        TeachDiaryTab: {
+          screen: TeachDiaryTabStack,
+          navigationOptions: {
+            tabBarLabel: ({
+              tintColor,
+            }: {
+              tintColor: string;
+            }): JSX.Element => <TabLabel color={tintColor} />,
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <MaterialCommunityIcons
+                name="spellcheck"
+                size={25}
+                color={tintColor}
+              />
+            ),
+          },
+        },
+        MyPageTab: {
+          screen: MyPageTabStack,
+          navigationOptions: {
+            tabBarLabel: I18n.t('mainTab.myPage'),
+            tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
+              <MaterialIcons name="person" size={25} color={tintColor} />
+            ),
+          },
+        },
       },
-    },
-    PostDiaryTab: {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-      // @ts-ignore
-      screen: PostDiaryScreen,
-      navigationOptions: {
-        tabBarLabel: I18n.t('mainTab.postDiary'),
-        tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-          <MaterialCommunityIcons name="pencil" size={25} color={tintColor} />
-        ),
-        tabBarOnPress: ({ navigation }): void => {
-          navigation.navigate('ModalPostDiary');
+      {
+        tabBarOptions: {
+          activeTintColor: mainColor,
+        },
+      }
+    );
+  }
+  return createSidebarNavigator(
+    {
+      Home: {
+        screen: MyDiaryTabStack,
+        params: {
+          tabName: 'myDiary',
+        },
+      },
+      TeachDiaryTab: {
+        screen: TeachDiaryTabStack,
+        params: {
+          tabName: 'teachDiary',
+        },
+      },
+      MyPageTab: {
+        screen: MyPageTabStack,
+        params: {
+          tabName: 'myPage',
         },
       },
     },
-    TeachDiaryTab: {
-      screen: TeachDiaryTabStack,
-      navigationOptions: {
-        tabBarLabel: ({ tintColor }: { tintColor: string }): JSX.Element => (
-          <TabLabel color={tintColor} />
-        ),
-        tabBarIcon: ({ tintColor }: { tintColor: string }): JSX.Element => (
-          <MaterialCommunityIcons
-            name="spellcheck"
-            size={25}
-            color={tintColor}
-          />
-        ),
+    {
+      initialRouteName: 'Home',
+    }
+  );
+};
+
+export const createMainTabNavigator = (isTabletOrMobileDevice: boolean) => {
+  return createStackNavigator(
+    {
+      Home: {
+        screen: createHomeTabNavigator(isTabletOrMobileDevice),
+      },
+      ModalPostDiary: { screen: ModalPostDiaryNavigator },
+      ModalEditMyProfile: {
+        screen: ModalEditMyProfileNavigator,
+      },
+      ModalPostDraftDiary: {
+        screen: ModalPostDraftDiaryNavigator,
+      },
+      ModalCorrecting: {
+        screen: ModalCorrectingNavigator,
+      },
+      ModalReview: {
+        screen: ModalReviewNavigator,
       },
     },
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: mainColor,
-    },
-  }
-);
-
-export default createStackNavigator(
-  {
-    Home: {
-      screen: MainTab,
-    },
-    ModalPostDiary: { screen: ModalPostDiaryNavigator },
-    ModalEditMyProfile: {
-      screen: ModalEditMyProfileNavigator,
-    },
-    ModalPostDraftDiary: {
-      screen: ModalPostDraftDiaryNavigator,
-    },
-    ModalCorrecting: {
-      screen: ModalCorrectingNavigator,
-    },
-    ModalReview: {
-      screen: ModalReviewNavigator,
-    },
-  },
-  {
-    headerMode: 'none',
-    mode: 'modal',
-  }
-);
+    {
+      headerMode: 'none',
+      mode: 'modal',
+      defaultNavigationOptions: {
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+        },
+      },
+    }
+  );
+};

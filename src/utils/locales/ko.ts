@@ -21,11 +21,60 @@ const common = {
   back: 'Back',
 };
 
+// web
+const web = {
+  firstViewTitle: '"말하기"는 "쓰기"에서 시작',
+  firstViewSubTitle: '원어민이 직접 일기를 체크해주는 앱',
+  firstViewStart: '오늘 Interchao에 가입하세요.',
+  wahtTitle: 'What is Interchao?',
+  wahtText1:
+    'Interchao는 일본어, 영어, 중국어, 한국어를 무료로 공부할 수 있는 상호 학습 애플리케이션입니다.',
+  wahtText2:
+    '내가 쓴 일기를 원어민이 직접 읽고 체크해 줍니다. 나도 자신의 모국어 선생님이 되어 다른 사람의 일기를 체크해 줄 수 있습니다',
+  whyTitle: '쓰기가 필요한 이유',
+  whyText: '어학 공부에 있어서 문장 쓰기는 가장 효율적인 방법입니다',
+  whyCnatText1: '「How are you?」',
+  whyCnatText2: "「I'm fine,thank you,and you?」",
+  whyCnatText3: "「I'm fine...(어쩌지... 더 이상 뭐라고 해야 할지 모르겠어)」",
+  reasonTitle1: '쓸 수 없는 문장은 말할 수 없다',
+  reasonText11: '문장으로 쓸 수 없으면 말할 수도 없습니다.',
+  reasonText12: '쓰기는 곧 말하기 트레이닝으로도 연결됩니다.',
+  reasonTitle2: '원어민이 체크',
+  reasonText21: '열심히 문장을 썼지만, 혹시 틀렸다면?',
+  reasonText22:
+    '문법/단어는 올바를까? 상대방에게 의미가 잘 전달될까? 원어민이 정확하게 체크해 줍니다.',
+  reasonTitle3: '내가 원하는 글쓰기',
+  reasonText31:
+    '교과서에 나오는 표현이나 영화 대본을 공부해도 일상생활에는 적용하기 어렵습니다.',
+  reasonText32:
+    '내가 원하는 문장을 쓰면 자연스럽게 평상시에 사용하는 표현을 학습할 수 있습니다.',
+  correctTitle: '일기를 첨삭해서 포인트를 GET!',
+  correctText1:
+    '당신의 모국어로 쓰인 일기를 첨삭하면 10포인트가 쌓입니다. 이 10포인트를 사용해서 일기를 써 봅시다!',
+  exampleTitle: '첨삭 사례',
+  exampleText: '실제 첨삭 사례를 소개',
+  exampleDetailTitle1: '당신이 작성한 일기',
+  exampleDetailText1: '쓴 일기를 투고!',
+  exampleDetailTitle2: '첨삭 결과',
+  exampleDetailText2: '잘못된 표현이 있는 곳을 체크해 줍니다',
+  exampleDetailTitle3: '일기의 총평',
+  exampleDetailText3: '마지막으로 종합적인 평가를 받습니다',
+  startTitle: '먼저 무료로 일기를 써 보세요',
+  startText:
+    '앱 설치시 100pt(일기 10일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
+};
+
+const modalAppSuggestion = {
+  title: 'Interchao는 앱에서 사용하는 것이 더 좋습니다',
+  text: 'Interchao 앱에서 열어 전체 기능을 활용하세요.',
+};
+
 // タブ
 const mainTab = {
   myDiary: '내 일기',
   postDiary: '일기 쓰기',
   teachDiary: '첨삭하는 일기',
+  myPage: '마이 페이지',
 };
 
 // 共通のエラーメッセージ
@@ -82,6 +131,7 @@ const deleteAcount = {
   text:
     '회원을 탈퇴하면 업로드된 일기 정보가 완전히 삭제되어 복원할 수 없습니다.\n\n그래도 회원 탈퇴를 원하시는 분은 하단에 있는 버튼을 눌러 탈퇴해주세요.',
   withdrawal: '탈퇴하기',
+  confirmation: '정말 삭제하시겠습니까?',
 };
 
 const draftDiary = {
@@ -145,7 +195,7 @@ const inputUserName = {
 
 const myDiary = {
   menuDelete: '삭제하기',
-  confirmMessage: '정말로 삭제하시겠습니까?',
+  confirmMessage: '정말 삭제하시겠습니까?',
 };
 
 const myDiaryList = {
@@ -512,6 +562,8 @@ const language = {
 
 const ko = {
   common,
+  web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,

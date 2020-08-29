@@ -35,6 +35,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, {extensions: ['.js', '.jsx', '.tsx']}],
     'react-native/no-unused-styles': 2,
     'react-native/no-inline-styles': 2,
+    '@typescript-eslint/ban-ts-ignore': 1,
     '@typescript-eslint/explicit-function-return-type': [
       1,
       {
@@ -43,6 +44,8 @@ module.exports = {
     ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
+    // default propsは別にいい
+    'react/require-default-props': 0,
   },
   settings: {
     'import/resolver': {

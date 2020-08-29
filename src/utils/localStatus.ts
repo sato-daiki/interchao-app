@@ -12,7 +12,6 @@ export const getUnreadCorrectionNum = async (
     });
     return res.nbHits;
   } catch (e) {
-    console.log(e);
     return null;
   }
 };
