@@ -225,7 +225,7 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
 
 export const updateUnread = async (
   objectID: string,
-  data: Diary[]
+  data: DataCorrectionStatus | null
 ): Promise<void> => {
   await firebase
     .firestore()

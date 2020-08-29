@@ -4,7 +4,8 @@ import { Platform } from 'react-native';
 import {
   DEVELOPMENT_AMPLITUDE_API_KEY,
   PRODUCTION_AMPLITUDE_API_KEY,
-} from '../../envConfig';
+  // eslint-disable-next-line import/extensions
+} from '../../envConfig.js';
 import Sentry from '../constants/Sentry';
 import { User, Profile, Language } from '../types';
 
