@@ -184,7 +184,6 @@ const createHomeTabNavigator = (isTabletOrMobileDevice: boolean) => {
           },
         },
         PostDiaryTab: {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
           // @ts-ignore
           screen: PostDiaryScreen,
           navigationOptions: {

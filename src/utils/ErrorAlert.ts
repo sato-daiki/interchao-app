@@ -28,7 +28,6 @@ export const alert = ({ err, onPressOk }: ErrorAlert): void => {
     message = I18n.t('errorMessage.defaultError', { message });
   }
   if (Platform.OS === 'web') {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
     // @ts-ignore
     const res = window.confirm(`${title}\n${message}`);
     if (res && onPressOk) onPressOk();

@@ -42,7 +42,6 @@ const ModalCountryPicker: React.FC<Props> = ({
         <ScrollView>
           <View style={styles.container}>
             <CountryPicker
-              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
               // @ts-ignore
               countryCode={nationalityCode}
               withFilter

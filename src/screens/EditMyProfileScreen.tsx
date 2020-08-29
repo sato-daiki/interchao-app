@@ -420,7 +420,6 @@ const EditMyProfileScreen: ScreenType = ({
               {I18n.t('selectLanguage.nationality')}
             </Text>
             <CountryPicker
-              // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
               // @ts-ignore
               countryCode={nationalityCode}
               placeholder={I18n.t('selectLanguage.placeholder')}

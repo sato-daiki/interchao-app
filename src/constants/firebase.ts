@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
+  // @ts-ignore
 } from '../../envConfig';
 
 const isProduction = !__DEV__;
