@@ -244,8 +244,9 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
     elRefs.current[index].openRight();
   }, []);
 
+  type RenderItemProps = { item: Diary; index: number };
   const renderItem = useCallback(
-    ({ item, index }: { item: Diary; index: number }): JSX.Element => {
+    ({ item, index }: RenderItemProps): JSX.Element => {
       return (
         <DraftListItem
           setRef={(el): void => {

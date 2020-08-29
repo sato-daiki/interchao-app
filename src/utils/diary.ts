@@ -11,6 +11,7 @@ import {
 import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
+import { DataCorrectionStatus } from './correcting';
 
 interface Status {
   text: string;
@@ -41,7 +42,6 @@ export const getDay = (timestamp: any): string => {
 };
 
 export const getAlgoliaDate = (timestamp: any): string => {
-  // eslint-disable-next-line no-underscore-dangle
   if (!timestamp) {
     return '';
   }
@@ -225,7 +225,7 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
 
 export const updateUnread = async (
   objectID: string,
-  data: any
+  data: Diary[]
 ): Promise<void> => {
   await firebase
     .firestore()
@@ -290,7 +290,7 @@ type Data =
 export const updateYet = async (
   objectID: string,
   uid: string,
-  data: any
+  data: DataCorrectionStatus | null
 ): Promise<void> => {
   const batch = firebase.firestore().batch();
   batch.update(firebase.firestore().doc(`diaries/${objectID}`), {

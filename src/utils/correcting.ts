@@ -20,7 +20,7 @@ interface UpdateDoneProps {
   setUser: (user: User) => void;
 }
 
-type DataCorrectionStatus =
+export type DataCorrectionStatus =
   | {
       correctionStatus: CorrectionStatus;
     }

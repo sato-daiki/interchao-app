@@ -6,6 +6,7 @@ import {
   Text,
   StyleProp,
   ViewStyle,
+  TextStyle,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Linking } from 'expo';
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
 });
 
 const AppDownload = ({ isWhite, containerStyle }: Props): JSX.Element => {
+  const styleClor = { color: isWhite ? primaryColor : '#fff' } as TextStyle;
   const onPressGoogle = (): void => {
     Linking.openURL(
       'https://play.google.com/store/apps/details?id=app.interchao'
@@ -74,10 +76,10 @@ const AppDownload = ({ isWhite, containerStyle }: Props): JSX.Element => {
         containerStyle,
       ]}
     >
-      <Text style={[styles.title, { color: isWhite ? primaryColor : '#fff' }]}>
+      <Text style={[styles.title, styleClor]}>
         {I18n.t('modalAppSuggestion.title')}
       </Text>
-      <Text style={[styles.text, { color: isWhite ? primaryColor : '#fff' }]}>
+      <Text style={[styles.text, styleClor]}>
         {I18n.t('modalAppSuggestion.text')}
       </Text>
       <View style={styles.row}>

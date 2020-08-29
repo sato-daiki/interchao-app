@@ -313,9 +313,7 @@ const MyDiaryScreen: ScreenType = ({
               viewShotRef={viewShotRef}
               nativeLanguage={profile.nativeLanguage}
             />
-          ) : null
-          // <Sns nativeLanguage={profile.nativeLanguage} />
-          }
+          ) : null}
         </View>
         <Space size={32} />
       </ScrollView>

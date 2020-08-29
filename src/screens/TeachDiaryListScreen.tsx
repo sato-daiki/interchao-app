@@ -234,8 +234,9 @@ const TeachDiaryListScreen: ScreenType = ({
     f();
   }, [setUser, user]);
 
+  type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <TeachDiaryListItem
           item={item}

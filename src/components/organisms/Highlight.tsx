@@ -1,16 +1,7 @@
-import React, { ReactNode } from 'react';
-import { Text, TextStyle, StyleProp, StyleSheet } from 'react-native';
+import React from 'react';
+import { Text, StyleSheet } from 'react-native';
 import { connectHighlight } from 'react-instantsearch-native';
-import { Diary } from '../../types';
 import { softRed } from '../../styles/Common';
-
-interface Props {
-  highlight: any;
-  attribute: string;
-  hit: Diary;
-  numberOfLines: number;
-  textStyle?: StyleProp<TextStyle>;
-}
 
 const styles = StyleSheet.create({
   text: {

@@ -60,7 +60,9 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeNativeScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const InitializeNativeScreen: NavigationStackScreenComponent = ({
+  navigation,
+}) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);

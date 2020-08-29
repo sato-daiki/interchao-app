@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  TextInput,
-  StyleProp,
-  TextStyle,
-  StyleSheet,
-} from 'react-native';
+import { TextInput, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import {
   fontSizeM,
   primaryColor,
@@ -46,15 +41,11 @@ const AutoHeightTextInput: React.FC<Props> = ({
 }: Props): JSX.Element => {
   const [scrollHeight, setScrollHeight] = useState(null);
 
-  const handleFocus = (
-    e: any
-  ): void => {
+  const handleFocus = (e: any): void => {
     setScrollHeight(e.target.scrollHeight);
   };
 
-  const handleChange = (
-    e: any
-  ): void => {
+  const handleChange = (e: any): void => {
     setScrollHeight(e.target.scrollHeight);
   };
 
