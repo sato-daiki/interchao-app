@@ -44,7 +44,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
     // default propsは別にいい
-    'react/require-default-props': false,
+    'react/require-default-props': 0,
   },
   settings: {
     'import/resolver': {
