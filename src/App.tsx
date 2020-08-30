@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { YellowBox, StatusBar, Platform } from 'react-native';
-import { PersistGate } from 'redux-persist/es/integration/react';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
