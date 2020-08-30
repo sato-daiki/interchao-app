@@ -63,9 +63,32 @@ node_modules
 /coverage
 /third-party
 
+.firebase
 .env
+# 一時的
+envConfig.ts
 
 # storybook static file
 storybook-static
 
 api-9035190028223224571-747936-5f20770a4114.json
+# @generated: @expo/next-adapter@2.1.26
+/.expo/*
+# Expo Web
+/web-build/*
+# Expo Native
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+# Next.js
+/.next/*
+/out/
+# Next.js production
+/build/
+# Next.js dependencies
+/.pnp
+.pnp.js
+# @end @expo/next-adapter

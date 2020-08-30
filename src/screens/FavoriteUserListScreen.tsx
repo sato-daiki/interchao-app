@@ -27,8 +27,6 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 const FavoriteUserListScreen: NavigationStackScreenComponent = ({
   navigation,
 }) => {
-  const onPressFavorite = useCallback(() => undefined, []);
-
   const renderItem = useCallback(
     ({ item }): JSX.Element => {
       const { userName, photoUrl, nativeLanguage, nationalityCode } = item;
@@ -42,12 +40,11 @@ const FavoriteUserListScreen: NavigationStackScreenComponent = ({
             onPressUser={(): void => {
               navigation.navigate('UserProfile', { uid: item.uid });
             }}
-            onPressButton={onPressFavorite}
           />
         </View>
       );
     },
-    [navigation, onPressFavorite]
+    [navigation]
   );
 
   return (

@@ -6,7 +6,7 @@
     "privacy": "public",
     "sdkVersion": "37.0.0",
     "platforms": ["ios", "android", "web"],
-    "version": "1.4.1",
+    "version": "1.4.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,16 +21,19 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
-      "buildNumber": "104100"
+      "buildNumber": "1040200"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1040100,
+      "versionCode": 1040200,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
         "backgroundColor": "#fff"
       }
+    },
+    "notification": {
+      "icon": "./assets/images/notification.png"
     },
     "locales": {
       "ja": "./languages/ja.json",
@@ -59,7 +62,7 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 0
+      "revision": 1
     },
     "hooks": {
       "postPublish": [

@@ -1,11 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  Keyboard,
-  StyleSheet,
-  Platform,
-  BackHandler,
-  Alert,
-} from 'react-native';
+import { Keyboard, BackHandler, Alert } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -13,8 +7,11 @@ import {
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 
-import { HeaderText } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { HeaderRight, HeaderLeft } from '../components/atoms';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
@@ -35,12 +32,6 @@ interface DispatchProps {
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
 }
-
-const styles = StyleSheet.create({
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
-  },
-});
 
 type ScreenType = React.ComponentType<
   Props & DispatchProps & NavigationStackScreenProps
@@ -64,6 +55,9 @@ const PostDraftDiaryScreen: ScreenType = ({
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isModalCancel, setIsModalCancel] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
 
@@ -158,13 +152,15 @@ const PostDraftDiaryScreen: ScreenType = ({
   }, [navigation, text.length, title.length]);
 
   const onPressPublic = useCallback((): void => {
-    const res = checkBeforePost(
+    const checked = checkBeforePost(
       title,
       text,
       user.points,
       profile.learnLanguage
     );
-    if (!res) {
+    if (!checked.result) {
+      setErrorMessage(checked.errorMessage);
+      setIsModalError(true);
       return;
     }
     setIsModalAlert(true);
@@ -256,12 +252,19 @@ const PostDraftDiaryScreen: ScreenType = ({
     navigation.goBack(null);
   }, [navigation]);
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   return (
     <PostDiary
       isLoading={isLoading}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
+      isModalError={isModalError}
+      errorMessage={errorMessage}
       title={title}
       text={text}
       points={user.points}
@@ -277,6 +280,7 @@ const PostDraftDiaryScreen: ScreenType = ({
       onPressSubmit={onPressSubmit}
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
+      onPressCloseError={onPressCloseError}
     />
   );
 };
@@ -291,25 +295,22 @@ PostDraftDiaryScreen.navigationOptions = ({
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('postDraftDiary.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => {
       if (points >= 10) {
         return (
-          <HeaderText
-            title={I18n.t('common.publish')}
+          <HeaderRight
+            text={I18n.t('common.publish')}
             onPress={onPressPublic}
           />
         );
       }
       return (
-        <HeaderText title={I18n.t('common.draft')} onPress={onPressDraft} />
+        <HeaderRight text={I18n.t('common.draft')} onPress={onPressDraft} />
       );
     },
   };

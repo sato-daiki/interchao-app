@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { subTextColor, mainColor, fontSizeS } from '../../styles/Common';
 import { Space } from '../atoms';
@@ -31,9 +31,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   right: {
-    flex: 1,
+    flex: 3,
     flexDirection: 'row',
-    paddingRight: 44, // 中央に寄せるため
+    paddingLeft: 36,
   },
   emptyHintContainer: {
     paddingLeft: 8,
@@ -59,21 +59,23 @@ const EmptyMyDiaryList: React.FC = (): JSX.Element => {
         <Space size={8} />
         <Text style={styles.emptyText}>{I18n.t('emptyMyDiaryList.text')}</Text>
       </View>
-      <View style={styles.emptyLower}>
-        <View style={styles.left} />
-        <View style={styles.right}>
-          <MaterialCommunityIcons
-            name="arrow-down-bold-outline"
-            size={50}
-            color={mainColor}
-          />
-          <View style={styles.emptyHintContainer}>
-            <Text style={styles.emptyHintText}>
-              {I18n.t('emptyMyDiaryList.hint')}
-            </Text>
+      {Platform.OS === 'web' ? null : (
+        <View style={styles.emptyLower}>
+          <View style={styles.left} />
+          <View style={styles.right}>
+            <MaterialCommunityIcons
+              name="arrow-down-bold-outline"
+              size={50}
+              color={mainColor}
+            />
+            <View style={styles.emptyHintContainer}>
+              <Text style={styles.emptyHintText}>
+                {I18n.t('emptyMyDiaryList.hint')}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
+      )}
     </View>
   );
 };

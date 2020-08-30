@@ -21,11 +21,55 @@ const common = {
   back: '返回',
 };
 
+// web
+const web = {
+  firstViewTitle: '"说"是从"写"开始',
+  firstViewSubTitle: '由母语者批改日记的应用程序',
+  firstViewStart: '立即加入 Interchao',
+  wahtTitle: 'What is Interchao?',
+  wahtText1: 'Interchao是可以免费互相学习 日文、英文、中文、韩文的应用程式.',
+  wahtText2:
+    '有母语者为你批改日记. 相反的你也可以使用自己的母语来批改其他人的日记',
+  whyTitle: '写作的理由',
+  whyText: '书写文章是学习语言最好的方法',
+  whyCnatText1: '「How are you?」',
+  whyCnatText2: "「I'm fine,thank you,and you?」",
+  whyCnatText3: "「I'm fine...(怎么办，话题进行不下去了)」",
+  reasonTitle1: '写不出文章话也说不出来',
+  reasonText11: '文章写不出来话也说不出来.',
+  reasonText12: '写文章也可以练习口语.',
+  reasonTitle2: '让母语者来批改',
+  reasonText21: '写好的文章说不定有不正确的地方.',
+  reasonText22: '母语者可以帮忙确认文法/单词是否正确？是否达意？',
+  reasonTitle3: '用自己的话来写',
+  reasonText31: '就算学习了课本上或电影中的台词在日常生活中也用不上.',
+  reasonText32: '借着输出自己的话，可以学习到日常使用的言语',
+  correctTitle: '批改日记获得积分！',
+  correctText1: '批改自己母语的日记可以获得10积分. 使用这10积分来写日记吧！',
+  exampleTitle: '批改案例',
+  exampleText: '实际的批改案例.',
+  exampleDetailTitle1: '你的日记',
+  exampleDetailText1: '赶快来写日记吧！​​',
+  exampleDetailTitle2: '批改结果',
+  exampleDetailText2: '指出错误的地方',
+  exampleDetailTitle3: '总结',
+  exampleDetailText3: '最后获得总评',
+  startTitle: '先来免费写日记吧​',
+  startText:
+    '安装应用程式可以获得100pt（10篇日记）. 赶快来写日记让人帮你批改吧！',
+};
+
+const modalAppSuggestion = {
+  title: 'Interchao 在应用上更好',
+  text: '在 Interchao 应用中打开它，享受完整体验。',
+};
+
 // タブ
 const mainTab = {
   myDiary: '我的日记',
   postDiary: '写日记',
   teachDiary: '批改的日记',
+  myPage: '我的页面',
 };
 
 // 共通のエラーメッセージ
@@ -78,6 +122,7 @@ const deleteAcount = {
   text:
     '账户注销后所发布的日记信息将被完全删除并且无法恢复。\n\n如果您仍要账户注销，请点击下面的按钮账户注销。',
   withdrawal: '账户注销',
+  confirmation: '确定要删除吗？',
 };
 
 const draftDiary = {
@@ -501,6 +546,8 @@ const language = {
 
 const zh = {
   common,
+  web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,

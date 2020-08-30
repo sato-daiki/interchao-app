@@ -12,13 +12,16 @@ import {
 } from '../utils/common';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
-import { Profile, UserReview } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { Profile } from '../types';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import {
   Space,
   SubmitButton,
-  HeaderText,
+  HeaderRight,
   LoadingModal,
 } from '../components/atoms';
 import {
@@ -29,19 +32,13 @@ import {
 } from '../styles/Common';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
 }
 
-interface DispatchProps {
-  setUser: (user: User) => void;
-  setProfile: (profile: Profile) => void;
-}
-
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -80,12 +77,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({
-  navigation,
-  profile,
-  setUser,
-  setProfile,
-}): JSX.Element => {
+const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -107,7 +99,7 @@ const SignUpScreen: ScreenType = ({
   }, []);
 
   const createUser = useCallback(
-    (credentUser: firebase.User): void => {
+    (credentUser: firebase.User, loginMethod: string): void => {
       const userInfo = {
         premium: false,
         diaryPosted: false,
@@ -120,9 +112,10 @@ const SignUpScreen: ScreenType = ({
         correctingCorrectedNum: null,
         notificationCorrection: true,
         notificationReview: true,
+        lastModalAppSuggestionAt: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as User;
+      };
 
       const profileInfo = {
         name: null,
@@ -136,7 +129,7 @@ const SignUpScreen: ScreenType = ({
         introduction: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as Profile;
+      };
 
       const userReviewInfo = {
         ratingSum: 0,
@@ -144,7 +137,7 @@ const SignUpScreen: ScreenType = ({
         score: 0.0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as UserReview;
+      };
 
       const batch = firebase.firestore().batch();
       batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
@@ -158,10 +151,10 @@ const SignUpScreen: ScreenType = ({
       );
       batch.commit();
 
-      setUser(userInfo);
-      setProfile(profileInfo);
+      track(events.CREATED_USER, { loginMethod });
+      navigation.navigate('MainTab');
     },
-    [profile, setProfile, setUser]
+    [navigation, profile]
   );
 
   const onPressSkip = useCallback(() => {
@@ -171,8 +164,7 @@ const SignUpScreen: ScreenType = ({
       try {
         const credent = await firebase.auth().signInAnonymously();
         if (credent.user) {
-          createUser(credent.user);
-          track(events.CREATED_USER, { loginMethod: 'anonymously' });
+          createUser(credent.user, 'anonymously');
         }
       } catch (err) {
         emailInputError(
@@ -190,7 +182,7 @@ const SignUpScreen: ScreenType = ({
   useEffect(() => {
     navigation.setParams({ onPressSkip });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onPressSkip]);
+  }, []);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -201,9 +193,7 @@ const SignUpScreen: ScreenType = ({
           .auth()
           .createUserWithEmailAndPassword(email, password);
         if (credent.user) {
-          createUser(credent.user);
-          track(events.CREATED_USER, { loginMethod: 'email' });
-          setIsLoading(false);
+          createUser(credent.user, 'email');
         }
       } catch (err) {
         emailInputError(
@@ -218,7 +208,7 @@ const SignUpScreen: ScreenType = ({
     f();
   }, [clearErrorMessage, createUser, email, password]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     const f = async (): Promise<void> => {
       if (email.length === 0) {
         setIsEmailCheckOk(false);
@@ -247,7 +237,7 @@ const SignUpScreen: ScreenType = ({
     f();
   }, [email, setIsEmailCheckOk, setErrorEmail, setIsEmailLoading]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     if (password.length === 0) {
       setIsPasswordCheckOk(false);
       setErrorPassword('');
@@ -262,52 +252,54 @@ const SignUpScreen: ScreenType = ({
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
-      <View style={styles.main}>
-        <LoadingModal visible={isLoading} />
+      <DefaultLayout>
+        <View style={styles.main}>
+          <LoadingModal visible={isLoading} />
 
-        <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
-        <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
-        <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
-        <CheckTextInput
-          autoFocus
-          value={email}
-          onChangeText={(text: string): void => setEmail(text)}
-          onEndEditing={onEndEditingEmail}
-          maxLength={50}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
-          isLoading={isEmailLoading}
-          isCheckOk={isEmailCheckOk}
-          errorMessage={errorEmail}
-        />
-        <Space size={16} />
-        <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
-        <CheckTextInput
-          value={password}
-          onChangeText={(text: string): void => setPassword(text)}
-          onEndEditing={onEndEditingPassword}
-          maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          secureTextEntry
-          returnKeyType="done"
-          isCheckOk={isPasswordCheckOk}
-          errorMessage={errorPassword}
-        />
-        <Space size={32} />
-        <SubmitButton
-          title={I18n.t('common.register')}
-          onPress={onPressSubmit}
-          disable={!(isEmailCheckOk && isPasswordCheckOk)}
-        />
-        <Space size={16} />
-      </View>
+          <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
+          <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>
+          <Text style={styles.label}>{I18n.t('signUp.email')}</Text>
+          <CheckTextInput
+            autoFocus
+            value={email}
+            onChangeText={(text: string): void => setEmail(text)}
+            onBlur={onBlurEmail}
+            maxLength={50}
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            returnKeyType="done"
+            isLoading={isEmailLoading}
+            isCheckOk={isEmailCheckOk}
+            errorMessage={errorEmail}
+          />
+          <Space size={16} />
+          <Text style={styles.label}>{I18n.t('signUp.password')}</Text>
+          <CheckTextInput
+            value={password}
+            onChangeText={(text: string): void => setPassword(text)}
+            onBlur={onBlurPassword}
+            maxLength={20}
+            placeholder="Password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            secureTextEntry
+            returnKeyType="done"
+            isCheckOk={isPasswordCheckOk}
+            errorMessage={errorPassword}
+          />
+          <Space size={32} />
+          <SubmitButton
+            title={I18n.t('common.register')}
+            onPress={onPressSubmit}
+            disable={!(isEmailCheckOk && isPasswordCheckOk)}
+          />
+          <Space size={16} />
+        </View>
+      </DefaultLayout>
     </KeyboardAwareScrollView>
   );
 };
@@ -316,9 +308,10 @@ SignUpScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
   const onPressSkip = navigation.getParam('onPressSkip');
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
     title: I18n.t('signUp.headerTitle'),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.skip')} onPress={onPressSkip} />
+      <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
     ),
   };
 };

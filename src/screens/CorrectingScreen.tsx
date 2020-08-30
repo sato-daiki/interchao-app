@@ -1,16 +1,11 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   SafeAreaView,
-  Platform,
   FlatList,
-  TouchableOpacity,
-  TextInput,
-  Text,
+  Platform,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { split } from 'sentence-splitter';
 import {
   NavigationStackOptions,
@@ -18,7 +13,7 @@ import {
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
-  HeaderText,
+  HeaderLeft,
   HeaderButton,
   LoadingModal,
   Space,
@@ -27,7 +22,10 @@ import { CorrectingHeader, KeyboardHideButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
 
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { User, Diary, Profile, Correction, TextInfo, Diff } from '../types';
 import I18n from '../utils/I18n';
 import { getUsePoints } from '../utils/diary';
@@ -35,13 +33,12 @@ import { getProfile } from '../utils/profile';
 import { updateDone, onUpdateTimeUp, onClose } from '../utils/correcting';
 import { getCorrection } from '../utils/corrections';
 import CorrectingListItem from '../components/organisms/CorrectingListItem';
-import {
-  mainColor,
-  fontSizeM,
-  subTextColor,
-  primaryColor,
-} from '../styles/Common';
+import { mainColor } from '../styles/Common';
 import Corrections from '../components/organisms/Corrections';
+import DefaultLayout from '../components/template/DefaultLayout';
+import { ModalConfirm } from '../components/organisms';
+import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
+import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
 
 export interface Props {
   user: User;
@@ -78,35 +75,13 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: '#FFF',
-    // flex: 1,
+    flex: 1,
   },
   scrollView: {
     paddingBottom: 32,
   },
   header: {
     paddingTop: 16,
-  },
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 16,
-    paddingLeft: 12,
-  },
-  label: {
-    fontSize: fontSizeM,
-    color: subTextColor,
-    marginLeft: 2,
-  },
-  textInputSummary: {
-    lineHeight: fontSizeM * 1,
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingHorizontal: 16,
   },
 });
 
@@ -134,6 +109,8 @@ const CorrectingScreen: ScreenType = ({
 
   const [isModalDone, setIsModalDone] = useState(false); // 投稿完了後のアラートモーダル
   const [isModalTimeUp, setIsModalTimeUp] = useState(false); // タイムアップモーダル
+  const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
+  const [isModalNoComment, setIsModalNoComment] = useState(false); // コメントがない場合のアラート
 
   /* 総評関連 */
   const [summary, setSummary] = useState(''); // まとめ
@@ -143,8 +120,6 @@ const CorrectingScreen: ScreenType = ({
 
   /* 一つでも修正したらたつフラグ */
   const [isFirstEdit, setIsFirstEdit] = useState(false);
-
-  const refSummary = useRef<any>(null);
 
   const initTextsInfo = useCallback((): void => {
     const splitTexts = split(teachDiary.text);
@@ -179,6 +154,7 @@ const CorrectingScreen: ScreenType = ({
         navigation
       );
       setIsLoading(false);
+      setIsModalConfirmation(false);
     };
     f();
   }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
@@ -231,7 +207,7 @@ const CorrectingScreen: ScreenType = ({
     const f = async (): Promise<void> => {
       const comments = textInfos.filter(item => item.diffs !== null);
       if (comments.length === 0) {
-        Alert.alert('', I18n.t('correcting.nothing'));
+        setIsModalNoComment(true);
         return;
       }
       if (isLoading) return;
@@ -266,23 +242,7 @@ const CorrectingScreen: ScreenType = ({
    * 左上の閉じるボタンが押下された時の処理
    */
   const onPressClose = useCallback(() => {
-    Alert.alert(
-      I18n.t('common.confirmation'),
-      I18n.t('correcting.deleteAlert'),
-      [
-        {
-          text: I18n.t('common.cancel'),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: async (): Promise<void> => {
-            await close();
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+    setIsModalConfirmation(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -356,8 +316,9 @@ const CorrectingScreen: ScreenType = ({
     [textInfos]
   );
 
+  type RenderItemProps = { item: TextInfo; index: number };
   const renderItem = useCallback(
-    ({ item, index }: { item: TextInfo; index: number }): JSX.Element => {
+    ({ item, index }: RenderItemProps): JSX.Element => {
       return (
         <CorrectingListItem
           item={item}
@@ -383,78 +344,91 @@ const CorrectingScreen: ScreenType = ({
     );
   }, [isProfileLoading, teachDiary, targetProfile, onTimeUp]);
 
-  return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <LoadingModal visible={isLoading} />
-        <ModalTimeUp
-          visible={isModalTimeUp}
-          onPressClose={onPressCloseTimeUp}
+  const renderSummary = (): JSX.Element | null => {
+    if (!isFirstEdit) return null;
+
+    if (Platform.OS === 'web') {
+      return (
+        <CorrectingSummaryWeb
+          summary={summary}
+          onHideKeyboard={onHideKeyboard}
+          onChangeText={(text: string): void => setSummary(text)}
         />
-        <ModalCorrectingDone
-          visible={isModalDone}
-          getPoints={getPoints}
-          points={user.points}
-          onPressClose={onPressCloseDone}
-        />
-        <KeyboardAwareScrollView
-          style={styles.scrollView}
-          keyboardShouldPersistTaps="handled"
-          extraScrollHeight={32}
-        >
-          <FlatList
-            data={textInfos}
-            keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
-            renderItem={renderItem}
-            ListHeaderComponent={listHeaderComponent}
-          />
-          {isFirstEdit ? (
-            <>
-              <TouchableOpacity
-                style={styles.buttonRow}
-                onPress={(): void => {
-                  refSummary.current.focus();
-                }}
-              >
-                <MaterialCommunityIcons
-                  size={22}
-                  color={subTextColor}
-                  name="plus"
-                />
-                <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
-              </TouchableOpacity>
-              {/* まとめは改行がある。他のはない */}
-              <TextInput
-                ref={refSummary}
-                style={styles.textInputSummary}
-                value={summary}
-                multiline
-                autoCapitalize="none"
-                spellCheck
-                autoCorrect
-                underlineColorAndroid="transparent"
-                scrollEnabled={false}
-                onChangeText={(text: string): void => setSummary(text)}
-                onEndEditing={onHideKeyboard}
-              />
-            </>
-          ) : null}
-          {correction ? <Space size={32} /> : null}
-          <Corrections
-            headerTitle={I18n.t('correcting.header')}
-            correction={correction}
-            correction2={correction2}
-            textLanguage={teachDiary.profile.learnLanguage}
-            nativeLanguage={currentProfile.nativeLanguage}
-          />
-          <Space size={32} />
-        </KeyboardAwareScrollView>
-      </View>
-      <KeyboardHideButton
-        isKeyboard={isKeyboard}
-        setIsKeyboard={setIsKeyboard}
+      );
+    }
+
+    return (
+      <CorrectingSummaryNative
+        summary={summary}
+        onHideKeyboard={onHideKeyboard}
+        onChangeText={(text: string): void => setSummary(text)}
       />
-    </SafeAreaView>
+    );
+  };
+
+  return (
+    <DefaultLayout lSize>
+      <SafeAreaView style={styles.safeAreaView}>
+        <View style={styles.container}>
+          <LoadingModal visible={isLoading} />
+          <ModalTimeUp
+            visible={isModalTimeUp}
+            onPressClose={onPressCloseTimeUp}
+          />
+          <ModalCorrectingDone
+            visible={isModalDone}
+            getPoints={getPoints}
+            points={user.points}
+            onPressClose={onPressCloseDone}
+          />
+          <ModalConfirm
+            visible={isModalConfirmation}
+            isLoading={isLoading}
+            title={I18n.t('common.confirmation')}
+            message={I18n.t('correcting.deleteAlert')}
+            mainButtonText="OK"
+            onPressMain={async (): Promise<void> => {
+              await close();
+            }}
+            onPressClose={(): void => setIsModalConfirmation(false)}
+          />
+          <ModalConfirm
+            visible={isModalNoComment}
+            title={I18n.t('common.error')}
+            message={I18n.t('correcting.nothing')}
+            mainButtonText={I18n.t('common.close')}
+            onPressMain={(): void => setIsModalNoComment(false)}
+          />
+          <KeyboardAwareScrollView
+            style={styles.scrollView}
+            keyboardShouldPersistTaps="handled"
+            extraScrollHeight={32}
+          >
+            <FlatList
+              data={textInfos}
+              keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
+              renderItem={renderItem}
+              ListHeaderComponent={listHeaderComponent}
+            />
+            {renderSummary()}
+            {correction ? <Space size={32} /> : null}
+            <Corrections
+              isLoading={isCorrectionLoading}
+              headerTitle={I18n.t('correcting.header')}
+              correction={correction}
+              correction2={correction2}
+              textLanguage={teachDiary.profile.learnLanguage}
+              nativeLanguage={currentProfile.nativeLanguage}
+            />
+            <Space size={32} />
+          </KeyboardAwareScrollView>
+        </View>
+        <KeyboardHideButton
+          isKeyboard={isKeyboard}
+          setIsKeyboard={setIsKeyboard}
+        />
+      </SafeAreaView>
+    </DefaultLayout>
   );
 };
 
@@ -464,15 +438,13 @@ CorrectingScreen.navigationOptions = ({
   const isFirstEdit = navigation.getParam('isFirstEdit');
   const onPressSubmitButton = navigation.getParam('onPressSubmitButton');
   const onPressClose = navigation.getParam('onPressClose');
+
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('correcting.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element | null =>
       isFirstEdit ? (

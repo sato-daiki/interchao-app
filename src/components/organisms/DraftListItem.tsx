@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Animated,
-  Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -22,7 +21,6 @@ import { Diary } from '../../types';
 import { DiaryStatus } from '../atoms';
 import I18n from '../../utils/I18n';
 
-const { width } = Dimensions.get('window');
 const EDIT_WIDTH = 48;
 
 interface Props {
@@ -38,12 +36,14 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  warraper: {
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
+  },
+  container: {
     flexDirection: 'row',
     paddingVertical: 8,
-    width: width + EDIT_WIDTH,
+    width: '100%',
     backgroundColor: '#fff',
   },
   left: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     width: EDIT_WIDTH,
   },
   main: {
-    width,
+    width: '100%',
     paddingHorizontal: 16,
   },
   header: {
@@ -136,45 +136,49 @@ const DraftListItem = ({
   };
 
   return (
-    <Swipeable
-      ref={(ref: Swipeable): void => {
-        setRef(ref);
-      }}
-      onSwipeableOpen={onSwipeableOpen}
-      onSwipeableClose={onSwipeableClose}
-      renderRightActions={renderRightActions}
-    >
-      <Animated.View
-        style={[styles.container, { transform: [{ translateX: x }] }]}
+    <View style={styles.warraper}>
+      <Swipeable
+        ref={(ref: Swipeable): void => {
+          setRef(ref);
+        }}
+        onSwipeableOpen={onSwipeableOpen}
+        onSwipeableClose={onSwipeableClose}
+        renderRightActions={renderRightActions}
       >
-        <View style={styles.left}>
-          <MaterialCommunityIcons
-            size={28}
-            color={softRed}
-            name="minus-circle"
-            onPress={onPressMinus}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.main}
-          onPress={(): void => onPressItem(item)}
+        <Animated.View
+          style={[styles.container, { transform: [{ translateX: x }] }]}
         >
-          <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDay}</Text>
-            <DiaryStatus
-              color={subTextColor}
-              text={I18n.t('draftListItem.draft')}
+          <View style={styles.left}>
+            <MaterialCommunityIcons
+              size={28}
+              color={softRed}
+              name="minus-circle"
+              onPress={onPressMinus}
             />
           </View>
-          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {title}
-          </Text>
-          <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
-            {text}
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
-    </Swipeable>
+          <TouchableOpacity
+            style={styles.main}
+            onPress={(): void => onPressItem(item)}
+          >
+            <View style={styles.header}>
+              <Text style={styles.postDayText}>{postDay}</Text>
+              {isEditing ? null : (
+                <DiaryStatus
+                  color={subTextColor}
+                  text={I18n.t('draftListItem.draft')}
+                />
+              )}
+            </View>
+            <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
+              {title}
+            </Text>
+            <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
+              {text}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </Swipeable>
+    </View>
   );
 };
 

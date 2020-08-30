@@ -3,7 +3,6 @@
 yarn install
 
 .env 　は渡して上げる必要ある
-firebase deploy --only firestore:rules -P default
 
 ### Publish
 
@@ -14,8 +13,8 @@ Expo クライアントアプリで PUBLISHED PROJECT から interchao を選択
 
 ## Prduction
 
-- 中身の JS だけ更新する場合 → 2,3 だけで OK
-- アプリをビルドし直して app store に申請する場合 → 1,2,4 を実行
+- 中身の JS だけ更新する場合 → 2,3,4,5 だけで OK
+- アプリをビルドし直して app store に申請する場合 → 1,2,4,5,6,7 を実行
 
 ### 1. version 更新
 
@@ -26,7 +25,7 @@ Expo クライアントアプリで PUBLISHED PROJECT から interchao を選択
 `app.json`の`revision`を更新する。  
 publish する度に+1。新 version を build するときは 0 に戻す。
 
-### 3-1. Publish
+### 3. Publish
 
 ターミナルで publish。（Expo XDE にて予めログインしておくこと)
 
@@ -37,13 +36,17 @@ expo publish --release-channel production
 expo publish --clear --release-channel production
 ```
 
-### 3-2. UpdateFirebae
+### 4. UpdateFirebae（変更があった場合）
 
 ```
 firebase deploy --only firestore:rules -P product
 ```
 
-### 4. Build
+### 5. Firebase Fuction の更新（変更があった場合）
+
+別プロジェクトの方
+
+### 6. Build
 
 ※app.json の特定の項目を編集した場合 build が必要。そうでなければ publish だけで最新プログラムが反映される。
 https://docs.expo.io/versions/latest/guides/publishing.html#limitations
@@ -53,11 +56,22 @@ expo build:ios --release-channel production
 expo build:android --release-channel production
 ```
 
-### 5.upload
+### 7.upload
 
 ```
 expo upload:ios
 expo upload:android
+```
+
+## Publish（web）
+
+## ビルド
+
+```
+npx expo-optimize
+expo build:web --no-pwa
+firebase deploy --only hosting -P product
+
 ```
 
 ## メモ

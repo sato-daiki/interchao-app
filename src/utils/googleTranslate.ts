@@ -1,10 +1,8 @@
 import axios from 'axios';
-import {
-  GOOGLE_TRANSLATE,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-  // @ts-ignore
-} from '@env';
-import * as Sentry from 'sentry-expo';
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { GOOGLE_TRANSLATE } from '../../envConfig';
+import Sentry from '../constants/Sentry';
 import { Language } from '../types';
 
 const endpoint = 'https://translation.googleapis.com/language/translate/v2';

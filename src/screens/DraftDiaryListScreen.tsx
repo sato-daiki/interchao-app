@@ -20,7 +20,7 @@ import {
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
@@ -100,13 +100,13 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftDiaryTotalNum, preOpendIndex, isEditing, onPressEdit]);
 
-  const getNewDraftDiary = useCallback((clean: boolean) => {
+  const getNewDraftDiary = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
         const { currentUser } = firebase.auth();
         if (!currentUser) return;
 
-        const index = await Algolia.getDiaryIndex(clean);
+        const index = await Algolia.getDiaryIndex();
         await Algolia.setSettings(index, 'updatedAt');
         const res = await index.search('', {
           filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
@@ -129,7 +129,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      await getNewDraftDiary(true);
+      await getNewDraftDiary();
     };
     f();
   }, [getNewDraftDiary]);
@@ -137,7 +137,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDraftDiary(true);
+      await getNewDraftDiary();
       setRefreshing(false);
     };
     f();
@@ -244,8 +244,9 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
     elRefs.current[index].openRight();
   }, []);
 
+  type RenderItemProps = { item: Diary; index: number };
   const renderItem = useCallback(
-    ({ item, index }: { item: Diary; index: number }): JSX.Element => {
+    ({ item, index }: RenderItemProps): JSX.Element => {
       return (
         <DraftListItem
           setRef={(el): void => {
@@ -334,8 +335,8 @@ DraftDiaryListScreen.navigationOptions = ({
     headerRight: (): ReactNode => {
       if (draftDiaryTotalNum > 0) {
         return (
-          <HeaderText
-            title={
+          <HeaderRight
+            text={
               getIsEditMode(isEditing, preOpendIndex)
                 ? I18n.t('common.done')
                 : I18n.t('common.edit')

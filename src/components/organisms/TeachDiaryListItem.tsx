@@ -15,7 +15,6 @@ import { ProfileIcon } from '../atoms';
 import I18n from '../../utils/I18n';
 
 interface Props {
-  mine?: boolean;
   item: Diary;
   onPressUser: (uid: string) => void;
   onPressItem: (item: firebase.firestore.DocumentData) => void;

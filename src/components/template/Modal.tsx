@@ -1,17 +1,25 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import Modal from 'react-native-modal';
-
-const { width } = Dimensions.get('window');
+import ModalWeb from 'modal-enhanced-react-native-web';
+import { maxModal } from '../../styles/Common';
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    width: width - 16,
   },
-  modal: {
+  modalWeb: {
+    width: '100%',
+    maxWidth: maxModal,
+    alignSelf: 'center',
     borderRadius: 8,
     marginHorizontal: 8,
+    paddingVertical: 32,
+    backgroundColor: '#fff',
+  },
+  modal: {
+    width: '100%',
+    borderRadius: 8,
     backgroundColor: '#fff',
   },
 });
@@ -29,6 +37,19 @@ const Modal1: React.FC<Props> = ({
   animationOut = 'zoomOut',
   children,
 }: Props): JSX.Element | null => {
+  if (Platform.OS === 'web') {
+    return (
+      <View style={styles.container}>
+        <ModalWeb
+          isVisible={visible}
+          animationIn={animationIn}
+          animationOut={animationOut}
+        >
+          <View style={styles.modalWeb}>{children}</View>
+        </ModalWeb>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <Modal

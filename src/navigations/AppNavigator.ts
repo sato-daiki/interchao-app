@@ -1,25 +1,31 @@
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import {
+  createAppContainer,
+  createSwitchNavigator,
+  NavigationContainer,
+} from 'react-navigation';
 
 import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer';
 
 /* navigator */
-import AuthNavigator from './AuthNavigator';
-import MainTabNavigator from './MainTabNavigator';
+import { createAuthTabNavigator } from './AuthNavigator';
+import { createMainTabNavigator } from './MainTabNavigator';
 
-const appContainer = createAppContainer(
-  createSwitchNavigator(
-    {
-      AuthLoading: {
-        screen: AuthLoadingScreenContainer,
-        navigationOptions: { header: null },
+export const createAppNavigator = (
+  isTabletOrMobileDevice: boolean
+): NavigationContainer => {
+  return createAppContainer(
+    createSwitchNavigator(
+      {
+        AuthLoading: {
+          screen: AuthLoadingScreenContainer,
+          navigationOptions: { header: null },
+        },
+        Auth: createAuthTabNavigator(),
+        MainTab: createMainTabNavigator(isTabletOrMobileDevice),
       },
-      AuthNavigator,
-      MainTabNavigator,
-    },
-    {
-      initialRouteName: 'AuthLoading',
-    }
-  )
-);
-
-export default appContainer;
+      {
+        initialRouteName: 'AuthLoading',
+      }
+    )
+  );
+};

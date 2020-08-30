@@ -8,6 +8,7 @@ import firebase from '../constants/firebase';
 export const registerForPushNotificationsAsync = async (
   uid: string
 ): Promise<void> => {
+  if (Platform.OS === 'web') return;
   // 実機端末か否かを判定
   if (Constants.isDevice) {
     const { status: existingStatus } = await Permissions.getAsync(

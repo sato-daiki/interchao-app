@@ -6,7 +6,10 @@ import {
 } from 'react-navigation-stack';
 import { emailInputError, emailValidate } from '../utils/common';
 import firebase from '../constants/firebase';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultAuthLayoutOptions,
+} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import {
@@ -17,6 +20,7 @@ import {
 } from '../styles/Common';
 import ModalSendEmail from '../components/organisms/ModalSendEmail';
 import I18n from '../utils/I18n';
+import DefaultLayout from '../components/template/DefaultLayout';
 
 type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
   navigationOptions:
@@ -74,7 +78,7 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
     f();
   }, [email]);
 
-  const onEndEditingEmail = useCallback(() => {
+  const onBlurEmail = useCallback(() => {
     const f = async (): Promise<void> => {
       if (email.length === 0) {
         setErrorEmail('');
@@ -89,42 +93,45 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
   }, [email, setErrorEmail]);
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <ModalSendEmail
-        visible={isModal}
-        onPressClose={(): boolean => navigation.goBack()}
-      />
-      <Text style={styles.title}>{I18n.t('foregetPassword.title')}</Text>
-      <Text style={styles.subText}>{I18n.t('foregetPassword.subText')}</Text>
-      <Text style={styles.label}>{I18n.t('foregetPassword.email')}</Text>
-      <CheckTextInput
-        value={email}
-        onChangeText={(text: string): void => setEmail(text)}
-        onEndEditing={onEndEditingEmail}
-        maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
-        errorMessage={errorEmail}
-      />
-      <Space size={32} />
-      <SubmitButton
-        title={I18n.t('common.sending')}
-        onPress={onPressSubmit}
-        disable={errorEmail !== '' || email === ''}
-      />
-      <Space size={16} />
-    </View>
+    <DefaultLayout>
+      <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
+        <ModalSendEmail
+          visible={isModal}
+          onPressClose={(): boolean => navigation.goBack()}
+        />
+        <Text style={styles.title}>{I18n.t('foregetPassword.title')}</Text>
+        <Text style={styles.subText}>{I18n.t('foregetPassword.subText')}</Text>
+        <Text style={styles.label}>{I18n.t('foregetPassword.email')}</Text>
+        <CheckTextInput
+          value={email}
+          onChangeText={(text: string): void => setEmail(text)}
+          onBlur={onBlurEmail}
+          maxLength={50}
+          placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          returnKeyType="done"
+          errorMessage={errorEmail}
+        />
+        <Space size={32} />
+        <SubmitButton
+          title={I18n.t('common.sending')}
+          onPress={onPressSubmit}
+          disable={errorEmail !== '' || email === ''}
+        />
+        <Space size={16} />
+      </View>
+    </DefaultLayout>
   );
 };
 
 ForegetPasswordScreen.navigationOptions = (): NavigationStackOptions => {
   return {
     ...DefaultNavigationOptions,
+    ...DefaultAuthLayoutOptions,
     title: I18n.t('foregetPassword.headerTitle'),
   };
 };

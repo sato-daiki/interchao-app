@@ -10,6 +10,8 @@ import { mainColor, fontSizeM } from '../../styles/Common';
 interface Props {
   isLoading?: boolean;
   disable?: boolean;
+  backgroundColor?: string;
+  titleColor?: string;
   title: string;
   onPress: () => void;
 }
@@ -17,38 +19,38 @@ interface Props {
 const styles = StyleSheet.create({
   contaner: {
     borderRadius: 8,
-    backgroundColor: mainColor,
     paddingHorizontal: 12,
     paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
-    color: '#fff',
     fontSize: fontSizeM,
     fontWeight: 'bold',
   },
 });
 
-const SmallButtonBlue: React.FC<Props> = ({
+const SmallButtonSubmit: React.FC<Props> = ({
   isLoading = false,
   disable = false,
   title,
   onPress,
+  backgroundColor = mainColor,
+  titleColor = '#fff',
 }: Props): JSX.Element => {
   return (
     <TouchableOpacity
-      style={styles.contaner}
+      style={[styles.contaner, { backgroundColor }]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
         <ActivityIndicator size="small" color="#fff" />
       ) : (
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
       )}
     </TouchableOpacity>
   );
 };
 
-export default SmallButtonBlue;
+export default SmallButtonSubmit;

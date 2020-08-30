@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
-import { YellowBox, StatusBar, Alert } from 'react-native';
-import * as Sentry from 'sentry-expo';
-import { PersistGate } from 'redux-persist/es/integration/react';
+import React, { useEffect, useState } from 'react';
+import { YellowBox, StatusBar, Platform } from 'react-native';
+import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import Constants from 'expo-constants';
 import { MenuProvider } from 'react-native-popup-menu';
 // import Updates from 'expo-updates';
 import { Updates } from 'expo';
-
-import AppNavigator from './navigations/AppNavigator';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
+import { createAppNavigator } from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
 import I18n from './utils/I18n';
+import Sentry from './constants/Sentry';
+import { ModalConfirm } from './components/organisms';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -22,10 +23,11 @@ YellowBox.ignoreWarnings(['Setting a timer']);
 const { store, persistor } = configureStore();
 
 // エラー監視
-Sentry.setRelease(Constants.manifest.revisionId || 'DEV');
 Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
+  enableInExpoDevelopment: true,
+  debug: __DEV__,
 });
 
 if (!firebase.apps.length) {
@@ -33,24 +35,14 @@ if (!firebase.apps.length) {
 }
 
 const App: React.SFC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
   const checkUpdate = async (): Promise<void> => {
-    if (__DEV__) return;
+    if (__DEV__ || Platform.OS === 'web') return;
 
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {
-      Alert.alert(
-        I18n.t('app.updateTitle'),
-        I18n.t('app.updateMessage'),
-        [
-          {
-            text: I18n.t('app.updateOk'),
-            onPress: (): void => {
-              Updates.reload();
-            },
-          },
-        ],
-        { cancelable: false }
-      );
+      setIsVisible(true);
     }
   };
 
@@ -58,12 +50,25 @@ const App: React.SFC = () => {
     checkUpdate();
   }, []);
 
+  const isTabletOrMobileDevice = useMediaQuery({
+    maxDeviceWidth: 1224,
+  });
+
+  const AppNavigator = createAppNavigator(isTabletOrMobileDevice);
+
   return (
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
           <MenuProvider>
+            <ModalConfirm
+              visible={isVisible}
+              title={I18n.t('app.updateTitle')}
+              message={I18n.t('app.updateMessage')}
+              mainButtonText={I18n.t('app.updateOk')}
+              onPressMain={(): void => Updates.reload()}
+            />
             <AppNavigator />
           </MenuProvider>
         </ActionSheetProvider>
