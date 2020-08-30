@@ -439,7 +439,7 @@ const modalCorrectingDone = {
 
 const modalDeleteAcount = {
   title: '退会',
-  text: 'パスワードを入力して確定ボタンを押してください。',
+  text: 'パスワードを入力して"退会する"ボタンを押してください。',
   button: '退会する',
 };
 
