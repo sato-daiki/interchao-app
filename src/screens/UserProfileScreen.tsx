@@ -9,29 +9,29 @@ import {
   ScrollView,
   Text,
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   NavigationStackScreenComponent,
   NavigationStackOptions,
 } from 'react-navigation-stack';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
 import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
-import { Space, GrayHeader } from '../components/atoms';
+import { Space, GrayHeader, HeaderRight } from '../components/atoms';
 import {
   Diary,
   Profile,
   UserReview,
   Review,
   BlockUser,
-  Report as ReportType,
+  Report,
 } from '../types';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
-import { primaryColor, linkBlue, fontSizeM } from '../styles/Common';
-import Report from '../components/organisms/Report';
+import { linkBlue, fontSizeM } from '../styles/Common';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -43,6 +43,8 @@ import { getTopReviews, getReviewNum } from '../utils/review';
 import ReviewListItem from '../components/organisms/ReviewListItem';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import UserProfileMenu from '../components/web/organisms/UserProfileMenu';
+import ModalReport from '../components/web/organisms/ModalReport';
 
 const styles = StyleSheet.create({
   container: {
@@ -93,6 +95,10 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [topReviews, setTopReviews] = useState<Review[]>([]);
   const [reviewNum, setReviewNum] = useState<number>();
 
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
+
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
       if (!navigation.state.params) return;
@@ -106,33 +112,30 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     f();
   }, [setProfile, setLoadingProfile, navigation]);
 
-  const getNewDiary = useCallback(
-    (clean: boolean) => {
-      const f = async (): Promise<void> => {
-        if (!navigation.state.params) return;
-        try {
-          const { uid } = navigation.state.params;
-          const index = await Algolia.getDiaryIndex(clean);
-          await Algolia.setSettings(index);
-          const res = await index.search('', {
-            filters: `profile.uid: ${uid} AND diaryStatus: publish`,
-            page: 0,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+  const getNewDiary = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!navigation.state.params) return;
+      try {
+        const { uid } = navigation.state.params;
+        const index = await Algolia.getDiaryIndex();
+        await Algolia.setSettings(index);
+        const res = await index.search('', {
+          filters: `profile.uid: ${uid} AND diaryStatus: publish`,
+          page: 0,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          setDiaries(res.hits as Diary[]);
-          setDiaryTotalNum(res.nbHits);
-        } catch (err) {
-          setLoadingDiary(false);
-          setRefreshing(false);
-          alert({ err });
-        }
+        setDiaries(res.hits as Diary[]);
+        setDiaryTotalNum(res.nbHits);
+      } catch (err) {
         setLoadingDiary(false);
-      };
-      f();
-    },
-    [navigation.state.params]
-  );
+        setRefreshing(false);
+        alert({ err });
+      }
+      setLoadingDiary(false);
+    };
+    f();
+  }, [navigation.state.params]);
 
   const getNewReview = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -167,7 +170,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       const resBlocker = await checkBlocker(currentUser.uid, params.uid);
       setIsBlocked(resBlocker);
       // データを取得していく
-      await Promise.all([getNewProfile(), getNewDiary(false), getNewReview()]);
+      await Promise.all([getNewProfile(), getNewDiary(), getNewReview()]);
     };
     f();
   }, [getNewDiary, getNewProfile, getNewReview, navigation.state]);
@@ -175,7 +178,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDiary(true);
+      await getNewDiary();
       setRefreshing(false);
     };
     f();
@@ -254,7 +257,13 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, [isBlocked, onPressBlock, onPressReport, showActionSheetWithOptions]);
 
   useEffect(() => {
-    navigation.setParams({ onPressMore });
+    navigation.setParams({
+      onPressMore,
+      isDesktopOrLaptopDevice,
+      isBlocked,
+      onPressReport,
+      onPressBlock,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBlocked]);
 
@@ -334,7 +343,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             targetUid: profile.uid,
             reason,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as ReportType);
+          } as Report);
         setIsLoading(false);
         setIsReportSuccess(true);
       };
@@ -377,8 +386,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       </>
     ) : null;
 
+  type RenderItemProps = { item: Diary };
   const renderDiary = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <DiaryListItem
           item={item}
@@ -394,8 +404,9 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     [navigation]
   );
 
+  type RenderReviewProps = { item: Review };
   const renderReview = useCallback(
-    ({ item }: { item: Review }): JSX.Element | null => {
+    ({ item }: RenderReviewProps): JSX.Element | null => {
       if (profile) {
         return (
           <ReviewListItem
@@ -430,8 +441,8 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         onPressSubmit={!isBlocked ? onPressBlockSubmit : onPressUnblockSubmit}
         onPressClose={(): void => setIsModalBlock(false)}
       />
-      <Report
-        isReport={isReport}
+      <ModalReport
+        visible={isReport}
         isSuccess={isReportSuccess}
         isLoading={isLoading}
         onReportSubmit={onReportSubmit}
@@ -446,7 +457,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
         {profile && !loadingProfile ? (
           <UserProfileHeader profile={profile} userReview={userReview} />
         ) : (
-          <ActivityIndicator />
+          <>
+            <Space size={16} />
+            <ActivityIndicator />
+            <Space size={16} />
+          </>
         )}
         <FlatList
           data={topReviews}
@@ -481,18 +496,26 @@ UserProfileScreen.navigationOptions = ({
   navigation,
 }): NavigationStackOptions => {
   const onPressMore = navigation.getParam('onPressMore');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
+  const isBlocked = navigation.getParam('isBlocked');
+  const onPressReport = navigation.getParam('onPressReport');
+  const onPressBlock = navigation.getParam('onPressBlock');
+
   return {
     ...DefaultNavigationOptions,
     title: I18n.t('userProfile.headerTitle'),
-    headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMore}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
+    headerRight: (): JSX.Element =>
+      isDesktopOrLaptopDevice ? (
+        <UserProfileMenu
+          isBlocked={isBlocked}
+          onPressReport={onPressReport}
+          onPressBlock={onPressBlock}
         />
-      </TouchableOpacity>
-    ),
+      ) : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+      ),
   };
 };
 

@@ -21,11 +21,60 @@ const common = {
   back: '戻る',
 };
 
+// web
+const web = {
+  firstViewTitle: '話す"は、"書く"から"',
+  firstViewSubTitle: 'ネイティブに日記を添削してもらえるアプリ',
+  firstViewStart: 'Interchaoを始めよう',
+  wahtTitle: 'What is Interchao?',
+  wahtText1:
+    'Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ',
+  wahtText2:
+    'あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+  whyTitle: '書くことが必要な理由',
+  whyText: '文章を書くことは語学学習において最適な方法です',
+  whyCnatText1: '「How are you?」',
+  whyCnatText2: "「I'm fine,thank you,and you?」",
+  whyCnatText3: "「I'm fine...(どうしよう、ここから会話が進まない)」",
+  reasonTitle1: '書けない文章は話せない',
+  reasonText11: '文章で書けないことを話すことはできません',
+  reasonText12: '書くことはスピーキングのトレーニングにもなります',
+  reasonTitle2: 'ネイティブにみてもらう',
+  reasonText21: 'せっかく文章を書いても間違っているかもしれません',
+  reasonText22:
+    '文法/単語は正しいか？相手に意味が伝わるか？などをネイティブにチェックしてもらいましょう',
+  reasonTitle3: '自分の言葉で書く',
+  reasonText31: '教科書や映画のセリフを勉強しても日常生活では使えません',
+  reasonText32:
+    'あなたの言葉をアウトプットすることにより、あなたが普段使う言葉を学習することができます',
+  correctTitle: '日記を添削してポイントGET！',
+  correctText1:
+    ' あなたのネイティブな言語の日記を添削すると10ポイント貯まります。この10ポイントを使って日記を書こう！',
+  exampleTitle: '添削事例',
+  exampleText: '実際の添削事例をご紹介​',
+  exampleDetailTitle1: 'あなたが作成した日記​',
+  exampleDetailText1: '早速日記を投稿！​​',
+  exampleDetailTitle2: '添削結果',
+  exampleDetailText2: '間違った表現を箇所を指摘してもらいました',
+  exampleDetailTitle3: '日記の総評​​',
+  exampleDetailText3: '最後に総評をもらいました',
+  startTitle: 'さっそく始めてみよう',
+  startText:
+    'アプリインストールで100pt（10日記分）が貰えます。早速日記を書いて添削してもらおう！',
+};
+
+const modalAppSuggestion = {
+  title: 'Interchaoアプリがおすすめ',
+  text:
+    '届いた添削を見逃さない。Interchaoアプリで開くと全ての機能をより快適に使えます。',
+};
+
 // タブ
 const mainTab = {
   myDiary: 'マイ日記',
   postDiary: '日記を書く',
   teachDiary: '添削する日記',
+  myPage: 'マイページ',
 };
 
 // 共通のエラーメッセージ
@@ -84,6 +133,7 @@ const deleteAcount = {
   text:
     '退会すると投稿した日記の情報が完全に消去され、復元することはできません。\n\nそれでも退会を希望する方は下のボタンから退会してください。',
   withdrawal: '退会する',
+  confirmation: '本当に退会してもよろしいですか？',
 };
 
 const draftDiary = {
@@ -389,7 +439,7 @@ const modalCorrectingDone = {
 
 const modalDeleteAcount = {
   title: '退会',
-  text: 'パスワードを入力して確定ボタンを押してください。',
+  text: 'パスワードを入力して"退会する"ボタンを押してください。',
   button: '退会する',
 };
 
@@ -515,6 +565,8 @@ const language = {
 
 const ja = {
   common,
+  web,
+  modalAppSuggestion,
   errorMessage,
   mainTab,
   app,
@@ -549,7 +601,6 @@ const ja = {
   userProfile,
   commentCard,
   firstDiary,
-
   userPoints,
   userPointsBig,
   emptyDiary,

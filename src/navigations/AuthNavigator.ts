@@ -1,30 +1,61 @@
 import { createStackNavigator } from 'react-navigation-stack';
-
+import { Platform } from 'react-native';
 /* screens */
-import InitializeScreen from '../screens/InitializeScreen';
+import InitializeWebScreen from '../screens/InitializeWebScreen';
+import InitializeNativeScreen from '../screens/InitializeNativeScreen';
 import SignUpScreenContainer from '../containers/SignUpScreenContainer';
 import SignInScreen from '../screens/SignInScreen';
 import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
 import InputUserNameScreenContainer from '../containers/InputUserNameScreenContainer';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 
-export default createStackNavigator({
-  Initialize: {
-    screen: InitializeScreen,
-  },
-  SignUp: {
-    screen: SignUpScreenContainer,
-  },
-  SignIn: {
-    screen: SignInScreen,
-  },
+const routeConfigMap = {
   SelectLanguage: {
     screen: SelectLanguageScreenContainer,
   },
   InputUserName: {
     screen: InputUserNameScreenContainer,
   },
+  SignIn: {
+    screen: SignInScreen,
+  },
+  SignUp: {
+    screen: SignUpScreenContainer,
+  },
   ForegetPassword: {
     screen: ForegetPasswordScreen,
   },
-});
+};
+// modalにしないとwebの時背景が白くならない
+const ModalAuthNavigator = createStackNavigator(routeConfigMap);
+
+export const createAuthTabNavigator = () => {
+  if (Platform.OS === 'web') {
+    return createStackNavigator(
+      {
+        Initialize: {
+          screen: InitializeWebScreen,
+        },
+        ModalAuth: {
+          screen: ModalAuthNavigator,
+        },
+      },
+      {
+        headerMode: 'none',
+        mode: 'modal',
+        defaultNavigationOptions: {
+          cardStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+        },
+      }
+    );
+  }
+
+  return createStackNavigator({
+    Initialize: {
+      screen: InitializeNativeScreen,
+    },
+    ...routeConfigMap,
+  });
+};

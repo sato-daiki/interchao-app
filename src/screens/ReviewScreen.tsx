@@ -1,12 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Alert,
-  Keyboard,
-  Platform,
-} from 'react-native';
+import { View, StyleSheet, TextInput, Keyboard } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
   NavigationStackOptions,
@@ -14,13 +7,23 @@ import {
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { borderLightColor, offWhite } from '../styles/Common';
-import { Space, HeaderText, LoadingModal } from '../components/atoms';
+import {
+  Space,
+  HeaderRight,
+  LoadingModal,
+  HeaderLeft,
+} from '../components/atoms';
 import { UserListItem } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultModalLayoutOptions,
+} from '../constants/NavigationOptions';
 import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
+import DefaultLayout from '../components/template/DefaultLayout';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   diary?: Diary;
@@ -55,9 +58,6 @@ const styles = StyleSheet.create({
   keyboardAwareScrollView: {
     flex: 1,
   },
-  headerLeft: {
-    paddingLeft: Platform.OS === 'android' ? 16 : 0,
-  },
 });
 
 const ReviewScreen: ScreenType = ({
@@ -69,28 +69,13 @@ const ReviewScreen: ScreenType = ({
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const onPressFavorite = useCallback(() => undefined, []);
+  const [isModalConfirmation, setIsModalConfirmation] = useState(false);
+  const [isModalError, setIsModalError] = useState(false);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
     if (rating > 0 || comment.length > 0) {
-      Alert.alert(
-        I18n.t('common.confirmation'),
-        I18n.t('review.confirmation'),
-        [
-          {
-            text: I18n.t('common.cancel'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: (): void => {
-              navigation.goBack(null);
-            },
-          },
-        ],
-        { cancelable: true }
-      );
+      setIsModalConfirmation(true);
     } else {
       navigation.goBack(null);
     }
@@ -104,7 +89,7 @@ const ReviewScreen: ScreenType = ({
     }
     if (isLoading) return;
     if (rating === 0) {
-      Alert.alert('', I18n.t('errorMessage.invalidRaiting'));
+      setIsModalError(true);
       return;
     }
     if (!navigation.state.params) return;
@@ -202,42 +187,73 @@ const ReviewScreen: ScreenType = ({
   }, [rating, comment]);
 
   if (!diary) {
-    Alert.alert(I18n.t('common.error'), I18n.t('errorMessage.notFound'));
-    return null;
+    return (
+      <View style={styles.container}>
+        <ModalConfirm
+          visible
+          title={I18n.t('common.error')}
+          message={I18n.t('errorMessage.notFound')}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={(): void => {
+            navigation.goBack(null);
+          }}
+        />
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <UserListItem
-        userName={diary.profile.userName}
-        photoUrl={diary.profile.photoUrl}
-        nativeLanguage={diary.profile.nativeLanguage}
-        nationalityCode={diary.profile.nationalityCode}
-        onPressButton={onPressFavorite}
-      />
-      <Space size={24} />
-      <AirbnbRating
-        showRating={false}
-        defaultRating={0}
-        onFinishRating={(num: number): void => setRating(num)}
-      />
-      <Space size={24} />
-      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
-        <TextInput
-          value={comment}
-          onChangeText={(text: string): void => setComment(text)}
-          maxLength={140}
-          placeholder={I18n.t('review.placeholder')}
-          multiline
-          numberOfLines={3}
-          spellCheck
-          autoCorrect
-          underlineColorAndroid="transparent"
-          style={styles.review}
+    <DefaultLayout lSize>
+      <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
+        <ModalConfirm
+          visible={isModalError}
+          title={I18n.t('common.error')}
+          message={I18n.t('errorMessage.invalidRaiting')}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={(): void => setIsModalError(false)}
         />
-      </KeyboardAwareScrollView>
-    </View>
+        <ModalConfirm
+          visible={isModalConfirmation}
+          title={I18n.t('common.confirmation')}
+          message={I18n.t('review.confirmation')}
+          mainButtonText="OK"
+          onPressMain={(): void => {
+            navigation.goBack(null);
+          }}
+          onPressClose={(): void => {
+            setIsModalConfirmation(false);
+          }}
+        />
+        <UserListItem
+          userName={diary.profile.userName}
+          photoUrl={diary.profile.photoUrl}
+          nativeLanguage={diary.profile.nativeLanguage}
+          nationalityCode={diary.profile.nationalityCode}
+        />
+        <Space size={24} />
+        <AirbnbRating
+          showRating={false}
+          defaultRating={0}
+          onFinishRating={(num: number): void => setRating(num)}
+        />
+        <Space size={24} />
+        <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+          <TextInput
+            value={comment}
+            onChangeText={(text: string): void => setComment(text)}
+            maxLength={140}
+            placeholder={I18n.t('review.placeholder')}
+            multiline
+            numberOfLines={3}
+            spellCheck
+            autoCorrect
+            underlineColorAndroid="transparent"
+            style={styles.review}
+          />
+        </KeyboardAwareScrollView>
+      </View>
+    </DefaultLayout>
   );
 };
 
@@ -247,16 +263,13 @@ ReviewScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
 
   return {
     ...DefaultNavigationOptions,
+    ...DefaultModalLayoutOptions,
     title: I18n.t('review.headerTitle'),
     headerLeft: (): JSX.Element => (
-      <HeaderText
-        containerStyle={styles.headerLeft}
-        title={I18n.t('common.close')}
-        onPress={onPressClose}
-      />
+      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
     ),
     headerRight: (): JSX.Element => (
-      <HeaderText title={I18n.t('common.sending')} onPress={onPressSubmit} />
+      <HeaderRight text={I18n.t('common.sending')} onPress={onPressSubmit} />
     ),
   };
 };

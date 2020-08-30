@@ -16,3 +16,19 @@ export const fontSizeSS = 11;
 export const fontSizeS = 13;
 export const fontSizeM = 14;
 export const fontSizeL = 18;
+
+// web用
+export const fontSizeTitle = 40;
+export const fontSizeLLLL = 32;
+export const fontSizeLLL = 20;
+export const fontSizeLL = 18;
+
+export const offBlack = '#2b3137';
+export const headerBlack = '#24292E';
+
+export const maxPartS = 375;
+export const maxPartL = 548;
+export const maxAuth = 580;
+export const maxMain = 1224;
+export const maxModal = 700;
+export const maxLayoutChange = 1024;

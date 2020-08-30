@@ -18,6 +18,7 @@ import { track, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import { ModalConfirm } from '../components/organisms';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,22 +53,33 @@ const styles = StyleSheet.create({
   },
 });
 
-const DeleteAcountScreen: NavigationStackScreenComponent = () => {
+const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
+  const [isPasswordInput, setIsPasswordInput] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
 
-  const onPressDelete = useCallback(() => {
+  const afterDeleteUser = useCallback(() => {
+    navigation.navigate('Auth');
+  }, [navigation]);
+
+  const onPressDelete1 = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
         const { currentUser } = firebase.auth();
-        if (!currentUser) return;
+        if (!currentUser) {
+          afterDeleteUser();
+          return;
+        }
         if (!currentUser.email) {
+          // メールアドレスを登録していないユーザの場合→そのまま削除
           setIsLoading(true);
           await currentUser.delete();
+          afterDeleteUser();
         } else {
-          setIsModal(true);
+          // メールアドレスを登録しているユーザの場合→パスワード入力に切り替える
+          setIsPasswordInput(true);
         }
       } catch (err) {
         setIsLoading(false);
@@ -77,9 +89,9 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
       track(events.DELETED_USER);
     };
     f();
-  }, []);
+  }, [afterDeleteUser]);
 
-  const onPressSubmit = useCallback(() => {
+  const onPressDelete2 = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
         const { currentUser } = firebase.auth();
@@ -91,6 +103,7 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
         setIsLoading(true);
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.delete();
+        afterDeleteUser();
       } catch (err) {
         setIsLoading(false);
         const errorCode = err.code;
@@ -105,13 +118,14 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
       setIsLoading(false);
     };
     f();
-  }, [password]);
+  }, [afterDeleteUser, password]);
 
-  const onEndEditingPassword = useCallback(() => {
+  const onBlurPassword = useCallback(() => {
     setErrorPassword('');
   }, [setErrorPassword]);
 
   const onPressClose = useCallback(() => {
+    setIsPasswordInput(false);
     setIsModal(false);
     setPassword('');
     setErrorPassword('');
@@ -121,17 +135,22 @@ const DeleteAcountScreen: NavigationStackScreenComponent = () => {
     <View style={styles.container}>
       <ModalDeleteAcount
         visible={isModal}
+        isPasswordInput={isPasswordInput}
         isLoading={isLoading}
         password={password}
         errorMessage={errorPassword}
         onChangeText={(txt: string): void => setPassword(txt)}
-        onPressSubmit={onPressSubmit}
-        onEndEditing={onEndEditingPassword}
+        onPressDelete1={onPressDelete1}
+        onPressDelete2={onPressDelete2}
+        onBlur={onBlurPassword}
         onPressClose={onPressClose}
       />
       <View style={styles.main}>
         <Text style={styles.text}>{I18n.t('deleteAcount.text')}</Text>
-        <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={(): void => setIsModal(true)}
+        >
           <Text style={styles.delete}>{I18n.t('deleteAcount.withdrawal')}</Text>
         </TouchableOpacity>
       </View>

@@ -1,10 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import algoliasearch from 'algoliasearch';
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-// @ts-ignore
-import { ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY } from '@env';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -17,6 +13,8 @@ import { getBlockers, getBlockees } from '../utils/blockUser';
 import { Profile } from '../types';
 import { LoadingModal } from '../components/atoms';
 import I18n from '../utils/I18n';
+import { getClient } from '../utils/Algolia';
+import { getIndexName } from '../utils/common';
 
 export interface Props {
   profile: Profile;
@@ -35,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const searchClient = algoliasearch(ALGOLIA_API_KEY, ALGOLIA_ADMIN_API_KEY);
+const searchClient = getClient();
 
 const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
   const [isEmpty, setIsEmpty] = useState(true);
@@ -79,10 +77,7 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <InstantSearch
-        searchClient={searchClient}
-        indexName={__DEV__ ? 'dev_diaries' : 'prod_diaries'}
-      >
+      <InstantSearch searchClient={searchClient} indexName={getIndexName()}>
         <Configure filters={filters} />
         <SearchBar
           placeholder={I18n.t('teachDiarySerch.searchBar')}

@@ -1,5 +1,5 @@
-import { Alert } from 'react-native';
-import * as Sentry from 'sentry-expo';
+import { Alert, Platform } from 'react-native';
+import Sentry from '../constants/Sentry';
 import I18n from './I18n';
 
 interface ErrorAlert {
@@ -27,11 +27,18 @@ export const alert = ({ err, onPressOk }: ErrorAlert): void => {
   } else {
     message = I18n.t('errorMessage.defaultError', { message });
   }
-  Alert.alert(title, message, [
-    {
-      text: 'OK',
-      onPress: onPressOk,
-    },
-  ]);
+  if (Platform.OS === 'web') {
+    // @ts-ignore
+    const res = window.confirm(`${title}\n${message}`);
+    if (res && onPressOk) onPressOk();
+  } else {
+    Alert.alert(title, message, [
+      {
+        text: 'OK',
+        onPress: onPressOk,
+      },
+    ]);
+  }
+
   Sentry.captureException(err);
 };

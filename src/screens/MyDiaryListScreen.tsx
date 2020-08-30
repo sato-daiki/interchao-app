@@ -4,22 +4,25 @@ import {
   StyleSheet,
   FlatList,
   RefreshControl,
-  TouchableOpacity,
   Platform,
 } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 import { Notifications } from 'expo';
-import { GrayHeader, LoadingModal } from '../components/atoms';
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
+
+import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import {
+  DefaultNavigationOptions,
+  DefaultSearchBarOptions,
+} from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
-import { primaryColor } from '../styles/Common';
+import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
@@ -34,6 +37,8 @@ import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
+import { getEachOS } from '../utils/common';
+import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
 
 export interface Props {
   user: User;
@@ -96,6 +101,10 @@ const MyDiaryListScreen: ScreenType = ({
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
+  });
+
   const [correctingObjectID, setCorrectingObjectID] = useState(
     user.correctingObjectID
   );
@@ -109,53 +118,52 @@ const MyDiaryListScreen: ScreenType = ({
     navigation.setParams({
       onPressMenu: () => setIsMenu(true),
       onPressSearch,
+      isDesktopOrLaptopDevice,
+      nativeLanguage: profile.nativeLanguage,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getNewDiary = useCallback(
-    (clean: boolean) => {
-      const f = async (): Promise<void> => {
-        try {
-          const index = await Algolia.getDiaryIndex(clean);
-          await Algolia.setSettings(index);
-          const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
-            page: 0,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+  const getNewDiary = useCallback(() => {
+    const f = async (): Promise<void> => {
+      try {
+        const index = await Algolia.getDiaryIndex();
+        await Algolia.setSettings(index);
+        const res = await index.search('', {
+          filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
+          page: 0,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          const { hits, nbHits } = res;
-          setDiaries(hits as Diary[]);
-          setDiaryTotalNum(nbHits);
+        const { hits, nbHits } = res;
+        setDiaries(hits as Diary[]);
+        setDiaryTotalNum(nbHits);
 
-          // ユーザ情報も更新し直す（badgeのカウントの対応のため）
-          const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
-          if (newUnreadCorrectionNum !== null) {
-            if (Platform.OS === 'ios') {
-              Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
-            }
-            setLocalStatus({
-              ...localStatus,
-              unreadCorrectionNum: newUnreadCorrectionNum,
-            });
+        // ユーザ情報も更新し直す（badgeのカウントの対応のため）
+        const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
+        if (newUnreadCorrectionNum !== null) {
+          if (Platform.OS === 'ios') {
+            Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
           }
-        } catch (err) {
-          setIsLoading(false);
-          setRefreshing(false);
-          alert({ err });
+          setLocalStatus({
+            ...localStatus,
+            unreadCorrectionNum: newUnreadCorrectionNum,
+          });
         }
+      } catch (err) {
         setIsLoading(false);
-      };
-      f();
-    },
-    [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]
-  );
+        setRefreshing(false);
+        alert({ err });
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDiary(true);
+      await getNewDiary();
       setRefreshing(false);
     };
     f();
@@ -164,7 +172,7 @@ const MyDiaryListScreen: ScreenType = ({
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      await getNewDiary(false);
+      await getNewDiary();
       // push通知の設定
       await registerForPushNotificationsAsync(user.uid);
       addLisner(navigation, onRefresh);
@@ -285,8 +293,9 @@ const MyDiaryListScreen: ScreenType = ({
     [editDiary, isLoading, localStatus, navigation, setLocalStatus]
   );
 
+  type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
-    ({ item }: { item: Diary }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <DiaryListItem
           mine
@@ -323,7 +332,6 @@ const MyDiaryListScreen: ScreenType = ({
         navigation={navigation}
         isMenu={isMenu}
         nativeLanguage={profile.nativeLanguage}
-        uid={user.uid}
         onClose={onClose}
       />
       <LoadingModal visible={isLoading} />
@@ -332,6 +340,7 @@ const MyDiaryListScreen: ScreenType = ({
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />
+      <ModalAppSuggestion user={user} />
       <FlatList
         // emptyの時のレイアウトのため
         contentContainerStyle={isEmpty ? styles.flatList : null}
@@ -355,23 +364,29 @@ MyDiaryListScreen.navigationOptions = ({
 }): NavigationStackOptions => {
   const onPressMenu = navigation.getParam('onPressMenu');
   const onPressSearch = navigation.getParam('onPressSearch');
+  const isDesktopOrLaptopDevice = navigation.getParam(
+    'isDesktopOrLaptopDevice'
+  );
+  const nativeLanguage = navigation.getParam('nativeLanguage');
+
   return {
     ...DefaultNavigationOptions,
+    ...DefaultSearchBarOptions,
     headerTitle: (): JSX.Element => (
       <SearchBarButton
         title={I18n.t('myDiaryList.headerTitle')}
         onPress={onPressSearch}
       />
     ),
-    headerRight: (): JSX.Element => (
-      <TouchableOpacity onPress={onPressMenu}>
-        <MaterialCommunityIcons
-          size={28}
-          color={primaryColor}
-          name="dots-horizontal"
+    headerRight: (): JSX.Element =>
+      isDesktopOrLaptopDevice ? (
+        <MyDiaryListMenuWebPc
+          navigation={navigation}
+          nativeLanguage={nativeLanguage}
         />
-      </TouchableOpacity>
-    ),
+      ) : (
+        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
+      ),
   };
 };
 

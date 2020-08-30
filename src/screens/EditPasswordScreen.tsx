@@ -88,7 +88,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
     setErrorCurrentPassword('');
   }, [setErrorCurrentPassword]);
 
-  const onEndEditingNewPassword = useCallback(() => {
+  const onBlurNewPassword = useCallback(() => {
     setErrorNewPassword('');
   }, [setErrorNewPassword]);
 
@@ -102,7 +102,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         <CheckTextInput
           value={currentPassword}
           onChangeText={(text: string): void => setCurrentPassword(text)}
-          onEndEditing={onEndEditinCurrentPassword}
+          onBlur={onEndEditinCurrentPassword}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"
@@ -117,7 +117,7 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         <CheckTextInput
           value={newPassword}
           onChangeText={(text: string): void => setNewPassword(text)}
-          onEndEditing={onEndEditingNewPassword}
+          onBlur={onBlurNewPassword}
           maxLength={20}
           placeholder="Password"
           autoCapitalize="none"

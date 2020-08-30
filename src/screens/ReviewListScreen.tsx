@@ -120,8 +120,9 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
     <GrayHeader title={I18n.t('reviewList.reviewList')} />
   );
 
+  type RenderItemProps = { item: Review };
   const renderItem = useCallback(
-    ({ item }: { item: Review }): JSX.Element => {
+    ({ item }: RenderItemProps): JSX.Element => {
       return (
         <ReviewListItem
           item={item}

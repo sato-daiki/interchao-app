@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -20,6 +20,7 @@ import {
   offWhite,
 } from '../styles/Common';
 import { alert } from '../utils/ErrorAlert';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   profile: Profile;
@@ -90,6 +91,9 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const [isModalError, setIsModalError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   useEffect(() => {
     const { currentUser } = firebase.auth();
     if (currentUser && currentUser.email) {
@@ -99,17 +103,20 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
 
   const checkValidate = useCallback((): boolean => {
     if (email.length === 0) {
-      Alert.alert('', I18n.t('errorMessage.emptyEmail'));
+      setErrorMessage(I18n.t('errorMessage.emptyEmail'));
+      setIsModalError(true);
       return false;
     }
 
     if (message.length === 0) {
-      Alert.alert('', I18n.t('errorMessage.emptyMessage'));
+      setErrorMessage(I18n.t('errorMessage.emptyMessage'));
+      setIsModalError(true);
       return false;
     }
 
     if (emailValidate(email)) {
-      Alert.alert('', I18n.t('errorMessage.invalidEmail'));
+      setErrorMessage(I18n.t('errorMessage.invalidEmail'));
+      setIsModalError(true);
       return false;
     }
     return true;
@@ -146,10 +153,21 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
     f();
   }, [checkValidate, email, isLoading, message, profile]);
 
+  const onPressCloseError = (): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  };
+
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <LoadingModal visible={isLoading} />
-
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={errorMessage}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={onPressCloseError}
+      />
       {!isSuccess ? (
         <View style={styles.main}>
           <Text style={styles.label}>{I18n.t('inquiry.email')}</Text>
@@ -182,7 +200,6 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
           <SubmitButton
             title={I18n.t('common.sending')}
             onPress={onPressSend}
-            disable={!(email.length && message.length > 0)}
           />
         </View>
       ) : (

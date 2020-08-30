@@ -48,13 +48,12 @@ const AuthLoadingScreen: ScreenType = ({
 
             // Amplitudeに登録
             setAnalyticsUser(user, profile);
-            navigation.navigate('MainTabNavigator');
+            navigation.navigate('MainTab');
           } else {
             // ここに入る場合エラーどうするか;
-            navigation.navigate('AuthNavigator');
           }
         } else {
-          navigation.navigate('AuthNavigator');
+          navigation.navigate('Auth');
         }
       };
       f();
