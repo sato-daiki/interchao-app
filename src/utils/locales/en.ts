@@ -449,7 +449,7 @@ const modalCorrectingDone = {
 
 const modalDeleteAcount = {
   title: 'Delete Account',
-  text: 'Please enter your password and tap the “Confirm” button.',
+  text: 'Please enter your password and tap the “Delete Account” button.',
   button: 'Delete Account',
 };
 

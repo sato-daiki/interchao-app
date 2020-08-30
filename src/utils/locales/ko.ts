@@ -436,7 +436,7 @@ const modalCorrectingDone = {
 
 const modalDeleteAcount = {
   title: '회원 탈퇴',
-  text: '비밀번호를 입력하고 "확정" 버튼을 눌러주세요.',
+  text: '비밀번호를 입력하고 "탈퇴하기" 버튼을 눌러주세요.',
   button: '탈퇴하기',
 };
 
