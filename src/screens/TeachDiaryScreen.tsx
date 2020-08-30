@@ -245,7 +245,7 @@ const TeachDiaryScreen: ScreenType = ({
       setIsLoading(true);
 
       // 他の人が添削を開始していないかチェックする
-      const index = await Algolia.getDiaryIndex(true);
+      const index = await Algolia.getDiaryIndex();
       await Algolia.setSettings(index);
       const res = await index.search('', {
         filters: `objectID: ${teachDiary.objectID} AND (correctionStatus: correcting OR correctionStatus2: correcting OR correctionStatus3: correcting)`,

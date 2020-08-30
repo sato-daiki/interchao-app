@@ -25,10 +25,8 @@ class Algolia {
     }
   }
 
-  public getDiaryIndex = async (clean = false): Promise<SearchIndex> => {
-    if (clean) {
-      this.client.clearCache();
-    }
+  public getDiaryIndex = async (): Promise<SearchIndex> => {
+    this.client.clearCache();
     return this.client.initIndex(getIndexName());
   };
 

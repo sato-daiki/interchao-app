@@ -12,7 +12,7 @@ import {
 } from '../utils/common';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
-import { Profile, UserReview } from '../types';
+import { Profile } from '../types';
 import {
   DefaultNavigationOptions,
   DefaultAuthLayoutOptions,
@@ -38,14 +38,7 @@ export interface Props {
   profile: Profile;
 }
 
-interface DispatchProps {
-  setUser: (user: User) => void;
-  setProfile: (profile: Profile) => void;
-}
-
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
+type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
   navigationOptions:
     | NavigationStackOptions
     | ((props: NavigationStackScreenProps) => NavigationStackOptions);
@@ -84,12 +77,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({
-  navigation,
-  profile,
-  setUser,
-  setProfile,
-}): JSX.Element => {
+const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -111,7 +99,7 @@ const SignUpScreen: ScreenType = ({
   }, []);
 
   const createUser = useCallback(
-    (credentUser: firebase.User): void => {
+    (credentUser: firebase.User, loginMethod: string): void => {
       const userInfo = {
         premium: false,
         diaryPosted: false,
@@ -127,7 +115,7 @@ const SignUpScreen: ScreenType = ({
         lastModalAppSuggestionAt: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as User;
+      };
 
       const profileInfo = {
         name: null,
@@ -141,7 +129,7 @@ const SignUpScreen: ScreenType = ({
         introduction: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as Profile;
+      };
 
       const userReviewInfo = {
         ratingSum: 0,
@@ -149,7 +137,7 @@ const SignUpScreen: ScreenType = ({
         score: 0.0,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as UserReview;
+      };
 
       const batch = firebase.firestore().batch();
       batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
@@ -163,18 +151,10 @@ const SignUpScreen: ScreenType = ({
       );
       batch.commit();
 
-      setUser(userInfo);
-      setProfile(profileInfo);
+      track(events.CREATED_USER, { loginMethod });
+      navigation.navigate('MainTab');
     },
-    [
-      profile.learnLanguage,
-      profile.nationalityCode,
-      profile.nativeLanguage,
-      profile.spokenLanguages,
-      profile.userName,
-      setProfile,
-      setUser,
-    ]
+    [navigation, profile]
   );
 
   const onPressSkip = useCallback(() => {
@@ -184,8 +164,7 @@ const SignUpScreen: ScreenType = ({
       try {
         const credent = await firebase.auth().signInAnonymously();
         if (credent.user) {
-          createUser(credent.user);
-          track(events.CREATED_USER, { loginMethod: 'anonymously' });
+          createUser(credent.user, 'anonymously');
         }
       } catch (err) {
         emailInputError(
@@ -214,8 +193,7 @@ const SignUpScreen: ScreenType = ({
           .auth()
           .createUserWithEmailAndPassword(email, password);
         if (credent.user) {
-          createUser(credent.user);
-          track(events.CREATED_USER, { loginMethod: 'email' });
+          createUser(credent.user, 'email');
         }
       } catch (err) {
         emailInputError(

@@ -124,49 +124,46 @@ const MyDiaryListScreen: ScreenType = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getNewDiary = useCallback(
-    (clean: boolean) => {
-      const f = async (): Promise<void> => {
-        try {
-          const index = await Algolia.getDiaryIndex(clean);
-          await Algolia.setSettings(index);
-          const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
-            page: 0,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+  const getNewDiary = useCallback(() => {
+    const f = async (): Promise<void> => {
+      try {
+        const index = await Algolia.getDiaryIndex();
+        await Algolia.setSettings(index);
+        const res = await index.search('', {
+          filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
+          page: 0,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          const { hits, nbHits } = res;
-          setDiaries(hits as Diary[]);
-          setDiaryTotalNum(nbHits);
+        const { hits, nbHits } = res;
+        setDiaries(hits as Diary[]);
+        setDiaryTotalNum(nbHits);
 
-          // ユーザ情報も更新し直す（badgeのカウントの対応のため）
-          const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
-          if (newUnreadCorrectionNum !== null) {
-            if (Platform.OS === 'ios') {
-              Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
-            }
-            setLocalStatus({
-              ...localStatus,
-              unreadCorrectionNum: newUnreadCorrectionNum,
-            });
+        // ユーザ情報も更新し直す（badgeのカウントの対応のため）
+        const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
+        if (newUnreadCorrectionNum !== null) {
+          if (Platform.OS === 'ios') {
+            Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
           }
-        } catch (err) {
-          setIsLoading(false);
-          setRefreshing(false);
-          alert({ err });
+          setLocalStatus({
+            ...localStatus,
+            unreadCorrectionNum: newUnreadCorrectionNum,
+          });
         }
+      } catch (err) {
         setIsLoading(false);
-      };
-      f();
-    },
-    [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]
-  );
+        setRefreshing(false);
+        alert({ err });
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDiary(true);
+      await getNewDiary();
       setRefreshing(false);
     };
     f();
@@ -175,7 +172,7 @@ const MyDiaryListScreen: ScreenType = ({
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      await getNewDiary(false);
+      await getNewDiary();
       // push通知の設定
       await registerForPushNotificationsAsync(user.uid);
       addLisner(navigation, onRefresh);

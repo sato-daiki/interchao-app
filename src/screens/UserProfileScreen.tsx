@@ -112,33 +112,30 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     f();
   }, [setProfile, setLoadingProfile, navigation]);
 
-  const getNewDiary = useCallback(
-    (clean: boolean) => {
-      const f = async (): Promise<void> => {
-        if (!navigation.state.params) return;
-        try {
-          const { uid } = navigation.state.params;
-          const index = await Algolia.getDiaryIndex(clean);
-          await Algolia.setSettings(index);
-          const res = await index.search('', {
-            filters: `profile.uid: ${uid} AND diaryStatus: publish`,
-            page: 0,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+  const getNewDiary = useCallback(() => {
+    const f = async (): Promise<void> => {
+      if (!navigation.state.params) return;
+      try {
+        const { uid } = navigation.state.params;
+        const index = await Algolia.getDiaryIndex();
+        await Algolia.setSettings(index);
+        const res = await index.search('', {
+          filters: `profile.uid: ${uid} AND diaryStatus: publish`,
+          page: 0,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          setDiaries(res.hits as Diary[]);
-          setDiaryTotalNum(res.nbHits);
-        } catch (err) {
-          setLoadingDiary(false);
-          setRefreshing(false);
-          alert({ err });
-        }
+        setDiaries(res.hits as Diary[]);
+        setDiaryTotalNum(res.nbHits);
+      } catch (err) {
         setLoadingDiary(false);
-      };
-      f();
-    },
-    [navigation.state.params]
-  );
+        setRefreshing(false);
+        alert({ err });
+      }
+      setLoadingDiary(false);
+    };
+    f();
+  }, [navigation.state.params]);
 
   const getNewReview = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -173,7 +170,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       const resBlocker = await checkBlocker(currentUser.uid, params.uid);
       setIsBlocked(resBlocker);
       // データを取得していく
-      await Promise.all([getNewProfile(), getNewDiary(false), getNewReview()]);
+      await Promise.all([getNewProfile(), getNewDiary(), getNewReview()]);
     };
     f();
   }, [getNewDiary, getNewProfile, getNewReview, navigation.state]);
@@ -181,7 +178,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDiary(true);
+      await getNewDiary();
       setRefreshing(false);
     };
     f();

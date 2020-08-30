@@ -92,6 +92,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
           .signInWithEmailAndPassword(email, password);
         if (credent.user) {
           track(events.SIGN_IN);
+          navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -104,7 +105,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       }
     };
     f();
-  }, [email, password]);
+  }, [email, navigation, password]);
 
   const onPressForget = useCallback(() => {
     navigation.navigate('ForegetPassword');

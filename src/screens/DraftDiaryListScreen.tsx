@@ -100,13 +100,13 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftDiaryTotalNum, preOpendIndex, isEditing, onPressEdit]);
 
-  const getNewDraftDiary = useCallback((clean: boolean) => {
+  const getNewDraftDiary = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
         const { currentUser } = firebase.auth();
         if (!currentUser) return;
 
-        const index = await Algolia.getDiaryIndex(clean);
+        const index = await Algolia.getDiaryIndex();
         await Algolia.setSettings(index, 'updatedAt');
         const res = await index.search('', {
           filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
@@ -129,7 +129,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      await getNewDraftDiary(true);
+      await getNewDraftDiary();
     };
     f();
   }, [getNewDraftDiary]);
@@ -137,7 +137,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDraftDiary(true);
+      await getNewDraftDiary();
       setRefreshing(false);
     };
     f();

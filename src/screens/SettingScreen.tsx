@@ -70,12 +70,13 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
           return;
         }
         track(events.SIGN_OUT);
+        navigation.navigate('Auth');
       } catch (err) {
         alert({ err });
       }
     };
     f();
-  }, [currentUser]);
+  }, [currentUser, navigation]);
 
   return (
     <View style={styles.container}>
