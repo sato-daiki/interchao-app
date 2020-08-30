@@ -102,52 +102,54 @@ const TeachDiaryListScreen: ScreenType = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getNewDiary = useCallback(
-    (clean: boolean) => {
-      const f = async (): Promise<void> => {
-        try {
-          // ブロック一覧を取得する
-          const blockerUids = await getBlockers(user.uid);
-          const blockeeUids = await getBlockees(user.uid);
-          const uids = blockerUids.concat(blockeeUids);
+  const getNewDiary = useCallback(() => {
+    const f = async (): Promise<void> => {
+      try {
+        // ブロック一覧を取得する
+        const blockerUids = await getBlockers(user.uid);
+        const blockeeUids = await getBlockees(user.uid);
+        const uids = blockerUids.concat(blockeeUids);
 
-          const index = await Algolia.getDiaryIndex(clean);
-          await Algolia.setSettings(index);
+        const index = await Algolia.getDiaryIndex();
+        await Algolia.setSettings(index);
 
-          const fillterUids = getExceptUser(uids);
-          const fillterLanguages = getFillterLanguages(
-            profile.nativeLanguage,
-            profile.spokenLanguages
-          );
+        const fillterUids = getExceptUser(uids);
+        const fillterLanguages = getFillterLanguages(
+          profile.nativeLanguage,
+          profile.spokenLanguages
+        );
 
-          const filters = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
-          const res = await index.search('', {
-            filters,
-            page: 0,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+        const filters = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
+        const res = await index.search('', {
+          filters,
+          page: 0,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          // stateで保持
-          setBlockUids(uids);
+        // stateで保持
+        setBlockUids(uids);
 
-          // reduxで保持
-          setTeachDiaries(res.hits as Diary[]);
-        } catch (err) {
-          setIsLoading(false);
-          setRefreshing(false);
-          alert({ err });
-        }
+        // reduxで保持
+        setTeachDiaries(res.hits as Diary[]);
+      } catch (err) {
         setIsLoading(false);
-      };
-      f();
-    },
-    [profile.nativeLanguage, profile.spokenLanguages, setTeachDiaries, user.uid]
-  );
+        setRefreshing(false);
+        alert({ err });
+      }
+      setIsLoading(false);
+    };
+    f();
+  }, [
+    profile.nativeLanguage,
+    profile.spokenLanguages,
+    setTeachDiaries,
+    user.uid,
+  ]);
 
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      await getNewDiary(false);
+      await getNewDiary();
     };
     f();
   }, [getNewDiary]);
@@ -155,7 +157,7 @@ const TeachDiaryListScreen: ScreenType = ({
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDiary(true);
+      await getNewDiary();
       setRefreshing(false);
     };
     f();
