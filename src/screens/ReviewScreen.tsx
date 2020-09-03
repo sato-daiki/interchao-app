@@ -6,7 +6,7 @@ import {
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { borderLightColor, offWhite } from '../styles/Common';
+import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
 import {
   Space,
   HeaderRight,
@@ -56,6 +56,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 170,
     backgroundColor: offWhite,
+    textAlignVertical: 'top',
+    fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
   },
   keyboardAwareScrollView: {
     flex: 1,

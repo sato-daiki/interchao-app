@@ -50,10 +50,10 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: fontSizeM,
     color: primaryColor,
-    paddingLeft: 16,
-    paddingRight: 46,
-    paddingVertical: 14,
-    textAlignVertical: 'top',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
+
     backgroundColor: offWhite,
     borderRadius: 6,
     borderColor: borderLightColor,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   message: {
     height: 300,
-    paddingTop: 16,
+    textAlignVertical: 'top',
   },
   successContainer: {
     paddingTop: 32,
