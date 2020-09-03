@@ -76,8 +76,7 @@ firebase deploy --only hosting -P product
 
 ## メモ
 
-firebase deploy --only firestore:rules -P product
-expo publish --release-channel production
+firebase deploy --only firestore:rules -P default
 
 - master に merge する。（CircleCI でチェク OK なら次へ。結果は slack の develop チャンネルに返ってくる）
   https://github.com/interchao/interchao-app/compare/master...develop
