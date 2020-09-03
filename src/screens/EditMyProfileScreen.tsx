@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 32,
   },
   keyboardAwareScrollView: {
     flex: 1,
+    paddingTop: 32,
   },
   avatar: {
     alignItems: 'center',
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'web' ? 8 : 0,
   },
   introduction: {
+    textAlignVertical: 'top',
     paddingHorizontal: 16,
     // paddingとかくとpaddingTopがなぜか反応しない
     paddingTop: 16,

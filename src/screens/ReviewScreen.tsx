@@ -49,7 +49,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   review: {
-    padding: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingHorizontal: 16,
     borderBottomColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
     height: 170,

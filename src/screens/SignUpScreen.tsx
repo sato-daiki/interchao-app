@@ -35,7 +35,6 @@ import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
-  user: User;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -77,11 +76,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({
-  navigation,
-  profile,
-  user,
-}): JSX.Element => {
+const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -103,7 +98,7 @@ const SignUpScreen: ScreenType = ({
   }, []);
 
   const createUser = useCallback(
-    (credentUser: firebase.User, loginMethod: string): void => {
+    (credentUser: firebase.User): void => {
       const userInfo = {
         premium: false,
         diaryPosted: false,
@@ -111,7 +106,7 @@ const SignUpScreen: ScreenType = ({
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
         points: 100,
-        expoPushToken: user.expoPushToken || null,
+        expoPushToken: null,
         correctingObjectID: null,
         correctingCorrectedNum: null,
         notificationCorrection: true,
@@ -154,18 +149,13 @@ const SignUpScreen: ScreenType = ({
         userReviewInfo
       );
       batch.commit();
-
-      track(events.CREATED_USER, { loginMethod });
-      navigation.navigate('MainTab');
     },
     [
-      navigation,
       profile.learnLanguage,
       profile.nationalityCode,
       profile.nativeLanguage,
       profile.spokenLanguages,
       profile.userName,
-      user.expoPushToken,
     ]
   );
 
@@ -176,7 +166,9 @@ const SignUpScreen: ScreenType = ({
       try {
         const credent = await firebase.auth().signInAnonymously();
         if (credent.user) {
-          createUser(credent.user, 'anonymously');
+          createUser(credent.user);
+          track(events.CREATED_USER, 'anonymously');
+          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -205,7 +197,9 @@ const SignUpScreen: ScreenType = ({
           .auth()
           .createUserWithEmailAndPassword(email, password);
         if (credent.user) {
-          createUser(credent.user, 'email');
+          createUser(credent.user);
+          track(events.CREATED_USER, 'email');
+          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -266,7 +260,10 @@ const SignUpScreen: ScreenType = ({
     <KeyboardAwareScrollView style={styles.container}>
       <DefaultLayout>
         <View style={styles.main}>
-          <LoadingModal visible={isLoading} />
+          <LoadingModal
+            visible={isLoading}
+            // text="画面が切り替わらない場合はリロードしてください"
+          />
 
           <Text style={styles.title}>{I18n.t('signUp.title')}</Text>
           <Text style={styles.subText}>{I18n.t('signUp.subText')}</Text>

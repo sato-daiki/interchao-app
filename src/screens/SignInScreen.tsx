@@ -92,7 +92,11 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
           .signInWithEmailAndPassword(email, password);
         if (credent.user) {
           track(events.SIGN_IN);
-          navigation.navigate('MainTab');
+          // const user = await getUser(credent.user.uid);
+          // const profile = await getProfile(credent.user.uid);
+          // setUser(user);
+          // setProfile(profile);
+          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -105,7 +109,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       }
     };
     f();
-  }, [email, navigation, password]);
+  }, [email, password]);
 
   const onPressForget = useCallback(() => {
     navigation.navigate('ForegetPassword');
