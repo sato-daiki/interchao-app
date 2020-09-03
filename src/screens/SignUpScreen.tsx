@@ -11,8 +11,7 @@ import {
   emaillExistCheck,
 } from '../utils/common';
 import firebase from '../constants/firebase';
-import { User } from '../types/user';
-import { Profile } from '../types';
+import { Profile, User } from '../types';
 import {
   DefaultNavigationOptions,
   DefaultAuthLayoutOptions,
@@ -36,6 +35,7 @@ import DefaultLayout from '../components/template/DefaultLayout';
 
 export interface Props {
   profile: Profile;
+  user: User;
 }
 
 type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
@@ -77,7 +77,11 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
+const SignUpScreen: ScreenType = ({
+  navigation,
+  profile,
+  user,
+}): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -107,7 +111,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
         points: 100,
-        expoPushToken: null,
+        expoPushToken: user.expoPushToken || null,
         correctingObjectID: null,
         correctingCorrectedNum: null,
         notificationCorrection: true,
@@ -154,7 +158,15 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       track(events.CREATED_USER, { loginMethod });
       navigation.navigate('MainTab');
     },
-    [navigation, profile]
+    [
+      navigation,
+      profile.learnLanguage,
+      profile.nationalityCode,
+      profile.nativeLanguage,
+      profile.spokenLanguages,
+      profile.userName,
+      user.expoPushToken,
+    ]
   );
 
   const onPressSkip = useCallback(() => {
