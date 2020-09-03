@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   textInputDetail: {
     marginRight: 16,
-    lineHeight: fontSizeM * 1,
+    lineHeight: fontSizeM * 1.1,
     fontSize: fontSizeM,
     color: primaryColor,
   },

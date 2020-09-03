@@ -13,10 +13,12 @@ interface Props {
 
 const styles = StyleSheet.create({
   textInput: {
-    padding: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingHorizontal: 16,
     color: primaryColor,
     fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.7,
+    lineHeight: fontSizeM * 1.3,
     textAlignVertical: 'top',
     flex: 1,
     borderColor: borderLightColor,

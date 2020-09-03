@@ -51,7 +51,7 @@ const AutoHeightTextInput: React.FC<Props> = ({
 
   return (
     <TextInput
-      style={[styles.textInput, style, { height: scrollHeight || 100 }]}
+      style={[styles.textInput, style, { height: scrollHeight || undefined }]}
       defaultValue={defaultValue}
       placeholder={placeholder}
       value={value}
