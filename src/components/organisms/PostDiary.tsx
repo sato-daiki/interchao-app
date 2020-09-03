@@ -130,6 +130,7 @@ const PostDiary = ({
       toValue: 1,
       easing: Easing.back(1),
       duration: 400,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
