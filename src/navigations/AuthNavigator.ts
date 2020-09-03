@@ -2,7 +2,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { Platform } from 'react-native';
 /* screens */
 import InitializeWebScreen from '../screens/InitializeWebScreen';
-import InitializeNativeScreenContainer from '../containers/InitializeNativeScreenContainer';
+import InitializeNativeScreen from '../screens/InitializeNativeScreen';
 import SignUpScreenContainer from '../containers/SignUpScreenContainer';
 import SignInScreen from '../screens/SignInScreen';
 import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
@@ -54,7 +54,7 @@ export const createAuthTabNavigator = () => {
 
   return createStackNavigator({
     Initialize: {
-      screen: InitializeNativeScreenContainer,
+      screen: InitializeNativeScreen,
     },
     ...routeConfigMap,
   });

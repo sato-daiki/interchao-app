@@ -1,19 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  Platform,
-} from 'react-native';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
 } from 'react-navigation-stack';
-import { Notifications } from 'expo';
+import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-
+import { Subscription } from '@unimodules/core';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -26,10 +20,6 @@ import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
-import {
-  registerForPushNotificationsAsync,
-  addLisner,
-} from '../utils/Notification';
 import { updateUnread, updateYet } from '../utils/diary';
 import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
 import { getUnreadCorrectionNum } from '../utils/localStatus';
@@ -37,8 +27,11 @@ import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
-import { getEachOS } from '../utils/common';
 import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
+import {
+  getExpoPushToken,
+  registerForPushNotificationsAsync,
+} from '../utils/Notification';
 
 export interface Props {
   user: User;
@@ -100,6 +93,8 @@ const MyDiaryListScreen: ScreenType = ({
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
 
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
@@ -142,9 +137,7 @@ const MyDiaryListScreen: ScreenType = ({
         // ユーザ情報も更新し直す（badgeのカウントの対応のため）
         const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
         if (newUnreadCorrectionNum !== null) {
-          if (Platform.OS === 'ios') {
-            Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
-          }
+          Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
           setLocalStatus({
             ...localStatus,
             unreadCorrectionNum: newUnreadCorrectionNum,
@@ -173,11 +166,39 @@ const MyDiaryListScreen: ScreenType = ({
   useEffect(() => {
     const f = async (): Promise<void> => {
       await getNewDiary();
-      // push通知の設定
-      await registerForPushNotificationsAsync(user.uid);
-      addLisner(navigation, onRefresh);
+      // expoへの登録
+      const expoPushToken = await getExpoPushToken();
+      if (expoPushToken) {
+        registerForPushNotificationsAsync(user.uid, expoPushToken);
+      }
     };
     f();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      prm => {
+        console.log('addNotificationReceivedListener', prm);
+        onRefresh();
+      }
+    );
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      response => {
+        console.log('addNotificationResponseReceivedListener', response);
+        onRefresh();
+      }
+    );
+
+    return (): void => {
+      // @ts-ignore
+      Notifications.removeNotificationSubscription(notificationListener);
+      // @ts-ignore
+      Notifications.removeNotificationSubscription(responseListener);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -253,9 +274,7 @@ const MyDiaryListScreen: ScreenType = ({
           if (localStatus.unreadCorrectionNum) {
             const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
             // アプリの通知数を設定
-            if (Platform.OS === 'ios') {
-              Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
-            }
+            Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
             setLocalStatus({
               ...localStatus,
               unreadCorrectionNum: newUnreadCorrectionNum,
