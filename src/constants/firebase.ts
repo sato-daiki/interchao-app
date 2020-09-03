@@ -5,8 +5,7 @@ import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
   // @ts-ignore
-  // eslint-disable-next-line import/no-unresolved, import/extensions
-} from '../../envConfig';
+} from '@env';
 
 const isProduction = !__DEV__;
 const extraConfig = isProduction
