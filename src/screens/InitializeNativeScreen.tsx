@@ -8,14 +8,32 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {
-  NavigationStackScreenComponent,
   NavigationStackOptions,
+  NavigationStackScreenProps,
 } from 'react-navigation-stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
 import { LogoVercitacl } from '../images';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import { User } from '../types';
+import { getExpoPushToken } from '../utils/Notification';
+
+export interface Props {
+  user: User;
+}
+
+interface DispatchProps {
+  setUser: (user: User) => void;
+}
+
+type ScreenType = React.ComponentType<
+  Props & DispatchProps & NavigationStackScreenProps
+> & {
+  navigationOptions:
+    | NavigationStackOptions
+    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+};
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -60,12 +78,17 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeNativeScreen: NavigationStackScreenComponent = ({
-  navigation,
-}) => {
+const InitializeNativeScreen: ScreenType = ({ user, setUser, navigation }) => {
   useEffect((): void => {
-    track(events.OPENED_INITIALIZE);
-  }, []);
+    const f = async (): Promise<void> => {
+      track(events.OPENED_INITIALIZE);
+      const expoPushToken = await getExpoPushToken();
+      if (expoPushToken) {
+        setUser({ ...user, expoPushToken });
+      }
+    };
+    f();
+  }, [setUser, user]);
 
   const onPressSignIn = useCallback((): void => {
     navigation.navigate('SignIn');
