@@ -1,5 +1,4 @@
 import React, { useEffect, useCallback } from 'react';
-import { View } from 'react-native';
 import {
   NavigationStackOptions,
   NavigationStackScreenProps,
@@ -9,6 +8,7 @@ import { getUser } from '../utils/user';
 import { getProfile } from '../utils/profile';
 import { initAnalytics, setAnalyticsUser } from '../utils/Analytics';
 import { Profile, User } from '../types';
+import { LoadingModal } from '../components/atoms';
 
 interface Props {
   setUser: (user: User) => void;
@@ -65,7 +65,7 @@ const AuthLoadingScreen: ScreenType = ({
     firebase.auth().onAuthStateChanged(initNavigation);
   }, [initNavigation]);
 
-  return <View />;
+  return <LoadingModal visible />;
 };
 
 AuthLoadingScreen.navigationOptions = (): NavigationStackOptions => ({
