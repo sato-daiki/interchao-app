@@ -5,20 +5,21 @@ import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
-// import Updates from 'expo-updates';
-import { Updates } from 'expo';
+import Updates from 'expo-updates';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { createAppNavigator } from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
-import I18n from './utils/I18n';
+// import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
-import { ModalConfirm } from './components/organisms';
+// import { registerForPushNotificationsAsync } from './utils/Notification';
+// import { ModalConfirm } from './components/organisms';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['Remote debugger']);
 
 const { store, persistor } = configureStore();
 
@@ -35,14 +36,13 @@ if (!firebase.apps.length) {
 }
 
 const App: React.SFC = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
   const checkUpdate = async (): Promise<void> => {
     if (__DEV__ || Platform.OS === 'web') return;
 
     const update = await Updates.checkForUpdateAsync();
     if (update.isAvailable) {
-      setIsVisible(true);
+      await Updates.fetchUpdateAsync();
+      Updates.reloadAsync();
     }
   };
 
@@ -62,13 +62,6 @@ const App: React.SFC = () => {
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
           <MenuProvider>
-            <ModalConfirm
-              visible={isVisible}
-              title={I18n.t('app.updateTitle')}
-              message={I18n.t('app.updateMessage')}
-              mainButtonText={I18n.t('app.updateOk')}
-              onPressMain={(): void => Updates.reload()}
-            />
             <AppNavigator />
           </MenuProvider>
         </ActionSheetProvider>
