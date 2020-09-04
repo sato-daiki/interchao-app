@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   emailInputError,
   emailValidate,
@@ -12,10 +15,6 @@ import {
 } from '../utils/common';
 import firebase from '../constants/firebase';
 import { Profile, User } from '../types';
-import {
-  DefaultNavigationOptions,
-  DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import {
   Space,
@@ -32,16 +31,13 @@ import {
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<AuthStackParamList, 'SignUp'> & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +72,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
+const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -179,14 +175,18 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         );
         setIsLoading(false);
       }
+      setIsLoading(false);
     };
     f();
   }, [clearErrorMessage, createUser]);
 
-  useEffect(() => {
-    navigation.setParams({ onPressSkip });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
+      ),
+    });
+  }, [navigation, onPressSkip]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -311,18 +311,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       </DefaultLayout>
     </KeyboardAwareScrollView>
   );
-};
-
-SignUpScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  const onPressSkip = navigation.getParam('onPressSkip');
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultAuthLayoutOptions,
-    title: I18n.t('signUp.headerTitle'),
-    headerRight: (): JSX.Element => (
-      <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
-    ),
-  };
 };
 
 export default SignUpScreen;

@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import {
-  NavigationStackScreenComponent,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
 import {
   subTextColor,
@@ -13,12 +10,17 @@ import {
   borderLightColor,
   softRed,
 } from '../styles/Common';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { ModalConfirm } from '../components/organisms';
+import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
+
+type ScreenType = StackScreenProps<
+  MyPageTabStackParamList & AuthStackParamList,
+  'DeleteAcount'
+>;
 
 const styles = StyleSheet.create({
   container: {
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const DeleteAcountScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isPasswordInput, setIsPasswordInput] = useState(false);
@@ -61,7 +63,8 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
   const [errorPassword, setErrorPassword] = useState('');
 
   const afterDeleteUser = useCallback(() => {
-    navigation.navigate('Auth');
+    // TODO reduxの削除
+    navigation.navigate('Initialize');
   }, [navigation]);
 
   const onPressDelete1 = useCallback(() => {
@@ -156,13 +159,6 @@ const DeleteAcountScreen: NavigationStackScreenComponent = ({ navigation }) => {
       </View>
     </View>
   );
-};
-
-DeleteAcountScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('deleteAcount.headerTitle'),
-  };
 };
 
 export default DeleteAcountScreen;

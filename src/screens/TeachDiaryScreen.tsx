@@ -13,10 +13,6 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import {
@@ -24,14 +20,11 @@ import {
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
+import { StackScreenProps } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection, ModalConfirm } from '../components/organisms';
-import {
-  DefaultNavigationOptions,
-  DefaultDiaryOptions,
-} from '../constants/NavigationOptions';
 import {
   LoadingModal,
   SubmitButton,
@@ -56,6 +49,10 @@ import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
 import { appShare } from '../utils/common';
 import TeachDiaryMenu from '../components/web/organisms/TeachDiaryMenu';
+import {
+  TeachDiaryTabStackParamList,
+  ModalCorrectingStackParamList,
+} from '../navigations/MainTabNavigator';
 
 export interface Props {
   user: User;
@@ -68,13 +65,12 @@ interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<
+  TeachDiaryTabStackParamList & ModalCorrectingStackParamList,
+  'TeachDiary'
+> &
+  Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -133,7 +129,7 @@ const styles = StyleSheet.create({
 /**
  * 日記詳細
  */
-const TeachDiaryScreen: ScreenType = ({
+const TeachDiaryScreen: React.FC<ScreenType> = ({
   user,
   profile,
   navigation,
@@ -236,7 +232,7 @@ const TeachDiaryScreen: ScreenType = ({
       await Promise.all([getNewProfile(), getNewCorrection()]);
     };
     f();
-  }, [getNewCorrection, getNewProfile, navigation.state.params]);
+  }, [getNewCorrection, getNewProfile]);
 
   const onPressSubmitCorrection = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -342,12 +338,21 @@ const TeachDiaryScreen: ScreenType = ({
 
   useEffect(() => {
     if (!teachDiary) return;
-    navigation.setParams({
-      onPressMore,
-      onPressAppShare,
+    navigation.setOptions({
       title: teachDiary.title,
-      isDesktopOrLaptopDevice,
+      // headerRight: (): JSX.Element =>
+      //   isDesktopOrLaptopDevice ? (
+      //     <TeachDiaryMenu onPressAppShare={onPressAppShare} />
+      //   ) : (
+      //     <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+      //   ),
+      // TODO: シェア機能ができてから
+      headerRight: (): JSX.Element | null =>
+        Platform.OS === 'web' ? null : (
+          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+        ),
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [teachDiary]);
 
@@ -508,33 +513,6 @@ const TeachDiaryScreen: ScreenType = ({
       </ScrollView>
     </View>
   );
-};
-
-TeachDiaryScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const title = navigation.getParam('title');
-  const onPressMore = navigation.getParam('onPressMore');
-  const onPressAppShare = navigation.getParam('onPressAppShare');
-  const isDesktopOrLaptopDevice = navigation.getParam(
-    'isDesktopOrLaptopDevice'
-  );
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultDiaryOptions,
-    title,
-    // headerRight: (): JSX.Element =>
-    //   isDesktopOrLaptopDevice ? (
-    //     <TeachDiaryMenu onPressAppShare={onPressAppShare} />
-    //   ) : (
-    //     <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-    //   ),
-    // TODO: シェア機能ができてから
-    headerRight: (): JSX.Element | null =>
-      Platform.OS === 'web' ? null : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-      ),
-  };
 };
 
 export default connectActionSheet(TeachDiaryScreen);

@@ -1,16 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Keyboard, BackHandler, Alert } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { HeaderRight, HeaderLeft } from '../components/atoms';
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
@@ -21,6 +14,11 @@ import {
 } from '../utils/diary';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import {
+  ModalPostDiaryStackParamList,
+  MyDiaryTabStackParamList,
+  TeachDiaryTabStackParamList,
+} from '../navigations/MainTabNavigator';
 
 export interface Props {
   user: User;
@@ -32,18 +30,19 @@ interface DispatchProps {
   addDiary: (diary: Diary) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<
+  ModalPostDiaryStackParamList &
+    MyDiaryTabStackParamList &
+    TeachDiaryTabStackParamList,
+  'ModalPostDiary'
+> &
+  Props &
+  DispatchProps;
 
 /**
  * 概要：日記投稿画面
  */
-const PostDiaryScreen: ScreenType = ({
+const PostDiaryScreen: React.FC<ScreenType> = ({
   navigation,
   user,
   profile,
@@ -123,7 +122,7 @@ const PostDiaryScreen: ScreenType = ({
     if (title.length > 0 || text.length > 0) {
       setIsModalCancel(true);
     } else {
-      navigation.goBack(null);
+      navigation.goBack();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text.length, title.length]);
@@ -145,13 +144,24 @@ const PostDiaryScreen: ScreenType = ({
   }, [profile.learnLanguage, text, title, user.points]);
 
   useEffect(() => {
-    navigation.setParams({
-      points: user.points,
-      onPressClose,
-      onPressDraft,
-      onPressPublic,
+    navigation.setOptions({
+      headerLeft: (): JSX.Element => (
+        <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
+      ),
+      headerRight: (): JSX.Element => {
+        if (user.points >= 10) {
+          return (
+            <HeaderRight
+              text={I18n.t('common.publish')}
+              onPress={onPressPublic}
+            />
+          );
+        }
+        return (
+          <HeaderRight text={I18n.t('common.draft')} onPress={onPressDraft} />
+        );
+      },
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
 
@@ -169,7 +179,7 @@ const PostDiaryScreen: ScreenType = ({
           {
             text: 'OK',
             onPress: (): void => {
-              navigation.goBack(null);
+              navigation.goBack();
             },
           },
         ]
@@ -247,7 +257,7 @@ const PostDiaryScreen: ScreenType = ({
 
   const onPressNotSave = useCallback((): void => {
     setIsModalCancel(false);
-    navigation.goBack(null);
+    navigation.goBack();
   }, [navigation]);
 
   const onPressTutorial = useCallback((): void => {
@@ -303,37 +313,6 @@ const PostDiaryScreen: ScreenType = ({
       onPressCloseError={onPressCloseError}
     />
   );
-};
-
-PostDiaryScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressClose = navigation.getParam('onPressClose');
-  const onPressPublic = navigation.getParam('onPressPublic');
-  const onPressDraft = navigation.getParam('onPressDraft');
-  const points = navigation.getParam('points');
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultModalLayoutOptions,
-    title: I18n.t('postDiary.headerTitle'),
-    headerLeft: (): JSX.Element => (
-      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
-    ),
-    headerRight: (): JSX.Element => {
-      if (points >= 10) {
-        return (
-          <HeaderRight
-            text={I18n.t('common.publish')}
-            onPress={onPressPublic}
-          />
-        );
-      }
-      return (
-        <HeaderRight text={I18n.t('common.draft')} onPress={onPressDraft} />
-      );
-    },
-  };
 };
 
 export default PostDiaryScreen;

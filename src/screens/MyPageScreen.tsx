@@ -1,10 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
+import { StackScreenProps } from '@react-navigation/stack';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile, UserReview, User } from '../types';
 import {
@@ -21,17 +17,21 @@ import {
 } from '../components/molecules';
 import { getUserReview } from '../utils/userReview';
 import I18n from '../utils/I18n';
+import {
+  MyPageTabStackParamList,
+  ModalEditMyProfileStackParamList,
+} from '../navigations/MainTabNavigator';
 
 export interface Props {
   profile: Profile;
   user: User;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<
+  MyPageTabStackParamList & ModalEditMyProfileStackParamList,
+  'MyPage'
+> &
+  Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
 /**
  * マイページ
  */
-const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
+const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
 
   const {
@@ -80,8 +80,13 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
 
   useEffect(() => {
     const f = async (): Promise<void> => {
-      navigation.setParams({
-        onPressSetting: () => navigation.navigate('Setting'),
+      navigation.setOptions({
+        headerRight: (): JSX.Element => (
+          <HeaderRight
+            name="settings"
+            onPress={(): void => navigation.navigate('Setting')}
+          />
+        ),
       });
       const newUserReivew = await getUserReview(uid);
       setUserReview(newUserReivew);
@@ -125,17 +130,6 @@ const MyPageScreen: ScreenType = ({ navigation, profile, user }) => {
       ) : null}
     </View>
   );
-};
-
-MyPageScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  const onPressSetting = navigation.getParam('onPressSetting');
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('myPage.headerTitle'),
-    headerRight: (): JSX.Element => (
-      <HeaderRight name="settings" onPress={onPressSetting} />
-    ),
-  };
 };
 
 export default MyPageScreen;

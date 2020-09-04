@@ -7,11 +7,8 @@ import {
   Platform,
 } from 'react-native';
 import { split } from 'sentence-splitter';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   HeaderLeft,
   HeaderButton,
@@ -22,10 +19,6 @@ import { CorrectingHeader, KeyboardHideButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
 
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
 import { User, Diary, Profile, Correction, TextInfo, Diff } from '../types';
 import I18n from '../utils/I18n';
 import { getUsePoints } from '../utils/diary';
@@ -39,6 +32,10 @@ import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
 import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
+import {
+  ModalCorrectingStackParamList,
+  TeachDiaryTabStackParamList,
+} from '../navigations/MainTabNavigator';
 
 export interface Props {
   user: User;
@@ -51,6 +48,13 @@ interface DispatchProps {
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
 
+type ScreenType = StackScreenProps<
+  ModalCorrectingStackParamList & TeachDiaryTabStackParamList,
+  'Correcting'
+> &
+  Props &
+  DispatchProps;
+
 type Info =
   | {
       fix: string | null;
@@ -59,14 +63,6 @@ type Info =
   | {
       detail: string | null;
     };
-
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -88,7 +84,7 @@ const styles = StyleSheet.create({
 /**
  * 添削中
  */
-const CorrectingScreen: ScreenType = ({
+const CorrectingScreen: React.FC<ScreenType> = ({
   navigation,
   user,
   currentProfile,
@@ -250,10 +246,18 @@ const CorrectingScreen: ScreenType = ({
    * ヘッダーに初期値設定
    */
   useEffect(() => {
-    navigation.setParams({
-      isFirstEdit,
-      onPressClose,
-      onPressSubmitButton,
+    navigation.setOptions({
+      headerLeft: (): JSX.Element => (
+        <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
+      ),
+      headerRight: (): JSX.Element | null =>
+        isFirstEdit ? (
+          <HeaderButton
+            title={I18n.t('correcting.titleDone')}
+            color={mainColor}
+            onPress={onPressSubmitButton}
+          />
+        ) : null,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFirstEdit, onPressSubmitButton]);
@@ -430,31 +434,6 @@ const CorrectingScreen: ScreenType = ({
       </SafeAreaView>
     </DefaultLayout>
   );
-};
-
-CorrectingScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const isFirstEdit = navigation.getParam('isFirstEdit');
-  const onPressSubmitButton = navigation.getParam('onPressSubmitButton');
-  const onPressClose = navigation.getParam('onPressClose');
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultModalLayoutOptions,
-    title: I18n.t('correcting.headerTitle'),
-    headerLeft: (): JSX.Element => (
-      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
-    ),
-    headerRight: (): JSX.Element | null =>
-      isFirstEdit ? (
-        <HeaderButton
-          title={I18n.t('correcting.titleDone')}
-          color={mainColor}
-          onPress={onPressSubmitButton}
-        />
-      ) : null,
-  };
 };
 
 export default CorrectingScreen;

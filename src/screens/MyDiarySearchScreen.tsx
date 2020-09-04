@@ -1,22 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
 import I18n from '../utils/I18n';
 import { getClient } from '../utils/Algolia';
 import { getIndexName } from '../utils/common';
+import { MyDiaryTabStackParamList } from '../navigations/MainTabNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<MyDiaryTabStackParamList, 'MyDiarySearch'>;
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +21,7 @@ const styles = StyleSheet.create({
 
 const searchClient = getClient();
 
-const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
+const MyDiarySerchScreen: React.FC<ScreenType> = ({ navigation }) => {
   const { currentUser } = firebase.auth();
   const [isEmpty, setIsEmpty] = useState(true);
 
@@ -58,9 +52,5 @@ const MyDiarySerchScreen: ScreenType = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-MyDiarySerchScreen.navigationOptions = (): NavigationStackOptions => ({
-  headerShown: false,
-});
 
 export default MyDiarySerchScreen;

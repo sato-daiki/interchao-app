@@ -1,11 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, Keyboard } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackScreenProps } from '@react-navigation/stack';
 import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
 import {
   Space,
@@ -14,16 +11,13 @@ import {
   HeaderLeft,
 } from '../components/atoms';
 import { UserListItem } from '../components/molecules';
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
 import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
+import { ModalReviewStackParamList } from '../navigations/MainTabNavigator';
 
 export interface Props {
   diary?: Diary;
@@ -34,13 +28,9 @@ interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<ModalReviewStackParamList, 'Review'> &
+  Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -65,8 +55,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const ReviewScreen: ScreenType = ({
+const ReviewScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   diary,
   profile,
   editDiary,
@@ -82,7 +73,7 @@ const ReviewScreen: ScreenType = ({
     if (rating > 0 || comment.length > 0) {
       setIsModalConfirmation(true);
     } else {
-      navigation.goBack(null);
+      navigation.goBack();
     }
   }, [comment.length, navigation, rating]);
 
@@ -97,13 +88,13 @@ const ReviewScreen: ScreenType = ({
       setIsModalError(true);
       return;
     }
-    if (!navigation.state.params) return;
+    if (!route.params) return;
 
     setIsLoading(true);
     const batch = firebase.firestore().batch();
     const refDiary = firebase.firestore().doc(`diaries/${diary.objectID}`);
 
-    const { correctedNum } = navigation.state.params;
+    const { correctedNum } = route.params;
 
     let data;
     let revieweeUid = '';
@@ -167,7 +158,7 @@ const ReviewScreen: ScreenType = ({
       ...data,
     });
 
-    navigation.goBack(null);
+    navigation.goBack();
     setIsLoading(false);
   }, [
     comment,
@@ -181,12 +172,17 @@ const ReviewScreen: ScreenType = ({
     profile.uid,
     profile.userName,
     rating,
+    route.params,
   ]);
 
   useEffect(() => {
-    navigation.setParams({
-      onPressSubmit,
-      onPressClose,
+    navigation.setOptions({
+      headerLeft: (): JSX.Element => (
+        <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
+      ),
+      headerRight: (): JSX.Element => (
+        <HeaderRight text={I18n.t('common.sending')} onPress={onPressSubmit} />
+      ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rating, comment]);
@@ -200,7 +196,7 @@ const ReviewScreen: ScreenType = ({
           message={I18n.t('errorMessage.notFound')}
           mainButtonText={I18n.t('common.close')}
           onPressMain={(): void => {
-            navigation.goBack(null);
+            navigation.goBack();
           }}
         />
       </View>
@@ -224,7 +220,7 @@ const ReviewScreen: ScreenType = ({
           message={I18n.t('review.confirmation')}
           mainButtonText="OK"
           onPressMain={(): void => {
-            navigation.goBack(null);
+            navigation.goBack();
           }}
           onPressClose={(): void => {
             setIsModalConfirmation(false);
@@ -262,20 +258,4 @@ const ReviewScreen: ScreenType = ({
   );
 };
 
-ReviewScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  const onPressSubmit = navigation.getParam('onPressSubmit');
-  const onPressClose = navigation.getParam('onPressClose');
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultModalLayoutOptions,
-    title: I18n.t('review.headerTitle'),
-    headerLeft: (): JSX.Element => (
-      <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
-    ),
-    headerRight: (): JSX.Element => (
-      <HeaderRight text={I18n.t('common.sending')} onPress={onPressSubmit} />
-    ),
-  };
-};
 export default ReviewScreen;

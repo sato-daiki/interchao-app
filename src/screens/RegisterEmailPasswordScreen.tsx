@@ -1,17 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   emailInputError,
   emailValidate,
   emaillExistCheck,
 } from '../utils/common';
 import firebase from '../constants/firebase';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import {
@@ -21,12 +17,12 @@ import {
   subTextColor,
 } from '../styles/Common';
 import I18n from '../utils/I18n';
+import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<
+  MyPageTabStackParamList,
+  'RegisterEmailPassword'
+>;
 
 const styles = StyleSheet.create({
   container: {
@@ -58,7 +54,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RegisterEmailPasswordScreen: ScreenType = ({
+const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({
   navigation,
 }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
@@ -203,13 +199,6 @@ const RegisterEmailPasswordScreen: ScreenType = ({
       </View>
     </KeyboardAwareScrollView>
   );
-};
-
-RegisterEmailPasswordScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('registerEmailPassword.headerTitle'),
-  };
 };
 
 export default RegisterEmailPasswordScreen;
