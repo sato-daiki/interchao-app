@@ -1,13 +1,9 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextInput } from 'react-native-gesture-handler';
+import { StackScreenProps } from '@react-navigation/stack';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import firebase from '../constants/firebase';
 import { Profile, Inquiry as InquiryType } from '../types';
 import I18n from '../utils/I18n';
@@ -21,16 +17,13 @@ import {
 } from '../styles/Common';
 import { alert } from '../utils/ErrorAlert';
 import { ModalConfirm } from '../components/organisms';
+import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<MyPageTabStackParamList, 'Inquiry'> & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -85,7 +78,7 @@ const styles = StyleSheet.create({
 /**
  * 添削中
  */
-const InquiryScreen: ScreenType = ({ navigation, profile }) => {
+const InquiryScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -216,13 +209,6 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
       )}
     </KeyboardAwareScrollView>
   );
-};
-
-InquiryScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('inquiry.headerTitle'),
-  };
 };
 
 export default InquiryScreen;

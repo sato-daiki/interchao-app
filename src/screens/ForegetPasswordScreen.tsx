@@ -1,15 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import { emailInputError, emailValidate } from '../utils/common';
 import firebase from '../constants/firebase';
-import {
-  DefaultNavigationOptions,
-  DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import {
@@ -21,12 +14,13 @@ import {
 import ModalSendEmail from '../components/organisms/ModalSendEmail';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
+import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<
+  AuthStackParamList | MyPageTabStackParamList,
+  'ForegetPassword'
+>;
 
 const styles = StyleSheet.create({
   container: {
@@ -53,7 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
+const ForegetPasswordScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [email, setEmail] = useState('');
@@ -98,7 +92,9 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
         <LoadingModal visible={isLoading} />
         <ModalSendEmail
           visible={isModal}
-          onPressClose={(): boolean => navigation.goBack()}
+          onPressClose={(): void => {
+            navigation.goBack();
+          }}
         />
         <Text style={styles.title}>{I18n.t('foregetPassword.title')}</Text>
         <Text style={styles.subText}>{I18n.t('foregetPassword.subText')}</Text>
@@ -126,14 +122,6 @@ const ForegetPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       </View>
     </DefaultLayout>
   );
-};
-
-ForegetPasswordScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultAuthLayoutOptions,
-    title: I18n.t('foregetPassword.headerTitle'),
-  };
 };
 
 export default ForegetPasswordScreen;

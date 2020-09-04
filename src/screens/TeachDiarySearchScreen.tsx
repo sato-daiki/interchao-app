@@ -1,10 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
@@ -15,16 +12,17 @@ import { LoadingModal } from '../components/atoms';
 import I18n from '../utils/I18n';
 import { getClient } from '../utils/Algolia';
 import { getIndexName } from '../utils/common';
+import { TeachDiaryTabStackParamList } from '../navigations/MainTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<
+  TeachDiaryTabStackParamList,
+  'TeachDiarySearch'
+> &
+  Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -35,7 +33,10 @@ const styles = StyleSheet.create({
 
 const searchClient = getClient();
 
-const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
+const TeachDiarySerchScreen: React.FC<ScreenType> = ({
+  profile,
+  navigation,
+}) => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState('');
@@ -91,9 +92,5 @@ const TeachDiarySerchScreen: ScreenType = ({ profile, navigation }) => {
     </SafeAreaView>
   );
 };
-
-TeachDiarySerchScreen.navigationOptions = (): NavigationStackOptions => ({
-  headerShown: false,
-});
 
 export default TeachDiarySerchScreen;

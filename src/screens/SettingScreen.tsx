@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import {
-  NavigationStackScreenComponent,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
 import {
   subTextColor,
@@ -15,12 +12,18 @@ import {
 } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
 import { Space } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getVersionText } from '../utils/common';
 import { ModalConfirm } from '../components/organisms';
+import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
+
+type ScreenType = StackScreenProps<
+  MyPageTabStackParamList & AuthStackParamList,
+  'Setting'
+>;
 
 const styles = StyleSheet.create({
   container: {
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const SettingScreen: React.FC<ScreenType> = ({ navigation }) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -70,7 +73,8 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
           return;
         }
         track(events.SIGN_OUT);
-        navigation.navigate('Auth');
+        // TODO Authへ飛ばして、reduxを消す
+        navigation.navigate('Initialize');
       } catch (err) {
         alert({ err });
       }
@@ -158,13 +162,6 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <Text style={styles.versionText}>{getVersionText()}</Text>
     </View>
   );
-};
-
-SettingScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('setting.headerTitle'),
-  };
 };
 
 export default SettingScreen;
