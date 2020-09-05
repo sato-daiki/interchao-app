@@ -8,7 +8,7 @@ import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import I18n from '../utils/I18n';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import { MyPageTabStackParamList } from '../navigations/MainNavigator';
 
 type ScreenType = StackScreenProps<MyPageTabStackParamList, 'EditPassword'>;
 

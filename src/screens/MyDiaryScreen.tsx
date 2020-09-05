@@ -20,7 +20,8 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
 import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
@@ -46,9 +47,9 @@ import I18n from '../utils/I18n';
 import RichText from '../components/organisms/RichText';
 import MyDiaryMenu from '../components/web/organisms/MyDiaryMenu';
 import {
+  MyDiaryTabNavigationProp,
   MyDiaryTabStackParamList,
-  ModalReviewStackParamList,
-} from '../navigations/MainTabNavigator';
+} from '../navigations/MyDiaryTabNavigator';
 
 export interface Props {
   diary?: Diary;
@@ -60,11 +61,14 @@ interface DispatchProps {
   deleteDiary: (objectID: string) => void;
 }
 
-type ScreenType = StackScreenProps<
-  MyDiaryTabStackParamList & ModalReviewStackParamList,
-  'MyDiary'
-> &
-  Props &
+type MyDiaryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'MyDiary'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyDiaryNavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({
@@ -238,7 +242,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         }}
         onPressReview={(): void => {
           if (!diary.objectID) return;
-          navigation.navigate('Review', {
+          navigation.navigate('ModalReview', {
             objectID: diary.objectID,
             correctedNum,
           });

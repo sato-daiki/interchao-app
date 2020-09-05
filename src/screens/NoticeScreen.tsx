@@ -1,12 +1,16 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { offWhite } from '../styles/Common';
 import { CheckItem } from '../components/molecules';
 import { User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyPageTabNavigationProp,
+  MyPageTabStackParamList,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   user: User;
@@ -16,8 +20,14 @@ interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-type ScreenType = StackScreenProps<MyPageTabStackParamList, 'Notice'> &
-  Props &
+type NoticeNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'Notice'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NoticeNavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({

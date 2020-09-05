@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
@@ -22,10 +23,10 @@ import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryLi
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import TeachDiaryListMenu from '../components/organisms/TeachDiaryListMenu';
-import TeachDiaryListMenuWebPc from '../components/web/organisms/TeachDiaryListMenu';
-
-import { primaryColor } from '../styles/Common';
-import { TeachDiaryTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  TeachDiaryTabNavigationProp,
+  TeachDiaryTabStackParamList,
+} from '../navigations/TeachDiaryTabNavigator';
 
 export interface Props {
   profile: Profile;
@@ -38,8 +39,14 @@ interface DispatchProps {
   setTeachDiaries: (teachDiaries: Diary[]) => void;
 }
 
-type ScreenType = StackScreenProps<TeachDiaryTabStackParamList, 'TeachDiary'> &
-  Props &
+type TeachDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<TeachDiaryTabStackParamList, 'TeachDiaryList'>,
+  TeachDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: TeachDiaryListNavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({

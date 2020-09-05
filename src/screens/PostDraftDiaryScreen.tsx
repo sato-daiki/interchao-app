@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Keyboard, BackHandler, Alert } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 
@@ -15,11 +16,9 @@ import {
 } from '../utils/diary';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import {
-  ModalPostDraftDiaryStackParamList,
-  MyDiaryTabStackParamList,
-  TeachDiaryTabStackParamList,
-} from '../navigations/MainTabNavigator';
+import { MainStackParamList } from '../navigations/MainNavigator';
+import { MyDiaryListNavigationProp } from './MyDiaryListScreen';
+import { TeachDiaryTabNavigationProp } from '../navigations/TeachDiaryTabNavigator';
 
 export interface Props {
   user: User;
@@ -31,13 +30,17 @@ interface DispatchProps {
   addDiary: (diary: Diary) => void;
 }
 
-type ScreenType = StackScreenProps<
-  ModalPostDraftDiaryStackParamList &
-    MyDiaryTabStackParamList &
-    TeachDiaryTabStackParamList,
-  'PostDraftDiary'
-> &
-  Props &
+type ModalPostDraftDiaryStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalPostDraftDiary'
+>;
+
+type ScreenType = {
+  navigation: ModalPostDraftDiaryStackNavigationProp &
+    TeachDiaryTabNavigationProp &
+    MyDiaryListNavigationProp;
+  route: RouteProp<MainStackParamList, 'ModalPostDraftDiary'>;
+} & Props &
   DispatchProps;
 
 /**
@@ -281,7 +284,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       learnLanguage={profile.learnLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
-        navigation.navigate('TeachDiaryList');
+        navigation.navigate('TeachDiaryTab');
       }}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}

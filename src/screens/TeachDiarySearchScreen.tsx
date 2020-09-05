@@ -1,7 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
@@ -12,17 +13,23 @@ import { LoadingModal } from '../components/atoms';
 import I18n from '../utils/I18n';
 import { getClient } from '../utils/Algolia';
 import { getIndexName } from '../utils/common';
-import { TeachDiaryTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  TeachDiaryTabNavigationProp,
+  TeachDiaryTabStackParamList,
+} from '../navigations/TeachDiaryTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = StackScreenProps<
-  TeachDiaryTabStackParamList,
-  'TeachDiarySearch'
-> &
-  Props;
+type TeachDiaryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<TeachDiaryTabStackParamList, 'TeachDiarySearch'>,
+  TeachDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: TeachDiaryNavigationProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {

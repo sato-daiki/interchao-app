@@ -1,16 +1,27 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';
 import DiaryHitList from '../components/organisms/DiaryHitList';
 import I18n from '../utils/I18n';
 import { getClient } from '../utils/Algolia';
 import { getIndexName } from '../utils/common';
-import { MyDiaryTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyDiaryTabStackParamList,
+  MyDiaryTabNavigationProp,
+} from '../navigations/MyDiaryTabNavigator';
 
-type ScreenType = StackScreenProps<MyDiaryTabStackParamList, 'MyDiarySearch'>;
+type MyDiarySearchNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'MyDiarySearch'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyDiarySearchNavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {

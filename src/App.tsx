@@ -8,7 +8,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 import Updates from 'expo-updates';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import { createAppNavigator } from './navigations/AppNavigator';
+import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
@@ -49,12 +49,6 @@ const App: React.SFC = () => {
   useEffect(() => {
     checkUpdate();
   }, []);
-
-  const isTabletOrMobileDevice = useMediaQuery({
-    maxDeviceWidth: 1224,
-  });
-
-  const AppNavigator = createAppNavigator(isTabletOrMobileDevice);
 
   return (
     <Provider store={store}>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { emailInputError, emailValidate } from '../utils/common';
 import firebase from '../constants/firebase';
 import { CheckTextInput } from '../components/molecules';
@@ -15,12 +16,22 @@ import ModalSendEmail from '../components/organisms/ModalSendEmail';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyPageTabStackParamList,
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
 
-type ScreenType = StackScreenProps<
-  AuthStackParamList | MyPageTabStackParamList,
-  'ForegetPassword'
+type SettingNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<
+    MyPageTabStackParamList | AuthStackParamList,
+    'ForegetPassword'
+  >,
+  MyPageTabNavigationProp
 >;
+
+type ScreenType = {
+  navigation: SettingNavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import {
   subTextColor,
@@ -14,13 +15,19 @@ import { track, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
+import {
+  MyPageTabNavigationProp,
+  MyPageTabStackParamList,
+} from '../navigations/MyPageTabNavigator';
 
-type ScreenType = StackScreenProps<
-  MyPageTabStackParamList & AuthStackParamList,
-  'DeleteAcount'
+type DeleteAcountNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'DeleteAcount'>,
+  MyPageTabNavigationProp
 >;
+
+type ScreenType = {
+  navigation: DeleteAcountNavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {

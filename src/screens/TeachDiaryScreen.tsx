@@ -20,7 +20,8 @@ import {
   useActionSheet,
 } from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
@@ -48,11 +49,10 @@ import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
 import { appShare } from '../utils/common';
-import TeachDiaryMenu from '../components/web/organisms/TeachDiaryMenu';
 import {
   TeachDiaryTabStackParamList,
-  ModalCorrectingStackParamList,
-} from '../navigations/MainTabNavigator';
+  TeachDiaryTabNavigationProp,
+} from '../navigations/TeachDiaryTabNavigator';
 
 export interface Props {
   user: User;
@@ -65,11 +65,14 @@ interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-type ScreenType = StackScreenProps<
-  TeachDiaryTabStackParamList & ModalCorrectingStackParamList,
-  'TeachDiary'
-> &
-  Props &
+type TeachDiaryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<TeachDiaryTabStackParamList, 'TeachDiary'>,
+  TeachDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: TeachDiaryNavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({
@@ -326,7 +329,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       batch.commit();
       track(events.CREATED_CORRECTING);
       setIsModalCorrection(false);
-      navigation.navigate('Correcting', { objectID: teachDiary.objectID });
+      navigation.navigate('ModalCorrecting', { objectID: teachDiary.objectID });
       setIsLoading(false);
     };
     f();
@@ -502,7 +505,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
             correction2={correction2}
             correction3={correction3}
             onPressUser={(uid: string): void => {
-              navigation.push('UserProfile', { uid });
+              navigation.navigate('UserProfile', { uid });
             }}
             nativeLanguage={profile.nativeLanguage}
             textLanguage={teachDiary.profile.learnLanguage}
