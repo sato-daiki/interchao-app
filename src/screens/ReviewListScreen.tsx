@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { firestore } from 'firebase';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { Review, Profile } from '../types';
 import { LoadingModal, GrayHeader } from '../components/atoms';
 import { getReviews } from '../utils/review';
@@ -9,13 +10,26 @@ import ReviewListItem from '../components/organisms/ReviewListItem';
 import { EmptyReview } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { CommonStackParamList } from '../navigations/MainTabNavigator';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = StackScreenProps<CommonStackParamList, 'ReviewList'> & Props;
+type ReviewListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CommonStackParamList, 'ReviewList'>,
+  CommonNavigationProp
+>;
+
+type ReviewListRouteProp = RouteProp<CommonStackParamList, 'ReviewList'>;
+
+type ScreenType = {
+  navigation: ReviewListNavigationProp;
+  route: ReviewListRouteProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {

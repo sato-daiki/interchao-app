@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   emailInputError,
   emailValidate,
@@ -17,12 +18,19 @@ import {
   subTextColor,
 } from '../styles/Common';
 import I18n from '../utils/I18n';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
-
-type ScreenType = StackScreenProps<
+import {
   MyPageTabStackParamList,
-  'RegisterEmailPassword'
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
+
+type RegisterEmailPasswordNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'RegisterEmailPassword'>,
+  MyPageTabNavigationProp
 >;
+
+type ScreenType = {
+  navigation: RegisterEmailPasswordNavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   emailInputError,
   emailValidate,
@@ -12,9 +13,19 @@ import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import { primaryColor, fontSizeM, fontSizeL } from '../styles/Common';
 import I18n from '../utils/I18n';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyPageTabStackParamList,
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
 
-type ScreenType = StackScreenProps<MyPageTabStackParamList, 'EditEmail'>;
+type EditEmailNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'EditEmail'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: EditEmailNavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {

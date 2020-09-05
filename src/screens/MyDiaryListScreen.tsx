@@ -4,7 +4,8 @@ import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { Subscription } from '@unimodules/core';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -25,7 +26,10 @@ import {
   getExpoPushToken,
   registerForPushNotificationsAsync,
 } from '../utils/Notification';
-import { MyDiaryTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyDiaryTabStackParamList,
+  MyDiaryTabNavigationProp,
+} from '../navigations/MyDiaryTabNavigator';
 
 export interface Props {
   user: User;
@@ -43,8 +47,14 @@ interface DispatchProps {
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
-type ScreenType = StackScreenProps<MyDiaryTabStackParamList, 'MyDiaryList'> &
-  Props &
+type MyDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'MyDiaryList'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyDiaryListNavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({
@@ -99,7 +109,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   }, [navigation]);
 
   // 第二引数をなしにするのがポイント
-  useEffect(() => {
+  React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: (): JSX.Element => (
         <SearchBarButton
@@ -117,7 +127,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
           />
         ),
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

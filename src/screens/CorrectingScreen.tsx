@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { split } from 'sentence-splitter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   HeaderLeft,
   HeaderButton,
@@ -32,15 +32,13 @@ import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
 import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
-import {
-  ModalCorrectingStackParamList,
-  TeachDiaryTabStackParamList,
-} from '../navigations/MainTabNavigator';
+import { MainStackParamList } from '../navigations/MainNavigator';
+import { TeachDiaryTabNavigationProp } from '../navigations/TeachDiaryTabNavigator';
 
 export interface Props {
   user: User;
   currentProfile: Profile;
-  teachDiary: Diary;
+  teachDiary?: Diary;
 }
 
 interface DispatchProps {
@@ -48,11 +46,14 @@ interface DispatchProps {
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
 
-type ScreenType = StackScreenProps<
-  ModalCorrectingStackParamList & TeachDiaryTabStackParamList,
-  'Correcting'
-> &
-  Props &
+type ModalCorrectingStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalCorrecting'
+>;
+
+type ScreenType = {
+  navigation: ModalCorrectingStackNavigationProp & TeachDiaryTabNavigationProp;
+} & Props &
   DispatchProps;
 
 type Info =
@@ -118,6 +119,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
   const [isFirstEdit, setIsFirstEdit] = useState(false);
 
   const initTextsInfo = useCallback((): void => {
+    if (!teachDiary) return;
     const splitTexts = split(teachDiary.text);
     const newTextInfos = splitTexts
       .filter(i => i.raw.trim().length > 0)
@@ -131,7 +133,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
         };
       });
     setTextInfos(newTextInfos);
-  }, [teachDiary.text]);
+  }, [teachDiary]);
 
   /**
    * 閉じる処理
@@ -194,13 +196,15 @@ const CorrectingScreen: React.FC<ScreenType> = ({
       await Promise.all([getNewProfile(), getNewCorrection()]);
     };
     f();
-  }, [getNewCorrection, getNewProfile, initTextsInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * 完了する
    */
   const onPressSubmitButton = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (!teachDiary) return;
       const comments = textInfos.filter(item => item.diffs !== null);
       if (comments.length === 0) {
         setIsModalNoComment(true);
@@ -266,7 +270,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('TeachDiaryList');
+    navigation.navigate('TeachDiaryTab');
     setIsModalDone(false);
   }, [navigation]);
 
@@ -275,6 +279,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    */
   const onTimeUp = useCallback(() => {
     const f = async (): Promise<void> => {
+      if (!teachDiary) return;
       await onUpdateTimeUp(
         teachDiary,
         user,
@@ -291,18 +296,13 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * タイムアップ後のアラート画面での遷移
    */
   const onPressCloseTimeUp = useCallback(() => {
-    navigation.navigate('TeachDiaryList');
+    navigation.navigate('TeachDiaryTab');
   }, [navigation]);
 
   /* キーボード閉じる */
   const onHideKeyboard = (): void => {
     setIsKeyboard(false);
   };
-
-  const getPoints = getUsePoints(
-    teachDiary.text.length,
-    teachDiary.profile.learnLanguage
-  );
 
   const editText = useCallback(
     (index: number, info: Info): void => {
@@ -320,33 +320,37 @@ const CorrectingScreen: React.FC<ScreenType> = ({
     [textInfos]
   );
 
-  type RenderItemProps = { item: TextInfo; index: number };
-  const renderItem = useCallback(
-    ({ item, index }: RenderItemProps): JSX.Element => {
-      return (
-        <CorrectingListItem
-          item={item}
-          editText={(info: Info): void => editText(index, info)}
-          editFirst={(): void => setIsFirstEdit(true)}
-          onHideKeyboard={onHideKeyboard}
-        />
-      );
-    },
-    [editText]
+  if (!teachDiary) {
+    return null;
+  }
+
+  const getPoints = getUsePoints(
+    teachDiary.text.length,
+    teachDiary.profile.learnLanguage
   );
 
-  const listHeaderComponent = useCallback(() => {
+  type RenderItemProps = { item: TextInfo; index: number };
+  const renderItem = ({ item, index }: RenderItemProps): JSX.Element => {
     return (
-      <View style={styles.header}>
-        <CorrectingHeader
-          isProfileLoading={isProfileLoading}
-          teachDiary={teachDiary}
-          targetProfile={targetProfile}
-          onTimeUp={onTimeUp}
-        />
-      </View>
+      <CorrectingListItem
+        item={item}
+        editText={(info: Info): void => editText(index, info)}
+        editFirst={(): void => setIsFirstEdit(true)}
+        onHideKeyboard={onHideKeyboard}
+      />
     );
-  }, [isProfileLoading, teachDiary, targetProfile, onTimeUp]);
+  };
+
+  const listHeaderComponent = (
+    <View style={styles.header}>
+      <CorrectingHeader
+        isProfileLoading={isProfileLoading}
+        teachDiary={teachDiary}
+        targetProfile={targetProfile}
+        onTimeUp={onTimeUp}
+      />
+    </View>
+  );
 
   const renderSummary = (): JSX.Element | null => {
     if (!isFirstEdit) return null;

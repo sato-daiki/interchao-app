@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { offWhite } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
 import TutorialPostDiary from '../components/organisms/TutorialPostDiary';
 import TutorialPoints from '../components/organisms/TutorialPoints';
 import I18n from '../utils/I18n';
 import { Profile } from '../types';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyPageTabStackParamList,
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = StackScreenProps<MyPageTabStackParamList, 'TutorialList'> &
-  Props;
+type TutorialListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'TutorialList'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: TutorialListNavigationProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {

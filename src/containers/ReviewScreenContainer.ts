@@ -1,18 +1,18 @@
 import { connect } from 'react-redux';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { RouteProp } from '@react-navigation/native';
 import { editDiary } from '../stores/actions/diaryList';
 import { State } from '../types/state';
 import ReviewScreen, { Props } from '../screens/ReviewScreen';
+import { MainStackParamList } from '../navigations/MainNavigator';
 
 interface OwnProps {
-  navigation: NavigationStackProp;
+  route: RouteProp<MainStackParamList, 'ModalReview'>;
 }
 
 const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
   const { diaries } = state.rootReducer.diaryList;
   const { profile } = state.rootReducer;
-
-  const objectID = ownProps.navigation.getParam('objectID');
+  const objectID = ownProps.route.params?.objectID;
   const diary = diaries.find(d => d.objectID === objectID);
   return {
     diary,

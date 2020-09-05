@@ -6,7 +6,8 @@ import {
   Text,
   ActivityIndicator,
 } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
 import { Profile, Correction, Diary } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
@@ -23,13 +24,26 @@ import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
-import { CommonStackParamList } from '../navigations/MainTabNavigator';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = StackScreenProps<CommonStackParamList, 'UserDiary'> & Props;
+type UserDiaryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CommonStackParamList, 'UserDiary'>,
+  CommonNavigationProp
+>;
+
+type UserDiaryRouteProp = RouteProp<CommonStackParamList, 'UserDiary'>;
+
+type ScreenType = {
+  navigation: UserDiaryNavigationProp;
+  route: UserDiaryRouteProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {

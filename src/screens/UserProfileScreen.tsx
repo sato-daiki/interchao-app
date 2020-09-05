@@ -15,7 +15,8 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
 import { Space, GrayHeader, HeaderRight } from '../components/atoms';
@@ -41,9 +42,22 @@ import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import UserProfileMenu from '../components/web/organisms/UserProfileMenu';
 import ModalReport from '../components/web/organisms/ModalReport';
-import { CommonStackParamList } from '../navigations/MainTabNavigator';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
 
-type ScreenType = StackScreenProps<CommonStackParamList, 'UserProfile'>;
+type UserProfileNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CommonStackParamList, 'UserProfile'>,
+  CommonNavigationProp
+>;
+
+type UserProfileRouteProp = RouteProp<CommonStackParamList, 'UserProfile'>;
+
+type ScreenType = {
+  navigation: UserProfileNavigationProp;
+  route: UserProfileRouteProp;
+};
 
 const styles = StyleSheet.create({
   container: {

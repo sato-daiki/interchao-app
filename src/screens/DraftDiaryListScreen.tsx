@@ -14,7 +14,8 @@ import {
   Animated,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
@@ -25,13 +26,17 @@ import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import {
   MyDiaryTabStackParamList,
-  ModalPostDraftDiaryStackParamList,
-} from '../navigations/MainTabNavigator';
+  MyDiaryTabNavigationProp,
+} from '../navigations/MyDiaryTabNavigator';
 
-type ScreenType = StackScreenProps<
-  MyDiaryTabStackParamList & ModalPostDraftDiaryStackParamList,
-  'DraftDiaryList'
+type DraftDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'DraftDiaryList'>,
+  MyDiaryTabNavigationProp
 >;
+
+type ScreenType = {
+  navigation: DraftDiaryListNavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -191,7 +196,7 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
 
   const onPressItem = useCallback(
     item => {
-      navigation.navigate('PostDraftDiary', { item });
+      navigation.navigate('ModalPostDraftDiary', { item });
     },
     [navigation]
   );

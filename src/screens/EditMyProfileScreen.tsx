@@ -10,7 +10,7 @@ import {
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import {
   borderLightColor,
   primaryColor,
@@ -39,10 +39,8 @@ import {
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
-import {
-  ModalEditMyProfileStackParamList,
-  MyPageTabStackParamList,
-} from '../navigations/MainTabNavigator';
+import { MainStackParamList } from '../navigations/MainNavigator';
+import { MyPageTabNavigationProp } from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   profile: Profile;
@@ -51,12 +49,14 @@ export interface Props {
 interface DispatchProps {
   setProfile: (profile: Profile) => {};
 }
+type ModalEditMyProfileStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalEditMyProfile'
+>;
 
-type ScreenType = StackScreenProps<
-  ModalEditMyProfileStackParamList & MyPageTabStackParamList,
-  'EditMyProfile'
-> &
-  Props &
+type ScreenType = {
+  navigation: ModalEditMyProfileStackNavigationProp & MyPageTabNavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({
@@ -222,7 +222,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
         ...profile,
         ...profileInfo,
       });
-      navigation.navigate('MyPage');
+      navigation.navigate('MyPageTab');
     };
     f();
   }, [
@@ -281,7 +281,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
 
   const onPressUserName = useCallback(() => {
     // 次ページのuserNameは最終更新でないためstateで渡す
-    navigation.navigate('EditUserName', {
+    navigation.navigate('ModalEditUserName', {
       userName,
       setUserName: (text: string): void => setUserName(text),
     });

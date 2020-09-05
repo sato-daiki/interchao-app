@@ -2,7 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextInput } from 'react-native-gesture-handler';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import firebase from '../constants/firebase';
 import { Profile, Inquiry as InquiryType } from '../types';
@@ -17,13 +18,23 @@ import {
 } from '../styles/Common';
 import { alert } from '../utils/ErrorAlert';
 import { ModalConfirm } from '../components/organisms';
-import { MyPageTabStackParamList } from '../navigations/MainTabNavigator';
+import {
+  MyPageTabNavigationProp,
+  MyPageTabStackParamList,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = StackScreenProps<MyPageTabStackParamList, 'Inquiry'> & Props;
+type InquiryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'Inquiry'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: InquiryNavigationProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {

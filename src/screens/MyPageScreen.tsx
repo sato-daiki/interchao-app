@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile, UserReview, User } from '../types';
 import {
@@ -19,19 +20,22 @@ import { getUserReview } from '../utils/userReview';
 import I18n from '../utils/I18n';
 import {
   MyPageTabStackParamList,
-  ModalEditMyProfileStackParamList,
-} from '../navigations/MainTabNavigator';
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   profile: Profile;
   user: User;
 }
 
-type ScreenType = StackScreenProps<
-  MyPageTabStackParamList & ModalEditMyProfileStackParamList,
-  'MyPage'
-> &
-  Props;
+type MyPageNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'MyPage'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyPageNavigationProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -96,7 +100,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
   }, [uid]);
 
   const onPressEdit = useCallback(() => {
-    navigation.navigate('EditMyProfile');
+    navigation.navigate('ModalEditMyProfile');
   }, [navigation]);
 
   return (
