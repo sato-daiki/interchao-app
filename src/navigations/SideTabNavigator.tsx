@@ -88,7 +88,7 @@ const TabNavigator = ({
   );
 };
 
-export const createMyNavigator = createNavigatorFactory<
+export const createSideTabNavigator = createNavigatorFactory<
   TabNavigationState,
   TabNavigationOptions,
   TabNavigationEventMap,

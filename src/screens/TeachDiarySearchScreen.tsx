@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { InstantSearch, Configure } from 'react-instantsearch-native';
-import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import SearchBar from '../components/organisms/SearchBar';

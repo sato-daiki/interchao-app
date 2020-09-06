@@ -4,10 +4,10 @@ import { setUser } from '../stores/actions/user';
 import CorrectingScreen, { Props } from '../screens/CorrectingScreen';
 import { State } from '../types/state';
 import { editTeachDiary } from '../stores/actions/teachDiaryList';
-import { MainStackParamList } from '../navigations/MainNavigator';
+import { ModalCorrectingStackParamList } from '../navigations/ModalNavigator';
 
 interface OwnProps {
-  route: RouteProp<MainStackParamList, 'ModalCorrecting'>;
+  route: RouteProp<ModalCorrectingStackParamList, 'Correcting'>;
 }
 
 const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
@@ -16,6 +16,7 @@ const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
 
   const objectID = ownProps.route.params?.objectID;
   const teachDiary = teachDiaries.find(d => d.objectID === objectID);
+
   return {
     user,
     currentProfile: profile,

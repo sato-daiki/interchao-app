@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import {
   checkDuplicatedUserName,
   checkTypeUserName,
@@ -13,20 +13,23 @@ import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
-import { MainStackParamList } from '../navigations/MainNavigator';
+import {
+  ModalEditMyProfileStackNavigationProp,
+  ModalEditMyProfileStackParamList,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ModalEditUserNameStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalEditUserName'
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalEditMyProfileStackParamList, 'EditUserName'>,
+  ModalEditMyProfileStackNavigationProp
 >;
 
 type ScreenType = {
-  navigation: ModalEditUserNameStackNavigationProp;
-  route: RouteProp<MainStackParamList, 'ModalEditUserName'>;
+  navigation: NavigationProp;
+  route: RouteProp<ModalEditMyProfileStackParamList, 'EditUserName'>;
 } & Props;
 
 const styles = StyleSheet.create({

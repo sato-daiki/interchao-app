@@ -100,7 +100,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
   }, [uid]);
 
   const onPressEdit = useCallback(() => {
-    navigation.navigate('ModalEditMyProfile');
+    navigation.navigate('ModalEditMyProfile', { screen: 'EditMyProfile' });
   }, [navigation]);
 
   return (

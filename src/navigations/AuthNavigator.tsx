@@ -47,8 +47,6 @@ export const AuthNavigator = (): JSX.Element => {
         options={{
           ...DefaultAuthLayoutOptions,
           title: I18n.t('selectLanguage.headerTitle'),
-          // TODO: Web直す必要あり
-          // headerShown: false,
         }}
       />
       <Stack.Screen

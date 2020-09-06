@@ -1,30 +1,26 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
-/* screens */
-import ReviewScreenContainer from '../containers/ReviewScreenContainer';
-import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
-import EditMyProfileScreenContainer from '../containers/EditMyProfileScreenContainer';
-import EditUserNameScreenContainer from '../containers/EditUserNameScreenContainer';
-import PostDraftDiaryScreenContainer from '../containers/PostDraftDiaryScreenContainer';
-import CorrectingScreenContainer from '../containers/CorrectingScreenContainer';
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
 import HomeBottomTabNavigator from './HomeBottomTabNavigator';
-import I18n from '../utils/I18n';
 
 import { Diary } from '../types';
+import {
+  ModalPostDiaryNavigator,
+  ModalPostDraftDiaryNavigator,
+  ModalEditMyProfileNavigator,
+  ModalReviewNavigator,
+  ModalCorrectingNavigator,
+} from './ModalNavigator';
 
 export type MainStackParamList = {
-  Home: undefined;
-  ModalPostDiary: undefined;
-  ModalEditMyProfile: undefined;
-  ModalEditUserName: { userName: string; setUserName: (text: string) => void };
-  ModalPostDraftDiary: { item: Diary };
-  ModalCorrecting: { objectID: string };
-  ModalReview: { objectID: string; correctedNum: number };
+  Home: { screen: string };
+  ModalPostDiary: { screen: string };
+  ModalPostDraftDiary: { screen: string; params: { item: Diary } };
+  ModalEditMyProfile: { screen: string };
+  ModalCorrecting: { screen: string; params: { objectID: string } };
+  ModalReview: {
+    screen: string;
+    params: { objectID: string; correctedNum: number };
+  };
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -33,7 +29,7 @@ const MainNavigator = (): JSX.Element => {
   return (
     <MainStack.Navigator
       initialRouteName="Home"
-      // headerMode="none"
+      headerMode="none"
       mode="modal"
       screenOptions={{
         cardStyle: {
@@ -41,64 +37,23 @@ const MainNavigator = (): JSX.Element => {
         },
       }}
     >
-      <MainStack.Screen
-        name="Home"
-        component={HomeBottomTabNavigator}
-        options={{ headerShown: false }}
-      />
+      <MainStack.Screen name="Home" component={HomeBottomTabNavigator} />
       <MainStack.Screen
         name="ModalPostDiary"
-        component={PostDiaryScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('postDiary.headerTitle'),
-        }}
+        component={ModalPostDiaryNavigator}
       />
       <MainStack.Screen
         name="ModalPostDraftDiary"
-        component={PostDraftDiaryScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('postDraftDiary.headerTitle'),
-        }}
+        component={ModalPostDraftDiaryNavigator}
       />
-      <MainStack.Screen
-        name="ModalReview"
-        component={ReviewScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('review.headerTitle'),
-        }}
-      />
+      <MainStack.Screen name="ModalReview" component={ModalReviewNavigator} />
       <MainStack.Screen
         name="ModalEditMyProfile"
-        component={EditMyProfileScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('editMyProfile.headerTitle'),
-        }}
-      />
-      <MainStack.Screen
-        name="ModalEditUserName"
-        component={EditUserNameScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('editUserName.headerTitle'),
-        }}
+        component={ModalEditMyProfileNavigator}
       />
       <MainStack.Screen
         name="ModalCorrecting"
-        component={CorrectingScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('correcting.headerTitle'),
-        }}
+        component={ModalCorrectingNavigator}
       />
     </MainStack.Navigator>
   );

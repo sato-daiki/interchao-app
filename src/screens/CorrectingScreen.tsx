@@ -9,6 +9,7 @@ import {
 import { split } from 'sentence-splitter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   HeaderLeft,
   HeaderButton,
@@ -32,8 +33,11 @@ import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
 import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
-import { MainStackParamList } from '../navigations/MainNavigator';
 import { TeachDiaryTabNavigationProp } from '../navigations/TeachDiaryTabNavigator';
+import {
+  ModalCorrectingStackNavigationProp,
+  ModalCorrectingStackParamList,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   user: User;
@@ -46,13 +50,13 @@ interface DispatchProps {
   editTeachDiary: (objectID: string, diary: Diary) => void;
 }
 
-type ModalCorrectingStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalCorrecting'
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalCorrectingStackParamList, 'Correcting'>,
+  ModalCorrectingStackNavigationProp
 >;
 
 type ScreenType = {
-  navigation: ModalCorrectingStackNavigationProp & TeachDiaryTabNavigationProp;
+  navigation: NavigationProp;
 } & Props &
   DispatchProps;
 
@@ -270,7 +274,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('TeachDiaryTab');
+    navigation.navigate('Home', { screen: 'TeachDiaryTab' });
     setIsModalDone(false);
   }, [navigation]);
 
@@ -296,7 +300,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * タイムアップ後のアラート画面での遷移
    */
   const onPressCloseTimeUp = useCallback(() => {
-    navigation.navigate('TeachDiaryTab');
+    navigation.navigate('Home', { screen: 'TeachDiaryTab' });
   }, [navigation]);
 
   /* キーボード閉じる */

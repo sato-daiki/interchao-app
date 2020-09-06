@@ -329,7 +329,10 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       batch.commit();
       track(events.CREATED_CORRECTING);
       setIsModalCorrection(false);
-      navigation.navigate('ModalCorrecting', { objectID: teachDiary.objectID });
+      navigation.navigate('ModalCorrecting', {
+        screen: 'Correcting',
+        params: { objectID: teachDiary.objectID },
+      });
       setIsLoading(false);
     };
     f();

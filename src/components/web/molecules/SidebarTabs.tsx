@@ -158,14 +158,14 @@ const SidebarTabs = ({ state, navigation }): JSX.Element => {
         <SubmitButton
           title={I18n.t('mainTab.postDiary')}
           onPress={(): void => {
-            navigation.navigate('ModalPostDiary');
+            navigation.navigate('ModalPostDiary', { screen: 'PostDiary' });
           }}
         />
       ) : (
         <TouchableOpacity
           style={styles.post}
           onPress={(): void => {
-            navigation.navigate('ModalPostDiary');
+            navigation.navigate('ModalPostDiary', { screen: 'PostDiary' });
           }}
         >
           <MaterialCommunityIcons name="pencil" size={25} color="#fff" />

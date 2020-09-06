@@ -196,7 +196,10 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
 
   const onPressItem = useCallback(
     item => {
-      navigation.navigate('ModalPostDraftDiary', { item });
+      navigation.navigate('ModalPostDraftDiary', {
+        screen: 'PostDraftDiary',
+        params: { item },
+      });
     },
     [navigation]
   );
