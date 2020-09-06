@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import I18n from '../utils/I18n';
 
 /* screens */
 import ReviewScreenContainer from '../containers/ReviewScreenContainer';
@@ -14,6 +13,8 @@ import {
   DefaultModalLayoutOptions,
 } from '../constants/NavigationOptions';
 import HomeBottomTabNavigator from './HomeBottomTabNavigator';
+import I18n from '../utils/I18n';
+
 import { Diary } from '../types';
 
 export type MainStackParamList = {

@@ -168,12 +168,12 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
   const [errorMessage, setErrorMessage] = useState('');
 
   // TODO: web
-  // useEffect(() => {
-  //   navigation.setParams({
-  //     headerDissabele: Platform.OS === 'web' && countryVisible,
-  //   });
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [countryVisible]);
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: !(Platform.OS === 'web' && countryVisible),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countryVisible]);
 
   const onPressCloseError = (): void => {
     setErrorMessage('');

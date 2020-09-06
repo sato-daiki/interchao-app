@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import '@expo/match-media';
+import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { mainColor } from '../styles/Common';
@@ -11,6 +12,7 @@ import MyDiaryTabNavigator from './MyDiaryTabNavigator';
 import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
+import { createMyNavigator } from './SidebarTabNavigator';
 
 export type HomeBottomNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -23,8 +25,27 @@ export type HomeBottomParamList = {
   TeachDiaryTab: undefined;
   MyPageTab: undefined;
 };
-const HomeBottom = createBottomTabNavigator<HomeBottomParamList>();
+
 const HomeBottomTabNavigator = (): JSX.Element => {
+  const isTabletOrMobileDevice = useMediaQuery({
+    maxDeviceWidth: 1224,
+  });
+
+  if (isTabletOrMobileDevice) {
+    const HomeSide = createMyNavigator<HomeBottomParamList>();
+    return (
+      <HomeSide.Navigator initialRouteName="MyDiaryTab">
+        <HomeSide.Screen name="MyDiaryTab" component={MyDiaryTabNavigator} />
+        <HomeSide.Screen
+          name="TeachDiaryTab"
+          component={TeachDiaryTabNavigator}
+        />
+        <HomeSide.Screen name="MyPageTab" component={MyPageTabNavigator} />
+      </HomeSide.Navigator>
+    );
+  }
+
+  const HomeBottom = createBottomTabNavigator<HomeBottomParamList>();
   return (
     <HomeBottom.Navigator tabBarOptions={{ activeTintColor: mainColor }}>
       <HomeBottom.Screen

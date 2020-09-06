@@ -14,7 +14,6 @@ import {
   DefaultAuthLayoutOptions,
 } from '../constants/NavigationOptions';
 import I18n from '../utils/I18n';
-import { HeaderRight } from '../components/atoms';
 
 export type AuthStackParamList = {
   Initialize: undefined;
@@ -25,67 +24,38 @@ export type AuthStackParamList = {
   ForegetPassword: undefined;
 };
 
-// modalにしないとwebの時背景が白くならない
-// const ModalAuthNavigator = createStackNavigator(routeConfigMap);
-
 const Stack = createStackNavigator<AuthStackParamList>();
 
-export const createAuthTabNavigator = () => {
-  // if (Platform.OS === 'web') {
-  //   return createStackNavigator(
-  //     {
-  //       Initialize: {
-  //         screen: InitializeWebScreen,
-  //       },
-  //       ModalAuth: {
-  //         screen: ModalAuthNavigator,
-  //       },
-  //     },
-  //     {
-  //       headerMode: 'none',
-  //       mode: 'modal',
-  //       defaultNavigationOptions: {
-  //         cardStyle: {
-  //           backgroundColor: '#FFFFFF',
-  //         },
-  //       },
-  //     }
-  //   );
-  // }
-  // return createStackNavigator({
-  //   Initialize: {
-  //     screen: InitializeNativeScreen,
-  //   },
-  //   ...routeConfigMap,
-  // });
-};
-
-const AuthNavigator = (): JSX.Element => {
+export const AuthNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator
       initialRouteName="Initialize"
       screenOptions={{
         ...DefaultNavigationOptions,
-        ...DefaultAuthLayoutOptions,
       }}
     >
       <Stack.Screen
         name="Initialize"
-        component={InitializeNativeScreen}
+        component={
+          Platform.OS === 'web' ? InitializeWebScreen : InitializeNativeScreen
+        }
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SelectLanguage"
         component={SelectLanguageScreenContainer}
         options={{
+          ...DefaultAuthLayoutOptions,
           title: I18n.t('selectLanguage.headerTitle'),
           // TODO: Web直す必要あり
+          // headerShown: false,
         }}
       />
       <Stack.Screen
         name="InputUserName"
         component={InputUserNameScreenContainer}
         options={{
+          ...DefaultAuthLayoutOptions,
           title: I18n.t('inputUserName.headerTitle'),
         }}
       />
@@ -93,6 +63,7 @@ const AuthNavigator = (): JSX.Element => {
         name="SignIn"
         component={SignInScreen}
         options={{
+          ...DefaultAuthLayoutOptions,
           title: I18n.t('signIn.headerTitle'),
           // TODO: Web直す必要あり
         }}
@@ -101,6 +72,7 @@ const AuthNavigator = (): JSX.Element => {
         name="SignUp"
         component={SignUpScreenContainer}
         options={{
+          ...DefaultAuthLayoutOptions,
           title: I18n.t('signUp.headerTitle'),
         }}
       />
@@ -108,6 +80,7 @@ const AuthNavigator = (): JSX.Element => {
         name="ForegetPassword"
         component={ForegetPasswordScreen}
         options={{
+          ...DefaultAuthLayoutOptions,
           title: I18n.t('foregetPassword.headerTitle'),
         }}
       />

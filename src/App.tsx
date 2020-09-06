@@ -6,8 +6,6 @@ import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
 import Updates from 'expo-updates';
-import '@expo/match-media';
-import { useMediaQuery } from 'react-responsive';
 import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
