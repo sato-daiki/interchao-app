@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 20;
+const HIT_PER_PAGE = 10;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 

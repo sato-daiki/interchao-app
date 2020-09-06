@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   keyboardAwareScrollView: {
     flex: 1,
-    paddingTop: 32,
+    paddingVertical: 32,
   },
   avatar: {
     alignItems: 'center',
