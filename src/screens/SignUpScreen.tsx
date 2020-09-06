@@ -37,7 +37,13 @@ export interface Props {
   profile: Profile;
 }
 
-type ScreenType = StackScreenProps<AuthStackParamList, 'SignUp'> & Props;
+interface DispatchProps {
+  signIn: (uid: string) => void;
+}
+
+type ScreenType = StackScreenProps<AuthStackParamList, 'SignUp'> &
+  Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -72,7 +78,11 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
+const SignUpScreen: React.FC<ScreenType> = ({
+  navigation,
+  profile,
+  signIn,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -95,56 +105,63 @@ const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
 
   const createUser = useCallback(
     (credentUser: firebase.User): void => {
-      const userInfo = {
-        premium: false,
-        diaryPosted: false,
-        tutorialPostDiary: false,
-        tutorialTeachDiaryList: false,
-        tutorialCorrectiong: false,
-        points: 100,
-        expoPushToken: null,
-        correctingObjectID: null,
-        correctingCorrectedNum: null,
-        notificationCorrection: true,
-        notificationReview: true,
-        lastModalAppSuggestionAt: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
+      const f = async (): Promise<void> => {
+        const userInfo = {
+          premium: false,
+          diaryPosted: false,
+          tutorialPostDiary: false,
+          tutorialTeachDiaryList: false,
+          tutorialCorrectiong: false,
+          points: 100,
+          expoPushToken: null,
+          correctingObjectID: null,
+          correctingCorrectedNum: null,
+          notificationCorrection: true,
+          notificationReview: true,
+          lastModalAppSuggestionAt: null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-      const profileInfo = {
-        name: null,
-        userName: profile.userName,
-        photoUrl: null,
-        pro: false,
-        learnLanguage: profile.learnLanguage,
-        nativeLanguage: profile.nativeLanguage,
-        spokenLanguages: profile.spokenLanguages || null,
-        nationalityCode: profile.nationalityCode || null,
-        introduction: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
+        const profileInfo = {
+          name: null,
+          userName: profile.userName,
+          photoUrl: null,
+          pro: false,
+          learnLanguage: profile.learnLanguage,
+          nativeLanguage: profile.nativeLanguage,
+          spokenLanguages: profile.spokenLanguages || null,
+          nationalityCode: profile.nationalityCode || null,
+          introduction: null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-      const userReviewInfo = {
-        ratingSum: 0,
-        reviewNum: 0,
-        score: 0.0,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
+        const userReviewInfo = {
+          ratingSum: 0,
+          reviewNum: 0,
+          score: 0.0,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-      const batch = firebase.firestore().batch();
-      batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
-      batch.set(
-        firebase.firestore().doc(`profiles/${credentUser.uid}`),
-        profileInfo
-      );
-      batch.set(
-        firebase.firestore().doc(`userReviews/${credentUser.uid}`),
-        userReviewInfo
-      );
-      batch.commit();
+        const batch = firebase.firestore().batch();
+        batch.set(
+          firebase.firestore().doc(`users/${credentUser.uid}`),
+          userInfo
+        );
+        batch.set(
+          firebase.firestore().doc(`profiles/${credentUser.uid}`),
+          profileInfo
+        );
+        batch.set(
+          firebase.firestore().doc(`userReviews/${credentUser.uid}`),
+          userReviewInfo
+        );
+        await batch.commit();
+        signIn(credentUser.uid);
+      };
+      f();
     },
     [
       profile.learnLanguage,
@@ -152,6 +169,7 @@ const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
       profile.nativeLanguage,
       profile.spokenLanguages,
       profile.userName,
+      signIn,
     ]
   );
 
@@ -164,7 +182,6 @@ const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
         if (credent.user) {
           createUser(credent.user);
           track(events.CREATED_USER, 'anonymously');
-          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -175,7 +192,6 @@ const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
         );
         setIsLoading(false);
       }
-      setIsLoading(false);
     };
     f();
   }, [clearErrorMessage, createUser]);
@@ -199,7 +215,6 @@ const SignUpScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
         if (credent.user) {
           createUser(credent.user);
           track(events.CREATED_USER, 'email');
-          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(

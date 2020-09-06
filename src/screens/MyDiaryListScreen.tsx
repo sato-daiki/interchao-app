@@ -179,8 +179,9 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       await getNewDiary();
       // expoへの登録
       const expoPushToken = await getExpoPushToken();
-      if (expoPushToken) {
-        registerForPushNotificationsAsync(user.uid, expoPushToken);
+      if (expoPushToken && localStatus.uid) {
+        // localStatusの方を使わないと初回登録時落ちる
+        registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
       }
     };
     f();

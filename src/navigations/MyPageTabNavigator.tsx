@@ -8,12 +8,12 @@ import I18n from '../utils/I18n';
 
 /* screens */
 import MyPageScreenContainer from '../containers/MyPageScreenContainer';
-import SettingScreen from '../screens/SettingScreen';
+import SettingScreenContainer from '../containers/SettingScreenContainer';
 import NoticeScreenContainer from '../containers/NoticeScreenContainer';
 import EditEmailScreen from '../screens/EditEmailScreen';
 import EditPasswordScreen from '../screens/EditPasswordScreen';
 import RegisterEmailPasswordScreen from '../screens/RegisterEmailPasswordScreen';
-import DeleteAcountScreen from '../screens/DeleteAcountScreen';
+import DeleteAcountScreenContainer from '../containers/DeleteAcountScreenContainer';
 import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
 import TutorialListScreenContainer from '../containers/TutorialListScreenContainer';
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
@@ -57,7 +57,7 @@ const MyPageTabNavigator = (): JSX.Element => {
       />
       <MyPageTabStack.Screen
         name="Setting"
-        component={SettingScreen}
+        component={SettingScreenContainer}
         options={{ title: I18n.t('setting.headerTitle') }}
       />
       <MyPageTabStack.Screen
@@ -92,7 +92,7 @@ const MyPageTabNavigator = (): JSX.Element => {
       />
       <MyPageTabStack.Screen
         name="DeleteAcount"
-        component={DeleteAcountScreen}
+        component={DeleteAcountScreenContainer}
         options={{ title: I18n.t('deleteAcount.headerTitle') }}
       />
       <MyPageTabStack.Screen
