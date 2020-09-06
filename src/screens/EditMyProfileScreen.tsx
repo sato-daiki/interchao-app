@@ -11,6 +11,7 @@ import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   borderLightColor,
   primaryColor,
@@ -39,8 +40,11 @@ import {
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
-import { MainStackParamList } from '../navigations/MainNavigator';
 import { MyPageTabNavigationProp } from '../navigations/MyPageTabNavigator';
+import {
+  ModalEditMyProfileStackNavigationProp,
+  ModalEditMyProfileStackParamList,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   profile: Profile;
@@ -49,13 +53,14 @@ export interface Props {
 interface DispatchProps {
   setProfile: (profile: Profile) => {};
 }
-type ModalEditMyProfileStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalEditMyProfile'
+
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalEditMyProfileStackParamList, 'EditMyProfile'>,
+  ModalEditMyProfileStackNavigationProp
 >;
 
 type ScreenType = {
-  navigation: ModalEditMyProfileStackNavigationProp & MyPageTabNavigationProp;
+  navigation: NavigationProp & MyPageTabNavigationProp;
 } & Props &
   DispatchProps;
 
@@ -281,7 +286,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
 
   const onPressUserName = useCallback(() => {
     // 次ページのuserNameは最終更新でないためstateで渡す
-    navigation.navigate('ModalEditUserName', {
+    navigation.navigate('EditUserName', {
       userName,
       setUserName: (text: string): void => setUserName(text),
     });

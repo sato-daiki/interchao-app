@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Keyboard, BackHandler, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
 import { HeaderRight, HeaderLeft } from '../components/atoms';
@@ -14,9 +15,10 @@ import {
 } from '../utils/diary';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { MainStackParamList } from '../navigations/MainNavigator';
-import { TeachDiaryTabNavigationProp } from '../navigations/TeachDiaryTabNavigator';
-import { MyDiaryTabNavigationProp } from '../navigations/MyDiaryTabNavigator';
+import {
+  ModalPostDiaryStackParamList,
+  ModalPostDiaryStackNavigationProp,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   user: User;
@@ -28,15 +30,13 @@ interface DispatchProps {
   addDiary: (diary: Diary) => void;
 }
 
-type ModalPostDiaryStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalPostDiary'
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalPostDiaryStackParamList, 'PostDiary'>,
+  ModalPostDiaryStackNavigationProp
 >;
 
 type ScreenType = {
-  navigation: ModalPostDiaryStackNavigationProp &
-    TeachDiaryTabNavigationProp &
-    MyDiaryTabNavigationProp;
+  navigation: NavigationProp;
 } & Props &
   DispatchProps;
 
@@ -106,8 +106,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
           .add(diary);
 
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
-
-        navigation.navigate('MyDiaryTab');
+        navigation.navigate('Home', { screen: 'TeachDiaryTab' });
         setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
@@ -240,7 +239,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
         points: newPoints,
       });
 
-      navigation.navigate('MyDiaryTab');
+      navigation.navigate('Home', { screen: 'MyDiaryTab' });
       setIsLoading(false);
       setIsModalAlert(false);
     };
@@ -301,7 +300,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       learnLanguage={profile.learnLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
-        navigation.navigate('TeachDiaryTab');
+        navigation.navigate('Home', { screen: 'TeachDiaryTab' });
       }}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}

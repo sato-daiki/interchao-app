@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput, Keyboard } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp } from '@react-navigation/native';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
 import {
   Space,
@@ -18,7 +18,10 @@ import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
-import { MainStackParamList } from '../navigations/MainNavigator';
+import {
+  ModalReviewStackParamList,
+  ModalReviewStackNavigationProp,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   diary?: Diary;
@@ -29,14 +32,14 @@ interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
 }
 
-type ModalReviewStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalReview'
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalReviewStackParamList, 'Review'>,
+  ModalReviewStackNavigationProp
 >;
 
 type ScreenType = {
-  navigation: ModalReviewStackNavigationProp;
-  route: RouteProp<MainStackParamList, 'ModalReview'>;
+  navigation: NavigationProp;
+  route: RouteProp<ModalReviewStackParamList, 'Review'>;
 } & Props &
   DispatchProps;
 

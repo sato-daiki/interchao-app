@@ -12,7 +12,7 @@ import MyDiaryTabNavigator from './MyDiaryTabNavigator';
 import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
-import { createMyNavigator } from './SidebarTabNavigator';
+import { createSideTabNavigator } from './SideTabNavigator';
 
 export type HomeBottomNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -27,12 +27,13 @@ export type HomeBottomParamList = {
 };
 
 const HomeBottomTabNavigator = (): JSX.Element => {
-  const isTabletOrMobileDevice = useMediaQuery({
-    maxDeviceWidth: 1224,
+  const isDesktopOrLaptopDevice = useMediaQuery({
+    minDeviceWidth: 1224,
   });
 
-  if (isTabletOrMobileDevice) {
-    const HomeSide = createMyNavigator<HomeBottomParamList>();
+  if (isDesktopOrLaptopDevice) {
+    const HomeSide = createSideTabNavigator<HomeBottomParamList>();
+
     return (
       <HomeSide.Navigator initialRouteName="MyDiaryTab">
         <HomeSide.Screen name="MyDiaryTab" component={MyDiaryTabNavigator} />
@@ -76,7 +77,7 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           tabPress: e => {
             // Prevent default action
             e.preventDefault();
-            navigation.navigate('ModalPostDiary');
+            navigation.navigate('ModalPostDiary', { screen: 'PostDiary' });
           },
         })}
       />
