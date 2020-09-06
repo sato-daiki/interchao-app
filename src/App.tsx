@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
@@ -10,10 +10,7 @@ import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
-// import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
-// import { registerForPushNotificationsAsync } from './utils/Notification';
-// import { ModalConfirm } from './components/organisms';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);

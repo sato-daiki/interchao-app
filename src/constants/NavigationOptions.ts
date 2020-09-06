@@ -53,6 +53,7 @@ export const DefaultModalLayoutOptions: StackNavigationOptions = {
     maxWidth: maxModal,
     marginHorizontal: 'auto',
     backgroundColor: '#fff',
+    flex: 1,
   },
 };
 
@@ -62,5 +63,6 @@ export const DefaultAuthLayoutOptions: StackNavigationOptions = {
     maxWidth: maxAuth,
     marginHorizontal: 'auto',
     backgroundColor: '#fff',
+    flex: 1,
   },
 };

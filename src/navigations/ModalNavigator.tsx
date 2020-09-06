@@ -121,7 +121,14 @@ export const ModalReviewNavigator = (): JSX.Element => {
 
 export const ModalEditMyProfileNavigator = (): JSX.Element => {
   return (
-    <ModalEditMyProfileStack.Navigator initialRouteName="EditMyProfile">
+    <ModalEditMyProfileStack.Navigator
+      initialRouteName="EditMyProfile"
+      screenOptions={{
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+        },
+      }}
+    >
       <ModalEditMyProfileStack.Screen
         name="EditMyProfile"
         component={EditMyProfileScreenContainer}

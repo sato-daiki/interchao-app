@@ -33,7 +33,6 @@ import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
 import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
-import { TeachDiaryTabNavigationProp } from '../navigations/TeachDiaryTabNavigator';
 import {
   ModalCorrectingStackNavigationProp,
   ModalCorrectingStackParamList,

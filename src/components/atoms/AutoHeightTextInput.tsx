@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextInput, StyleProp, TextStyle, StyleSheet } from 'react-native';
 import {
   fontSizeM,
@@ -18,7 +18,8 @@ interface Props {
 
 const styles = StyleSheet.create({
   textInput: {
-    lineHeight: fontSizeM * 1.1,
+    lineHeight: fontSizeM * 1.3,
+    height: 100,
     fontSize: fontSizeM,
     color: primaryColor,
     paddingVertical: 10,
@@ -39,19 +40,9 @@ const AutoHeightTextInput: React.FC<Props> = ({
   onChangeText,
   onBlur,
 }: Props): JSX.Element => {
-  const [scrollHeight, setScrollHeight] = useState(null);
-
-  const handleFocus = (e: any): void => {
-    setScrollHeight(e.target.scrollHeight);
-  };
-
-  const handleChange = (e: any): void => {
-    setScrollHeight(e.target.scrollHeight);
-  };
-
   return (
     <TextInput
-      style={[styles.textInput, style, { height: scrollHeight || undefined }]}
+      style={[styles.textInput, style]}
       defaultValue={defaultValue}
       placeholder={placeholder}
       value={value}
@@ -64,8 +55,6 @@ const AutoHeightTextInput: React.FC<Props> = ({
       scrollEnabled={false}
       underlineColorAndroid="transparent"
       onChangeText={onChangeText}
-      onFocus={handleFocus}
-      onChange={handleChange}
       onBlur={onBlur}
     />
   );
