@@ -22,6 +22,11 @@ import {
   MyPageTabStackParamList,
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
+import { configureStore } from '../stores/Store';
+
+interface DispatchProps {
+  signOut: () => void;
+}
 
 type SettingNavigationProp = CompositeNavigationProp<
   StackNavigationProp<MyPageTabStackParamList, 'Setting'>,
@@ -30,7 +35,7 @@ type SettingNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: SettingNavigationProp;
-};
+} & DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: React.FC<ScreenType> = ({ navigation }) => {
+const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -81,13 +86,15 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation }) => {
         }
         track(events.SIGN_OUT);
         // TODO Authへ飛ばして、reduxを消す
-        navigation.navigate('Initialize');
+        const { persistor } = configureStore();
+        signOut();
+        persistor.purge();
       } catch (err) {
         alert({ err });
       }
     };
     f();
-  }, [currentUser, navigation]);
+  }, [currentUser, signOut]);
 
   return (
     <View style={styles.container}>

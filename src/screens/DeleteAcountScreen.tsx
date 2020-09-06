@@ -19,6 +19,11 @@ import {
   MyPageTabNavigationProp,
   MyPageTabStackParamList,
 } from '../navigations/MyPageTabNavigator';
+import { configureStore } from '../stores/Store';
+
+interface DispatchProps {
+  signOut: () => void;
+}
 
 type DeleteAcountNavigationProp = CompositeNavigationProp<
   StackNavigationProp<MyPageTabStackParamList, 'DeleteAcount'>,
@@ -27,7 +32,7 @@ type DeleteAcountNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: DeleteAcountNavigationProp;
-};
+} & DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DeleteAcountScreen: React.FC<ScreenType> = ({ navigation }) => {
+const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [isPasswordInput, setIsPasswordInput] = useState(false);
@@ -70,9 +75,10 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [errorPassword, setErrorPassword] = useState('');
 
   const afterDeleteUser = useCallback(() => {
-    // TODO reduxの削除
-    navigation.navigate('Initialize');
-  }, [navigation]);
+    const { persistor } = configureStore();
+    signOut();
+    persistor.purge();
+  }, [signOut]);
 
   const onPressDelete1 = useCallback(() => {
     const f = async (): Promise<void> => {
