@@ -2,8 +2,7 @@ rules_version = '2';
 service cloud.firestore {
 	// user
   function isValidUsers(user) {
-  	return "premium" in user && user.premium is bool
-    	&& "tutorialPostDiary" in user && user.tutorialPostDiary is bool
+  	return "tutorialPostDiary" in user && user.tutorialPostDiary is bool
     	&& "tutorialTeachDiaryList" in user && user.tutorialTeachDiaryList is bool
     	&& "tutorialCorrectiong" in user && user.tutorialCorrectiong is bool
     	&& "points" in user && user.points is int
@@ -77,8 +76,7 @@ service cloud.firestore {
   }
   
   function isValidDiaries(diary) {
-  	return "premium" in diary && diary.premium is bool
-    	&& "title" in diary && diary.title is string
+  	return "title" in diary && diary.title is string
     	&& "text" in diary && diary.text is string
       && isValidDisplayProfiles(diary.profile)
     	&& "diaryStatus" in diary && diary.diaryStatus is string
@@ -186,7 +184,6 @@ service cloud.firestore {
       	&& request.auth.uid == uid
         && isValidUsers(request.resource.data)
     		// 初期値
-        && request.resource.data.premium == false
         && request.resource.data.tutorialPostDiary == false
         && request.resource.data.tutorialTeachDiaryList == false
         && request.resource.data.tutorialCorrectiong == false
@@ -230,7 +227,6 @@ service cloud.firestore {
         && request.resource.data.correctingObjectID == null
         && isValidUsers(request.resource.data)
         // 他は変わらないこと
-        && request.resource.data.premium == resource.data.premium
         && request.resource.data.tutorialPostDiary == resource.data.tutorialPostDiary
         && request.resource.data.tutorialTeachDiaryList == resource.data.tutorialTeachDiaryList
         && request.resource.data.tutorialCorrectiong == resource.data.tutorialCorrectiong

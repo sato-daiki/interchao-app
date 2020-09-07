@@ -107,7 +107,6 @@ const SignUpScreen: React.FC<ScreenType> = ({
     (credentUser: firebase.User): void => {
       const f = async (): Promise<void> => {
         const userInfo = {
-          premium: false,
           diaryPosted: false,
           tutorialPostDiary: false,
           tutorialTeachDiaryList: false,

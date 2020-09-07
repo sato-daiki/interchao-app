@@ -28,7 +28,6 @@ export interface DisplayProfile {
 
 export interface Diary {
   objectID?: string;
-  premium: boolean;
   firstDiary: boolean;
   hidden: boolean;
   title: string;

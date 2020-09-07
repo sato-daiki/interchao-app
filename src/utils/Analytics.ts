@@ -10,7 +10,6 @@ import Sentry from '../constants/Sentry';
 import { User, Profile, Language } from '../types';
 
 interface Property {
-  premium: boolean;
   nativeLanguage: Language;
   points: number;
   createdAt: firestore.FieldValue;
@@ -23,7 +22,6 @@ const apiKey = isProduction
 
 const createPropertiesUser = (user: User, profile: Profile): Property => {
   return {
-    premium: !!user.premium,
     nativeLanguage: profile.nativeLanguage,
     points: user.points,
     createdAt: user.createdAt,

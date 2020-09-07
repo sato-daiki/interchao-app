@@ -104,7 +104,6 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     (diaryStatus: DiaryStatus) => {
       const displayProfile = getDisplayProfile(profile);
       return {
-        premium: user.premium,
         title,
         text,
         profile: displayProfile,
@@ -112,7 +111,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, text, title, user.premium]
+    [profile, text, title]
   );
 
   const onPressDraft = useCallback(() => {
