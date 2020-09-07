@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import {
-  NavigationStackScreenComponent,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import {
   subTextColor,
@@ -15,12 +13,29 @@ import {
 } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
 import { Space } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getVersionText } from '../utils/common';
 import { ModalConfirm } from '../components/organisms';
+import {
+  MyPageTabStackParamList,
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
+import { configureStore } from '../stores/Store';
+
+interface DispatchProps {
+  signOut: () => void;
+}
+
+type SettingNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'Setting'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: SettingNavigationProp;
+} & DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -56,7 +71,7 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -70,13 +85,15 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
           return;
         }
         track(events.SIGN_OUT);
-        navigation.navigate('Auth');
+        const { persistor } = configureStore();
+        signOut();
+        persistor.purge();
       } catch (err) {
         alert({ err });
       }
     };
     f();
-  }, [currentUser, navigation]);
+  }, [currentUser, signOut]);
 
   return (
     <View style={styles.container}>
@@ -158,13 +175,6 @@ const SettingScreen: NavigationStackScreenComponent = ({ navigation }) => {
       <Text style={styles.versionText}>{getVersionText()}</Text>
     </View>
   );
-};
-
-SettingScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('setting.headerTitle'),
-  };
 };
 
 export default SettingScreen;

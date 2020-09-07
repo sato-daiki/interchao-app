@@ -13,10 +13,6 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import ViewShot from 'react-native-view-shot';
@@ -24,15 +20,13 @@ import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
 import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
-import { MyDiaryStatus, Sns } from '../components/molecules';
+import { MyDiaryStatus } from '../components/molecules';
 import { ModalConfirm } from '../components/organisms';
-import {
-  DefaultNavigationOptions,
-  DefaultDiaryOptions,
-} from '../constants/NavigationOptions';
 import {
   primaryColor,
   subTextColor,
@@ -52,6 +46,10 @@ import {
 import I18n from '../utils/I18n';
 import RichText from '../components/organisms/RichText';
 import MyDiaryMenu from '../components/web/organisms/MyDiaryMenu';
+import {
+  MyDiaryTabNavigationProp,
+  MyDiaryTabStackParamList,
+} from '../navigations/MyDiaryTabNavigator';
 
 export interface Props {
   diary?: Diary;
@@ -63,13 +61,15 @@ interface DispatchProps {
   deleteDiary: (objectID: string) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type MyDiaryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'MyDiary'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyDiaryNavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
 /**
  * 日記詳細
  */
-const MyDiaryScreen: ScreenType = ({
+const MyDiaryScreen: React.FC<ScreenType> = ({
   navigation,
   profile,
   diary,
@@ -165,11 +165,14 @@ const MyDiaryScreen: ScreenType = ({
   }, [onPressDeleteMenu, showActionSheetWithOptions]);
 
   useEffect(() => {
-    navigation.setParams({
-      onPressMore,
-      onPressDeleteMenu,
+    navigation.setOptions({
       title: diary ? diary.title : '',
-      isDesktopOrLaptopDevice,
+      headerRight: (): JSX.Element =>
+        isDesktopOrLaptopDevice ? (
+          <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />
+        ) : (
+          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+        ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diary]);
@@ -238,9 +241,10 @@ const MyDiaryScreen: ScreenType = ({
           navigation.navigate('UserProfile', { uid });
         }}
         onPressReview={(): void => {
-          navigation.navigate('Review', {
-            objectID: diary.objectID,
-            correctedNum,
+          if (!diary.objectID) return;
+          navigation.navigate('ModalReview', {
+            screen: 'Review',
+            params: { objectID: diary.objectID, correctedNum },
           });
         }}
       />
@@ -319,26 +323,6 @@ const MyDiaryScreen: ScreenType = ({
       </ScrollView>
     </View>
   );
-};
-
-MyDiaryScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  const onPressMore = navigation.getParam('onPressMore');
-  const onPressDeleteMenu = navigation.getParam('onPressDeleteMenu');
-  const isDesktopOrLaptopDevice = navigation.getParam(
-    'isDesktopOrLaptopDevice'
-  );
-  const title = navigation.getParam('title');
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultDiaryOptions,
-    title,
-    headerRight: (): JSX.Element =>
-      isDesktopOrLaptopDevice ? (
-        <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />
-      ) : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-      ),
-  };
 };
 
 export default connectActionSheet(MyDiaryScreen);

@@ -8,12 +8,10 @@ import {
   Platform,
 } from 'react-native';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   borderLightColor,
   primaryColor,
@@ -30,10 +28,6 @@ import {
   SubmitButton,
   Space,
 } from '../components/atoms';
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
 import { Profile, Language } from '../types';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
@@ -46,6 +40,11 @@ import {
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
+import { MyPageTabNavigationProp } from '../navigations/MyPageTabNavigator';
+import {
+  ModalEditMyProfileStackNavigationProp,
+  ModalEditMyProfileStackParamList,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   profile: Profile;
@@ -55,22 +54,24 @@ interface DispatchProps {
   setProfile: (profile: Profile) => {};
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalEditMyProfileStackParamList, 'EditMyProfile'>,
+  ModalEditMyProfileStackNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NavigationProp & MyPageTabNavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 32,
   },
   keyboardAwareScrollView: {
     flex: 1,
+    paddingVertical: 32,
   },
   avatar: {
     alignItems: 'center',
@@ -98,6 +99,7 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === 'web' ? 8 : 0,
   },
   introduction: {
+    textAlignVertical: 'top',
     paddingHorizontal: 16,
     // paddingとかくとpaddingTopがなぜか反応しない
     paddingTop: 16,
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
 /**
  * マイページ編集画面
  */
-const EditMyProfileScreen: ScreenType = ({
+const EditMyProfileScreen: React.FC<ScreenType> = ({
   profile,
   setProfile,
   navigation,
@@ -225,7 +227,7 @@ const EditMyProfileScreen: ScreenType = ({
         ...profile,
         ...profileInfo,
       });
-      navigation.navigate('MyPage');
+      navigation.navigate('MyPageTab');
     };
     f();
   }, [
@@ -244,9 +246,20 @@ const EditMyProfileScreen: ScreenType = ({
   ]);
 
   useEffect(() => {
-    if (Platform.OS !== 'web') {
-      navigation.setParams({ onPressSubmit });
-    }
+    navigation.setOptions({
+      headerLeft: (): JSX.Element => (
+        <HeaderLeft
+          text={I18n.t('common.close')}
+          onPress={(): void => {
+            navigation.goBack();
+          }}
+        />
+      ),
+      headerRight: (): JSX.Element | null =>
+        Platform.OS === 'web' ? null : (
+          <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
+        ),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     name,
@@ -461,29 +474,6 @@ const EditMyProfileScreen: ScreenType = ({
       </View>
     </DefaultLayout>
   );
-};
-
-EditMyProfileScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressSubmit = navigation.getParam('onPressSubmit');
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultModalLayoutOptions,
-    title: I18n.t('editMyProfile.headerTitle'),
-    headerLeft: (): JSX.Element => (
-      <HeaderLeft
-        text={I18n.t('common.close')}
-        onPress={(): void => {
-          navigation.goBack(null);
-        }}
-      />
-    ),
-    headerRight: (): JSX.Element | null =>
-      Platform.OS === 'web' ? null : (
-        <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
-      ),
-  };
 };
 
 export default EditMyProfileScreen;

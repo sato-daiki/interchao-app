@@ -28,7 +28,7 @@ import I18n from '../../utils/I18n';
 import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
 import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
 import DefaultLayout from '../template/DefaultLayout';
-import { ModalConfirm } from '.';
+import ModalConfirm from './ModalConfirm';
 import PostDiaryKeybordWeb from './PostDiaryKeybordWeb';
 
 interface Props {
@@ -130,6 +130,7 @@ const PostDiary = ({
       toValue: 1,
       easing: Easing.back(1),
       duration: 400,
+      useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
 
@@ -184,63 +185,63 @@ const PostDiary = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      <DefaultLayout lSize>
-        <LoadingModal visible={isLoading} />
-        <ModalConfirm
-          visible={isModalError}
-          title={I18n.t('common.error')}
-          message={errorMessage}
-          mainButtonText={I18n.t('common.close')}
-          onPressMain={onPressCloseError}
-        />
-        <TutorialPostDiary
-          isLoading={isTutorialLoading}
-          displayed={tutorialPostDiary}
-          learnLanguage={learnLanguage}
-          onPress={onPressTutorial}
-        />
-        <ModalLackPoint
-          visible={isModalLack}
-          learnLanguage={learnLanguage}
-          onPressSubmit={onPressSubmitModalLack}
-          onPressClose={onPressCloseModalLack}
-        />
-        <ModalAlertPublish
-          visible={isModalAlert}
-          isLoading={isLoading}
-          usePoints={usePoints}
-          points={points}
-          onPressSubmit={onPressSubmit}
-          onPressClose={onPressCloseModalPublish}
-        />
-        <ModalDiaryCancel
-          visible={isModalCancel}
-          isLoading={isLoading}
-          onPressSave={onPressDraft}
-          onPressNotSave={onPressNotSave}
-          onPressClose={onPressCloseModalCancel}
-        />
-        <View style={styles.header}>
-          <View style={styles.left}>
-            <Text style={styles.headerLabel}>
-              {I18n.t('postDiaryComponent.usePoints')}
-            </Text>
-            <Text style={styles.headerValue}>{usePoints}</Text>
-            <Text style={styles.headerLabel}>
-              {I18n.t('postDiaryComponent.textLength')}
-            </Text>
-            <Text style={styles.headerValue}>{text.length}</Text>
-          </View>
-          <View style={styles.right}>
-            <Image style={styles.points} source={Points} />
-            <Text style={styles.headerLabel}>
-              {I18n.t('postDiaryComponent.points')}
-            </Text>
-            <Text style={styles.headerValue}>{points}</Text>
-          </View>
+      {/* <DefaultLayout lSize> */}
+      <LoadingModal visible={isLoading} />
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={errorMessage}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={onPressCloseError}
+      />
+      <TutorialPostDiary
+        isLoading={isTutorialLoading}
+        displayed={tutorialPostDiary}
+        learnLanguage={learnLanguage}
+        onPress={onPressTutorial}
+      />
+      <ModalLackPoint
+        visible={isModalLack}
+        learnLanguage={learnLanguage}
+        onPressSubmit={onPressSubmitModalLack}
+        onPressClose={onPressCloseModalLack}
+      />
+      <ModalAlertPublish
+        visible={isModalAlert}
+        isLoading={isLoading}
+        usePoints={usePoints}
+        points={points}
+        onPressSubmit={onPressSubmit}
+        onPressClose={onPressCloseModalPublish}
+      />
+      <ModalDiaryCancel
+        visible={isModalCancel}
+        isLoading={isLoading}
+        onPressSave={onPressDraft}
+        onPressNotSave={onPressNotSave}
+        onPressClose={onPressCloseModalCancel}
+      />
+      <View style={styles.header}>
+        <View style={styles.left}>
+          <Text style={styles.headerLabel}>
+            {I18n.t('postDiaryComponent.usePoints')}
+          </Text>
+          <Text style={styles.headerValue}>{usePoints}</Text>
+          <Text style={styles.headerLabel}>
+            {I18n.t('postDiaryComponent.textLength')}
+          </Text>
+          <Text style={styles.headerValue}>{text.length}</Text>
         </View>
-        {renderKeyboard()}
-      </DefaultLayout>
+        <View style={styles.right}>
+          <Image style={styles.points} source={Points} />
+          <Text style={styles.headerLabel}>
+            {I18n.t('postDiaryComponent.points')}
+          </Text>
+          <Text style={styles.headerValue}>{points}</Text>
+        </View>
+      </View>
+      {renderKeyboard()}
+      {/* </DefaultLayout> */}
     </SafeAreaView>
   );
 };

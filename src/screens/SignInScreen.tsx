@@ -1,39 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-  LoadingModal,
-  Space,
-  SubmitButton,
-  HeaderLeft,
-} from '../components/atoms';
+import { StackScreenProps } from '@react-navigation/stack';
+import { LoadingModal, Space, SubmitButton } from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
-import {
-  DefaultNavigationOptions,
-  DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
 import { emailInputError, emailValidate } from '../utils/common';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<AuthStackParamList, 'SignIn'>;
 
 const styles = StyleSheet.create({
   container: {
@@ -66,7 +45,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログイン画面
  */
-const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
+const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [errorEmail, setErrorEmail] = useState('');
@@ -92,7 +71,11 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
           .signInWithEmailAndPassword(email, password);
         if (credent.user) {
           track(events.SIGN_IN);
-          navigation.navigate('MainTab');
+          // const user = await getUser(credent.user.uid);
+          // const profile = await getProfile(credent.user.uid);
+          // setUser(user);
+          // setProfile(profile);
+          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -105,7 +88,7 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       }
     };
     f();
-  }, [email, navigation, password]);
+  }, [email, password]);
 
   const onPressForget = useCallback(() => {
     navigation.navigate('ForegetPassword');
@@ -185,29 +168,6 @@ const SignInScreen: ScreenType = ({ navigation }): JSX.Element => {
       </DefaultLayout>
     </KeyboardAwareScrollView>
   );
-};
-
-SignInScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  const headerLeftOptions =
-    Platform.OS === 'web'
-      ? {
-          headerLeft: (): JSX.Element => (
-            <HeaderLeft
-              text={I18n.t('common.close')}
-              onPress={(): void => {
-                navigation.navigate('Initialize');
-              }}
-            />
-          ),
-        }
-      : {};
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultAuthLayoutOptions,
-    ...headerLeftOptions,
-    title: I18n.t('signIn.headerTitle'),
-  };
 };
 
 export default SignInScreen;

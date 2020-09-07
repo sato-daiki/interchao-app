@@ -191,7 +191,6 @@ service cloud.firestore {
         && request.resource.data.tutorialTeachDiaryList == false
         && request.resource.data.tutorialCorrectiong == false
         && request.resource.data.points >= 0
-        && request.resource.data.expoPushToken == null
         && request.resource.data.correctingObjectID == null
         && request.resource.data.notificationCorrection == true
         && request.resource.data.notificationReview == true
