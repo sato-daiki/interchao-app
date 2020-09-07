@@ -121,11 +121,11 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         isDesktopOrLaptopDevice ? (
           <MyDiaryListMenuWebPc nativeLanguage={profile.nativeLanguage} />
         ) : (
-            <HeaderRight
-              name="dots-horizontal"
-              onPress={(): void => setIsMenu(true)}
-            />
-          ),
+          <HeaderRight
+            name="dots-horizontal"
+            onPress={(): void => setIsMenu(true)}
+          />
+        ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

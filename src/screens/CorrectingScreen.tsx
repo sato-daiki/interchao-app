@@ -61,12 +61,12 @@ type ScreenType = {
 
 type Info =
   | {
-    fix: string | null;
-    diffs: Diff[] | null;
-  }
+      fix: string | null;
+      diffs: Diff[] | null;
+    }
   | {
-    detail: string | null;
-  };
+      detail: string | null;
+    };
 
 const styles = StyleSheet.create({
   safeAreaView: {
