@@ -13,7 +13,9 @@ const styles = StyleSheet.create({
   titleInput: {
     fontSize: fontSizeM,
     color: primaryColor,
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
     borderColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
     backgroundColor: '#fff',
@@ -39,6 +41,7 @@ const TextInputTitle: React.FC<Props> = ({
       returnKeyType="done"
       underlineColorAndroid="transparent"
       onFocus={onFocus}
+      multiline
       onChangeText={onChangeText}
     />
   );

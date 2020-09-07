@@ -65,8 +65,6 @@ node_modules
 
 .firebase
 .env
-# 一時的
-envConfig.ts
 
 # storybook static file
 storybook-static

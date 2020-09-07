@@ -1,4 +1,4 @@
-import { Language, CountryCode } from '.';
+import { Language, CountryCode } from './index';
 
 export interface Reviewer {
   uid: string;

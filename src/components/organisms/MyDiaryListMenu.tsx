@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { SwipeablePanel } from 'rn-swipeable-panel';
-import { NavigationStackProp } from 'react-navigation-stack';
 import { Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { OptionItem } from '../molecules';
 import I18n from '../../utils/I18n';
 import { appShare } from '../../utils/common';
@@ -11,20 +11,19 @@ interface Props {
   isMenu: boolean;
   nativeLanguage: Language;
   onClose: () => void;
-  navigation: NavigationStackProp;
 }
 
 // web版もある
 const MyDiaryListMenu = ({
-  navigation,
   isMenu,
   nativeLanguage,
   onClose,
 }: Props): JSX.Element => {
+  const { navigate } = useNavigation();
   const onPressDraftList = useCallback(() => {
-    navigation.navigate('DraftDiaryList');
+    navigate('DraftDiaryList');
     onClose();
-  }, [navigation, onClose]);
+  }, [navigate, onClose]);
 
   const onPressAppShare = useCallback(() => {
     appShare(nativeLanguage);

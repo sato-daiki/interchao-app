@@ -9,16 +9,14 @@ import {
   ScrollView,
   Text,
 } from 'react-native';
-import {
-  NavigationStackScreenComponent,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import {
   connectActionSheet,
   useActionSheet,
 } from '@expo/react-native-action-sheet';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
 import { Space, GrayHeader, HeaderRight } from '../components/atoms';
@@ -30,7 +28,6 @@ import {
   BlockUser,
   Report,
 } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { linkBlue, fontSizeM } from '../styles/Common';
 import { getProfile } from '../utils/profile';
 import Algolia from '../utils/Algolia';
@@ -45,6 +42,22 @@ import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import UserProfileMenu from '../components/web/organisms/UserProfileMenu';
 import ModalReport from '../components/web/organisms/ModalReport';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
+
+type UserProfileNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CommonStackParamList, 'UserProfile'>,
+  CommonNavigationProp
+>;
+
+type UserProfileRouteProp = RouteProp<CommonStackParamList, 'UserProfile'>;
+
+type ScreenType = {
+  navigation: UserProfileNavigationProp;
+  route: UserProfileRouteProp;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -64,7 +77,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 20;
+const HIT_PER_PAGE = 10;
 
 const keyExtractor = (item: Diary | Review, index: number): string =>
   String(index);
@@ -72,7 +85,7 @@ const keyExtractor = (item: Diary | Review, index: number): string =>
 /**
  * ユーザページ
  */
-const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
+const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isBlockSuccess, setIsBlockSuccess] = useState(false);
@@ -101,8 +114,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
 
   const getNewProfile = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!navigation.state.params) return;
-      const { uid } = navigation.state.params;
+      const { uid } = route.params;
       const newProfile = await getProfile(uid);
       const newUserReivew = await getUserReview(uid);
       setProfile(newProfile);
@@ -110,13 +122,12 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       setLoadingProfile(false);
     };
     f();
-  }, [setProfile, setLoadingProfile, navigation]);
+  }, [route.params]);
 
   const getNewDiary = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!navigation.state.params) return;
       try {
-        const { uid } = navigation.state.params;
+        const { uid } = route.params;
         const index = await Algolia.getDiaryIndex();
         await Algolia.setSettings(index);
         const res = await index.search('', {
@@ -135,12 +146,11 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       setLoadingDiary(false);
     };
     f();
-  }, [navigation.state.params]);
+  }, [route.params]);
 
   const getNewReview = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!navigation.state.params) return;
-      const { uid } = navigation.state.params;
+      const { uid } = route.params;
       const newReivews = await getTopReviews(uid);
       const newReviewNum = await getReviewNum(uid);
       setTopReviews(newReivews);
@@ -148,13 +158,13 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       setLoadingReview(false);
     };
     f();
-  }, [navigation.state.params]);
+  }, [route.params]);
 
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
       const { currentUser } = firebase.auth();
-      const { params } = navigation.state;
+      const { params } = route;
       if (!currentUser || !params) return;
 
       // ブロックされているかのチェック
@@ -173,7 +183,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       await Promise.all([getNewProfile(), getNewDiary(), getNewReview()]);
     };
     f();
-  }, [getNewDiary, getNewProfile, getNewReview, navigation.state]);
+  }, [getNewDiary, getNewProfile, getNewReview, route]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -188,8 +198,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
     const f = async (): Promise<void> => {
       if (!readingNext && !readAllResults) {
         try {
-          if (!navigation.state.params) return;
-          const { uid } = navigation.state.params;
+          const { uid } = route.params;
           const nextPage = page + 1;
           setReadingNext(true);
 
@@ -217,7 +226,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       }
     };
     f();
-  }, [diaries, navigation.state.params, page, readAllResults, readingNext]);
+  }, [diaries, route.params, page, readAllResults, readingNext]);
 
   const onPressBlock = useCallback(() => {
     setIsBlockSuccess(false);
@@ -257,12 +266,17 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
   }, [isBlocked, onPressBlock, onPressReport, showActionSheetWithOptions]);
 
   useEffect(() => {
-    navigation.setParams({
-      onPressMore,
-      isDesktopOrLaptopDevice,
-      isBlocked,
-      onPressReport,
-      onPressBlock,
+    navigation.setOptions({
+      headerRight: (): JSX.Element =>
+        isDesktopOrLaptopDevice ? (
+          <UserProfileMenu
+            isBlocked={isBlocked}
+            onPressReport={onPressReport}
+            onPressBlock={onPressBlock}
+          />
+        ) : (
+          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+        ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBlocked]);
@@ -396,6 +410,7 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
             navigation.push('UserProfile', { uid });
           }}
           onPressItem={(): void => {
+            if (!item.objectID) return;
             navigation.push('UserDiary', { objectID: item.objectID });
           }}
         />
@@ -490,33 +505,6 @@ const UserProfileScreen: NavigationStackScreenComponent = ({ navigation }) => {
       </ScrollView>
     </View>
   );
-};
-
-UserProfileScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressMore = navigation.getParam('onPressMore');
-  const isDesktopOrLaptopDevice = navigation.getParam(
-    'isDesktopOrLaptopDevice'
-  );
-  const isBlocked = navigation.getParam('isBlocked');
-  const onPressReport = navigation.getParam('onPressReport');
-  const onPressBlock = navigation.getParam('onPressBlock');
-
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('userProfile.headerTitle'),
-    headerRight: (): JSX.Element =>
-      isDesktopOrLaptopDevice ? (
-        <UserProfileMenu
-          isBlocked={isBlocked}
-          onPressReport={onPressReport}
-          onPressBlock={onPressBlock}
-        />
-      ) : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-      ),
-  };
 };
 
 export default connectActionSheet(UserProfileScreen);

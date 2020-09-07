@@ -1,7 +1,6 @@
 import axios from 'axios';
 // @ts-ignore
-// eslint-disable-next-line import/no-unresolved, import/extensions
-import { GOOGLE_TRANSLATE } from '../../envConfig';
+import { GOOGLE_TRANSLATE } from '@env';
 import Sentry from '../constants/Sentry';
 import { Language } from '../types';
 

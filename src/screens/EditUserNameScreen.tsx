@@ -1,34 +1,36 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import {
   checkDuplicatedUserName,
   checkTypeUserName,
   checkInitialUserName,
 } from '../utils/profile';
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { HeaderRight } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
+import {
+  ModalEditMyProfileStackNavigationProp,
+  ModalEditMyProfileStackParamList,
+} from '../navigations/ModalNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<ModalEditMyProfileStackParamList, 'EditUserName'>,
+  ModalEditMyProfileStackNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NavigationProp;
+  route: RouteProp<ModalEditMyProfileStackParamList, 'EditUserName'>;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -44,11 +46,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditUserNameScreen: ScreenType = ({
+const EditUserNameScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   profile,
 }): JSX.Element => {
-  const [userName, setUserName] = useState(navigation.state.params!.userName);
+  const [userName, setUserName] = useState(route.params.userName);
   const [isUserNameLoading, setIsUserNameLoading] = useState(false);
   const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -56,7 +59,7 @@ const EditUserNameScreen: ScreenType = ({
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
       if (userName === '') return;
-      if (!navigation.state.params) return;
+      if (!route.params) return;
 
       if (profile.userName !== userName) {
         const typeChecked = checkTypeUserName(userName);
@@ -68,14 +71,18 @@ const EditUserNameScreen: ScreenType = ({
           return;
         }
       }
-      navigation.state.params.setUserName(userName);
-      navigation.goBack(null);
+      route.params.setUserName(userName);
+      navigation.goBack();
     };
     f();
-  }, [navigation, profile.userName, userName]);
+  }, [navigation, profile.userName, route.params, userName]);
 
   useEffect(() => {
-    navigation.setParams({ onPressSubmit });
+    navigation.setOptions({
+      headerRight: (): JSX.Element => (
+        <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
+      ),
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userName]);
 
@@ -143,20 +150,6 @@ const EditUserNameScreen: ScreenType = ({
       </View>
     </DefaultLayout>
   );
-};
-
-EditUserNameScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressSubmit = navigation.getParam('onPressSubmit');
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultModalLayoutOptions,
-    title: I18n.t('editUserName.headerTitle'),
-    headerRight: (): JSX.Element => (
-      <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
-    ),
-  };
 };
 
 export default EditUserNameScreen;
