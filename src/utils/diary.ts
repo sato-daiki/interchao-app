@@ -214,7 +214,6 @@ export const getFillterLanguages = (
 export const getDisplayProfile = (profile: Profile): DisplayProfile => {
   return {
     uid: profile.uid,
-    pro: profile.pro,
     userName: profile.userName,
     photoUrl: profile.photoUrl,
     learnLanguage: profile.learnLanguage,

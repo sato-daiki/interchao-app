@@ -9,7 +9,6 @@ export interface Profile {
   name: string | null;
   userName: string;
   photoUrl: string | null;
-  pro: boolean;
   learnLanguage: Language;
   nativeLanguage: Language;
   spokenLanguages?: Language[] | null;
