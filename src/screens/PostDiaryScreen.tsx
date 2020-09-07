@@ -67,7 +67,6 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       const displayProfile = getDisplayProfile(profile);
 
       return {
-        premium: user.premium,
         // 最初の日記かチェック
         firstDiary: !(
           user.diaryPosted === undefined || user.diaryPosted === true
@@ -90,7 +89,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, text, title, user.diaryPosted, user.premium]
+    [profile, text, title, user.diaryPosted]
   );
 
   const onPressDraft = useCallback(() => {

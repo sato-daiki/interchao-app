@@ -12,7 +12,6 @@ export const getUser = async (uid: string): Promise<User | null> => {
     const data = doc.data();
     if (data) {
       const {
-        premium,
         diaryPosted,
         tutorialPostDiary,
         tutorialTeachDiaryList,
@@ -30,7 +29,6 @@ export const getUser = async (uid: string): Promise<User | null> => {
 
       return {
         uid,
-        premium,
         diaryPosted,
         tutorialPostDiary,
         tutorialTeachDiaryList,
