@@ -181,7 +181,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       const expoPushToken = await getExpoPushToken();
       if (expoPushToken && localStatus.uid) {
         // localStatusの方を使わないと初回登録時落ちる
-        registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
+        await registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
       }
     };
     f();

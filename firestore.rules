@@ -23,7 +23,6 @@ service cloud.firestore {
     	&& "userName" in profile && profile.userName is string
     	&& "photoUrl" in profile 
     	&& (profile.photoUrl == null || profile.photoUrl is string)
-    	&& "pro" in profile && profile.pro is bool
     	&& "learnLanguage" in profile && profile.learnLanguage is string
     	&& "nativeLanguage" in profile && profile.nativeLanguage is string
     	&& "introduction" in profile
@@ -44,7 +43,6 @@ service cloud.firestore {
   // displayProfiles
   function isValidDisplayProfiles(profile) {
   	return "uid" in profile && profile.uid is string
-      && "pro" in profile && profile.pro is bool
       && "userName" in profile && profile.userName is string
       && "photoUrl" in profile
       && (profile.photoUrl == null || profile.photoUrl is string)

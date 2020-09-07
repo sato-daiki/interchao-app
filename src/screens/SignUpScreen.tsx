@@ -126,7 +126,6 @@ const SignUpScreen: React.FC<ScreenType> = ({
           name: null,
           userName: profile.userName,
           photoUrl: null,
-          pro: false,
           learnLanguage: profile.learnLanguage,
           nativeLanguage: profile.nativeLanguage,
           spokenLanguages: profile.spokenLanguages || null,
