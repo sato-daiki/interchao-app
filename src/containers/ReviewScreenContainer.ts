@@ -3,10 +3,10 @@ import { RouteProp } from '@react-navigation/native';
 import { editDiary } from '../stores/actions/diaryList';
 import { State } from '../types/state';
 import ReviewScreen, { Props } from '../screens/ReviewScreen';
-import { MainStackParamList } from '../navigations/MainNavigator';
+import { ModalReviewStackParamList } from '../navigations/ModalNavigator';
 
 interface OwnProps {
-  route: RouteProp<MainStackParamList, 'ModalReview'>;
+  route: RouteProp<ModalReviewStackParamList, 'Review'>;
 }
 
 const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
