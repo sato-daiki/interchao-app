@@ -1,27 +1,30 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
-
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { offWhite } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import TutorialPostDiary from '../components/organisms/TutorialPostDiary';
 import TutorialPoints from '../components/organisms/TutorialPoints';
 import I18n from '../utils/I18n';
 import { Profile } from '../types';
+import {
+  MyPageTabStackParamList,
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type TutorialListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'TutorialList'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: TutorialListNavigationProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -34,7 +37,7 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const TutorialListScreen: ScreenType = ({ profile }) => {
+const TutorialListScreen: React.FC<ScreenType> = ({ profile }) => {
   // trueの時が非表示
   const [tutorialPostDiary, setTutorialPostDiary] = useState(true);
   const [tutorialPoints, setTutorialPoints] = useState(true);
@@ -64,13 +67,6 @@ const TutorialListScreen: ScreenType = ({ profile }) => {
       />
     </View>
   );
-};
-
-TutorialListScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('tutorialList.headerTitle'),
-  };
 };
 
 export default TutorialListScreen;

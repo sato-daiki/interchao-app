@@ -13,25 +13,29 @@ import {
   ActivityIndicator,
   Animated,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary } from '../types';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import {
+  MyDiaryTabStackParamList,
+  MyDiaryTabNavigationProp,
+} from '../navigations/MyDiaryTabNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+type DraftDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'DraftDiaryList'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: DraftDiaryListNavigationProp;
 };
 
 const styles = StyleSheet.create({
@@ -58,7 +62,7 @@ const getIsEditMode = (
 /**
  * 下書き一覧
  */
-const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
+const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [draftDiaries, setDraftDiaries] = useState<Diary[]>([]);
@@ -77,6 +81,7 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
       setIsEditing(true);
       Animated.spring(x, {
         toValue: 0,
+        useNativeDriver: true,
       }).start();
       return;
     }
@@ -87,15 +92,27 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
     setIsEditing(false);
     Animated.spring(x, {
       toValue: -EDIT_WIDTH,
+      useNativeDriver: true,
     }).start();
   }, [isEditing, preOpendIndex, x]);
 
   useEffect(() => {
-    navigation.setParams({
-      preOpendIndex,
-      draftDiaryTotalNum,
-      isEditing,
-      onPressEdit,
+    navigation.setOptions({
+      headerRight: (): ReactNode => {
+        if (draftDiaryTotalNum > 0) {
+          return (
+            <HeaderRight
+              text={
+                getIsEditMode(isEditing, preOpendIndex)
+                  ? I18n.t('common.done')
+                  : I18n.t('common.edit')
+              }
+              onPress={onPressEdit}
+            />
+          );
+        }
+        return null;
+      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [draftDiaryTotalNum, preOpendIndex, isEditing, onPressEdit]);
@@ -179,7 +196,10 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
 
   const onPressItem = useCallback(
     item => {
-      navigation.navigate('PostDraftDiary', { item });
+      navigation.navigate('ModalPostDraftDiary', {
+        screen: 'PostDraftDiary',
+        params: { item },
+      });
     },
     [navigation]
   );
@@ -319,35 +339,6 @@ const DraftDiaryListScreen: ScreenType = ({ navigation }) => {
       />
     </View>
   );
-};
-
-DraftDiaryListScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const draftDiaryTotalNum = navigation.getParam('draftDiaryTotalNum');
-  const isEditing = navigation.getParam('isEditing');
-  const preOpendIndex = navigation.getParam('preOpendIndex');
-  const onPressEdit = navigation.getParam('onPressEdit');
-
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('draftDiary.headerTitle'),
-    headerRight: (): ReactNode => {
-      if (draftDiaryTotalNum > 0) {
-        return (
-          <HeaderRight
-            text={
-              getIsEditMode(isEditing, preOpendIndex)
-                ? I18n.t('common.done')
-                : I18n.t('common.edit')
-            }
-            onPress={onPressEdit}
-          />
-        );
-      }
-      return null;
-    },
-  };
 };
 
 export default DraftDiaryListScreen;

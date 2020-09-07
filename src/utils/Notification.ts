@@ -1,14 +1,23 @@
-import { Notifications } from 'expo';
+import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import { NavigationStackProp } from 'react-navigation-stack';
 import { Platform } from 'react-native';
 import firebase from '../constants/firebase';
 
-export const registerForPushNotificationsAsync = async (
-  uid: string
-): Promise<void> => {
-  if (Platform.OS === 'web') return;
+// アプリ起動中のPush通知設定
+// https://docs.expo.io/versions/latest/sdk/notifications/#handling-incoming-notifications-when-the-app-is
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+export const getExpoPushToken = async (): Promise<null | string> => {
+  let expoPushToken;
+  if (Platform.OS === 'web') return null;
+
   // 実機端末か否かを判定
   if (Constants.isDevice) {
     const { status: existingStatus } = await Permissions.getAsync(
@@ -22,54 +31,32 @@ export const registerForPushNotificationsAsync = async (
     }
 
     if (finalStatus !== 'granted') {
-      return;
+      return null;
     }
-    const expoPushToken = await Notifications.getExpoPushTokenAsync();
-    console.log(expoPushToken);
-
-    await firebase
-      .firestore()
-      .doc(`users/${uid}`)
-      .update({
-        expoPushToken,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    expoPushToken = (await Notifications.getExpoPushTokenAsync()).data;
   }
 
   if (Platform.OS === 'android') {
-    Notifications.createChannelAndroidAsync('default', {
+    Notifications.setNotificationChannelAsync('default', {
       name: 'default',
-      sound: true,
-      priority: 'max',
-      vibrate: [0, 250, 250, 250],
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
     });
   }
+
+  return expoPushToken;
 };
 
-const generateNotificationHandler = (
-  navigation: NavigationStackProp,
-  onRefresh: () => void
-) => {
-  return async function notificationHandler(notification): Promise<void> {
-    const { origin, data } = notification;
-    if (origin !== 'selected' || !data.navigate) {
-      return;
-    }
-    if (data.navigate === 'myDiaryList') {
-      // 通知をクリックした場合
-      navigation.navigate('MyDiaryList');
-      onRefresh();
-    }
-  };
-};
-
-export const addLisner = (
-  navigation: NavigationStackProp,
-  onRefresh: () => void
-): void => {
-  const notificationHandler = generateNotificationHandler(
-    navigation,
-    onRefresh
-  );
-  Notifications.addListener(notificationHandler);
+export const registerForPushNotificationsAsync = async (
+  uid: string,
+  expoPushToken: string
+): Promise<void> => {
+  await firebase
+    .firestore()
+    .doc(`users/${uid}`)
+    .update({
+      expoPushToken,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 };

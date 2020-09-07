@@ -7,7 +7,7 @@ import {
   primaryColor,
 } from '../../styles/Common';
 import { ProfileIconHorizontal } from '../atoms';
-import { CorrectionTimer } from '.';
+import CorrectionTimer from './CorrectionTimer';
 import { getAlgoliaDate } from '../../utils/diary';
 import { Diary, Profile } from '../../types';
 

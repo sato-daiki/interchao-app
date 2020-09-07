@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: 'black',
   },
+  menuOptions: {
+    backgroundColor: 'transparent',
+  },
 });
 
 // 補足
@@ -183,7 +186,9 @@ const TextMenu = ({
         }}
       >
         <MenuTrigger triggerOnLongPress>{children}</MenuTrigger>
-        <MenuOptions>{renderMenuButton()}</MenuOptions>
+        <MenuOptions optionsContainerStyle={styles.menuOptions}>
+          {renderMenuButton()}
+        </MenuOptions>
       </Menu>
     </View>
   );
