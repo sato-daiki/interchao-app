@@ -6,14 +6,11 @@ import {
   Text,
   ActivityIndicator,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
 import { Profile, Correction, Diary } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { ProfileIconHorizontal, Space } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -27,16 +24,27 @@ import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type UserDiaryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CommonStackParamList, 'UserDiary'>,
+  CommonNavigationProp
+>;
+
+type UserDiaryRouteProp = RouteProp<CommonStackParamList, 'UserDiary'>;
+
+type ScreenType = {
+  navigation: UserDiaryNavigationProp;
+  route: UserDiaryRouteProp;
+} & Props;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -81,7 +89,11 @@ const styles = StyleSheet.create({
 /**
  * 日記詳細
  */
-const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
+const UserDiaryScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  profile,
+}) => {
   const [isProfileLoading, setIsProfileLoading] = useState(true);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isDiaryLoading, setIsDiaryLoading] = useState(true);
@@ -132,12 +144,7 @@ const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
 
   useEffect(() => {
     const f = async (): Promise<void> => {
-      const { params = {} } = navigation.state;
-      const { objectID } = params;
-      if (!objectID) {
-        setIsDiaryLoading(false);
-        return;
-      }
+      const { objectID } = route.params;
 
       // 日記を取得
       const index = await Algolia.getDiaryIndex();
@@ -158,12 +165,7 @@ const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
       await Promise.all([getNewProfile(diary), getNewCorrection(diary)]);
     };
     f();
-  }, [
-    getNewCorrection,
-    getNewProfile,
-    navigation.state,
-    navigation.state.params,
-  ]);
+  }, [getNewCorrection, getNewProfile, route.params]);
 
   const onPressUser = useCallback(
     (uid: string): void => {
@@ -240,13 +242,6 @@ const UserDiaryScreen: ScreenType = ({ navigation, profile }) => {
       </ScrollView>
     </View>
   );
-};
-
-UserDiaryScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('teachDiary.headerTitle'),
-  };
 };
 
 export default UserDiaryScreen;

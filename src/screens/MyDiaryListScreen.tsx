@@ -1,20 +1,14 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { Subscription } from '@unimodules/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
-import {
-  DefaultNavigationOptions,
-  DefaultSearchBarOptions,
-} from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
@@ -32,6 +26,10 @@ import {
   getExpoPushToken,
   registerForPushNotificationsAsync,
 } from '../utils/Notification';
+import {
+  MyDiaryTabStackParamList,
+  MyDiaryTabNavigationProp,
+} from '../navigations/MyDiaryTabNavigator';
 
 export interface Props {
   user: User;
@@ -49,13 +47,15 @@ interface DispatchProps {
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type MyDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'MyDiaryList'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyDiaryListNavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -73,7 +73,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 /**
  * マイ日記一覧
  */
-const MyDiaryListScreen: ScreenType = ({
+const MyDiaryListScreen: React.FC<ScreenType> = ({
   user,
   profile,
   diaries,
@@ -109,12 +109,23 @@ const MyDiaryListScreen: ScreenType = ({
   }, [navigation]);
 
   // 第二引数をなしにするのがポイント
-  useEffect(() => {
-    navigation.setParams({
-      onPressMenu: () => setIsMenu(true),
-      onPressSearch,
-      isDesktopOrLaptopDevice,
-      nativeLanguage: profile.nativeLanguage,
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: (): JSX.Element => (
+        <SearchBarButton
+          title={I18n.t('myDiaryList.headerTitle')}
+          onPress={onPressSearch}
+        />
+      ),
+      headerRight: (): JSX.Element =>
+        isDesktopOrLaptopDevice ? (
+          <MyDiaryListMenuWebPc nativeLanguage={profile.nativeLanguage} />
+        ) : (
+          <HeaderRight
+            name="dots-horizontal"
+            onPress={(): void => setIsMenu(true)}
+          />
+        ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -168,8 +179,9 @@ const MyDiaryListScreen: ScreenType = ({
       await getNewDiary();
       // expoへの登録
       const expoPushToken = await getExpoPushToken();
-      if (expoPushToken) {
-        registerForPushNotificationsAsync(user.uid, expoPushToken);
+      if (expoPushToken && localStatus.uid) {
+        // localStatusの方を使わないと初回登録時落ちる
+        registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
       }
     };
     f();
@@ -348,7 +360,6 @@ const MyDiaryListScreen: ScreenType = ({
   return (
     <View style={styles.container}>
       <MyDiaryListMenu
-        navigation={navigation}
         isMenu={isMenu}
         nativeLanguage={profile.nativeLanguage}
         onClose={onClose}
@@ -376,37 +387,6 @@ const MyDiaryListScreen: ScreenType = ({
       />
     </View>
   );
-};
-
-MyDiaryListScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressMenu = navigation.getParam('onPressMenu');
-  const onPressSearch = navigation.getParam('onPressSearch');
-  const isDesktopOrLaptopDevice = navigation.getParam(
-    'isDesktopOrLaptopDevice'
-  );
-  const nativeLanguage = navigation.getParam('nativeLanguage');
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultSearchBarOptions,
-    headerTitle: (): JSX.Element => (
-      <SearchBarButton
-        title={I18n.t('myDiaryList.headerTitle')}
-        onPress={onPressSearch}
-      />
-    ),
-    headerRight: (): JSX.Element =>
-      isDesktopOrLaptopDevice ? (
-        <MyDiaryListMenuWebPc
-          navigation={navigation}
-          nativeLanguage={nativeLanguage}
-        />
-      ) : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
-      ),
-  };
 };
 
 export default MyDiaryListScreen;

@@ -5,7 +5,13 @@ import CountryPicker, {
   CountryCode,
 } from 'react-native-country-picker-modal';
 import ModalWeb from 'modal-enhanced-react-native-web';
-import { maxAuth } from '../../../styles/Common';
+import {
+  maxAuth,
+  fontSizeM,
+  primaryColor,
+  offWhite,
+  borderLightColor,
+} from '../../../styles/Common';
 
 interface Props {
   visible: boolean;
@@ -27,6 +33,18 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  textInput: {
+    fontSize: fontSizeM,
+    color: primaryColor,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    marginVertical: 2,
+    backgroundColor: offWhite,
+    borderColor: borderLightColor,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 8,
+    width: '100%',
+  },
 });
 
 const ModalCountryPicker: React.FC<Props> = ({
@@ -42,6 +60,7 @@ const ModalCountryPicker: React.FC<Props> = ({
         <ScrollView>
           <View style={styles.container}>
             <CountryPicker
+              filterProps={{ style: styles.textInput }}
               // @ts-ignore
               countryCode={nationalityCode}
               withFilter

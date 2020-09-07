@@ -1,8 +1,8 @@
-import { NavigationStackOptions } from 'react-navigation-stack';
+import { StackNavigationOptions } from '@react-navigation/stack';
 import { primaryColor, fontSizeL, maxModal, maxAuth } from '../styles/Common';
 import { getEachOS } from '../utils/common';
 
-export const DefaultNavigationOptions: NavigationStackOptions = {
+export const DefaultNavigationOptions: StackNavigationOptions = {
   headerStyle: {
     backgroundColor: '#fff',
   },
@@ -26,7 +26,7 @@ export const DefaultNavigationOptions: NavigationStackOptions = {
   },
 };
 
-export const DefaultSearchBarOptions: NavigationStackOptions = {
+export const DefaultSearchBarOptions: StackNavigationOptions = {
   headerTitleAlign: 'center',
   headerTitleContainerStyle: {
     flex: 1,
@@ -34,7 +34,7 @@ export const DefaultSearchBarOptions: NavigationStackOptions = {
   },
 };
 
-export const DefaultDiaryOptions: NavigationStackOptions = {
+export const DefaultDiaryOptions: StackNavigationOptions = {
   headerTitleAlign: getEachOS({
     ios: 'center',
     android: 'left',
@@ -47,20 +47,22 @@ export const DefaultDiaryOptions: NavigationStackOptions = {
   },
 };
 
-export const DefaultModalLayoutOptions: NavigationStackOptions = {
+export const DefaultModalLayoutOptions: StackNavigationOptions = {
   cardStyle: {
     width: '100%',
     maxWidth: maxModal,
     marginHorizontal: 'auto',
     backgroundColor: '#fff',
+    flex: 1,
   },
 };
 
-export const DefaultAuthLayoutOptions: NavigationStackOptions = {
+export const DefaultAuthLayoutOptions: StackNavigationOptions = {
   cardStyle: {
     width: '100%',
     maxWidth: maxAuth,
     marginHorizontal: 'auto',
     backgroundColor: '#fff',
+    flex: 1,
   },
 };

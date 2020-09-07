@@ -20,7 +20,12 @@ import {
   SetTeachDiariesAction,
   EditTeachDiaryAction,
 } from '../stores/actions/teachDiaryList';
-import { SetLocalStatusAction } from '../stores/actions/localStatus';
+import {
+  SetLocalStatusAction,
+  RestoreUidAction,
+  SignInAction,
+  SignOutAction,
+} from '../stores/actions/localStatus';
 
 export interface State {
   rootReducer: {
@@ -34,6 +39,9 @@ export interface State {
 
 export type Actions =
   | SetLocalStatusAction
+  | RestoreUidAction
+  | SignInAction
+  | SignOutAction
   | SetUserAction
   | SetProfileAction
   | SetDiariesAction

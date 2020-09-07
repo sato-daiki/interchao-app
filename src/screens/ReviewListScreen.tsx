@@ -1,30 +1,35 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
-
 import { firestore } from 'firebase';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { Review, Profile } from '../types';
-
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { LoadingModal, GrayHeader } from '../components/atoms';
 import { getReviews } from '../utils/review';
 import ReviewListItem from '../components/organisms/ReviewListItem';
 import { EmptyReview } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ReviewListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CommonStackParamList, 'ReviewList'>,
+  CommonNavigationProp
+>;
+
+type ReviewListRouteProp = RouteProp<CommonStackParamList, 'ReviewList'>;
+
+type ScreenType = {
+  navigation: ReviewListNavigationProp;
+  route: ReviewListRouteProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +42,11 @@ const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Review, index: number): string => String(index);
 
-const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
+const ReviewListScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  profile,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [readingNext, setReadingNext] = useState(false);
@@ -50,8 +59,7 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      if (!navigation.state.params) return;
-      const { uid } = navigation.state.params;
+      const { uid } = route.params;
       const newReviews = await getReviews(uid, null, HIT_PER_PAGE);
       setReviews(newReviews);
       if (newReviews.length > 0) {
@@ -67,8 +75,7 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!navigation.state.params) return;
-      const { uid } = navigation.state.params;
+      const { uid } = route.params;
       setRefreshing(true);
       const newReviews = await getReviews(uid, null, HIT_PER_PAGE);
 
@@ -80,14 +87,13 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
       setRefreshing(false);
     };
     f();
-  }, [navigation.state.params]);
+  }, [route.params]);
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
       if (!readingNext && !readAllResults) {
         try {
-          if (!navigation.state.params) return;
-          const { uid } = navigation.state.params;
+          const { uid } = route.params;
           setReadingNext(true);
           const nextReviews = await getReviews(uid, lastVisible, HIT_PER_PAGE);
 
@@ -106,13 +112,7 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
       }
     };
     f();
-  }, [
-    lastVisible,
-    navigation.state.params,
-    readAllResults,
-    readingNext,
-    reviews,
-  ]);
+  }, [lastVisible, route.params, readAllResults, readingNext, reviews]);
 
   const listEmptyComponent = isLoading || refreshing ? null : <EmptyReview />;
 
@@ -153,13 +153,6 @@ const ReviewListScreen: ScreenType = ({ navigation, profile }) => {
       />
     </View>
   );
-};
-
-ReviewListScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('reviewList.headerTitle'),
-  };
 };
 
 export default ReviewListScreen;

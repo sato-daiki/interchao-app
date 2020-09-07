@@ -1,15 +1,16 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { offWhite } from '../styles/Common';
 import { CheckItem } from '../components/molecules';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
+import {
+  MyPageTabNavigationProp,
+  MyPageTabStackParamList,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   user: User;
@@ -19,13 +20,15 @@ interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type NoticeNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'Notice'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NoticeNavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
 /**
  * 通知画面
  */
-const NoticeScreen: ScreenType = ({ user, setUser }) => {
+const NoticeScreen: React.FC<ScreenType> = ({ user, setUser }) => {
   const { notificationCorrection } = user;
   const onPressCorrection = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -88,13 +91,6 @@ const NoticeScreen: ScreenType = ({ user, setUser }) => {
       /> */}
     </View>
   );
-};
-
-NoticeScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('notice.headerTitle'),
-  };
 };
 
 export default NoticeScreen;

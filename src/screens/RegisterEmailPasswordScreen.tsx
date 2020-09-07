@@ -1,17 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import {
   emailInputError,
   emailValidate,
   emaillExistCheck,
 } from '../utils/common';
 import firebase from '../constants/firebase';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import {
@@ -21,11 +18,18 @@ import {
   subTextColor,
 } from '../styles/Common';
 import I18n from '../utils/I18n';
+import {
+  MyPageTabStackParamList,
+  MyPageTabNavigationProp,
+} from '../navigations/MyPageTabNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
+type RegisterEmailPasswordNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'RegisterEmailPassword'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: RegisterEmailPasswordNavigationProp;
 };
 
 const styles = StyleSheet.create({
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RegisterEmailPasswordScreen: ScreenType = ({
+const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({
   navigation,
 }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
@@ -203,13 +207,6 @@ const RegisterEmailPasswordScreen: ScreenType = ({
       </View>
     </KeyboardAwareScrollView>
   );
-};
-
-RegisterEmailPasswordScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('registerEmailPassword.headerTitle'),
-  };
 };
 
 export default RegisterEmailPasswordScreen;

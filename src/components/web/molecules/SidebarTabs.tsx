@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { NavigationStackProp } from 'react-navigation-stack';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
+import { TabActions } from '@react-navigation/native';
 import {
   primaryColor,
   mainColor,
@@ -15,10 +15,6 @@ import { SubmitButton, Space } from '../../atoms';
 import I18n from '../../../utils/I18n';
 import { IconSmall } from '../../../images/web';
 import { TabIcon } from '../../molecules';
-
-interface Props {
-  navigation: NavigationStackProp;
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -69,16 +65,65 @@ const styles = StyleSheet.create({
   },
 });
 
-const SidebarTabs = ({ navigation }: Props): JSX.Element => {
-  const { routes, index } = navigation.state;
+const SidebarTabs = ({ state, navigation }): JSX.Element => {
   const isMaxLayoutChange = useMediaQuery({ minWidth: maxLayoutChange });
-
   const viewStyle = { width: isMaxLayoutChange ? 220 : 60 };
+
+  const onPressTab = route => {
+    const event = navigation.emit({
+      type: 'tabPress',
+      target: route.key,
+      canPreventDefault: true,
+    });
+
+    if (!event.defaultPrevented) {
+      navigation.dispatch({
+        ...TabActions.jumpTo(route.name),
+        target: state.key,
+      });
+    }
+  };
+
+  const getTabInfo = (
+    tabName: string,
+    color: string
+  ): { name: string; icon: JSX.Element } => {
+    let icon;
+    let name;
+
+    switch (tabName) {
+      case 'MyDiaryTab':
+        icon = (
+          <TabIcon
+            name="book-open"
+            size={25}
+            color={color}
+            badgeMode="myDiary"
+          />
+        );
+        name = I18n.t('mainTab.myDiary');
+        break;
+      case 'TeachDiaryTab':
+        icon = (
+          <MaterialCommunityIcons name="spellcheck" size={25} color={color} />
+        );
+        name = I18n.t('mainTab.teachDiary');
+        break;
+      case 'MyPageTab':
+        icon = <MaterialIcons name="person" size={25} color={color} />;
+        name = I18n.t('mainTab.myPage');
+        break;
+      default:
+    }
+
+    return { icon, name };
+  };
+
   return (
     <View style={[styles.container, viewStyle]}>
       <TouchableOpacity
         onPress={(): void => {
-          navigation.navigate('MyDiaryList');
+          navigation.navigate('MyDiaryTab');
         }}
         style={styles.row}
       >
@@ -89,53 +134,20 @@ const SidebarTabs = ({ navigation }: Props): JSX.Element => {
           </View>
         ) : null}
       </TouchableOpacity>
-      {routes.map((route, tabIndex) => {
-        const { routeName, params } = route;
-        const { tabName } = params || {};
-        const color = tabIndex === index ? mainColor : primaryColor;
+      {state.routes.map((route, tabIndex) => {
+        const color = tabIndex === state.index ? mainColor : primaryColor;
+        const tabInfo = getTabInfo(route.name, color);
 
-        let icon;
-        let name;
-        switch (tabName) {
-          case 'myDiary':
-            icon = (
-              <TabIcon
-                name="book-open"
-                size={25}
-                color={color}
-                badgeMode="myDiary"
-              />
-            );
-            name = I18n.t('mainTab.myDiary');
-            break;
-          case 'teachDiary':
-            icon = (
-              <MaterialCommunityIcons
-                name="spellcheck"
-                size={25}
-                color={color}
-              />
-            );
-            name = I18n.t('mainTab.teachDiary');
-            break;
-          case 'myPage':
-            icon = <MaterialIcons name="person" size={25} color={color} />;
-            name = I18n.t('mainTab.myPage');
-            break;
-          default:
-        }
         return (
           <TouchableOpacity
-            onPress={(): void => {
-              navigation.navigate(routeName);
-            }}
             style={styles.row}
-            key={route.routeName}
+            key={route.key}
+            onPress={(): void => onPressTab(route)}
           >
-            {icon}
+            {tabInfo.icon}
             {isMaxLayoutChange ? (
               <View style={styles.textContainer}>
-                <Text style={[styles.text, { color }]}>{name}</Text>
+                <Text style={[styles.text, { color }]}>{tabInfo.name}</Text>
               </View>
             ) : null}
           </TouchableOpacity>
@@ -146,14 +158,14 @@ const SidebarTabs = ({ navigation }: Props): JSX.Element => {
         <SubmitButton
           title={I18n.t('mainTab.postDiary')}
           onPress={(): void => {
-            navigation.navigate('ModalPostDiary');
+            navigation.navigate('ModalPostDiary', { screen: 'PostDiary' });
           }}
         />
       ) : (
         <TouchableOpacity
           style={styles.post}
           onPress={(): void => {
-            navigation.navigate('ModalPostDiary');
+            navigation.navigate('ModalPostDiary', { screen: 'PostDiary' });
           }}
         >
           <MaterialCommunityIcons name="pencil" size={25} color="#fff" />
