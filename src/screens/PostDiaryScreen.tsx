@@ -106,7 +106,10 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
           .add(diary);
 
         track(events.CREATED_DIARY, { diaryStatus: 'draft' });
-        navigation.navigate('Home', { screen: 'TeachDiaryTab' });
+        navigation.navigate('Home', {
+          screen: 'MyDiaryTab',
+          params: { screen: 'MyDiaryList' },
+        });
         setIsLoading(false);
         setIsModalAlert(false);
       } catch (err) {
@@ -238,8 +241,10 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
         diaryPosted: true,
         points: newPoints,
       });
-
-      navigation.navigate('Home', { screen: 'MyDiaryTab' });
+      navigation.navigate('Home', {
+        screen: 'MyDiaryTab',
+        params: { screen: 'MyDiaryList' },
+      });
       setIsLoading(false);
       setIsModalAlert(false);
     };
@@ -300,7 +305,10 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       learnLanguage={profile.learnLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
-        navigation.navigate('Home', { screen: 'TeachDiaryTab' });
+        navigation.navigate('Home', {
+          screen: 'TeachDiaryTab',
+          params: { screen: 'TeachDiaryList' },
+        });
       }}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}

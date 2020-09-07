@@ -16,10 +16,10 @@ export const setLocalStatus = (
 
 export interface RestoreUidAction extends Action {
   type: Types.RESTORE_UID;
-  uid: string;
+  uid: string | null;
 }
 
-export const restoreUid = (uid: string): RestoreUidAction => ({
+export const restoreUid = (uid: string | null): RestoreUidAction => ({
   type: Types.RESTORE_UID,
   uid,
 });

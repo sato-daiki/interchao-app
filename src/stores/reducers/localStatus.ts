@@ -26,7 +26,11 @@ const localStatus = (state = initialState, action: Actions): LocalStatus => {
         uid: action.uid,
       };
     case Types.SIGN_OUT:
-      return initialState;
+      return {
+        ...state,
+        isSignout: true,
+        uid: null,
+      };
     default:
       return state;
   }

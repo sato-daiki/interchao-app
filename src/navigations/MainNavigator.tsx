@@ -12,7 +12,7 @@ import {
 } from './ModalNavigator';
 
 export type MainStackParamList = {
-  Home: { screen: string };
+  Home: { screen: string; params: { screen: string } };
   ModalPostDiary: { screen: string };
   ModalPostDraftDiary: { screen: string; params: { item: Diary } };
   ModalEditMyProfile: { screen: string };

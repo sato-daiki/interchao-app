@@ -22,9 +22,9 @@ interface DispatchProps {
  * 概要：初期ローデンング
  */
 const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
+  localStatus,
   setUser,
   setProfile,
-  localStatus,
   restoreUid,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -67,10 +67,10 @@ const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
     return <LoadingModal visible />;
   }
 
-  if (localStatus.uid === null) {
-    return <AuthNavigator />;
+  if (localStatus.uid !== null) {
+    return <MainNavigator />;
   }
-  return <MainNavigator />;
+  return <AuthNavigator />;
 };
 
 export default AuthLoadingScreen;

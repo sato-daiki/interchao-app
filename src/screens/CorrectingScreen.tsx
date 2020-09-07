@@ -61,12 +61,12 @@ type ScreenType = {
 
 type Info =
   | {
-      fix: string | null;
-      diffs: Diff[] | null;
-    }
+    fix: string | null;
+    diffs: Diff[] | null;
+  }
   | {
-      detail: string | null;
-    };
+    detail: string | null;
+  };
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -273,7 +273,10 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('Home', { screen: 'TeachDiaryTab' });
+    navigation.navigate('Home', {
+      screen: 'TeachDiaryTab',
+      params: { screen: 'TeachDiaryList' },
+    });
     setIsModalDone(false);
   }, [navigation]);
 
@@ -299,7 +302,10 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * タイムアップ後のアラート画面での遷移
    */
   const onPressCloseTimeUp = useCallback(() => {
-    navigation.navigate('Home', { screen: 'TeachDiaryTab' });
+    navigation.navigate('Home', {
+      screen: 'TeachDiaryTab',
+      params: { screen: 'TeachDiaryList' },
+    });
   }, [navigation]);
 
   /* キーボード閉じる */
