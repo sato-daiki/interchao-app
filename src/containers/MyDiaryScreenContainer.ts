@@ -1,18 +1,19 @@
 import { connect } from 'react-redux';
-import { NavigationStackProp } from 'react-navigation-stack';
+import { RouteProp } from '@react-navigation/native';
 import MyDiaryScreen, { Props } from '../screens/MyDiaryScreen';
 import { State } from '../types/state';
 import { deleteDiary, editDiary } from '../stores/actions/diaryList';
+import { MyDiaryTabStackParamList } from '../navigations/MyDiaryTabNavigator';
 
 interface OwnProps {
-  navigation: NavigationStackProp;
+  route: RouteProp<MyDiaryTabStackParamList, 'MyDiary'>;
 }
 
 const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
   const { diaries } = state.rootReducer.diaryList;
   const { profile } = state.rootReducer;
 
-  const objectID = ownProps.navigation.getParam('objectID');
+  const objectID = ownProps.route.params?.objectID;
   const diary = diaries.find(d => d.objectID === objectID);
   return {
     diary,

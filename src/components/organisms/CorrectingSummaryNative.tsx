@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     marginLeft: 2,
   },
   textInputSummary: {
-    lineHeight: fontSizeM * 1,
+    lineHeight: fontSizeM * 1.3,
     fontSize: fontSizeM,
     color: primaryColor,
     paddingTop: 10,

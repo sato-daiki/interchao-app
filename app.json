@@ -4,7 +4,6 @@
     "scheme": "interchao",
     "slug": "white-zebra",
     "privacy": "public",
-    "sdkVersion": "37.0.0",
     "platforms": ["ios", "android", "web"],
     "version": "1.4.2",
     "orientation": "portrait",
@@ -30,7 +29,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
         "backgroundColor": "#fff"
-      }
+      },
+      "useNextNotificationsApi": true
     },
     "notification": {
       "icon": "./assets/images/notification.png"

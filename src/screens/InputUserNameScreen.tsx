@@ -1,9 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackScreenProps,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
   fontSizeM,
@@ -15,10 +12,6 @@ import Space from '../components/atoms/Space';
 import { CheckTextInput } from '../components/molecules';
 import { Profile } from '../types';
 import {
-  DefaultNavigationOptions,
-  DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
-import {
   checkDuplicatedUserName,
   checkTypeUserName,
   checkInitialUserName,
@@ -26,6 +19,7 @@ import {
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
 
 export interface Props {
   profile: Profile;
@@ -35,13 +29,9 @@ interface DispatchProps {
   setProfile: (profile: Profile) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<AuthStackParamList, 'InputUserName'> &
+  Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -63,11 +53,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const InputUserNameScreen: ScreenType = ({
+const InputUserNameScreen: React.FC<ScreenType> = ({
   navigation,
   profile,
   setProfile,
-}): JSX.Element => {
+}) => {
   const [userName, setUserName] = useState('');
   const [isUserNameLoading, setIsUserNameLoading] = useState(false);
   const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
@@ -165,14 +155,6 @@ const InputUserNameScreen: ScreenType = ({
       </View>
     </DefaultLayout>
   );
-};
-
-InputUserNameScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultAuthLayoutOptions,
-    title: I18n.t('inputUserName.headerTitle'),
-  };
 };
 
 export default InputUserNameScreen;

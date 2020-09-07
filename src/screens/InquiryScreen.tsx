@@ -1,13 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TextInput } from 'react-native-gesture-handler';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import firebase from '../constants/firebase';
 import { Profile, Inquiry as InquiryType } from '../types';
 import I18n from '../utils/I18n';
@@ -21,16 +18,23 @@ import {
 } from '../styles/Common';
 import { alert } from '../utils/ErrorAlert';
 import { ModalConfirm } from '../components/organisms';
+import {
+  MyPageTabNavigationProp,
+  MyPageTabStackParamList,
+} from '../navigations/MyPageTabNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type InquiryNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyPageTabStackParamList, 'Inquiry'>,
+  MyPageTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: InquiryNavigationProp;
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -50,10 +54,10 @@ const styles = StyleSheet.create({
     width: '100%',
     fontSize: fontSizeM,
     color: primaryColor,
-    paddingLeft: 16,
-    paddingRight: 46,
-    paddingVertical: 14,
-    textAlignVertical: 'top',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 12,
+
     backgroundColor: offWhite,
     borderRadius: 6,
     borderColor: borderLightColor,
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
   },
   message: {
     height: 300,
-    paddingTop: 16,
+    textAlignVertical: 'top',
   },
   successContainer: {
     paddingTop: 32,
@@ -85,7 +89,7 @@ const styles = StyleSheet.create({
 /**
  * 添削中
  */
-const InquiryScreen: ScreenType = ({ navigation, profile }) => {
+const InquiryScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -216,13 +220,6 @@ const InquiryScreen: ScreenType = ({ navigation, profile }) => {
       )}
     </KeyboardAwareScrollView>
   );
-};
-
-InquiryScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('inquiry.headerTitle'),
-  };
 };
 
 export default InquiryScreen;

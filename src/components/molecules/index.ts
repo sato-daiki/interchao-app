@@ -1,6 +1,5 @@
 export { default as CheckItem } from './CheckItem';
 export { default as CheckTextInput } from './CheckTextInput';
-export { default as ClearTextInput } from './ClearTextInput';
 export { default as CorrectingHeader } from './CorrectingHeader';
 export { default as CorrectionItem } from './CorrectionItem';
 export { default as CorrectionTimer } from './CorrectionTimer';

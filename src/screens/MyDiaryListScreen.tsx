@@ -1,35 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  Platform,
-} from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
-import { Notifications } from 'expo';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-
+import { Subscription } from '@unimodules/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
-import {
-  DefaultNavigationOptions,
-  DefaultSearchBarOptions,
-} from '../constants/NavigationOptions';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
-import {
-  registerForPushNotificationsAsync,
-  addLisner,
-} from '../utils/Notification';
 import { updateUnread, updateYet } from '../utils/diary';
 import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
 import { getUnreadCorrectionNum } from '../utils/localStatus';
@@ -37,8 +21,15 @@ import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
-import { getEachOS } from '../utils/common';
 import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
+import {
+  getExpoPushToken,
+  registerForPushNotificationsAsync,
+} from '../utils/Notification';
+import {
+  MyDiaryTabStackParamList,
+  MyDiaryTabNavigationProp,
+} from '../navigations/MyDiaryTabNavigator';
 
 export interface Props {
   user: User;
@@ -56,13 +47,15 @@ interface DispatchProps {
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type MyDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MyDiaryTabStackParamList, 'MyDiaryList'>,
+  MyDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: MyDiaryListNavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -80,7 +73,7 @@ const keyExtractor = (item: Diary, index: number): string => String(index);
 /**
  * マイ日記一覧
  */
-const MyDiaryListScreen: ScreenType = ({
+const MyDiaryListScreen: React.FC<ScreenType> = ({
   user,
   profile,
   diaries,
@@ -100,6 +93,8 @@ const MyDiaryListScreen: ScreenType = ({
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
 
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
@@ -114,12 +109,23 @@ const MyDiaryListScreen: ScreenType = ({
   }, [navigation]);
 
   // 第二引数をなしにするのがポイント
-  useEffect(() => {
-    navigation.setParams({
-      onPressMenu: () => setIsMenu(true),
-      onPressSearch,
-      isDesktopOrLaptopDevice,
-      nativeLanguage: profile.nativeLanguage,
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: (): JSX.Element => (
+        <SearchBarButton
+          title={I18n.t('myDiaryList.headerTitle')}
+          onPress={onPressSearch}
+        />
+      ),
+      headerRight: (): JSX.Element =>
+        isDesktopOrLaptopDevice ? (
+          <MyDiaryListMenuWebPc nativeLanguage={profile.nativeLanguage} />
+        ) : (
+          <HeaderRight
+            name="dots-horizontal"
+            onPress={(): void => setIsMenu(true)}
+          />
+        ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -142,9 +148,7 @@ const MyDiaryListScreen: ScreenType = ({
         // ユーザ情報も更新し直す（badgeのカウントの対応のため）
         const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
         if (newUnreadCorrectionNum !== null) {
-          if (Platform.OS === 'ios') {
-            Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
-          }
+          Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
           setLocalStatus({
             ...localStatus,
             unreadCorrectionNum: newUnreadCorrectionNum,
@@ -173,11 +177,40 @@ const MyDiaryListScreen: ScreenType = ({
   useEffect(() => {
     const f = async (): Promise<void> => {
       await getNewDiary();
-      // push通知の設定
-      await registerForPushNotificationsAsync(user.uid);
-      addLisner(navigation, onRefresh);
+      // expoへの登録
+      const expoPushToken = await getExpoPushToken();
+      if (expoPushToken && localStatus.uid) {
+        // localStatusの方を使わないと初回登録時落ちる
+        registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
+      }
     };
     f();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      prm => {
+        console.log('addNotificationReceivedListener', prm);
+        onRefresh();
+      }
+    );
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      response => {
+        console.log('addNotificationResponseReceivedListener', response);
+        onRefresh();
+      }
+    );
+
+    return (): void => {
+      // @ts-ignore
+      Notifications.removeNotificationSubscription(notificationListener);
+      // @ts-ignore
+      Notifications.removeNotificationSubscription(responseListener);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -253,9 +286,7 @@ const MyDiaryListScreen: ScreenType = ({
           if (localStatus.unreadCorrectionNum) {
             const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
             // アプリの通知数を設定
-            if (Platform.OS === 'ios') {
-              Notifications.setBadgeNumberAsync(newUnreadCorrectionNum);
-            }
+            Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
             setLocalStatus({
               ...localStatus,
               unreadCorrectionNum: newUnreadCorrectionNum,
@@ -329,7 +360,6 @@ const MyDiaryListScreen: ScreenType = ({
   return (
     <View style={styles.container}>
       <MyDiaryListMenu
-        navigation={navigation}
         isMenu={isMenu}
         nativeLanguage={profile.nativeLanguage}
         onClose={onClose}
@@ -357,37 +387,6 @@ const MyDiaryListScreen: ScreenType = ({
       />
     </View>
   );
-};
-
-MyDiaryListScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressMenu = navigation.getParam('onPressMenu');
-  const onPressSearch = navigation.getParam('onPressSearch');
-  const isDesktopOrLaptopDevice = navigation.getParam(
-    'isDesktopOrLaptopDevice'
-  );
-  const nativeLanguage = navigation.getParam('nativeLanguage');
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultSearchBarOptions,
-    headerTitle: (): JSX.Element => (
-      <SearchBarButton
-        title={I18n.t('myDiaryList.headerTitle')}
-        onPress={onPressSearch}
-      />
-    ),
-    headerRight: (): JSX.Element =>
-      isDesktopOrLaptopDevice ? (
-        <MyDiaryListMenuWebPc
-          navigation={navigation}
-          nativeLanguage={nativeLanguage}
-        />
-      ) : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
-      ),
-  };
 };
 
 export default MyDiaryListScreen;

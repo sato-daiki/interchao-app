@@ -6,20 +6,14 @@ import {
   RefreshControl,
   Platform,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
-import {
-  DefaultNavigationOptions,
-  DefaultSearchBarOptions,
-} from '../constants/NavigationOptions';
 import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
@@ -29,9 +23,10 @@ import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryLi
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import TeachDiaryListMenu from '../components/organisms/TeachDiaryListMenu';
-import TeachDiaryListMenuWebPc from '../components/web/organisms/TeachDiaryListMenu';
-
-import { primaryColor } from '../styles/Common';
+import {
+  TeachDiaryTabNavigationProp,
+  TeachDiaryTabStackParamList,
+} from '../navigations/TeachDiaryTabNavigator';
 
 export interface Props {
   profile: Profile;
@@ -44,13 +39,15 @@ interface DispatchProps {
   setTeachDiaries: (teachDiaries: Diary[]) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type TeachDiaryListNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<TeachDiaryTabStackParamList, 'TeachDiaryList'>,
+  TeachDiaryTabNavigationProp
+>;
+
+type ScreenType = {
+  navigation: TeachDiaryListNavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -59,14 +56,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 20;
+const HIT_PER_PAGE = 10;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
 /**
  * みんなの日記一覧
  */
-const TeachDiaryListScreen: ScreenType = ({
+const TeachDiaryListScreen: React.FC<ScreenType> = ({
   profile,
   user,
   setUser,
@@ -93,11 +90,23 @@ const TeachDiaryListScreen: ScreenType = ({
   }, [navigation]);
 
   useEffect(() => {
-    navigation.setParams({
-      onPressMenu: () => setIsMenu(true),
-      onPressSearch,
-      isDesktopOrLaptopDevice,
-      nativeLanguage: profile.nativeLanguage,
+    navigation.setOptions({
+      headerTitle: (): JSX.Element => (
+        <SearchBarButton
+          title={I18n.t('teachDiaryList.headerTitle')}
+          onPress={onPressSearch}
+        />
+      ),
+      // headerRight: (): JSX.Element =>
+      //   isDesktopOrLaptopDevice ? (
+      //     <TeachDiaryListMenuWebPc nativeLanguage={nativeLanguage} />
+      //   ) : (
+      //     <HeaderRight name="dots-horizontal" onPress={() => setIsMenu(true)} />
+      //   ),
+      headerRight: (): JSX.Element | null =>
+        Platform.OS === 'web' ? null : (
+          <HeaderRight name="dots-horizontal" onPress={() => setIsMenu(true)} />
+        ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -290,38 +299,6 @@ const TeachDiaryListScreen: ScreenType = ({
       />
     </View>
   );
-};
-
-TeachDiaryListScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const onPressMenu = navigation.getParam('onPressMenu');
-  const onPressSearch = navigation.getParam('onPressSearch');
-  const isDesktopOrLaptopDevice = navigation.getParam(
-    'isDesktopOrLaptopDevice'
-  );
-  const nativeLanguage = navigation.getParam('nativeLanguage');
-
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultSearchBarOptions,
-    headerTitle: (): JSX.Element => (
-      <SearchBarButton
-        title={I18n.t('teachDiaryList.headerTitle')}
-        onPress={onPressSearch}
-      />
-    ),
-    // headerRight: (): JSX.Element =>
-    //   isDesktopOrLaptopDevice ? (
-    //     <TeachDiaryListMenuWebPc nativeLanguage={nativeLanguage} />
-    //   ) : (
-    //     <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
-    //   ),
-    headerRight: (): JSX.Element | null =>
-      Platform.OS === 'web' ? null : (
-        <HeaderRight name="dots-horizontal" onPress={onPressMenu} />
-      ),
-  };
 };
 
 export default TeachDiaryListScreen;

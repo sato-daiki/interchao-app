@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import '@expo/match-media';
-import {
-  NavigationStackScreenComponent,
-  NavigationStackOptions,
-} from 'react-navigation-stack';
 import { useMediaQuery } from 'react-responsive';
+import { StackScreenProps } from '@react-navigation/stack';
 import { maxLayoutChange } from '../styles/Common';
 import { track, events } from '../utils/Analytics';
 import { AppDownload, Fotter, Header } from '../components/web/molecules';
@@ -16,6 +13,9 @@ import Reason from '../components/web/organisms/Reason';
 import Correct from '../components/web/organisms/Correct';
 import Start from '../components/web/organisms/Start';
 import Example from '../components/web/organisms/Example';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
+
+type ScreenType = StackScreenProps<AuthStackParamList, 'Initialize'>;
 
 const styles = StyleSheet.create({
   container: {
@@ -30,9 +30,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeWebScreen: NavigationStackScreenComponent = ({
-  navigation,
-}) => {
+const InitializeWebScreen: React.FC<ScreenType> = ({ navigation }) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);
@@ -96,9 +94,5 @@ const InitializeWebScreen: NavigationStackScreenComponent = ({
     </ScrollView>
   );
 };
-
-InitializeWebScreen.navigationOptions = (): NavigationStackOptions => ({
-  headerShown: false,
-});
 
 export default InitializeWebScreen;
