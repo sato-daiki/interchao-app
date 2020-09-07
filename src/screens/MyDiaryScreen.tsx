@@ -171,8 +171,8 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         isDesktopOrLaptopDevice ? (
           <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />
         ) : (
-          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
-        ),
+            <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+          ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diary]);
@@ -243,8 +243,8 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         onPressReview={(): void => {
           if (!diary.objectID) return;
           navigation.navigate('ModalReview', {
-            objectID: diary.objectID,
-            correctedNum,
+            screen: 'Review',
+            params: { objectID: diary.objectID, correctedNum },
           });
         }}
       />
@@ -293,21 +293,21 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
               <ActivityIndicator size="small" />
             </View>
           ) : (
-            <>
-              {correction ? (
-                <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
-              ) : null}
-              {correction
-                ? renderMyDiaryCorrection(1, correction, isReview)
-                : null}
-              {correction2
-                ? renderMyDiaryCorrection(2, correction2, isReview2)
-                : null}
-              {correction3
-                ? renderMyDiaryCorrection(3, correction3, isReview3)
-                : null}
-            </>
-          )}
+              <>
+                {correction ? (
+                  <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
+                ) : null}
+                {correction
+                  ? renderMyDiaryCorrection(1, correction, isReview)
+                  : null}
+                {correction2
+                  ? renderMyDiaryCorrection(2, correction2, isReview2)
+                  : null}
+                {correction3
+                  ? renderMyDiaryCorrection(3, correction3, isReview3)
+                  : null}
+              </>
+            )}
           <Space size={16} />
         </ViewShot>
         <Space size={48} />

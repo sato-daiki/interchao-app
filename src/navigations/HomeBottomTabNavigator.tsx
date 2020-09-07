@@ -20,7 +20,7 @@ export type HomeBottomNavigationProp = StackNavigationProp<
 >;
 
 export type HomeBottomParamList = {
-  MyDiaryTab: undefined;
+  MyDiaryTab: { screen: string };
   PostDiaryTab: undefined;
   TeachDiaryTab: undefined;
   MyPageTab: undefined;

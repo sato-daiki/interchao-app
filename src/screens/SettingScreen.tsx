@@ -85,7 +85,6 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
           return;
         }
         track(events.SIGN_OUT);
-        // TODO Authへ飛ばして、reduxを消す
         const { persistor } = configureStore();
         signOut();
         persistor.purge();
