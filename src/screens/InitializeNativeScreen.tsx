@@ -7,15 +7,15 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenComponent,
-} from 'react-navigation-stack';
+import { StackScreenProps } from '@react-navigation/stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
 import { LogoVercitacl } from '../images';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
+
+type ScreenType = StackScreenProps<AuthStackParamList, 'Initialize'>;
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -60,9 +60,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeNativeScreen: NavigationStackScreenComponent = ({
-  navigation,
-}) => {
+const InitializeNativeScreen: React.FC<ScreenType> = ({ navigation }) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);
@@ -97,9 +95,5 @@ const InitializeNativeScreen: NavigationStackScreenComponent = ({
     </SafeAreaView>
   );
 };
-
-InitializeNativeScreen.navigationOptions = (): NavigationStackOptions => ({
-  headerShown: false,
-});
 
 export default InitializeNativeScreen;

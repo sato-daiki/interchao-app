@@ -1,10 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackScreenProps } from '@react-navigation/stack';
 import {
   emailInputError,
   emailValidate,
@@ -12,10 +15,6 @@ import {
 } from '../utils/common';
 import firebase from '../constants/firebase';
 import { Profile, User } from '../types';
-import {
-  DefaultNavigationOptions,
-  DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import {
   Space,
@@ -32,16 +31,19 @@ import {
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import DefaultLayout from '../components/template/DefaultLayout';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
 
 export interface Props {
   profile: Profile;
 }
 
-type ScreenType = React.ComponentType<Props & NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+interface DispatchProps {
+  signIn: (uid: string) => void;
+}
+
+type ScreenType = StackScreenProps<AuthStackParamList, 'SignUp'> &
+  Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +78,11 @@ const styles = StyleSheet.create({
 /**
  * 概要：アカウント登録画面
  */
-const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
+const SignUpScreen: React.FC<ScreenType> = ({
+  navigation,
+  profile,
+  signIn,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -99,56 +105,63 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
 
   const createUser = useCallback(
     (credentUser: firebase.User): void => {
-      const userInfo = {
-        premium: false,
-        diaryPosted: false,
-        tutorialPostDiary: false,
-        tutorialTeachDiaryList: false,
-        tutorialCorrectiong: false,
-        points: 100,
-        expoPushToken: null,
-        correctingObjectID: null,
-        correctingCorrectedNum: null,
-        notificationCorrection: true,
-        notificationReview: true,
-        lastModalAppSuggestionAt: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
+      const f = async (): Promise<void> => {
+        const userInfo = {
+          premium: false,
+          diaryPosted: false,
+          tutorialPostDiary: false,
+          tutorialTeachDiaryList: false,
+          tutorialCorrectiong: false,
+          points: 100,
+          expoPushToken: null,
+          correctingObjectID: null,
+          correctingCorrectedNum: null,
+          notificationCorrection: true,
+          notificationReview: true,
+          lastModalAppSuggestionAt: null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-      const profileInfo = {
-        name: null,
-        userName: profile.userName,
-        photoUrl: null,
-        pro: false,
-        learnLanguage: profile.learnLanguage,
-        nativeLanguage: profile.nativeLanguage,
-        spokenLanguages: profile.spokenLanguages || null,
-        nationalityCode: profile.nationalityCode || null,
-        introduction: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
+        const profileInfo = {
+          name: null,
+          userName: profile.userName,
+          photoUrl: null,
+          pro: false,
+          learnLanguage: profile.learnLanguage,
+          nativeLanguage: profile.nativeLanguage,
+          spokenLanguages: profile.spokenLanguages || null,
+          nationalityCode: profile.nationalityCode || null,
+          introduction: null,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-      const userReviewInfo = {
-        ratingSum: 0,
-        reviewNum: 0,
-        score: 0.0,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
+        const userReviewInfo = {
+          ratingSum: 0,
+          reviewNum: 0,
+          score: 0.0,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-      const batch = firebase.firestore().batch();
-      batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
-      batch.set(
-        firebase.firestore().doc(`profiles/${credentUser.uid}`),
-        profileInfo
-      );
-      batch.set(
-        firebase.firestore().doc(`userReviews/${credentUser.uid}`),
-        userReviewInfo
-      );
-      batch.commit();
+        const batch = firebase.firestore().batch();
+        batch.set(
+          firebase.firestore().doc(`users/${credentUser.uid}`),
+          userInfo
+        );
+        batch.set(
+          firebase.firestore().doc(`profiles/${credentUser.uid}`),
+          profileInfo
+        );
+        batch.set(
+          firebase.firestore().doc(`userReviews/${credentUser.uid}`),
+          userReviewInfo
+        );
+        await batch.commit();
+        signIn(credentUser.uid);
+      };
+      f();
     },
     [
       profile.learnLanguage,
@@ -156,6 +169,7 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       profile.nativeLanguage,
       profile.spokenLanguages,
       profile.userName,
+      signIn,
     ]
   );
 
@@ -168,7 +182,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         if (credent.user) {
           createUser(credent.user);
           track(events.CREATED_USER, 'anonymously');
-          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -183,10 +196,13 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
     f();
   }, [clearErrorMessage, createUser]);
 
-  useEffect(() => {
-    navigation.setParams({ onPressSkip });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
+      ),
+    });
+  }, [navigation, onPressSkip]);
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -199,7 +215,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
         if (credent.user) {
           createUser(credent.user);
           track(events.CREATED_USER, 'email');
-          // navigation.navigate('MainTab');
         }
       } catch (err) {
         emailInputError(
@@ -311,18 +326,6 @@ const SignUpScreen: ScreenType = ({ navigation, profile }): JSX.Element => {
       </DefaultLayout>
     </KeyboardAwareScrollView>
   );
-};
-
-SignUpScreen.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  const onPressSkip = navigation.getParam('onPressSkip');
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultAuthLayoutOptions,
-    title: I18n.t('signUp.headerTitle'),
-    headerRight: (): JSX.Element => (
-      <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
-    ),
-  };
 };
 
 export default SignUpScreen;

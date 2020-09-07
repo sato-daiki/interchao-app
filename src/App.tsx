@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
@@ -6,16 +6,11 @@ import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
 import Updates from 'expo-updates';
-import '@expo/match-media';
-import { useMediaQuery } from 'react-responsive';
-import { createAppNavigator } from './navigations/AppNavigator';
+import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
-// import I18n from './utils/I18n';
 import Sentry from './constants/Sentry';
-// import { registerForPushNotificationsAsync } from './utils/Notification';
-// import { ModalConfirm } from './components/organisms';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -49,12 +44,6 @@ const App: React.SFC = () => {
   useEffect(() => {
     checkUpdate();
   }, []);
-
-  const isTabletOrMobileDevice = useMediaQuery({
-    maxDeviceWidth: 1224,
-  });
-
-  const AppNavigator = createAppNavigator(isTabletOrMobileDevice);
 
   return (
     <Provider store={store}>

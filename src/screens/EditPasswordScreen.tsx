@@ -1,23 +1,16 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { StackScreenProps } from '@react-navigation/stack';
 import { passwordInputError } from '../utils/common';
 import firebase from '../constants/firebase';
-import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import I18n from '../utils/I18n';
+import { MyPageTabStackParamList } from '../navigations/MyPageTabNavigator';
 
-type ScreenType = React.ComponentType<NavigationStackScreenProps> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<MyPageTabStackParamList, 'EditPassword'>;
 
 const styles = StyleSheet.create({
   container: {
@@ -44,7 +37,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
+const EditPasswordScreen: React.FC<ScreenType> = ({
+  navigation,
+}): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [errorCurrentPassword, setErrorCurrentPassword] = useState('');
@@ -153,13 +148,6 @@ const EditPasswordScreen: ScreenType = ({ navigation }): JSX.Element => {
       </View>
     </KeyboardAwareScrollView>
   );
-};
-
-EditPasswordScreen.navigationOptions = (): NavigationStackOptions => {
-  return {
-    ...DefaultNavigationOptions,
-    title: I18n.t('editPassword.headerTitle'),
-  };
 };
 
 export default EditPasswordScreen;

@@ -6,15 +6,12 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {
-  NavigationStackOptions,
-  NavigationStackScreenProps,
-} from 'react-navigation-stack';
 import { getName } from 'country-list';
 import Flag from 'react-native-flags';
 import * as Localization from 'expo-localization';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StackScreenProps } from '@react-navigation/stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
   primaryColor,
@@ -24,10 +21,6 @@ import {
 } from '../styles/Common';
 import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
-import {
-  DefaultNavigationOptions,
-  DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
 import { Profile, CountryCode, Language } from '../types';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
@@ -39,9 +32,9 @@ import {
   checkSelectLanguage,
 } from '../utils/diary';
 import DefaultLayout from '../components/template/DefaultLayout';
-import { HeaderLeft } from '../components/atoms';
 import { ModalConfirm } from '../components/organisms';
 import ModalCountryPicker from '../components/web/organisms/ModalCountryPicker';
+import { AuthStackParamList } from '../navigations/AuthNavigator';
 
 export interface Props {
   profile: Profile;
@@ -51,13 +44,9 @@ interface DispatchProps {
   setProfile: (profile: Profile) => void;
 }
 
-type ScreenType = React.ComponentType<
-  Props & DispatchProps & NavigationStackScreenProps
-> & {
-  navigationOptions:
-    | NavigationStackOptions
-    | ((props: NavigationStackScreenProps) => NavigationStackOptions);
-};
+type ScreenType = StackScreenProps<AuthStackParamList, 'SelectLanguage'> &
+  Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   contaner: {
@@ -156,11 +145,11 @@ const initCountryCode = (code: string): CountryCode | undefined => {
 /**
  * 概要：学びたい言語とネイティブの言語の登録
  */
-const SelectLanguageScreen: ScreenType = ({
+const SelectLanguageScreen: React.FC<ScreenType> = ({
   navigation,
   profile,
   setProfile,
-}): JSX.Element => {
+}) => {
   const code = Localization.locale.split('-')[0];
   const [learnLanguage, setLearnLanguage] = useState<Language>(
     initLearnLanguage(code)
@@ -178,9 +167,10 @@ const SelectLanguageScreen: ScreenType = ({
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  // TODO: web
   useEffect(() => {
-    navigation.setParams({
-      headerDissabele: Platform.OS === 'web' && countryVisible,
+    navigation.setOptions({
+      headerShown: !(Platform.OS === 'web' && countryVisible),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countryVisible]);
@@ -371,38 +361,6 @@ const SelectLanguageScreen: ScreenType = ({
       </View>
     </DefaultLayout>
   );
-};
-
-SelectLanguageScreen.navigationOptions = ({
-  navigation,
-}): NavigationStackOptions => {
-  const headerDissabele = navigation.getParam('headerDissabele');
-
-  const headerLeftOptions =
-    Platform.OS === 'web'
-      ? {
-          headerLeft: (): JSX.Element => (
-            <HeaderLeft
-              text={I18n.t('common.close')}
-              onPress={(): void => {
-                navigation.navigate('Initialize');
-              }}
-            />
-          ),
-        }
-      : {};
-
-  if (headerDissabele) {
-    return {
-      headerShown: false,
-    };
-  }
-  return {
-    ...DefaultNavigationOptions,
-    ...DefaultAuthLayoutOptions,
-    ...headerLeftOptions,
-    title: I18n.t('selectLanguage.headerTitle'),
-  };
 };
 
 export default SelectLanguageScreen;
