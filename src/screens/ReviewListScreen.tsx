@@ -128,8 +128,8 @@ const ReviewListScreen: React.FC<ScreenType> = ({
           item={item}
           nativeLanguage={profile.nativeLanguage}
           textLanguage={profile.learnLanguage}
-          onPressUser={(uid: string): void => {
-            navigation.push('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.push('UserProfile', { uid, userName });
           }}
         />
       );

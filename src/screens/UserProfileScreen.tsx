@@ -283,7 +283,10 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
 
   const onPressMoreReview = useCallback((): void => {
     if (!profile) return;
-    navigation.push('ReviewList', { uid: profile.uid });
+    navigation.push('ReviewList', {
+      uid: profile.uid,
+      userName: profile.userName,
+    });
   }, [navigation, profile]);
 
   const onPressBlockSubmit = useCallback((): void => {
@@ -406,12 +409,15 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       return (
         <DiaryListItem
           item={item}
-          onPressUser={(uid: string): void => {
-            navigation.push('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.push('UserProfile', { uid, userName });
           }}
           onPressItem={(): void => {
             if (!item.objectID) return;
-            navigation.push('UserDiary', { objectID: item.objectID });
+            navigation.push('UserDiary', {
+              objectID: item.objectID,
+              userName: item.profile.userName,
+            });
           }}
         />
       );
@@ -427,8 +433,8 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           <ReviewListItem
             item={item}
             textLanguage={profile.learnLanguage}
-            onPressUser={(uid: string): void => {
-              navigation.push('UserProfile', { uid });
+            onPressUser={(uid: string, userName: string): void => {
+              navigation.push('UserProfile', { uid, userName });
             }}
           />
         );

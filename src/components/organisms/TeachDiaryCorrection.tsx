@@ -11,7 +11,7 @@ interface Props {
   nativeLanguage: Language;
   textLanguage: Language;
   correction: Correction;
-  onPressUser?: (uid: string) => void;
+  onPressUser?: (uid: string, userName: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -89,7 +89,11 @@ const TeachDiaryCorrection: React.FC<Props> = ({
               photoUrl={profile.photoUrl}
               nativeLanguage={profile.nativeLanguage}
               nationalityCode={profile.nationalityCode}
-              onPress={(): void => onPressUser && onPressUser(profile.uid)}
+              onPress={(): void => {
+                if (onPressUser) {
+                  onPressUser(profile.uid, profile.userName);
+                }
+              }}
             />
             <Text style={styles.daytext}>{postDate}</Text>
           </View>

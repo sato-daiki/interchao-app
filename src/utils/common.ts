@@ -180,5 +180,6 @@ export const getEachOS = ({ ios, android, web, other }: EachOS): any => {
 
 // 何日前かをチェックする
 export const getIsAfterDay = (targetAt: any, days: number): boolean => {
+  if (!targetAt) return false;
   return moment(targetAt.toDate()).isAfter(moment().add(days, 'days'));
 };

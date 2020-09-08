@@ -13,6 +13,11 @@ import {
   MyDiaryTabStackParamList,
   MyDiaryTabNavigationProp,
 } from '../navigations/MyDiaryTabNavigator';
+import { Profile } from '../types';
+
+export interface Props {
+  profile: Profile;
+}
 
 type MyDiarySearchNavigationProp = CompositeNavigationProp<
   StackNavigationProp<MyDiaryTabStackParamList, 'MyDiarySearch'>,
@@ -21,7 +26,7 @@ type MyDiarySearchNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: MyDiarySearchNavigationProp;
-};
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -32,15 +37,16 @@ const styles = StyleSheet.create({
 
 const searchClient = getClient();
 
-const MyDiarySerchScreen: React.FC<ScreenType> = ({ navigation }) => {
+const MyDiarySerchScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
   const { currentUser } = firebase.auth();
   const [isEmpty, setIsEmpty] = useState(true);
 
   const onPressItem = useCallback(
     (objectID: string) => {
-      navigation.navigate('MyDiary', { objectID });
+      if (!currentUser) return;
+      navigation.navigate('MyDiary', { objectID, userName: profile.userName });
     },
-    [navigation]
+    [currentUser, navigation, profile.userName]
   );
 
   if (!currentUser) return <View />;

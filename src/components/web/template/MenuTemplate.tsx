@@ -15,7 +15,7 @@ interface Props {
 
 const styles = StyleSheet.create({
   optionsWrapper: {
-    flex: 1,
+    width: 200,
   },
   optionWrapper: {
     paddingHorizontal: 32,
@@ -32,8 +32,7 @@ const MenuTemplate = ({ children }: Props): JSX.Element => {
     <Menu
       renderer={renderers.Popover}
       rendererProps={{
-        // preferredPlacement: 'bottom',
-        placement: 'left',
+        placement: 'bottom',
       }}
     >
       <MenuTrigger>
