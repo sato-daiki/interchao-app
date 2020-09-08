@@ -14,7 +14,7 @@ import { MyDiaryStatus, ProfileIcons } from '../molecules';
 interface Props {
   mine?: boolean;
   item: Diary;
-  onPressUser: (uid: string) => void;
+  onPressUser: (uid: string, userName: string) => void;
   onPressItem: (item: Diary) => void;
 }
 

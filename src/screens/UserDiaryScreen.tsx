@@ -168,8 +168,8 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
   }, [getNewCorrection, getNewProfile, route.params]);
 
   const onPressUser = useCallback(
-    (uid: string): void => {
-      navigation.push('UserProfile', { uid });
+    (uid: string, userName: string): void => {
+      navigation.push('UserProfile', { uid, userName });
     },
     [navigation]
   );
@@ -192,7 +192,9 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
               nationalityCode={targetProfile.nationalityCode}
-              onPress={(): void => onPressUser(targetProfile.uid)}
+              onPress={(): void => {
+                onPressUser(targetProfile.uid, targetProfile.userName);
+              }}
             />
           ) : (
             <ActivityIndicator />
@@ -232,8 +234,8 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
             correction3={correction3}
             nativeLanguage={profile.nativeLanguage}
             textLanguage={targetProfile.learnLanguage}
-            onPressUser={(uid: string): void => {
-              navigation.push('UserProfile', { uid });
+            onPressUser={(uid: string, userName: string): void => {
+              navigation.push('UserProfile', { uid, userName });
             }}
           />
         ) : (

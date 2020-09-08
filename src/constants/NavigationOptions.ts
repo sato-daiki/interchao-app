@@ -7,12 +7,12 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
     backgroundColor: '#fff',
   },
   headerTitleStyle: {
-    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'center' }),
+    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'left' }),
     fontWeight: getEachOS({ ios: '700', android: '500', web: '700' }),
     color: primaryColor,
     fontSize: fontSizeL,
-    marginHorizontal: getEachOS({ ios: 32, android: 0, web: 32 }),
-    alignSelf: 'center',
+    marginHorizontal: getEachOS({ ios: 32, android: 0, web: 0 }),
+    alignSelf: getEachOS({ ios: 'center', android: 'center', web: 'left' }),
   },
   headerTintColor: primaryColor,
   headerRightContainerStyle: {

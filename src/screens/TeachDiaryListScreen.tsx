@@ -251,8 +251,8 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
       return (
         <TeachDiaryListItem
           item={item}
-          onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.navigate('UserProfile', { uid, userName });
           }}
           onPressItem={onPressItem}
         />

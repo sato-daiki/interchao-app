@@ -363,8 +363,8 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
   }, [teachDiary]);
 
   const onPressUser = useCallback(
-    (uid: string): void => {
-      navigation.navigate('UserProfile', { uid });
+    (uid: string, userName: string): void => {
+      navigation.navigate('UserProfile', { uid, userName });
     },
     [navigation]
   );
@@ -474,7 +474,9 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
                 photoUrl={targetProfile.photoUrl}
                 nativeLanguage={targetProfile.nativeLanguage}
                 nationalityCode={targetProfile.nationalityCode}
-                onPress={(): void => onPressUser(targetProfile.uid)}
+                onPress={(): void => {
+                  onPressUser(targetProfile.uid, targetProfile.userName);
+                }}
               />
             ) : (
               <ActivityIndicator />
@@ -507,8 +509,8 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
             correction={correction}
             correction2={correction2}
             correction3={correction3}
-            onPressUser={(uid: string): void => {
-              navigation.navigate('UserProfile', { uid });
+            onPressUser={(uid: string, userName: string): void => {
+              navigation.navigate('UserProfile', { uid, userName });
             }}
             nativeLanguage={profile.nativeLanguage}
             textLanguage={teachDiary.profile.learnLanguage}

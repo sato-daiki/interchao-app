@@ -21,9 +21,9 @@ export type CommonNavigationProp = CompositeNavigationProp<
 >;
 
 export type CommonStackParamList = {
-  UserProfile: { uid: string };
-  UserDiary: { objectID: string };
-  ReviewList: { uid: string };
+  UserProfile: { uid: string; userName: string };
+  UserDiary: { objectID: string; userName: string };
+  ReviewList: { uid: string; userName: string };
 };
 
 const CommonStack = createStackNavigator<CommonStackParamList>();

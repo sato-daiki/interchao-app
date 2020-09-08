@@ -237,8 +237,11 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         nativeLanguage={profile.nativeLanguage}
         textLanguage={profile.learnLanguage}
         correction={prmCorrection}
-        onPressUser={(uid): void => {
-          navigation.navigate('UserProfile', { uid });
+        onPressUser={(uid, userName): void => {
+          navigation.navigate('UserProfile', {
+            uid,
+            userName,
+          });
         }}
         onPressReview={(): void => {
           if (!diary.objectID) return;

@@ -317,11 +317,21 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
           setIsLoading(false);
         }
-        navigation.navigate('MyDiary', { objectID: item.objectID });
+        navigation.navigate('MyDiary', {
+          objectID: item.objectID,
+          userName: profile.userName,
+        });
       };
       f();
     },
-    [editDiary, isLoading, localStatus, navigation, setLocalStatus]
+    [
+      editDiary,
+      isLoading,
+      localStatus,
+      navigation,
+      profile.userName,
+      setLocalStatus,
+    ]
   );
 
   type RenderItemProps = { item: Diary };
@@ -331,8 +341,11 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         <DiaryListItem
           mine
           item={item}
-          onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.navigate('UserProfile', {
+              uid,
+              userName,
+            });
           }}
           onPressItem={onPressItem}
         />

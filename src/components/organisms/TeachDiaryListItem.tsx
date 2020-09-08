@@ -16,7 +16,7 @@ import I18n from '../../utils/I18n';
 
 interface Props {
   item: Diary;
-  onPressUser: (uid: string) => void;
+  onPressUser: (uid: string, userName: string) => void;
   onPressItem: (item: firebase.firestore.DocumentData) => void;
 }
 
@@ -92,7 +92,7 @@ const TeachDiaryListItem = ({
       <ProfileIcon
         photoUrl={photoUrl}
         nativeLanguage={nativeLanguage}
-        onPress={(): void => onPressUser(uid)}
+        onPress={(): void => onPressUser(uid, userName)}
       />
       <View style={styles.main}>
         <View style={styles.header}>

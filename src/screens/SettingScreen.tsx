@@ -24,6 +24,10 @@ import {
 } from '../navigations/MyPageTabNavigator';
 import { configureStore } from '../stores/Store';
 
+export interface Props {
+  profile: Profile;
+}
+
 interface DispatchProps {
   signOut: () => void;
 }
@@ -35,7 +39,8 @@ type SettingNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: SettingNavigationProp;
-} & DispatchProps;
+} & DispatchProps &
+  Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -71,7 +76,11 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
+const SettingScreen: React.FC<ScreenType> = ({
+  navigation,
+  profile,
+  signOut,
+}) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -115,7 +124,10 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
         <OptionItem
           title={I18n.t('myDiaryListMenu.reviewList')}
           onPress={(): void => {
-            navigation.navigate('ReviewList', { uid: currentUser.uid });
+            navigation.navigate('ReviewList', {
+              uid: currentUser.uid,
+              userName: profile.userName,
+            });
           }}
         />
       ) : null}
