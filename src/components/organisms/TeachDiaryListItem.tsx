@@ -8,7 +8,6 @@ import {
   subTextColor,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
-import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
 import { UserDiaryStatus } from '../molecules';
 import { ProfileIcon } from '../atoms';
@@ -17,7 +16,7 @@ import I18n from '../../utils/I18n';
 interface Props {
   item: Diary;
   onPressUser: (uid: string, userName: string) => void;
-  onPressItem: (item: firebase.firestore.DocumentData) => void;
+  onPressItem: (item: Diary) => void;
 }
 
 const styles = StyleSheet.create({

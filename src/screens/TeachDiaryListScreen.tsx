@@ -220,8 +220,12 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
   ]);
 
   const onPressItem = useCallback(
-    item => {
-      navigation.navigate('TeachDiary', { objectID: item.objectID });
+    (item: Diary) => {
+      if (!item.objectID) return;
+      navigation.navigate('TeachDiary', {
+        objectID: item.objectID,
+        userName: item.profile.userName,
+      });
     },
     [navigation]
   );

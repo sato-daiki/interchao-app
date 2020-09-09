@@ -8,7 +8,9 @@ import { mainColor } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
-import MyDiaryTabNavigator from './MyDiaryTabNavigator';
+import MyDiaryTabNavigator, {
+  MyDiaryTabStackParamList,
+} from './MyDiaryTabNavigator';
 import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
@@ -20,7 +22,7 @@ export type HomeBottomNavigationProp = StackNavigationProp<
 >;
 
 export type HomeBottomParamList = {
-  MyDiaryTab: { screen: string };
+  MyDiaryTab: { screen: keyof MyDiaryTabStackParamList };
   PostDiaryTab: undefined;
   TeachDiaryTab: undefined;
   MyPageTab: undefined;

@@ -247,7 +247,11 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
           if (!diary.objectID) return;
           navigation.navigate('ModalReview', {
             screen: 'Review',
-            params: { objectID: diary.objectID, correctedNum },
+            params: {
+              objectID: diary.objectID,
+              correctedNum,
+              userName: diary.profile.userName,
+            },
           });
         }}
       />
