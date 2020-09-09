@@ -331,7 +331,10 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       setIsModalCorrection(false);
       navigation.navigate('ModalCorrecting', {
         screen: 'Correcting',
-        params: { objectID: teachDiary.objectID },
+        params: {
+          objectID: teachDiary.objectID,
+          userName: teachDiary.profile.userName,
+        },
       });
       setIsLoading(false);
     };

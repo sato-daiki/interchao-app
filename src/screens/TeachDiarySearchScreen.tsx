@@ -69,8 +69,11 @@ const TeachDiarySerchScreen: React.FC<ScreenType> = ({
   }, [filters, profile.nativeLanguage, profile.spokenLanguages]);
 
   const onPressItem = useCallback(
-    (objectID: string) => {
-      navigation.navigate('TeachDiary', { objectID });
+    (objectID: string, userName: string) => {
+      navigation.navigate('TeachDiary', {
+        objectID,
+        userName,
+      });
     },
     [navigation]
   );

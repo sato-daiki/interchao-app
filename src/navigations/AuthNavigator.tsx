@@ -14,6 +14,7 @@ import {
   DefaultAuthLayoutOptions,
 } from '../constants/NavigationOptions';
 import I18n from '../utils/I18n';
+import NotFoundScreen from '../screens/NotFoundScreen';
 
 export type AuthStackParamList = {
   Initialize: undefined;
@@ -22,6 +23,7 @@ export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForegetPassword: undefined;
+  NotFound: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -82,6 +84,7 @@ export const AuthNavigator = (): JSX.Element => {
           title: I18n.t('foregetPassword.headerTitle'),
         }}
       />
+      <Stack.Screen name="NotFound" component={NotFoundScreen} />
     </Stack.Navigator>
   );
 };

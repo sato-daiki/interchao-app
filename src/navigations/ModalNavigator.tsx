@@ -23,17 +23,17 @@ export type ModalPostDiaryStackParamList = {
   PostDiary: undefined;
 };
 export type ModalPostDraftDiaryStackParamList = {
-  PostDraftDiary: { item: Diary };
+  PostDraftDiary: { item: Diary; objectID: string };
 };
 export type ModalEditMyProfileStackParamList = {
   EditMyProfile: undefined;
   EditUserName: { userName: string; setUserName: (text: string) => void };
 };
 export type ModalReviewStackParamList = {
-  Review: { objectID: string; correctedNum: number };
+  Review: { objectID: string; correctedNum: number; userName: string };
 };
 export type ModalCorrectingStackParamList = {
-  Correcting: { objectID: string };
+  Correcting: { objectID: string; userName: string };
 };
 
 export type ModalPostDiaryStackNavigationProp = StackNavigationProp<

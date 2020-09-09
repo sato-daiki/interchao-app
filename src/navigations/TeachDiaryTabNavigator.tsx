@@ -28,7 +28,7 @@ export type TeachDiaryTabNavigationProp = CompositeNavigationProp<
 export type TeachDiaryTabStackParamList = {
   TeachDiaryList: undefined;
   TeachDiarySearch: undefined;
-  TeachDiary: { objectID: string };
+  TeachDiary: { objectID: string; userName: string };
   Common: undefined;
 } & CommonStackParamList;
 
