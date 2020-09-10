@@ -41,7 +41,7 @@ export const AuthNavigator = (): JSX.Element => {
         component={
           Platform.OS === 'web' ? InitializeWebScreen : InitializeNativeScreen
         }
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: 'Interchao' }}
       />
       <Stack.Screen
         name="SelectLanguage"
