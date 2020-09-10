@@ -12,7 +12,7 @@ export interface User {
   correctingCorrectedNum: number | null;
   notificationCorrection: boolean;
   notificationReview: boolean;
-  lastModalAppSuggestionAt?: firestore.FieldValue | null;
-  createdAt: firestore.FieldValue;
-  updatedAt: firestore.FieldValue;
+  lastModalAppSuggestionAt?: firestore.Timestamp | null;
+  createdAt: firestore.Timestamp;
+  updatedAt: firestore.Timestamp;
 }

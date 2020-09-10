@@ -21,6 +21,7 @@ import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
+import firebase from '../constants/firebase';
 import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
 import {
   getExpoPushToken,
@@ -383,7 +384,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />
-      <ModalAppSuggestion user={user} />
+      <ModalAppSuggestion user={user} setUser={setUser} />
       <FlatList
         // emptyの時のレイアウトのため
         contentContainerStyle={isEmpty ? styles.flatList : null}
