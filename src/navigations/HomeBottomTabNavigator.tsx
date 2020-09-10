@@ -1,10 +1,12 @@
 import React from 'react';
+import { Text, TouchableOpacity, Image, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { mainColor } from '../styles/Common';
+import { mainColor, maxLayoutChange, fontSizeM } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
@@ -14,7 +16,7 @@ import MyDiaryTabNavigator, {
 import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
-import { createSideTabNavigator } from './SideTabNavigator';
+import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
 
 export type HomeBottomNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -28,23 +30,94 @@ export type HomeBottomParamList = {
   MyPageTab: undefined;
 };
 
+const styles = StyleSheet.create({
+  drawerLabelContainr: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  drawerLabelText: {
+    marginLeft: 12,
+    fontSize: fontSizeM,
+    fontWeight: 'bold',
+  },
+});
+
 const HomeBottomTabNavigator = (): JSX.Element => {
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
+  const isMaxLayoutChange = useMediaQuery({ minWidth: maxLayoutChange });
 
   if (isDesktopOrLaptopDevice) {
-    const HomeSide = createSideTabNavigator<HomeBottomParamList>();
+    const drawerStyle = { width: isMaxLayoutChange ? 240 : 80 };
+
+    const Drawer = createDrawerNavigator<HomeBottomParamList>();
 
     return (
-      <HomeSide.Navigator initialRouteName="MyDiaryTab">
-        <HomeSide.Screen name="MyDiaryTab" component={MyDiaryTabNavigator} />
-        <HomeSide.Screen
+      <Drawer.Navigator
+        initialRouteName="MyDiaryTab"
+        drawerType="permanent"
+        drawerStyle={drawerStyle}
+        drawerContent={(props): JSX.Element => (
+          <CustomDrawerContent
+            isMaxLayoutChange={isMaxLayoutChange}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...props}
+          />
+        )}
+      >
+        <Drawer.Screen
+          name="MyDiaryTab"
+          component={MyDiaryTabNavigator}
+          options={{
+            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+              <View style={styles.drawerLabelContainr}>
+                <TabIcon
+                  name="book-open"
+                  size={25}
+                  color={color}
+                  badgeMode="myDiary"
+                />
+                <Text style={[styles.drawerLabelText, { color }]}>
+                  {isMaxLayoutChange ? I18n.t('mainTab.myDiary') : null}
+                </Text>
+              </View>
+            ),
+          }}
+        />
+        <Drawer.Screen
           name="TeachDiaryTab"
           component={TeachDiaryTabNavigator}
+          options={{
+            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+              <View style={styles.drawerLabelContainr}>
+                <MaterialCommunityIcons
+                  name="spellcheck"
+                  size={25}
+                  color={color}
+                />
+                <Text style={[styles.drawerLabelText, { color }]}>
+                  {isMaxLayoutChange ? I18n.t('mainTab.teachDiary') : ''}
+                </Text>
+              </View>
+            ),
+          }}
         />
-        <HomeSide.Screen name="MyPageTab" component={MyPageTabNavigator} />
-      </HomeSide.Navigator>
+        <Drawer.Screen
+          name="MyPageTab"
+          component={MyPageTabNavigator}
+          options={{
+            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+              <View style={styles.drawerLabelContainr}>
+                <MaterialIcons name="person" size={25} color={color} />
+                <Text style={[styles.drawerLabelText, { color }]}>
+                  {isMaxLayoutChange ? I18n.t('mainTab.myPage') : ''}
+                </Text>
+              </View>
+            ),
+          }}
+        />
+      </Drawer.Navigator>
     );
   }
 

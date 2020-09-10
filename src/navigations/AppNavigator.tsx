@@ -29,7 +29,7 @@ const linking = {
             path: '',
             screens: {
               MyDiaryList: {
-                path: 'my/entries',
+                path: 'home',
               },
               MyDiarySearch: {
                 path: 'my/search',
