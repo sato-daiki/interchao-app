@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   fontSizeS,
   fontSizeM,
   primaryColor,
   borderLightColor,
   subTextColor,
+  hoverGray,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
 import { MyDiaryStatus, ProfileIcons } from '../molecules';
+import { TouchableOpacityHover } from '../template';
 
 interface Props {
   mine?: boolean;
@@ -24,6 +26,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
+  },
+  hover: {
+    backgroundColor: hoverGray,
   },
   header: {
     flexDirection: 'row',
@@ -68,8 +73,9 @@ const DiaryListItem = ({
   const postDay = getAlgoliaDay(createdAt);
 
   return (
-    <TouchableOpacity
+    <TouchableOpacityHover
       style={styles.container}
+      hoverStyle={styles.hover}
       onPress={(): void => onPressItem(item)}
     >
       <View style={styles.header}>
@@ -96,7 +102,7 @@ const DiaryListItem = ({
           </View>
         ) : null}
       </View>
-    </TouchableOpacity>
+    </TouchableOpacityHover>
   );
 };
 

@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   fontSizeS,
   fontSizeM,
   primaryColor,
   borderLightColor,
   subTextColor,
+  hoverGray,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
 import { UserDiaryStatus } from '../molecules';
 import { ProfileIcon } from '../atoms';
 import I18n from '../../utils/I18n';
+import { TouchableOpacityHover } from '../template';
 
 interface Props {
   item: Diary;
@@ -31,6 +33,9 @@ const styles = StyleSheet.create({
   main: {
     paddingLeft: 12,
     flex: 1,
+  },
+  hover: {
+    backgroundColor: hoverGray,
   },
   header: {
     flexDirection: 'row',
@@ -84,8 +89,9 @@ const TeachDiaryListItem = ({
   const postDay = getAlgoliaDay(createdAt);
 
   return (
-    <TouchableOpacity
+    <TouchableOpacityHover
       style={styles.container}
+      hoverStyle={styles.hover}
       onPress={(): void => onPressItem(item)}
     >
       <ProfileIcon
@@ -114,7 +120,7 @@ const TeachDiaryListItem = ({
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacityHover>
   );
 };
 
