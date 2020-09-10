@@ -11,6 +11,7 @@ import { User } from '../../../types';
 
 interface Props {
   user: User;
+  setUser: (user: User) => void;
 }
 
 const styles = StyleSheet.create({
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ModalAppSuggestion = ({ user }: Props): JSX.Element | null => {
+const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
   const [visible, setVisible] = useState(true);
 
   const isTabletOrMobileDevice = useMediaQuery({
@@ -40,14 +41,23 @@ const ModalAppSuggestion = ({ user }: Props): JSX.Element | null => {
   });
 
   const onPressClose = (): void => {
-    firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    const f = async (): Promise<void> => {
+      setVisible(false);
+
+      await firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({
+          lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+      setUser({
+        ...user,
+        lastModalAppSuggestionAt: firebase.firestore.Timestamp.now(),
       });
-    setVisible(false);
+    };
+    f();
   };
 
   if (
