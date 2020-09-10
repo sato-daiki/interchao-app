@@ -23,7 +23,7 @@ Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
   enableInExpoDevelopment: true,
-  debug: __DEV__,
+  debug: false,
 });
 
 if (!firebase.apps.length) {
