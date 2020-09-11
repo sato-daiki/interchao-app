@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  TouchableOpacity,
   Text,
   StyleSheet,
   ActivityIndicator,
@@ -9,6 +8,7 @@ import {
   TextStyle,
 } from 'react-native';
 import { fontSizeM, maxPartL, mainColor } from '../../styles/Common';
+import Hoverable from './Hoverable';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -47,7 +47,7 @@ const WhiteButton: React.FC<Props> = ({
   textStyle,
 }: Props): JSX.Element => {
   return (
-    <TouchableOpacity
+    <Hoverable
       style={[styles.contaner, containerStyle]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
@@ -57,7 +57,7 @@ const WhiteButton: React.FC<Props> = ({
       ) : (
         <Text style={[styles.title, textStyle]}>{title}</Text>
       )}
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 
