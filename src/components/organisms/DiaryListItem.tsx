@@ -11,7 +11,7 @@ import {
 import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
 import { MyDiaryStatus, ProfileIcons } from '../molecules';
-import { TouchableOpacityHover } from '../template';
+import { Hoverable } from '../atoms';
 
 interface Props {
   mine?: boolean;
@@ -73,9 +73,9 @@ const DiaryListItem = ({
   const postDay = getAlgoliaDay(createdAt);
 
   return (
-    <TouchableOpacityHover
-      style={styles.container}
+    <Hoverable
       hoverStyle={styles.hover}
+      style={styles.container}
       onPress={(): void => onPressItem(item)}
     >
       <View style={styles.header}>
@@ -102,7 +102,7 @@ const DiaryListItem = ({
           </View>
         ) : null}
       </View>
-    </TouchableOpacityHover>
+    </Hoverable>
   );
 };
 

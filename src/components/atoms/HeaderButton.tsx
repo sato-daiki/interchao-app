@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { fontSizeM, mainColor } from '../../styles/Common';
+import Hoverable from './Hoverable';
 
 interface Props {
   title: string;
@@ -27,12 +28,12 @@ const styles = StyleSheet.create({
 const HeaderButton: React.FC<Props> = ({ title, color, onPress }: Props) => {
   if (!title) return null;
   return (
-    <TouchableOpacity
-      style={[styles.container, { backgroundColor: color }]}
+    <Hoverable
       onPress={onPress}
+      style={[styles.container, { backgroundColor: color }]}
     >
       <Text style={styles.title}>{title}</Text>
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

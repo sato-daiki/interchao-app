@@ -41,7 +41,7 @@ import {
   GrayHeader,
   Space,
   ShareButton,
-  HeaderRight,
+  HeaderIcon,
 } from '../components/atoms';
 import I18n from '../utils/I18n';
 import RichText from '../components/organisms/RichText';
@@ -171,7 +171,11 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         isDesktopOrLaptopDevice ? (
           <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />
         ) : (
-          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={onPressMore}
+          />
         ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

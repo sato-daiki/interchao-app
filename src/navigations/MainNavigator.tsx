@@ -25,7 +25,9 @@ export type MainStackParamList = {
   Home: {
     screen: keyof HomeBottomParamList;
     params: {
-      screen: keyof MyDiaryTabStackParamList | TeachDiaryTabStackParamList;
+      screen:
+        | keyof MyDiaryTabStackParamList
+        | keyof TeachDiaryTabStackParamList;
     };
   };
   ModalPostDiary: { screen: keyof ModalPostDiaryStackParamList };

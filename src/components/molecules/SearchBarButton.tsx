@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, subTextColor, offWhite } from '../../styles/Common';
 import { getEachOS } from '../../utils/common';
+import { Hoverable } from '../atoms';
 
 const styles = StyleSheet.create({
   button: {
@@ -34,14 +35,14 @@ interface Props {
 
 const SearchBarButton: React.FC<Props> = ({ title, onPress }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <Hoverable style={styles.button} onPress={onPress}>
       <View style={styles.icon}>
         <MaterialCommunityIcons color={subTextColor} size={18} name="magnify" />
       </View>
       <Text style={styles.label} numberOfLines={1}>
         {title}
       </Text>
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

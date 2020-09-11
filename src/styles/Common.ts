@@ -34,3 +34,4 @@ export const maxModal = 700;
 export const maxLayoutChange = 1024;
 
 export const hoverGray = 'rgba(179,218,255,0.1)';
+export const hoverMain = 'rgba(45,156,219,0.1)';

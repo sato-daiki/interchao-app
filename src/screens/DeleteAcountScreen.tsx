@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
@@ -20,6 +20,7 @@ import {
   MyPageTabStackParamList,
 } from '../navigations/MyPageTabNavigator';
 import { configureStore } from '../stores/Store';
+import { Hoverable } from '../components/atoms';
 
 interface DispatchProps {
   signOut: () => void;
@@ -163,12 +164,12 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       />
       <View style={styles.main}>
         <Text style={styles.text}>{I18n.t('deleteAcount.text')}</Text>
-        <TouchableOpacity
+        <Hoverable
           style={styles.deleteButton}
           onPress={(): void => setIsModal(true)}
         >
           <Text style={styles.delete}>{I18n.t('deleteAcount.withdrawal')}</Text>
-        </TouchableOpacity>
+        </Hoverable>
       </View>
     </View>
   );

@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Image, Text, StyleSheet } from 'react-native';
 import Flag from 'react-native-flags';
 import { fontSizeS, primaryColor } from '../../styles/Common';
 import { getPhotoUrl } from '../../utils/profile';
 import { Language, CountryCode } from '../../types';
+import Hoverable from './Hoverable';
 
 interface Props {
   userName: string;
@@ -42,7 +43,7 @@ const ProfileIconHorizontal: React.FC<Props> = ({
   onPress,
 }: Props): JSX.Element => {
   return (
-    <TouchableOpacity
+    <Hoverable
       style={styles.container}
       onPress={onPress || undefined}
       activeOpacity={onPress ? 0.2 : 1}
@@ -55,7 +56,7 @@ const ProfileIconHorizontal: React.FC<Props> = ({
       {nationalityCode ? (
         <Flag style={styles.flag} code={nationalityCode} size={16} />
       ) : null}
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

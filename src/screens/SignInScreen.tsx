@@ -1,8 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackScreenProps } from '@react-navigation/stack';
-import { LoadingModal, Space, SubmitButton } from '../components/atoms';
+import {
+  LoadingModal,
+  Space,
+  SubmitButton,
+  Hoverable,
+} from '../components/atoms';
 import { CheckTextInput } from '../components/molecules';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import firebase from '../constants/firebase';
@@ -39,6 +44,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  hoverLink: {
+    borderBottomColor: linkBlue,
+    borderBottomWidth: 1,
   },
 });
 
@@ -160,9 +169,9 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
           <Space size={16} />
           <View style={styles.row}>
             <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
-            <TouchableOpacity onPress={onPressForget}>
+            <Hoverable onPress={onPressForget} hoverStyle={styles.hoverLink}>
               <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
-            </TouchableOpacity>
+            </Hoverable>
           </View>
         </View>
       </DefaultLayout>

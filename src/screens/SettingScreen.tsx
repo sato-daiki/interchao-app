@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
@@ -12,7 +12,7 @@ import {
   borderLightColor,
 } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
-import { Space } from '../components/atoms';
+import { Space, Hoverable } from '../components/atoms';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -23,6 +23,8 @@ import {
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
 import { configureStore } from '../stores/Store';
+
+import { Profile } from '../types';
 
 export interface Props {
   profile: Profile;
@@ -180,9 +182,9 @@ const SettingScreen: React.FC<ScreenType> = ({
         }}
       />
       <Space size={16} />
-      <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
+      <Hoverable style={styles.logoutButton} onPress={onPressLogout}>
         <Text style={styles.logout}>{I18n.t('setting.logout')}</Text>
-      </TouchableOpacity>
+      </Hoverable>
       <Space size={16} />
       <Text style={styles.versionText}>{getVersionText()}</Text>
     </View>

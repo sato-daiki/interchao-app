@@ -1,8 +1,9 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
+import { Platform } from 'react-native';
 import { primaryColor, fontSizeL, maxModal, maxAuth } from '../styles/Common';
 import { getEachOS } from '../utils/common';
-import { CusmtumHeaderBackButton } from '../components/web/atoms';
+import { HeaderIcon } from '../components/atoms';
 
 export const DefaultNavigationOptions: StackNavigationOptions = {
   headerStyle: {
@@ -18,12 +19,34 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
   },
   headerTintColor: primaryColor,
   headerLeftContainerStyle: {
-    paddingHorizontal: getEachOS({ ios: 16, android: 0, web: 0 }),
+    paddingHorizontal: getEachOS({ ios: 0, android: 0, web: 0 }),
   },
   headerBackTitleStyle: {
     display: 'none',
   },
-  headerLeft: props => <CusmtumHeaderBackButton {...props} />,
+  headerLeft: props => {
+    const { onPress } = props;
+    if (!onPress) return null;
+    if (Platform.OS === 'ios') {
+      return (
+        <HeaderIcon
+          icon="feather"
+          name="chevron-left"
+          size={25}
+          onPress={onPress}
+        />
+      );
+    }
+
+    return (
+      <HeaderIcon
+        icon="material"
+        name="arrow-back"
+        size={25}
+        onPress={onPress}
+      />
+    );
+  },
 };
 
 export const DefaultSearchBarOptions: StackNavigationOptions = {

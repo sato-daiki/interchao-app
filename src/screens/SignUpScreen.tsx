@@ -19,8 +19,8 @@ import { CheckTextInput } from '../components/molecules';
 import {
   Space,
   SubmitButton,
-  HeaderRight,
   LoadingModal,
+  HeaderText,
 } from '../components/atoms';
 import {
   primaryColor,
@@ -197,7 +197,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HeaderRight text={I18n.t('common.skip')} onPress={onPressSkip} />
+        <HeaderText text={I18n.t('common.skip')} onPress={onPressSkip} />
       ),
     });
   }, [navigation, onPressSkip]);

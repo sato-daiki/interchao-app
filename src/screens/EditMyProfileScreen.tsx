@@ -1,12 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { StyleSheet, View, Text, TextInput, Platform } from 'react-native';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,10 +16,10 @@ import firebase from '../constants/firebase';
 import {
   LoadingModal,
   Avatar,
-  HeaderRight,
-  HeaderLeft,
   SubmitButton,
   Space,
+  Hoverable,
+  HeaderText,
 } from '../components/atoms';
 import { Profile, Language } from '../types';
 import I18n from '../utils/I18n';
@@ -248,7 +241,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
-        <HeaderLeft
+        <HeaderText
           text={I18n.t('common.close')}
           onPress={(): void => {
             navigation.goBack();
@@ -257,7 +250,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       ),
       headerRight: (): JSX.Element | null =>
         Platform.OS === 'web' ? null : (
-          <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
+          <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />
         ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -359,37 +352,41 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
               onChangeText={(text: string): void => setName(text)}
             />
           </View>
-          <TouchableOpacity
+
+          <Hoverable
             style={styles.row}
             activeOpacity={1}
             onPress={onPressUserName}
           >
             <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
             <Text>{userName}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Hoverable>
+
+          <Hoverable
             style={styles.row}
             activeOpacity={1}
             onPress={(): void => setIsLearn(true)}
           >
             <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
             <Text>{getLanguage(learnLanguage)}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          </Hoverable>
+          <Hoverable
             style={styles.row}
             activeOpacity={1}
             onPress={(): void => setIsNative(true)}
           >
             <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
             <Text>{getLanguage(nativeLanguage)}</Text>
-          </TouchableOpacity>
+          </Hoverable>
+
           <View style={styles.spokenContainer}>
             <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
             <View style={styles.right}>
               {spokenLanguages.map(item => (
                 <View style={styles.spokenRow} key={item}>
                   <Text style={styles.spoken}>{getLanguage(item)}</Text>
-                  <TouchableOpacity
+
+                  <Hoverable
                     style={styles.trash}
                     onPress={(): void => {
                       setSpokenLanguages(
@@ -402,12 +399,12 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
                       color={primaryColor}
                       name="trash-can-outline"
                     />
-                  </TouchableOpacity>
+                  </Hoverable>
                 </View>
               ))}
 
               {spokenLanguages.length < getLanguageNum() - 2 ? (
-                <TouchableOpacity
+                <Hoverable
                   style={styles.addRow}
                   onPress={(): void => setIsSpoken(true)}
                 >
@@ -419,12 +416,11 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
                   <Text style={styles.addText}>
                     {I18n.t('selectLanguage.add')}
                   </Text>
-                </TouchableOpacity>
+                </Hoverable>
               ) : null}
             </View>
           </View>
-
-          <TouchableOpacity
+          <Hoverable
             style={[styles.row, rowStyle]}
             activeOpacity={1}
             onPress={(): void => setIsNationality(true)}
@@ -449,7 +445,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
               onOpen={(): void => setIsNationality(true)}
               visible={isNationality}
             />
-          </TouchableOpacity>
+          </Hoverable>
           <TextInput
             style={styles.introduction}
             value={introduction || ''}

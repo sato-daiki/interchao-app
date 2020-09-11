@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-import { TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { TextInput, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import I18n from '../../utils/I18n';
 import { fontSizeM, primaryColor, subTextColor } from '../../styles/Common';
+import { Hoverable } from '../atoms';
 
 interface Props {
   detail: string;
@@ -39,7 +40,7 @@ const CorrectingCommentNative: React.FC<Props> = ({
 
   return (
     <>
-      <TouchableOpacity
+      <Hoverable
         style={styles.buttonRow}
         onPress={(): void => {
           refDetail.current.focus();
@@ -47,7 +48,7 @@ const CorrectingCommentNative: React.FC<Props> = ({
       >
         <MaterialCommunityIcons size={22} color={subTextColor} name="plus" />
         <Text style={styles.detailLabel}>{I18n.t('commentCard.detail')}</Text>
-      </TouchableOpacity>
+      </Hoverable>
       <TextInput
         ref={refDetail}
         style={styles.textInputDetail}

@@ -31,7 +31,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
-  HeaderRight,
+  HeaderIcon,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -358,7 +358,11 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       // TODO: シェア機能ができてから
       headerRight: (): JSX.Element | null =>
         Platform.OS === 'web' ? null : (
-          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={onPressMore}
+          />
         ),
     });
 

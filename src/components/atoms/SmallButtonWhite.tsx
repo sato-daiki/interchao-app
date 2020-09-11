@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { mainColor, fontSizeM } from '../../styles/Common';
+import Hoverable from './Hoverable';
 
 interface Props {
   isLoading?: boolean;
@@ -38,7 +34,7 @@ const SmallButtonWhite: React.FC<Props> = ({
   onPress,
 }: Props): JSX.Element => {
   return (
-    <TouchableOpacity
+    <Hoverable
       style={[styles.contaner, { borderColor: color }]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
@@ -48,7 +44,7 @@ const SmallButtonWhite: React.FC<Props> = ({
       ) : (
         <Text style={[styles.title, { color }]}>{title}</Text>
       )}
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

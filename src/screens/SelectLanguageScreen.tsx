@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { getName } from 'country-list';
 import Flag from 'react-native-flags';
 import * as Localization from 'expo-localization';
@@ -35,6 +29,7 @@ import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import ModalCountryPicker from '../components/web/organisms/ModalCountryPicker';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
+import { Hoverable } from '../components/atoms';
 
 export interface Props {
   profile: Profile;
@@ -276,7 +271,7 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
         {spokenLanguages.map(item => (
           <View style={styles.rowSpoken} key={item}>
             <Text style={styles.spoken}>{getLanguage(item)}</Text>
-            <TouchableOpacity
+            <Hoverable
               style={styles.trash}
               onPress={(): void => {
                 setSpokenLanguages(spokenLanguages.filter(s => s !== item));
@@ -287,11 +282,11 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
                 color={primaryColor}
                 name="trash-can-outline"
               />
-            </TouchableOpacity>
+            </Hoverable>
           </View>
         ))}
         {spokenLanguages.length < getLanguageNum() - 2 ? (
-          <TouchableOpacity
+          <Hoverable
             style={styles.row}
             onPress={(): void => setSpokenVisible(true)}
           >
@@ -301,12 +296,12 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
               name="plus"
             />
             <Text style={styles.addText}>{I18n.t('selectLanguage.add')}</Text>
-          </TouchableOpacity>
+          </Hoverable>
         ) : null}
         <Space size={24} />
         <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
         {Platform.OS === 'web' ? (
-          <TouchableOpacity onPress={onOpenCountry}>
+          <Hoverable onPress={onOpenCountry}>
             {nationalityCode ? (
               <View style={styles.row}>
                 <Flag code={nationalityCode} size={24} />
@@ -322,15 +317,15 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
                 {I18n.t('selectLanguage.placeholder')}
               </Text>
             )}
-          </TouchableOpacity>
+          </Hoverable>
         ) : (
           <View style={styles.row}>
             {nationalityCode ? null : (
-              <TouchableOpacity onPress={onOpenCountry}>
+              <Hoverable onPress={onOpenCountry}>
                 <Text style={styles.pleaseText}>
                   {I18n.t('selectLanguage.placeholder')}
                 </Text>
-              </TouchableOpacity>
+              </Hoverable>
             )}
 
             <CountryPicker

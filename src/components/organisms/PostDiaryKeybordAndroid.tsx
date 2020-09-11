@@ -5,10 +5,9 @@ import {
   View,
   KeyboardAvoidingView,
   Keyboard,
-  TouchableOpacity,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TextButtun, TextInputTitle, TextInputText } from '../atoms';
+import { TextButtun, TextInputTitle, TextInputText, Hoverable } from '../atoms';
 import { offWhite, mainColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 
@@ -112,13 +111,13 @@ const PostDiaryKeybordAndroid = ({
         )}
       </SafeAreaView>
       {isKeyboard ? (
-        <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
+        <Hoverable style={styles.icon} onPress={Keyboard.dismiss}>
           <MaterialCommunityIcons
             size={24}
             color={mainColor}
             name="keyboard-close"
           />
-        </TouchableOpacity>
+        </Hoverable>
       ) : null}
     </View>
   );

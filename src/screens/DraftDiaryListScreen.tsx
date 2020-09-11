@@ -18,7 +18,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
 import { Diary } from '../types';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
@@ -101,7 +101,7 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
       headerRight: (): ReactNode => {
         if (draftDiaryTotalNum > 0) {
           return (
-            <HeaderRight
+            <HeaderText
               text={
                 getIsEditMode(isEditing, preOpendIndex)
                   ? I18n.t('common.done')

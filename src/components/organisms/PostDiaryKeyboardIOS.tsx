@@ -8,8 +8,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TextButtun, TextInputTitle, TextInputText } from '../atoms';
+import { TextButtun, TextInputTitle, TextInputText, Hoverable } from '../atoms';
 import { offWhite, mainColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 
@@ -71,13 +70,13 @@ const PostDiaryKeyboardIOS = ({
             opacity: fadeAnim,
           }}
         >
-          <TouchableOpacity onPress={Keyboard.dismiss} style={styles.icon}>
+          <Hoverable style={styles.icon} onPress={Keyboard.dismiss}>
             <MaterialCommunityIcons
               size={24}
               color={mainColor}
               name="keyboard-close"
             />
-          </TouchableOpacity>
+          </Hoverable>
         </Animated.View>
       ) : null}
       <KeyboardSpacer />
