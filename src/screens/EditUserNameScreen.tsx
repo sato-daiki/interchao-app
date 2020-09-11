@@ -8,7 +8,7 @@ import {
   checkInitialUserName,
 } from '../utils/profile';
 import { CheckTextInput } from '../components/molecules';
-import { HeaderRight } from '../components/atoms';
+import { HeaderText } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile } from '../types';
 import I18n from '../utils/I18n';
@@ -80,7 +80,7 @@ const EditUserNameScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerRight: (): JSX.Element => (
-        <HeaderRight text={I18n.t('common.done')} onPress={onPressSubmit} />
+        <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

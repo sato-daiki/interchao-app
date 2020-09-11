@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import {
   subTextColor,
   fontSizeS,
@@ -11,7 +11,7 @@ import { getAlgoliaDay } from '../../utils/diary';
 import { MyDiaryStatus, UserDiaryStatus } from '../molecules';
 import { Diary } from '../../types';
 import Highlight from './Highlight';
-import { Space } from '../atoms';
+import { Space, Hoverable } from '../atoms';
 
 interface Props {
   me: boolean;
@@ -64,10 +64,7 @@ const SearchDiaryList: React.FC<Props> = ({
   const postDay = getAlgoliaDay(createdAt);
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={(): void => onPressItem(item)}
-    >
+    <Hoverable style={styles.container} onPress={(): void => onPressItem(item)}>
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
         {me ? <MyDiaryStatus diary={item} /> : <UserDiaryStatus diary={item} />}
@@ -87,7 +84,7 @@ const SearchDiaryList: React.FC<Props> = ({
           hit={item}
         />
       </View>
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

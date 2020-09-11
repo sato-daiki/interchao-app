@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { StyleSheet } from 'react-native';
 import { mainColor, maxLayoutChange } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
@@ -12,7 +13,9 @@ import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import MyDiaryTabNavigator, {
   MyDiaryTabStackParamList,
 } from './MyDiaryTabNavigator';
-import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
+import TeachDiaryTabNavigator, {
+  TeachDiaryTabStackParamList,
+} from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
 import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
@@ -26,9 +29,18 @@ export type HomeBottomNavigationProp = StackNavigationProp<
 export type HomeBottomParamList = {
   MyDiaryTab: { screen: keyof MyDiaryTabStackParamList };
   PostDiaryTab: undefined;
-  TeachDiaryTab: undefined;
+  TeachDiaryTab: { screen: keyof TeachDiaryTabStackParamList };
   MyPageTab: undefined;
 };
+
+const styles = StyleSheet.create({
+  itemStyle: {
+    backgroundColor: undefined,
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 const HomeBottomTabNavigator = (): JSX.Element => {
   const isDesktopOrLaptopDevice = useMediaQuery({
@@ -54,7 +66,7 @@ const HomeBottomTabNavigator = (): JSX.Element => {
         )}
         drawerContentOptions={{
           activeTintColor: mainColor,
-          itemStyle: { backgroundColor: undefined },
+          itemStyle: styles.itemStyle,
         }}
       >
         <Drawer.Screen

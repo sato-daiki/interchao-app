@@ -1,12 +1,13 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import {
   fontSizeM,
   primaryColor,
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
+import { Hoverable } from '../atoms';
 
 interface Props {
   isBorrderTop?: boolean;
@@ -40,17 +41,14 @@ const OptionItem = ({
 }: Props): JSX.Element => {
   const borderTopWidth = isBorrderTop ? 0.5 : undefined;
   return (
-    <TouchableOpacity
-      style={[styles.container, { borderTopWidth }]}
-      onPress={onPress}
-    >
+    <Hoverable style={[styles.container, { borderTopWidth }]} onPress={onPress}>
       <Text style={styles.title}>{title}</Text>
       <MaterialCommunityIcons
         size={28}
         color={subTextColor}
         name="chevron-right"
       />
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

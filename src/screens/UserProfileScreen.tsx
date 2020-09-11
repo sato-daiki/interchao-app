@@ -2,7 +2,6 @@ import React, { useCallback, useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   ActivityIndicator,
   RefreshControl,
@@ -19,7 +18,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
-import { Space, GrayHeader, HeaderRight } from '../components/atoms';
+import { Space, GrayHeader, Hoverable, HeaderIcon } from '../components/atoms';
 import {
   Diary,
   Profile,
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 10;
+const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Diary | Review, index: number): string =>
   String(index);
@@ -275,7 +274,11 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
             onPressBlock={onPressBlock}
           />
         ) : (
-          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={onPressMore}
+          />
         ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -493,11 +496,11 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           ListFooterComponent={listFooterReviewComponent}
         />
         {!!reviewNum && reviewNum > 3 ? (
-          <TouchableOpacity style={styles.moreRead} onPress={onPressMoreReview}>
+          <Hoverable style={styles.moreRead} onPress={onPressMoreReview}>
             <Text style={styles.moreReadText}>
               {I18n.t('userProfile.moreRead', { count: reviewNum })}
             </Text>
-          </TouchableOpacity>
+          </Hoverable>
         ) : null}
         <FlatList
           data={diaries}

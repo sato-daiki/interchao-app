@@ -95,7 +95,6 @@ const CheckTextInput = (props: Props): JSX.Element => {
             styles.textInput,
             errorMessage.length > 0 ? styles.errorBorder : {},
           ]}
-          // eslint-disable-next-line react/jsx-props-no-spreading
           {...props}
         />
         {rightIcon()}

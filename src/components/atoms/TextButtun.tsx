@@ -1,11 +1,7 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { mainColor, fontSizeM, subTextColor } from '../../styles/Common';
+import Hoverable from './Hoverable';
 
 interface Props {
   isBorrderTop?: boolean;
@@ -46,7 +42,7 @@ const TextButtun: React.FC<Props> = ({
     : undefined;
 
   return (
-    <TouchableOpacity
+    <Hoverable
       style={[styles.contaner, { borderTopWidth, borderBottomWidth }]}
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
@@ -56,7 +52,7 @@ const TextButtun: React.FC<Props> = ({
       ) : (
         <Text style={styles.title}>{title}</Text>
       )}
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

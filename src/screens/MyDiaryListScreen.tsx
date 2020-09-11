@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Subscription } from '@unimodules/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
@@ -122,7 +122,8 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         isDesktopOrLaptopDevice ? (
           <MyDiaryListMenuWebPc nativeLanguage={profile.nativeLanguage} />
         ) : (
-          <HeaderRight
+          <HeaderIcon
+            icon="community"
             name="dots-horizontal"
             onPress={(): void => setIsMenu(true)}
           />
@@ -193,7 +194,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(
       prm => {
-        console.log('addNotificationReceivedListener', prm);
         onRefresh();
       }
     );
@@ -201,7 +201,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
       response => {
-        console.log('addNotificationResponseReceivedListener', response);
         onRefresh();
       }
     );

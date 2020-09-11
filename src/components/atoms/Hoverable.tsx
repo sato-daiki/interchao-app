@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { ViewStyle, StyleProp, TouchableOpacity } from 'react-native';
+import {
+  ViewStyle,
+  StyleProp,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native';
 
-interface Props {
+type Props = {
   style?: StyleProp<ViewStyle>;
-  hoverStyle: StyleProp<ViewStyle>;
-  onPress: () => void;
+  hoverStyle?: StyleProp<ViewStyle>;
   children: React.ReactNode;
-}
+} & TouchableOpacityProps;
 
-const TouchableOpacityHover: React.FC<Props> = ({
+// defautlはopacityの設定のみ
+const Hoverable: React.FC<Props> = ({
   style,
-  hoverStyle,
-  onPress,
+  hoverStyle = { opacity: 0.8 },
   children,
+  ...props
 }) => {
   const [isHover, setIsHover] = useState(false);
   return (
@@ -21,11 +26,11 @@ const TouchableOpacityHover: React.FC<Props> = ({
       // @ts-ignore
       onMouseEnter={(): void => setIsHover(true)}
       onMouseLeave={(): void => setIsHover(false)}
-      onPress={onPress}
+      {...props}
     >
       {children}
     </TouchableOpacity>
   );
 };
 
-export default TouchableOpacityHover;
+export default Hoverable;

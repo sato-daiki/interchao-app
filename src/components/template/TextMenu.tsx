@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, Clipboard } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Speech from 'expo-speech';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -14,6 +13,7 @@ import I18n from '../../utils/I18n';
 import { clipboard } from '../../styles/Common';
 import ModalSpeech from '../organisms/ModalSpeech';
 import { Language } from '../../types';
+import { Hoverable } from '../atoms';
 
 interface Props {
   children: React.ReactNode;
@@ -153,13 +153,11 @@ const TextMenu = ({
     }
     return (
       <View style={styles.row}>
-        <TouchableOpacity onPress={onPressCopy}>{copyButton}</TouchableOpacity>
-        <TouchableOpacity onPress={onPressTranslate}>
-          {translateButton}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressSpeech}>
-          {speechButton}
-        </TouchableOpacity>
+        <Hoverable onPress={onPressCopy}>{copyButton}</Hoverable>
+
+        <Hoverable onPress={onPressTranslate}>{translateButton}</Hoverable>
+
+        <Hoverable onPress={onPressSpeech}>{speechButton}</Hoverable>
       </View>
     );
   };

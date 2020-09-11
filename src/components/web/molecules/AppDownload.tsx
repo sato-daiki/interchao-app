@@ -8,7 +8,6 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Linking } from 'expo';
 import I18n from '../../../utils/I18n';
 import { GooglePlayBadge, Appstore } from '../../../images/web/index';
@@ -19,6 +18,7 @@ import {
   offWhite,
   primaryColor,
 } from '../../../styles/Common';
+import { Hoverable } from '../../atoms';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -83,16 +83,16 @@ const AppDownload = ({ isWhite, containerStyle }: Props): JSX.Element => {
         {I18n.t('modalAppSuggestion.text')}
       </Text>
       <View style={styles.row}>
-        <TouchableOpacity onPress={onPressGoogle}>
+        <Hoverable onPress={onPressGoogle}>
           <Image
             resizeMode="contain"
             style={styles.image}
             source={GooglePlayBadge}
           />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressApple}>
+        </Hoverable>
+        <Hoverable onPress={onPressApple}>
           <Image resizeMode="contain" style={styles.image} source={Appstore} />
-        </TouchableOpacity>
+        </Hoverable>
       </View>
     </View>
   );
