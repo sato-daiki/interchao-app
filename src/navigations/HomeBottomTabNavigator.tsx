@@ -1,12 +1,11 @@
 import React from 'react';
-import { Text, TouchableOpacity, Image, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { mainColor, maxLayoutChange, fontSizeM } from '../styles/Common';
+import { mainColor, maxLayoutChange } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
@@ -17,6 +16,7 @@ import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
 import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
+import { DrawerLabel } from '../components/web/molecules';
 
 export type HomeBottomNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -29,18 +29,6 @@ export type HomeBottomParamList = {
   TeachDiaryTab: undefined;
   MyPageTab: undefined;
 };
-
-const styles = StyleSheet.create({
-  drawerLabelContainr: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  drawerLabelText: {
-    marginLeft: 12,
-    fontSize: fontSizeM,
-    fontWeight: 'bold',
-  },
-});
 
 const HomeBottomTabNavigator = (): JSX.Element => {
   const isDesktopOrLaptopDevice = useMediaQuery({
@@ -61,27 +49,25 @@ const HomeBottomTabNavigator = (): JSX.Element => {
         drawerContent={(props): JSX.Element => (
           <CustomDrawerContent
             isMaxLayoutChange={isMaxLayoutChange}
-            // eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
           />
         )}
+        drawerContentOptions={{
+          activeTintColor: mainColor,
+          itemStyle: { backgroundColor: undefined },
+        }}
       >
         <Drawer.Screen
           name="MyDiaryTab"
           component={MyDiaryTabNavigator}
           options={{
             drawerLabel: ({ color }: { color: string }): JSX.Element => (
-              <View style={styles.drawerLabelContainr}>
-                <TabIcon
-                  name="book-open"
-                  size={25}
-                  color={color}
-                  badgeMode="myDiary"
-                />
-                <Text style={[styles.drawerLabelText, { color }]}>
-                  {isMaxLayoutChange ? I18n.t('mainTab.myDiary') : null}
-                </Text>
-              </View>
+              <DrawerLabel
+                isMaxLayoutChange={isMaxLayoutChange}
+                tabName="MyDiaryTab"
+                color={color}
+                text={isMaxLayoutChange ? I18n.t('mainTab.myDiary') : null}
+              />
             ),
           }}
         />
@@ -90,16 +76,12 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           component={TeachDiaryTabNavigator}
           options={{
             drawerLabel: ({ color }: { color: string }): JSX.Element => (
-              <View style={styles.drawerLabelContainr}>
-                <MaterialCommunityIcons
-                  name="spellcheck"
-                  size={25}
-                  color={color}
-                />
-                <Text style={[styles.drawerLabelText, { color }]}>
-                  {isMaxLayoutChange ? I18n.t('mainTab.teachDiary') : ''}
-                </Text>
-              </View>
+              <DrawerLabel
+                isMaxLayoutChange={isMaxLayoutChange}
+                tabName="TeachDiaryTab"
+                color={color}
+                text={isMaxLayoutChange ? I18n.t('mainTab.teachDiary') : null}
+              />
             ),
           }}
         />
@@ -108,12 +90,12 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           component={MyPageTabNavigator}
           options={{
             drawerLabel: ({ color }: { color: string }): JSX.Element => (
-              <View style={styles.drawerLabelContainr}>
-                <MaterialIcons name="person" size={25} color={color} />
-                <Text style={[styles.drawerLabelText, { color }]}>
-                  {isMaxLayoutChange ? I18n.t('mainTab.myPage') : ''}
-                </Text>
-              </View>
+              <DrawerLabel
+                isMaxLayoutChange={isMaxLayoutChange}
+                tabName="MyPageTab"
+                color={color}
+                text={isMaxLayoutChange ? I18n.t('mainTab.myPage') : null}
+              />
             ),
           }}
         />
@@ -148,7 +130,11 @@ const HomeBottomTabNavigator = (): JSX.Element => {
             <MaterialCommunityIcons name="pencil" size={25} color={color} />
           ),
         }}
-        listeners={({ navigation }) => ({
+        listeners={({
+          navigation,
+        }: {
+          navigation: HomeBottomNavigationProp;
+        }) => ({
           tabPress: e => {
             // Prevent default action
             e.preventDefault();

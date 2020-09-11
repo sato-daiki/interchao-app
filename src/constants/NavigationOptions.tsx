@@ -1,6 +1,8 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
+import React from 'react';
 import { primaryColor, fontSizeL, maxModal, maxAuth } from '../styles/Common';
 import { getEachOS } from '../utils/common';
+import { CusmtumHeaderBackButton } from '../components/web/atoms';
 
 export const DefaultNavigationOptions: StackNavigationOptions = {
   headerStyle: {
@@ -15,15 +17,13 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
     alignSelf: getEachOS({ ios: 'center', android: 'center', web: 'left' }),
   },
   headerTintColor: primaryColor,
-  headerRightContainerStyle: {
-    paddingHorizontal: 16,
-  },
   headerLeftContainerStyle: {
     paddingHorizontal: getEachOS({ ios: 16, android: 0, web: 0 }),
   },
   headerBackTitleStyle: {
     display: 'none',
   },
+  headerLeft: props => <CusmtumHeaderBackButton {...props} />,
 };
 
 export const DefaultSearchBarOptions: StackNavigationOptions = {
