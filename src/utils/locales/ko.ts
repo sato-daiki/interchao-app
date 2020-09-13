@@ -199,7 +199,8 @@ const myDiary = {
 };
 
 const myDiaryList = {
-  headerTitle: '내 일기 검색하기',
+  headerTitle: '내 일기',
+  searchText: '내 일기 검색하기',
   diaryList: {
     one: '내 일기 리스트{{count}}건',
     other: '내 일기 리스트{{count}}건',
@@ -304,7 +305,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '일기 찾기',
+  headerTitle: '일기 목록',
+  searchText: '일기 찾기',
   diaryList: '당신이 원어민 언어의 일기 목록',
   empty: '일기가 없습니다',
 };

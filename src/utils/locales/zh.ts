@@ -190,7 +190,8 @@ const myDiary = {
 };
 
 const myDiaryList = {
-  headerTitle: '搜索我的日记',
+  headerTitle: '我的日记',
+  searchText: '搜索我的日记',
   diaryList: {
     one: '我的日记列表{{count}}项',
     other: '我的日记列表{{count}}项',
@@ -292,7 +293,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '查找日记',
+  headerTitle: '日记列表',
+  searchText: '查找日记',
   diaryList: '你说的语言的日记列表',
   empty: '日记还没有发布',
 };

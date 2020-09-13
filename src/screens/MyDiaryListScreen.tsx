@@ -114,7 +114,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     navigation.setOptions({
       headerTitle: (): JSX.Element => (
         <SearchBarButton
-          title={I18n.t('myDiaryList.headerTitle')}
+          title={I18n.t('myDiaryList.searchText')}
           onPress={onPressSearch}
         />
       ),

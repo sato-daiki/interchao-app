@@ -65,7 +65,6 @@ export const AuthNavigator = (): JSX.Element => {
         options={{
           ...DefaultAuthLayoutOptions,
           title: I18n.t('signIn.headerTitle'),
-          // TODO: Web直す必要あり
         }}
       />
       <Stack.Screen

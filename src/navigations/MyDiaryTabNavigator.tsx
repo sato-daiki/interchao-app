@@ -45,12 +45,18 @@ const MyDiaryTabNavigator = (): JSX.Element => {
       <MyDiaryTabStack.Screen
         name="MyDiaryList"
         component={MyDiaryListScreenContainer}
-        options={DefaultSearchBarOptions}
+        options={{
+          ...DefaultSearchBarOptions,
+          title: I18n.t('myDiaryList.headerTitle'),
+        }}
       />
       <MyDiaryTabStack.Screen
         name="MyDiarySearch"
         component={MyDiarySerchScreenContainer}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          title: I18n.t('myDiaryList.searchText'),
+        }}
       />
       <MyDiaryTabStack.Screen
         name="DraftDiaryList"

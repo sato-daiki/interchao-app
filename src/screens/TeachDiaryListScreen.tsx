@@ -93,7 +93,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     navigation.setOptions({
       headerTitle: (): JSX.Element => (
         <SearchBarButton
-          title={I18n.t('teachDiaryList.headerTitle')}
+          title={I18n.t('teachDiaryList.searchText')}
           onPress={onPressSearch}
         />
       ),
