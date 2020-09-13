@@ -331,6 +331,11 @@ const tutorialList = {
   points: 'About Points',
 };
 
+const notFound = {
+  text: 'The page you are looking for is not found',
+  link: 'Top',
+};
+
 const userProfile = {
   headerTitle: 'Profile',
   moreRead: 'View All {{count}} Reviews',
@@ -613,6 +618,7 @@ const en = {
   teachDiarySerch,
   tutorialList,
   userProfile,
+  notFound,
   commentCard,
   firstDiary,
   userPoints,

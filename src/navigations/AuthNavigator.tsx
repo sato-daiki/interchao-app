@@ -83,7 +83,11 @@ export const AuthNavigator = (): JSX.Element => {
           title: I18n.t('foregetPassword.headerTitle'),
         }}
       />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ headerShown: false, title: '404 NOT FOUND' }}
+      />
     </Stack.Navigator>
   );
 };

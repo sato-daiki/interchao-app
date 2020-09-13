@@ -309,6 +309,11 @@ const tutorialList = {
   points: '关于积分',
 };
 
+const notFound = {
+  text: '找不到您要查找的页',
+  link: '返回首页',
+};
+
 const userProfile = {
   headerTitle: '个人资料',
   moreRead: '查看所有{{count}}条评论',
@@ -582,6 +587,7 @@ const zh = {
   teachDiarySerch,
   tutorialList,
   userProfile,
+  notFound,
   commentCard,
   firstDiary,
   userPoints,
