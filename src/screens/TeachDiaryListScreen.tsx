@@ -11,7 +11,7 @@ import { useMediaQuery } from 'react-responsive';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
 import { EmptyList } from '../components/molecules';
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 10;
+const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
@@ -93,7 +93,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     navigation.setOptions({
       headerTitle: (): JSX.Element => (
         <SearchBarButton
-          title={I18n.t('teachDiaryList.headerTitle')}
+          title={I18n.t('teachDiaryList.searchText')}
           onPress={onPressSearch}
         />
       ),
@@ -105,7 +105,11 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
       //   ),
       headerRight: (): JSX.Element | null =>
         Platform.OS === 'web' ? null : (
-          <HeaderRight name="dots-horizontal" onPress={() => setIsMenu(true)} />
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={(): void => setIsMenu(true)}
+          />
         ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -220,8 +224,12 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
   ]);
 
   const onPressItem = useCallback(
-    item => {
-      navigation.navigate('TeachDiary', { objectID: item.objectID });
+    (item: Diary) => {
+      if (!item.objectID) return;
+      navigation.navigate('TeachDiary', {
+        objectID: item.objectID,
+        userName: item.profile.userName,
+      });
     },
     [navigation]
   );
@@ -251,8 +259,8 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
       return (
         <TeachDiaryListItem
           item={item}
-          onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.navigate('UserProfile', { userName });
           }}
           onPressItem={onPressItem}
         />

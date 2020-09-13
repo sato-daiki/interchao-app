@@ -11,7 +11,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import {
-  HeaderLeft,
+  HeaderText,
   HeaderButton,
   LoadingModal,
   Space,
@@ -255,7 +255,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
-        <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
+        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
       ),
       headerRight: (): JSX.Element | null =>
         isFirstEdit ? (

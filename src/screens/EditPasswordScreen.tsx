@@ -5,7 +5,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { passwordInputError } from '../utils/common';
 import firebase from '../constants/firebase';
 import { CheckTextInput } from '../components/molecules';
-import { Space, SubmitButton, LoadingModal } from '../components/atoms';
+import {
+  Space,
+  SubmitButton,
+  LoadingModal,
+  Hoverable,
+} from '../components/atoms';
 import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { MyPageTabStackParamList } from '../navigations/MyPageTabNavigator';
@@ -34,6 +39,10 @@ const styles = StyleSheet.create({
   },
   linkText: {
     color: linkBlue,
+  },
+  hoverLink: {
+    borderBottomColor: linkBlue,
+    borderBottomWidth: 1,
   },
 });
 
@@ -136,14 +145,14 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
         <Space size={16} />
         <Text style={styles.forgetText}>
           {I18n.t('editPassword.forgetText')}
-          <Text
-            style={styles.linkText}
+          <Hoverable
             onPress={(): void => {
               navigation.navigate('ForegetPassword');
             }}
+            hoverStyle={styles.hoverLink}
           >
-            {I18n.t('editPassword.link')}
-          </Text>
+            <Text style={styles.linkText}>{I18n.t('editPassword.link')}</Text>
+          </Hoverable>
         </Text>
       </View>
     </KeyboardAwareScrollView>

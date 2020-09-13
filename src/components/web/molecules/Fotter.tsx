@@ -1,13 +1,8 @@
 import React from 'react';
-import {
-  View,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Linking, StyleSheet, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { maxLayoutChange, offBlack, offWhite } from '../../../styles/Common';
+import { Hoverable } from '../../atoms';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -58,15 +53,17 @@ const Fotter = (): JSX.Element => {
         <View style={styles.row}>
           <Text style={styles.textSmall}>©2020 Interchao</Text>
           <View style={styles.right}>
-            <TouchableOpacity onPress={onPressBlog}>
+            <Hoverable onPress={onPressBlog}>
               <Text style={styles.textMiddle}>Blog</Text>
-            </TouchableOpacity>
-            <MaterialCommunityIcons
-              size={28}
-              color={offWhite}
-              name="twitter"
-              onPress={onPressTwitter}
-            />
+            </Hoverable>
+
+            <Hoverable onPress={onPressTwitter}>
+              <MaterialCommunityIcons
+                size={28}
+                color={offWhite}
+                name="twitter"
+              />
+            </Hoverable>
           </View>
         </View>
       </View>

@@ -43,7 +43,7 @@ const InitializeWebScreen: React.FC<ScreenType> = ({ navigation }) => {
   });
 
   const isMobileDevice = useMediaQuery({
-    maxDeviceWidth: 767,
+    maxDeviceWidth: 768,
   });
 
   return (

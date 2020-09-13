@@ -14,6 +14,7 @@ import {
   DefaultAuthLayoutOptions,
 } from '../constants/NavigationOptions';
 import I18n from '../utils/I18n';
+import NotFoundScreen from '../screens/NotFoundScreen';
 
 export type AuthStackParamList = {
   Initialize: undefined;
@@ -22,6 +23,7 @@ export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForegetPassword: undefined;
+  notfound: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -39,7 +41,7 @@ export const AuthNavigator = (): JSX.Element => {
         component={
           Platform.OS === 'web' ? InitializeWebScreen : InitializeNativeScreen
         }
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: 'Interchao' }}
       />
       <Stack.Screen
         name="SelectLanguage"
@@ -63,7 +65,6 @@ export const AuthNavigator = (): JSX.Element => {
         options={{
           ...DefaultAuthLayoutOptions,
           title: I18n.t('signIn.headerTitle'),
-          // TODO: Web直す必要あり
         }}
       />
       <Stack.Screen
@@ -81,6 +82,11 @@ export const AuthNavigator = (): JSX.Element => {
           ...DefaultAuthLayoutOptions,
           title: I18n.t('foregetPassword.headerTitle'),
         }}
+      />
+      <Stack.Screen
+        name="notfound"
+        component={NotFoundScreen}
+        options={{ headerShown: false, title: '404 NOT FOUND' }}
       />
     </Stack.Navigator>
   );

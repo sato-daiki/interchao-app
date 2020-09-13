@@ -1,12 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
@@ -14,6 +7,7 @@ import { LogoVercitacl } from '../images';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
+import { Hoverable } from '../components/atoms';
 
 type ScreenType = StackScreenProps<AuthStackParamList, 'Initialize'>;
 
@@ -86,9 +80,9 @@ const InitializeNativeScreen: React.FC<ScreenType> = ({ navigation }) => {
           />
           <View style={styles.row}>
             <Text style={styles.text}>{I18n.t('initialize.acount')}</Text>
-            <TouchableOpacity onPress={onPressSignIn}>
+            <Hoverable onPress={onPressSignIn}>
               <Text style={styles.linkText}>{I18n.t('initialize.link')}</Text>
-            </TouchableOpacity>
+            </Hoverable>
           </View>
         </View>
       </View>

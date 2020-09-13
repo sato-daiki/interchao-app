@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { imageLightColor, subTextColor } from '../../styles/Common';
+import Hoverable from './Hoverable';
 
 const styles = StyleSheet.create({
   container: {},
@@ -30,7 +31,7 @@ interface Props {
 }
 
 const Avatar = ({ photoUrl = '', pickImage }: Props): JSX.Element => (
-  <TouchableOpacity style={styles.container} onPress={pickImage}>
+  <Hoverable onPress={pickImage} style={styles.container}>
     {photoUrl ? (
       <Image style={styles.icon} source={{ uri: photoUrl }} />
     ) : (
@@ -39,12 +40,11 @@ const Avatar = ({ photoUrl = '', pickImage }: Props): JSX.Element => (
           name="person"
           size={80}
           style={styles.dummyAvatarIcon}
-          onPress={pickImage}
           color={subTextColor}
         />
       </View>
     )}
-  </TouchableOpacity>
+  </Hoverable>
 );
 
 export default Avatar;

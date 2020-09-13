@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Animated,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, StyleSheet, Animated } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import {
@@ -15,10 +9,11 @@ import {
   borderLightColor,
   subTextColor,
   softRed,
+  hoverGray,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
 import { Diary } from '../../types';
-import { DiaryStatus } from '../atoms';
+import { DiaryStatus, Hoverable } from '../atoms';
 import I18n from '../../utils/I18n';
 
 const EDIT_WIDTH = 48;
@@ -42,7 +37,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    paddingVertical: 8,
     width: '100%',
     backgroundColor: '#fff',
   },
@@ -54,6 +48,7 @@ const styles = StyleSheet.create({
   main: {
     width: '100%',
     paddingHorizontal: 16,
+    paddingVertical: 8,
   },
   header: {
     flexDirection: 'row',
@@ -92,6 +87,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     fontWeight: 'bold',
   },
+  hover: {
+    backgroundColor: hoverGray,
+  },
 });
 
 const DraftListItem = ({
@@ -124,13 +122,13 @@ const DraftListItem = ({
           { paddingLeft: isEditing ? EDIT_WIDTH : undefined },
         ]}
       >
-        <TouchableOpacity style={styles.deleteButton} onPress={onPressDelete}>
+        <Hoverable style={styles.deleteButton} onPress={onPressDelete}>
           <Animated.Text
             style={[styles.deleteText, { transform: [{ translateX: trans }] }]}
           >
             {I18n.t('common.delete')}
           </Animated.Text>
-        </TouchableOpacity>
+        </Hoverable>
       </View>
     );
   };
@@ -148,16 +146,17 @@ const DraftListItem = ({
         <Animated.View
           style={[styles.container, { transform: [{ translateX: x }] }]}
         >
-          <View style={styles.left}>
+          <Hoverable style={styles.left} onPress={onPressMinus}>
             <MaterialCommunityIcons
               size={28}
               color={softRed}
               name="minus-circle"
-              onPress={onPressMinus}
             />
-          </View>
-          <TouchableOpacity
+          </Hoverable>
+
+          <Hoverable
             style={styles.main}
+            hoverStyle={styles.hover}
             onPress={(): void => onPressItem(item)}
           >
             <View style={styles.header}>
@@ -175,7 +174,7 @@ const DraftListItem = ({
             <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
               {text}
             </Text>
-          </TouchableOpacity>
+          </Hoverable>
         </Animated.View>
       </Swipeable>
     </View>

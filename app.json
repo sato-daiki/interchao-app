@@ -1,20 +1,24 @@
 {
   "expo": {
     "name": "Interchao",
+    "description": "Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう",
+    "sdkVersion": "38.0.0",
     "scheme": "interchao",
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
     "version": "1.5.0",
     "orientation": "portrait",
+    "userInterfaceStyle":"light",
     "icon": "./assets/icon.png",
+    "primaryColor": "#2a2a2a",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 30000
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -31,6 +35,14 @@
         "backgroundColor": "#fff"
       },
       "useNextNotificationsApi": true
+    },
+    "web": {
+      "name": "Interchao",
+      "shortName": "Interchao",
+      "lang": "en",
+      "startUrl": "https://interchao.app",
+      "themeColor": "#ffffff",
+      "description":"Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう"
     },
     "notification": {
       "icon": "./assets/images/notification.png"

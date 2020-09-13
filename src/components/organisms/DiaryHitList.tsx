@@ -10,7 +10,7 @@ import I18n from '../../utils/I18n';
 interface Props {
   me: boolean;
   isEmpty: boolean;
-  onPressItem: (objectID: string) => void;
+  onPressItem: (objectID: string, userName: string) => void;
   hits: Diary[];
   hasMore: boolean;
   refine?: any;
@@ -48,7 +48,10 @@ const DiaryHitList = ({
         <SearchDiaryList
           me={me}
           item={item}
-          onPressItem={(): void => onPressItem(item.objectID!)}
+          onPressItem={(): void => {
+            if (!item.objectID) return;
+            onPressItem(item.objectID, item.profile.userName);
+          }}
         />
       );
     },

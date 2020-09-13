@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
-import { StyleSheet, TouchableOpacity, TextInput, Text } from 'react-native';
+import { StyleSheet, TextInput, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import I18n from '../../utils/I18n';
 import { fontSizeM, primaryColor, subTextColor } from '../../styles/Common';
+import { Hoverable } from '../atoms';
 
 interface Props {
   summary: string;
@@ -40,7 +41,7 @@ const CorrectingSummaryNative: React.FC<Props> = ({
   const refSummary = useRef<any>(null);
   return (
     <>
-      <TouchableOpacity
+      <Hoverable
         style={styles.buttonRow}
         onPress={(): void => {
           refSummary.current.focus();
@@ -48,7 +49,7 @@ const CorrectingSummaryNative: React.FC<Props> = ({
       >
         <MaterialCommunityIcons size={22} color={subTextColor} name="plus" />
         <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
-      </TouchableOpacity>
+      </Hoverable>
       {/* まとめは改行がある。他のはない */}
       <TextInput
         ref={refSummary}

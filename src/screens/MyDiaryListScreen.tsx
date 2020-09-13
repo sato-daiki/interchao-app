@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Subscription } from '@unimodules/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { GrayHeader, LoadingModal, HeaderRight } from '../components/atoms';
+import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
@@ -113,7 +113,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     navigation.setOptions({
       headerTitle: (): JSX.Element => (
         <SearchBarButton
-          title={I18n.t('myDiaryList.headerTitle')}
+          title={I18n.t('myDiaryList.searchText')}
           onPress={onPressSearch}
         />
       ),
@@ -121,7 +121,8 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         isDesktopOrLaptopDevice ? (
           <MyDiaryListMenuWebPc nativeLanguage={profile.nativeLanguage} />
         ) : (
-          <HeaderRight
+          <HeaderIcon
+            icon="community"
             name="dots-horizontal"
             onPress={(): void => setIsMenu(true)}
           />
@@ -192,7 +193,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current = Notifications.addNotificationReceivedListener(
       prm => {
-        console.log('addNotificationReceivedListener', prm);
         onRefresh();
       }
     );
@@ -200,7 +200,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
       response => {
-        console.log('addNotificationResponseReceivedListener', response);
         onRefresh();
       }
     );
@@ -317,11 +316,21 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
           setIsLoading(false);
         }
-        navigation.navigate('MyDiary', { objectID: item.objectID });
+        navigation.navigate('MyDiary', {
+          objectID: item.objectID,
+          userName: profile.userName,
+        });
       };
       f();
     },
-    [editDiary, isLoading, localStatus, navigation, setLocalStatus]
+    [
+      editDiary,
+      isLoading,
+      localStatus,
+      navigation,
+      profile.userName,
+      setLocalStatus,
+    ]
   );
 
   type RenderItemProps = { item: Diary };
@@ -331,8 +340,10 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         <DiaryListItem
           mine
           item={item}
-          onPressUser={(uid: string): void => {
-            navigation.navigate('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.navigate('UserProfile', {
+              userName,
+            });
           }}
           onPressItem={onPressItem}
         />
@@ -370,7 +381,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         isLoading={isStillLoading}
         onPress={onPressModalStill}
       />
-      <ModalAppSuggestion user={user} />
+      <ModalAppSuggestion user={user} setUser={setUser} />
       <FlatList
         // emptyの時のレイアウトのため
         contentContainerStyle={isEmpty ? styles.flatList : null}

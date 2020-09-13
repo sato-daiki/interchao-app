@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
   },
   thanksText: {
     fontSize: fontSizeM,
+    textAlign: 'center',
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
     marginBottom: 32,

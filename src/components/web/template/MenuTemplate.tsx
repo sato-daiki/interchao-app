@@ -5,25 +5,18 @@ import {
   MenuTrigger,
   renderers,
 } from 'react-native-popup-menu';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
-import { primaryColor, fontSizeM } from '../../../styles/Common';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { HeaderIcon } from '../../atoms';
 
 interface Props {
   children: ReactNode;
 }
 
 const styles = StyleSheet.create({
-  optionsWrapper: {
-    flex: 1,
-  },
   optionWrapper: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-  },
-  optionText: {
-    color: primaryColor,
-    fontSize: fontSizeM,
+    width: 200,
+    margin: 0,
+    padding: 0,
   },
 });
 
@@ -32,22 +25,19 @@ const MenuTemplate = ({ children }: Props): JSX.Element => {
     <Menu
       renderer={renderers.Popover}
       rendererProps={{
-        // preferredPlacement: 'bottom',
-        placement: 'left',
+        placement: 'bottom',
       }}
     >
-      <MenuTrigger>
-        <MaterialCommunityIcons
-          name="dots-horizontal"
-          size={28}
-          color={primaryColor}
-        />
+      <MenuTrigger
+        customStyles={{
+          TriggerTouchableComponent: TouchableOpacity,
+        }}
+      >
+        <HeaderIcon icon="community" name="dots-horizontal" size={28} />
       </MenuTrigger>
       <MenuOptions
         customStyles={{
-          optionsWrapper: styles.optionsWrapper,
           optionWrapper: styles.optionWrapper,
-          optionText: styles.optionText,
         }}
       >
         {children}

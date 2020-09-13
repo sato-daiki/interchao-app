@@ -5,12 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
-import {
-  Space,
-  HeaderRight,
-  LoadingModal,
-  HeaderLeft,
-} from '../components/atoms';
+import { Space, LoadingModal, HeaderText } from '../components/atoms';
 import { UserListItem } from '../components/molecules';
 import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
@@ -189,10 +184,10 @@ const ReviewScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
-        <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
+        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
       ),
       headerRight: (): JSX.Element => (
-        <HeaderRight text={I18n.t('common.sending')} onPress={onPressSubmit} />
+        <HeaderText text={I18n.t('common.sending')} onPress={onPressSubmit} />
       ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -190,7 +190,8 @@ const myDiary = {
 };
 
 const myDiaryList = {
-  headerTitle: '搜索我的日记',
+  headerTitle: '我的日记',
+  searchText: '搜索我的日记',
   diaryList: {
     one: '我的日记列表{{count}}项',
     other: '我的日记列表{{count}}项',
@@ -292,7 +293,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '查找日记',
+  headerTitle: '日记列表',
+  searchText: '查找日记',
   diaryList: '你说的语言的日记列表',
   empty: '日记还没有发布',
 };
@@ -305,6 +307,11 @@ const tutorialList = {
   headerTitle: '教程列表',
   postDiary: '如何写日记',
   points: '关于积分',
+};
+
+const notFound = {
+  text: '找不到您要查找的页',
+  link: '返回首页',
 };
 
 const userProfile = {
@@ -580,6 +587,7 @@ const zh = {
   teachDiarySerch,
   tutorialList,
   userProfile,
+  notFound,
   commentCard,
   firstDiary,
   userPoints,

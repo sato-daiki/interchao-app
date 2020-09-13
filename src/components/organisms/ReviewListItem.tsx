@@ -17,7 +17,7 @@ interface Props {
   item: Review;
   nativeLanguage?: Language;
   textLanguage: Language;
-  onPressUser: (uid: string) => void;
+  onPressUser: (uid: string, userName: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -80,7 +80,7 @@ const ReviewListItem = ({
         photoUrl={reviewer.photoUrl}
         nativeLanguage={reviewer.nativeLanguage}
         nationalityCode={reviewer.nationalityCode}
-        onPress={(): void => onPressUser(reviewer.uid)}
+        onPress={(): void => onPressUser(reviewer.uid, reviewer.userName)}
       />
     </View>
   );

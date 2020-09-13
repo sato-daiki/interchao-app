@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { getName } from 'country-list';
 import Flag from 'react-native-flags';
 import * as Localization from 'expo-localization';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
@@ -35,6 +28,7 @@ import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import ModalCountryPicker from '../components/web/organisms/ModalCountryPicker';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
+import { Hoverable, AddButton, HoverableIcon } from '../components/atoms';
 
 export interface Props {
   profile: Profile;
@@ -88,13 +82,7 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   trash: {
-    width: 40,
     alignItems: 'center',
-  },
-  addText: {
-    color: subTextColor,
-    fontSize: fontSizeM,
-    marginLeft: 2,
   },
   pleaseText: {
     color: primaryColor,
@@ -272,41 +260,30 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
         />
         <Space size={16} />
         <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
-        <Space size={8} />
         {spokenLanguages.map(item => (
           <View style={styles.rowSpoken} key={item}>
             <Text style={styles.spoken}>{getLanguage(item)}</Text>
-            <TouchableOpacity
+            <HoverableIcon
+              icon="community"
+              size={22}
+              hoverBorderRadius={32}
+              color={primaryColor}
+              name="trash-can-outline"
               style={styles.trash}
               onPress={(): void => {
                 setSpokenLanguages(spokenLanguages.filter(s => s !== item));
               }}
-            >
-              <MaterialCommunityIcons
-                size={20}
-                color={primaryColor}
-                name="trash-can-outline"
-              />
-            </TouchableOpacity>
+            />
           </View>
         ))}
         {spokenLanguages.length < getLanguageNum() - 2 ? (
-          <TouchableOpacity
-            style={styles.row}
-            onPress={(): void => setSpokenVisible(true)}
-          >
-            <MaterialCommunityIcons
-              size={24}
-              color={subTextColor}
-              name="plus"
-            />
-            <Text style={styles.addText}>{I18n.t('selectLanguage.add')}</Text>
-          </TouchableOpacity>
+          <AddButton onPress={(): void => setSpokenVisible(true)} />
         ) : null}
+
         <Space size={24} />
         <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
         {Platform.OS === 'web' ? (
-          <TouchableOpacity onPress={onOpenCountry}>
+          <Hoverable onPress={onOpenCountry}>
             {nationalityCode ? (
               <View style={styles.row}>
                 <Flag code={nationalityCode} size={24} />
@@ -322,15 +299,15 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
                 {I18n.t('selectLanguage.placeholder')}
               </Text>
             )}
-          </TouchableOpacity>
+          </Hoverable>
         ) : (
           <View style={styles.row}>
             {nationalityCode ? null : (
-              <TouchableOpacity onPress={onOpenCountry}>
+              <Hoverable onPress={onOpenCountry}>
                 <Text style={styles.pleaseText}>
                   {I18n.t('selectLanguage.placeholder')}
                 </Text>
-              </TouchableOpacity>
+              </Hoverable>
             )}
 
             <CountryPicker

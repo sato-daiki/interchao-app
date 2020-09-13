@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  TextInput,
-} from 'react-native';
+import { View, Text, StyleSheet, Platform, TextInput } from 'react-native';
 import * as jsdiff from 'diff';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
@@ -15,7 +8,12 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { CorrectingText, Space, AutoHeightTextInput } from '../atoms';
+import {
+  CorrectingText,
+  Space,
+  AutoHeightTextInput,
+  Hoverable,
+} from '../atoms';
 import { Diff, TextInfo } from '../../types';
 import CorrectingCommentNative from './CorrectingCommentNative';
 import CorrectingCommentWeb from './CorrectingCommentWeb';
@@ -191,7 +189,7 @@ const CorrectingListItem: React.FC<Props> = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={(): void => setIsEdit(true)}>
+      <Hoverable onPress={(): void => setIsEdit(true)}>
         {!diffs ? (
           <View style={styles.rowNoEdit}>
             <Text style={styles.text}>{item.original}</Text>
@@ -212,7 +210,7 @@ const CorrectingListItem: React.FC<Props> = ({
           />
         )}
         {renderFix()}
-      </TouchableOpacity>
+      </Hoverable>
       {renderComment()}
     </View>
   );
