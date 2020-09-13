@@ -304,7 +304,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
 
   const onPressMoreReview = useCallback((): void => {
     if (!profile) return;
-    navigation.navigate('ReviewList', {
+    navigation.push('ReviewList', {
       userName: profile.userName,
     });
   }, [navigation, profile]);
