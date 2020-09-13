@@ -12,7 +12,7 @@ import { Hoverable } from '../components/atoms';
 import I18n from '../utils/I18n';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
 
-type ScreenType = StackScreenProps<AuthStackParamList, 'NotFound'>;
+type ScreenType = StackScreenProps<AuthStackParamList, 'notfound'>;
 
 const styles = StyleSheet.create({
   container: {
