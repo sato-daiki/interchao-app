@@ -40,7 +40,6 @@ const Avatar = ({ photoUrl = '', pickImage }: Props): JSX.Element => (
           name="person"
           size={80}
           style={styles.dummyAvatarIcon}
-          onPress={pickImage}
           color={subTextColor}
         />
       </View>
