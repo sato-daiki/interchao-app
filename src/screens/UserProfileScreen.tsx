@@ -2,7 +2,6 @@ import React, { useCallback, useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   ActivityIndicator,
   RefreshControl,
@@ -19,7 +18,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { EmptyDiary, EmptyReview } from '../components/molecules';
-import { Space, GrayHeader, HeaderRight } from '../components/atoms';
+import { Space, GrayHeader, Hoverable, HeaderIcon } from '../components/atoms';
 import {
   Diary,
   Profile,
@@ -27,9 +26,10 @@ import {
   Review,
   BlockUser,
   Report,
+  User,
 } from '../types';
 import { linkBlue, fontSizeM } from '../styles/Common';
-import { getProfile } from '../utils/profile';
+import { getProfile, getUid } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
 import { ModalBlock, ModalConfirm } from '../components/organisms';
@@ -47,6 +47,10 @@ import {
   CommonNavigationProp,
 } from '../navigations/CommonNavigator';
 
+export interface Props {
+  user: User;
+}
+
 type UserProfileNavigationProp = CompositeNavigationProp<
   StackNavigationProp<CommonStackParamList, 'UserProfile'>,
   CommonNavigationProp
@@ -57,7 +61,7 @@ type UserProfileRouteProp = RouteProp<CommonStackParamList, 'UserProfile'>;
 type ScreenType = {
   navigation: UserProfileNavigationProp;
   route: UserProfileRouteProp;
-};
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 10;
+const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Diary | Review, index: number): string =>
   String(index);
@@ -85,7 +89,11 @@ const keyExtractor = (item: Diary | Review, index: number): string =>
 /**
  * ユーザページ
  */
-const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
+const UserProfileScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  user,
+}) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isBlockSuccess, setIsBlockSuccess] = useState(false);
@@ -112,26 +120,24 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
     minDeviceWidth: 1224,
   });
 
-  const getNewProfile = useCallback(() => {
+  const getNewProfile = useCallback((targetUid: string) => {
     const f = async (): Promise<void> => {
-      const { uid } = route.params;
-      const newProfile = await getProfile(uid);
-      const newUserReivew = await getUserReview(uid);
+      const newProfile = await getProfile(targetUid);
+      const newUserReivew = await getUserReview(targetUid);
       setProfile(newProfile);
       setUserReview(newUserReivew);
       setLoadingProfile(false);
     };
     f();
-  }, [route.params]);
+  }, []);
 
-  const getNewDiary = useCallback(() => {
+  const getNewDiary = useCallback((targetUid: string) => {
     const f = async (): Promise<void> => {
       try {
-        const { uid } = route.params;
         const index = await Algolia.getDiaryIndex();
         await Algolia.setSettings(index);
         const res = await index.search('', {
-          filters: `profile.uid: ${uid} AND diaryStatus: publish`,
+          filters: `profile.uid: ${targetUid} AND diaryStatus: publish`,
           page: 0,
           hitsPerPage: HIT_PER_PAGE,
         });
@@ -146,29 +152,32 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       setLoadingDiary(false);
     };
     f();
-  }, [route.params]);
+  }, []);
 
-  const getNewReview = useCallback(() => {
+  const getNewReview = useCallback((targetUid: string) => {
     const f = async (): Promise<void> => {
-      const { uid } = route.params;
-      const newReivews = await getTopReviews(uid);
-      const newReviewNum = await getReviewNum(uid);
+      const newReivews = await getTopReviews(targetUid);
+      const newReviewNum = await getReviewNum(targetUid);
       setTopReviews(newReivews);
       setReviewNum(newReviewNum);
       setLoadingReview(false);
     };
     f();
-  }, [route.params]);
+  }, []);
 
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      const { currentUser } = firebase.auth();
-      const { params } = route;
-      if (!currentUser || !params) return;
+      const targetUid = await getUid(route.params.userName);
+      if (!targetUid) {
+        setIsModalDeleted(true);
+        setLoadingProfile(false);
+        setLoadingDiary(false);
+        return;
+      }
 
       // ブロックされているかのチェック
-      const resBlockee = await checkBlockee(currentUser.uid, params.uid);
+      const resBlockee = await checkBlockee(user.uid, targetUid);
       if (resBlockee) {
         setIsModalDeleted(true);
         setLoadingProfile(false);
@@ -177,34 +186,42 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       }
 
       // ブロックしているかのチェック
-      const resBlocker = await checkBlocker(currentUser.uid, params.uid);
+      const resBlocker = await checkBlocker(user.uid, targetUid);
       setIsBlocked(resBlocker);
       // データを取得していく
-      await Promise.all([getNewProfile(), getNewDiary(), getNewReview()]);
+
+      await Promise.all([
+        getNewProfile(targetUid),
+        getNewDiary(targetUid),
+        getNewReview(targetUid),
+      ]);
     };
     f();
-  }, [getNewDiary, getNewProfile, getNewReview, route]);
+  }, [getNewDiary, getNewProfile, getNewReview, route, user.uid]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
       setRefreshing(true);
-      await getNewDiary();
+      if (!profile) {
+        setRefreshing(false);
+        return;
+      }
+      await getNewDiary(profile.uid);
       setRefreshing(false);
     };
     f();
-  }, [getNewDiary]);
+  }, [getNewDiary, profile]);
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!readingNext && !readAllResults) {
+      if (!readingNext && !readAllResults && profile) {
         try {
-          const { uid } = route.params;
           const nextPage = page + 1;
           setReadingNext(true);
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.uid: ${uid} AND diaryStatus: publish`,
+            filters: `profile.uid: ${profile.uid} AND diaryStatus: publish`,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -226,7 +243,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       }
     };
     f();
-  }, [diaries, route.params, page, readAllResults, readingNext]);
+  }, [readingNext, readAllResults, profile, page, diaries]);
 
   const onPressBlock = useCallback(() => {
     setIsBlockSuccess(false);
@@ -275,7 +292,11 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
             onPressBlock={onPressBlock}
           />
         ) : (
-          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={onPressMore}
+          />
         ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -283,18 +304,19 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
 
   const onPressMoreReview = useCallback((): void => {
     if (!profile) return;
-    navigation.push('ReviewList', { uid: profile.uid });
+    navigation.push('ReviewList', {
+      userName: profile.userName,
+    });
   }, [navigation, profile]);
 
   const onPressBlockSubmit = useCallback((): void => {
     const f = async (): Promise<void> => {
-      const { currentUser } = firebase.auth();
-      if (!currentUser || !profile) {
+      if (!profile) {
         return;
       }
       setIsLoading(true);
       const newBlockUser = {
-        blockerUid: currentUser.uid,
+        blockerUid: user.uid,
         blockeeUid: profile.uid,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as BlockUser;
@@ -307,12 +329,11 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       setIsBlocked(true);
     };
     f();
-  }, [profile]);
+  }, [profile, user.uid]);
 
   const onPressUnblockSubmit = useCallback((): void => {
     const f = async (): Promise<void> => {
-      const { currentUser } = firebase.auth();
-      if (!currentUser || !profile) {
+      if (!profile) {
         return;
       }
       setIsLoading(true);
@@ -320,7 +341,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       const users = await firebase
         .firestore()
         .collection(`blockUsers`)
-        .where('blockerUid', '==', currentUser.uid)
+        .where('blockerUid', '==', user.uid)
         .where('blockeeUid', '==', profile.uid)
         .get();
 
@@ -334,7 +355,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       setIsBlocked(false);
     };
     f();
-  }, [profile]);
+  }, [profile, user.uid]);
 
   const onPressCloseDeleted = useCallback(() => {
     setIsModalDeleted(false);
@@ -344,8 +365,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
   const onReportSubmit = useCallback(
     (reason: string) => {
       const f = async (): Promise<void> => {
-        const { currentUser } = firebase.auth();
-        if (!currentUser || !profile) {
+        if (!profile) {
           return;
         }
         setIsLoading(true);
@@ -353,7 +373,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           .firestore()
           .collection(`reports`)
           .add({
-            uid: currentUser.uid,
+            uid: user.uid,
             targetUid: profile.uid,
             reason,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -363,7 +383,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       };
       f();
     },
-    [profile]
+    [profile, user.uid]
   );
 
   const listEmptyDiaryComponent =
@@ -406,12 +426,15 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       return (
         <DiaryListItem
           item={item}
-          onPressUser={(uid: string): void => {
-            navigation.push('UserProfile', { uid });
+          onPressUser={(uid: string, userName: string): void => {
+            navigation.push('UserProfile', { userName });
           }}
           onPressItem={(): void => {
             if (!item.objectID) return;
-            navigation.push('UserDiary', { objectID: item.objectID });
+            navigation.push('UserDiary', {
+              objectID: item.objectID,
+              userName: item.profile.userName,
+            });
           }}
         />
       );
@@ -427,8 +450,8 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           <ReviewListItem
             item={item}
             textLanguage={profile.learnLanguage}
-            onPressUser={(uid: string): void => {
-              navigation.push('UserProfile', { uid });
+            onPressUser={(uid: string, userName: string): void => {
+              navigation.push('UserProfile', { userName });
             }}
           />
         );
@@ -487,11 +510,11 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           ListFooterComponent={listFooterReviewComponent}
         />
         {!!reviewNum && reviewNum > 3 ? (
-          <TouchableOpacity style={styles.moreRead} onPress={onPressMoreReview}>
+          <Hoverable style={styles.moreRead} onPress={onPressMoreReview}>
             <Text style={styles.moreReadText}>
               {I18n.t('userProfile.moreRead', { count: reviewNum })}
             </Text>
-          </TouchableOpacity>
+          </Hoverable>
         ) : null}
         <FlatList
           data={diaries}

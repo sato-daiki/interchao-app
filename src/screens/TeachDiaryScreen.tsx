@@ -31,7 +31,7 @@ import {
   SubmitButton,
   ProfileIconHorizontal,
   Space,
-  HeaderRight,
+  HeaderIcon,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
 import {
@@ -331,7 +331,10 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       setIsModalCorrection(false);
       navigation.navigate('ModalCorrecting', {
         screen: 'Correcting',
-        params: { objectID: teachDiary.objectID },
+        params: {
+          objectID: teachDiary.objectID,
+          userName: teachDiary.profile.userName,
+        },
       });
       setIsLoading(false);
     };
@@ -355,7 +358,11 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       // TODO: シェア機能ができてから
       headerRight: (): JSX.Element | null =>
         Platform.OS === 'web' ? null : (
-          <HeaderRight name="dots-horizontal" onPress={onPressMore} />
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={onPressMore}
+          />
         ),
     });
 
@@ -363,8 +370,8 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
   }, [teachDiary]);
 
   const onPressUser = useCallback(
-    (uid: string): void => {
-      navigation.navigate('UserProfile', { uid });
+    (uid: string, userName: string): void => {
+      navigation.navigate('UserProfile', { userName });
     },
     [navigation]
   );
@@ -474,7 +481,9 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
                 photoUrl={targetProfile.photoUrl}
                 nativeLanguage={targetProfile.nativeLanguage}
                 nationalityCode={targetProfile.nationalityCode}
-                onPress={(): void => onPressUser(targetProfile.uid)}
+                onPress={(): void => {
+                  onPressUser(targetProfile.uid, targetProfile.userName);
+                }}
               />
             ) : (
               <ActivityIndicator />
@@ -507,8 +516,8 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
             correction={correction}
             correction2={correction2}
             correction3={correction3}
-            onPressUser={(uid: string): void => {
-              navigation.navigate('UserProfile', { uid });
+            onPressUser={(uid: string, userName: string): void => {
+              navigation.navigate('UserProfile', { userName });
             }}
             nativeLanguage={profile.nativeLanguage}
             textLanguage={teachDiary.profile.learnLanguage}

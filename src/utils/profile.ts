@@ -16,6 +16,23 @@ export const getPhotoUrl = (
   return Zenny;
 };
 
+export const getUid = async (userName: string): Promise<string | null> => {
+  const docs = await firebase
+    .firestore()
+    .collection('profiles')
+    .where('userName', '==', userName)
+    .get();
+
+  if (docs.empty) {
+    return null;
+  }
+  const uids: string[] = [];
+  docs.forEach(doc => {
+    uids.push(doc.id);
+  });
+  return uids[0];
+};
+
 // ユーザ情報取得
 export const getProfile = async (uid: string): Promise<Profile | null> => {
   try {

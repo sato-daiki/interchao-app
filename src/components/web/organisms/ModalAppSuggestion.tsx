@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,9 +8,11 @@ import { mainColor } from '../../../styles/Common';
 import { getIsAfterDay } from '../../../utils/common';
 import { AppDownload } from '../molecules';
 import { User } from '../../../types';
+import { Hoverable } from '../../atoms';
 
 interface Props {
   user: User;
+  setUser: (user: User) => void;
 }
 
 const styles = StyleSheet.create({
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ModalAppSuggestion = ({ user }: Props): JSX.Element | null => {
+const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
   const [visible, setVisible] = useState(true);
 
   const isTabletOrMobileDevice = useMediaQuery({
@@ -40,14 +42,23 @@ const ModalAppSuggestion = ({ user }: Props): JSX.Element | null => {
   });
 
   const onPressClose = (): void => {
-    firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    const f = async (): Promise<void> => {
+      setVisible(false);
+
+      await firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({
+          lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+      setUser({
+        ...user,
+        lastModalAppSuggestionAt: firebase.firestore.Timestamp.now(),
       });
-    setVisible(false);
+    };
+    f();
   };
 
   if (
@@ -59,13 +70,13 @@ const ModalAppSuggestion = ({ user }: Props): JSX.Element | null => {
   ) {
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.icon} onPress={onPressClose}>
+        <Hoverable style={styles.icon} onPress={onPressClose}>
           <MaterialCommunityIcons
             size={28}
             color="#fff"
             name="close-circle-outline"
           />
-        </TouchableOpacity>
+        </Hoverable>
         <AppDownload isWhite={false} />
       </View>
     );

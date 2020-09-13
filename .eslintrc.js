@@ -38,6 +38,7 @@ module.exports = {
     ],
     'react-native/no-unused-styles': 2,
     'react-native/no-inline-styles': 2,
+    'react/jsx-props-no-spreading': 0,
     '@typescript-eslint/ban-ts-ignore': 1,
     '@typescript-eslint/explicit-function-return-type': [
       1,

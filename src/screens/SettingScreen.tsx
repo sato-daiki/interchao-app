@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
@@ -12,7 +12,7 @@ import {
   borderLightColor,
 } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
-import { Space } from '../components/atoms';
+import { Space, Hoverable } from '../components/atoms';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -23,6 +23,12 @@ import {
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
 import { configureStore } from '../stores/Store';
+
+import { Profile } from '../types';
+
+export interface Props {
+  profile: Profile;
+}
 
 interface DispatchProps {
   signOut: () => void;
@@ -35,7 +41,8 @@ type SettingNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: SettingNavigationProp;
-} & DispatchProps;
+} & DispatchProps &
+  Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -71,7 +78,11 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
+const SettingScreen: React.FC<ScreenType> = ({
+  navigation,
+  profile,
+  signOut,
+}) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -111,14 +122,14 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
           navigation.navigate('Notice');
         }}
       />
-      {currentUser ? (
-        <OptionItem
-          title={I18n.t('myDiaryListMenu.reviewList')}
-          onPress={(): void => {
-            navigation.navigate('ReviewList', { uid: currentUser.uid });
-          }}
-        />
-      ) : null}
+      <OptionItem
+        title={I18n.t('myDiaryListMenu.reviewList')}
+        onPress={(): void => {
+          navigation.navigate('ReviewList', {
+            userName: profile.userName,
+          });
+        }}
+      />
       <OptionItem
         title={I18n.t('setting.notice')}
         onPress={(): void => {
@@ -168,9 +179,9 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, signOut }) => {
         }}
       />
       <Space size={16} />
-      <TouchableOpacity style={styles.logoutButton} onPress={onPressLogout}>
+      <Hoverable style={styles.logoutButton} onPress={onPressLogout}>
         <Text style={styles.logout}>{I18n.t('setting.logout')}</Text>
-      </TouchableOpacity>
+      </Hoverable>
       <Space size={16} />
       <Text style={styles.versionText}>{getVersionText()}</Text>
     </View>

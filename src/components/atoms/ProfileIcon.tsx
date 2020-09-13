@@ -1,7 +1,8 @@
 import React from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native';
 import { getPhotoUrl } from '../../utils/profile';
 import { Language } from '../../types';
+import Hoverable from './Hoverable';
 
 interface Props {
   size?: number;
@@ -22,9 +23,9 @@ const ProfileIcon: React.FC<Props> = ({
     borderRadius: size / 2,
   };
   return (
-    <TouchableOpacity onPress={onPress}>
+    <Hoverable onPress={onPress}>
       <Image style={styleIcon} source={getPhotoUrl(photoUrl, nativeLanguage)} />
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 

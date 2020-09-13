@@ -12,7 +12,7 @@ interface Props {
   correction3?: Correction;
   nativeLanguage: Language;
   textLanguage: Language;
-  onPressUser?: (uid: string) => void;
+  onPressUser?: (uid: string, userName: string) => void;
 }
 const styles = StyleSheet.create({
   activityIndicator: {

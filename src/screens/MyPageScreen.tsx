@@ -10,7 +10,7 @@ import {
   Space,
   ScoreStar,
   UserPoints,
-  HeaderRight,
+  HeaderIcon,
 } from '../components/atoms';
 import {
   ProfileLanguage,
@@ -86,7 +86,8 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
     const f = async (): Promise<void> => {
       navigation.setOptions({
         headerRight: (): JSX.Element => (
-          <HeaderRight
+          <HeaderIcon
+            icon="community"
             name="settings"
             onPress={(): void => navigation.navigate('Setting')}
           />

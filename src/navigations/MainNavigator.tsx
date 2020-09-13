@@ -1,6 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeBottomTabNavigator from './HomeBottomTabNavigator';
+import HomeBottomTabNavigator, {
+  HomeBottomParamList,
+} from './HomeBottomTabNavigator';
 
 import { Diary } from '../types';
 import {
@@ -9,18 +11,40 @@ import {
   ModalEditMyProfileNavigator,
   ModalReviewNavigator,
   ModalCorrectingNavigator,
+  ModalPostDiaryStackParamList,
+  ModalPostDraftDiaryStackParamList,
+  ModalEditMyProfileStackParamList,
+  ModalCorrectingStackParamList,
+  ModalReviewStackParamList,
 } from './ModalNavigator';
+import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
+import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
+import NotFoundScreen from '../screens/NotFoundScreen';
 
 export type MainStackParamList = {
-  Home: { screen: string; params: { screen: string } };
-  ModalPostDiary: { screen: string };
-  ModalPostDraftDiary: { screen: string; params: { item: Diary } };
-  ModalEditMyProfile: { screen: string };
-  ModalCorrecting: { screen: string; params: { objectID: string } };
-  ModalReview: {
-    screen: string;
-    params: { objectID: string; correctedNum: number };
+  Home: {
+    screen: keyof HomeBottomParamList;
+    params: {
+      screen:
+        | keyof MyDiaryTabStackParamList
+        | keyof TeachDiaryTabStackParamList;
+    };
   };
+  ModalPostDiary: { screen: keyof ModalPostDiaryStackParamList };
+  ModalPostDraftDiary: {
+    screen: keyof ModalPostDraftDiaryStackParamList;
+    params: { item: Diary; objectID: string };
+  };
+  ModalEditMyProfile: { screen: keyof ModalEditMyProfileStackParamList };
+  ModalCorrecting: {
+    screen: keyof ModalCorrectingStackParamList;
+    params: { objectID: string; userName: string };
+  };
+  ModalReview: {
+    screen: keyof ModalReviewStackParamList;
+    params: { objectID: string; correctedNum: number; userName: string };
+  };
+  NotFound: undefined;
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -55,6 +79,7 @@ const MainNavigator = (): JSX.Element => {
         name="ModalCorrecting"
         component={ModalCorrectingNavigator}
       />
+      <MainStack.Screen name="NotFound" component={NotFoundScreen} />
     </MainStack.Navigator>
   );
 };

@@ -3,16 +3,23 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { mainColor } from '../styles/Common';
+import { StyleSheet } from 'react-native';
+import { mainColor, maxLayoutChange } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
-import MyDiaryTabNavigator from './MyDiaryTabNavigator';
-import TeachDiaryTabNavigator from './TeachDiaryTabNavigator';
+import MyDiaryTabNavigator, {
+  MyDiaryTabStackParamList,
+} from './MyDiaryTabNavigator';
+import TeachDiaryTabNavigator, {
+  TeachDiaryTabStackParamList,
+} from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList } from './MainNavigator';
-import { createSideTabNavigator } from './SideTabNavigator';
+import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
+import { DrawerLabel } from '../components/web/molecules';
 
 export type HomeBottomNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -20,29 +27,91 @@ export type HomeBottomNavigationProp = StackNavigationProp<
 >;
 
 export type HomeBottomParamList = {
-  MyDiaryTab: { screen: string };
+  MyDiaryTab: { screen: keyof MyDiaryTabStackParamList };
   PostDiaryTab: undefined;
-  TeachDiaryTab: undefined;
+  TeachDiaryTab: { screen: keyof TeachDiaryTabStackParamList };
   MyPageTab: undefined;
 };
+
+const styles = StyleSheet.create({
+  itemStyle: {
+    backgroundColor: undefined,
+    height: 54,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 const HomeBottomTabNavigator = (): JSX.Element => {
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
+  const isMaxLayoutChange = useMediaQuery({ minWidth: maxLayoutChange });
 
   if (isDesktopOrLaptopDevice) {
-    const HomeSide = createSideTabNavigator<HomeBottomParamList>();
+    const drawerStyle = { width: isMaxLayoutChange ? 240 : 80 };
+
+    const Drawer = createDrawerNavigator<HomeBottomParamList>();
 
     return (
-      <HomeSide.Navigator initialRouteName="MyDiaryTab">
-        <HomeSide.Screen name="MyDiaryTab" component={MyDiaryTabNavigator} />
-        <HomeSide.Screen
+      <Drawer.Navigator
+        initialRouteName="MyDiaryTab"
+        drawerType="permanent"
+        drawerStyle={drawerStyle}
+        drawerContent={(props): JSX.Element => (
+          <CustomDrawerContent
+            isMaxLayoutChange={isMaxLayoutChange}
+            {...props}
+          />
+        )}
+        drawerContentOptions={{
+          activeTintColor: mainColor,
+          itemStyle: styles.itemStyle,
+        }}
+      >
+        <Drawer.Screen
+          name="MyDiaryTab"
+          component={MyDiaryTabNavigator}
+          options={{
+            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+              <DrawerLabel
+                isMaxLayoutChange={isMaxLayoutChange}
+                tabName="MyDiaryTab"
+                color={color}
+                text={isMaxLayoutChange ? I18n.t('mainTab.myDiary') : null}
+              />
+            ),
+          }}
+        />
+        <Drawer.Screen
           name="TeachDiaryTab"
           component={TeachDiaryTabNavigator}
+          options={{
+            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+              <DrawerLabel
+                isMaxLayoutChange={isMaxLayoutChange}
+                tabName="TeachDiaryTab"
+                color={color}
+                text={isMaxLayoutChange ? I18n.t('mainTab.teachDiary') : null}
+              />
+            ),
+          }}
         />
-        <HomeSide.Screen name="MyPageTab" component={MyPageTabNavigator} />
-      </HomeSide.Navigator>
+        <Drawer.Screen
+          name="MyPageTab"
+          component={MyPageTabNavigator}
+          options={{
+            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+              <DrawerLabel
+                isMaxLayoutChange={isMaxLayoutChange}
+                tabName="MyPageTab"
+                color={color}
+                text={isMaxLayoutChange ? I18n.t('mainTab.myPage') : null}
+              />
+            ),
+          }}
+        />
+      </Drawer.Navigator>
     );
   }
 
@@ -73,7 +142,11 @@ const HomeBottomTabNavigator = (): JSX.Element => {
             <MaterialCommunityIcons name="pencil" size={25} color={color} />
           ),
         }}
-        listeners={({ navigation }) => ({
+        listeners={({
+          navigation,
+        }: {
+          navigation: HomeBottomNavigationProp;
+        }) => ({
           tabPress: e => {
             // Prevent default action
             e.preventDefault();

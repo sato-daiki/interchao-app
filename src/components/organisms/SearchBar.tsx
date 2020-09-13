@@ -8,7 +8,7 @@ import {
   fontSizeM,
   borderLightColor,
 } from '../../styles/Common';
-import { HeaderRight } from '../atoms';
+import { HeaderText } from '../atoms';
 import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
@@ -76,7 +76,7 @@ const SearchBar = ({
         value={currentRefinement}
         onChangeText={onChangeText}
       />
-      <HeaderRight text={I18n.t('common.cancel')} onPress={onPressClose} />
+      <HeaderText text={I18n.t('common.cancel')} onPress={onPressClose} />
     </View>
   );
 };

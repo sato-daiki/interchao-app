@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  Keyboard,
-  View,
-  Platform,
-} from 'react-native';
+import { StyleSheet, Keyboard, View, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { mainColor } from '../../styles/Common';
+import { Hoverable } from '../atoms';
 
 interface Props {
   isKeyboard: boolean;
@@ -50,13 +45,13 @@ const KeyboardHideButton: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       {isKeyboard ? (
-        <TouchableOpacity onPress={Keyboard.dismiss} style={styles.keyboard}>
+        <Hoverable style={styles.keyboard} onPress={Keyboard.dismiss}>
           <MaterialCommunityIcons
             size={24}
             color={mainColor}
             name="keyboard-close"
           />
-        </TouchableOpacity>
+        </Hoverable>
       ) : null}
       {Platform.OS === 'ios' ? <KeyboardSpacer /> : null}
     </View>

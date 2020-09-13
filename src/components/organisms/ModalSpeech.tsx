@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Text, ScrollView, Switch } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Modal } from '../template';
-import { WhiteButton, Space } from '../atoms';
+import { WhiteButton, Space, HoverableIcon } from '../atoms';
 import I18n from '../../utils/I18n';
 
 const styles = StyleSheet.create({
@@ -59,11 +58,12 @@ const ModalSpeech: React.FC<Props> = ({
         <View style={styles.container}>
           <Text style={styles.text}>{text}</Text>
           <Space size={16} />
-          {/* <View style={{ flex: 1 }}> */}
-          <MaterialCommunityIcons
-            size={48}
-            color={primaryColor}
+          <HoverableIcon
+            icon="community"
             name={playing ? 'pause' : 'play'}
+            size={48}
+            hoverBorderRadius={32}
+            color={primaryColor}
             onPress={playing ? onPressPause : onPressSpeak}
           />
           <View style={styles.switchContainer}>
@@ -75,7 +75,6 @@ const ModalSpeech: React.FC<Props> = ({
             />
             <Text style={styles.switchText}>{I18n.t('common.slow')}</Text>
           </View>
-          {/* </View> */}
           <Space size={32} />
           <WhiteButton title={I18n.t('common.close')} onPress={onPressClose} />
         </View>

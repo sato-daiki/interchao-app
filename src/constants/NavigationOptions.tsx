@@ -1,28 +1,51 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
+import React from 'react';
+import { Platform } from 'react-native';
 import { primaryColor, fontSizeL, maxModal, maxAuth } from '../styles/Common';
 import { getEachOS } from '../utils/common';
+import { HeaderIcon } from '../components/atoms';
 
 export const DefaultNavigationOptions: StackNavigationOptions = {
   headerStyle: {
     backgroundColor: '#fff',
   },
   headerTitleStyle: {
-    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'center' }),
+    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'left' }),
     fontWeight: getEachOS({ ios: '700', android: '500', web: '700' }),
     color: primaryColor,
     fontSize: fontSizeL,
-    marginHorizontal: getEachOS({ ios: 32, android: 0, web: 32 }),
-    alignSelf: 'center',
+    marginHorizontal: getEachOS({ ios: 32, android: 0, web: 0 }),
+    alignSelf: getEachOS({ ios: 'center', android: 'center', web: 'left' }),
   },
   headerTintColor: primaryColor,
-  headerRightContainerStyle: {
-    paddingHorizontal: 16,
-  },
   headerLeftContainerStyle: {
-    paddingHorizontal: getEachOS({ ios: 16, android: 0, web: 0 }),
+    paddingHorizontal: getEachOS({ ios: 0, android: 0, web: 0 }),
   },
   headerBackTitleStyle: {
     display: 'none',
+  },
+  headerLeft: props => {
+    const { onPress } = props;
+    if (!onPress) return null;
+    if (Platform.OS === 'ios') {
+      return (
+        <HeaderIcon
+          icon="feather"
+          name="chevron-left"
+          size={25}
+          onPress={onPress}
+        />
+      );
+    }
+
+    return (
+      <HeaderIcon
+        icon="material"
+        name="arrow-back"
+        size={25}
+        onPress={onPress}
+      />
+    );
   },
 };
 

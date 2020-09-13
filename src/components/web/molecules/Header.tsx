@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Text } from 'react-native';
 import { maxMain, headerBlack } from '../../../styles/Common';
 import { Icon } from '../../../images/web';
+import { Hoverable } from '../../atoms';
 
 interface Props {
   onPress: () => void;
@@ -40,10 +41,10 @@ const Header = ({ onPress }: Props): JSX.Element => {
   return (
     <View style={styles.warapper}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.row} onPress={onPress}>
+        <Hoverable style={styles.row} onPress={onPress}>
           <Image source={Icon} style={styles.icon} />
           <Text style={styles.text}>Interchao</Text>
-        </TouchableOpacity>
+        </Hoverable>
       </View>
     </View>
   );

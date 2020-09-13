@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { User } from '../types/user';
-import { HeaderRight, HeaderLeft } from '../components/atoms';
+import { HeaderText } from '../components/atoms';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
 import PostDiary from '../components/organisms/PostDiary';
@@ -148,19 +148,19 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
-        <HeaderLeft text={I18n.t('common.close')} onPress={onPressClose} />
+        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
       ),
       headerRight: (): JSX.Element => {
         if (user.points >= 10) {
           return (
-            <HeaderRight
+            <HeaderText
               text={I18n.t('common.publish')}
               onPress={onPressPublic}
             />
           );
         }
         return (
-          <HeaderRight text={I18n.t('common.draft')} onPress={onPressDraft} />
+          <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />
         );
       },
     });

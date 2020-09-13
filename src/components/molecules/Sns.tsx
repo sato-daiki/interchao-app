@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 import { twitterShare, facebookShare } from '../../utils/common';
 import { Language } from '../../types';
+import { Hoverable } from '../atoms';
 
 interface Props {
   nativeLanguage: Language;
@@ -49,20 +50,20 @@ const Sns: React.FC<Props> = ({ nativeLanguage }) => {
     <View style={styles.container}>
       <Text style={styles.title}>{I18n.t('sns.app')}</Text>
       <View style={styles.row}>
-        <TouchableOpacity style={styles.icon} onPress={onPressFacebook}>
+        <Hoverable style={styles.icon} onPress={onPressFacebook}>
           <MaterialCommunityIcons
             size={28}
             color={primaryColor}
             name="facebook"
           />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.icon} onPress={onPressTwitter}>
+        </Hoverable>
+        <Hoverable style={styles.icon} onPress={onPressTwitter}>
           <MaterialCommunityIcons
             size={24}
             color={primaryColor}
             name="twitter"
           />
-        </TouchableOpacity>
+        </Hoverable>
       </View>
     </View>
   );

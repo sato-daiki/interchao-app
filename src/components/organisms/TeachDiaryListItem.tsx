@@ -1,23 +1,23 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import {
   fontSizeS,
   fontSizeM,
   primaryColor,
   borderLightColor,
   subTextColor,
+  hoverGray,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
-import firebase from '../../constants/firebase';
 import { Diary } from '../../types';
 import { UserDiaryStatus } from '../molecules';
-import { ProfileIcon } from '../atoms';
+import { ProfileIcon, Hoverable } from '../atoms';
 import I18n from '../../utils/I18n';
 
 interface Props {
   item: Diary;
-  onPressUser: (uid: string) => void;
-  onPressItem: (item: firebase.firestore.DocumentData) => void;
+  onPressUser: (uid: string, userName: string) => void;
+  onPressItem: (item: Diary) => void;
 }
 
 const styles = StyleSheet.create({
@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
   main: {
     paddingLeft: 12,
     flex: 1,
+  },
+  hover: {
+    backgroundColor: hoverGray,
   },
   header: {
     flexDirection: 'row',
@@ -85,14 +88,15 @@ const TeachDiaryListItem = ({
   const postDay = getAlgoliaDay(createdAt);
 
   return (
-    <TouchableOpacity
+    <Hoverable
       style={styles.container}
+      hoverStyle={styles.hover}
       onPress={(): void => onPressItem(item)}
     >
       <ProfileIcon
         photoUrl={photoUrl}
         nativeLanguage={nativeLanguage}
-        onPress={(): void => onPressUser(uid)}
+        onPress={(): void => onPressUser(uid, userName)}
       />
       <View style={styles.main}>
         <View style={styles.header}>
@@ -115,7 +119,7 @@ const TeachDiaryListItem = ({
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </Hoverable>
   );
 };
 
