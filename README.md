@@ -54,6 +54,7 @@ https://docs.expo.io/versions/latest/guides/publishing.html#limitations
 ```
 expo build:ios --release-channel production
 expo build:android --release-channel production
+app bundleを選択
 ```
 
 ### 7.upload

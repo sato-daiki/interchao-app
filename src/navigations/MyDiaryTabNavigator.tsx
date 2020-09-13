@@ -8,7 +8,7 @@ import I18n from '../utils/I18n';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
-import DraftDiaryListScreen from '../screens/DraftDiaryListScreen';
+import DraftDiaryListScreenContainer from '../containers/DraftDiaryListScreenContainer';
 import MyDiaryScreenContainer from '../containers/MyDiaryScreenContainer';
 import MyDiarySerchScreenContainer from '../containers/MyDiarySearchScreenContainer';
 import {
@@ -60,7 +60,7 @@ const MyDiaryTabNavigator = (): JSX.Element => {
       />
       <MyDiaryTabStack.Screen
         name="DraftDiaryList"
-        component={DraftDiaryListScreen}
+        component={DraftDiaryListScreenContainer}
         options={{ title: I18n.t('draftDiary.headerTitle') }}
       />
       <MyDiaryTabStack.Screen

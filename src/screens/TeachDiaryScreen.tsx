@@ -371,7 +371,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
 
   const onPressUser = useCallback(
     (uid: string, userName: string): void => {
-      navigation.navigate('UserProfile', { uid, userName });
+      navigation.navigate('UserProfile', { userName });
     },
     [navigation]
   );
@@ -517,7 +517,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
             correction2={correction2}
             correction3={correction3}
             onPressUser={(uid: string, userName: string): void => {
-              navigation.navigate('UserProfile', { uid, userName });
+              navigation.navigate('UserProfile', { userName });
             }}
             nativeLanguage={profile.nativeLanguage}
             textLanguage={teachDiary.profile.learnLanguage}
