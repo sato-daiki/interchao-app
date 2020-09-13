@@ -336,6 +336,11 @@ const userProfile = {
   topReview: 'トップレビュー',
 };
 
+const notFound = {
+  text: 'お探しのページは見つかりませんでした',
+  link: 'Topへ',
+};
+
 // atoms
 const commentCard = {
   original: '原文',
@@ -601,6 +606,7 @@ const ja = {
   teachDiarySerch,
   tutorialList,
   userProfile,
+  notFound,
   commentCard,
   firstDiary,
   userPoints,

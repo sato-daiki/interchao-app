@@ -321,6 +321,11 @@ const tutorialList = {
   points: '포인트에 대해서',
 };
 
+const notFound = {
+  text: '찾고있는 페이지를 찾을 수 없습니다',
+  link: '맨위로',
+};
+
 const userProfile = {
   headerTitle: '프로필',
   moreRead: '{{count}}건의 리뷰를 모두 보기',
@@ -598,6 +603,7 @@ const ko = {
   teachDiarySerch,
   tutorialList,
   userProfile,
+  notFound,
   commentCard,
   firstDiary,
   userPoints,
