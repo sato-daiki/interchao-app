@@ -21,7 +21,6 @@ import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { getDataCorrectionStatus } from '../utils/correcting';
-import firebase from '../constants/firebase';
 import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
 import {
   getExpoPushToken,
@@ -343,7 +342,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
           item={item}
           onPressUser={(uid: string, userName: string): void => {
             navigation.navigate('UserProfile', {
-              uid,
               userName,
             });
           }}

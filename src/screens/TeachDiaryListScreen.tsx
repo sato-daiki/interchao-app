@@ -260,7 +260,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
         <TeachDiaryListItem
           item={item}
           onPressUser={(uid: string, userName: string): void => {
-            navigation.navigate('UserProfile', { uid, userName });
+            navigation.navigate('UserProfile', { userName });
           }}
           onPressItem={onPressItem}
         />

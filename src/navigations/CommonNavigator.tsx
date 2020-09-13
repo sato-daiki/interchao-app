@@ -7,7 +7,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import I18n from '../utils/I18n';
 
 /* screens */
-import UserProfileScreen from '../screens/UserProfileScreen';
+import UserProfileScreenContainer from '../containers/UserProfileScreenContainer';
 import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import UserDiaryScreenContainer from '../containers/UserDiaryScreenContainer';
 import {
@@ -21,9 +21,9 @@ export type CommonNavigationProp = CompositeNavigationProp<
 >;
 
 export type CommonStackParamList = {
-  UserProfile: { uid: string; userName: string };
+  UserProfile: { userName: string };
   UserDiary: { objectID: string; userName: string };
-  ReviewList: { uid: string; userName: string };
+  ReviewList: { userName: string };
 };
 
 const CommonStack = createStackNavigator<CommonStackParamList>();
@@ -33,7 +33,7 @@ export const createCommonNavigator = (): JSX.Element => {
     <>
       <CommonStack.Screen
         name="UserProfile"
-        component={UserProfileScreen}
+        component={UserProfileScreenContainer}
         options={{ title: I18n.t('userProfile.headerTitle') }}
       />
       <CommonStack.Screen
@@ -44,7 +44,7 @@ export const createCommonNavigator = (): JSX.Element => {
       <CommonStack.Screen
         name="ReviewList"
         component={ReviewListScreenContainer}
-        options={{ title: I18n.t('teachDiary.headerTitle') }}
+        options={{ title: I18n.t('reviewList.headerTitle') }}
       />
     </>
   );

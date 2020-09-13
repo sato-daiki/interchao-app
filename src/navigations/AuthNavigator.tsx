@@ -23,7 +23,7 @@ export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForegetPassword: undefined;
-  NotFound: undefined;
+  notfound: undefined;
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -84,7 +84,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="NotFound"
+        name="notfound"
         component={NotFoundScreen}
         options={{ headerShown: false, title: '404 NOT FOUND' }}
       />

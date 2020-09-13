@@ -243,7 +243,6 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         correction={prmCorrection}
         onPressUser={(uid, userName): void => {
           navigation.navigate('UserProfile', {
-            uid,
             userName,
           });
         }}

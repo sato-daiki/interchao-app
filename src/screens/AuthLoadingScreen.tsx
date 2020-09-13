@@ -62,7 +62,6 @@ const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // if (localStatus.isLoading) {
   if (localStatus.isLoading) {
     return <LoadingModal visible />;
   }

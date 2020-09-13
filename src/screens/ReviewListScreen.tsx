@@ -14,6 +14,7 @@ import {
   CommonStackParamList,
   CommonNavigationProp,
 } from '../navigations/CommonNavigator';
+import { getUid } from '../utils/profile';
 
 export interface Props {
   profile: Profile;
@@ -59,8 +60,13 @@ const ReviewListScreen: React.FC<ScreenType> = ({
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      const { uid } = route.params;
-      const newReviews = await getReviews(uid, null, HIT_PER_PAGE);
+      const targetUid = await getUid(route.params.userName);
+
+      if (!targetUid) {
+        setIsLoading(false);
+        return;
+      }
+      const newReviews = await getReviews(targetUid, null, HIT_PER_PAGE);
       setReviews(newReviews);
       if (newReviews.length > 0) {
         const { createdAt } = newReviews[newReviews.length - 1];
@@ -70,14 +76,17 @@ const ReviewListScreen: React.FC<ScreenType> = ({
       setIsLoading(false);
     };
     f();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [route.params.userName]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
-      const { uid } = route.params;
       setRefreshing(true);
-      const newReviews = await getReviews(uid, null, HIT_PER_PAGE);
+      const targetUid = await getUid(route.params.userName);
+      if (!targetUid) {
+        setIsLoading(false);
+        return;
+      }
+      const newReviews = await getReviews(targetUid, null, HIT_PER_PAGE);
 
       setReviews(newReviews);
       if (newReviews.length > 0) {
@@ -93,9 +102,17 @@ const ReviewListScreen: React.FC<ScreenType> = ({
     const f = async (): Promise<void> => {
       if (!readingNext && !readAllResults) {
         try {
-          const { uid } = route.params;
+          const targetUid = await getUid(route.params.userName);
+          if (!targetUid) {
+            setIsLoading(false);
+            return;
+          }
           setReadingNext(true);
-          const nextReviews = await getReviews(uid, lastVisible, HIT_PER_PAGE);
+          const nextReviews = await getReviews(
+            targetUid,
+            lastVisible,
+            HIT_PER_PAGE
+          );
 
           if (nextReviews.length === 0) {
             setReadAllResults(true);
@@ -129,7 +146,7 @@ const ReviewListScreen: React.FC<ScreenType> = ({
           nativeLanguage={profile.nativeLanguage}
           textLanguage={profile.learnLanguage}
           onPressUser={(uid: string, userName: string): void => {
-            navigation.push('UserProfile', { uid, userName });
+            navigation.navigate('UserProfile', { userName });
           }}
         />
       );

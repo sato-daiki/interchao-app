@@ -7,14 +7,14 @@ import AuthLoadingScreenContainer from '../containers/AuthLoadingScreenContainer
 const prefix = Linking.makeUrl('/');
 
 const common = {
-  UserProfileScreen: {
+  UserProfile: {
     path: ':userName',
+  },
+  ReviewList: {
+    path: 'reviews/:userName',
   },
   UserDiary: {
     path: ':userName/:objectID',
-  },
-  ReviewList: {
-    path: ':userName/reviews',
   },
 };
 
@@ -27,6 +27,7 @@ const linking = {
         screens: {
           MyDiaryTab: {
             path: '',
+            initialRouteName: 'MyDiaryList',
             screens: {
               MyDiaryList: {
                 path: 'home',
@@ -38,13 +39,14 @@ const linking = {
                 path: 'drafts',
               },
               MyDiary: {
-                path: ':userName/:objectID',
+                path: 'my/:userName/:objectID',
               },
               ...common,
             },
           },
           TeachDiaryTab: {
             path: '',
+            initialRouteName: 'TeachDiaryList',
             screens: {
               TeachDiaryList: {
                 path: 'entries',
@@ -60,6 +62,7 @@ const linking = {
           },
           MyPageTab: {
             path: '',
+            initialRouteName: 'MyPage',
             screens: {
               MyPage: {
                 path: 'mypage',
@@ -114,6 +117,7 @@ const linking = {
       },
       ModalEditMyProfile: {
         path: '',
+        initialRouteName: 'EditMyProfile',
         screens: {
           EditMyProfile: {
             path: 'mypage/edit',
@@ -140,25 +144,27 @@ const linking = {
         },
       },
       Initialize: {
-        path: '/',
+        path: '',
       },
       SelectLanguage: {
-        path: '/create',
+        path: 'create',
+        exact: true,
       },
       InputUserName: {
-        path: '/create',
+        path: 'create',
       },
       SignIn: {
-        path: '/login',
+        path: 'login',
       },
       SignUp: {
-        path: '/create',
+        path: 'create',
       },
       ForegetPassword: {
-        path: '/foreget',
+        path: 'foreget',
       },
-      NotFound: '*',
+      notfound: '*',
     },
+    initialRouteName: 'Initialize',
   },
 } as LinkingOptions;
 

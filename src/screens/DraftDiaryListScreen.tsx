@@ -19,7 +19,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
-import { Diary } from '../types';
+import { Diary, User } from '../types';
 import DraftListItem from '../components/organisms/DraftListItem';
 import { EmptyList } from '../components/molecules';
 import I18n from '../utils/I18n';
@@ -29,6 +29,10 @@ import {
   MyDiaryTabNavigationProp,
 } from '../navigations/MyDiaryTabNavigator';
 
+export interface Props {
+  user: User;
+}
+
 type DraftDiaryListNavigationProp = CompositeNavigationProp<
   StackNavigationProp<MyDiaryTabStackParamList, 'DraftDiaryList'>,
   MyDiaryTabNavigationProp
@@ -36,7 +40,7 @@ type DraftDiaryListNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: DraftDiaryListNavigationProp;
-};
+} & Props;
 
 const styles = StyleSheet.create({
   container: {
@@ -62,7 +66,7 @@ const getIsEditMode = (
 /**
  * 下書き一覧
  */
-const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
+const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation, user }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [draftDiaries, setDraftDiaries] = useState<Diary[]>([]);
@@ -120,13 +124,10 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
   const getNewDraftDiary = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
-        const { currentUser } = firebase.auth();
-        if (!currentUser) return;
-
         const index = await Algolia.getDiaryIndex();
         await Algolia.setSettings(index, 'updatedAt');
         const res = await index.search('', {
-          filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
+          filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
           page: 0,
           hitsPerPage: HIT_PER_PAGE,
         });
@@ -141,7 +142,7 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
       setIsLoading(false);
     };
     f();
-  }, []);
+  }, [user.uid]);
 
   // 初期データの取得
   useEffect(() => {
@@ -162,9 +163,6 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
-      const { currentUser } = firebase.auth();
-      if (!currentUser) return;
-
       if (!readingNext && !readAllResults) {
         try {
           const nextPage = page + 1;
@@ -172,7 +170,7 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: `profile.uid: ${currentUser.uid} AND diaryStatus: draft`,
+            filters: `profile.uid: ${user.uid} AND diaryStatus: draft`,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
@@ -192,7 +190,7 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation }) => {
       }
     };
     f();
-  }, [draftDiaries, page, readAllResults, readingNext, setDraftDiaries]);
+  }, [draftDiaries, page, readAllResults, readingNext, user.uid]);
 
   const onPressItem = useCallback(
     (item: Diary) => {
