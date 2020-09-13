@@ -201,7 +201,8 @@ const myDiary = {
 };
 
 const myDiaryList = {
-  headerTitle: 'マイ日記を探す',
+  headerTitle: 'マイ日記',
+  searchText: 'マイ日記を探す',
   diaryList: {
     one: 'マイ日記一覧{{count}}件',
     other: 'マイ日記一覧{{count}}件',
@@ -305,7 +306,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: '日記を探す',
+  headerTitle: '日記一覧',
+  searchText: '日記を探す',
   diaryList: 'あなたが話せる言語の日記一覧',
   empty: '日記がありません',
 };

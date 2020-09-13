@@ -81,7 +81,6 @@ export const ModalPostDiaryNavigator = (): JSX.Element => {
           ...DefaultNavigationOptions,
           ...DefaultModalLayoutOptions,
           title: I18n.t('postDiary.headerTitle'),
-          // animationEnabled: true,
         }}
       />
     </ModalPostDiaryStack.Navigator>

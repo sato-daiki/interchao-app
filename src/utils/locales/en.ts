@@ -208,7 +208,8 @@ const myDiary = {
 };
 
 const myDiaryList = {
-  headerTitle: 'Search My Entries',
+  headerTitle: 'My Entries',
+  searchText: 'Search My Entries',
   diaryList: {
     one: 'My Journal Entries: {{count}} entry',
     other: 'My Journal Entries: {{count}} entries',
@@ -314,7 +315,8 @@ const teachDiary = {
 };
 
 const teachDiaryList = {
-  headerTitle: 'Search Entries',
+  headerTitle: 'Entries',
+  searchText: 'Search Entries',
   diaryList: 'List of Entries in Languages ​​You Can Speak',
   empty: 'There are no entries from other people.',
 };

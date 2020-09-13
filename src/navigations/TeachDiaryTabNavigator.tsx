@@ -3,9 +3,10 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
+import { CompositeNavigationProp } from '@react-navigation/native';
+import I18n from '../utils/I18n';
 
 /* screens */
-import { CompositeNavigationProp } from '@react-navigation/native';
 import TeachDiaryListScreenContainer from '../containers/TeachDiaryListScreenContainer';
 import TeachDiaryScreenContainer from '../containers/TeachDiaryScreenContainer';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
@@ -43,12 +44,18 @@ const TeachDiaryTabNavigator = (): JSX.Element => {
       <TeachDiaryTabStack.Screen
         name="TeachDiaryList"
         component={TeachDiaryListScreenContainer}
-        options={DefaultSearchBarOptions}
+        options={{
+          ...DefaultSearchBarOptions,
+          title: I18n.t('teachDiaryList.headerTitle'),
+        }}
       />
       <TeachDiaryTabStack.Screen
         name="TeachDiarySearch"
         component={TeachDiarySearchScreenContainer}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          title: I18n.t('teachDiaryList.searchText'),
+        }}
       />
       <TeachDiaryTabStack.Screen
         name="TeachDiary"
