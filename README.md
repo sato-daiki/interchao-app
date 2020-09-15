@@ -66,17 +66,22 @@ expo upload:android
 
 ## Publish（web）
 
-## ビルド
+### 1.versionを書く
+webevisionを上げる。（基本はアプリと合わせたいが、webのみリリースする場合はずれる）
+
+## 2.ビルド
 
 ```
 npx expo-optimize
 expo build:web --no-pwa
-firebase deploy --only hosting -P product
+```
 
+### デプロイ
+```
+firebase deploy --only hosting -P product
 ```
 
 ## メモ
-
 firebase deploy --only firestore:rules -P default
 
 - master に merge する。（CircleCI でチェク OK なら次へ。結果は slack の develop チャンネルに返ってくる）
