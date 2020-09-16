@@ -141,6 +141,9 @@ export const getConfig = ():
           },
         },
       },
+      Loading: {
+        path: '',
+      },
       Initialize: {
         path: '',
       },
