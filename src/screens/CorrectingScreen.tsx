@@ -29,7 +29,6 @@ import { getCorrection } from '../utils/corrections';
 import CorrectingListItem from '../components/organisms/CorrectingListItem';
 import { mainColor } from '../styles/Common';
 import Corrections from '../components/organisms/Corrections';
-import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
 import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
@@ -384,68 +383,66 @@ const CorrectingScreen: React.FC<ScreenType> = ({
   };
 
   return (
-    <DefaultLayout lSize>
-      <SafeAreaView style={styles.safeAreaView}>
-        <View style={styles.container}>
-          <LoadingModal visible={isLoading} />
-          <ModalTimeUp
-            visible={isModalTimeUp}
-            onPressClose={onPressCloseTimeUp}
-          />
-          <ModalCorrectingDone
-            visible={isModalDone}
-            getPoints={getPoints}
-            points={user.points}
-            onPressClose={onPressCloseDone}
-          />
-          <ModalConfirm
-            visible={isModalConfirmation}
-            isLoading={isLoading}
-            title={I18n.t('common.confirmation')}
-            message={I18n.t('correcting.deleteAlert')}
-            mainButtonText="OK"
-            onPressMain={async (): Promise<void> => {
-              await close();
-            }}
-            onPressClose={(): void => setIsModalConfirmation(false)}
-          />
-          <ModalConfirm
-            visible={isModalNoComment}
-            title={I18n.t('common.error')}
-            message={I18n.t('correcting.nothing')}
-            mainButtonText={I18n.t('common.close')}
-            onPressMain={(): void => setIsModalNoComment(false)}
-          />
-          <KeyboardAwareScrollView
-            style={styles.scrollView}
-            keyboardShouldPersistTaps="handled"
-            extraScrollHeight={32}
-          >
-            <FlatList
-              data={textInfos}
-              keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
-              renderItem={renderItem}
-              ListHeaderComponent={listHeaderComponent}
-            />
-            {renderSummary()}
-            {correction ? <Space size={32} /> : null}
-            <Corrections
-              isLoading={isCorrectionLoading}
-              headerTitle={I18n.t('correcting.header')}
-              correction={correction}
-              correction2={correction2}
-              textLanguage={teachDiary.profile.learnLanguage}
-              nativeLanguage={currentProfile.nativeLanguage}
-            />
-            <Space size={32} />
-          </KeyboardAwareScrollView>
-        </View>
-        <KeyboardHideButton
-          isKeyboard={isKeyboard}
-          setIsKeyboard={setIsKeyboard}
+    <SafeAreaView style={styles.safeAreaView}>
+      <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
+        <ModalTimeUp
+          visible={isModalTimeUp}
+          onPressClose={onPressCloseTimeUp}
         />
-      </SafeAreaView>
-    </DefaultLayout>
+        <ModalCorrectingDone
+          visible={isModalDone}
+          getPoints={getPoints}
+          points={user.points}
+          onPressClose={onPressCloseDone}
+        />
+        <ModalConfirm
+          visible={isModalConfirmation}
+          isLoading={isLoading}
+          title={I18n.t('common.confirmation')}
+          message={I18n.t('correcting.deleteAlert')}
+          mainButtonText="OK"
+          onPressMain={async (): Promise<void> => {
+            await close();
+          }}
+          onPressClose={(): void => setIsModalConfirmation(false)}
+        />
+        <ModalConfirm
+          visible={isModalNoComment}
+          title={I18n.t('common.error')}
+          message={I18n.t('correcting.nothing')}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={(): void => setIsModalNoComment(false)}
+        />
+        <KeyboardAwareScrollView
+          style={styles.scrollView}
+          keyboardShouldPersistTaps="handled"
+          extraScrollHeight={32}
+        >
+          <FlatList
+            data={textInfos}
+            keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
+            renderItem={renderItem}
+            ListHeaderComponent={listHeaderComponent}
+          />
+          {renderSummary()}
+          {correction ? <Space size={32} /> : null}
+          <Corrections
+            isLoading={isCorrectionLoading}
+            headerTitle={I18n.t('correcting.header')}
+            correction={correction}
+            correction2={correction2}
+            textLanguage={teachDiary.profile.learnLanguage}
+            nativeLanguage={currentProfile.nativeLanguage}
+          />
+          <Space size={32} />
+        </KeyboardAwareScrollView>
+      </View>
+      <KeyboardHideButton
+        isKeyboard={isKeyboard}
+        setIsKeyboard={setIsKeyboard}
+      />
+    </SafeAreaView>
   );
 };
 

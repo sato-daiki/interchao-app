@@ -1,5 +1,6 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import firebase from 'firebase';
+import { createStackNavigator } from '@react-navigation/stack';
 import { getUser } from '../utils/user';
 import { getProfile } from '../utils/profile';
 import { initAnalytics, setAnalyticsUser } from '../utils/Analytics';
@@ -45,8 +46,6 @@ const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
 
           // Amplitudeに登録
           setAnalyticsUser(newUser, newProfile);
-        } else {
-          restoreUid(null);
         }
       } else {
         restoreUid(null);
@@ -62,8 +61,19 @@ const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const Stack = createStackNavigator();
+
   if (localStatus.isLoading) {
-    return <LoadingModal visible />;
+    return (
+      // 直でスクリーン呼ぶとwebの時エラーになる
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Loading" component={LoadingModal} />
+      </Stack.Navigator>
+    );
   }
 
   if (localStatus.uid !== null) {
