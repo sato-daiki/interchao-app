@@ -31,6 +31,7 @@ export const maxPartL = 548;
 export const maxAuth = 580;
 export const maxMain = 1224;
 export const maxModal = 700;
+export const maxModalScreen = 900;
 export const maxLayoutChange = 1024;
 
 export const hoverGray = 'rgba(179,218,255,0.1)';

@@ -27,7 +27,6 @@ import TutorialPostDiary from './TutorialPostDiary';
 import I18n from '../../utils/I18n';
 import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
 import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
-import DefaultLayout from '../template/DefaultLayout';
 import ModalConfirm from './ModalConfirm';
 import PostDiaryKeybordWeb from './PostDiaryKeybordWeb';
 
@@ -185,7 +184,6 @@ const PostDiary = ({
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <DefaultLayout lSize> */}
       <LoadingModal visible={isLoading} />
       <ModalConfirm
         visible={isModalError}
@@ -241,7 +239,6 @@ const PostDiary = ({
         </View>
       </View>
       {renderKeyboard()}
-      {/* </DefaultLayout> */}
     </SafeAreaView>
   );
 };

@@ -31,7 +31,6 @@ import {
   getLanguageNum,
   checkSelectLanguage,
 } from '../utils/diary';
-import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import { MyPageTabNavigationProp } from '../navigations/MyPageTabNavigator';
 import {
@@ -288,187 +287,183 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   const rowStyle = { paddingVertical: nationalityCode ? 6 : 16 };
 
   return (
-    <DefaultLayout lSize>
-      <View style={styles.container}>
-        <ModalConfirm
-          visible={isModalError}
-          title={I18n.t('common.error')}
-          message={errorMessage}
-          mainButtonText={I18n.t('common.close')}
-          onPressMain={onPressCloseError}
-        />
-        <ModalSpokenLanguages
-          visible={isLearn}
-          defaultLanguage={learnLanguage}
-          languages={getAllLanguage()}
-          onPressSubmit={(language: Language): void => {
-            setLearnLanguage(language);
-            setIsLearn(false);
-          }}
-          onPressClose={(): void => setIsLearn(false)}
-        />
-        <ModalSpokenLanguages
-          visible={isNative}
-          defaultLanguage={nativeLanguage}
-          languages={getAllLanguage()}
-          onPressSubmit={(language: Language): void => {
-            setNativeLanguage(language);
-            setIsNative(false);
-          }}
-          onPressClose={(): void => setIsNative(false)}
-        />
-        <ModalSpokenLanguages
-          visible={isSpoken}
-          languages={getTargetLanguages(
-            learnLanguage,
-            nativeLanguage,
-            spokenLanguages
-          )}
-          onPressSubmit={(language: Language): void => {
-            setSpokenLanguages([...spokenLanguages, language]);
-            setIsSpoken(false);
-          }}
-          onPressClose={(): void => setIsSpoken(false)}
-        />
-        <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
-          <LoadingModal visible={isLoading} />
-          <View style={styles.avatar}>
-            <Avatar photoUrl={photoUrl} pickImage={pickImage} />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
-            <TextInput
-              style={styles.textInput}
-              value={name || ''}
-              placeholder="username"
-              maxLength={20}
-              autoCorrect={false}
-              blurOnSubmit
-              keyboardType="default"
-              spellCheck
-              returnKeyType="done"
-              autoCapitalize="none"
-              underlineColorAndroid="transparent"
-              onChangeText={(text: string): void => setName(text)}
-            />
-          </View>
+    <View style={styles.container}>
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={errorMessage}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={onPressCloseError}
+      />
+      <ModalSpokenLanguages
+        visible={isLearn}
+        defaultLanguage={learnLanguage}
+        languages={getAllLanguage()}
+        onPressSubmit={(language: Language): void => {
+          setLearnLanguage(language);
+          setIsLearn(false);
+        }}
+        onPressClose={(): void => setIsLearn(false)}
+      />
+      <ModalSpokenLanguages
+        visible={isNative}
+        defaultLanguage={nativeLanguage}
+        languages={getAllLanguage()}
+        onPressSubmit={(language: Language): void => {
+          setNativeLanguage(language);
+          setIsNative(false);
+        }}
+        onPressClose={(): void => setIsNative(false)}
+      />
+      <ModalSpokenLanguages
+        visible={isSpoken}
+        languages={getTargetLanguages(
+          learnLanguage,
+          nativeLanguage,
+          spokenLanguages
+        )}
+        onPressSubmit={(language: Language): void => {
+          setSpokenLanguages([...spokenLanguages, language]);
+          setIsSpoken(false);
+        }}
+        onPressClose={(): void => setIsSpoken(false)}
+      />
+      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+        <LoadingModal visible={isLoading} />
+        <View style={styles.avatar}>
+          <Avatar photoUrl={photoUrl} pickImage={pickImage} />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
+          <TextInput
+            style={styles.textInput}
+            value={name || ''}
+            placeholder="username"
+            maxLength={20}
+            autoCorrect={false}
+            blurOnSubmit
+            keyboardType="default"
+            spellCheck
+            returnKeyType="done"
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            onChangeText={(text: string): void => setName(text)}
+          />
+        </View>
 
-          <Hoverable
-            style={styles.row}
-            activeOpacity={1}
-            onPress={onPressUserName}
-          >
-            <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
-            <Text>{userName}</Text>
-          </Hoverable>
+        <Hoverable
+          style={styles.row}
+          activeOpacity={1}
+          onPress={onPressUserName}
+        >
+          <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
+          <Text>{userName}</Text>
+        </Hoverable>
 
-          <Hoverable
-            style={styles.row}
-            activeOpacity={1}
-            onPress={(): void => setIsLearn(true)}
-          >
-            <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
-            <Text>{getLanguage(learnLanguage)}</Text>
-          </Hoverable>
-          <Hoverable
-            style={styles.row}
-            activeOpacity={1}
-            onPress={(): void => setIsNative(true)}
-          >
-            <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
-            <Text>{getLanguage(nativeLanguage)}</Text>
-          </Hoverable>
+        <Hoverable
+          style={styles.row}
+          activeOpacity={1}
+          onPress={(): void => setIsLearn(true)}
+        >
+          <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
+          <Text>{getLanguage(learnLanguage)}</Text>
+        </Hoverable>
+        <Hoverable
+          style={styles.row}
+          activeOpacity={1}
+          onPress={(): void => setIsNative(true)}
+        >
+          <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
+          <Text>{getLanguage(nativeLanguage)}</Text>
+        </Hoverable>
 
-          <View style={styles.spokenContainer}>
-            <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
-            <View style={styles.right}>
-              {spokenLanguages.map(item => (
-                <View style={styles.spokenRow} key={item}>
-                  <Text style={styles.spoken}>{getLanguage(item)}</Text>
+        <View style={styles.spokenContainer}>
+          <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
+          <View style={styles.right}>
+            {spokenLanguages.map(item => (
+              <View style={styles.spokenRow} key={item}>
+                <Text style={styles.spoken}>{getLanguage(item)}</Text>
 
-                  <Hoverable
-                    style={styles.trash}
-                    onPress={(): void => {
-                      setSpokenLanguages(
-                        spokenLanguages.filter(s => s !== item)
-                      );
-                    }}
-                  >
-                    <MaterialCommunityIcons
-                      size={20}
-                      color={primaryColor}
-                      name="trash-can-outline"
-                    />
-                  </Hoverable>
-                </View>
-              ))}
-
-              {spokenLanguages.length < getLanguageNum() - 2 ? (
                 <Hoverable
-                  style={styles.addRow}
-                  onPress={(): void => setIsSpoken(true)}
+                  style={styles.trash}
+                  onPress={(): void => {
+                    setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+                  }}
                 >
                   <MaterialCommunityIcons
-                    size={24}
-                    color={subTextColor}
-                    name="plus"
+                    size={20}
+                    color={primaryColor}
+                    name="trash-can-outline"
                   />
-                  <Text style={styles.addText}>
-                    {I18n.t('selectLanguage.add')}
-                  </Text>
                 </Hoverable>
-              ) : null}
-            </View>
+              </View>
+            ))}
+
+            {spokenLanguages.length < getLanguageNum() - 2 ? (
+              <Hoverable
+                style={styles.addRow}
+                onPress={(): void => setIsSpoken(true)}
+              >
+                <MaterialCommunityIcons
+                  size={24}
+                  color={subTextColor}
+                  name="plus"
+                />
+                <Text style={styles.addText}>
+                  {I18n.t('selectLanguage.add')}
+                </Text>
+              </Hoverable>
+            ) : null}
           </View>
-          <Hoverable
-            style={[styles.row, rowStyle]}
-            activeOpacity={1}
-            onPress={(): void => setIsNationality(true)}
-          >
-            <Text style={styles.label}>
-              {I18n.t('selectLanguage.nationality')}
-            </Text>
-            <CountryPicker
-              // @ts-ignore
-              countryCode={nationalityCode}
-              placeholder={I18n.t('selectLanguage.placeholder')}
-              withFilter
-              withFlag
-              withCountryNameButton
-              withEmoji
-              withModal
-              withAlphaFilter
-              onSelect={(country: Country): void => {
-                setNationalityCode(country.cca2);
-              }}
-              onClose={(): void => setIsNationality(false)}
-              onOpen={(): void => setIsNationality(true)}
-              visible={isNationality}
-            />
-          </Hoverable>
-          <TextInput
-            style={styles.introduction}
-            value={introduction || ''}
-            onChangeText={(text: string): void => setIntroduction(text)}
-            maxLength={200}
-            placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
-            multiline
-            numberOfLines={3}
-            spellCheck
-            autoCorrect
-            underlineColorAndroid="transparent"
+        </View>
+        <Hoverable
+          style={[styles.row, rowStyle]}
+          activeOpacity={1}
+          onPress={(): void => setIsNationality(true)}
+        >
+          <Text style={styles.label}>
+            {I18n.t('selectLanguage.nationality')}
+          </Text>
+          <CountryPicker
+            // @ts-ignore
+            countryCode={nationalityCode}
+            placeholder={I18n.t('selectLanguage.placeholder')}
+            withFilter
+            withFlag
+            withCountryNameButton
+            withEmoji
+            withModal
+            withAlphaFilter
+            onSelect={(country: Country): void => {
+              setNationalityCode(country.cca2);
+            }}
+            onClose={(): void => setIsNationality(false)}
+            onOpen={(): void => setIsNationality(true)}
+            visible={isNationality}
           />
-          <Space size={32} />
-          {Platform.OS === 'web' ? (
-            <SubmitButton
-              isLoading={isLoading}
-              title={I18n.t('common.done')}
-              onPress={onPressSubmit}
-            />
-          ) : null}
-        </KeyboardAwareScrollView>
-      </View>
-    </DefaultLayout>
+        </Hoverable>
+        <TextInput
+          style={styles.introduction}
+          value={introduction || ''}
+          onChangeText={(text: string): void => setIntroduction(text)}
+          maxLength={200}
+          placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
+          multiline
+          numberOfLines={3}
+          spellCheck
+          autoCorrect
+          underlineColorAndroid="transparent"
+        />
+        <Space size={32} />
+        {Platform.OS === 'web' ? (
+          <SubmitButton
+            isLoading={isLoading}
+            title={I18n.t('common.done')}
+            onPress={onPressSubmit}
+          />
+        ) : null}
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
