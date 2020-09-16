@@ -18,7 +18,6 @@ import {
 } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
-import DefaultLayout from '../components/template/DefaultLayout';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
 
 export interface Props {
@@ -128,32 +127,30 @@ const InputUserNameScreen: React.FC<ScreenType> = ({
   };
 
   return (
-    <DefaultLayout>
-      <View style={styles.container}>
-        <Text style={styles.title}>{I18n.t('inputUserName.title')}</Text>
-        <Text style={styles.subText}>{I18n.t('inputUserName.subText')}</Text>
-        <CheckTextInput
-          autoFocus
-          value={userName}
-          onChangeText={onChangeText}
-          maxLength={20}
-          placeholder="username"
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
-          isLoading={isUserNameLoading}
-          isCheckOk={isUserNameCheckOk}
-          errorMessage={errorMessage}
-        />
-        <Space size={32} />
-        <SubmitButton
-          disable={!isUserNameCheckOk}
-          title={I18n.t('common.next')}
-          onPress={onPressNext}
-        />
-      </View>
-    </DefaultLayout>
+    <View style={styles.container}>
+      <Text style={styles.title}>{I18n.t('inputUserName.title')}</Text>
+      <Text style={styles.subText}>{I18n.t('inputUserName.subText')}</Text>
+      <CheckTextInput
+        autoFocus
+        value={userName}
+        onChangeText={onChangeText}
+        maxLength={20}
+        placeholder="username"
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
+        returnKeyType="done"
+        isLoading={isUserNameLoading}
+        isCheckOk={isUserNameCheckOk}
+        errorMessage={errorMessage}
+      />
+      <Space size={32} />
+      <SubmitButton
+        disable={!isUserNameCheckOk}
+        title={I18n.t('common.next')}
+        onPress={onPressNext}
+      />
+    </View>
   );
 };
 

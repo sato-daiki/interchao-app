@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import { getName } from 'country-list';
-import Flag from 'react-native-flags';
 import * as Localization from 'expo-localization';
 import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -24,9 +22,7 @@ import {
   getLanguageNum,
   checkSelectLanguage,
 } from '../utils/diary';
-import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
-import ModalCountryPicker from '../components/web/organisms/ModalCountryPicker';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
 import { Hoverable, AddButton, HoverableIcon } from '../components/atoms';
 
@@ -85,11 +81,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pleaseText: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-  },
-  nationality: {
-    marginLeft: 8,
     color: primaryColor,
     fontSize: fontSizeM,
   },
@@ -155,14 +146,6 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // TODO: web
-  useEffect(() => {
-    navigation.setOptions({
-      headerShown: !(Platform.OS === 'web' && countryVisible),
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countryVisible]);
-
   const onPressCloseError = (): void => {
     setErrorMessage('');
     setIsModalError(false);
@@ -214,129 +197,95 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
     setNationalityCode(country.cca2);
   };
 
-  if (Platform.OS === 'web' && countryVisible) {
-    return (
-      <ModalCountryPicker
-        visible={countryVisible}
-        nationalityCode={nationalityCode}
-        onSelect={onSelectCountry}
-        onClose={onCloseCountry}
-        onOpen={onOpenCountry}
-      />
-    );
-  }
-
   return (
-    <DefaultLayout>
-      <View style={styles.contaner}>
-        <ModalConfirm
-          visible={isModalError}
-          title={I18n.t('common.error')}
-          message={errorMessage}
-          mainButtonText={I18n.t('common.close')}
-          onPressMain={onPressCloseError}
-        />
-        <ModalSpokenLanguages
-          visible={spokenVisible}
-          languages={getTargetLanguages(
-            learnLanguage,
-            nativeLanguage,
-            spokenLanguages
-          )}
-          onPressSubmit={onPressSpokenLanguages}
-          onPressClose={(): void => setSpokenVisible(false)}
-        />
-        <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
-        <LanguageRadioBox
-          label={I18n.t('selectLanguage.learn')}
-          value={learnLanguage}
-          onPress={(value: Language): void => setLearnLanguage(value)}
-        />
-        <Space size={16} />
-        <LanguageRadioBox
-          label={I18n.t('selectLanguage.native')}
-          value={nativeLanguage}
-          onPress={(value: Language): void => setNativeLanguage(value)}
-        />
-        <Space size={16} />
-        <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
-        {spokenLanguages.map(item => (
-          <View style={styles.rowSpoken} key={item}>
-            <Text style={styles.spoken}>{getLanguage(item)}</Text>
-            <HoverableIcon
-              icon="community"
-              size={22}
-              hoverBorderRadius={32}
-              color={primaryColor}
-              name="trash-can-outline"
-              style={styles.trash}
-              onPress={(): void => {
-                setSpokenLanguages(spokenLanguages.filter(s => s !== item));
-              }}
-            />
-          </View>
-        ))}
-        {spokenLanguages.length < getLanguageNum() - 2 ? (
-          <AddButton onPress={(): void => setSpokenVisible(true)} />
-        ) : null}
-
-        <Space size={24} />
-        <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
-        {Platform.OS === 'web' ? (
-          <Hoverable onPress={onOpenCountry}>
-            {nationalityCode ? (
-              <View style={styles.row}>
-                <Flag code={nationalityCode} size={24} />
-                <Text style={styles.nationality}>
-                  {getName(nationalityCode)}
-                </Text>
-                <Text style={styles.change}>
-                  {I18n.t('selectLanguage.change')}
-                </Text>
-              </View>
-            ) : (
-              <Text style={styles.pleaseText}>
-                {I18n.t('selectLanguage.placeholder')}
-              </Text>
-            )}
-          </Hoverable>
-        ) : (
-          <View style={styles.row}>
-            {nationalityCode ? null : (
-              <Hoverable onPress={onOpenCountry}>
-                <Text style={styles.pleaseText}>
-                  {I18n.t('selectLanguage.placeholder')}
-                </Text>
-              </Hoverable>
-            )}
-
-            <CountryPicker
-              // @ts-ignore
-              countryCode={nationalityCode}
-              placeholder=""
-              withFilter
-              withFlag
-              withCountryNameButton
-              withEmoji
-              withModal
-              withAlphaFilter
-              onSelect={onSelectCountry}
-              onClose={onCloseCountry}
-              onOpen={onOpenCountry}
-              visible={countryVisible}
-            />
-
-            {nationalityCode ? (
-              <Text style={styles.change} onPress={onOpenCountry}>
-                {I18n.t('selectLanguage.change')}
-              </Text>
-            ) : null}
-          </View>
+    <View style={styles.contaner}>
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={errorMessage}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={onPressCloseError}
+      />
+      <ModalSpokenLanguages
+        visible={spokenVisible}
+        languages={getTargetLanguages(
+          learnLanguage,
+          nativeLanguage,
+          spokenLanguages
         )}
-        <Space size={32} />
-        <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
+        onPressSubmit={onPressSpokenLanguages}
+        onPressClose={(): void => setSpokenVisible(false)}
+      />
+      <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
+      <LanguageRadioBox
+        label={I18n.t('selectLanguage.learn')}
+        value={learnLanguage}
+        onPress={(value: Language): void => setLearnLanguage(value)}
+      />
+      <Space size={16} />
+      <LanguageRadioBox
+        label={I18n.t('selectLanguage.native')}
+        value={nativeLanguage}
+        onPress={(value: Language): void => setNativeLanguage(value)}
+      />
+      <Space size={16} />
+      <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
+      {spokenLanguages.map(item => (
+        <View style={styles.rowSpoken} key={item}>
+          <Text style={styles.spoken}>{getLanguage(item)}</Text>
+          <HoverableIcon
+            icon="community"
+            size={22}
+            hoverBorderRadius={32}
+            color={primaryColor}
+            name="trash-can-outline"
+            style={styles.trash}
+            onPress={(): void => {
+              setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+            }}
+          />
+        </View>
+      ))}
+      {spokenLanguages.length < getLanguageNum() - 2 ? (
+        <AddButton onPress={(): void => setSpokenVisible(true)} />
+      ) : null}
+
+      <Space size={24} />
+      <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
+      <View style={styles.row}>
+        {nationalityCode ? null : (
+          <Hoverable onPress={onOpenCountry}>
+            <Text style={styles.pleaseText}>
+              {I18n.t('selectLanguage.placeholder')}
+            </Text>
+          </Hoverable>
+        )}
+
+        <CountryPicker
+          // @ts-ignore
+          countryCode={nationalityCode}
+          placeholder=""
+          withFilter
+          withFlag
+          withCountryNameButton
+          withEmoji
+          withModal
+          withAlphaFilter={Platform.OS !== 'web'}
+          onSelect={onSelectCountry}
+          onClose={onCloseCountry}
+          onOpen={onOpenCountry}
+          visible={countryVisible}
+        />
+
+        {nationalityCode ? (
+          <Text style={styles.change} onPress={onOpenCountry}>
+            {I18n.t('selectLanguage.change')}
+          </Text>
+        ) : null}
       </View>
-    </DefaultLayout>
+      <Space size={32} />
+      <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
+    </View>
   );
 };
 

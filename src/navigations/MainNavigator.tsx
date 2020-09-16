@@ -20,6 +20,7 @@ import {
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import { maxMain } from '../styles/Common';
 
 export type MainStackParamList = {
   Home: {
@@ -58,6 +59,10 @@ const MainNavigator = (): JSX.Element => {
       screenOptions={{
         cardStyle: {
           backgroundColor: '#FFFFFF',
+          marginHorizontal: 'auto',
+          flex: 1,
+          width: '100%',
+          maxWidth: maxMain,
         },
       }}
     >

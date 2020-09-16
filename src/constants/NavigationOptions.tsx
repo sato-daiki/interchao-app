@@ -1,7 +1,13 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
 import { Platform } from 'react-native';
-import { primaryColor, fontSizeL, maxModal, maxAuth } from '../styles/Common';
+import {
+  primaryColor,
+  fontSizeL,
+  maxAuth,
+  borderLightColor,
+  maxModalScreen,
+} from '../styles/Common';
 import { getEachOS } from '../utils/common';
 import { HeaderIcon } from '../components/atoms';
 
@@ -47,6 +53,11 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
       />
     );
   },
+  cardStyle: {
+    // borderleftはdrwarのdefaultでついている
+    borderRightWidth: 1,
+    borderRightColor: borderLightColor,
+  },
 };
 
 export const DefaultSearchBarOptions: StackNavigationOptions = {
@@ -73,9 +84,13 @@ export const DefaultDiaryOptions: StackNavigationOptions = {
 export const DefaultModalLayoutOptions: StackNavigationOptions = {
   cardStyle: {
     width: '100%',
-    maxWidth: maxModal,
+    maxWidth: maxModalScreen,
     marginHorizontal: 'auto',
     backgroundColor: '#fff',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderLeftColor: borderLightColor,
+    borderRightColor: borderLightColor,
     flex: 1,
   },
 };
