@@ -11,7 +11,6 @@ import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
-import DefaultLayout from '../components/template/DefaultLayout';
 import { ModalConfirm } from '../components/organisms';
 import {
   ModalReviewStackParamList,
@@ -210,57 +209,55 @@ const ReviewScreen: React.FC<ScreenType> = ({
   }
 
   return (
-    <DefaultLayout lSize>
-      <View style={styles.container}>
-        <LoadingModal visible={isLoading} />
-        <ModalConfirm
-          visible={isModalError}
-          title={I18n.t('common.error')}
-          message={I18n.t('errorMessage.invalidRaiting')}
-          mainButtonText={I18n.t('common.close')}
-          onPressMain={(): void => setIsModalError(false)}
+    <View style={styles.container}>
+      <LoadingModal visible={isLoading} />
+      <ModalConfirm
+        visible={isModalError}
+        title={I18n.t('common.error')}
+        message={I18n.t('errorMessage.invalidRaiting')}
+        mainButtonText={I18n.t('common.close')}
+        onPressMain={(): void => setIsModalError(false)}
+      />
+      <ModalConfirm
+        visible={isModalConfirmation}
+        title={I18n.t('common.confirmation')}
+        message={I18n.t('review.confirmation')}
+        mainButtonText="OK"
+        onPressMain={(): void => {
+          navigation.goBack();
+        }}
+        onPressClose={(): void => {
+          setIsModalConfirmation(false);
+        }}
+      />
+      <UserListItem
+        userName={diary.profile.userName}
+        photoUrl={diary.profile.photoUrl}
+        nativeLanguage={diary.profile.nativeLanguage}
+        nationalityCode={diary.profile.nationalityCode}
+      />
+      <Space size={24} />
+      <AirbnbRating
+        showRating={false}
+        defaultRating={0}
+        onFinishRating={(num: number): void => setRating(num)}
+      />
+      <Space size={24} />
+      <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
+        <TextInput
+          value={comment}
+          onChangeText={(text: string): void => setComment(text)}
+          maxLength={140}
+          placeholder={I18n.t('review.placeholder')}
+          multiline
+          numberOfLines={3}
+          spellCheck
+          autoCorrect
+          underlineColorAndroid="transparent"
+          style={styles.review}
         />
-        <ModalConfirm
-          visible={isModalConfirmation}
-          title={I18n.t('common.confirmation')}
-          message={I18n.t('review.confirmation')}
-          mainButtonText="OK"
-          onPressMain={(): void => {
-            navigation.goBack();
-          }}
-          onPressClose={(): void => {
-            setIsModalConfirmation(false);
-          }}
-        />
-        <UserListItem
-          userName={diary.profile.userName}
-          photoUrl={diary.profile.photoUrl}
-          nativeLanguage={diary.profile.nativeLanguage}
-          nationalityCode={diary.profile.nationalityCode}
-        />
-        <Space size={24} />
-        <AirbnbRating
-          showRating={false}
-          defaultRating={0}
-          onFinishRating={(num: number): void => setRating(num)}
-        />
-        <Space size={24} />
-        <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
-          <TextInput
-            value={comment}
-            onChangeText={(text: string): void => setComment(text)}
-            maxLength={140}
-            placeholder={I18n.t('review.placeholder')}
-            multiline
-            numberOfLines={3}
-            spellCheck
-            autoCorrect
-            underlineColorAndroid="transparent"
-            style={styles.review}
-          />
-        </KeyboardAwareScrollView>
-      </View>
-    </DefaultLayout>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
