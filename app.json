@@ -75,7 +75,7 @@
         }
       },
       "revision": 0,
-      "webevision": 1
+      "webRevision": 2
     },
     "hooks": {
       "postPublish": [
