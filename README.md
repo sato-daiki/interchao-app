@@ -67,7 +67,7 @@ expo upload:android
 ## Publish（web）
 
 ### 1.versionを書く
-webevisionを上げる。（基本はアプリと合わせたいが、webのみリリースする場合はずれる）
+webVesionを上げる。（基本はアプリと合わせたいが、webのみリリースする場合はずれる）
 
 ## 2.ビルド
 
