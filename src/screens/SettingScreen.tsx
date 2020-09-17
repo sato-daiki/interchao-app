@@ -127,12 +127,6 @@ const SettingScreen: React.FC<ScreenType> = ({
           });
         }}
       />
-      <OptionItem
-        title={I18n.t('setting.notice')}
-        onPress={(): void => {
-          navigation.navigate('Notice');
-        }}
-      />
       {currentUser && currentUser.email ? (
         <>
           <OptionItem
