@@ -30,6 +30,7 @@ const localStatus = (state = initialState, action: Actions): LocalStatus => {
         ...state,
         isSignout: true,
         uid: null,
+        isLoading: false,
       };
     default:
       return state;

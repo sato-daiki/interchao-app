@@ -19,7 +19,6 @@ import {
   MyPageTabNavigationProp,
   MyPageTabStackParamList,
 } from '../navigations/MyPageTabNavigator';
-import { configureStore } from '../stores/Store';
 import { Hoverable } from '../components/atoms';
 
 interface DispatchProps {
@@ -77,25 +76,19 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
 
-  const afterDeleteUser = useCallback(() => {
-    const { persistor } = configureStore();
-    signOut();
-    persistor.purge();
-  }, [signOut]);
-
   const onPressDelete1 = useCallback(() => {
     const f = async (): Promise<void> => {
       try {
         const { currentUser } = firebase.auth();
         if (!currentUser) {
-          afterDeleteUser();
+          signOut();
           return;
         }
         if (!currentUser.email) {
           // メールアドレスを登録していないユーザの場合→そのまま削除
           setIsLoading(true);
           await currentUser.delete();
-          afterDeleteUser();
+          signOut();
         } else {
           // メールアドレスを登録しているユーザの場合→パスワード入力に切り替える
           setIsPasswordInput(true);
@@ -108,7 +101,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       track(events.DELETED_USER);
     };
     f();
-  }, [afterDeleteUser]);
+  }, [signOut]);
 
   const onPressDelete2 = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -122,7 +115,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
         setIsLoading(true);
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.delete();
-        afterDeleteUser();
+        signOut();
       } catch (err) {
         setIsLoading(false);
         const errorCode = err.code;
@@ -137,7 +130,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       setIsLoading(false);
     };
     f();
-  }, [afterDeleteUser, password]);
+  }, [password, signOut]);
 
   const onBlurPassword = useCallback(() => {
     setErrorPassword('');
