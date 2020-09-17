@@ -67,7 +67,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingVertical: 16,
+  },
+  scrollView: {
+    flex: 1,
+    paddingVertical: 32,
   },
   moreRead: {
     marginTop: 16,
@@ -487,7 +490,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         onReportClose={(): void => setIsReport(false)}
       />
       <ScrollView
-        style={styles.container}
+        style={styles.scrollView}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

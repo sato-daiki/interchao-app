@@ -6,6 +6,7 @@ import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
 import * as Updates from 'expo-updates';
+import { initAnalytics } from './utils/Analytics';
 import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
@@ -42,6 +43,7 @@ const App: React.SFC = () => {
   };
 
   useEffect(() => {
+    initAnalytics();
     checkUpdate();
   }, []);
 
