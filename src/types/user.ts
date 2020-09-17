@@ -13,6 +13,6 @@ export interface User {
   notificationCorrection: boolean;
   notificationReview: boolean;
   lastModalAppSuggestionAt?: firestore.Timestamp | null;
-  createdAt: firestore.Timestamp;
-  updatedAt: firestore.Timestamp;
+  createdAt: firestore.FieldValue;
+  updatedAt: firestore.FieldValue;
 }

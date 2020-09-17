@@ -38,6 +38,8 @@ export interface Props {
 
 interface DispatchProps {
   signIn: (uid: string) => void;
+  setUser: (user: User) => void;
+  setProfile: (profile: Profile) => void;
 }
 
 type ScreenType = StackScreenProps<AuthStackParamList, 'SignUp'> &
@@ -81,6 +83,8 @@ const SignUpScreen: React.FC<ScreenType> = ({
   navigation,
   profile,
   signIn,
+  setUser,
+  setProfile,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
@@ -157,6 +161,8 @@ const SignUpScreen: React.FC<ScreenType> = ({
         );
         await batch.commit();
         signIn(credentUser.uid);
+        setUser({ ...userInfo, uid: credentUser.uid });
+        setProfile({ ...profileInfo, uid: credentUser.uid });
       };
       f();
     },
@@ -166,6 +172,8 @@ const SignUpScreen: React.FC<ScreenType> = ({
       profile.nativeLanguage,
       profile.spokenLanguages,
       profile.userName,
+      setProfile,
+      setUser,
       signIn,
     ]
   );
