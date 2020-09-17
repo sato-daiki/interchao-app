@@ -280,6 +280,7 @@ const setting = {
   deleteAcount: '退会について',
   logout: 'ログアウト',
   inquiry: 'お問い合わせ',
+  about: 'Interchaoとは',
 };
 
 const signIn = {

@@ -289,6 +289,7 @@ const setting = {
   deleteAcount: 'About Account Deletion',
   logout: 'Logout',
   inquiry: 'Contact',
+  about: 'What is Interchao',
 };
 
 const signIn = {
