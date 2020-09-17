@@ -22,7 +22,6 @@ import {
   MyPageTabStackParamList,
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
-import { configureStore } from '../stores/Store';
 
 import { Profile } from '../types';
 
@@ -96,9 +95,7 @@ const SettingScreen: React.FC<ScreenType> = ({
           return;
         }
         track(events.SIGN_OUT);
-        const { persistor } = configureStore();
         signOut();
-        persistor.purge();
       } catch (err) {
         alert({ err });
       }
@@ -128,12 +125,6 @@ const SettingScreen: React.FC<ScreenType> = ({
           navigation.navigate('ReviewList', {
             userName: profile.userName,
           });
-        }}
-      />
-      <OptionItem
-        title={I18n.t('setting.notice')}
-        onPress={(): void => {
-          navigation.navigate('Notice');
         }}
       />
       {currentUser && currentUser.email ? (
