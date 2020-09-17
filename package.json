@@ -34,6 +34,7 @@
     "@expo/react-native-action-sheet": "^3.5.0",
     "@expo/vector-icons": "^10.0.0",
     "@firebase/firestore": "^1.10.2",
+    "@react-native-community/async-storage": "~1.11.0",
     "@react-native-community/clipboard": "^1.2.2",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.8.0",

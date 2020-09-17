@@ -22,7 +22,6 @@ import {
   MyPageTabStackParamList,
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
-import { configureStore } from '../stores/Store';
 
 import { Profile } from '../types';
 
@@ -96,9 +95,7 @@ const SettingScreen: React.FC<ScreenType> = ({
           return;
         }
         track(events.SIGN_OUT);
-        const { persistor } = configureStore();
         signOut();
-        persistor.purge();
       } catch (err) {
         alert({ err });
       }
