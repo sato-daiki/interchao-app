@@ -13,10 +13,11 @@ import I18n from '../../../utils/I18n';
 import { getSize } from '../../../utils/responsibleCss';
 
 interface Props {
+  isAbout: boolean;
   isMaxLayoutChange: boolean;
   isMobileDevice: boolean;
-  onPressStart: () => void;
-  onPressLogin: () => void;
+  onPressStart?: () => void;
+  onPressLogin?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
 });
 
 const FirstView = ({
+  isAbout,
   isMaxLayoutChange,
   isMobileDevice,
   onPressStart,
@@ -124,33 +126,35 @@ const FirstView = ({
             {I18n.t('web.firstViewSubTitle')}
           </Text>
         </View>
-        <View style={styles.loginContainer}>
-          <Space size={36} />
-          <Text
-            style={[
-              styles.loginText,
-              {
-                fontSize: getSize(isMobileDevice, fontSizeLL),
-                lineHeight: getSize(isMobileDevice, fontSizeLL) * 1.3,
-              },
-              setRight(),
-            ]}
-          >
-            {I18n.t('web.firstViewStart')}
-          </Text>
-          <Space size={8} />
-          <SubmitButton
-            containerStyle={styles.button}
-            title={I18n.t('initialize.start')}
-            onPress={onPressStart}
-          />
-          <Space size={16} />
-          <WhiteButton
-            containerStyle={styles.button}
-            title={I18n.t('signIn.login')}
-            onPress={onPressLogin}
-          />
-        </View>
+        {isAbout ? null : (
+          <View style={styles.loginContainer}>
+            <Space size={36} />
+            <Text
+              style={[
+                styles.loginText,
+                {
+                  fontSize: getSize(isMobileDevice, fontSizeLL),
+                  lineHeight: getSize(isMobileDevice, fontSizeLL) * 1.3,
+                },
+                setRight(),
+              ]}
+            >
+              {I18n.t('web.firstViewStart')}
+            </Text>
+            <Space size={8} />
+            <SubmitButton
+              containerStyle={styles.button}
+              title={I18n.t('initialize.start')}
+              onPress={onPressStart}
+            />
+            <Space size={16} />
+            <WhiteButton
+              containerStyle={styles.button}
+              title={I18n.t('signIn.login')}
+              onPress={onPressLogin}
+            />
+          </View>
+        )}
       </View>
     </View>
   );

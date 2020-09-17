@@ -5,7 +5,7 @@ import { Icon } from '../../../images/web';
 import { Hoverable } from '../../atoms';
 
 interface Props {
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const styles = StyleSheet.create({

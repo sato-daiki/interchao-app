@@ -268,6 +268,7 @@ const setting = {
   deleteAcount: '关于账户注销',
   logout: '注销',
   inquiry: '联系我们',
+  about: '什么是Interchao?',
 };
 
 const signIn = {
