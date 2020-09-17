@@ -30,10 +30,6 @@ const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    initAnalytics();
-  }, []);
-
   const initNavigation = (authUser: firebase.User | null): void => {
     const f = async (): Promise<void> => {
       if (authUser) {

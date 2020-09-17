@@ -14,7 +14,6 @@ import MyDiarySerchScreenContainer from '../containers/MyDiarySearchScreenContai
 import {
   DefaultNavigationOptions,
   DefaultSearchBarOptions,
-  DefaultDiaryOptions,
 } from '../constants/NavigationOptions';
 import { createCommonNavigator, CommonStackParamList } from './CommonNavigator';
 import {
@@ -66,7 +65,6 @@ const MyDiaryTabNavigator = (): JSX.Element => {
       <MyDiaryTabStack.Screen
         name="MyDiary"
         component={MyDiaryScreenContainer}
-        options={DefaultDiaryOptions}
       />
       {createCommonNavigator()}
     </MyDiaryTabStack.Navigator>

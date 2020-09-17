@@ -13,7 +13,6 @@ import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScree
 import {
   DefaultNavigationOptions,
   DefaultSearchBarOptions,
-  DefaultDiaryOptions,
 } from '../constants/NavigationOptions';
 import { CommonStackParamList, createCommonNavigator } from './CommonNavigator';
 import {
@@ -60,7 +59,6 @@ const TeachDiaryTabNavigator = (): JSX.Element => {
       <TeachDiaryTabStack.Screen
         name="TeachDiary"
         component={TeachDiaryScreenContainer}
-        options={DefaultDiaryOptions}
       />
       {createCommonNavigator()}
     </TeachDiaryTabStack.Navigator>

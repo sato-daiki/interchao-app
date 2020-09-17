@@ -191,11 +191,11 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
   useEffect(() => {
     // This listener is fired whenever a notification is received while the app is foregrounded
-    notificationListener.current = Notifications.addNotificationReceivedListener(
-      prm => {
-        onRefresh();
-      }
-    );
+    // notificationListener.current = Notifications.addNotificationReceivedListener(
+    //   prm => {
+    //     onRefresh();
+    //   }
+    // );
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
@@ -205,8 +205,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     );
 
     return (): void => {
-      // @ts-ignore
-      Notifications.removeNotificationSubscription(notificationListener);
       // @ts-ignore
       Notifications.removeNotificationSubscription(responseListener);
     };

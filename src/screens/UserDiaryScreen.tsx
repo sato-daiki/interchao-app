@@ -49,7 +49,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingVertical: 16,
+  },
+  scrollView: {
+    flex: 1,
+    paddingVertical: 32,
   },
   errContainer: {
     flex: 1,
@@ -184,7 +187,7 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
         <View style={styles.main}>
           {targetProfile && !isProfileLoading ? (
             <ProfileIconHorizontal

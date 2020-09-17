@@ -16,17 +16,11 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
     backgroundColor: '#fff',
   },
   headerTitleStyle: {
-    textAlign: getEachOS({ ios: 'center', android: 'left', web: 'left' }),
     fontWeight: getEachOS({ ios: '700', android: '500', web: '700' }),
     color: primaryColor,
     fontSize: fontSizeL,
-    marginHorizontal: getEachOS({ ios: 32, android: 0, web: 0 }),
-    alignSelf: getEachOS({ ios: 'center', android: 'center', web: 'left' }),
   },
   headerTintColor: primaryColor,
-  headerLeftContainerStyle: {
-    paddingHorizontal: getEachOS({ ios: 0, android: 0, web: 0 }),
-  },
   headerBackTitleStyle: {
     display: 'none',
   },
@@ -65,19 +59,6 @@ export const DefaultSearchBarOptions: StackNavigationOptions = {
   headerTitleContainerStyle: {
     flex: 1,
     marginRight: 64,
-  },
-};
-
-export const DefaultDiaryOptions: StackNavigationOptions = {
-  headerTitleAlign: getEachOS({
-    ios: 'center',
-    android: 'left',
-    web: 'center',
-  }),
-  headerTitleContainerStyle: {
-    flex: 1,
-    marginRight: 64,
-    marginLeft: 64,
   },
 };
 
