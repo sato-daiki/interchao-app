@@ -141,6 +141,14 @@ export const getConfig = ():
           },
         },
       },
+      ModalAbout: {
+        path: '',
+        screens: {
+          About: {
+            path: 'about',
+          },
+        },
+      },
       Loading: {
         path: '',
       },

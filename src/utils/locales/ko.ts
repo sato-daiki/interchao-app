@@ -279,6 +279,7 @@ const setting = {
   deleteAcount: '회원 탈퇴',
   logout: '로그아웃',
   inquiry: '문의',
+  about: 'Interchao는 무엇입니까?',
 };
 
 const signIn = {
