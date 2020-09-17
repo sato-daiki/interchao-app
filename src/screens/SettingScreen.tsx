@@ -171,6 +171,12 @@ const SettingScreen: React.FC<ScreenType> = ({
           navigation.navigate('TutorialList');
         }}
       />
+      <OptionItem
+        title={I18n.t('setting.about')}
+        onPress={(): void => {
+          navigation.navigate('ModalAbout', { screen: 'About' });
+        }}
+      />
       <Space size={16} />
       <OptionItem
         title={I18n.t('setting.deleteAcount')}

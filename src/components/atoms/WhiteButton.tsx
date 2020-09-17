@@ -16,7 +16,7 @@ interface Props {
   isLoading?: boolean;
   disable?: boolean;
   title: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const styles = StyleSheet.create({

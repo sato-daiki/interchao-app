@@ -57,10 +57,12 @@ const styles = StyleSheet.create({
   deleteButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 0.5,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
     backgroundColor: '#fff',
     height: 48,
-    borderColor: borderLightColor,
+    borderTopColor: borderLightColor,
+    borderBottomColor: borderLightColor,
   },
   delete: {
     color: softRed,

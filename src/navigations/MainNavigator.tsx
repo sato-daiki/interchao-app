@@ -16,6 +16,8 @@ import {
   ModalEditMyProfileStackParamList,
   ModalCorrectingStackParamList,
   ModalReviewStackParamList,
+  ModalAboutNavigator,
+  ModalAboutStackParamList,
 } from './ModalNavigator';
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
@@ -45,6 +47,7 @@ export type MainStackParamList = {
     screen: keyof ModalReviewStackParamList;
     params: { objectID: string; correctedNum: number; userName: string };
   };
+  ModalAbout: { screen: keyof ModalAboutStackParamList };
   NotFound: undefined;
 };
 
@@ -84,6 +87,7 @@ const MainNavigator = (): JSX.Element => {
         name="ModalCorrecting"
         component={ModalCorrectingNavigator}
       />
+      <MainStack.Screen name="ModalAbout" component={ModalAboutNavigator} />
       <MainStack.Screen name="NotFound" component={NotFoundScreen} />
     </MainStack.Navigator>
   );
