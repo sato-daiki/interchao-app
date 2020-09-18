@@ -7,7 +7,8 @@
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "node node_modules/jest/bin/jest.js --watch",
+    "test": "node_modules/.bin/jest",
+    "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand",
     "type-check": "tsc --noEmit"
   },
   "husky": {
@@ -27,6 +28,12 @@
     "*.tsx": [
       "eslint --ext .tsx --fix",
       "git add"
+    ]
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
     ]
   },
   "dependencies": {
@@ -63,6 +70,7 @@
     "expo-notifications": "^0.5.0",
     "expo-permissions": "~9.0.1",
     "expo-random": "~8.2.1",
+    "expo-sharing": "^8.3.0",
     "expo-speech": "~8.2.1",
     "expo-updates": "~0.2.8",
     "expo-web-browser": "~8.3.1",
@@ -114,10 +122,12 @@
     "@expo/webpack-config": "^0.12.16",
     "@types/algoliasearch": "^3.34.10",
     "@types/i18n-js": "^3.0.1",
-    "@types/react": "~16.9.41",
+    "@types/jest": "^26.0.14",
+    "@types/react": "^16.9.49",
     "@types/react-instantsearch-native": "^5.3.3",
-    "@types/react-native": "~0.62.13",
+    "@types/react-native": "^0.63.18",
     "@types/react-redux": "^7.1.7",
+    "@types/react-test-renderer": "^16.9.3",
     "@types/redux-logger": "^3.0.7",
     "@types/uuid": "^7.0.2",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
@@ -135,11 +145,13 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "eslint-plugin-react-native": "^3.8.1",
     "install": "^0.13.0",
+    "jest-expo": "^38.0.2",
     "lint-staged": "^10.0.2",
     "prettier": "^1.19.1",
     "react-native-dotenv": "^2.4.0",
+    "react-test-renderer": "^16.13.1",
     "redux-devtools-extension": "^2.13.8",
-    "typescript": "~3.9.5",
+    "typescript": "^4.0.2",
     "webpack-bundle-analyzer": "^3.8.0"
   },
   "private": true
