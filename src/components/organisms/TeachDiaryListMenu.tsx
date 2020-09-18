@@ -12,21 +12,17 @@ interface Props {
   onClose: () => void;
 }
 
-const styles = StyleSheet.create({
-  sns: {
-    padding: 16,
-  },
-});
+// const styles = StyleSheet.create({
+//   sns: {
+//     padding: 16,
+//   },
+// });
 
 const TeachDiaryListMenu = ({
   isMenu,
   nativeLanguage,
   onClose,
 }: Props): JSX.Element => {
-  const onPressAppShare = useCallback(() => {
-    appShare(nativeLanguage);
-  }, [nativeLanguage]);
-
   return (
     <SwipeablePanel
       fullWidth
@@ -35,12 +31,11 @@ const TeachDiaryListMenu = ({
       onClose={onClose}
       onPressCloseButton={onClose}
     >
-      {Platform.OS === 'web' ? (
-        <View style={styles.sns}>
-          <Sns nativeLanguage={nativeLanguage} />
-        </View>
-      ) : (
-        <OptionItem title={I18n.t('sns.app')} onPress={onPressAppShare} />
+      {Platform.OS === 'web' ? null : (
+        <OptionItem
+          title={I18n.t('sns.app')}
+          onPress={(): Promise<void> => appShare(nativeLanguage)}
+        />
       )}
     </SwipeablePanel>
   );

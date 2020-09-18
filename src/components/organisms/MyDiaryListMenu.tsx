@@ -25,10 +25,6 @@ const MyDiaryListMenu = ({
     onClose();
   }, [navigate, onClose]);
 
-  const onPressAppShare = useCallback(() => {
-    appShare(nativeLanguage);
-  }, [nativeLanguage]);
-
   return (
     <SwipeablePanel
       fullWidth
@@ -42,7 +38,10 @@ const MyDiaryListMenu = ({
         onPress={onPressDraftList}
       />
       {Platform.OS === 'web' ? null : (
-        <OptionItem title={I18n.t('sns.app')} onPress={onPressAppShare} />
+        <OptionItem
+          title={I18n.t('sns.app')}
+          onPress={(): Promise<void> => appShare(nativeLanguage)}
+        />
       )}
     </SwipeablePanel>
   );
