@@ -3,9 +3,12 @@ import * as Random from 'expo-random';
 import Constants from 'expo-constants';
 import { Share, Platform, Linking } from 'react-native';
 import firebase, { firestore } from 'firebase';
+import * as Sharing from 'expo-sharing';
 import I18n from './I18n';
 import { alert } from './ErrorAlert';
 import { Language } from '../types';
+
+const url = 'https://interchao.app';
 
 export const getUuid = async (): Promise<string> =>
   uuidv4({ random: await Random.getRandomBytesAsync(16) });
@@ -105,46 +108,33 @@ export const getVersionText = (): string => {
   return versionText;
 };
 
-export const getShareUrl = (nativeLanguage: Language): string => {
-  switch (nativeLanguage) {
-    case 'ja':
-      return 'https://interchao.app/jp/share.html';
-    case 'en':
-      return 'https://interchao.app/en/share.html';
-    case 'zh':
-      return 'https://interchao.app/zh/share.html';
-    case 'ko':
-      return 'https://interchao.app/ko/share.html';
-    default:
-      return 'https://interchao.app/en/share.html';
-  }
-};
-
-export const appShare = async (
+export const diaryShare = async (
   nativeLanguage: Language,
-  imageUrl: string | null = null
+  imageUrl: string
 ): Promise<void> => {
-  // androidは画像のシェアができない
-  const url = getShareUrl(nativeLanguage);
   const shareUrl = encodeURI(url);
-
   const message = `#Interchao ${shareUrl}`;
-  if (imageUrl) {
+  if (Platform.OS === 'ios') {
     Share.share({
       message,
       url: imageUrl,
     });
-
-    return;
+  } else {
+    Sharing.shareAsync(imageUrl);
   }
+};
 
+export const appShare = async (nativeLanguage: Language): Promise<void> => {
+  // androidは画像のシェアができない
+  const shareUrl = encodeURI(url);
+
+  const message = `#Interchao ${shareUrl}`;
   Share.share({
     message,
   });
 };
 
 export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
-  const url = getShareUrl(nativeLanguage);
   const shareMessage = encodeURI(url);
   Linking.openURL(
     `https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`
@@ -154,7 +144,6 @@ export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
 export const facebookShare = async (
   nativeLanguage: Language
 ): Promise<void> => {
-  const url = getShareUrl(nativeLanguage);
   const shareMessage = encodeURI(url);
   Linking.canOpenURL('twitter://post')
     .then(() => {
