@@ -1,17 +1,20 @@
 import React, { useEffect } from 'react';
 import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
+import * as Linking from 'expo-linking';
 import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
 import * as Updates from 'expo-updates';
+import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 import { initAnalytics } from './utils/Analytics';
-import AppNavigator from './navigations/AppNavigator';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
 import Loading from './screens/LoadingScreen';
 import Sentry from './constants/Sentry';
+import RootNavigatorContainer from './containers/RootNavigatorContainer';
+import { getConfig } from './navigations/root';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -30,6 +33,12 @@ Sentry.init({
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
+const prefix = Linking.makeUrl('/');
+
+const linking = {
+  prefixes: [prefix],
+  config: getConfig(),
+} as LinkingOptions;
 
 const App: React.SFC = () => {
   const checkUpdate = async (): Promise<void> => {
@@ -53,7 +62,9 @@ const App: React.SFC = () => {
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
           <MenuProvider>
-            <AppNavigator />
+            <NavigationContainer linking={linking}>
+              <RootNavigatorContainer />
+            </NavigationContainer>
           </MenuProvider>
         </ActionSheetProvider>
       </PersistGate>
