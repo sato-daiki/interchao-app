@@ -6,6 +6,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { mainColor, maxLayoutChange } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon, TabLabel } from '../components/molecules';
@@ -17,13 +18,13 @@ import TeachDiaryTabNavigator, {
   TeachDiaryTabStackParamList,
 } from './TeachDiaryTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
-import { MainStackParamList } from './MainNavigator';
+import { MainStackParamList, MainNavigationProp } from './MainNavigator';
 import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
 import { DrawerLabel } from '../components/web/molecules';
 
-export type HomeBottomNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'Home'
+export type HomeBottomNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<MainStackParamList, 'Home'>,
+  MainNavigationProp
 >;
 
 export type HomeBottomParamList = {
