@@ -21,7 +21,7 @@ export interface Comment {
   detail: string | null;
   // 途中で追加した
   diffs?: Diff[] | null;
-  rowNumber?: number;
+  rowNumber: number;
 }
 
 export interface Correction {
