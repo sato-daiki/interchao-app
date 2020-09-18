@@ -116,14 +116,6 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
     return { text: I18n.t('myDiaryStatus.unread'), color: softRed };
   }
 
-  if (
-    (correctionStatus === 'done' && isReview === false) ||
-    (correctionStatus2 === 'done' && isReview2 === false) ||
-    (correctionStatus3 === 'done' && isReview3 === false)
-  ) {
-    return { text: I18n.t('myDiaryStatus.yetReview'), color: mainColor };
-  }
-
   if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
     return { text: I18n.t('myDiaryStatus.yet'), color: subTextColor };
   }

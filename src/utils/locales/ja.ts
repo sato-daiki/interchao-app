@@ -555,7 +555,6 @@ const myDiaryStatus = {
   yet: '添削待ち',
   correcting: '添削中',
   unread: '未読',
-  yetReview: 'レビュー待ち',
 };
 
 const userDiaryStatus = {

@@ -552,7 +552,6 @@ const myDiaryStatus = {
   yet: '첨삭 대기중',
   correcting: '첨삭중',
   unread: '안읽음',
-  yetReview: '리뷰 대기중',
 };
 
 const userDiaryStatus = {

@@ -567,7 +567,6 @@ const myDiaryStatus = {
   yet: 'Waiting for Corrections',
   correcting: 'Being Corrected',
   unread: 'Unread',
-  yetReview: 'Waiting for Reviews',
 };
 
 const userDiaryStatus = {
