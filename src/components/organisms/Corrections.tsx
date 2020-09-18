@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { Correction, Language } from '../../types';
 import { GrayHeader } from '../atoms';
-import TeachDiaryCorrection from './TeachDiaryCorrection';
+import UserDiaryCorrection from './UserDiaryCorrection';
 
 interface Props {
   isLoading: boolean;
@@ -39,7 +39,7 @@ const Corrections: React.FC<Props> = ({
 
   const renderDiaryCorrection = (prmCorrection: Correction): ReactNode => {
     return (
-      <TeachDiaryCorrection
+      <UserDiaryCorrection
         nativeLanguage={nativeLanguage}
         textLanguage={textLanguage}
         correction={prmCorrection}
