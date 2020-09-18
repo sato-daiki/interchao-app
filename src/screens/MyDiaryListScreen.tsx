@@ -93,7 +93,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
-  const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
   const isDesktopOrLaptopDevice = useMediaQuery({
