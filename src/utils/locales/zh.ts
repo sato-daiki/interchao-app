@@ -536,7 +536,6 @@ const myDiaryStatus = {
   yet: '待批改',
   correcting: '正在批改',
   unread: '未读',
-  yetReview: '等待评论',
 };
 
 const userDiaryStatus = {
