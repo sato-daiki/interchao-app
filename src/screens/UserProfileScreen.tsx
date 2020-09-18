@@ -5,7 +5,6 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  ScrollView,
   Text,
 } from 'react-native';
 import '@expo/match-media';
@@ -67,10 +66,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-  },
-  scrollView: {
-    flex: 1,
-    paddingVertical: 32,
   },
   moreRead: {
     marginTop: 16,
@@ -396,26 +391,60 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     loadingReview || refreshing ? null : <EmptyReview />;
 
   const listHeaderDiaryComponent = (
-    <GrayHeader
-      title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
-    />
-  );
+    <>
+      <Space size={32} />
+      {profile && !loadingProfile ? (
+        <UserProfileHeader profile={profile} userReview={userReview} />
+      ) : (
+        <>
+          <Space size={16} />
+          <ActivityIndicator />
+          <Space size={16} />
+        </>
+      )}
 
-  const listHeaderReviewComponent = (
-    <GrayHeader title={I18n.t('userProfile.topReview')} />
+      <GrayHeader title={I18n.t('userProfile.topReview')} />
+      {topReviews.length > 0
+        ? topReviews.map((item, index) => {
+            if (profile) {
+              return (
+                <ReviewListItem
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  item={item}
+                  textLanguage={profile.learnLanguage}
+                  onPressUser={(uid: string, userName: string): void => {
+                    navigation.push('UserProfile', { userName });
+                  }}
+                />
+              );
+            }
+            return null;
+          })
+        : listEmptyReviewComponent}
+
+      {loadingReview && !refreshing ? (
+        <>
+          <Space size={16} />
+          <ActivityIndicator />
+          <Space size={16} />
+        </>
+      ) : null}
+      {!!reviewNum && reviewNum > 3 ? (
+        <Hoverable style={styles.moreRead} onPress={onPressMoreReview}>
+          <Text style={styles.moreReadText}>
+            {I18n.t('userProfile.moreRead', { count: reviewNum })}
+          </Text>
+        </Hoverable>
+      ) : null}
+      <GrayHeader
+        title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
+      />
+    </>
   );
 
   const listFooterDiaryComponent =
     loadingDiary && !refreshing ? (
-      <>
-        <Space size={16} />
-        <ActivityIndicator />
-        <Space size={16} />
-      </>
-    ) : null;
-
-  const listFooterReviewComponent =
-    loadingReview && !refreshing ? (
       <>
         <Space size={16} />
         <ActivityIndicator />
@@ -445,25 +474,6 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     [navigation]
   );
 
-  type RenderReviewProps = { item: Review };
-  const renderReview = useCallback(
-    ({ item }: RenderReviewProps): JSX.Element | null => {
-      if (profile) {
-        return (
-          <ReviewListItem
-            item={item}
-            textLanguage={profile.learnLanguage}
-            onPressUser={(uid: string, userName: string): void => {
-              navigation.push('UserProfile', { userName });
-            }}
-          />
-        );
-      }
-      return null;
-    },
-    [navigation, profile]
-  );
-
   return (
     <View style={styles.container}>
       <ModalConfirm
@@ -489,46 +499,18 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         onReportSubmit={onReportSubmit}
         onReportClose={(): void => setIsReport(false)}
       />
-      <ScrollView
-        style={styles.scrollView}
+      <FlatList
+        data={diaries}
+        keyExtractor={keyExtractor}
+        renderItem={renderDiary}
+        ListHeaderComponent={listHeaderDiaryComponent}
+        ListEmptyComponent={listEmptyDiaryComponent}
+        ListFooterComponent={listFooterDiaryComponent}
+        onEndReached={loadNextPage}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      >
-        {profile && !loadingProfile ? (
-          <UserProfileHeader profile={profile} userReview={userReview} />
-        ) : (
-          <>
-            <Space size={16} />
-            <ActivityIndicator />
-            <Space size={16} />
-          </>
-        )}
-        <FlatList
-          data={topReviews}
-          keyExtractor={keyExtractor}
-          renderItem={renderReview}
-          ListHeaderComponent={listHeaderReviewComponent}
-          ListEmptyComponent={listEmptyReviewComponent}
-          ListFooterComponent={listFooterReviewComponent}
-        />
-        {!!reviewNum && reviewNum > 3 ? (
-          <Hoverable style={styles.moreRead} onPress={onPressMoreReview}>
-            <Text style={styles.moreReadText}>
-              {I18n.t('userProfile.moreRead', { count: reviewNum })}
-            </Text>
-          </Hoverable>
-        ) : null}
-        <FlatList
-          data={diaries}
-          keyExtractor={keyExtractor}
-          renderItem={renderDiary}
-          ListHeaderComponent={listHeaderDiaryComponent}
-          ListEmptyComponent={listEmptyDiaryComponent}
-          ListFooterComponent={listFooterDiaryComponent}
-          onEndReached={loadNextPage}
-        />
-      </ScrollView>
+      />
     </View>
   );
 };
