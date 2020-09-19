@@ -265,7 +265,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   ]);
   const pickImage = useCallback(() => {
     const f = async (): Promise<void> => {
-      const result: any = await openCameraRoll({
+      const result = await openCameraRoll({
         allowsEditing: true,
         aspect: [1, 1],
       });
