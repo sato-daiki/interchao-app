@@ -12,6 +12,9 @@ export interface User {
   correctingCorrectedNum: number | null;
   notificationCorrection: boolean;
   notificationReview: boolean;
+  runningDays?: number;
+  runningWeeks?: number;
+  lastDiaryPostedAt?: firestore.Timestamp | null;
   lastModalAppSuggestionAt?: firestore.Timestamp | null;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;

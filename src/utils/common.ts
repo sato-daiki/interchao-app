@@ -189,3 +189,39 @@ export const getIsAfterDay = (
     return false;
   }
 };
+
+export const getDateToStrDay = (targetDay: Date): string => {
+  return `${targetDay.getFullYear()}${targetDay.getMonth() +
+    1}${targetDay.getDate()}`;
+};
+
+export const getLastMonday = (targetDay: Date): string => {
+  // dayは日曜日が0,土曜日が6
+  const day = targetDay.getDay();
+  if (day === 0) {
+    // 日曜日の場合は
+    targetDay.setDate(targetDay.getDate() - 7 - 6);
+  } else if (day === 1) {
+    // 月曜日の場合は
+    targetDay.setDate(targetDay.getDate() - 7);
+  } else {
+    targetDay.setDate(targetDay.getDate() - 7 - day + 1);
+  }
+
+  return getDateToStrDay(targetDay);
+};
+
+export const getThisMonday = (targetDay: Date): string => {
+  // dayは日曜日が0,土曜日が6
+  const day = targetDay.getDay();
+  if (day === 0) {
+    // 日曜日の場合は
+    targetDay.setDate(targetDay.getDate() - 6);
+  } else if (day === 1) {
+    // 月曜日の場合は
+    targetDay.setDate(targetDay.getDate());
+  } else {
+    targetDay.setDate(targetDay.getDate() - day + 1);
+  }
+  return getDateToStrDay(targetDay);
+};
