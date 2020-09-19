@@ -36,14 +36,14 @@ const CorrectingCommentNative: React.FC<Props> = ({
   onBlurDetail,
   onChangeText,
 }) => {
-  const refDetail = useRef<any>(null);
+  const refDetail = useRef<TextInput | null>(null);
 
   return (
     <>
       <Hoverable
         style={styles.buttonRow}
         onPress={(): void => {
-          refDetail.current.focus();
+          if (refDetail.current) refDetail.current.focus();
         }}
       >
         <MaterialCommunityIcons size={22} color={subTextColor} name="plus" />

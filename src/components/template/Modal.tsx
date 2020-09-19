@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import Modal from 'react-native-modal';
 import ModalWeb from 'modal-enhanced-react-native-web';
+import { Animation, CustomAnimation } from 'react-native-animatable';
 import { maxModal } from '../../styles/Common';
 
 const styles = StyleSheet.create({
@@ -26,8 +27,8 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
-  animationIn?: any;
-  animationOut?: any;
+  animationIn?: Animation | CustomAnimation;
+  animationOut?: Animation | CustomAnimation;
   children: React.ReactNode;
 }
 

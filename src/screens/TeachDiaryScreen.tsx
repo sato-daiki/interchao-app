@@ -276,7 +276,13 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       const diary = res2.hits[0] as Diary;
       const data = {
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as any;
+      } as Pick<
+        Diary,
+        | 'updatedAt'
+        | 'correctionStatus'
+        | 'correctionStatus2'
+        | 'correctionStatus3'
+      >;
       let correctingCorrectedNum: number;
       if (diary.correctionStatus === 'yet') {
         data.correctionStatus = 'correcting';

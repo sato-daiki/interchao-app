@@ -157,13 +157,18 @@ export const facebookShare = async (
 };
 
 interface EachOS {
-  ios: any;
-  android: any;
-  web: any;
-  other?: any;
+  ios: number | string;
+  android: number | string;
+  web: number | string;
+  other?: number | string;
 }
 
-export const getEachOS = ({ ios, android, web, other }: EachOS): any => {
+export const getEachOS = ({
+  ios,
+  android,
+  web,
+  other,
+}: EachOS): number | string => {
   if (Platform.OS === 'ios') {
     return ios;
   }

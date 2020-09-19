@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Animation, CustomAnimation } from 'react-native-animatable';
 import {
   primaryColor,
   fontSizeL,
@@ -47,9 +48,9 @@ const styles = StyleSheet.create({
 interface Props {
   visible: boolean;
   isLoading: boolean;
-  animationOut?: any;
+  animationOut?: Animation | CustomAnimation;
   teachDiaryLanguage: Language;
-  onPressSubmit: (checked: boolean) => void;
+  onPressSubmit: () => void;
   onPressClose: () => void;
 }
 
@@ -61,8 +62,6 @@ const ModalAlertCorrection: React.FC<Props> = ({
   onPressSubmit,
   onPressClose,
 }: Props): JSX.Element | null => {
-  const [checked, setChecked] = useState(false);
-
   return (
     <Modal visible={visible} animationOut={animationOut}>
       <View style={styles.container}>
@@ -84,7 +83,7 @@ const ModalAlertCorrection: React.FC<Props> = ({
         <SubmitButton
           isLoading={isLoading}
           title={I18n.t('modalAlertCorrection.start')}
-          onPress={(): void => onPressSubmit(checked)}
+          onPress={onPressSubmit}
         />
         <Space size={16} />
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
