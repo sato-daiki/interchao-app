@@ -1,5 +1,6 @@
 import moment from 'moment';
 import 'moment/locale/ja';
+import { firestore } from 'firebase';
 import {
   CorrectionStatus,
   Language,
@@ -12,6 +13,7 @@ import { softRed, subTextColor, mainColor } from '../styles/Common';
 import firebase from '../constants/firebase';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
+import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
 
 interface Status {
   text: string;
@@ -233,6 +235,86 @@ export const getUsePoints = (
 ): number => {
   const basePoints = getBasePoints(learnLanguage);
   return Math.ceil(length / basePoints) * 10;
+};
+
+export const getRunningDays = (
+  runningDays: number | undefined,
+  lastDiaryPostedAt: firestore.Timestamp | null | undefined
+): number => {
+  // 初投稿の場合
+  if (!lastDiaryPostedAt || !runningDays) return 1;
+
+  const strTargetDay = getDateToStrDay(lastDiaryPostedAt.toDate());
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const strYesterday = getDateToStrDay(yesterday);
+
+  if (strTargetDay === strYesterday) {
+    // 昨日投稿していた場合
+    return runningDays + 1;
+  }
+
+  const strToday = getDateToStrDay(new Date());
+
+  if (strTargetDay === strToday) {
+    // 今日投稿している場合
+    return runningDays;
+  }
+
+  // 昨日より前に投稿していた場合
+  return 1;
+};
+
+export const getRunningWeeks = (
+  runningWeeks: number | undefined,
+  lastDiaryPostedAt: firestore.Timestamp | null | undefined
+): number => {
+  // 初回の場合
+  if (!lastDiaryPostedAt || !runningWeeks) return 1;
+  const strTargetThisMonday = getThisMonday(lastDiaryPostedAt.toDate());
+
+  const strLastMonday = getLastMonday(new Date());
+
+  if (strTargetThisMonday === strLastMonday) {
+    // 最終投稿が1週間前の時
+    return runningWeeks + 1;
+  }
+
+  const strThisMonday = getThisMonday(new Date());
+  if (strTargetThisMonday === strThisMonday) {
+    // 今週投稿している場合
+    return runningWeeks;
+  }
+
+  // 先週の月曜日以降投稿していない場合
+  return 1;
+};
+
+export const getPublishMessage = (
+  beforeDays: number | null | undefined,
+  beforeWeeks: number | null | undefined,
+  afterDays: number,
+  afterWeeks: number
+): string | null => {
+  if (!beforeDays) {
+    // 初回（0の場合もこっちに入る）
+    return I18n.t('modalAlertPublish.first');
+  }
+  if (!beforeWeeks) return null;
+
+  if (beforeDays + 1 === afterDays) {
+    // 日が連続の場合
+    return I18n.t('modalAlertPublish.runningDays', { runningDays: afterDays });
+  }
+
+  if (beforeWeeks + 1 === afterWeeks) {
+    // 週が連続の場合
+    return I18n.t('modalAlertPublish.runningWeeks', {
+      runningWeeks: afterWeeks,
+    });
+  }
+  return null;
 };
 
 export const checkBeforePost = (

@@ -432,6 +432,12 @@ const modalAlertPublish = {
   confirmation:
     'It will cost {{usePoints}} points to publish this entry. Once an entry has been published, it cannot be edited. Would you like to proceed?',
   submit: 'Publish',
+  publish: 'The journal entry has been published',
+  share: "Let's tell everyone the published journal entry",
+  first: "Thank you for your first post. Let's do our best tomorrow too.",
+  runningDays: "It's a diary post for {{runningDays}} consecutive days. Great!",
+  runningWeeks:
+    "It's a diary post for {{runningWeeks}} consecutive weeks! Let's keep doing our best.",
 };
 
 const modalBlock = {
