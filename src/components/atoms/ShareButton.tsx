@@ -9,7 +9,7 @@ import { appShare, diaryShare } from '../../utils/common';
 import Hoverable from './Hoverable';
 
 interface Props {
-  viewShotRef: React.MutableRefObject<ViewShot | null>;
+  viewShotRef?: React.MutableRefObject<ViewShot | null>;
   nativeLanguage: Language;
 }
 
