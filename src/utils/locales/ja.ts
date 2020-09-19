@@ -422,6 +422,12 @@ const modalAlertPublish = {
   confirmation:
     '{{usePoints}}ポイントを使い日記を投稿します。一度投稿すると、編集ができませんが、よろしいですか？',
   submit: '投稿する',
+  publish: '日記が公開されました',
+  share: '公開した日記を\nみんなに教えてあげましょう',
+  first:
+    '初回の投稿おつかれさまです\n添削を待ちましょう！\n明日からも頑張りましょう',
+  runningDays: '{{runningDays}}日連続の投稿です\n素晴らしい！',
+  runningWeeks: '{{runningWeeks}}週連続の投稿です\nこれからも継続しましょう',
 };
 
 const modalBlock = {
@@ -555,7 +561,6 @@ const myDiaryStatus = {
   yet: '添削待ち',
   correcting: '添削中',
   unread: '未読',
-  yetReview: 'レビュー待ち',
 };
 
 const userDiaryStatus = {

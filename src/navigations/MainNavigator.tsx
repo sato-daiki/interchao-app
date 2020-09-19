@@ -1,5 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import HomeBottomTabNavigator, {
   HomeBottomParamList,
 } from './HomeBottomTabNavigator';
@@ -21,8 +24,13 @@ import {
 } from './ModalNavigator';
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
-import NotFoundScreen from '../screens/NotFoundScreen';
 import { maxMain } from '../styles/Common';
+import { RootStackParamList } from './RootNavigator';
+
+export type MainNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Main'
+>;
 
 export type MainStackParamList = {
   Home: {
@@ -48,7 +56,7 @@ export type MainStackParamList = {
     params: { objectID: string; correctedNum: number; userName: string };
   };
   ModalAbout: { screen: keyof ModalAboutStackParamList };
-  NotFound: undefined;
+  // NotFound: undefined;
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -88,7 +96,7 @@ const MainNavigator = (): JSX.Element => {
         component={ModalCorrectingNavigator}
       />
       <MainStack.Screen name="ModalAbout" component={ModalAboutNavigator} />
-      <MainStack.Screen name="NotFound" component={NotFoundScreen} />
+      {/* <MainStack.Screen name="NotFound" component={NotFoundScreen} /> */}
     </MainStack.Navigator>
   );
 };

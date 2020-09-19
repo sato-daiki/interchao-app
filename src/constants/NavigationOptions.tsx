@@ -15,8 +15,13 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
   headerStyle: {
     backgroundColor: '#fff',
   },
+  // @ts-ignore
   headerTitleStyle: {
-    fontWeight: getEachOS({ ios: '700', android: '500', web: '700' }),
+    fontWeight: getEachOS({
+      ios: '700',
+      android: '500',
+      web: '700',
+    }),
     color: primaryColor,
     fontSize: fontSizeL,
   },

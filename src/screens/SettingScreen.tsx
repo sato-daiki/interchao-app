@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
@@ -16,7 +16,7 @@ import { Space, Hoverable } from '../components/atoms';
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { getVersionText } from '../utils/common';
+import { appShare, getVersionText } from '../utils/common';
 import { ModalConfirm } from '../components/organisms';
 import {
   MyPageTabStackParamList,
@@ -168,6 +168,12 @@ const SettingScreen: React.FC<ScreenType> = ({
           navigation.navigate('ModalAbout', { screen: 'About' });
         }}
       />
+      {Platform.OS === 'web' ? null : (
+        <OptionItem
+          title={I18n.t('sns.app')}
+          onPress={(): Promise<void> => appShare(profile.nativeLanguage)}
+        />
+      )}
       <Space size={16} />
       <OptionItem
         title={I18n.t('setting.deleteAcount')}

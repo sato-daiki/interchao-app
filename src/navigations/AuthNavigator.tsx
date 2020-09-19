@@ -1,5 +1,8 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
 import { Platform } from 'react-native';
 /* screens */
 import InitializeWebScreen from '../screens/InitializeWebScreen';
@@ -15,6 +18,12 @@ import {
 } from '../constants/NavigationOptions';
 import I18n from '../utils/I18n';
 import NotFoundScreen from '../screens/NotFoundScreen';
+import { RootStackParamList } from './RootNavigator';
+
+export type AuthNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Auth'
+>;
 
 export type AuthStackParamList = {
   Initialize: undefined;

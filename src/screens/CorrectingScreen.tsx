@@ -1,11 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  FlatList,
-  Platform,
-} from 'react-native';
+import { StyleSheet, View, SafeAreaView, Platform } from 'react-native';
 import { split } from 'sentence-splitter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -272,10 +266,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    * 添削完了
    */
   const onPressCloseDone = useCallback(() => {
-    navigation.navigate('Home', {
-      screen: 'TeachDiaryTab',
-      params: { screen: 'TeachDiaryList' },
-    });
+    navigation.goBack();
     setIsModalDone(false);
   }, [navigation]);
 
@@ -337,29 +328,6 @@ const CorrectingScreen: React.FC<ScreenType> = ({
     teachDiary.profile.learnLanguage
   );
 
-  type RenderItemProps = { item: TextInfo; index: number };
-  const renderItem = ({ item, index }: RenderItemProps): JSX.Element => {
-    return (
-      <CorrectingListItem
-        item={item}
-        editText={(info: Info): void => editText(index, info)}
-        editFirst={(): void => setIsFirstEdit(true)}
-        onHideKeyboard={onHideKeyboard}
-      />
-    );
-  };
-
-  const listHeaderComponent = (
-    <View style={styles.header}>
-      <CorrectingHeader
-        isProfileLoading={isProfileLoading}
-        teachDiary={teachDiary}
-        targetProfile={targetProfile}
-        onTimeUp={onTimeUp}
-      />
-    </View>
-  );
-
   const renderSummary = (): JSX.Element | null => {
     if (!isFirstEdit) return null;
 
@@ -419,12 +387,23 @@ const CorrectingScreen: React.FC<ScreenType> = ({
           keyboardShouldPersistTaps="handled"
           extraScrollHeight={32}
         >
-          <FlatList
-            data={textInfos}
-            keyExtractor={(item: TextInfo): string => String(item.rowNumber)}
-            renderItem={renderItem}
-            ListHeaderComponent={listHeaderComponent}
-          />
+          <View style={styles.header}>
+            <CorrectingHeader
+              isProfileLoading={isProfileLoading}
+              teachDiary={teachDiary}
+              targetProfile={targetProfile}
+              onTimeUp={onTimeUp}
+            />
+          </View>
+          {textInfos.map((item, index) => (
+            <CorrectingListItem
+              key={item.rowNumber}
+              item={item}
+              editText={(info: Info): void => editText(index, info)}
+              editFirst={(): void => setIsFirstEdit(true)}
+              onHideKeyboard={onHideKeyboard}
+            />
+          ))}
           {renderSummary()}
           {correction ? <Space size={32} /> : null}
           <Corrections

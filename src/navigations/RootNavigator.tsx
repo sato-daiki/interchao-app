@@ -3,11 +3,19 @@ import firebase from 'firebase';
 import { createStackNavigator } from '@react-navigation/stack';
 import { getUser } from '../utils/user';
 import { getProfile } from '../utils/profile';
-import { initAnalytics, setAnalyticsUser } from '../utils/Analytics';
+import { setAnalyticsUser } from '../utils/Analytics';
 import { Profile, User, LocalStatus } from '../types';
-import { LoadingModal } from '../components/atoms';
-import AuthNavigator from '../navigations/AuthNavigator';
-import MainNavigator from '../navigations/MainNavigator';
+import AuthNavigator from './AuthNavigator';
+import MainNavigator from './MainNavigator';
+import PublicNavigator from './PublicNavigator';
+import LoadingScreen from '../screens/LoadingScreen';
+
+export type RootStackParamList = {
+  Loading: undefined;
+  Main: undefined;
+  Auth: undefined;
+  Public: undefined;
+};
 
 export interface Props {
   localStatus: LocalStatus;
@@ -19,15 +27,12 @@ interface DispatchProps {
   restoreUid: (uid: string | null) => void;
 }
 
-/**
- * 概要：初期ローデンング
- */
-const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
+const RootNavigator: React.FC<Props & DispatchProps> = ({
   localStatus,
   setUser,
   setProfile,
   restoreUid,
-}) => {
+}): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
   const initNavigation = (authUser: firebase.User | null): void => {
@@ -57,25 +62,31 @@ const AuthLoadingScreen: React.FC<Props & DispatchProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const Stack = createStackNavigator();
+  const Stack = createStackNavigator<RootStackParamList>();
 
-  if (localStatus.isLoading) {
-    return (
-      // 直でスクリーン呼ぶとwebの時エラーになる
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="Loading" component={LoadingModal} />
-      </Stack.Navigator>
-    );
-  }
+  const renderScreen = (): JSX.Element => {
+    if (localStatus.isLoading) {
+      return <Stack.Screen name="Loading" component={LoadingScreen} />;
+    }
+    if (localStatus.uid !== null) {
+      return <Stack.Screen name="Main" component={MainNavigator} />;
+    }
+    return <Stack.Screen name="Auth" component={AuthNavigator} />;
+  };
 
-  if (localStatus.uid !== null) {
-    return <MainNavigator />;
-  }
-  return <AuthNavigator />;
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+        },
+      }}
+    >
+      {renderScreen()}
+      <Stack.Screen name="Public" component={PublicNavigator} />
+    </Stack.Navigator>
+  );
 };
 
-export default AuthLoadingScreen;
+export default RootNavigator;

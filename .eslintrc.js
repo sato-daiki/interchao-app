@@ -16,6 +16,7 @@ module.exports = {
   env: {
     browser: true,
     'react-native/react-native': true,
+    'jest': true,
   },
   rules: {
     // @envのimportは許可する

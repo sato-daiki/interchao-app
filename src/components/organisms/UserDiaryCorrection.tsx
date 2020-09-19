@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
-import { Correction, Comment, Language } from '../../types';
+import { Correction, Language } from '../../types';
 import { getAlgoliaDate } from '../../utils/diary';
 import { CorrectionItem, Summary } from '../molecules';
 import { HideButton } from '../atoms';
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const keyExtractor = (item: Comment, index: number): string => String(index);
+// const keyExtractor = (item: Comment, index: number): string => String(index);
 
 /**
  * 概要：添削一覧
  */
-const TeachDiaryCorrection: React.FC<Props> = ({
+const UserDiaryCorrection: React.FC<Props> = ({
   nativeLanguage,
   textLanguage,
   correction,
@@ -47,36 +47,6 @@ const TeachDiaryCorrection: React.FC<Props> = ({
   const [hidden, setHidden] = useState(false);
 
   const postDate = getAlgoliaDate(createdAt);
-  const listFooterComponent = (): JSX.Element | null => {
-    if (summary) {
-      return (
-        <Summary
-          summary={summary}
-          nativeLanguage={nativeLanguage}
-          textLanguage={textLanguage}
-        />
-      );
-    }
-    return null;
-  };
-
-  type RenderItemProps = { item: Comment };
-  const renderItem = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
-      const { original, fix, detail, diffs } = item;
-      return (
-        <CorrectionItem
-          original={original}
-          fix={fix}
-          detail={detail}
-          diffs={diffs}
-          nativeLanguage={nativeLanguage}
-          textLanguage={textLanguage}
-        />
-      );
-    },
-    [nativeLanguage, textLanguage]
-  );
 
   return (
     <View style={styles.main}>
@@ -97,17 +67,31 @@ const TeachDiaryCorrection: React.FC<Props> = ({
             />
             <Text style={styles.daytext}>{postDate}</Text>
           </View>
-          <FlatList
-            data={comments}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            ListFooterComponent={listFooterComponent}
-            scrollEnabled={false}
-          />
+          {comments.map(item => {
+            const { original, fix, detail, diffs, rowNumber } = item;
+            return (
+              <CorrectionItem
+                key={rowNumber}
+                original={original}
+                fix={fix}
+                detail={detail}
+                diffs={diffs}
+                nativeLanguage={nativeLanguage}
+                textLanguage={textLanguage}
+              />
+            );
+          })}
+          {summary ? (
+            <Summary
+              summary={summary}
+              nativeLanguage={nativeLanguage}
+              textLanguage={textLanguage}
+            />
+          ) : null}
         </>
       )}
     </View>
   );
 };
 
-export default TeachDiaryCorrection;
+export default UserDiaryCorrection;

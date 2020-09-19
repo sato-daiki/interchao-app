@@ -12,6 +12,9 @@ import {
   checkBeforePost,
   getUsePoints,
   getDisplayProfile,
+  getRunningDays,
+  getRunningWeeks,
+  getPublishMessage,
 } from '../utils/diary';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -59,8 +62,10 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
   const [isModalLack, setIsModalLack] = useState(user.points < 10);
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isModalCancel, setIsModalCancel] = useState(false);
+  const [isPublish, setIsPublish] = useState(false);
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [publishMessage, setPublishMessage] = useState<string | null>(null);
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
@@ -201,6 +206,22 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       const diary = getDiary('publish');
       const usePoints = getUsePoints(text.length, profile.learnLanguage);
       const newPoints = user.points - usePoints;
+      const runningDays = getRunningDays(
+        user.runningDays,
+        user.lastDiaryPostedAt
+      );
+      const runningWeeks = getRunningWeeks(
+        user.runningWeeks,
+        user.lastDiaryPostedAt
+      );
+
+      const message = getPublishMessage(
+        user.runningDays,
+        user.runningWeeks,
+        runningDays,
+        runningWeeks
+      );
+
       let diaryId = '';
       // 日記の更新とpointsの整合性をとるためtransactionを使う
       await firebase
@@ -217,8 +238,19 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
           // 初回の場合はdiaryPostedを更新する
           const updateUser = {
             points: newPoints,
+            runningDays,
+            runningWeeks,
+            lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as any;
+          } as Pick<
+            User,
+            | 'points'
+            | 'runningDays'
+            | 'runningWeeks'
+            | 'lastDiaryPostedAt'
+            | 'updatedAt'
+            | 'diaryPosted'
+          >;
           if (!user.diaryPosted) {
             updateUser.diaryPosted = true;
           }
@@ -229,7 +261,12 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
           alert({ err });
         });
 
-      track(events.CREATED_DIARY, { diaryStatus: 'publish' });
+      track(events.CREATED_DIARY, {
+        usePoints,
+        characters: text.length,
+        diaryStatus: 'publish',
+      });
+
       // reduxに追加
       addDiary({
         objectID: diaryId,
@@ -237,27 +274,35 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       });
       setUser({
         ...user,
+        runningDays,
+        runningWeeks,
+        lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
         diaryPosted: true,
         points: newPoints,
       });
-      navigation.navigate('Home', {
-        screen: 'MyDiaryTab',
-        params: { screen: 'MyDiaryList' },
-      });
+      setPublishMessage(message);
       setIsLoading(false);
-      setIsModalAlert(false);
+      setIsPublish(true);
     };
     f();
   }, [
     addDiary,
     getDiary,
     isLoading,
-    navigation,
     profile.learnLanguage,
     setUser,
     text.length,
     user,
   ]);
+
+  const onPressCloseSns = (): void => {
+    navigation.navigate('Home', {
+      screen: 'MyDiaryTab',
+      params: { screen: 'MyDiaryList' },
+    });
+    setIsModalAlert(false);
+    setIsPublish(false);
+  };
 
   const onPressNotSave = useCallback((): void => {
     setIsModalCancel(false);
@@ -295,13 +340,16 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
       isModalError={isModalError}
+      isPublish={isPublish}
       isTutorialLoading={isTutorialLoading}
       tutorialPostDiary={user.tutorialPostDiary}
       errorMessage={errorMessage}
       title={title}
       text={text}
+      publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
+      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={(): void => setIsModalLack(false)}
       onPressCloseModalLack={(): void => {
         navigation.navigate('Home', {
@@ -311,6 +359,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       }}
       onPressCloseModalPublish={(): void => setIsModalAlert(false)}
       onPressCloseModalCancel={(): void => setIsModalCancel(false)}
+      onPressCloseSns={onPressCloseSns}
       onChangeTextTitle={(txt: string): void => setTitle(txt)}
       onChangeTextText={(txt: string): void => setText(txt)}
       onPressSubmit={onPressSubmit}

@@ -76,6 +76,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
+  viewShot: {
+    backgroundColor: '#FFF',
+  },
   diaryOriginal: {
     paddingHorizontal: 16,
     paddingBottom: 32,
@@ -135,7 +138,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
-  const viewShotRef = useRef<any>(null);
+  const viewShotRef = useRef<ViewShot | null>(null);
 
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
@@ -274,7 +277,11 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         onPressClose={(): void => setIsModalDelete(false)}
       />
       <ScrollView style={styles.scrollView}>
-        <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }}>
+        <ViewShot
+          style={styles.viewShot}
+          ref={viewShotRef}
+          options={{ format: 'jpg', quality: 0.9 }}
+        >
           <Space size={12} />
           <View style={styles.diaryOriginal}>
             <View style={styles.header}>
