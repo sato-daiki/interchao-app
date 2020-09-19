@@ -407,6 +407,11 @@ const modalAlertCorrection = {
 const modalAlertPublish = {
   confirmation: '使用{{usePoints}}积分发布日记。发布后将无法编辑。确定发布吗？',
   submit: '发布',
+  publish: '日记已发布',
+  share: '让我们告诉大家出版的日记',
+  first: '谢谢你的第一篇文章\n我们明天也要努力',
+  runningDays: '这是连续{{runningDays}}天的日记\n大！',
+  runningWeeks: '这是连续{{runningWeeks}}周的日记！\n让我们继续努力',
 };
 
 const modalBlock = {
@@ -536,7 +541,6 @@ const myDiaryStatus = {
   yet: '待批改',
   correcting: '正在批改',
   unread: '未读',
-  yetReview: '等待评论',
 };
 
 const userDiaryStatus = {

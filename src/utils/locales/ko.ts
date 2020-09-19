@@ -420,6 +420,11 @@ const modalAlertPublish = {
   confirmation:
     '{{usePoints}}포인트를 사용해 일기를 업로드합니다. 한번 업로드하면 편집 할 수 없습니다. 그래도 계속 하시겠습니까?',
   submit: '업로드하기',
+  publish: '일기가 공개되었습니다',
+  share: '공개 일기를 모두 알려 드리죠',
+  first: '첫 번째 게시물에 감사드립니다\n내일도 최선을 다합시다.',
+  runningDays: '{{runningDays}} 일 연속 일기장입니다\n큰!',
+  runningWeeks: '{{runningWeeks}} 주 연속 일기장\n계속 최선을 다합시다.',
 };
 
 const modalBlock = {
@@ -552,7 +557,6 @@ const myDiaryStatus = {
   yet: '첨삭 대기중',
   correcting: '첨삭중',
   unread: '안읽음',
-  yetReview: '리뷰 대기중',
 };
 
 const userDiaryStatus = {

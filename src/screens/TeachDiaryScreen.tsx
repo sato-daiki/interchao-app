@@ -48,7 +48,7 @@ import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
 import RichText from '../components/organisms/RichText';
-import { appShare } from '../utils/common';
+import { appShare, diaryShare } from '../utils/common';
 import {
   TeachDiaryTabStackParamList,
   TeachDiaryTabNavigationProp,
@@ -80,6 +80,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingTop: 16,
+  },
+  viewShot: {
+    backgroundColor: '#FFF',
   },
   scrollView: {
     flex: 1,
@@ -152,7 +155,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const viewShotRef = useRef<any>(null);
+  const viewShotRef = useRef<ViewShot | null>(null);
 
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
@@ -160,9 +163,9 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
 
   const onPressAppShare = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (Platform.OS === 'ios') {
+      if (viewShotRef?.current?.capture) {
         const imageUrl = await viewShotRef.current.capture();
-        appShare(profile.nativeLanguage, imageUrl);
+        diaryShare(profile.nativeLanguage, imageUrl);
       } else {
         appShare(profile.nativeLanguage);
       }
@@ -171,10 +174,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
   }, [profile.nativeLanguage]);
 
   const onPressMore = useCallback(() => {
-    const options = [
-      I18n.t(Platform.OS === 'ios' ? 'sns.diary' : 'sns.app'),
-      I18n.t('common.cancel'),
-    ];
+    const options = [I18n.t('sns.diary'), I18n.t('common.cancel')];
     showActionSheetWithOptions(
       {
         options,
@@ -276,7 +276,13 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       const diary = res2.hits[0] as Diary;
       const data = {
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as any;
+      } as Pick<
+        Diary,
+        | 'updatedAt'
+        | 'correctionStatus'
+        | 'correctionStatus2'
+        | 'correctionStatus3'
+      >;
       let correctingCorrectedNum: number;
       if (diary.correctionStatus === 'yet') {
         data.correctionStatus = 'correcting';
@@ -472,7 +478,11 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
         onPressMain={onPressCloseError}
       />
       <ScrollView style={styles.scrollView}>
-        <ViewShot ref={viewShotRef} options={{ format: 'jpg', quality: 0.9 }}>
+        <ViewShot
+          ref={viewShotRef}
+          style={styles.viewShot}
+          options={{ format: 'jpg', quality: 0.9 }}
+        >
           <Space size={12} />
           <View style={styles.main}>
             {targetProfile && !isProfileLoading ? (

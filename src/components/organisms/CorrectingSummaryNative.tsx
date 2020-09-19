@@ -38,13 +38,13 @@ const CorrectingSummaryNative: React.FC<Props> = ({
   onHideKeyboard,
   onChangeText,
 }) => {
-  const refSummary = useRef<any>(null);
+  const refSummary = useRef<TextInput | null>(null);
   return (
     <>
       <Hoverable
         style={styles.buttonRow}
         onPress={(): void => {
-          refSummary.current.focus();
+          if (refSummary.current) refSummary.current.focus();
         }}
       >
         <MaterialCommunityIcons size={22} color={subTextColor} name="plus" />

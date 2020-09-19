@@ -1,14 +1,15 @@
 import React from 'react';
-import { Text, StyleSheet, Platform } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import ViewShot from 'react-native-view-shot';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 import { Language } from '../../types';
-import { appShare } from '../../utils/common';
+import { appShare, diaryShare } from '../../utils/common';
 import Hoverable from './Hoverable';
 
 interface Props {
-  viewShotRef: any;
+  viewShotRef?: React.MutableRefObject<ViewShot | null>;
   nativeLanguage: Language;
 }
 
@@ -36,12 +37,13 @@ const ShareButton: React.FC<Props> = ({
   nativeLanguage,
 }: Props): JSX.Element => {
   const onPressShare = async (): Promise<void> => {
-    if (Platform.OS === 'ios') {
+    if (viewShotRef?.current?.capture) {
       const imageUrl = await viewShotRef.current.capture();
-      appShare(nativeLanguage, imageUrl);
-    } else {
-      appShare(nativeLanguage);
+      diaryShare(nativeLanguage, imageUrl);
+      return;
     }
+
+    appShare(nativeLanguage);
   };
   return (
     <Hoverable style={styles.contaner} onPress={onPressShare}>
@@ -50,9 +52,7 @@ const ShareButton: React.FC<Props> = ({
         color={primaryColor}
         name="share-variant"
       />
-      <Text style={styles.title}>
-        {I18n.t(Platform.OS === 'ios' ? 'sns.diary' : 'sns.app')}
-      </Text>
+      <Text style={styles.title}>{I18n.t('sns.diary')}</Text>
     </Hoverable>
   );
 };

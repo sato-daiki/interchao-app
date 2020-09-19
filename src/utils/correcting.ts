@@ -169,7 +169,7 @@ export const onUpdateTimeUp = async (
   teachDiary: Diary,
   user: User,
   setIsLoading: Function,
-  editTeachDiary: (objectID: string, data: any) => void,
+  editTeachDiary: (objectID: string, data: Diary) => void,
   setUser: Function,
   setIsModalTimeUp: Function
 ): Promise<void> => {

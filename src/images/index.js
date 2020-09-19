@@ -3,6 +3,7 @@ module.exports = {
   GetPoints: require('./getPoints.png'),
   Loading: require('./loading.gif'),
   LogoVercitacl: require('./logo_vertical.png'),
+  Note: require('./note.png'),
   Pen: require('./pen.png'),
   People: require('./people.png'),
   Points: require('./points.png'),

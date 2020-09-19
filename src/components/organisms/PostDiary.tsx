@@ -36,17 +36,21 @@ interface Props {
   isModalAlert: boolean;
   isModalCancel: boolean;
   isModalError: boolean;
+  isPublish: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
   errorMessage: string;
   title: string;
   text: string;
+  publishMessage: string | null;
   points: number;
   learnLanguage: Language;
+  nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
+  onPressCloseSns: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
   onPressSubmit: () => void;
@@ -103,17 +107,21 @@ const PostDiary = ({
   isModalAlert,
   isModalCancel,
   isModalError,
+  isPublish,
   isTutorialLoading = false,
   tutorialPostDiary = true,
   errorMessage,
   title,
   text,
+  publishMessage,
   points,
   learnLanguage,
+  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
+  onPressCloseSns,
   onChangeTextTitle,
   onChangeTextText,
   onPressSubmit,
@@ -206,11 +214,15 @@ const PostDiary = ({
       />
       <ModalAlertPublish
         visible={isModalAlert}
+        isPublish={isPublish}
         isLoading={isLoading}
         usePoints={usePoints}
         points={points}
+        publishMessage={publishMessage}
+        nativeLanguage={nativeLanguage}
         onPressSubmit={onPressSubmit}
-        onPressClose={onPressCloseModalPublish}
+        onPressCloseCancel={onPressCloseModalPublish}
+        onPressCloseSns={onPressCloseSns}
       />
       <ModalDiaryCancel
         visible={isModalCancel}

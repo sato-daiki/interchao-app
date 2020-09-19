@@ -20,158 +20,184 @@ export const getConfig = ():
   | undefined => {
   return {
     screens: {
-      Home: {
+      Main: {
         path: '',
+        initialRouteName: 'Home',
         screens: {
-          MyDiaryTab: {
+          Home: {
             path: '',
-            initialRouteName: 'MyDiaryList',
             screens: {
-              MyDiaryList: {
-                path: 'home',
+              MyDiaryTab: {
+                path: '',
+                initialRouteName: 'MyDiaryList',
+                screens: {
+                  MyDiaryList: {
+                    path: 'home',
+                  },
+                  MyDiarySearch: {
+                    path: 'my/search',
+                  },
+                  DraftDiaryList: {
+                    path: 'drafts',
+                  },
+                  MyDiary: {
+                    path: 'my/:userName/:objectID',
+                  },
+                  ...common,
+                },
               },
-              MyDiarySearch: {
-                path: 'my/search',
+              TeachDiaryTab: {
+                path: '',
+                initialRouteName: 'TeachDiaryList',
+                screens: {
+                  TeachDiaryList: {
+                    path: 'entries',
+                  },
+                  TeachDiarySearch: {
+                    path: 'search',
+                  },
+                  TeachDiary: {
+                    path: ':userName/:objectID',
+                  },
+                  ...common,
+                },
               },
-              DraftDiaryList: {
-                path: 'drafts',
+              MyPageTab: {
+                path: '',
+                initialRouteName: 'MyPage',
+                screens: {
+                  MyPage: {
+                    path: 'mypage',
+                  },
+                  Setting: {
+                    path: 'setting',
+                  },
+                  TutorialList: {
+                    path: 'tutorials',
+                  },
+                  Notice: {
+                    path: 'notice',
+                  },
+                  Inquiry: {
+                    path: 'inquiry',
+                  },
+                  EditEmail: {
+                    path: 'setting/mail',
+                  },
+                  EditPassword: {
+                    path: 'setting/password',
+                  },
+                  RegisterEmailPassword: {
+                    path: 'setting/register',
+                  },
+                  DeleteAcount: {
+                    path: 'setting/delete',
+                  },
+                  ForegetPassword: {
+                    path: 'setting/foreget',
+                  },
+                  ...common,
+                },
               },
-              MyDiary: {
-                path: 'my/:userName/:objectID',
-              },
-              ...common,
             },
           },
-          TeachDiaryTab: {
+          ModalPostDiary: {
             path: '',
-            initialRouteName: 'TeachDiaryList',
             screens: {
-              TeachDiaryList: {
-                path: 'entries',
+              PostDiary: {
+                path: 'entry/new',
               },
-              TeachDiarySearch: {
-                path: 'search',
-              },
-              TeachDiary: {
-                path: ':userName/:objectID',
-              },
-              ...common,
             },
           },
-          MyPageTab: {
+          ModalPostDraftDiary: {
             path: '',
-            initialRouteName: 'MyPage',
             screens: {
-              MyPage: {
-                path: 'mypage',
+              PostDraftDiary: {
+                path: 'entries/:objectID/edit',
               },
-              Setting: {
-                path: 'setting',
+            },
+          },
+          ModalEditMyProfile: {
+            path: '',
+            initialRouteName: 'EditMyProfile',
+            screens: {
+              EditMyProfile: {
+                path: 'mypage/edit',
               },
-              TutorialList: {
-                path: 'tutorials',
+              EditUserName: {
+                path: 'mypage/edit',
               },
-              Notice: {
-                path: 'notice',
+            },
+          },
+          ModalCorrecting: {
+            path: '',
+            screens: {
+              Correcting: {
+                path: ':userName/:objectID/correcting',
               },
-              Inquiry: {
-                path: 'inquiry',
+            },
+          },
+          ModalReview: {
+            path: '',
+            screens: {
+              Review: {
+                path: ':userName/:objectID/:correctedNum/review',
               },
-              EditEmail: {
-                path: 'setting/mail',
+            },
+          },
+          ModalAbout: {
+            path: '',
+            screens: {
+              About: {
+                path: 'about',
               },
-              EditPassword: {
-                path: 'setting/password',
-              },
-              RegisterEmailPassword: {
-                path: 'setting/register',
-              },
-              DeleteAcount: {
-                path: 'setting/delete',
-              },
-              ForegetPassword: {
-                path: 'setting/foreget',
-              },
-              ...common,
             },
           },
         },
       },
-      ModalPostDiary: {
+      Auth: {
         path: '',
+        initialRouteName: 'Initialize',
         screens: {
-          PostDiary: {
-            path: 'entry/new',
+          Initialize: {
+            path: '',
           },
-        },
-      },
-      ModalPostDraftDiary: {
-        path: '',
-        screens: {
-          PostDraftDiary: {
-            path: 'entries/:objectID/edit',
+          SelectLanguage: {
+            path: 'create',
+            exact: true,
           },
-        },
-      },
-      ModalEditMyProfile: {
-        path: '',
-        initialRouteName: 'EditMyProfile',
-        screens: {
-          EditMyProfile: {
-            path: 'mypage/edit',
+          InputUserName: {
+            path: 'create',
           },
-          EditUserName: {
-            path: 'mypage/edit',
+          SignIn: {
+            path: 'login',
           },
-        },
-      },
-      ModalCorrecting: {
-        path: '',
-        screens: {
-          Correcting: {
-            path: ':userName/:objectID/correcting',
+          SignUp: {
+            path: 'create',
           },
-        },
-      },
-      ModalReview: {
-        path: '',
-        screens: {
-          Review: {
-            path: ':userName/:objectID/:correctedNum/review',
+          ForegetPassword: {
+            path: 'foreget',
           },
-        },
-      },
-      ModalAbout: {
-        path: '',
-        screens: {
-          About: {
-            path: 'about',
-          },
+          // notfound: '*',
         },
       },
       Loading: {
         path: '',
+        initialRouteName: '',
+        screens: {
+          Loading: {
+            path: '',
+          },
+        },
       },
-      Initialize: {
+      Public: {
         path: '',
+        // screens: {
+        //   UserDiary: {
+        //     path: ':userName/:objectID',
+        //   },
+        // },
       },
-      SelectLanguage: {
-        path: 'create',
-        exact: true,
-      },
-      InputUserName: {
-        path: 'create',
-      },
-      SignIn: {
-        path: 'login',
-      },
-      SignUp: {
-        path: 'create',
-      },
-      ForegetPassword: {
-        path: 'foreget',
-      },
-      notfound: '*',
     },
   };
 };
