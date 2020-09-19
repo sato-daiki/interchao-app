@@ -24,7 +24,6 @@ import {
 } from './ModalNavigator';
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
-import NotFoundScreen from '../screens/NotFoundScreen';
 import { maxMain } from '../styles/Common';
 import { RootStackParamList } from './RootNavigator';
 

@@ -1,4 +1,3 @@
-import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import Lp from '../components/organisms/Lp';

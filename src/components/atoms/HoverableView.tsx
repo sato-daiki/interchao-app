@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ViewStyle, StyleProp, View, StyleSheet } from 'react-native';
-import { hoverMain } from '../../styles/Common';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

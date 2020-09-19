@@ -1,5 +1,3 @@
-import React from 'react';
-import renderer from 'react-test-renderer';
 import firebase from '../constants/firebase';
 import { getRunningDays, getRunningWeeks, getUsePoints } from './diary';
 
@@ -32,10 +30,6 @@ describe('diary #getRunningDays', () => {
 });
 
 describe('diary #getRunningWeeks', () => {
-  // it('通常', () => {
-  //   const weeks = getRunningWeeks(3, firebase.firestore.Timestamp.now());
-  //   expect(weeks).toEqual(4);
-  // });
   it('初回', () => {
     const weeks = getRunningWeeks(0, null);
     expect(weeks).toEqual(1);

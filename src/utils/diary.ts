@@ -103,9 +103,6 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
     correctionStatus,
     correctionStatus2,
     correctionStatus3,
-    isReview,
-    isReview2,
-    isReview3,
   } = diary;
 
   if (diaryStatus === 'draft') return null;
