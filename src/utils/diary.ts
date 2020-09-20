@@ -294,11 +294,11 @@ export const getPublishMessage = (
   afterDays: number,
   afterWeeks: number
 ): string | null => {
-  if (!beforeDays) {
+  if (beforeDays === 0) {
     // 初回（0の場合もこっちに入る）
     return I18n.t('modalAlertPublish.first');
   }
-  if (!beforeWeeks) return null;
+  if (!beforeDays || !beforeWeeks) return null;
 
   if (beforeDays + 1 === afterDays) {
     // 日が連続の場合
