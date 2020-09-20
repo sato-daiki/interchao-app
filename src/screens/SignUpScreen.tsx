@@ -107,7 +107,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
   }, []);
 
   const createUser = useCallback(
-    (credentUser: firebase.User): void => {
+    (credentUser: firebase.User, loginMethod: string): void => {
       const f = async (): Promise<void> => {
         const userInfo = {
           diaryPosted: false,
@@ -166,6 +166,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
         signIn(credentUser.uid);
         setUser({ ...userInfo, uid: credentUser.uid });
         setProfile({ ...profileInfo, uid: credentUser.uid });
+        track(events.CREATED_USER, { loginMethod });
       };
       f();
     },
@@ -188,8 +189,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
       try {
         const credent = await firebase.auth().signInAnonymously();
         if (credent.user) {
-          createUser(credent.user);
-          track(events.CREATED_USER, 'anonymously');
+          createUser(credent.user, 'anonymously');
         }
       } catch (err) {
         emailInputError(
@@ -221,8 +221,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
           .auth()
           .createUserWithEmailAndPassword(email, password);
         if (credent.user) {
-          createUser(credent.user);
-          track(events.CREATED_USER, 'email');
+          createUser(credent.user, 'email');
         }
       } catch (err) {
         emailInputError(
