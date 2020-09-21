@@ -239,7 +239,6 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    */
   const onPressClose = useCallback(() => {
     setIsModalConfirmation(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**

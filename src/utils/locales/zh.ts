@@ -187,6 +187,9 @@ const inputUserName = {
 const myDiary = {
   menuDelete: '删除',
   confirmMessage: '确定要删除吗？',
+  posted: '发表',
+  fairCopy: '公平复制',
+  closeAlert: '未保存的修改将会丢失。您确定要关闭吗？',
 };
 
 const myDiaryList = {

@@ -8,16 +8,17 @@ import {
 } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { Diary, Profile } from '../../types';
-import MyDiaryCorrection from '../../components/organisms/MyDiaryCorrection';
+import MyDiaryCorrection from './MyDiaryCorrection';
 import { Correction } from '../../types/correction';
 import { getCorrection } from '../../utils/corrections';
-import { GrayHeader, Space, ShareButton } from '../../components/atoms';
+import { GrayHeader, Space, ShareButton } from '../atoms';
 import I18n from '../../utils/I18n';
-import DiaryOriginal from '../../components/organisms/DiaryOriginal';
+import DiaryOriginal from './DiaryOriginal';
 
 export interface Props {
   diary?: Diary;
   profile: Profile;
+  isEditing: boolean;
   onPressUser: (uid: string, userName: string) => void;
   onPressReview: (correctedNum: number) => void;
 }
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
 const Posted: React.FC<Props> = ({
   profile,
   diary,
+  isEditing,
   onPressUser,
   onPressReview,
 }) => {
@@ -99,6 +101,7 @@ const Posted: React.FC<Props> = ({
     return (
       <MyDiaryCorrection
         isReview={prmIsReview}
+        isEditing={isEditing}
         nativeLanguage={profile.nativeLanguage}
         textLanguage={profile.learnLanguage}
         correction={prmCorrection}
@@ -116,7 +119,12 @@ const Posted: React.FC<Props> = ({
           ref={viewShotRef}
           options={{ format: 'jpg', quality: 0.9 }}
         >
-          <DiaryOriginal diary={diary} profile={profile} text={diary.text} />
+          <DiaryOriginal
+            diary={diary}
+            profile={profile}
+            title={diary.title}
+            text={diary.text}
+          />
           {isCorrectionLoading ? (
             <View style={styles.activityIndicator}>
               <ActivityIndicator size="small" />
@@ -141,12 +149,12 @@ const Posted: React.FC<Props> = ({
         </ViewShot>
         <Space size={48} />
         <View style={styles.shareButton}>
-          {Platform.OS !== 'web' ? (
+          {Platform.OS === 'web' || isEditing ? null : (
             <ShareButton
               viewShotRef={viewShotRef}
               nativeLanguage={profile.nativeLanguage}
             />
-          ) : null}
+          )}
         </View>
         <Space size={32} />
       </ScrollView>

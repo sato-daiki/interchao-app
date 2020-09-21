@@ -31,6 +31,8 @@ export interface Diary {
   hidden: boolean;
   title: string;
   text: string;
+  fairCopyTitle?: string | null;
+  fairCopyText?: string | null;
   profile: DisplayProfile;
   diaryStatus: DiaryStatus;
   correction: DisplaCorrection | null;

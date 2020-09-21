@@ -15,6 +15,7 @@ import RichText from './RichText';
 interface Props {
   diary: Diary;
   profile: Profile;
+  title: string;
   text: string;
 }
 
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiaryOriginal: React.FC<Props> = ({ diary, profile, text }) => {
+const DiaryOriginal: React.FC<Props> = ({ diary, profile, title, text }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -63,7 +64,7 @@ const DiaryOriginal: React.FC<Props> = ({ diary, profile, text }) => {
       </View>
       <RichText
         style={styles.title}
-        text={diary.title}
+        text={title}
         nativeLanguage={profile.nativeLanguage}
         textLanguage={profile.learnLanguage}
       />

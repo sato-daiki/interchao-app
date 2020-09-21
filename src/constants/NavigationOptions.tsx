@@ -1,6 +1,5 @@
 import { StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
-import { Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -9,7 +8,7 @@ import {
   maxModalScreen,
 } from '../styles/Common';
 import { getEachOS } from '../utils/common';
-import { HeaderIcon } from '../components/atoms';
+import { DefaultHeaderBack } from '../components/atoms';
 
 export const DefaultNavigationOptions: StackNavigationOptions = {
   headerStyle: {
@@ -32,25 +31,7 @@ export const DefaultNavigationOptions: StackNavigationOptions = {
   headerLeft: props => {
     const { onPress } = props;
     if (!onPress) return null;
-    if (Platform.OS === 'ios') {
-      return (
-        <HeaderIcon
-          icon="feather"
-          name="chevron-left"
-          size={25}
-          onPress={onPress}
-        />
-      );
-    }
-
-    return (
-      <HeaderIcon
-        icon="material"
-        name="arrow-back"
-        size={25}
-        onPress={onPress}
-      />
-    );
+    return <DefaultHeaderBack onPress={onPress} />;
   },
   cardStyle: {
     // borderleftはdrwarのdefaultでついている
