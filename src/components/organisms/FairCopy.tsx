@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
-import { ShareButton, Space } from '../../components/atoms';
-import DiaryOriginal from '../../components/organisms/DiaryOriginal';
+import { ShareButton, Space } from '../atoms';
+import DiaryOriginal from './DiaryOriginal';
 
 import { Diary, Profile } from '../../types';
 
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 
 const FairCopy: React.FC<Props> = ({ diary, profile }) => {
   const viewShotRef = useRef<ViewShot | null>(null);
-
   if (!diary) {
     return null;
   }
@@ -47,7 +46,8 @@ const FairCopy: React.FC<Props> = ({ diary, profile }) => {
           <DiaryOriginal
             diary={diary}
             profile={profile}
-            text={diary.fairCopy || diary.text}
+            title={diary.fairCopyTitle || diary.title}
+            text={diary.fairCopyText || diary.text}
           />
         </ViewShot>
         <Space size={48} />

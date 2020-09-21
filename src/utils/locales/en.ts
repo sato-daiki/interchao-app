@@ -205,6 +205,10 @@ const inputUserName = {
 const myDiary = {
   menuDelete: 'Delete',
   confirmMessage: 'Are you sure you want to delete this journal entry?',
+  posted: 'Posted',
+  fairCopy: 'Fair Copy',
+  closeAlert:
+    'Any edits that have not been saved will be lost. Would you like to exit?',
 };
 
 const myDiaryList = {
