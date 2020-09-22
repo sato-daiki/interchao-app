@@ -10,6 +10,7 @@ export { default as EmptyList } from './EmptyList';
 export { default as EmptyReview } from './EmptyReview';
 export { default as MyDiaryCorrectionFooter } from './MyDiaryCorrectionFooter';
 export { default as MyDiaryStatus } from './MyDiaryStatus';
+export { default as MyDiaryTabBar } from './MyDiaryTabBar';
 export { default as OnOffSmallButton } from './OnOffSmallButton';
 export { default as OptionItem } from './OptionItem';
 export { default as ProfileIcons } from './ProfileIcons';

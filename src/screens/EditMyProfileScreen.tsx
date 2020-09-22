@@ -37,6 +37,7 @@ import {
   ModalEditMyProfileStackNavigationProp,
   ModalEditMyProfileStackParamList,
 } from '../navigations/ModalNavigator';
+import { KeyboardHideButton } from '../components/molecules';
 
 export interface Props {
   profile: Profile;
@@ -163,6 +164,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   const [isNationality, setIsNationality] = useState(false);
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isKeyboard, setIsKeyboard] = useState(false);
 
   const onPressCloseError = (): void => {
     setErrorMessage('');
@@ -453,6 +455,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           spellCheck
           autoCorrect
           underlineColorAndroid="transparent"
+          onBlur={(): void => setIsKeyboard(false)}
         />
         <Space size={32} />
         {Platform.OS === 'web' ? (
@@ -463,6 +466,10 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           />
         ) : null}
       </KeyboardAwareScrollView>
+      <KeyboardHideButton
+        isKeyboard={isKeyboard}
+        setIsKeyboard={setIsKeyboard}
+      />
     </View>
   );
 };

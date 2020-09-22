@@ -221,5 +221,5 @@ export const onClose = (
     correctingCorrectedNum: null,
   });
   setIsLoading(false);
-  navigation.goBack(null);
+  navigation.goBack();
 };

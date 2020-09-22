@@ -1,21 +1,8 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  ReactNode,
-  useRef,
-} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-  Platform,
-} from 'react-native';
+import React, { useCallback, useState, useEffect, ReactNode } from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import ViewShot from 'react-native-view-shot';
+import { TabView } from 'react-native-tab-view';
 import {
   connectActionSheet,
   useActionSheet,
@@ -24,32 +11,23 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
-import MyDiaryCorrection from '../components/organisms/MyDiaryCorrection';
-import { MyDiaryStatus } from '../components/molecules';
 import { ModalConfirm } from '../components/organisms';
 import {
-  primaryColor,
-  subTextColor,
-  fontSizeM,
-  fontSizeS,
-} from '../styles/Common';
-import { getAlgoliaDate } from '../utils/diary';
-import { Correction } from '../types/correction';
-import { getCorrection } from '../utils/corrections';
-import {
   LoadingModal,
-  GrayHeader,
-  Space,
-  ShareButton,
   HeaderIcon,
+  HeaderText,
+  DefaultHeaderBack,
 } from '../components/atoms';
 import I18n from '../utils/I18n';
-import RichText from '../components/organisms/RichText';
 import MyDiaryMenu from '../components/web/organisms/MyDiaryMenu';
 import {
   MyDiaryTabNavigationProp,
   MyDiaryTabStackParamList,
 } from '../navigations/MyDiaryTabNavigator';
+import Posted from '../components/organisms/Posted';
+import FairCopy from '../components/organisms/FairCopy';
+import FairCopyEdit from '../components/organisms/FairCopyEdit';
+import { MyDiaryTabBar } from '../components/molecules';
 
 export interface Props {
   diary?: Diary;
@@ -76,51 +54,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
-  viewShot: {
-    backgroundColor: '#FFF',
-  },
-  diaryOriginal: {
-    paddingHorizontal: 16,
-    paddingBottom: 32,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 4,
-  },
-  postDayText: {
-    color: subTextColor,
-    fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 16,
-  },
-  text: {
-    lineHeight: fontSizeM * 1.3,
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingBottom: 16,
-  },
-  textLength: {
-    color: subTextColor,
-    fontSize: fontSizeS,
-    textAlign: 'right',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  activityIndicator: {
-    marginVertical: 16,
-  },
-  shareButton: {
-    width: 300,
-    alignSelf: 'center',
-  },
 });
+
+const initialLayout = { width: Dimensions.get('window').width };
 
 /**
  * 日記詳細
@@ -130,23 +66,37 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   profile,
   diary,
   deleteDiary,
+  editDiary,
 }) => {
+  const initFairCopyTitle = (): string => {
+    if (!diary) return '';
+    return diary.fairCopyTitle || diary.title;
+  };
+  const initFairCopyText = (): string => {
+    if (!diary) return '';
+    return diary.fairCopyText || diary.text;
+  };
+
   const { showActionSheetWithOptions } = useActionSheet();
-  const [correction, setCorrection] = useState<Correction>();
-  const [correction2, setCorrection2] = useState<Correction>();
-  const [correction3, setCorrection3] = useState<Correction>();
   const [isLoading, setIsLoading] = useState(false);
-  const [isCorrectionLoading, setIsCorrectionLoading] = useState(true);
   const [isModalDelete, setIsModalDelete] = useState(false);
-  const viewShotRef = useRef<ViewShot | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isFirstEdit, setIsFirstEdit] = useState(false);
+  const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
+  const [fairCopyTitle, setFairCopyTitle] = useState<string>(
+    initFairCopyTitle()
+  );
+  const [fairCopyText, setFairCopyText] = useState<string>(initFairCopyText());
+
+  const [index, setIndex] = useState(0);
+  const [routes] = useState([
+    { key: 'posted', title: I18n.t('myDiary.posted') },
+    { key: 'fairCopy', title: I18n.t('myDiary.fairCopy') },
+  ]);
 
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
-
-  const onPressDeleteMenu = useCallback(() => {
-    setIsModalDelete(true);
-  }, []);
 
   const onPressMore = useCallback(() => {
     const options = [I18n.t('myDiary.menuDelete'), I18n.t('common.cancel')];
@@ -156,60 +106,34 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         destructiveButtonIndex: 0,
         cancelButtonIndex: 1,
       },
-      index => {
-        switch (index) {
+      i => {
+        switch (i) {
           case 0:
-            onPressDeleteMenu();
+            setIsModalDelete(true);
             break;
           default:
         }
       }
     );
-  }, [onPressDeleteMenu, showActionSheetWithOptions]);
+  }, [showActionSheetWithOptions]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: diary ? diary.title : '',
-      headerRight: (): JSX.Element =>
-        isDesktopOrLaptopDevice ? (
-          <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />
-        ) : (
-          <HeaderIcon
-            icon="community"
-            name="dots-horizontal"
-            onPress={onPressMore}
-          />
-        ),
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diary]);
+  const onPressSubmit = async (): Promise<void> => {
+    if (!diary || !diary.objectID || isLoading) return;
 
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      if (!diary) return;
-      // 添削がある場合データを取得
-      if (diary.correction) {
-        const newCorrection = await getCorrection(diary.correction.id);
-        if (newCorrection) {
-          setCorrection(newCorrection);
-        }
-      }
-      if (diary.correction2) {
-        const newCorrection = await getCorrection(diary.correction2.id);
-        if (newCorrection) {
-          setCorrection2(newCorrection);
-        }
-      }
-      if (diary.correction3) {
-        const newCorrection = await getCorrection(diary.correction3.id);
-        if (newCorrection) {
-          setCorrection3(newCorrection);
-        }
-      }
-      setIsCorrectionLoading(false);
-    };
-    f();
-  }, [diary]);
+    setIsLoading(true);
+    await firebase
+      .firestore()
+      .doc(`diaries/${diary.objectID}`)
+      .update({
+        fairCopyTitle,
+        fairCopyText,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+    editDiary(diary.objectID, { ...diary, fairCopyTitle, fairCopyText });
+    setIsLoading(false);
+    setIsEditing(false);
+  };
 
   const onPressDelete = useCallback(() => {
     if (!diary || !diary.objectID) return;
@@ -226,42 +150,118 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     setIsLoading(false);
   }, [deleteDiary, diary, navigation]);
 
+  const onClose = (): void => {
+    setIsEditing(false);
+    setFairCopyTitle(initFairCopyTitle());
+    setFairCopyText(initFairCopyText());
+    setIsModalConfirmation(false);
+  };
+
+  const onPressClose = (): void => {
+    if (isFirstEdit) {
+      setIsModalConfirmation(true);
+    } else {
+      onClose();
+    }
+  };
+
+  const headerRight = (): ReactNode => {
+    if (isDesktopOrLaptopDevice) {
+      return (
+        <MyDiaryMenu onPressDeleteMenu={(): void => setIsModalDelete(true)} />
+      );
+    }
+
+    if (!isEditing) {
+      if (index === 0) {
+        return (
+          <HeaderIcon
+            icon="community"
+            name="dots-horizontal"
+            onPress={onPressMore}
+          />
+        );
+      }
+      if (index === 1) {
+        return (
+          <HeaderText
+            text={I18n.t('common.edit')}
+            onPress={(): void => setIsEditing(true)}
+          />
+        );
+      }
+      return <View />;
+    }
+    if (!isFirstEdit || index === 0) {
+      return null;
+    }
+    return <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />;
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: diary ? diary.title : '',
+      headerLeft: () =>
+        !isEditing ? (
+          <DefaultHeaderBack onPress={(): void => navigation.goBack()} />
+        ) : (
+          <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
+        ),
+      headerRight,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [diary, index, isEditing, isFirstEdit]);
+
+  const onPressUser = (uid: string, userName: string): void => {
+    navigation.navigate('UserProfile', {
+      userName,
+    });
+  };
+
+  const onPressReview = (correctedNum: number): void => {
+    if (!diary || !diary.objectID) return;
+    navigation.navigate('ModalReview', {
+      screen: 'Review',
+      params: {
+        objectID: diary.objectID,
+        correctedNum,
+        userName: diary.profile.userName,
+      },
+    });
+  };
+
   if (!diary) {
     return null;
   }
 
-  const { createdAt, title, text, isReview, isReview2, isReview3 } = diary;
-  const postDate = getAlgoliaDate(createdAt);
-
-  const renderMyDiaryCorrection = (
-    correctedNum: number,
-    prmCorrection: Correction,
-    prmIsReview: boolean | undefined
-  ): ReactNode => {
-    return (
-      <MyDiaryCorrection
-        isReview={prmIsReview}
-        nativeLanguage={profile.nativeLanguage}
-        textLanguage={profile.learnLanguage}
-        correction={prmCorrection}
-        onPressUser={(uid, userName): void => {
-          navigation.navigate('UserProfile', {
-            userName,
-          });
-        }}
-        onPressReview={(): void => {
-          if (!diary.objectID) return;
-          navigation.navigate('ModalReview', {
-            screen: 'Review',
-            params: {
-              objectID: diary.objectID,
-              correctedNum,
-              userName: diary.profile.userName,
-            },
-          });
-        }}
-      />
-    );
+  const renderScene = ({ route }): JSX.Element | null => {
+    if (!diary) return null;
+    switch (route.key) {
+      case 'posted':
+        return (
+          <Posted
+            profile={profile}
+            diary={diary}
+            isEditing={isEditing}
+            onPressUser={onPressUser}
+            onPressReview={onPressReview}
+          />
+        );
+      case 'fairCopy':
+        return !isEditing ? (
+          <FairCopy diary={diary} profile={profile} />
+        ) : (
+          <FairCopyEdit
+            title={fairCopyTitle}
+            text={fairCopyText}
+            onChangeTextTitle={(title: string): void => setFairCopyTitle(title)}
+            onChangeTextText={(text: string): void => setFairCopyText(text)}
+            onFocus={(): void => setIsFirstEdit(true)}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -276,70 +276,22 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         onPressMain={onPressDelete}
         onPressClose={(): void => setIsModalDelete(false)}
       />
-      <ScrollView style={styles.scrollView}>
-        <ViewShot
-          style={styles.viewShot}
-          ref={viewShotRef}
-          options={{ format: 'jpg', quality: 0.9 }}
-        >
-          <Space size={12} />
-          <View style={styles.diaryOriginal}>
-            <View style={styles.header}>
-              <Text style={styles.postDayText}>{postDate}</Text>
-              <MyDiaryStatus diary={diary} />
-            </View>
-            <RichText
-              style={styles.title}
-              text={title}
-              nativeLanguage={profile.nativeLanguage}
-              textLanguage={profile.learnLanguage}
-            />
-            <RichText
-              style={styles.text}
-              text={text}
-              nativeLanguage={profile.nativeLanguage}
-              textLanguage={profile.learnLanguage}
-            />
-            <Text style={styles.textLength}>
-              {I18n.t('postDiaryComponent.textLength')}
-              {` ${text.length}`}
-            </Text>
-          </View>
-          {isCorrectionLoading ? (
-            <View style={styles.activityIndicator}>
-              <ActivityIndicator size="small" />
-            </View>
-          ) : (
-            <>
-              {correction ? (
-                <GrayHeader title={I18n.t('myDiaryCorrection.header')} />
-              ) : null}
-              {correction
-                ? renderMyDiaryCorrection(1, correction, isReview)
-                : null}
-              {correction2
-                ? renderMyDiaryCorrection(2, correction2, isReview2)
-                : null}
-              {correction3
-                ? renderMyDiaryCorrection(3, correction3, isReview3)
-                : null}
-            </>
-          )}
-          <Space size={16} />
-        </ViewShot>
-        <Space size={48} />
-        <View style={styles.shareButton}>
-          {Platform.OS !== 'web' ? (
-            <ShareButton
-              viewShotRef={viewShotRef}
-              nativeLanguage={profile.nativeLanguage}
-            />
-          ) : null}
-        </View>
-        <Space size={32} />
-      </ScrollView>
+      <ModalConfirm
+        visible={isModalConfirmation}
+        title={I18n.t('common.confirmation')}
+        message={I18n.t('myDiary.closeAlert')}
+        mainButtonText="OK"
+        onPressMain={onClose}
+        onPressClose={(): void => setIsModalConfirmation(false)}
+      />
+      <TabView
+        renderTabBar={(props): ReactNode => <MyDiaryTabBar {...props} />}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={(i: number): void => setIndex(i)}
+        initialLayout={initialLayout}
+      />
     </View>
   );
 };
-
 export default connectActionSheet(MyDiaryScreen);
