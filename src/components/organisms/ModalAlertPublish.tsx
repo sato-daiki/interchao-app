@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -7,13 +7,7 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import {
-  SubmitButton,
-  WhiteButton,
-  Space,
-  UserPointsBig,
-  ShareButton,
-} from '../atoms';
+import { SubmitButton, WhiteButton, Space, UserPointsBig } from '../atoms';
 import I18n from '../../utils/I18n';
 import { Language } from '../../types';
 import { Note } from '../../images';
