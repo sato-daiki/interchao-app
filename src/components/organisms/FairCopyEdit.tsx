@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Diary } from '../../types';
 import {
   borderLightColor,
   fontSizeM,
@@ -9,9 +8,9 @@ import {
   primaryColor,
 } from '../../styles/Common';
 import { KeyboardHideButton } from '../molecules';
+import { Space, TextInputText, TextInputTitle } from '../atoms';
 
 export interface Props {
-  diary?: Diary;
   title: string;
   text: string;
   onChangeTextTitle: (title: string) => void;
@@ -23,7 +22,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    paddingVertical: 16,
+  },
+  scrollView: {
+    paddingBottom: 32,
+    paddingTop: 12,
     paddingHorizontal: 16,
   },
   textInput: {
@@ -36,11 +38,11 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: borderLightColor,
     marginBottom: 16,
+    borderBottomWidth: 0,
   },
 });
 
 const FairCopyEdit: React.FC<Props> = ({
-  diary,
   title,
   text,
   onChangeTextTitle,
@@ -53,39 +55,28 @@ const FairCopyEdit: React.FC<Props> = ({
   const onHideKeyboard = (): void => {
     setIsKeyboard(false);
   };
-  if (!diary) {
-    return null;
-  }
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
+        style={styles.scrollView}
         keyboardShouldPersistTaps="handled"
         extraScrollHeight={32}
       >
-        <TextInput
+        <TextInputTitle
           style={styles.textInput}
           value={title}
-          multiline
-          underlineColorAndroid="transparent"
-          autoCorrect={false}
-          keyboardType="default"
-          spellCheck
           onChangeText={onChangeTextTitle}
           onFocus={onFocus}
           onBlur={onHideKeyboard}
         />
-        <TextInput
+        <TextInputText
           style={styles.textInput}
           value={text}
-          multiline
-          underlineColorAndroid="transparent"
-          autoCorrect={false}
-          keyboardType="default"
-          spellCheck
           onChangeText={onChangeTextText}
           onFocus={onFocus}
           onBlur={onHideKeyboard}
         />
+        <Space size={32} />
       </KeyboardAwareScrollView>
       <KeyboardHideButton
         isKeyboard={isKeyboard}

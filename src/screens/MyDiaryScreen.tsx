@@ -235,6 +235,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   }
 
   const renderScene = ({ route }): JSX.Element | null => {
+    if (!diary) return null;
     switch (route.key) {
       case 'posted':
         return (
@@ -251,7 +252,6 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
           <FairCopy diary={diary} profile={profile} />
         ) : (
           <FairCopyEdit
-            diary={diary}
             title={fairCopyTitle}
             text={fairCopyText}
             onChangeTextTitle={(title: string): void => setFairCopyTitle(title)}
