@@ -9,6 +9,7 @@ import { MyDiaryCorrectionFooter, CorrectionItem, Summary } from '../molecules';
 
 interface Props {
   isReview?: boolean;
+  isEditing: boolean;
   nativeLanguage: Language;
   textLanguage: Language;
   correction: Correction;
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
  */
 const MyDiaryCorrection: React.FC<Props> = ({
   isReview,
+  isEditing,
   nativeLanguage,
   textLanguage,
   correction,
@@ -60,7 +62,9 @@ const MyDiaryCorrection: React.FC<Props> = ({
               photoUrl={profile.photoUrl}
               nativeLanguage={profile.nativeLanguage}
               nationalityCode={profile.nationalityCode}
-              onPress={(): void => onPressUser(profile.uid, profile.userName)}
+              onPress={(): void => {
+                if (!isEditing) onPressUser(profile.uid, profile.userName);
+              }}
             />
             <Text style={styles.daytext}>{postDate}</Text>
           </View>
@@ -86,7 +90,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
             />
           ) : null}
           <Space size={32} />
-          {isReview !== undefined ? (
+          {isReview !== undefined && !isEditing ? (
             <MyDiaryCorrectionFooter
               isReview={isReview}
               onPress={onPressReview}

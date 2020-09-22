@@ -3,6 +3,7 @@ export { default as AutoHeightTextInput } from './AutoHeightTextInput';
 export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as CorrectingText } from '../molecules/CorrectingText';
+export { default as DefaultHeaderBack } from './DefaultHeaderBack';
 export { default as DiaryStatus } from './DiaryStatus';
 export { default as FirstDiary } from './FirstDiary';
 export { default as FixText } from './FixText';

@@ -196,6 +196,9 @@ const inputUserName = {
 const myDiary = {
   menuDelete: '삭제하기',
   confirmMessage: '정말 삭제하시겠습니까?',
+  posted: '게시 됨',
+  fairCopy: '정서',
+  closeAlert: '저장되지 않은 사항은 사라집니다. 그래도 계속 하시겠습니까?',
 };
 
 const myDiaryList = {

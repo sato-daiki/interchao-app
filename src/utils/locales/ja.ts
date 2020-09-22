@@ -198,6 +198,9 @@ const inputUserName = {
 const myDiary = {
   menuDelete: '削除する',
   confirmMessage: '本当に削除してよろしいでしょうか？',
+  posted: '投稿済',
+  fairCopy: '清書',
+  closeAlert: '保存されていない変更は失われます。閉じてよろしいですか？',
 };
 
 const myDiaryList = {
