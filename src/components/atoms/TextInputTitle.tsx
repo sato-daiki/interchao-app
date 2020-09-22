@@ -7,6 +7,7 @@ interface Props {
   value: string;
   onChangeText: (txt: string) => void;
   onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -26,6 +27,7 @@ const TextInputTitle: React.FC<Props> = ({
   value,
   onChangeText,
   onFocus,
+  onBlur,
   style,
 }: Props): JSX.Element => {
   return (
@@ -43,6 +45,7 @@ const TextInputTitle: React.FC<Props> = ({
       onFocus={onFocus}
       multiline
       onChangeText={onChangeText}
+      onBlur={onBlur}
     />
   );
 };

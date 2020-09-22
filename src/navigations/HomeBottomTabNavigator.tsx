@@ -118,7 +118,9 @@ const HomeBottomTabNavigator = (): JSX.Element => {
 
   const HomeBottom = createBottomTabNavigator<HomeBottomParamList>();
   return (
-    <HomeBottom.Navigator tabBarOptions={{ activeTintColor: mainColor }}>
+    <HomeBottom.Navigator
+      tabBarOptions={{ activeTintColor: mainColor, keyboardHidesTabBar: true }}
+    >
       <HomeBottom.Screen
         name="MyDiaryTab"
         component={MyDiaryTabNavigator}

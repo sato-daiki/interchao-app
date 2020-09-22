@@ -7,7 +7,7 @@ import DiaryOriginal from './DiaryOriginal';
 import { Diary, Profile } from '../../types';
 
 export interface Props {
-  diary?: Diary;
+  diary: Diary;
   profile: Profile;
 }
 
@@ -31,9 +31,6 @@ const styles = StyleSheet.create({
 
 const FairCopy: React.FC<Props> = ({ diary, profile }) => {
   const viewShotRef = useRef<ViewShot | null>(null);
-  if (!diary) {
-    return null;
-  }
 
   return (
     <View style={styles.container}>

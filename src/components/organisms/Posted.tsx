@@ -16,7 +16,7 @@ import I18n from '../../utils/I18n';
 import DiaryOriginal from './DiaryOriginal';
 
 export interface Props {
-  diary?: Diary;
+  diary: Diary;
   profile: Profile;
   isEditing: boolean;
   onPressUser: (uid: string, userName: string) => void;
@@ -62,7 +62,6 @@ const Posted: React.FC<Props> = ({
 
   useEffect(() => {
     const f = async (): Promise<void> => {
-      if (!diary) return;
       // 添削がある場合データを取得
       if (diary.correction) {
         const newCorrection = await getCorrection(diary.correction.id);
@@ -86,10 +85,6 @@ const Posted: React.FC<Props> = ({
     };
     f();
   }, [diary]);
-
-  if (!diary) {
-    return null;
-  }
 
   const { isReview, isReview2, isReview3 } = diary;
 
