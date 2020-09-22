@@ -230,6 +230,14 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     });
   };
 
+  const goToRecord = (): void => {
+    if (!diary || !diary.objectID) return;
+    navigation.navigate('ModalRecord', {
+      screen: 'Record',
+      params: { objectID: diary.objectID },
+    });
+  };
+
   if (!diary) {
     return null;
   }
@@ -249,7 +257,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         );
       case 'fairCopy':
         return !isEditing ? (
-          <FairCopy diary={diary} profile={profile} />
+          <FairCopy diary={diary} profile={profile} goToRecord={goToRecord} />
         ) : (
           <FairCopyEdit
             title={fairCopyTitle}

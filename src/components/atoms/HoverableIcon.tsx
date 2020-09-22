@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { ViewStyle, StyleProp, TouchableOpacity, View } from 'react-native';
+import {
+  ViewStyle,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  TouchableOpacityProps,
+} from 'react-native';
 import { mainColor, hoverMain, primaryColor } from '../../styles/Common';
 import Icon, { IconType } from './Icon';
 
@@ -15,7 +21,7 @@ type Props = {
   hoverColor?: string;
   hoverBackgroundColor?: string;
   onPress?: () => void;
-};
+} & TouchableOpacityProps;
 
 // defautlはopacityの設定のみ
 const HoverableIcon: React.FC<Props> = ({

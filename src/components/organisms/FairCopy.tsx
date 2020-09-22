@@ -12,6 +12,7 @@ import ModalSpeech from './ModalSpeech';
 export interface Props {
   diary: Diary;
   profile: Profile;
+  goToRecord: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -36,11 +37,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const FairCopy: React.FC<Props> = ({ diary, profile }) => {
+const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
   const viewShotRef = useRef<ViewShot | null>(null);
 
-  const onPressRecord = () => {};
   const onPressMyVoiice = () => {};
 
   const iconHeader = <AntDesign size={22} color={primaryColor} name="like1" />;
@@ -95,7 +95,7 @@ const FairCopy: React.FC<Props> = ({ diary, profile }) => {
           containerStyle={styles.button}
           title="音声を録音する"
           icon={iconRecord}
-          onPress={onPressRecord}
+          onPress={goToRecord}
         />
         <WhiteButton
           containerStyle={styles.button}
