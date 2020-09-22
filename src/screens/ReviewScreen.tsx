@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
 import { Space, LoadingModal, HeaderText } from '../components/atoms';
-import { UserListItem } from '../components/molecules';
+import { KeyboardHideButton, UserListItem } from '../components/molecules';
 import { Diary, Profile, Review, Reviewer } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
@@ -72,6 +72,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
   const [comment, setComment] = useState('');
   const [isModalConfirmation, setIsModalConfirmation] = useState(false);
   const [isModalError, setIsModalError] = useState(false);
+  const [isKeyboard, setIsKeyboard] = useState(false);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
@@ -255,8 +256,13 @@ const ReviewScreen: React.FC<ScreenType> = ({
           autoCorrect
           underlineColorAndroid="transparent"
           style={styles.review}
+          onBlur={(): void => setIsKeyboard(false)}
         />
       </KeyboardAwareScrollView>
+      <KeyboardHideButton
+        isKeyboard={isKeyboard}
+        setIsKeyboard={setIsKeyboard}
+      />
     </View>
   );
 };
