@@ -9,6 +9,7 @@ import {
 } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
+import { Permissions } from 'expo';
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
 import { ModalConfirm } from '../components/organisms';
@@ -80,6 +81,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
+  const [isModalAlertRecord, setIsModalAlertRecord] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
@@ -218,8 +220,16 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     });
   };
 
-  const onPressReview = (correctedNum: number): void => {
+  const onPressReview = async (correctedNum: number): Promise<void> => {
     if (!diary || !diary.objectID) return;
+    if (isLoading) return;
+    setIsLoading(true);
+    const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    if (response.status !== 'granted') {
+      setIsModalAlertRecord(true);
+      setIsLoading(false);
+      return;
+    }
     navigation.navigate('ModalReview', {
       screen: 'Review',
       params: {
@@ -228,6 +238,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         userName: diary.profile.userName,
       },
     });
+    setIsLoading(false);
   };
 
   const goToRecord = (): void => {
@@ -291,6 +302,14 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         mainButtonText="OK"
         onPressMain={onClose}
         onPressClose={(): void => setIsModalConfirmation(false)}
+      />
+      <ModalConfirm
+        visible={isModalAlertRecord}
+        title={I18n.t('common.confirmation')}
+        message="権限がないでごわす！"
+        mainButtonText="OK"
+        onPressMain={onClose}
+        onPressClose={(): void => setIsModalAlertRecord(false)}
       />
       <TabView
         renderTabBar={(props): ReactNode => <MyDiaryTabBar {...props} />}

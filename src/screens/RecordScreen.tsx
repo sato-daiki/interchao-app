@@ -1,57 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  SafeAreaView,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
-// import * as Icons from '../components/organisms/Icons/Icons';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { SwipeablePanel } from 'rn-swipeable-panel';
 import { useFonts } from '@use-expo/font';
-import {
-  HeaderText,
-  HoverableIcon,
-  LoadingModal,
-  RecordButton,
-} from '../components/atoms';
-import { Diary, Profile, User } from '../types';
+import firebase from '../constants/firebase';
+import { HeaderText, HoverableIcon, LoadingModal } from '../components/atoms';
+import { Diary, Profile } from '../types';
 import I18n from '../utils/I18n';
 import {
   ModalRecordStackParamList,
   ModaRecordStackNavigationProp,
 } from '../navigations/ModalNavigator';
-import RichText from '../components/organisms/RichText';
 import { DiaryTitleAndText } from '../components/molecules';
 import {
   borderLightColor,
+  fontSizeM,
   fontSizeS,
   offWhite,
   primaryColor,
   softRed,
 } from '../styles/Common';
-
-const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
-const BACKGROUND_COLOR = '#FFF8ED';
-const LIVE_COLOR = '#FF0000';
-const DISABLED_OPACITY = 0.5;
-const RATE_SCALE = 3.0;
+import { uploadStorageAsync } from '../utils/storage';
 
 export interface Props {
   diary?: Diary;
-  user: User;
   profile: Profile;
 }
 
 interface DispatchProps {
-  setUser: (user: User) => void;
+  editDiary: (objectID: string, diary: Diary) => void;
 }
 
 type NavigationProp = CompositeNavigationProp<
@@ -79,24 +60,23 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: '#fff',
   },
-  centerIcon: {
-    alignItems: 'center',
-  },
-  playButtonContainer: {
+  playContaier: {
     backgroundColor: offWhite,
     paddingVertical: 16,
     paddingHorizontal: 32,
+  },
+  playButtonContainer: {
+    marginTop: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   recordButtonContainer: {
     height: 70,
     borderTopWidth: 1,
     borderTopColor: borderLightColor,
     backgroundColor: offWhite,
+    alignItems: 'center',
     justifyContent: 'center',
-  },
-  recordingContainer: {
-    backgroundColor: offWhite,
-    paddingVertical: 16,
   },
   timestampText: {
     color: primaryColor,
@@ -106,111 +86,31 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoMono',
   },
   recordingText: {
-    alignSelf: 'center',
     position: 'absolute',
-    paddingLeft: 124,
+    right: 20,
     paddingTop: 4,
   },
-  // noPermissionsText: {
-  //   textAlign: 'center',
-  // },
-  // wrapper: {},
-  // halfScreenContainer: {
-  //   flex: 1,
-  //   flexDirection: 'column',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  //   alignSelf: 'stretch',
-  //   minHeight: DEVICE_HEIGHT / 2.0,
-  //   maxHeight: DEVICE_HEIGHT / 2.0,
-  // },
-  // recordingContainer: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  //   alignSelf: 'stretch',
-  //   minHeight: Icons.RECORD_BUTTON.height,
-  //   maxHeight: Icons.RECORD_BUTTON.height,
-  // },
-
-  // recordingDataRowContainer: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  //   minHeight: Icons.RECORDING.height,
-  //   maxHeight: Icons.RECORDING.height,
-  // },
-  // playbackContainer: {
-  //   flex: 1,
-  //   flexDirection: 'column',
-  //   justifyContent: 'space-between',
-  //   alignItems: 'center',
-  //   alignSelf: 'stretch',
-  //   minHeight: Icons.THUMB_1.height * 2.0,
-  //   maxHeight: Icons.THUMB_1.height * 2.0,
-  // },
-
-  // liveText: {
-  //   color: LIVE_COLOR,
-  // },
-  // recordingTimestamp: {
-  //   paddingLeft: 20,
-  // },
-  // playbackTimestamp: {
-  //   textAlign: 'right',
-  //   alignSelf: 'stretch',
-  //   paddingRight: 20,
-  // },
-  // image: {
-  //   backgroundColor: BACKGROUND_COLOR,
-  // },
-  // buttonsContainerBase: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  // },
-  // buttonsContainerTopRow: {
-  //   maxHeight: Icons.MUTED_BUTTON.height,
-  //   alignSelf: 'stretch',
-  //   paddingRight: 20,
-  // },
-  // playStopContainer: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   minWidth: ((Icons.PLAY_BUTTON.width + Icons.STOP_BUTTON.width) * 3.0) / 2.0,
-  //   maxWidth: ((Icons.PLAY_BUTTON.width + Icons.STOP_BUTTON.width) * 3.0) / 2.0,
-  // },
-  // volumeContainer: {
-  //   flex: 1,
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-between',
-  //   minWidth: DEVICE_WIDTH / 2.0,
-  //   maxWidth: DEVICE_WIDTH / 2.0,
-  // },
-  // volumeSlider: {
-  //   width: DEVICE_WIDTH / 2.0 - Icons.MUTED_BUTTON.width,
-  // },
-  // buttonsContainerBottomRow: {
-  //   maxHeight: Icons.THUMB_1.height,
-  //   alignSelf: 'stretch',
-  //   paddingRight: 20,
-  //   paddingLeft: 20,
-  // },
-  // rateSlider: {
-  //   width: DEVICE_WIDTH / 2.0,
-  // },
+  noPermissionsContainer: {
+    padding: 16,
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  noPermissionsText: {
+    color: primaryColor,
+    fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
+  },
 });
 
 const recordingSettings: Audio.RecordingOptions =
   Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY;
 
-const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
+const RecordScreen: React.FC<ScreenType> = ({
+  navigation,
+  diary,
+  profile,
+  editDiary,
+}) => {
   const [fontsLoaded] = useFonts({
     // eslint-disable-next-line global-require
     RobotoMono: require('../styles/fonts/RobotoMono-Regular.ttf'),
@@ -263,6 +163,7 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
   }, []);
 
   const updateScreenForSoundStatus = (status: AVPlaybackStatus): void => {
+    // console.log('updateScreenForSoundStatus');
     if (status.isLoaded) {
       setSoundDuration(status.durationMillis ?? null);
       setSoundPosition(status.positionMillis);
@@ -306,6 +207,7 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
     }
     const info = await FileSystem.getInfoAsync(recording.getURI() || '');
     console.log(`FILE INFO: ${JSON.stringify(info)}`);
+
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -384,56 +286,27 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
     }
   };
 
-  const onPlayPausePressed = (): void => {
+  const getSeekSliderPosition = (): number => {
+    if (sound != null && soundPosition != null && soundDuration != null) {
+      return soundPosition / soundDuration;
+    }
+    return 0;
+  };
+
+  const onPlayPausePressed = async (): Promise<void> => {
     if (sound != null) {
       if (isPlaying) {
-        sound.pauseAsync();
+        await sound.pauseAsync();
       } else {
-        sound.playAsync();
+        if (getSeekSliderPosition() === 1) {
+          await sound.stopAsync();
+        }
+        await sound.playAsync();
       }
     }
   };
 
-  const onStopPressed = (): void => {
-    if (sound != null) {
-      sound.stopAsync();
-    }
-  };
-
-  const onMutePressed = (): void => {
-    if (sound != null) {
-      sound.setIsMutedAsync(!muted);
-    }
-  };
-
-  const onVolumeSliderValueChange = (value: number): void => {
-    if (sound != null) {
-      sound.setVolumeAsync(value);
-    }
-  };
-
-  const trySetRate = async (
-    prmRate: number,
-    prmShouldCorrectPitch: boolean
-  ): Promise<void> => {
-    if (sound != null) {
-      try {
-        await sound.setRateAsync(prmRate, prmShouldCorrectPitch);
-      } catch (error) {
-        // Rate changing could not be performed, possibly because the client's Android API is too old.
-      }
-    }
-  };
-
-  const onRateSliderSlidingComplete = async (value: number): Promise<void> => {
-    trySetRate(value * RATE_SCALE, shouldCorrectPitch);
-  };
-
-  const onPitchCorrectionPressed = (): void => {
-    trySetRate(rate, !shouldCorrectPitch);
-  };
-
-  const onSeekSliderValueChange = (value: number): void => {
+  const onSeekSliderValueChange = (): void => {
     if (sound != null && !isSeeking) {
       setIsSeeking(true);
       setShouldPlayAtEndOfSeek(shouldPlay);
@@ -451,13 +324,6 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
         sound.setPositionAsync(seekPosition);
       }
     }
-  };
-
-  const getSeekSliderPosition = (): number => {
-    if (sound != null && soundPosition != null && soundDuration != null) {
-      return soundPosition / soundDuration;
-    }
-    return 0;
   };
 
   const getMMSSFromMillis = (millis: number): string => {
@@ -491,6 +357,36 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
     return `${getMMSSFromMillis(0)}`;
   };
 
+  const onPressSave = async (): Promise<void> => {
+    if (!recording || !diary || !diary.objectID) return;
+    if (isLoading) return;
+
+    setIsLoading(true);
+
+    const info = await FileSystem.getInfoAsync(recording.getURI() || '');
+    if (!info.exists) {
+      setIsLoading(false);
+    }
+    const path = `voices/${profile.uid}/${diary.objectID}`;
+
+    const voiceUrl = await uploadStorageAsync(path, info.uri);
+
+    await firebase
+      .firestore()
+      .doc(`diaries/${diary.objectID}`)
+      .update({
+        voiceUrl,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+
+    editDiary(diary.objectID, {
+      ...diary,
+      voiceUrl,
+    });
+
+    setIsLoading(false);
+  };
+
   if (!diary) return null;
 
   if (!fontsLoaded) {
@@ -498,13 +394,12 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
   }
 
   if (!haveRecordingPermissions) {
+    // navigationの最初でチェックしているから基本はここには入らない
     return (
-      <View style={styles.container}>
-        <View />
+      <View style={styles.noPermissionsContainer}>
         <Text style={[styles.noPermissionsText]}>
           You must enable audio recording permissions in order to use this app.
         </Text>
-        <View />
       </View>
     );
   }
@@ -521,7 +416,7 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
           />
         </ScrollView>
         {sound ? (
-          <View style={styles.playButtonContainer}>
+          <View style={styles.playContaier}>
             <Slider
               minimumTrackTintColor={primaryColor}
               value={getSeekSliderPosition()}
@@ -530,21 +425,22 @@ const RecordScreen: React.FC<ScreenType> = ({ navigation, diary, profile }) => {
               disabled={!isPlaybackAllowed || isLoading}
             />
             <Text style={styles.timestampText}>{getPlaybackTimestamp()}</Text>
-            <HoverableIcon
-              style={styles.centerIcon}
-              disabled={!isPlaybackAllowed || isLoading}
-              icon="community"
-              name={isPlaying ? 'pause' : 'play'}
-              size={56}
-              color={primaryColor}
-              onPress={onPlayPausePressed}
-            />
+            <View style={styles.playButtonContainer}>
+              <HoverableIcon
+                disabled={!isPlaybackAllowed || isLoading}
+                icon="community"
+                name={isPlaying ? 'pause' : 'play'}
+                size={56}
+                color={primaryColor}
+                onPress={onPlayPausePressed}
+              />
+              <Text onPress={onPressSave}>保存する</Text>
+            </View>
           </View>
         ) : null}
 
         <View style={styles.recordButtonContainer}>
           <HoverableIcon
-            style={styles.centerIcon}
             disabled={isLoading}
             icon="community"
             name={isRecording ? 'stop' : 'record'}
