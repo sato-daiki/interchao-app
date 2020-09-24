@@ -97,12 +97,14 @@ const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
           icon={iconRecord}
           onPress={goToRecord}
         />
-        <WhiteButton
-          containerStyle={styles.button}
-          icon={iconMyVoice}
-          title="自分の音声を聞く"
-          onPress={onPressMyVoiice}
-        />
+        {diary.voiceUrl ? (
+          <WhiteButton
+            containerStyle={styles.button}
+            icon={iconMyVoice}
+            title="自分の音声を聞く"
+            onPress={onPressMyVoiice}
+          />
+        ) : null}
         <Space size={32} />
         <View style={styles.button}>
           {Platform.OS !== 'web' ? (

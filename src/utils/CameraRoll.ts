@@ -2,9 +2,9 @@ import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as Permissions from 'expo-permissions';
 import { Alert, Platform } from 'react-native';
-import firebase from '../constants/firebase';
 import { SERVICE_NAME } from '../constants';
 import I18n from './I18n';
+import { uploadStorageAsync } from './storage';
 
 export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatus> => {
   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -30,25 +30,7 @@ export const uploadImageAsync = async (
   const ret = await ImageManipulator.manipulateAsync(photoUrl, [
     { resize: { width } },
   ]);
-
-  const storageRef = firebase.storage().ref();
-  const imageRef = storageRef.child(path);
-
-  const blob: Blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = (): void => {
-      resolve(xhr.response);
-    };
-    xhr.onerror = (): void => {
-      reject(new TypeError('Network request failed'));
-    };
-    xhr.responseType = 'blob';
-    xhr.open('GET', ret.uri, true);
-    xhr.send(null);
-  });
-
-  const snapshot = await imageRef.put(blob);
-  const url = await snapshot.ref.getDownloadURL();
+  const url = await uploadStorageAsync(path, ret.uri);
   return url;
 };
 
