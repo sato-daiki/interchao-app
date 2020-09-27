@@ -1,13 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
 import { GrayHeader, ShareButton, Space, WhiteButton } from '../atoms';
 import DiaryOriginal from './DiaryOriginal';
 
 import { Diary, Profile } from '../../types';
 import { mainColor, primaryColor } from '../../styles/Common';
 import ModalSpeech from './ModalSpeech';
+import ModalVoice from './ModalVoice';
 
 export interface Props {
   diary: Diary;
@@ -39,9 +41,9 @@ const styles = StyleSheet.create({
 
 const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
-  const viewShotRef = useRef<ViewShot | null>(null);
+  const [visibleVoice, setVisibleVoice] = useState(false);
 
-  const onPressMyVoiice = () => {};
+  const viewShotRef = useRef<ViewShot | null>(null);
 
   const iconHeader = <AntDesign size={22} color={primaryColor} name="like1" />;
 
@@ -65,6 +67,15 @@ const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
         textLanguage={profile.learnLanguage}
         onClose={(): void => setVisibleSpeech(false)}
       />
+      {diary.voiceUrl && visibleVoice ? (
+        <ModalVoice
+          visible={visibleVoice}
+          text={diary.fairCopyText || diary.text}
+          voiceUrl={diary.voiceUrl}
+          afterClose={(): void => setVisibleVoice(false)}
+        />
+      ) : null}
+
       <ScrollView style={styles.scrollView}>
         <ViewShot
           style={styles.viewShot}
@@ -85,6 +96,14 @@ const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
           title="音読練習をする"
         />
         <Space size={24} />
+        {diary.voiceUrl ? (
+          <WhiteButton
+            containerStyle={styles.button}
+            icon={iconMyVoice}
+            title="自分の音声を聞く"
+            onPress={(): void => setVisibleVoice(true)}
+          />
+        ) : null}
         <WhiteButton
           containerStyle={styles.button}
           icon={iconMachine}
@@ -97,14 +116,6 @@ const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
           icon={iconRecord}
           onPress={goToRecord}
         />
-        {diary.voiceUrl ? (
-          <WhiteButton
-            containerStyle={styles.button}
-            icon={iconMyVoice}
-            title="自分の音声を聞く"
-            onPress={onPressMyVoiice}
-          />
-        ) : null}
         <Space size={32} />
         <View style={styles.button}>
           {Platform.OS !== 'web' ? (
