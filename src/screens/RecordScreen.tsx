@@ -4,15 +4,14 @@ import Slider from '@react-native-community/slider';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 // import * as Font from 'expo-font';
 import * as FileSystem from 'expo-file-system';
-import * as Permissions from 'expo-permissions';
+import * as Font from 'expo-font';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { useFonts } from '@use-expo/font';
 import firebase from '../constants/firebase';
 import {
   HeaderText,
   HoverableIcon,
-  SmallButtonSubmit,
+  LoadingModal,
   SmallButtonWhite,
 } from '../components/atoms';
 import { Diary, Profile } from '../types';
@@ -33,14 +32,14 @@ import {
 import { uploadStorageAsync } from '../utils/storage';
 import { ModalConfirm } from '../components/organisms';
 
-export interface Props {
+export type Props = {
   diary?: Diary;
   profile: Profile;
-}
+};
 
-interface DispatchProps {
+type DispatchProps = {
   editDiary: (objectID: string, diary: Diary) => void;
-}
+};
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<ModalRecordStackParamList, 'Record'>,
@@ -90,22 +89,12 @@ const styles = StyleSheet.create({
     fontSize: fontSizeS,
     textAlign: 'center',
     textAlignVertical: 'center',
-    // fontFamily: 'RobotoMono',
+    fontFamily: 'RobotoMono',
   },
   recordingText: {
     position: 'absolute',
     right: 20,
     paddingTop: 4,
-  },
-  noPermissionsContainer: {
-    padding: 16,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  noPermissionsText: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.3,
   },
   saveButton: {
     position: 'absolute',
@@ -114,10 +103,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// type Props = {};
-
 type State = {
-  haveRecordingPermissions: boolean;
   isLoading: boolean;
   isSaving: boolean;
   saved: boolean;
@@ -147,15 +133,16 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
 
   private readonly recordingSettings: Audio.RecordingOptions;
 
-  constructor(props: Props) {
+  constructor(props: ScreenType) {
     super(props);
     this.recording = null;
     this.sound = null;
     this.isSeeking = false;
     this.shouldPlayAtEndOfSeek = false;
     this.state = {
-      haveRecordingPermissions: false,
       isLoading: false,
+      isSaving: false,
+      saved: false,
       isPlaybackAllowed: false,
       muted: false,
       soundPosition: null,
@@ -164,14 +151,12 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       shouldPlay: false,
       isPlaying: false,
       isRecording: false,
-      saved: false,
       fontLoaded: false,
       isModaleVoiceDelete: false,
       shouldCorrectPitch: true,
       volume: 1.0,
       rate: 1.0,
     };
-    // this.recordingSettings = Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY;
 
     this.recordingSettings = {
       android: {
@@ -208,9 +193,10 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
   componentDidMount() {
     const { navigation } = this.props;
     (async () => {
-      // await Font.loadAsync({
-      //   RobotoMono: require('../styles/fonts/RobotoMono-Regular.ttf'),
-      // });
+      await Font.loadAsync({
+        // eslint-disable-next-line global-require
+        RobotoMono: require('../styles/fonts/RobotoMono-Regular.ttf'),
+      });
       this.setState({ fontLoaded: true });
     })();
     // this.askForPermissions();
@@ -554,25 +540,14 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       isSaving,
       saved,
       isModaleVoiceDelete,
+      fontLoaded,
     } = this.state;
     const { profile, diary } = this.props;
     if (!diary) return null;
 
-    // if (!fontsLoaded) {
-    //   return <LoadingModal />;
-    // }
-
-    // if (!haveRecordingPermissions) {
-    //   // navigationの最初でチェックしているから基本はここには入らない
-    //   return (
-    //     <View style={styles.noPermissionsContainer}>
-    //       <Text style={[styles.noPermissionsText]}>
-    //         You must enable audio recording permissions in order to use this
-    //         app.
-    //       </Text>
-    //     </View>
-    //   );
-    // }
+    if (!fontLoaded) {
+      return <LoadingModal />;
+    }
 
     return (
       <SafeAreaView style={styles.safeAreaView}>
