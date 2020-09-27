@@ -2,13 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio, AVPlaybackStatus } from 'expo-av';
+// import * as Font from 'expo-font';
 import * as FileSystem from 'expo-file-system';
 import * as Permissions from 'expo-permissions';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useFonts } from '@use-expo/font';
 import firebase from '../constants/firebase';
-import { HeaderText, HoverableIcon, LoadingModal } from '../components/atoms';
+import {
+  HeaderText,
+  HoverableIcon,
+  SmallButtonSubmit,
+  SmallButtonWhite,
+} from '../components/atoms';
 import { Diary, Profile } from '../types';
 import I18n from '../utils/I18n';
 import {
@@ -25,6 +31,7 @@ import {
   softRed,
 } from '../styles/Common';
 import { uploadStorageAsync } from '../utils/storage';
+import { ModalConfirm } from '../components/organisms';
 
 export interface Props {
   diary?: Diary;
@@ -83,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeS,
     textAlign: 'center',
     textAlignVertical: 'center',
-    fontFamily: 'RobotoMono',
+    // fontFamily: 'RobotoMono',
   },
   recordingText: {
     position: 'absolute',
@@ -100,159 +107,199 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
   },
+  saveButton: {
+    position: 'absolute',
+    right: 5,
+    width: 100,
+  },
 });
 
-const recordingSettings: Audio.RecordingOptions =
-  Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY;
+// type Props = {};
 
-const RecordScreen: React.FC<ScreenType> = ({
-  navigation,
-  diary,
-  profile,
-  editDiary,
-}) => {
-  const [fontsLoaded] = useFonts({
-    // eslint-disable-next-line global-require
-    RobotoMono: require('../styles/fonts/RobotoMono-Regular.ttf'),
-  });
+type State = {
+  haveRecordingPermissions: boolean;
+  isLoading: boolean;
+  isSaving: boolean;
+  saved: boolean;
+  isPlaybackAllowed: boolean;
+  muted: boolean;
+  soundPosition: number | null;
+  soundDuration: number | null;
+  recordingDuration: number | null;
+  shouldPlay: boolean;
+  isPlaying: boolean;
+  isRecording: boolean;
+  isModaleVoiceDelete: boolean;
+  fontLoaded: boolean;
+  shouldCorrectPitch: boolean;
+  volume: number;
+  rate: number;
+};
 
-  const [haveRecordingPermissions, setHaveRecordingPermissions] = useState(
-    false
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPlaybackAllowed, setIsPlaybackAllowed] = useState(false);
-  const [muted, setMuted] = useState(false);
-  const [soundPosition, setSoundPosition] = useState<number | null>(null);
-  const [soundDuration, setSoundDuration] = useState<number | null>(null);
-  const [recordingDuration, setRecordingDuration] = useState<number | null>(
-    null
-  );
-  const [shouldPlay, setShouldPlay] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [shouldCorrectPitch, setShouldCorrectPitch] = useState(true);
-  const [volume, setVolume] = useState(1.0);
-  const [rate, setRate] = useState(1.0);
+export default class RecordScreen extends React.Component<ScreenType, State> {
+  private recording: Audio.Recording | null;
 
-  const [recording, setRecording] = useState<Audio.Recording | null>(null);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [isSeeking, setIsSeeking] = useState(false);
-  const [shouldPlayAtEndOfSeek, setShouldPlayAtEndOfSeek] = useState(false);
+  private sound: Audio.Sound | null;
 
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-      setHaveRecordingPermissions(response.status === 'granted');
+  private isSeeking: boolean;
+
+  private shouldPlayAtEndOfSeek: boolean;
+
+  private readonly recordingSettings: Audio.RecordingOptions;
+
+  constructor(props: Props) {
+    super(props);
+    this.recording = null;
+    this.sound = null;
+    this.isSeeking = false;
+    this.shouldPlayAtEndOfSeek = false;
+    this.state = {
+      haveRecordingPermissions: false,
+      isLoading: false,
+      isPlaybackAllowed: false,
+      muted: false,
+      soundPosition: null,
+      soundDuration: null,
+      recordingDuration: null,
+      shouldPlay: false,
+      isPlaying: false,
+      isRecording: false,
+      saved: false,
+      fontLoaded: false,
+      isModaleVoiceDelete: false,
+      shouldCorrectPitch: true,
+      volume: 1.0,
+      rate: 1.0,
     };
-    f();
-  }, []);
+    // this.recordingSettings = Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY;
 
-  /**
-   * ヘッダーに初期値設定
-   */
-  useEffect(() => {
+    this.recordingSettings = {
+      android: {
+        extension: '.m4a',
+        outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_MPEG_4,
+        audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AAC,
+        sampleRate: 44100,
+        numberOfChannels: 2,
+        bitRate: 128000,
+      },
+      ios: {
+        extension: '.m4a',
+        outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_MPEG4AAC,
+        audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
+        sampleRate: 44100,
+        numberOfChannels: 2,
+        bitRate: 128000,
+        linearPCMBitDepth: 16,
+        linearPCMIsBigEndian: false,
+        linearPCMIsFloat: false,
+      },
+    };
+
+    // UNCOMMENT THIS TO TEST maxFileSize:
+    /* this.recordingSettings = {
+      ...this.recordingSettings,
+      android: {
+        ...this.recordingSettings.android,
+        maxFileSize: 12000,
+      },
+    }; */
+  }
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    (async () => {
+      // await Font.loadAsync({
+      //   RobotoMono: require('../styles/fonts/RobotoMono-Regular.ttf'),
+      // });
+      this.setState({ fontLoaded: true });
+    })();
+    // this.askForPermissions();
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
         <HeaderText
           text={I18n.t('common.close')}
-          onPress={(): void => navigation.goBack()}
+          onPress={(): void => {
+            navigation.goBack();
+          }}
         />
       ),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }
 
-  const updateScreenForSoundStatus = (status: AVPlaybackStatus): void => {
-    // console.log('updateScreenForSoundStatus');
+  async componentWillUnmount() {
+    const { isRecording, isPlaying } = this.state;
+    console.log('componentWillUnmount');
+    if (this.recording !== null) {
+      console.log('this.recording !== null');
+      this.recording.setOnRecordingStatusUpdate(null);
+      if (isRecording) await this.recording.stopAndUnloadAsync();
+      this.recording = null;
+    }
+
+    if (this.sound !== null) {
+      console.log('this.sound !== null');
+      this.sound.setOnPlaybackStatusUpdate(null);
+      await this.sound.unloadAsync();
+      this.sound = null;
+    }
+  }
+
+  private updateScreenForSoundStatus = (status: AVPlaybackStatus) => {
+    console.log('updateScreenForSoundStatus');
     if (status.isLoaded) {
-      setSoundDuration(status.durationMillis ?? null);
-      setSoundPosition(status.positionMillis);
-      setShouldPlay(status.shouldPlay);
-      setIsPlaying(status.isPlaying);
-      setRate(status.rate);
-      setMuted(status.isMuted);
-      setVolume(status.volume);
-      setShouldCorrectPitch(status.shouldCorrectPitch);
-      setIsPlaybackAllowed(true);
+      this.setState({
+        soundDuration: status.durationMillis ?? null,
+        soundPosition: status.positionMillis,
+        shouldPlay: status.shouldPlay,
+        isPlaying: status.isPlaying,
+        rate: status.rate,
+        muted: status.isMuted,
+        volume: status.volume,
+        shouldCorrectPitch: status.shouldCorrectPitch,
+        isPlaybackAllowed: true,
+      });
     } else {
-      setSoundDuration(null);
-      setSoundPosition(null);
-      setIsPlaybackAllowed(false);
+      this.setState({
+        soundDuration: null,
+        soundPosition: null,
+        isPlaybackAllowed: false,
+      });
       if (status.error) {
         console.log(`FATAL PLAYER ERROR: ${status.error}`);
       }
     }
   };
 
-  const stopRecordingAndEnablePlayback = async (): Promise<void> => {
-    setIsLoading(true);
-    if (!recording) {
-      return;
-    }
-    try {
-      await recording.stopAndUnloadAsync();
-    } catch (error) {
-      // On Android, calling stop before any data has been collected results in
-      // an E_AUDIO_NODATA error. This means no audio data has been written to
-      // the output file is invalid.
-      if (error.code === 'E_AUDIO_NODATA') {
-        console.log(
-          `Stop was called too quickly, no data has yet been received (${error.message})`
-        );
-      } else {
-        console.log('STOP ERROR: ', error.code, error.name, error.message);
-      }
-      setIsLoading(false);
-      return;
-    }
-    const info = await FileSystem.getInfoAsync(recording.getURI() || '');
-    console.log(`FILE INFO: ${JSON.stringify(info)}`);
-
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: false,
-      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
-      shouldDuckAndroid: true,
-      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
-      playThroughEarpieceAndroid: false,
-      staysActiveInBackground: true,
-    });
-    const result = await recording.createNewLoadedSoundAsync(
-      {
-        isLooping: false,
-        isMuted: muted,
-        volume,
-        rate,
-        shouldCorrectPitch,
-      },
-      updateScreenForSoundStatus
-    );
-    setSound(result.sound);
-    setIsLoading(false);
-  };
-
-  const updateScreenForRecordingStatus = (
+  private updateScreenForRecordingStatus = (
     status: Audio.RecordingStatus
   ): void => {
+    const { isLoading } = this.state;
+    console.log('updateScreenForRecordingStatus', status);
     if (status.canRecord) {
-      setIsRecording(status.isRecording);
-      setRecordingDuration(status.durationMillis);
+      this.setState({
+        isRecording: status.isRecording,
+        recordingDuration: status.durationMillis,
+      });
     } else if (status.isDoneRecording) {
-      setIsRecording(false);
-      setRecordingDuration(status.durationMillis);
+      this.setState({
+        isRecording: false,
+        recordingDuration: status.durationMillis,
+      });
       if (!isLoading) {
-        stopRecordingAndEnablePlayback();
+        this.stopRecordingAndEnablePlayback();
       }
     }
   };
 
-  const stopPlaybackAndBeginRecording = async (): Promise<void> => {
-    setIsLoading(true);
-
-    if (sound !== null) {
-      await sound.unloadAsync();
-      sound.setOnPlaybackStatusUpdate(null);
-      setSound(null);
+  private stopPlaybackAndBeginRecording = async (): Promise<void> => {
+    console.log('stopPlaybackAndBeginRecording');
+    this.setState({
+      isLoading: true,
+    });
+    if (this.sound !== null) {
+      await this.sound.unloadAsync();
+      this.sound.setOnPlaybackStatusUpdate(null);
+      this.sound = null;
     }
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
@@ -263,70 +310,138 @@ const RecordScreen: React.FC<ScreenType> = ({
       playThroughEarpieceAndroid: false,
       staysActiveInBackground: true,
     });
-    if (recording !== null) {
-      recording.setOnRecordingStatusUpdate(null);
-      setRecording(null);
+    if (this.recording !== null) {
+      this.recording.setOnRecordingStatusUpdate(null);
+      this.recording = null;
     }
 
-    const newRecording = new Audio.Recording();
-    await newRecording.prepareToRecordAsync(recordingSettings);
-    newRecording.setOnRecordingStatusUpdate(updateScreenForRecordingStatus);
+    const recording = new Audio.Recording();
+    await recording.prepareToRecordAsync(this.recordingSettings);
+    recording.setOnRecordingStatusUpdate(this.updateScreenForRecordingStatus);
 
-    setRecording(newRecording);
-    await newRecording.startAsync(); // Will call this._updateScreenForRecordingStatus to update the screen.
-
-    setIsLoading(false);
+    this.recording = recording;
+    await this.recording.startAsync(); // Will call this.updateScreenForRecordingStatus to update the screen.
+    this.setState({
+      isLoading: false,
+    });
   };
 
-  const onRecordPressed = (): void => {
+  private stopRecordingAndEnablePlayback = async (): Promise<void> => {
+    const { muted, volume, rate, shouldCorrectPitch } = this.state;
+    this.setState({
+      isLoading: true,
+    });
+    if (!this.recording) {
+      return;
+    }
+    try {
+      await this.recording.stopAndUnloadAsync();
+    } catch (error) {
+      // On Android, calling stop before any data has been collected results in
+      // an EAUDIONODATA error. This means no audio data has been written to
+      // the output file is invalid.
+      if (error.code === 'EAUDIONODATA') {
+        console.log(
+          `Stop was called too quickly, no data has yet been received (${error.message})`
+        );
+      } else {
+        console.log('STOP ERROR: ', error.code, error.name, error.message);
+      }
+      this.setState({
+        isLoading: false,
+      });
+      return;
+    }
+    const info = await FileSystem.getInfoAsync(this.recording.getURI() || '');
+    console.log(`FILE INFO: ${JSON.stringify(info)}`);
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: false,
+      staysActiveInBackground: true,
+    });
+    console.log(' aaaa');
+    const { sound } = await this.recording.createNewLoadedSoundAsync(
+      {
+        isLooping: false,
+        isMuted: muted,
+        volume,
+        rate,
+        shouldCorrectPitch,
+      },
+      this.updateScreenForSoundStatus
+    );
+    console.log(' bbbbb');
+
+    console.log(' this.sound = sound;');
+    this.sound = sound;
+    this.setState({
+      isLoading: false,
+    });
+  };
+
+  private onRecordPressed = (): void => {
+    console.log('onRecordPressed');
+    const { isRecording } = this.state;
     if (isRecording) {
-      stopRecordingAndEnablePlayback();
+      this.stopRecordingAndEnablePlayback();
     } else {
-      stopPlaybackAndBeginRecording();
+      this.stopPlaybackAndBeginRecording();
     }
   };
 
-  const getSeekSliderPosition = (): number => {
-    if (sound != null && soundPosition != null && soundDuration != null) {
+  private onPlayPausePressed = async (): Promise<void> => {
+    const { isPlaying } = this.state;
+
+    if (this.sound != null) {
+      if (isPlaying) {
+        this.sound.pauseAsync();
+      } else {
+        if (this.getSeekSliderPosition() === 1) {
+          await this.sound.stopAsync();
+        }
+        this.sound.playAsync();
+      }
+    }
+  };
+
+  private onSeekSliderValueChange = (): void => {
+    const { shouldPlay } = this.state;
+
+    if (this.sound != null && !this.isSeeking) {
+      this.isSeeking = true;
+      this.shouldPlayAtEndOfSeek = shouldPlay;
+      this.sound.pauseAsync();
+    }
+  };
+
+  private onSeekSliderSlidingComplete = async (
+    value: number
+  ): Promise<void> => {
+    const { soundDuration } = this.state;
+    if (this.sound != null) {
+      this.isSeeking = false;
+      const seekPosition = value * (soundDuration || 0);
+      if (this.shouldPlayAtEndOfSeek) {
+        this.sound.playFromPositionAsync(seekPosition);
+      } else {
+        this.sound.setPositionAsync(seekPosition);
+      }
+    }
+  };
+
+  private getSeekSliderPosition = (): number => {
+    const { soundPosition, soundDuration } = this.state;
+    if (this.sound != null && soundPosition != null && soundDuration != null) {
       return soundPosition / soundDuration;
     }
     return 0;
   };
 
-  const onPlayPausePressed = async (): Promise<void> => {
-    if (sound != null) {
-      if (isPlaying) {
-        await sound.pauseAsync();
-      } else {
-        if (getSeekSliderPosition() === 1) {
-          await sound.stopAsync();
-        }
-        await sound.playAsync();
-      }
-    }
-  };
-
-  const onSeekSliderValueChange = (): void => {
-    if (sound != null && !isSeeking) {
-      setIsSeeking(true);
-      setShouldPlayAtEndOfSeek(shouldPlay);
-      sound.pauseAsync();
-    }
-  };
-
-  const onSeekSliderSlidingComplete = async (value: number): Promise<void> => {
-    if (sound != null) {
-      setIsSeeking(false);
-      const seekPosition = value * (soundDuration || 0);
-      if (shouldPlayAtEndOfSeek) {
-        sound.playFromPositionAsync(seekPosition);
-      } else {
-        sound.setPositionAsync(seekPosition);
-      }
-    }
-  };
-
-  const getMMSSFromMillis = (millis: number): string => {
+  private getMMSSFromMillis = (millis: number): string => {
     const totalSeconds = millis / 1000;
     const seconds = Math.floor(totalSeconds % 60);
     const minutes = Math.floor(totalSeconds / 60);
@@ -341,36 +456,43 @@ const RecordScreen: React.FC<ScreenType> = ({
     return `${padWithZero(minutes)}:${padWithZero(seconds)}`;
   };
 
-  const getPlaybackTimestamp = (): string => {
-    if (sound != null && soundPosition != null && soundDuration != null) {
-      return `${getMMSSFromMillis(soundPosition)} / ${getMMSSFromMillis(
-        soundDuration
-      )}`;
+  private getPlaybackTimestamp = (): string => {
+    const { soundPosition, soundDuration } = this.state;
+
+    if (this.sound != null && soundPosition != null && soundDuration != null) {
+      return `${this.getMMSSFromMillis(
+        soundPosition
+      )} / ${this.getMMSSFromMillis(soundDuration)}`;
     }
     return '';
   };
 
-  const getRecordingTimestamp = (): string => {
+  private getRecordingTimestamp = (): string => {
+    const { recordingDuration } = this.state;
+
     if (recordingDuration != null) {
-      return `${getMMSSFromMillis(recordingDuration)}`;
+      return `${this.getMMSSFromMillis(recordingDuration)}`;
     }
-    return `${getMMSSFromMillis(0)}`;
+    return `${this.getMMSSFromMillis(0)}`;
   };
 
-  const onPressSave = async (): Promise<void> => {
-    if (!recording || !diary || !diary.objectID) return;
-    if (isLoading) return;
+  private onPressSave = async (): Promise<void> => {
+    const { isLoading, isSaving } = this.state;
+    const { profile, diary, editDiary } = this.props;
 
-    setIsLoading(true);
-
-    const info = await FileSystem.getInfoAsync(recording.getURI() || '');
+    if (!this.recording || !diary || !diary.objectID) return;
+    if (isLoading || isSaving) return;
+    this.setState({
+      isSaving: true,
+    });
+    const info = await FileSystem.getInfoAsync(this.recording.getURI() || '');
     if (!info.exists) {
-      setIsLoading(false);
+      this.setState({
+        isSaving: false,
+      });
     }
     const path = `voices/${profile.uid}/${diary.objectID}`;
-
     const voiceUrl = await uploadStorageAsync(path, info.uri);
-
     await firebase
       .firestore()
       .doc(`diaries/${diary.objectID}`)
@@ -378,85 +500,162 @@ const RecordScreen: React.FC<ScreenType> = ({
         voiceUrl,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
-
     editDiary(diary.objectID, {
       ...diary,
       voiceUrl,
     });
-
-    setIsLoading(false);
+    this.setState({
+      isSaving: false,
+      saved: true,
+    });
   };
 
-  if (!diary) return null;
+  private onPressVoiceDelete = async (): Promise<void> => {
+    const { isLoading, isSaving, isPlaying } = this.state;
+    const { diary, editDiary } = this.props;
 
-  if (!fontsLoaded) {
-    return <LoadingModal />;
-  }
+    if (!this.recording || !diary || !diary.objectID) return;
+    if (isLoading || isSaving) return;
+    this.setState({
+      isSaving: true,
+    });
 
-  if (!haveRecordingPermissions) {
-    // navigationの最初でチェックしているから基本はここには入らない
+    if (this.sound != null) {
+      await this.sound.unloadAsync();
+      this.sound.setOnPlaybackStatusUpdate(null);
+      this.sound = null;
+    }
+
+    await firebase
+      .firestore()
+      .doc(`diaries/${diary.objectID}`)
+      .update({
+        voiceUrl: null,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    editDiary(diary.objectID, {
+      ...diary,
+      voiceUrl: null,
+    });
+
+    this.setState({
+      isSaving: false,
+      saved: false,
+      isModaleVoiceDelete: false,
+    });
+  };
+
+  render(): JSX.Element | null {
+    const {
+      isPlaybackAllowed,
+      isLoading,
+      isRecording,
+      isPlaying,
+      isSaving,
+      saved,
+      isModaleVoiceDelete,
+    } = this.state;
+    const { profile, diary } = this.props;
+    if (!diary) return null;
+
+    // if (!fontsLoaded) {
+    //   return <LoadingModal />;
+    // }
+
+    // if (!haveRecordingPermissions) {
+    //   // navigationの最初でチェックしているから基本はここには入らない
+    //   return (
+    //     <View style={styles.noPermissionsContainer}>
+    //       <Text style={[styles.noPermissionsText]}>
+    //         You must enable audio recording permissions in order to use this
+    //         app.
+    //       </Text>
+    //     </View>
+    //   );
+    // }
+
     return (
-      <View style={styles.noPermissionsContainer}>
-        <Text style={[styles.noPermissionsText]}>
-          You must enable audio recording permissions in order to use this app.
-        </Text>
-      </View>
+      <SafeAreaView style={styles.safeAreaView}>
+        <ModalConfirm
+          visible={isModaleVoiceDelete}
+          title={I18n.t('common.confirmation')}
+          message="削除してよろしいですか？"
+          mainButtonText="OK"
+          onPressMain={this.onPressVoiceDelete}
+          onPressClose={(): void => {
+            this.setState({ isModaleVoiceDelete: false });
+          }}
+        />
+        <View style={styles.container}>
+          <ScrollView style={styles.scrollView}>
+            <DiaryTitleAndText
+              nativeLanguage={profile.nativeLanguage}
+              textLanguage={profile.learnLanguage}
+              title={diary.fairCopyTitle || diary.title}
+              text={diary.fairCopyText || diary.text}
+            />
+          </ScrollView>
+          {this.sound ? (
+            <View style={styles.playContaier}>
+              <Slider
+                minimumTrackTintColor={primaryColor}
+                value={this.getSeekSliderPosition()}
+                onValueChange={this.onSeekSliderValueChange}
+                onSlidingComplete={this.onSeekSliderSlidingComplete}
+                disabled={!isPlaybackAllowed || isLoading}
+              />
+              <Text style={styles.timestampText}>
+                {this.getPlaybackTimestamp()}
+              </Text>
+              <View style={styles.playButtonContainer}>
+                <HoverableIcon
+                  disabled={!isPlaybackAllowed || isLoading}
+                  icon="community"
+                  name={isPlaying ? 'pause' : 'play'}
+                  size={56}
+                  color={primaryColor}
+                  onPress={this.onPlayPausePressed}
+                />
+                {saved ? (
+                  <SmallButtonWhite
+                    containerStyle={styles.saveButton}
+                    isLoading={isSaving}
+                    color={primaryColor}
+                    title="削除する"
+                    onPress={(): void => {
+                      this.setState({ isModaleVoiceDelete: true });
+                    }}
+                  />
+                ) : (
+                  <SmallButtonWhite
+                    containerStyle={styles.saveButton}
+                    isLoading={isSaving}
+                    color={primaryColor}
+                    title="保存する"
+                    onPress={this.onPressSave}
+                  />
+                )}
+              </View>
+            </View>
+          ) : null}
+
+          <View style={styles.recordButtonContainer}>
+            <HoverableIcon
+              disabled={isLoading}
+              icon="community"
+              name={isRecording ? 'stop' : 'record'}
+              size={64}
+              color={softRed}
+              onPress={this.onRecordPressed}
+            />
+            {isRecording ? (
+              <Text style={[styles.timestampText, styles.recordingText]}>
+                {this.getRecordingTimestamp()}
+              </Text>
+            ) : null}
+          </View>
+        </View>
+      </SafeAreaView>
     );
   }
-
-  return (
-    <SafeAreaView style={styles.safeAreaView}>
-      <View style={styles.container}>
-        <ScrollView style={styles.scrollView}>
-          <DiaryTitleAndText
-            nativeLanguage={profile.nativeLanguage}
-            textLanguage={profile.learnLanguage}
-            title={diary.fairCopyTitle || diary.title}
-            text={diary.fairCopyText || diary.text}
-          />
-        </ScrollView>
-        {sound ? (
-          <View style={styles.playContaier}>
-            <Slider
-              minimumTrackTintColor={primaryColor}
-              value={getSeekSliderPosition()}
-              onValueChange={onSeekSliderValueChange}
-              onSlidingComplete={onSeekSliderSlidingComplete}
-              disabled={!isPlaybackAllowed || isLoading}
-            />
-            <Text style={styles.timestampText}>{getPlaybackTimestamp()}</Text>
-            <View style={styles.playButtonContainer}>
-              <HoverableIcon
-                disabled={!isPlaybackAllowed || isLoading}
-                icon="community"
-                name={isPlaying ? 'pause' : 'play'}
-                size={56}
-                color={primaryColor}
-                onPress={onPlayPausePressed}
-              />
-              <Text onPress={onPressSave}>保存する</Text>
-            </View>
-          </View>
-        ) : null}
-
-        <View style={styles.recordButtonContainer}>
-          <HoverableIcon
-            disabled={isLoading}
-            icon="community"
-            name={isRecording ? 'stop' : 'record'}
-            size={64}
-            color={softRed}
-            onPress={onRecordPressed}
-          />
-          {isRecording ? (
-            <Text style={[styles.timestampText, styles.recordingText]}>
-              {getRecordingTimestamp()}
-            </Text>
-          ) : null}
-        </View>
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default RecordScreen;
+}
