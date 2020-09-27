@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { YellowBox, StatusBar, Platform } from 'react-native';
+import { LogBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
 import { Provider } from 'react-redux';
@@ -17,8 +17,8 @@ import RootNavigatorContainer from './containers/RootNavigatorContainer';
 import { getConfig } from './navigations/root';
 
 // Ignore warnings of firebase
-YellowBox.ignoreWarnings(['Setting a timer']);
-YellowBox.ignoreWarnings(['Remote debugger']);
+// LogBox.ignoreLogs(['Setting a timer']);
+// LogBox.ignoreLogs(['Remote debugger']);
 
 const { store, persistor } = configureStore();
 
@@ -26,7 +26,7 @@ const { store, persistor } = configureStore();
 Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
-  enableInExpoDevelopment: true,
+  enableInExpoDevelopment: false,
   debug: false,
 });
 
