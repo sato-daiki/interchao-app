@@ -9,7 +9,7 @@ import {
 } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
 import { ModalConfirm } from '../components/organisms';
@@ -224,12 +224,6 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     if (!diary || !diary.objectID) return;
     if (isLoading) return;
     setIsLoading(true);
-    const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-    if (response.status !== 'granted') {
-      setIsModalAlertRecord(true);
-      setIsLoading(false);
-      return;
-    }
     navigation.navigate('ModalReview', {
       screen: 'Review',
       params: {
@@ -241,8 +235,15 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     setIsLoading(false);
   };
 
-  const goToRecord = (): void => {
+  const goToRecord = async (): Promise<void> => {
     if (!diary || !diary.objectID) return;
+    const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+    if (response.status !== 'granted') {
+      setIsModalAlertRecord(true);
+      setIsLoading(false);
+      return;
+    }
+
     navigation.navigate('ModalRecord', {
       screen: 'Record',
       params: { objectID: diary.objectID },
@@ -308,7 +309,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         title={I18n.t('common.confirmation')}
         message="権限がないでごわす！"
         mainButtonText="OK"
-        onPressMain={onClose}
+        onPressMain={(): void => setIsModalAlertRecord(false)}
         onPressClose={(): void => setIsModalAlertRecord(false)}
       />
       <TabView
