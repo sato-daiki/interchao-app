@@ -1,11 +1,17 @@
 import React from 'react';
-import { View, StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
 import { primaryColor, fontSizeM, fontSizeS } from '../../styles/Common';
 import { Modal } from '../template';
-import { WhiteButton, Space, HoverableIcon, SubmitButton } from '../atoms';
+import { WhiteButton, Space, HoverableIcon } from '../atoms';
 import I18n from '../../utils/I18n';
-import { useAudio } from './audio/hooks';
 
 const { height } = Dimensions.get('window');
 
@@ -26,9 +32,8 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
   },
   playButtonContainer: {
-    marginTop: 16,
     alignItems: 'center',
-    justifyContent: 'center',
+    height: 100,
   },
   timestampText: {
     color: primaryColor,
@@ -42,40 +47,30 @@ const styles = StyleSheet.create({
 interface Props {
   visible: boolean;
   text: string;
-  voiceUrl: string;
-  afterClose: () => void;
+  isPlaybackAllowed: boolean;
+  isLoading: boolean;
+  isPlaying: boolean;
+  onSeekSliderValueChange: () => void;
+  onSeekSliderSlidingComplete: (value: number) => Promise<void>;
+  getSeekSliderPosition: () => number;
+  getPlaybackTimestamp: () => string;
+  onPlayPausePressed: () => void;
+  onPressClose: () => void;
 }
 
 const ModalVoice: React.FC<Props> = ({
   visible,
   text,
-  voiceUrl,
-  afterClose,
+  isPlaybackAllowed,
+  isLoading,
+  isPlaying,
+  onSeekSliderValueChange,
+  onSeekSliderSlidingComplete,
+  getSeekSliderPosition,
+  getPlaybackTimestamp,
+  onPlayPausePressed,
+  onPressClose,
 }: Props): JSX.Element | null => {
-  const {
-    isPlaying,
-    isPlaybackAllowed,
-    isLoading,
-    getSeekSliderPosition,
-    getPlaybackTimestamp,
-    onPlayPausePressed,
-    onSeekSliderValueChange,
-    onSeekSliderSlidingComplete,
-    onClose,
-  } = useAudio({
-    source: { uri: voiceUrl },
-    visible,
-  });
-
-  const onPressClose = async (): Promise<void> => {
-    await onClose();
-    afterClose();
-  };
-
-  if (!visible) {
-    return null;
-  }
-
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
@@ -94,14 +89,18 @@ const ModalVoice: React.FC<Props> = ({
           <Text style={styles.timestampText}>{getPlaybackTimestamp()}</Text>
           <Space size={8} />
           <View style={styles.playButtonContainer}>
-            <HoverableIcon
-              disabled={!isPlaybackAllowed || isLoading}
-              icon="community"
-              name={isPlaying ? 'pause' : 'play'}
-              size={56}
-              color={primaryColor}
-              onPress={onPlayPausePressed}
-            />
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <HoverableIcon
+                disabled={!isPlaybackAllowed || isLoading}
+                icon="community"
+                name={isPlaying ? 'pause' : 'play'}
+                size={56}
+                color={primaryColor}
+                onPress={onPlayPausePressed}
+              />
+            )}
           </View>
           <Space size={32} />
           <WhiteButton title={I18n.t('common.close')} onPress={onPressClose} />

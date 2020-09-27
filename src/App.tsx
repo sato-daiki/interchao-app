@@ -18,7 +18,7 @@ import { getConfig } from './navigations/root';
 
 // Ignore warnings of firebase
 // LogBox.ignoreLogs(['Setting a timer']);
-// LogBox.ignoreLogs(['Remote debugger']);
+LogBox.ignoreLogs(['Remote debugger']);
 
 const { store, persistor } = configureStore();
 

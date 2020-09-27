@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
-import { Audio } from 'expo-av';
+import { Audio, AVPlaybackStatus } from 'expo-av';
 import { GrayHeader, ShareButton, Space, WhiteButton } from '../atoms';
 import DiaryOriginal from './DiaryOriginal';
 
@@ -15,6 +15,7 @@ export interface Props {
   diary: Diary;
   profile: Profile;
   goToRecord: () => void;
+  checkPermissions: () => Promise<boolean>;
 }
 
 const styles = StyleSheet.create({
@@ -39,11 +40,135 @@ const styles = StyleSheet.create({
   },
 });
 
-const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
+const FairCopy: React.FC<Props> = ({
+  diary,
+  profile,
+  goToRecord,
+  checkPermissions,
+}) => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
   const [visibleVoice, setVisibleVoice] = useState(false);
 
   const viewShotRef = useRef<ViewShot | null>(null);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaybackAllowed, setIsPlaybackAllowed] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(false);
+  const [isSeeking, setIsSeeking] = useState(false);
+  const [shouldPlayAtEndOfSeek, setShouldPlayAtEndOfSeek] = useState(false);
+  const [shouldPlay, setShouldPlay] = useState(false);
+
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+  const [soundPosition, setSoundPosition] = useState<number | null>(null);
+  const [soundDuration, setSoundDuration] = useState<number | null>(null);
+
+  const updateScreenForSoundStatus = (status: AVPlaybackStatus) => {
+    console.log('updateScreenForSoundStatus', status);
+    if (status.isLoaded) {
+      setSoundDuration(status.durationMillis ?? null);
+      setSoundPosition(status.positionMillis);
+      setShouldPlay(status.shouldPlay);
+      setIsPlaying(status.isPlaying);
+      setIsPlaybackAllowed(true);
+    } else {
+      setSoundDuration(null);
+      setSoundPosition(null);
+      setIsPlaybackAllowed(false);
+      if (status.error) {
+        console.log(`FATAL PLAYER ERROR: ${status.error}`);
+      }
+    }
+  };
+
+  const onSeekSliderValueChange = (): void => {
+    console.log('onSeekSliderValueChange');
+    if (sound != null && !isSeeking) {
+      setIsSeeking(true);
+      setShouldPlayAtEndOfSeek(shouldPlay);
+      sound.pauseAsync();
+    }
+  };
+
+  const onSeekSliderSlidingComplete = async (value: number): Promise<void> => {
+    if (sound != null) {
+      setIsSeeking(false);
+      const seekPosition = value * (soundDuration || 0);
+      if (shouldPlayAtEndOfSeek) {
+        sound.playFromPositionAsync(seekPosition);
+      } else {
+        sound.setPositionAsync(seekPosition);
+      }
+    }
+  };
+
+  const getMMSSFromMillis = (millis: number): string => {
+    const totalSeconds = millis / 1000;
+    const seconds = Math.floor(totalSeconds % 60);
+    const minutes = Math.floor(totalSeconds / 60);
+
+    const padWithZero = (number: number): string => {
+      const string = number.toString();
+      if (number < 10) {
+        return `0${string}`;
+      }
+      return string;
+    };
+    return `${padWithZero(minutes)}:${padWithZero(seconds)}`;
+  };
+
+  const getSeekSliderPosition = (): number => {
+    if (sound != null && soundPosition != null && soundDuration != null) {
+      return soundPosition / soundDuration;
+    }
+    return 0;
+  };
+
+  const getPlaybackTimestamp = (): string => {
+    if (sound != null && soundPosition != null && soundDuration != null) {
+      return `${getMMSSFromMillis(soundPosition)} / ${getMMSSFromMillis(
+        soundDuration
+      )}`;
+    }
+    return '';
+  };
+
+  const onPlayPausePressed = async (): Promise<void> => {
+    if (sound !== null) {
+      if (isPlaying) {
+        sound.pauseAsync();
+      } else {
+        if (getSeekSliderPosition() === 1) {
+          await sound.stopAsync();
+        }
+        sound.playAsync();
+      }
+    }
+  };
+
+  const onPressClose = async (): Promise<void> => {
+    if (sound !== null) {
+      console.log('soundObject !== null');
+
+      sound.setOnPlaybackStatusUpdate(null);
+      await sound.unloadAsync();
+      // setSound(null);
+    }
+    setVisibleVoice(false);
+  };
+
+  const onPressMyVoice = async (): Promise<void> => {
+    if (!diary.voiceUrl) return;
+    const res = await checkPermissions();
+    if (!res) return;
+    setVisibleVoice(true);
+    setIsInitialLoading(true);
+    const newSound = new Audio.Sound();
+    newSound.setOnPlaybackStatusUpdate(updateScreenForSoundStatus);
+    await newSound.loadAsync({ uri: diary.voiceUrl });
+    setSound(newSound);
+    setIsInitialLoading(false);
+  };
 
   const iconHeader = <AntDesign size={22} color={primaryColor} name="like1" />;
 
@@ -67,12 +192,19 @@ const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
         textLanguage={profile.learnLanguage}
         onClose={(): void => setVisibleSpeech(false)}
       />
-      {diary.voiceUrl && visibleVoice ? (
+      {diary.voiceUrl ? (
         <ModalVoice
           visible={visibleVoice}
           text={diary.fairCopyText || diary.text}
-          voiceUrl={diary.voiceUrl}
-          afterClose={(): void => setVisibleVoice(false)}
+          isPlaybackAllowed={isPlaybackAllowed}
+          isLoading={isInitialLoading}
+          isPlaying={isPlaying}
+          onSeekSliderValueChange={onSeekSliderValueChange}
+          onSeekSliderSlidingComplete={onSeekSliderSlidingComplete}
+          getSeekSliderPosition={getSeekSliderPosition}
+          getPlaybackTimestamp={getPlaybackTimestamp}
+          onPlayPausePressed={onPlayPausePressed}
+          onPressClose={onPressClose}
         />
       ) : null}
 
@@ -101,7 +233,7 @@ const FairCopy: React.FC<Props> = ({ diary, profile, goToRecord }) => {
             containerStyle={styles.button}
             icon={iconMyVoice}
             title="自分の音声を聞く"
-            onPress={(): void => setVisibleVoice(true)}
+            onPress={onPressMyVoice}
           />
         ) : null}
         <WhiteButton

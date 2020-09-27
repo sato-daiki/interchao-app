@@ -81,7 +81,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalDelete, setIsModalDelete] = useState(false);
-  const [isModalAlertRecord, setIsModalAlertRecord] = useState(false);
+  const [isModalAlertAudio, setIsModalAlertAudio] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
@@ -235,14 +235,21 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     setIsLoading(false);
   };
 
-  const goToRecord = async (): Promise<void> => {
-    if (!diary || !diary.objectID) return;
+  const checkPermissions = async (): Promise<boolean> => {
     const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     if (response.status !== 'granted') {
-      setIsModalAlertRecord(true);
+      setIsModalAlertAudio(true);
       setIsLoading(false);
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const goToRecord = async (): Promise<void> => {
+    if (!diary || !diary.objectID) return;
+
+    const res = await checkPermissions();
+    if (!res) return;
 
     navigation.navigate('ModalRecord', {
       screen: 'Record',
@@ -269,7 +276,12 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         );
       case 'fairCopy':
         return !isEditing ? (
-          <FairCopy diary={diary} profile={profile} goToRecord={goToRecord} />
+          <FairCopy
+            diary={diary}
+            profile={profile}
+            goToRecord={goToRecord}
+            checkPermissions={checkPermissions}
+          />
         ) : (
           <FairCopyEdit
             title={fairCopyTitle}
@@ -305,12 +317,12 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         onPressClose={(): void => setIsModalConfirmation(false)}
       />
       <ModalConfirm
-        visible={isModalAlertRecord}
+        visible={isModalAlertAudio}
         title={I18n.t('common.confirmation')}
         message="権限がないでごわす！"
         mainButtonText="OK"
-        onPressMain={(): void => setIsModalAlertRecord(false)}
-        onPressClose={(): void => setIsModalAlertRecord(false)}
+        onPressMain={(): void => setIsModalAlertAudio(false)}
+        onPressClose={(): void => setIsModalAlertAudio(false)}
       />
       <TabView
         renderTabBar={(props): ReactNode => <MyDiaryTabBar {...props} />}
