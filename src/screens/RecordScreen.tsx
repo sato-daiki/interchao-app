@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, ScrollView, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Audio, AVPlaybackStatus } from 'expo-av';
-// import * as Font from 'expo-font';
 import * as FileSystem from 'expo-file-system';
 import * as Font from 'expo-font';
 import { CompositeNavigationProp } from '@react-navigation/native';
@@ -23,11 +22,11 @@ import {
 import { DiaryTitleAndText } from '../components/molecules';
 import {
   borderLightColor,
-  fontSizeM,
   fontSizeS,
   offWhite,
   primaryColor,
   softRed,
+  subTextColor,
 } from '../styles/Common';
 import { uploadStorageAsync } from '../utils/storage';
 import { ModalConfirm } from '../components/organisms';
@@ -100,6 +99,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 5,
     width: 100,
+  },
+  notSaveText: {
+    fontSize: fontSizeS,
+    color: subTextColor,
   },
 });
 
@@ -231,7 +234,6 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
   }
 
   private updateScreenForSoundStatus = (status: AVPlaybackStatus) => {
-    console.log('updateScreenForSoundStatus');
     if (status.isLoaded) {
       this.setState({
         soundDuration: status.durationMillis ?? null,
@@ -497,7 +499,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
   };
 
   private onPressVoiceDelete = async (): Promise<void> => {
-    const { isLoading, isSaving, isPlaying } = this.state;
+    const { isLoading, isSaving } = this.state;
     const { diary, editDiary } = this.props;
 
     if (!this.recording || !diary || !diary.objectID) return;
@@ -541,9 +543,41 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       saved,
       isModaleVoiceDelete,
       fontLoaded,
+      soundDuration,
     } = this.state;
     const { profile, diary } = this.props;
     if (!diary) return null;
+
+    const SaveButton = (): JSX.Element => {
+      if (saved) {
+        return (
+          <SmallButtonWhite
+            containerStyle={styles.saveButton}
+            isLoading={isSaving}
+            color={primaryColor}
+            title={I18n.t('record.delete')}
+            onPress={(): void => {
+              this.setState({ isModaleVoiceDelete: true });
+            }}
+          />
+        );
+      }
+
+      if (soundDuration && soundDuration / 1000 >= 120) {
+        return (
+          <Text style={styles.notSaveText}>{I18n.t('record.notSave')}</Text>
+        );
+      }
+      return (
+        <SmallButtonWhite
+          containerStyle={styles.saveButton}
+          isLoading={isSaving}
+          color={primaryColor}
+          title={I18n.t('record.save')}
+          onPress={this.onPressSave}
+        />
+      );
+    };
 
     if (!fontLoaded) {
       return <LoadingModal />;
@@ -554,7 +588,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
         <ModalConfirm
           visible={isModaleVoiceDelete}
           title={I18n.t('common.confirmation')}
-          message="削除してよろしいですか？"
+          message={I18n.t('record.confirmMessage')}
           mainButtonText="OK"
           onPressMain={this.onPressVoiceDelete}
           onPressClose={(): void => {
@@ -591,25 +625,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
                   color={primaryColor}
                   onPress={this.onPlayPausePressed}
                 />
-                {saved ? (
-                  <SmallButtonWhite
-                    containerStyle={styles.saveButton}
-                    isLoading={isSaving}
-                    color={primaryColor}
-                    title="削除する"
-                    onPress={(): void => {
-                      this.setState({ isModaleVoiceDelete: true });
-                    }}
-                  />
-                ) : (
-                  <SmallButtonWhite
-                    containerStyle={styles.saveButton}
-                    isLoading={isSaving}
-                    color={primaryColor}
-                    title="保存する"
-                    onPress={this.onPressSave}
-                  />
-                )}
+                {SaveButton()}
               </View>
             </View>
           ) : null}

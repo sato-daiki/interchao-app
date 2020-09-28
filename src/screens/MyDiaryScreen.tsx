@@ -319,7 +319,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       <ModalConfirm
         visible={isModalAlertAudio}
         title={I18n.t('common.confirmation')}
-        message="権限がないでごわす！"
+        message={I18n.t('myDiary.permissionAudio')}
         mainButtonText="OK"
         onPressMain={(): void => setIsModalAlertAudio(false)}
         onPressClose={(): void => setIsModalAlertAudio(false)}

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
-import { MaterialCommunityIcons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio, AVPlaybackStatus } from 'expo-av';
 import { GrayHeader, ShareButton, Space, WhiteButton } from '../atoms';
 import DiaryOriginal from './DiaryOriginal';
@@ -10,6 +10,7 @@ import { Diary, Profile } from '../../types';
 import { mainColor, primaryColor } from '../../styles/Common';
 import ModalSpeech from './ModalSpeech';
 import ModalVoice from './ModalVoice';
+import I18n from '../../utils/I18n';
 
 export interface Props {
   diary: Diary;
@@ -63,7 +64,7 @@ const FairCopy: React.FC<Props> = ({
   const [soundPosition, setSoundPosition] = useState<number | null>(null);
   const [soundDuration, setSoundDuration] = useState<number | null>(null);
 
-  const updateScreenForSoundStatus = (status: AVPlaybackStatus) => {
+  const updateScreenForSoundStatus = (status: AVPlaybackStatus): void => {
     console.log('updateScreenForSoundStatus', status);
     if (status.isLoaded) {
       setSoundDuration(status.durationMillis ?? null);
@@ -170,17 +171,19 @@ const FairCopy: React.FC<Props> = ({
     setIsInitialLoading(false);
   };
 
-  const iconHeader = <AntDesign size={22} color={primaryColor} name="like1" />;
+  const iconHeader = (
+    <MaterialCommunityIcons size={22} color={primaryColor} name="voice" />
+  );
 
   const iconMachine = (
-    <MaterialCommunityIcons size={22} color={mainColor} name="volume-high" />
+    <MaterialCommunityIcons size={20} color={mainColor} name="robot" />
   );
 
   const iconRecord = (
     <MaterialCommunityIcons size={24} color={mainColor} name="microphone" />
   );
 
-  const iconMyVoice = (
+  const iconHeadphones = (
     <MaterialCommunityIcons size={22} color={mainColor} name="headphones" />
   );
 
@@ -225,26 +228,26 @@ const FairCopy: React.FC<Props> = ({
         <GrayHeader
           titleStyle={styles.containerStyle}
           icon={iconHeader}
-          title="音読練習をする"
+          title={I18n.t('myDiary.voiceTitle')}
         />
         <Space size={24} />
         {diary.voiceUrl ? (
           <WhiteButton
             containerStyle={styles.button}
-            icon={iconMyVoice}
-            title="自分の音声を聞く"
+            icon={iconHeadphones}
+            title={I18n.t('myDiary.myVoice')}
             onPress={onPressMyVoice}
           />
         ) : null}
         <WhiteButton
           containerStyle={styles.button}
           icon={iconMachine}
-          title="機械の音声を聞く"
+          title={I18n.t('myDiary.machine')}
           onPress={(): void => setVisibleSpeech(true)}
         />
         <WhiteButton
           containerStyle={styles.button}
-          title="音声を録音する"
+          title={I18n.t('myDiary.record')}
           icon={iconRecord}
           onPress={goToRecord}
         />

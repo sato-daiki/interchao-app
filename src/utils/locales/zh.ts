@@ -190,6 +190,11 @@ const myDiary = {
   posted: '发表',
   fairCopy: '公平复制',
   closeAlert: '未保存的修改将会丢失。您确定要关闭吗？',
+  permissionAudio: '您必须启用录音权限才能使用此功能',
+  voiceTitle: '大声朗读培训',
+  myVoice: '聆听您录制的声音',
+  machine: '聆听机器的声音',
+  record: '录音',
 };
 
 const myDiaryList = {
@@ -316,6 +321,14 @@ const tutorialList = {
 const notFound = {
   text: '找不到您要查找的页',
   link: '返回首页',
+};
+
+const record = {
+  headerTitle: '记录',
+  confirmMessage: '你确定你要删除吗？',
+  save: '保存',
+  delete: '删除',
+  notSave: '超过2分钟的音频无法保存',
 };
 
 const userProfile = {
@@ -596,6 +609,7 @@ const zh = {
   tutorialList,
   userProfile,
   notFound,
+  record,
   commentCard,
   firstDiary,
   userPoints,

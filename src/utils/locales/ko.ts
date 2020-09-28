@@ -199,6 +199,11 @@ const myDiary = {
   posted: '게시 됨',
   fairCopy: '정서',
   closeAlert: '저장되지 않은 사항은 사라집니다. 그래도 계속 하시겠습니까?',
+  permissionAudio: '이 기능을 사용하려면 오디오 녹음 권한을 활성화해야합니다',
+  voiceTitle: '음독 교육',
+  myVoice: '녹음 된 음성 듣기',
+  machine: '기계의 음성 듣기',
+  record: '음성 녹음',
 };
 
 const myDiaryList = {
@@ -328,6 +333,14 @@ const tutorialList = {
 const notFound = {
   text: '찾고있는 페이지를 찾을 수 없습니다',
   link: '맨위로',
+};
+
+const record = {
+  headerTitle: '녹음',
+  confirmMessage: '삭제 하시겠습니까?',
+  save: '저장',
+  delete: '삭제하기',
+  notSave: '2 분 이상의 오디오는 저장할 수 없습니다',
 };
 
 const userProfile = {
@@ -612,6 +625,7 @@ const ko = {
   tutorialList,
   userProfile,
   notFound,
+  record,
   commentCard,
   firstDiary,
   userPoints,

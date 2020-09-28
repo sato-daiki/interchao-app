@@ -194,7 +194,7 @@ export const ModalRecordNavigator = (): JSX.Element => {
         options={{
           ...DefaultNavigationOptions,
           ...DefaultModalLayoutOptions,
-          // title: I18n.t('correcting.headerTitle'),
+          title: I18n.t('record.headerTitle'),
         }}
       />
     </ModalRecordStack.Navigator>
