@@ -201,6 +201,12 @@ const myDiary = {
   posted: '投稿済',
   fairCopy: '清書',
   closeAlert: '保存されていない変更は失われます。閉じてよろしいですか？',
+  permissionAudio:
+    'マイクの権限がないため、起動できません。設定画面からマイクの設定をONにしてください',
+  voiceTitle: '音読トレーニング',
+  myVoice: '自分の音声を聞く',
+  machine: '機械の音声を聞く',
+  record: '録音する',
 };
 
 const myDiaryList = {
@@ -343,6 +349,14 @@ const userProfile = {
 const notFound = {
   text: 'お探しのページは見つかりませんでした',
   link: 'Topへ',
+};
+
+const record = {
+  headerTitle: '録音',
+  confirmMessage: '削除してよろしいでしょうか？',
+  save: '保存する',
+  delete: '削除する',
+  notSave: '2分以上の音声は保存できません',
 };
 
 // atoms
@@ -616,6 +630,7 @@ const ja = {
   tutorialList,
   userProfile,
   notFound,
+  record,
   commentCard,
   firstDiary,
   userPoints,

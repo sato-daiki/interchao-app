@@ -1,9 +1,18 @@
-import React from 'react';
-import { View, StyleSheet, Text, ScrollView, Switch } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Switch,
+  Platform,
+} from 'react-native';
+import * as Speech from 'expo-speech';
 import { primaryColor, fontSizeM } from '../../styles/Common';
 import { Modal } from '../template';
 import { WhiteButton, Space, HoverableIcon } from '../atoms';
 import I18n from '../../utils/I18n';
+import { Language } from '../../types';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,27 +40,69 @@ const styles = StyleSheet.create({
 
 interface Props {
   visible: boolean;
-  playing: boolean;
-  isSlow: boolean;
-  disabledSwitch: boolean;
   text: string;
-  onPressSpeak: () => void;
-  onPressPause: () => void;
-  onPressClose: () => void;
-  onValueChange: () => void;
+  textLanguage?: Language;
+  onClose: () => void;
 }
 
 const ModalSpeech: React.FC<Props> = ({
   visible,
-  playing,
-  isSlow,
-  disabledSwitch,
   text,
-  onPressSpeak,
-  onPressPause,
-  onPressClose,
-  onValueChange,
-}: Props): JSX.Element | null => {
+  textLanguage,
+  onClose,
+}: // onValueChange,
+Props): JSX.Element | null => {
+  const [isSlow, setIsSlow] = useState(false);
+
+  // 再生中のアイコンを制御
+  const [playing, setPlaying] = useState(false);
+  // 一番最初から再生
+  const [initial, setInitial] = useState(true);
+
+  const onDone = (): void => {
+    setPlaying(false);
+    setInitial(true);
+  };
+
+  const onSpeak = (): void => {
+    const option = {
+      language: textLanguage,
+      rate: isSlow ? 0.6 : 1.0,
+      onDone,
+    };
+    Speech.speak(text, option);
+    setInitial(false);
+    setPlaying(true);
+  };
+
+  const onPressClose = (): void => {
+    Speech.stop();
+    onClose();
+    setPlaying(false);
+    setInitial(true);
+  };
+
+  const onPressSpeak = (): void => {
+    if (initial) {
+      onSpeak();
+    } else {
+      Speech.resume();
+      setPlaying(true);
+    }
+  };
+
+  const onPressPause = (): void => {
+    if (Platform.OS === 'ios') {
+      Speech.pause();
+      setPlaying(false);
+    } else {
+      // Androidはpauseとresumeをサポートしていない
+      Speech.stop();
+      setInitial(true);
+      setPlaying(false);
+    }
+  };
+
   return (
     <Modal visible={visible}>
       <ScrollView>
@@ -68,10 +119,11 @@ const ModalSpeech: React.FC<Props> = ({
           />
           <View style={styles.switchContainer}>
             <Switch
+              thumbColor="white"
               trackColor={{ false: '#767577', true: '#81b0ff' }}
-              onValueChange={onValueChange}
+              onValueChange={(): void => setIsSlow(!isSlow)}
               value={isSlow}
-              disabled={disabledSwitch}
+              disabled={!initial}
             />
             <Text style={styles.switchText}>{I18n.t('common.slow')}</Text>
           </View>

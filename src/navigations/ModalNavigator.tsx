@@ -19,6 +19,7 @@ import I18n from '../utils/I18n';
 import { Diary } from '../types';
 import { MainStackParamList } from './MainNavigator';
 import AboutScreen from '../screens/About';
+import RecordScreenContainer from '../containers/RecordScreenContainer';
 
 export type ModalPostDiaryStackParamList = {
   PostDiary: undefined;
@@ -35,6 +36,9 @@ export type ModalReviewStackParamList = {
 };
 export type ModalCorrectingStackParamList = {
   Correcting: { objectID: string; userName: string };
+};
+export type ModalRecordStackParamList = {
+  Record: { objectID: string };
 };
 export type ModalAboutStackParamList = {
   About: undefined;
@@ -60,6 +64,10 @@ export type ModalCorrectingStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalCorrecting'
 >;
+export type ModaRecordStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalRecord'
+>;
 export type ModalAboutStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalAbout'
@@ -78,6 +86,7 @@ const ModalEditMyProfileStack = createStackNavigator<
 const ModalCorrectingStack = createStackNavigator<
   ModalCorrectingStackParamList
 >();
+const ModalRecordStack = createStackNavigator<ModalRecordStackParamList>();
 const ModalAboutStack = createStackNavigator<ModalAboutStackParamList>();
 
 export const ModalPostDiaryNavigator = (): JSX.Element => {
@@ -173,6 +182,22 @@ export const ModalCorrectingNavigator = (): JSX.Element => {
         }}
       />
     </ModalCorrectingStack.Navigator>
+  );
+};
+
+export const ModalRecordNavigator = (): JSX.Element => {
+  return (
+    <ModalRecordStack.Navigator initialRouteName="Record">
+      <ModalRecordStack.Screen
+        name="Record"
+        component={RecordScreenContainer}
+        options={{
+          ...DefaultNavigationOptions,
+          ...DefaultModalLayoutOptions,
+          title: I18n.t('record.headerTitle'),
+        }}
+      />
+    </ModalRecordStack.Navigator>
   );
 };
 

@@ -3,6 +3,7 @@ export { default as CheckTextInput } from './CheckTextInput';
 export { default as CorrectingHeader } from './CorrectingHeader';
 export { default as CorrectionItem } from './CorrectionItem';
 export { default as CorrectionTimer } from './CorrectionTimer';
+export { default as DiaryTitleAndText } from './DiaryTitleAndText';
 export { default as EmptyDiary } from './EmptyDiary';
 export { default as EmptyFavoriteUser } from './EmptyFavoriteUser';
 export { default as KeyboardHideButton } from './KeyboardHideButton';
