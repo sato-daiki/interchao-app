@@ -18,7 +18,9 @@ import { getConfig } from './navigations/root';
 
 // Ignore warnings of firebase
 // LogBox.ignoreLogs(['Setting a timer']);
-LogBox.ignoreLogs(['Remote debugger']);
+if (Platform.OS !== 'web') {
+  LogBox.ignoreLogs(['Remote debugger']);
+}
 
 const { store, persistor } = configureStore();
 
@@ -40,7 +42,7 @@ const linking = {
   config: getConfig(),
 } as LinkingOptions;
 
-const App: React.SFC = () => {
+const App = (): JSX.Element => {
   const checkUpdate = async (): Promise<void> => {
     if (__DEV__ || Platform.OS === 'web') return;
 

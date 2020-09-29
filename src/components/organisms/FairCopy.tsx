@@ -245,12 +245,14 @@ const FairCopy: React.FC<Props> = ({
           title={I18n.t('myDiary.machine')}
           onPress={(): void => setVisibleSpeech(true)}
         />
-        <WhiteButton
-          containerStyle={styles.button}
-          title={I18n.t('myDiary.record')}
-          icon={iconRecord}
-          onPress={goToRecord}
-        />
+        {Platform.OS !== 'web' ? (
+          <WhiteButton
+            containerStyle={styles.button}
+            title={I18n.t('myDiary.record')}
+            icon={iconRecord}
+            onPress={goToRecord}
+          />
+        ) : null}
         <Space size={32} />
         <View style={styles.button}>
           {Platform.OS !== 'web' ? (

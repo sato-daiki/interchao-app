@@ -84,7 +84,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       }}
     >
       {renderScreen()}
-      <Stack.Screen name="Public" component={PublicNavigator} />
+      {/* <Stack.Screen name="Public" component={PublicNavigator} /> */}
     </Stack.Navigator>
   );
 };
