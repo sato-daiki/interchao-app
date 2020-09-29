@@ -84,6 +84,7 @@ const ModalVoice: React.FC<Props> = ({
             value={getSeekSliderPosition()}
             onValueChange={onSeekSliderValueChange}
             onSlidingComplete={onSeekSliderSlidingComplete}
+            thumbTintColor={primaryColor}
             disabled={!isPlaybackAllowed || isLoading}
           />
           <Text style={styles.timestampText}>{getPlaybackTimestamp()}</Text>
