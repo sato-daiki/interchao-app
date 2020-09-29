@@ -23,7 +23,6 @@ const TeachDiaryListMenu = ({
       closeOnTouchOutside
       isActive={isMenu}
       onClose={onClose}
-      onPressCloseButton={onClose}
     >
       {Platform.OS === 'web' ? null : (
         <OptionItem
