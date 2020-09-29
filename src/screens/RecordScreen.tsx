@@ -611,6 +611,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
                 value={this.getSeekSliderPosition()}
                 onValueChange={this.onSeekSliderValueChange}
                 onSlidingComplete={this.onSeekSliderSlidingComplete}
+                thumbTintColor={primaryColor}
                 disabled={!isPlaybackAllowed || isLoading}
               />
               <Text style={styles.timestampText}>

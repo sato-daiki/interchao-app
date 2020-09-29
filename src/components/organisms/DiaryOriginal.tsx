@@ -48,7 +48,7 @@ const DiaryOriginal: React.FC<Props> = ({ diary, profile, title, text }) => {
         nativeLanguage={profile.nativeLanguage}
         textLanguage={profile.learnLanguage}
         title={title}
-        text={title}
+        text={text}
       />
       <Text style={styles.textLength}>
         {I18n.t('postDiaryComponent.textLength')}
