@@ -1,16 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  fontSizeS,
-  fontSizeM,
-  primaryColor,
-  subTextColor,
-} from '../../styles/Common';
+import { fontSizeS, subTextColor } from '../../styles/Common';
 import { getAlgoliaDate } from '../../utils/diary';
 import { Diary, Profile } from '../../types';
 import I18n from '../../utils/I18n';
-import { MyDiaryStatus } from '../molecules';
-import RichText from './RichText';
+import { DiaryTitleAndText, MyDiaryStatus } from '../molecules';
 
 interface Props {
   diary: Diary;
@@ -34,18 +28,6 @@ const styles = StyleSheet.create({
     color: subTextColor,
     fontSize: fontSizeS,
   },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 16,
-  },
-  text: {
-    lineHeight: fontSizeM * 1.3,
-    fontSize: fontSizeM,
-    color: primaryColor,
-    paddingBottom: 16,
-  },
   textLength: {
     color: subTextColor,
     fontSize: fontSizeS,
@@ -62,17 +44,11 @@ const DiaryOriginal: React.FC<Props> = ({ diary, profile, title, text }) => {
         </Text>
         <MyDiaryStatus diary={diary} />
       </View>
-      <RichText
-        style={styles.title}
-        text={title}
+      <DiaryTitleAndText
         nativeLanguage={profile.nativeLanguage}
         textLanguage={profile.learnLanguage}
-      />
-      <RichText
-        style={styles.text}
+        title={title}
         text={text}
-        nativeLanguage={profile.nativeLanguage}
-        textLanguage={profile.learnLanguage}
       />
       <Text style={styles.textLength}>
         {I18n.t('postDiaryComponent.textLength')}

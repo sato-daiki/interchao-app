@@ -1,8 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { ReactNode } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 import { fontSizeM, primaryColor, offWhite } from '../../styles/Common';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
+  titleStyle?: StyleProp<TextStyle>;
+  icon?: ReactNode;
   title: string;
 }
 
@@ -13,6 +23,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: offWhite,
   },
+  icon: {
+    marginRight: 8,
+  },
   title: {
     color: primaryColor,
     fontSize: fontSizeM,
@@ -20,10 +33,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const GrayHeader: React.FC<Props> = ({ title }: Props): JSX.Element => {
+const GrayHeader: React.FC<Props> = ({
+  title,
+  icon,
+  containerStyle,
+  titleStyle,
+}: Props): JSX.Element => {
   return (
-    <View style={styles.row}>
-      <Text style={styles.title}>{title}</Text>
+    <View style={[styles.row, containerStyle]}>
+      {<View style={styles.icon}>{icon}</View> || undefined}
+      <Text style={[styles.title, titleStyle]}>{title}</Text>
     </View>
   );
 };

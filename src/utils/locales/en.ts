@@ -209,6 +209,12 @@ const myDiary = {
   fairCopy: 'Fair Copy',
   closeAlert:
     'Any edits that have not been saved will be lost. Would you like to exit?',
+  permissionAudio:
+    'You must enable audio recording permissions in order to use this function',
+  voiceTitle: 'Read Out Loud',
+  myVoice: 'Listen to Your Recorded Voice',
+  machine: "Listen to Machine's Voice",
+  record: 'Voice Recording',
 };
 
 const myDiaryList = {
@@ -339,6 +345,14 @@ const tutorialList = {
 const notFound = {
   text: 'The page you are looking for is not found',
   link: 'Top',
+};
+
+const record = {
+  headerTitle: 'Recording',
+  confirmMessage: 'Are you sure you want to delete the recording?',
+  save: 'Save',
+  delete: 'Delete',
+  notSave: 'Audio for more than 2 minutes cannot be saved',
 };
 
 const userProfile = {
@@ -629,6 +643,7 @@ const en = {
   tutorialList,
   userProfile,
   notFound,
+  record,
   commentCard,
   firstDiary,
   userPoints,

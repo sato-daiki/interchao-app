@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, Clipboard } from 'react-native';
-import * as Speech from 'expo-speech';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   Menu,
@@ -57,59 +56,9 @@ const TextMenu = ({
   onPressTranslate,
 }: Props): JSX.Element => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
-  const [isSlow, setIsSlow] = useState(false);
-
-  // 再生中のアイコンを制御
-  const [playing, setPlaying] = useState(false);
-  // 一番最初から再生
-  const [initial, setInitial] = useState(false);
-
-  const onDone = (): void => {
-    setPlaying(false);
-    setInitial(true);
-  };
-
-  const onSpeak = (): void => {
-    const option = {
-      language: textLanguage,
-      rate: isSlow ? 0.6 : 1.0,
-      onDone,
-    };
-    Speech.speak(displayText, option);
-    setInitial(false);
-    setPlaying(true);
-  };
 
   const onPressSpeech = (): void => {
     setVisibleSpeech(true);
-    setInitial(true);
-  };
-
-  const onPressClose = (): void => {
-    Speech.stop();
-    setVisibleSpeech(false);
-    setPlaying(false);
-  };
-
-  const onPressSpeak = (): void => {
-    if (initial) {
-      onSpeak();
-    } else {
-      Speech.resume();
-      setPlaying(true);
-    }
-  };
-
-  const onPressPause = (): void => {
-    if (Platform.OS === 'ios') {
-      Speech.pause();
-      setPlaying(false);
-    } else {
-      // Androidはpauseとresumeをサポートしていない
-      Speech.stop();
-      setInitial(true);
-      setPlaying(false);
-    }
   };
 
   const onPressCopy = (): void => {
@@ -154,9 +103,7 @@ const TextMenu = ({
     return (
       <View style={styles.row}>
         <Hoverable onPress={onPressCopy}>{copyButton}</Hoverable>
-
         <Hoverable onPress={onPressTranslate}>{translateButton}</Hoverable>
-
         <Hoverable onPress={onPressSpeech}>{speechButton}</Hoverable>
       </View>
     );
@@ -166,14 +113,9 @@ const TextMenu = ({
     <View>
       <ModalSpeech
         visible={visibleSpeech}
-        playing={playing}
-        isSlow={isSlow}
-        disabledSwitch={!initial}
-        onValueChange={(): void => setIsSlow(!isSlow)}
         text={displayText}
-        onPressSpeak={onPressSpeak}
-        onPressPause={onPressPause}
-        onPressClose={onPressClose}
+        textLanguage={textLanguage}
+        onClose={(): void => setVisibleSpeech(false)}
       />
       <Menu
         renderer={renderers.Popover}
