@@ -31,7 +31,6 @@ const MyDiaryListMenu = ({
       closeOnTouchOutside
       isActive={isMenu}
       onClose={onClose}
-      onPressCloseButton={onClose}
     >
       <OptionItem
         title={I18n.t('myDiaryListMenu.draftList')}
