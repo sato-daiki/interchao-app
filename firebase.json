@@ -19,9 +19,5 @@
         "destination": "/index.html"
       }
     ]
-  },
-  "functions": {
-    "predeploy": [],
-    "source": "functions"
   }
 }
