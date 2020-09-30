@@ -80,8 +80,10 @@ module.exports = functions
             channelId: 'default',
           },
         ]);
+        // eslint-disable-next-line no-restricted-syntax
         for (const chunk of chunks) {
           // 送信
+          // eslint-disable-next-line no-await-in-loop
           await expo.sendPushNotificationsAsync(chunk);
           console.log('送信');
         }
