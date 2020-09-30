@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import algoliasearch from 'algoliasearch';
 import { IncomingWebhook } from '@slack/client';
-import { Diary, CorrectionStatus } from '../types/diary';
+import { Diary, CorrectionStatus } from '../../../src/types/diary';
 
 export const getIsProduction = (): boolean => {
   dotenv.config();

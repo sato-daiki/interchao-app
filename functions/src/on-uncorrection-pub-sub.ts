@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as timezone from 'moment-timezone';
 import { getIsProduction, sendMessage, getIndex } from './util/common';
-import { Diary } from './types/diary';
+import { Diary } from '../../src/types/diary';
 
 const index = getIndex();
 timezone.tz.setDefault('Asia/Tokyo');

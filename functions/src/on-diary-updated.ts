@@ -5,7 +5,7 @@ import {
   getIsProduction,
   sendMessage,
 } from './util/common';
-import { Diary } from './types/diary';
+import { Diary } from '../../src/types';
 
 const index = getIndex();
 
