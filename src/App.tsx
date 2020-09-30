@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { LogBox, StatusBar, Platform } from 'react-native';
+import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
 import { Provider } from 'react-redux';
@@ -17,10 +17,8 @@ import RootNavigatorContainer from './containers/RootNavigatorContainer';
 import { getConfig } from './navigations/root';
 
 // Ignore warnings of firebase
-// LogBox.ignoreLogs(['Setting a timer']);
-if (Platform.OS !== 'web') {
-  LogBox.ignoreLogs(['Remote debugger']);
-}
+YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['Remote debugger']);
 
 const { store, persistor } = configureStore();
 
