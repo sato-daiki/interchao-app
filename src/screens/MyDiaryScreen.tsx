@@ -168,14 +168,15 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   };
 
   const headerRight = (): ReactNode => {
-    if (isDesktopOrLaptopDevice) {
-      return (
-        <MyDiaryMenu onPressDeleteMenu={(): void => setIsModalDelete(true)} />
-      );
-    }
-
     if (!isEditing) {
       if (index === 0) {
+        if (isDesktopOrLaptopDevice) {
+          return (
+            <MyDiaryMenu
+              onPressDeleteMenu={(): void => setIsModalDelete(true)}
+            />
+          );
+        }
         return (
           <HeaderIcon
             icon="community"
