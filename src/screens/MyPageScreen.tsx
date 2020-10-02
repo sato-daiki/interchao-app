@@ -83,16 +83,20 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
   } = profile;
 
   useEffect(() => {
+    navigation.setOptions({
+      headerRight: (): JSX.Element => (
+        <HeaderIcon
+          icon="community"
+          name="settings"
+          onPress={(): void => navigation.navigate('Setting')}
+        />
+      ),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const f = async (): Promise<void> => {
-      navigation.setOptions({
-        headerRight: (): JSX.Element => (
-          <HeaderIcon
-            icon="community"
-            name="settings"
-            onPress={(): void => navigation.navigate('Setting')}
-          />
-        ),
-      });
       const newUserReivew = await getUserReview(uid);
       setUserReview(newUserReivew);
     };
