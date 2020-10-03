@@ -1,3 +1,4 @@
+// FirebaseAnalyticsに移行予定
 import * as Amplitude from 'expo-analytics-amplitude';
 import { firestore } from 'firebase';
 import { Platform } from 'react-native';

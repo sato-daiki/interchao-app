@@ -6,7 +6,7 @@
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.5.0",
+    "version": "1.5.1",
     "orientation": "portrait",
     "userInterfaceStyle":"light",
     "icon": "./assets/icon.png",
@@ -23,11 +23,12 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
-      "buildNumber": "1050000"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "buildNumber": "1050100"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1050000,
+      "versionCode": 1050100,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
@@ -41,7 +42,14 @@
       "lang": "en",
       "startUrl": "https://interchao.app",
       "themeColor": "#ffffff",
-      "description":"Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう"
+      "description":"Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう",
+      "config": {
+        "firebase":{
+          "apiKey": "AIzaSyDysrApwcn1GCRyjA_rhecZlQICmhR4poU",
+          "appId": "1:862039416371:web:6d61bcf6228ac65c9a4d46",
+          "measurementId": "G-X65F72V219"
+        }
+      }
     },
     "notification": {
       "icon": "./assets/images/notification.png"
@@ -73,8 +81,8 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 6,
-      "webRevision": 5
+      "revision": 0,
+      "webRevision": 0
     },
     "hooks": {
       "postPublish": [
