@@ -6,7 +6,7 @@
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.5.1",
+    "version": "1.5.2",
     "orientation": "portrait",
     "userInterfaceStyle":"light",
     "icon": "./assets/icon.png",
@@ -24,11 +24,11 @@
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "1050100"
+      "buildNumber": "1050200"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1050100,
+      "versionCode": 1050200,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
