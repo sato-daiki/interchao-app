@@ -5,6 +5,7 @@ import { Checkbox } from '../atoms';
 
 interface Props {
   checked: boolean;
+  disable?: boolean;
   title: string;
   onPress: () => void;
 }
@@ -25,13 +26,21 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
   },
+  opacity: {
+    opacity: 0.4,
+  },
 });
 
-const CheckItem = ({ title, checked, onPress }: Props): JSX.Element => {
+const CheckItem = ({
+  title,
+  checked,
+  disable,
+  onPress,
+}: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, disable ? styles.opacity : undefined]}>
       <Text style={styles.title}>{title}</Text>
-      <Checkbox checked={checked} onPress={onPress} />
+      <Checkbox checked={checked} onPress={onPress} disable={disable} />
     </View>
   );
 };

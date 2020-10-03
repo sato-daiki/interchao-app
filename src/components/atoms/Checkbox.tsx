@@ -4,12 +4,14 @@ import { mainColor } from '../../styles/Common';
 
 interface Props {
   checked: boolean;
+  disable?: boolean;
   color?: string;
   onPress: () => void;
 }
 
 const Checkbox: React.FC<Props> = ({
   checked,
+  disable,
   color = mainColor,
   onPress,
 }: Props): JSX.Element => {
@@ -19,7 +21,7 @@ const Checkbox: React.FC<Props> = ({
         size={28}
         color={color}
         name="checkbox-blank-outline"
-        onPress={onPress}
+        onPress={!disable ? onPress : undefined}
       />
     );
   }
@@ -28,7 +30,7 @@ const Checkbox: React.FC<Props> = ({
       size={28}
       color={color}
       name="checkbox-marked"
-      onPress={onPress}
+      onPress={!disable ? onPress : undefined}
     />
   );
 };

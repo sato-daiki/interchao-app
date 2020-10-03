@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { fontSizeS, offWhite, subTextColor } from '../styles/Common';
+import { fontSizeS, offWhite, softRed, subTextColor } from '../styles/Common';
 import { CheckItem } from '../components/molecules';
 import { User } from '../types';
 import firebase from '../constants/firebase';
@@ -40,16 +40,16 @@ const styles = StyleSheet.create({
   title: {
     color: subTextColor,
     fontSize: fontSizeS,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
     paddingBottom: 8,
     marginTop: 24,
   },
-  detail: {
-    color: subTextColor,
-    fontSize: fontSizeS,
-    paddingLeft: 16,
+  noMail: {
+    paddingHorizontal: 16,
     paddingBottom: 8,
-    marginTop: 24,
+    color: softRed,
+    fontSize: fontSizeS,
+    // lineHeight: fontSizeS * 1.3,
   },
 });
 
@@ -102,14 +102,17 @@ const NoticeScreen: React.FC<ScreenType> = ({ user, setUser }) => {
         title={I18n.t('notice.finishReview')}
         onPress={onPressReview}
       /> */}
+
       <Text style={styles.title}>{I18n.t('notice.mail')}</Text>
       {currentUser && !currentUser.email ? (
-        <Text style={styles.detail}>{I18n.t('notice.noMail')}</Text>
+        <Text style={styles.noMail}>{I18n.t('notice.noMail')}</Text>
       ) : null}
+
       <CheckItem
         checked={user.mailCorrection || false}
         title={I18n.t('notice.finishCorrection')}
         onPress={onPressMailCorrection}
+        disable={!currentUser || !currentUser.email}
       />
     </View>
   );
