@@ -230,8 +230,12 @@ const myPage = {
 
 const notice = {
   headerTitle: '通知',
-  finishCorrection: 'マイ日記の添削が完了',
+  finishCorrection: '日記の添削が届く',
   finishReview: 'レビューが届く',
+  push: 'プッシュ通知',
+  mail: 'メール通知',
+  noMail:
+    '※メールアドレスが登録されていません。メール通知を利用する場合は、メールアドレス/パスワード登録画面から設定してください',
 };
 
 const postDiary = {
