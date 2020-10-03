@@ -188,7 +188,7 @@ const myDiary = {
   menuDelete: '删除',
   confirmMessage: '确定要删除吗？',
   posted: '发表',
-  fairCopy: '公平复制',
+  fairCopy: '誊清',
   closeAlert: '未保存的修改将会丢失。您确定要关闭吗？',
   permissionAudio: '您必须启用录音权限才能使用此功能',
   voiceTitle: '大声朗读培训',
