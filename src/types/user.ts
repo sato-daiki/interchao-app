@@ -12,6 +12,17 @@ export interface User {
   correctingCorrectedNum: number | null;
   notificationCorrection: boolean;
   notificationReview: boolean;
+  // notificationReminderNextDay?: boolean;
+  // notificationReminderThreeDays?: boolean;
+  // notificationReminderOneWeek?: boolean;
+  // notificationReminderOneMonth?: boolean;
+  // notificationReminderThreeMonths?: boolean;
+  mailCorrection?: boolean;
+  // mailReminderNextDay?: boolean;
+  // mailReminderThreeDays?: boolean;
+  // mailReminderOneWeek?: boolean;
+  // mailReminderOneMonth?: boolean;
+  // mailReminderThreeMonths?: boolean;
   runningDays?: number;
   runningWeeks?: number;
   lastDiaryPostedAt?: firestore.Timestamp | null;
