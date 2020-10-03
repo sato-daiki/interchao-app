@@ -204,8 +204,9 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     );
 
     return (): void => {
-      // @ts-ignore
-      Notifications.removeNotificationSubscription(responseListener);
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
