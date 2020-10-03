@@ -7,7 +7,12 @@ import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
 import * as Updates from 'expo-updates';
-import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
+import {
+  LinkingOptions,
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
+import * as Analytics from 'expo-firebase-analytics';
 import { initAnalytics } from './utils/Analytics';
 import { configureStore } from './stores/Store';
 import { firebaseConfig } from './constants/firebase';
@@ -41,6 +46,9 @@ const linking = {
 } as LinkingOptions;
 
 const App = (): JSX.Element => {
+  const routeNameRef = React.useRef<string | undefined | null>(null);
+  const navigationRef = React.useRef<NavigationContainerRef | null>(null);
+
   const checkUpdate = async (): Promise<void> => {
     if (__DEV__ || Platform.OS === 'web') return;
 
@@ -49,6 +57,26 @@ const App = (): JSX.Element => {
       await Updates.fetchUpdateAsync();
       Updates.reloadAsync();
     }
+  };
+
+  const onReady = (): void => {
+    routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name;
+  };
+
+  const onStateChange = (): void => {
+    const previousRouteName = routeNameRef.current;
+    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
+
+    if (previousRouteName !== currentRouteName) {
+      // The line below uses the expo-firebase-analytics tracker
+      // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
+      // Change this line to use another Mobile analytics SDK
+      console.log('currentRouteName', currentRouteName);
+      Analytics.setCurrentScreen(currentRouteName);
+    }
+
+    // Save the current route name for later comparision
+    routeNameRef.current = currentRouteName;
   };
 
   useEffect(() => {
@@ -62,7 +90,12 @@ const App = (): JSX.Element => {
         <StatusBar barStyle="dark-content" />
         <ActionSheetProvider>
           <MenuProvider>
-            <NavigationContainer linking={linking}>
+            <NavigationContainer
+              ref={navigationRef}
+              linking={linking}
+              onStateChange={onStateChange}
+              onReady={onReady}
+            >
               <RootNavigatorContainer />
             </NavigationContainer>
           </MenuProvider>
