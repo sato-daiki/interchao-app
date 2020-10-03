@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { offWhite } from '../styles/Common';
+import { fontSizeS, offWhite, subTextColor } from '../styles/Common';
 import { CheckItem } from '../components/molecules';
 import { User } from '../types';
 import firebase from '../constants/firebase';
@@ -11,6 +11,7 @@ import {
   MyPageTabNavigationProp,
   MyPageTabStackParamList,
 } from '../navigations/MyPageTabNavigator';
+import { LoadingModal } from '../components/atoms';
 
 export interface Props {
   user: User;
@@ -36,51 +37,63 @@ const styles = StyleSheet.create({
     backgroundColor: offWhite,
     paddingTop: 32,
   },
+  title: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+    paddingLeft: 16,
+    paddingBottom: 8,
+    marginTop: 24,
+  },
+  detail: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+    paddingLeft: 16,
+    paddingBottom: 8,
+    marginTop: 24,
+  },
 });
 
 /**
  * 通知画面
  */
 const NoticeScreen: React.FC<ScreenType> = ({ user, setUser }) => {
-  const { notificationCorrection } = user;
-  const onPressCorrection = useCallback(() => {
-    const f = async (): Promise<void> => {
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({
-          notificationCorrection: !notificationCorrection,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      setUser({
-        ...user,
-        notificationCorrection: !notificationCorrection,
-      });
-    };
-    f();
-  }, [notificationCorrection, setUser, user]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { currentUser } = firebase.auth();
 
-  // const onPressReview = useCallback(() => {
-  //   const f = async (): Promise<void> => {
-  //     await firebase
-  //       .firestore()
-  //       .doc(`users/${user.uid}`)
-  //       .update({
-  //         notificationReview: !notificationReview,
-  //         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //       });
-  //     setUser({
-  //       ...user,
-  //       notificationReview: !notificationReview,
-  //     });
-  //   };
-  //   f();
-  // }, [notificationReview, setUser, user]);
+  const onUpdate = async (
+    data: firebase.firestore.UpdateData
+  ): Promise<void> => {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    await firebase
+      .firestore()
+      .doc(`users/${user.uid}`)
+      .update({
+        ...data,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    setUser({
+      ...user,
+      ...data,
+    });
+    setIsLoading(false);
+  };
+
+  const onPressCorrection = async (): Promise<void> => {
+    await onUpdate({ notificationCorrection: !user.notificationCorrection });
+  };
+
+  const onPressMailCorrection = async (): Promise<void> => {
+    await onUpdate({ mailCorrection: !user.mailCorrection });
+  };
 
   return (
     <View style={styles.container}>
+      <LoadingModal />
+      <Text style={styles.title}>{I18n.t('notice.push')}</Text>
       <CheckItem
-        checked={notificationCorrection}
+        checked={user.notificationCorrection}
         title={I18n.t('notice.finishCorrection')}
         onPress={onPressCorrection}
       />
@@ -89,6 +102,15 @@ const NoticeScreen: React.FC<ScreenType> = ({ user, setUser }) => {
         title={I18n.t('notice.finishReview')}
         onPress={onPressReview}
       /> */}
+      <Text style={styles.title}>{I18n.t('notice.mail')}</Text>
+      {currentUser && !currentUser.email ? (
+        <Text style={styles.detail}>{I18n.t('notice.noMail')}</Text>
+      ) : null}
+      <CheckItem
+        checked={user.mailCorrection || false}
+        title={I18n.t('notice.finishCorrection')}
+        onPress={onPressMailCorrection}
+      />
     </View>
   );
 };
