@@ -36,6 +36,8 @@ export interface Props {
   profile: Profile;
 }
 
+type LoginMethod = 'anonymously' | 'email';
+
 interface DispatchProps {
   signIn: (uid: string) => void;
   setUser: (user: User) => void;
@@ -107,7 +109,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
   }, []);
 
   const createUser = useCallback(
-    (credentUser: firebase.User, loginMethod: string): void => {
+    (credentUser: firebase.User, loginMethod: LoginMethod): void => {
       const f = async (): Promise<void> => {
         const userInfo = {
           diaryPosted: false,
@@ -120,6 +122,17 @@ const SignUpScreen: React.FC<ScreenType> = ({
           correctingCorrectedNum: null,
           notificationCorrection: true,
           notificationReview: true,
+          // notificationReminderNextDay: false,
+          // notificationReminderThreeDays: false,
+          // notificationReminderOneWeek: false,
+          // notificationReminderOneMonth: false,
+          // notificationReminderThreeMonths: false,
+          mailCorrection: false,
+          // mailReminderNextDay: true,
+          // mailReminderThreeDays: false,
+          // mailReminderOneWeek: true,
+          // mailReminderOneMonth: true,
+          // mailReminderThreeMonths: false,
           runningDays: 0,
           runningWeeks: 0,
           lastDiaryPostedAt: null,
