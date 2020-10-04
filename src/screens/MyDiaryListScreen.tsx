@@ -93,6 +93,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const [readingNext, setReadingNext] = useState(false);
   const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
+  const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
   const isDesktopOrLaptopDevice = useMediaQuery({
@@ -192,6 +193,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // This listener is fired whenever a notification is received while the app is foregrounded
     // notificationListener.current = Notifications.addNotificationReceivedListener(
     //   prm => {
+    //     console.log('[usePushNotification] catched notification', prm);
     //     onRefresh();
     //   }
     // );
@@ -199,11 +201,18 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current = Notifications.addNotificationResponseReceivedListener(
       response => {
+        console.log('[usePushNotification] catched notificationRes', response);
         onRefresh();
       }
     );
 
     return (): void => {
+      // if (notificationListener.current) {
+      //   Notifications.removeNotificationSubscription(
+      //     notificationListener.current
+      //   );
+      // }
+
       if (responseListener.current) {
         Notifications.removeNotificationSubscription(responseListener.current);
       }
