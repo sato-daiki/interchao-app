@@ -240,6 +240,10 @@ const notice = {
   headerTitle: 'Notifications',
   finishCorrection: 'When my journal entries are corrected',
   finishReview: 'When I get reviews',
+  push: 'Push notifications',
+  mail: 'Email notifications',
+  noMail:
+    '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
 };
 
 const postDiary = {
