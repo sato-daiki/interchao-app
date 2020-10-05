@@ -195,6 +195,7 @@ const myDiary = {
   myVoice: '聆听您录制的声音',
   machine: '聆听机器的声音',
   record: '录音',
+  recommend: '什么是有效的学习方法？',
 };
 
 const myDiaryList = {

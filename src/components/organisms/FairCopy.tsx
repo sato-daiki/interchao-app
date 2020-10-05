@@ -1,13 +1,19 @@
 import React, { useRef, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View, Text } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio, AVPlaybackStatus } from 'expo-av';
-import { GrayHeader, ShareButton, Space, WhiteButton } from '../atoms';
+import {
+  GrayHeader,
+  ShareButton,
+  Space,
+  WhiteButton,
+  Hoverable,
+} from '../atoms';
 import DiaryOriginal from './DiaryOriginal';
 
 import { Diary, Profile } from '../../types';
-import { mainColor, primaryColor } from '../../styles/Common';
+import { mainColor, primaryColor, linkBlue } from '../../styles/Common';
 import ModalSpeech from './ModalSpeech';
 import ModalVoice from './ModalVoice';
 import I18n from '../../utils/I18n';
@@ -16,6 +22,7 @@ export interface Props {
   diary: Diary;
   profile: Profile;
   goToRecord: () => void;
+  goToRecommend: () => void;
   checkPermissions: () => Promise<boolean>;
 }
 
@@ -39,12 +46,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 16,
   },
+  linkText: {
+    color: linkBlue,
+    marginHorizontal: 16,
+    textAlign: 'center',
+  },
 });
 
 const FairCopy: React.FC<Props> = ({
   diary,
   profile,
   goToRecord,
+  goToRecommend,
   checkPermissions,
 }) => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
@@ -262,6 +275,10 @@ const FairCopy: React.FC<Props> = ({
             />
           ) : null}
         </View>
+        <Space size={48} />
+        <Hoverable onPress={goToRecommend}>
+          <Text style={styles.linkText}>{I18n.t('myDiary.recommend')}</Text>
+        </Hoverable>
         <Space size={32} />
       </ScrollView>
     </View>
