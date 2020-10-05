@@ -204,6 +204,7 @@ const myDiary = {
   myVoice: '녹음 된 음성 듣기',
   machine: '기계의 음성 듣기',
   record: '음성 녹음',
+  recommend: '효율적인 공부 방법은?',
 };
 
 const myDiaryList = {
