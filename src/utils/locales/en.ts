@@ -215,6 +215,7 @@ const myDiary = {
   myVoice: 'Listen to Your Recorded Voice',
   machine: "Listen to Machine's Voice",
   record: 'Voice Recording',
+  recommend: 'What is an efficient study method?',
 };
 
 const myDiaryList = {
