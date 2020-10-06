@@ -7,6 +7,7 @@ import I18n from '../../../utils/I18n';
 
 interface Props {
   isMaxLayoutChange: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Reason = ({ isMaxLayoutChange }: Props): JSX.Element => {
+const Reason = ({ isMaxLayoutChange, options }: Props): JSX.Element => {
   const renderLeft = (
     <Image resizeMode="contain" style={styles.image} source={Zebra} />
   );
@@ -45,21 +46,21 @@ const Reason = ({ isMaxLayoutChange }: Props): JSX.Element => {
   const renderRight = (
     <>
       <View style={textContainer}>
-        <Text style={styles.title}>{I18n.t('web.reasonTitle1')}</Text>
-        <Text style={styles.text}>{I18n.t('web.reasonText11')}</Text>
-        <Text style={styles.text}>{I18n.t('web.reasonText12')}</Text>
+        <Text style={styles.title}>{I18n.t('web.reasonTitle1', options)}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText11', options)}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText12', options)}</Text>
       </View>
 
       <View style={textContainer}>
-        <Text style={styles.title}>{I18n.t('web.reasonTitle2')}</Text>
-        <Text style={styles.text}>{I18n.t('web.reasonText21')}</Text>
-        <Text style={styles.text}>{I18n.t('web.reasonText22')}</Text>
+        <Text style={styles.title}>{I18n.t('web.reasonTitle2', options)}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText21', options)}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText22', options)}</Text>
       </View>
 
       <View style={textContainer}>
-        <Text style={styles.title}>{I18n.t('web.reasonTitle3')}</Text>
-        <Text style={styles.text}>{I18n.t('web.reasonText31')}</Text>
-        <Text style={styles.text}>{I18n.t('web.reasonText32')}</Text>
+        <Text style={styles.title}>{I18n.t('web.reasonTitle3', options)}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText31', options)}</Text>
+        <Text style={styles.text}>{I18n.t('web.reasonText32', options)}</Text>
       </View>
     </>
   );

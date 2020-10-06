@@ -9,6 +9,7 @@ import { Title, BodyText } from '../atoms';
 interface Props {
   isMaxLayoutChange: boolean;
   isMobileDevice: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
 const WhatIs = ({
   isMaxLayoutChange,
   isMobileDevice,
+  options,
 }: Props): JSX.Element | null => {
   const source = getImage('correct');
   const renderLeft = source ? (
@@ -46,15 +48,18 @@ const WhatIs = ({
     <>
       <View style={styles.row}>
         <Image source={App} resizeMode="contain" style={styles.icon} />
-        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.wahtTitle')} />
+        <Title
+          isMobileDevice={isMobileDevice}
+          text={I18n.t('web.wahtTitle', options)}
+        />
       </View>
       <BodyText
         isMobileDevice={isMobileDevice}
-        text={I18n.t('web.wahtText1')}
+        text={I18n.t('web.wahtText1', options)}
       />
       <BodyText
         isMobileDevice={isMobileDevice}
-        text={I18n.t('web.wahtText2')}
+        text={I18n.t('web.wahtText2', options)}
       />
     </>
   );

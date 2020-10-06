@@ -26,7 +26,7 @@ export type AuthNavigationProp = StackNavigationProp<
 >;
 
 export type AuthStackParamList = {
-  Initialize: undefined;
+  Initialize: { lang?: string };
   SelectLanguage: undefined;
   InputUserName: undefined;
   SignIn: undefined;
@@ -51,6 +51,7 @@ export const AuthNavigator = (): JSX.Element => {
           Platform.OS === 'web' ? InitializeWebScreen : InitializeNativeScreen
         }
         options={{ headerShown: false, title: 'Interchao' }}
+        // initialParams={{ lang: 'ja' }}
       />
       <Stack.Screen
         name="SelectLanguage"
