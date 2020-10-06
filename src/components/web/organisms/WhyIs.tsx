@@ -9,6 +9,7 @@ import { Title, BodyText } from '../atoms';
 interface Props {
   isMaxLayoutChange: boolean;
   isMobileDevice: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -41,7 +42,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhyIs = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
+const WhyIs = ({
+  isMaxLayoutChange,
+  isMobileDevice,
+  options,
+}: Props): JSX.Element => {
   const imageStyle = {
     width: isMaxLayoutChange ? 150 : 75,
     height: isMaxLayoutChange ? 150 : 75,
@@ -50,18 +55,30 @@ const WhyIs = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
     <>
       <View style={styles.row}>
         <Image source={Pen} resizeMode="contain" style={styles.icon} />
-        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.whyTitle')} />
+        <Title
+          isMobileDevice={isMobileDevice}
+          text={I18n.t('web.whyTitle', options)}
+        />
       </View>
-      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.whyText')} />
+      <BodyText
+        isMobileDevice={isMobileDevice}
+        text={I18n.t('web.whyText', options)}
+      />
     </>
   );
 
   const renderRight = (
     <View style={styles.rowChat}>
       <View style={styles.textContainer}>
-        <Text style={styles.chatText}>{I18n.t('web.whyCnatText1')}</Text>
-        <Text style={styles.chatText}>{I18n.t('web.whyCnatText2')}</Text>
-        <Text style={styles.chatText}>{I18n.t('web.whyCnatText3')}</Text>
+        <Text style={styles.chatText}>
+          {I18n.t('web.whyCnatText1', options)}
+        </Text>
+        <Text style={styles.chatText}>
+          {I18n.t('web.whyCnatText2', options)}
+        </Text>
+        <Text style={styles.chatText}>
+          {I18n.t('web.whyCnatText3', options)}
+        </Text>
       </View>
       <View>
         <Image resizeMode="cover" style={imageStyle} source={Giar} />

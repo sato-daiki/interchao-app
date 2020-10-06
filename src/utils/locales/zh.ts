@@ -22,6 +22,15 @@ const common = {
 };
 
 // web
+const helmet = {
+  keyword: '日语,英语,韩语,语言交流,日记,更正,批改,研究,学习,外语',
+  description:
+    'Interchao是可以免费互相学习日文、英文、中文、韩文的应用程式。有母语者为你批改日记相反的你也可以使用自己的母语来批改其他人的日记',
+  ogTitle: '由母语者批改日记的应用程序',
+  ogDescription:
+    'Interchao是可以免费互相学习日文、英文、中文、韩文的应用程式。有母语者为你批改日记相反的你也可以使用自己的母语来批改其他人的日记',
+};
+
 const web = {
   firstViewTitle: '"说"是从"写"开始',
   firstViewSubTitle: '由母语者批改日记的应用程序',
@@ -580,6 +589,7 @@ const language = {
 const zh = {
   common,
   web,
+  helmet,
   modalAppSuggestion,
   errorMessage,
   mainTab,
