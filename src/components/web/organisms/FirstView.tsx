@@ -18,6 +18,7 @@ interface Props {
   isMobileDevice: boolean;
   onPressStart?: () => void;
   onPressLogin?: () => void;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -78,6 +79,7 @@ const FirstView = ({
   isMobileDevice,
   onPressStart,
   onPressLogin,
+  options,
 }: Props): JSX.Element => {
   const setLeft = (): StyleProp<TextStyle> => {
     return {
@@ -111,7 +113,7 @@ const FirstView = ({
               setLeft(),
             ]}
           >
-            {I18n.t('web.firstViewTitle')}
+            {I18n.t('web.firstViewTitle', options)}
           </Text>
           <Text
             style={[
@@ -123,7 +125,7 @@ const FirstView = ({
               setLeft(),
             ]}
           >
-            {I18n.t('web.firstViewSubTitle')}
+            {I18n.t('web.firstViewSubTitle', options)}
           </Text>
         </View>
         {isAbout ? null : (
@@ -139,18 +141,18 @@ const FirstView = ({
                 setRight(),
               ]}
             >
-              {I18n.t('web.firstViewStart')}
+              {I18n.t('web.firstViewStart', options)}
             </Text>
             <Space size={8} />
             <SubmitButton
               containerStyle={styles.button}
-              title={I18n.t('initialize.start')}
+              title={I18n.t('initialize.start', options)}
               onPress={onPressStart}
             />
             <Space size={16} />
             <WhiteButton
               containerStyle={styles.button}
-              title={I18n.t('signIn.login')}
+              title={I18n.t('signIn.login', options)}
               onPress={onPressLogin}
             />
           </View>

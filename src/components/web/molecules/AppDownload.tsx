@@ -23,6 +23,7 @@ import { Hoverable } from '../../atoms';
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
   isWhite: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -56,7 +57,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppDownload = ({ isWhite, containerStyle }: Props): JSX.Element => {
+const AppDownload = ({
+  isWhite,
+  containerStyle,
+  options,
+}: Props): JSX.Element => {
   const styleClor = { color: isWhite ? primaryColor : '#fff' } as TextStyle;
   const onPressGoogle = (): void => {
     Linking.openURL(
@@ -77,10 +82,10 @@ const AppDownload = ({ isWhite, containerStyle }: Props): JSX.Element => {
       ]}
     >
       <Text style={[styles.title, styleClor]}>
-        {I18n.t('modalAppSuggestion.title')}
+        {I18n.t('modalAppSuggestion.title', options)}
       </Text>
       <Text style={[styles.text, styleClor]}>
-        {I18n.t('modalAppSuggestion.text')}
+        {I18n.t('modalAppSuggestion.text', options)}
       </Text>
       <View style={styles.row}>
         <Hoverable onPress={onPressGoogle}>

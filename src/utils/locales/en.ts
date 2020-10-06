@@ -24,6 +24,16 @@ const common = {
 };
 
 // web
+const helmet = {
+  keyword:
+    'Japanese, Chinese, Korean, study, correct, free, diary, entry, language exchange',
+  description:
+    'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
+  ogTitle: 'Interchao Interactive language learning app',
+  ogDescription:
+    'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
+};
+
 const web = {
   firstViewTitle: '“Speaking” starts from “Writing”',
   firstViewSubTitle: 'Interactive language learning app',
@@ -614,6 +624,7 @@ const language = {
 const en = {
   common,
   web,
+  helmet,
   modalAppSuggestion,
   errorMessage,
   mainTab,

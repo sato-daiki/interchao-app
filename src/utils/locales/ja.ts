@@ -22,6 +22,16 @@ const common = {
 };
 
 // web
+const helmet = {
+  keyword:
+    '英語,中国語,簡体字,韓国語,語学学習,勉強,学習,日記,言語交換,添削,外国語',
+  description:
+    '日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+  ogTitle: 'Interchao-ネイティブに日記を添削してもらえるアプリ',
+  ogDescription:
+    '日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+};
+
 const web = {
   firstViewTitle: '話す"は、"書く"から"',
   firstViewSubTitle: 'ネイティブに日記を添削してもらえるアプリ',
@@ -601,6 +611,7 @@ const language = {
 const ja = {
   common,
   web,
+  helmet,
   modalAppSuggestion,
   errorMessage,
   mainTab,

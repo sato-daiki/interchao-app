@@ -59,7 +59,7 @@ const NotFoundScreen: React.FC<ScreenType> = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <Header
         onPress={(): void => {
-          navigation.navigate('Initialize');
+          navigation.navigate('Initialize', {});
         }}
       />
       <View style={styles.main}>
@@ -69,7 +69,7 @@ const NotFoundScreen: React.FC<ScreenType> = ({ navigation }) => {
           <Hoverable
             hoverStyle={styles.hoverLink}
             onPress={(): void => {
-              navigation.navigate('Initialize');
+              navigation.navigate('Initialize', {});
             }}
           >
             <Text style={styles.link}>{I18n.t('notFound.link')}</Text>

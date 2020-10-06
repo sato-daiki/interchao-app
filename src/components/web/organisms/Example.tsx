@@ -10,6 +10,7 @@ import { Title, BodyText } from '../atoms';
 interface Props {
   isMaxLayoutChange: boolean;
   isMobileDevice: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -59,19 +60,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const Example = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
+const Example = ({
+  isMaxLayoutChange,
+  isMobileDevice,
+  options,
+}: Props): JSX.Element => {
   const renderTopCenter = (
     <>
       <View style={styles.row}>
         <Image source={Sample} resizeMode="contain" style={styles.icon} />
         <Title
           isMobileDevice={isMobileDevice}
-          text={I18n.t('web.exampleTitle')}
+          text={I18n.t('web.exampleTitle', options)}
         />
       </View>
       <BodyText
         isMobileDevice={isMobileDevice}
-        text={I18n.t('web.exampleText')}
+        text={I18n.t('web.exampleText', options)}
       />
     </>
   );
@@ -80,9 +85,11 @@ const Example = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
   const renderLeft = entry ? (
     <>
       <Text style={styles.titleDetail}>
-        {I18n.t('web.exampleDetailTitle1')}
+        {I18n.t('web.exampleDetailTitle1', options)}
       </Text>
-      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText1')}</Text>
+      <Text style={styles.textDetail}>
+        {I18n.t('web.exampleDetailText1', options)}
+      </Text>
       <Image resizeMode="contain" source={entry} style={styles.image} />
     </>
   ) : null;
@@ -91,9 +98,11 @@ const Example = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
   const renderCenter = comment ? (
     <>
       <Text style={styles.titleDetail}>
-        {I18n.t('web.exampleDetailTitle2')}
+        {I18n.t('web.exampleDetailTitle2', options)}
       </Text>
-      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText2')}</Text>
+      <Text style={styles.textDetail}>
+        {I18n.t('web.exampleDetailText2', options)}
+      </Text>
       <Image resizeMode="contain" source={comment} style={styles.image} />
     </>
   ) : null;
@@ -102,9 +111,11 @@ const Example = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
   const renderRight = summary ? (
     <>
       <Text style={styles.titleDetail}>
-        {I18n.t('web.exampleDetailTitle3')}
+        {I18n.t('web.exampleDetailTitle3', options)}
       </Text>
-      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText3')}</Text>
+      <Text style={styles.textDetail}>
+        {I18n.t('web.exampleDetailText3', options)}
+      </Text>
       <Image resizeMode="contain" source={summary} style={styles.image} />
     </>
   ) : null;
