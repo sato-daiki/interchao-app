@@ -66,8 +66,9 @@ expo upload:android
 
 ## Publish（web）
 
-### 1.versionを書く
-webVesionを上げる。（基本はアプリと合わせたいが、webのみリリースする場合はずれる）
+### 1.version を書く
+
+webVesion を上げる。（基本はアプリと合わせたいが、web のみリリースする場合はずれる）
 
 ## 2.ビルド
 
@@ -77,11 +78,21 @@ expo build:web --no-pwa
 ```
 
 ### デプロイ
+
 ```
 firebase deploy --only hosting -P product
 ```
 
+### デプロイ（検証）
+
+```
+firebase deploy --only hosting -P default
+```
+
+https://white-zebra-dev.web.app
+
 ## メモ
+
 firebase deploy --only firestore:rules -P default
 
 - master に merge する。（CircleCI でチェク OK なら次へ。結果は slack の develop チャンネルに返ってくる）

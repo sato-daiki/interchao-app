@@ -24,6 +24,16 @@ const common = {
 };
 
 // web
+const helmet = {
+  keyword:
+    'Japanese, Chinese, Korean, study, correct, free, diary, entry, language exchange',
+  description:
+    'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
+  ogTitle: 'Interchao Interactive language learning app',
+  ogDescription:
+    'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
+};
+
 const web = {
   firstViewTitle: '“Speaking” starts from “Writing”',
   firstViewSubTitle: 'Interactive language learning app',
@@ -215,6 +225,7 @@ const myDiary = {
   myVoice: 'Listen to Your Recorded Voice',
   machine: "Listen to Machine's Voice",
   record: 'Voice Recording',
+  recommend: 'What is an efficient study method?',
 };
 
 const myDiaryList = {
@@ -240,6 +251,10 @@ const notice = {
   headerTitle: 'Notifications',
   finishCorrection: 'When my journal entries are corrected',
   finishReview: 'When I get reviews',
+  push: 'Push notifications',
+  mail: 'Email notifications',
+  noMail:
+    '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
 };
 
 const postDiary = {
@@ -609,6 +624,7 @@ const language = {
 const en = {
   common,
   web,
+  helmet,
   modalAppSuggestion,
   errorMessage,
   mainTab,

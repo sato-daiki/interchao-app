@@ -18,6 +18,7 @@ type Props = {
   onPressHeader?: () => void;
   onPressStart?: () => void;
   onPressLogin?: () => void;
+  options?: I18n.TranslateOptions;
 };
 
 const styles = StyleSheet.create({
@@ -38,6 +39,7 @@ const Lp: React.FC<Props> = ({
   onPressHeader,
   onPressStart,
   onPressLogin,
+  options,
 }) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
@@ -65,31 +67,39 @@ const Lp: React.FC<Props> = ({
             onPressLogin={onPressLogin}
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
+            options={options}
           />
-          {isTabletOrMobileDevice && !isAbout ? <AppDownload isWhite /> : null}
+          {isTabletOrMobileDevice && !isAbout ? (
+            <AppDownload isWhite options={options} />
+          ) : null}
           <WhatIs
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
+            options={options}
           />
           <WhyIs
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
+            options={options}
           />
-          <Reason isMaxLayoutChange={isMaxLayoutChange} />
+          <Reason isMaxLayoutChange={isMaxLayoutChange} options={options} />
           <Correct
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
+            options={options}
           />
           <Example
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
+            options={options}
           />
           <Start
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}
+            options={options}
           />
           {isTabletOrMobileDevice && !isAbout ? (
-            <AppDownload isWhite={false} />
+            <AppDownload isWhite={false} options={options} />
           ) : null}
           <Fotter />
         </View>

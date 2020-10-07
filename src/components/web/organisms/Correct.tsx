@@ -9,6 +9,7 @@ import { Title, BodyText } from '../atoms';
 interface Props {
   isMaxLayoutChange: boolean;
   isMobileDevice: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -29,19 +30,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const Correct = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
+const Correct = ({
+  isMaxLayoutChange,
+  isMobileDevice,
+  options,
+}: Props): JSX.Element => {
   const renderLeft = (
     <>
       <View style={styles.row}>
         <Image source={PointGet} resizeMode="contain" style={styles.icon} />
         <Title
           isMobileDevice={isMobileDevice}
-          text={I18n.t('web.correctTitle')}
+          text={I18n.t('web.correctTitle', options)}
         />
       </View>
       <BodyText
         isMobileDevice={isMobileDevice}
-        text={I18n.t('web.correctText1')}
+        text={I18n.t('web.correctText1', options)}
       />
     </>
   );

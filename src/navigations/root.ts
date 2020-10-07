@@ -20,8 +20,34 @@ export const getConfig = ():
   | undefined => {
   return {
     screens: {
-      Main: {
+      Auth: {
         path: '',
+        initialRouteName: 'Initialize',
+        screens: {
+          Initialize: {
+            path: '',
+          },
+          SelectLanguage: {
+            path: 'create',
+            exact: true,
+          },
+          InputUserName: {
+            path: 'create',
+          },
+          SignIn: {
+            path: 'login',
+          },
+          SignUp: {
+            path: 'create',
+          },
+          ForegetPassword: {
+            path: 'foreget',
+          },
+          // notfound: '*',
+        },
+      },
+      Main: {
+        path: '/',
         initialRouteName: 'Home',
         screens: {
           Home: {
@@ -155,49 +181,23 @@ export const getConfig = ():
           },
         },
       },
-      Auth: {
-        path: '',
-        initialRouteName: 'Initialize',
-        screens: {
-          Initialize: {
-            path: '',
-          },
-          SelectLanguage: {
-            path: 'create',
-            exact: true,
-          },
-          InputUserName: {
-            path: 'create',
-          },
-          SignIn: {
-            path: 'login',
-          },
-          SignUp: {
-            path: 'create',
-          },
-          ForegetPassword: {
-            path: 'foreget',
-          },
-          // notfound: '*',
-        },
-      },
-      Loading: {
-        path: '',
-        initialRouteName: '',
-        screens: {
-          Loading: {
-            path: '',
-          },
-        },
-      },
-      Public: {
-        path: '',
-        // screens: {
-        //   UserDiary: {
-        //     path: ':userName/:objectID',
-        //   },
-        // },
-      },
+      // Loading: {
+      //   path: '/',
+      //   initialRouteName: '',
+      //   screens: {
+      //     Loading: {
+      //       path: '',
+      //     },
+      //   },
+      // },
+      // Public: {
+      //   path: '',
+      //   // screens: {
+      //   //   UserDiary: {
+      //   //     path: ':userName/:objectID',
+      //   //   },
+      //   // },
+      // },
     },
   };
 };

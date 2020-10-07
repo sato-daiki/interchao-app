@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, ReactNode } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { TabView } from 'react-native-tab-view';
@@ -10,6 +10,7 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
+import * as Linking from 'expo-linking';
 import firebase from '../constants/firebase';
 import { Diary, Profile } from '../types';
 import { ModalConfirm } from '../components/organisms';
@@ -258,6 +259,19 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     });
   };
 
+  const goToRecommend = (): void => {
+    const url =
+      profile.nativeLanguage === 'ja'
+        ? 'https://note.com/interchao/n/nd0a563f2edd4'
+        : 'https://note.com/interchao/n/n5cba7273130d';
+
+    if (Platform.OS === 'web') {
+      Linking.openURL(url);
+    } else {
+      navigation.navigate('RecommendedMethod', { url });
+    }
+  };
+
   if (!diary) {
     return null;
   }
@@ -281,6 +295,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
             diary={diary}
             profile={profile}
             goToRecord={goToRecord}
+            goToRecommend={goToRecommend}
             checkPermissions={checkPermissions}
           />
         ) : (

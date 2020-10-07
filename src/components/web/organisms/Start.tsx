@@ -8,6 +8,7 @@ import { Title, BodyText } from '../atoms';
 interface Props {
   isMaxLayoutChange: boolean;
   isMobileDevice: boolean;
+  options?: I18n.TranslateOptions;
 }
 
 const styles = StyleSheet.create({
@@ -27,7 +28,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Start = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
+const Start = ({
+  isMaxLayoutChange,
+  isMobileDevice,
+  options,
+}: Props): JSX.Element => {
   const renderRight = (
     <Image resizeMode="contain" style={styles.image} source={Zenny} />
   );
@@ -38,12 +43,12 @@ const Start = ({ isMaxLayoutChange, isMobileDevice }: Props): JSX.Element => {
         <Image source={Note} resizeMode="contain" style={styles.icon} />
         <Title
           isMobileDevice={isMobileDevice}
-          text={I18n.t('web.startTitle')}
+          text={I18n.t('web.startTitle', options)}
         />
       </View>
       <BodyText
         isMobileDevice={isMobileDevice}
-        text={I18n.t('web.startText')}
+        text={I18n.t('web.startText', options)}
       />
     </>
   );

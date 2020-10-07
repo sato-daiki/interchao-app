@@ -96,11 +96,18 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
     const f = async (): Promise<void> => {
       const newUserReivew = await getUserReview(uid);
-      setUserReview(newUserReivew);
+      if (isMounted) {
+        setUserReview(newUserReivew);
+      }
     };
     f();
+    return (): void => {
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 

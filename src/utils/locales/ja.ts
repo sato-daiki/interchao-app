@@ -22,6 +22,16 @@ const common = {
 };
 
 // web
+const helmet = {
+  keyword:
+    '英語,中国語,簡体字,韓国語,語学学習,勉強,学習,日記,言語交換,添削,外国語',
+  description:
+    '日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+  ogTitle: 'Interchao-ネイティブに日記を添削してもらえるアプリ',
+  ogDescription:
+    '日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+};
+
 const web = {
   firstViewTitle: '話す"は、"書く"から"',
   firstViewSubTitle: 'ネイティブに日記を添削してもらえるアプリ',
@@ -207,6 +217,7 @@ const myDiary = {
   myVoice: '自分の音声を聞く',
   machine: '機械の音声を聞く',
   record: '録音する',
+  recommend: '効率的な勉強方法とは？',
 };
 
 const myDiaryList = {
@@ -230,8 +241,12 @@ const myPage = {
 
 const notice = {
   headerTitle: '通知',
-  finishCorrection: 'マイ日記の添削が完了',
+  finishCorrection: '日記の添削が届く',
   finishReview: 'レビューが届く',
+  push: 'プッシュ通知',
+  mail: 'メール通知',
+  noMail:
+    '※メールアドレスが登録されていません。メール通知を利用する場合は、メールアドレス/パスワード登録画面から設定してください',
 };
 
 const postDiary = {
@@ -596,6 +611,7 @@ const language = {
 const ja = {
   common,
   web,
+  helmet,
   modalAppSuggestion,
   errorMessage,
   mainTab,
