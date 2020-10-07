@@ -12,7 +12,6 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    width: 60,
     justifyContent: 'center',
   },
   row: {

@@ -22,6 +22,15 @@ const common = {
 };
 
 // web
+const helmet = {
+  keyword: '일본어,영어,중국어 간체,어학 학습, 일기, 첨삭, 공부,언어 교환',
+  description:
+    'Interchao는 일본어, 영어, 중국어, 한국어를 무료로 공부할 수 있는 상호 학습 애플리케이션입니다. 내가 쓴 일기를 원어민이 직접 읽고 체크해 줍니다. 나도 자신의 모국어 선생님이 되어 다른 사람의 일기를 체크해 줄 수 있습니다.',
+  ogTitle: '원어민이 직접 일기를 체크해주는 앱',
+  ogDescription:
+    'Interchao는 일본어, 영어, 중국어, 한국어를 무료로 공부할 수 있는 상호 학습 애플리케이션입니다. 내가 쓴 일기를 원어민이 직접 읽고 체크해 줍니다. 나도 자신의 모국어 선생님이 되어 다른 사람의 일기를 체크해 줄 수 있습니다.',
+};
+
 const web = {
   firstViewTitle: '"말하기"는 "쓰기"에서 시작',
   firstViewSubTitle: '원어민이 직접 일기를 체크해주는 앱',
@@ -204,6 +213,7 @@ const myDiary = {
   myVoice: '녹음 된 음성 듣기',
   machine: '기계의 음성 듣기',
   record: '음성 녹음',
+  recommend: '효율적인 공부 방법은?',
 };
 
 const myDiaryList = {
@@ -229,6 +239,10 @@ const notice = {
   headerTitle: '알림',
   finishCorrection: '내 일기 첨삭 완료 시',
   finishReview: '리뷰 도착 시',
+  push: '푸시 알림',
+  mail: '이메일 알림',
+  noMail:
+    '※이메일 주소가 등록되어 있지 않습니다. 메일 통지를 이용하는 경우는 "이메일 주소/비밀번호 등록" 화면에서 설정하십시오',
 };
 
 const postDiary = {
@@ -591,6 +605,7 @@ const language = {
 const ko = {
   common,
   web,
+  helmet,
   modalAppSuggestion,
   errorMessage,
   mainTab,

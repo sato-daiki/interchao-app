@@ -26,7 +26,7 @@ export type AuthNavigationProp = StackNavigationProp<
 >;
 
 export type AuthStackParamList = {
-  Initialize: undefined;
+  Initialize: { lang?: string } | undefined;
   SelectLanguage: undefined;
   InputUserName: undefined;
   SignIn: undefined;
