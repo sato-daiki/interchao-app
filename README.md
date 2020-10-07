@@ -89,6 +89,8 @@ firebase deploy --only hosting -P product
 firebase deploy --only hosting -P default
 ```
 
+https://white-zebra-dev.web.app
+
 ## メモ
 
 firebase deploy --only firestore:rules -P default
