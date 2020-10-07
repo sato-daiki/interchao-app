@@ -68,6 +68,7 @@
     "expo-constants": "~9.1.1",
     "expo-file-system": "~9.0.1",
     "expo-firebase-analytics": "~2.4.1",
+    "expo-firebase-core": "~1.1.1",
     "expo-font": "~8.2.1",
     "expo-haptics": "~8.2.1",
     "expo-image-manipulator": "~8.2.1",
