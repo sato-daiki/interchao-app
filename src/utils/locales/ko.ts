@@ -455,7 +455,7 @@ const modalAlertPublish = {
   first: '첫 번째 게시물에 감사드립니다\n내일도 최선을 다합시다.',
   runningDays: '{{runningDays}} 일 연속 일기장입니다\n큰!',
   runningWeeks: '{{runningWeeks}} 주 연속 일기장\n계속 최선을 다합시다.',
-  good: "Thank you for posting.\nLet's do your best tomorrow too",
+  good: '게시물 수고하셨습니다\n내일도 노력합시다',
 };
 
 const modalBlock = {
