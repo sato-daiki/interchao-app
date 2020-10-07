@@ -298,7 +298,7 @@ export const getPublishMessage = (
     // 初回（0の場合もこっちに入る）
     return I18n.t('modalAlertPublish.first');
   }
-  if (!beforeDays || !beforeWeeks) return null;
+  if (!beforeDays || !beforeWeeks) return I18n.t('modalAlertPublish.good');
 
   if (beforeDays + 1 === afterDays) {
     // 日が連続の場合
@@ -311,7 +311,7 @@ export const getPublishMessage = (
       runningWeeks: afterWeeks,
     });
   }
-  return null;
+  return I18n.t('modalAlertPublish.good');
 };
 
 export const checkBeforePost = (

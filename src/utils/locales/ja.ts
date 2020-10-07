@@ -460,6 +460,7 @@ const modalAlertPublish = {
     '初回の投稿おつかれさまです\n添削を待ちましょう！\n明日からも頑張りましょう',
   runningDays: '{{runningDays}}日連続の投稿です\n素晴らしい！',
   runningWeeks: '{{runningWeeks}}週連続の投稿です\nこれからも継続しましょう',
+  good: '게시물 수고하셨습니다\n내일도 노력합시다',
 };
 
 const modalBlock = {

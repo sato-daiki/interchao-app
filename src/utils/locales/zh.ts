@@ -442,6 +442,7 @@ const modalAlertPublish = {
   first: '谢谢你的第一篇文章\n我们明天也要努力',
   runningDays: '这是连续{{runningDays}}天的日记\n大！',
   runningWeeks: '这是连续{{runningWeeks}}周的日记！\n让我们继续努力',
+  good: '感谢您的发表\n明天努力吧',
 };
 
 const modalBlock = {
