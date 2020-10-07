@@ -30,7 +30,7 @@ const InitializeWebScreen: React.FC<ScreenType> = ({ navigation, route }) => {
         isAbout={false}
         options={options}
         onPressHeader={(): void => {
-          navigation.navigate('Initialize', { lang: 'en' });
+          navigation.navigate('Initialize');
         }}
         onPressStart={(): void => {
           navigation.navigate('SelectLanguage');
