@@ -471,6 +471,7 @@ const modalAlertPublish = {
   runningDays: "It's a diary post for {{runningDays}} consecutive days. Great!",
   runningWeeks:
     "It's a diary post for {{runningWeeks}} consecutive weeks! Let's keep doing our best.",
+  good: "Thank you for posting.\nLet's do your best tomorrow too",
 };
 
 const modalBlock = {

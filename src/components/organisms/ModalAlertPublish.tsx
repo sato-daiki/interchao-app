@@ -112,12 +112,9 @@ const ModalAlertPublish: React.FC<Props> = ({
             <View style={styles.line} />
             <Image style={styles.img} source={Note} />
             <Space size={32} />
-            {publishMessage ? (
-              <>
-                <Text style={styles.text}>{publishMessage}</Text>
-                <Space size={16} />
-              </>
-            ) : null}
+            <Text style={styles.text}>{publishMessage}</Text>
+            <Space size={16} />
+
             {/* <Text style={styles.text}>{I18n.t('modalAlertPublish.share')}</Text>
             {Platform.OS !== 'web' ? (
               <SubmitButton
