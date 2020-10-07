@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Localization from 'expo-localization';
 import { Helmet } from 'react-helmet';
 import I18n from '../../../utils/I18n';
 
@@ -7,9 +8,10 @@ interface Props {
 }
 
 const HtmlHeader: React.FC<Props> = ({ options }) => {
+  const code = Localization.locale.split('-')[0];
   return (
     <Helmet>
-      <html lang={!options || !options.locale ? I18n.locale : options.locale} />
+      <html lang={!options || !options.locale ? code : options.locale} />
       <meta name="keyword" content={I18n.t('helmet.keyword', options)} />
       <meta
         name="description"
