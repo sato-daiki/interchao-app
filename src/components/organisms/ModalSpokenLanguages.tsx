@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Picker, Platform } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { StyleSheet, View, Platform } from 'react-native';
+import { Picker } from '@react-native-community/picker';
+
 import { Modal } from '../template';
 import { Language } from '../../types';
 import { getLanguage } from '../../utils/diary';
@@ -37,9 +39,14 @@ const ModalSpokenLanguages: React.FC<Props> = ({
   onPressClose,
 }) => {
   const [value, setValue] = useState<Language>(defaultLanguage || languages[0]);
-  useEffect(() => {
-    setValue(languages[0]);
-  }, [languages]);
+
+  const onValueChange = useCallback((itemValue: React.ReactText) => {
+    setValue(itemValue as Language);
+  }, []);
+
+  const onPress = useCallback(() => {
+    onPressSubmit(value || languages[0]);
+  }, [languages, onPressSubmit, value]);
 
   return (
     <Modal visible={visible}>
@@ -47,17 +54,14 @@ const ModalSpokenLanguages: React.FC<Props> = ({
         <Picker
           style={styles.picker}
           selectedValue={value}
-          onValueChange={(selected: Language): void => setValue(selected)}
+          onValueChange={onValueChange}
         >
           {languages.map(item => (
             <Picker.Item key={item} label={getLanguage(item)} value={item} />
           ))}
         </Picker>
         {Platform.OS === 'ios' ? null : <Space size={32} />}
-        <SubmitButton
-          title="OK"
-          onPress={(): void => onPressSubmit(value || languages[0])}
-        />
+        <SubmitButton title="OK" onPress={onPress} />
         <Space size={16} />
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
       </View>
@@ -65,4 +69,4 @@ const ModalSpokenLanguages: React.FC<Props> = ({
   );
 };
 
-export default ModalSpokenLanguages;
+export default React.memo(ModalSpokenLanguages);

@@ -56,4 +56,4 @@ const TextButtun: React.FC<Props> = ({
   );
 };
 
-export default TextButtun;
+export default React.memo(TextButtun);

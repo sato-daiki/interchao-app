@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -103,9 +103,6 @@ const UserProfileScreen: React.FC<ScreenType> = ({
   const [loadingDiary, setLoadingDiary] = useState(true);
   const [loadingReview, setLoadingReview] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(0);
-  const [readingNext, setReadingNext] = useState(false);
-  const [readAllResults, setReadAllResults] = useState(false);
   const [profile, setProfile] = useState<Profile | null>();
   const [userReview, setUserReview] = useState<UserReview | null>();
   const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
@@ -113,6 +110,10 @@ const UserProfileScreen: React.FC<ScreenType> = ({
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
   const [topReviews, setTopReviews] = useState<Review[]>([]);
   const [reviewNum, setReviewNum] = useState<number>();
+
+  const page = useRef<number>(0);
+  const readingNext = useRef(false);
+  const readAllResults = useRef(false);
 
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
@@ -212,10 +213,10 @@ const UserProfileScreen: React.FC<ScreenType> = ({
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!readingNext && !readAllResults && profile) {
+      if (!readingNext.current && !readAllResults.current && profile) {
         try {
-          const nextPage = page + 1;
-          setReadingNext(true);
+          const nextPage = page.current + 1;
+          readingNext.current = true;
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
@@ -225,23 +226,23 @@ const UserProfileScreen: React.FC<ScreenType> = ({
           });
 
           if (res.hits.length === 0) {
-            setReadAllResults(true);
-            setReadingNext(false);
+            readAllResults.current = true;
+            readingNext.current = false;
           } else {
             if (diaries) {
               setDiaries([...diaries, ...(res.hits as Diary[])]);
             }
-            setPage(nextPage);
-            setReadingNext(false);
+            page.current = nextPage;
+            readingNext.current = false;
           }
         } catch (err) {
-          setReadingNext(false);
+          readingNext.current = false;
           alert({ err });
         }
       }
     };
     f();
-  }, [readingNext, readAllResults, profile, page, diaries]);
+  }, [profile, diaries]);
 
   const onPressBlock = useCallback(() => {
     setIsBlockSuccess(false);
@@ -384,6 +385,20 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     [profile, user.uid]
   );
 
+  const onPressUser = useCallback((uid: string, userName: string) => {
+    navigation.navigate('UserProfile', { userName });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onPressItem = useCallback((item: Diary) => {
+    if (!item.objectID) return;
+    navigation.push('UserDiary', {
+      objectID: item.objectID,
+      userName: item.profile.userName,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const listEmptyDiaryComponent =
     loadingDiary || refreshing ? null : <EmptyDiary />;
 
@@ -413,9 +428,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
                   key={index}
                   item={item}
                   textLanguage={profile.learnLanguage}
-                  onPressUser={(uid: string, userName: string): void => {
-                    navigation.push('UserProfile', { userName });
-                  }}
+                  onPressUser={onPressUser}
                 />
               );
             }
@@ -458,20 +471,13 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       return (
         <DiaryListItem
           item={item}
-          onPressUser={(uid: string, userName: string): void => {
-            navigation.push('UserProfile', { userName });
-          }}
-          onPressItem={(): void => {
-            if (!item.objectID) return;
-            navigation.push('UserDiary', {
-              objectID: item.objectID,
-              userName: item.profile.userName,
-            });
-          }}
+          onPressUser={onPressUser}
+          onPressItem={onPressItem}
         />
       );
     },
-    [navigation]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   return (

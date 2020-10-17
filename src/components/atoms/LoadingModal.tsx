@@ -54,4 +54,4 @@ const LoadingModal: React.FC<Props> = ({
     </View>
   ) : null;
 
-export default LoadingModal;
+export default React.memo(LoadingModal);

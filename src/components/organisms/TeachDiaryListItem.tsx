@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   fontSizeS,
@@ -87,16 +87,26 @@ const TeachDiaryListItem = ({
   const { photoUrl, nativeLanguage, uid, userName } = profile;
   const postDay = getAlgoliaDay(createdAt);
 
+  const onPressRow = useCallback(() => {
+    onPressItem(item);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onPressProfileIcon = useCallback(() => {
+    onPressUser(uid, userName);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Hoverable
       style={styles.container}
       hoverStyle={styles.hover}
-      onPress={(): void => onPressItem(item)}
+      onPress={onPressRow}
     >
       <ProfileIcon
         photoUrl={photoUrl}
         nativeLanguage={nativeLanguage}
-        onPress={(): void => onPressUser(uid, userName)}
+        onPress={onPressProfileIcon}
       />
       <View style={styles.main}>
         <View style={styles.header}>
@@ -123,4 +133,4 @@ const TeachDiaryListItem = ({
   );
 };
 
-export default TeachDiaryListItem;
+export default React.memo(TeachDiaryListItem);

@@ -56,4 +56,4 @@ const ScoreStar: React.FC<Props> = ({
   );
 };
 
-export default ScoreStar;
+export default React.memo(ScoreStar);

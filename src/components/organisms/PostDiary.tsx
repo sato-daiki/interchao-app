@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -141,12 +141,14 @@ const PostDiary = ({
     }).start();
   }, [fadeAnim]);
 
-  const onFocusText = (): void => {
+  const onFocusText = useCallback((): void => {
     setFadeAnim(new Animated.Value(0));
     setIsForce(true);
-  };
+  }, []);
 
   const usePoints = getUsePoints(text.length, learnLanguage);
+
+  const onBlurText = useCallback((): void => setIsForce(false), []);
 
   const renderKeyboard = (): JSX.Element => {
     if (Platform.OS === 'ios') {
@@ -160,7 +162,7 @@ const PostDiary = ({
           onChangeTextText={onChangeTextText}
           onPressDraft={onPressDraft}
           onFocusText={onFocusText}
-          onBlurText={(): void => setIsForce(false)}
+          onBlurText={onBlurText}
         />
       );
     }
@@ -185,7 +187,7 @@ const PostDiary = ({
         onChangeTextText={onChangeTextText}
         onPressDraft={onPressDraft}
         onFocusText={onFocusText}
-        onBlurText={(): void => setIsForce(false)}
+        onBlurText={onBlurText}
       />
     );
   };

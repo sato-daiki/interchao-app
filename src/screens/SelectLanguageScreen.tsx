@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import * as Localization from 'expo-localization';
-import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { StackScreenProps } from '@react-navigation/stack';
 import SubmitButton from '../components/atoms/SubmitButton';
 import {
@@ -10,9 +9,10 @@ import {
   fontSizeM,
   subTextColor,
 } from '../styles/Common';
+import { Profile, Language, CountryCode } from '../types';
 import Space from '../components/atoms/Space';
 import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
-import { Profile, CountryCode, Language } from '../types';
+
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
@@ -24,7 +24,12 @@ import {
 } from '../utils/diary';
 import { ModalConfirm } from '../components/organisms';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
-import { Hoverable, AddButton, HoverableIcon } from '../components/atoms';
+import {
+  Hoverable,
+  AddButton,
+  HoverableIcon,
+  CountryNameWithFlag,
+} from '../components/atoms';
 
 export interface Props {
   profile: Profile;
@@ -79,10 +84,6 @@ const styles = StyleSheet.create({
   },
   trash: {
     alignItems: 'center',
-  },
-  pleaseText: {
-    color: primaryColor,
-    fontSize: fontSizeM,
   },
 });
 
@@ -141,7 +142,6 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
   const [nationalityCode, setNationalityCode] = useState<
     CountryCode | undefined
   >(initCountryCode(code));
-  const [countryVisible, setCountryVisible] = useState(false);
   const [spokenVisible, setSpokenVisible] = useState(false);
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -185,17 +185,12 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
     setSpokenVisible(false);
   };
 
-  const onCloseCountry = (): void => {
-    setCountryVisible(false);
-  };
-
-  const onOpenCountry = (): void => {
-    setCountryVisible(true);
-  };
-
-  const onSelectCountry = (country: Country): void => {
-    setNationalityCode(country.cca2);
-  };
+  const onOpenCountry = useCallback((): void => {
+    navigation.navigate('EditCountry', {
+      nationalityCode,
+      setNationalityCode: (c: CountryCode): void => setNationalityCode(c),
+    });
+  }, [nationalityCode, navigation]);
 
   return (
     <View style={styles.contaner}>
@@ -252,37 +247,17 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
 
       <Space size={24} />
       <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
-      <View style={styles.row}>
-        {nationalityCode ? null : (
-          <Hoverable onPress={onOpenCountry}>
-            <Text style={styles.pleaseText}>
-              {I18n.t('selectLanguage.placeholder')}
-            </Text>
-          </Hoverable>
-        )}
 
-        <CountryPicker
-          // @ts-ignore
-          countryCode={nationalityCode}
-          placeholder=""
-          withFilter
-          withFlag
-          withCountryNameButton
-          withEmoji
-          withModal
-          withAlphaFilter={Platform.OS !== 'web'}
-          onSelect={onSelectCountry}
-          onClose={onCloseCountry}
-          onOpen={onOpenCountry}
-          visible={countryVisible}
-        />
-
+      <Hoverable style={styles.row} onPress={onOpenCountry}>
         {nationalityCode ? (
-          <Text style={styles.change} onPress={onOpenCountry}>
-            {I18n.t('selectLanguage.change')}
-          </Text>
+          <CountryNameWithFlag nationalityCode={nationalityCode} />
+        ) : (
+          <Text>{I18n.t('selectLanguage.placeholder')}</Text>
+        )}
+        {nationalityCode ? (
+          <Text style={styles.change}>{I18n.t('selectLanguage.change')}</Text>
         ) : null}
-      </View>
+      </Hoverable>
       <Space size={32} />
       <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
     </View>

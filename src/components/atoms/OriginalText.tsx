@@ -34,4 +34,4 @@ const OriginalText: React.FC<Props> = ({ diffs }: Props) => {
   return <>{diffText}</>;
 };
 
-export default OriginalText;
+export default React.memo(OriginalText);

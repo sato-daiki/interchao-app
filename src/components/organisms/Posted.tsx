@@ -14,6 +14,7 @@ import { getCorrection } from '../../utils/corrections';
 import { GrayHeader, Space, ShareButton } from '../atoms';
 import I18n from '../../utils/I18n';
 import DiaryOriginal from './DiaryOriginal';
+import { appShare, diaryShare } from '../../utils/common';
 
 export interface Props {
   diary: Diary;
@@ -86,6 +87,16 @@ const Posted: React.FC<Props> = ({
     f();
   }, [diary]);
 
+  const onPressShare = async (): Promise<void> => {
+    if (viewShotRef?.current?.capture) {
+      const imageUrl = await viewShotRef.current.capture();
+      diaryShare(profile.nativeLanguage, imageUrl);
+      return;
+    }
+
+    appShare(profile.nativeLanguage);
+  };
+
   const { isReview, isReview2, isReview3 } = diary;
 
   const renderMyDiaryCorrection = (
@@ -145,10 +156,7 @@ const Posted: React.FC<Props> = ({
         <Space size={48} />
         <View style={styles.shareButton}>
           {Platform.OS === 'web' || isEditing ? null : (
-            <ShareButton
-              viewShotRef={viewShotRef}
-              nativeLanguage={profile.nativeLanguage}
-            />
+            <ShareButton onPressShare={onPressShare} />
           )}
         </View>
         <Space size={32} />

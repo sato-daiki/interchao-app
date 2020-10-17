@@ -23,4 +23,4 @@ const FirstDiary = (): JSX.Element => (
   </View>
 );
 
-export default FirstDiary;
+export default React.memo(FirstDiary);

@@ -122,12 +122,10 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
   return null;
 };
 
-export const getAllLanguage = (): Language[] => {
-  return ['ja', 'en', 'zh', 'ko'];
-};
+export const allLanguage: Language[] = ['ja', 'en', 'zh', 'ko'];
 
 export const getLanguageNum = (): number => {
-  return getAllLanguage().length;
+  return allLanguage.length;
 };
 
 // すでに選択された言語、ネイティブ言語、勉強中の言語を除く
@@ -136,7 +134,6 @@ export const getTargetLanguages = (
   nativeLanguage,
   spokenLanguages
 ): Language[] => {
-  const allLanguage = getAllLanguage();
   return allLanguage.filter(item => {
     if (item === learnLanguage || item === nativeLanguage) return false;
     if (spokenLanguages) {

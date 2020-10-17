@@ -41,4 +41,4 @@ const HeaderText: React.FC<Props> = ({
   );
 };
 
-export default HeaderText;
+export default React.memo(HeaderText);
