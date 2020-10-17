@@ -48,7 +48,7 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     // default propsは別にいい
     'react/require-default-props': 0,
   },

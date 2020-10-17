@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+
 import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
@@ -48,6 +50,12 @@ const linking = {
 const App = (): JSX.Element => {
   const routeNameRef = React.useRef<string | undefined | null>(null);
   const navigationRef = React.useRef<NavigationContainerRef | null>(null);
+
+  if (__DEV__) {
+    whyDidYouRender(React, {
+      trackAllPureComponents: true,
+    });
+  }
 
   const checkUpdate = async (): Promise<void> => {
     if (__DEV__ || Platform.OS === 'web') return;

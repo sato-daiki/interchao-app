@@ -1,4 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 import { Keyboard, BackHandler, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
@@ -131,8 +136,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     } else {
       navigation.goBack();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text.length, title.length]);
+  }, [navigation, text.length, title.length]);
 
   const onPressPublic = useCallback((): void => {
     Keyboard.dismiss();
@@ -150,7 +154,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     setIsModalAlert(true);
   }, [profile.learnLanguage, text, title, user.points]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
         <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
@@ -295,14 +299,14 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     user,
   ]);
 
-  const onPressCloseSns = (): void => {
+  const onPressCloseSns = useCallback((): void => {
     navigation.navigate('Home', {
       screen: 'MyDiaryTab',
       params: { screen: 'MyDiaryList' },
     });
     setIsModalAlert(false);
     setIsPublish(false);
-  };
+  }, [navigation]);
 
   const onPressNotSave = useCallback((): void => {
     setIsModalCancel(false);
@@ -328,10 +332,37 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     f();
   }, [setUser, user]);
 
-  const onPressCloseError = (): void => {
+  const onPressCloseError = useCallback((): void => {
     setErrorMessage('');
     setIsModalError(false);
-  };
+  }, []);
+
+  const onChangeTextTitle = useCallback(txt => {
+    setTitle(txt);
+  }, []);
+
+  const onChangeTextText = useCallback(txt => {
+    setText(txt);
+  }, []);
+
+  const onPressSubmitModalLack = useCallback(() => {
+    setIsModalLack(false);
+  }, []);
+
+  const onPressCloseModalLack = useCallback(() => {
+    navigation.navigate('Home', {
+      screen: 'TeachDiaryTab',
+      params: { screen: 'TeachDiaryList' },
+    });
+  }, [navigation]);
+
+  const onPressCloseModalPublish = useCallback(() => {
+    setIsModalAlert(false);
+  }, []);
+
+  const onPressCloseModalCancel = useCallback(() => {
+    setIsModalCancel(false);
+  }, []);
 
   return (
     <PostDiary
@@ -350,18 +381,13 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       points={user.points}
       learnLanguage={profile.learnLanguage}
       nativeLanguage={profile.nativeLanguage}
-      onPressSubmitModalLack={(): void => setIsModalLack(false)}
-      onPressCloseModalLack={(): void => {
-        navigation.navigate('Home', {
-          screen: 'TeachDiaryTab',
-          params: { screen: 'TeachDiaryList' },
-        });
-      }}
-      onPressCloseModalPublish={(): void => setIsModalAlert(false)}
-      onPressCloseModalCancel={(): void => setIsModalCancel(false)}
+      onPressSubmitModalLack={onPressSubmitModalLack}
+      onPressCloseModalLack={onPressCloseModalLack}
+      onPressCloseModalPublish={onPressCloseModalPublish}
+      onPressCloseModalCancel={onPressCloseModalCancel}
       onPressCloseSns={onPressCloseSns}
-      onChangeTextTitle={(txt: string): void => setTitle(txt)}
-      onChangeTextText={(txt: string): void => setText(txt)}
+      onChangeTextTitle={onChangeTextTitle}
+      onChangeTextText={onChangeTextText}
       onPressSubmit={onPressSubmit}
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}

@@ -1,16 +1,12 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import ViewShot from 'react-native-view-shot';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
-import { Language } from '../../types';
-import { appShare, diaryShare } from '../../utils/common';
 import Hoverable from './Hoverable';
 
 interface Props {
-  viewShotRef?: React.MutableRefObject<ViewShot | null>;
-  nativeLanguage: Language;
+  onPressShare: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -32,19 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ShareButton: React.FC<Props> = ({
-  viewShotRef,
-  nativeLanguage,
-}: Props): JSX.Element => {
-  const onPressShare = async (): Promise<void> => {
-    if (viewShotRef?.current?.capture) {
-      const imageUrl = await viewShotRef.current.capture();
-      diaryShare(nativeLanguage, imageUrl);
-      return;
-    }
-
-    appShare(nativeLanguage);
-  };
+const ShareButton: React.FC<Props> = ({ onPressShare }: Props): JSX.Element => {
   return (
     <Hoverable style={styles.contaner} onPress={onPressShare}>
       <MaterialCommunityIcons
@@ -57,4 +41,4 @@ const ShareButton: React.FC<Props> = ({
   );
 };
 
-export default ShareButton;
+export default React.memo(ShareButton);

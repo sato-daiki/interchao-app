@@ -57,4 +57,4 @@ const PostDiaryKeybordWeb = ({
   );
 };
 
-export default PostDiaryKeybordWeb;
+export default React.memo(PostDiaryKeybordWeb);

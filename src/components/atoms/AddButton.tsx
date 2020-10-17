@@ -40,4 +40,4 @@ const AddButton: React.FC<Props> = ({ onPress }: Props): JSX.Element => {
   );
 };
 
-export default AddButton;
+export default React.memo(AddButton);

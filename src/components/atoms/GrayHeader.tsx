@@ -47,4 +47,4 @@ const GrayHeader: React.FC<Props> = ({
   );
 };
 
-export default GrayHeader;
+export default React.memo(GrayHeader);

@@ -60,7 +60,7 @@ const ModalDiaryCancel: React.FC<Props> = ({
       <SubmitButton
         isLoading={isLoading}
         title={I18n.t('modalDiaryCancel.button')}
-        onPress={(): void => onPressSave()}
+        onPress={onPressSave}
       />
       <Space size={16} />
       <WhiteButton title={I18n.t('common.close')} onPress={onPressNotSave} />

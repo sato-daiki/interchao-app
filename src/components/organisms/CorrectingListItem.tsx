@@ -8,15 +8,11 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import {
-  CorrectingText,
-  Space,
-  AutoHeightTextInput,
-  Hoverable,
-} from '../atoms';
+import { Space, AutoHeightTextInput, Hoverable } from '../atoms';
 import { Diff, TextInfo } from '../../types';
 import CorrectingCommentNative from './CorrectingCommentNative';
 import CorrectingCommentWeb from './CorrectingCommentWeb';
+import { CorrectingText } from '../molecules';
 
 type Info =
   | {

@@ -23,4 +23,4 @@ const DefaultHeaderBack: React.FC<Props> = ({ onPress }) => {
   );
 };
 
-export default DefaultHeaderBack;
+export default React.memo(DefaultHeaderBack);

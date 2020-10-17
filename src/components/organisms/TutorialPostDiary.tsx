@@ -37,7 +37,7 @@ const TutorialPostDiary: React.FC<Props> = ({
   displayed,
   learnLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
-  onPress = (): void => undefined,
+  onPress,
 }: Props): JSX.Element | null => {
   return (
     <Tutorial
