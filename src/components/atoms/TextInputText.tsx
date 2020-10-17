@@ -51,4 +51,4 @@ const TextInputText: React.FC<Props> = ({
   );
 };
 
-export default TextInputText;
+export default React.memo(TextInputText);

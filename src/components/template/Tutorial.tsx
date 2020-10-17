@@ -29,7 +29,7 @@ interface Props {
   isLoading: boolean;
   title: string;
   buttonText: string;
-  onPress: () => void;
+  onPress?: () => void;
   children: React.ReactNode;
 }
 

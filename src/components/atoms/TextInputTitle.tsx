@@ -50,4 +50,4 @@ const TextInputTitle: React.FC<Props> = ({
   );
 };
 
-export default TextInputTitle;
+export default React.memo(TextInputTitle);

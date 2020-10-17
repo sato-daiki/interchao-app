@@ -42,4 +42,4 @@ const UserPointsBig: React.FC<Props> = ({ points }: Props): JSX.Element => {
   );
 };
 
-export default UserPointsBig;
+export default React.memo(UserPointsBig);
