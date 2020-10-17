@@ -57,4 +57,4 @@ const SmallButtonSubmit: React.FC<Props> = ({
   );
 };
 
-export default SmallButtonSubmit;
+export default React.memo(SmallButtonSubmit);

@@ -11,6 +11,7 @@ import {
   Hoverable,
 } from '../atoms';
 import DiaryOriginal from './DiaryOriginal';
+import { appShare, diaryShare } from '../../utils/common';
 
 import { Diary, Profile } from '../../types';
 import { mainColor, primaryColor, linkBlue } from '../../styles/Common';
@@ -184,6 +185,16 @@ const FairCopy: React.FC<Props> = ({
     setIsInitialLoading(false);
   };
 
+  const onPressShare = async (): Promise<void> => {
+    if (viewShotRef?.current?.capture) {
+      const imageUrl = await viewShotRef.current.capture();
+      diaryShare(profile.nativeLanguage, imageUrl);
+      return;
+    }
+
+    appShare(profile.nativeLanguage);
+  };
+
   const iconHeader = (
     <MaterialCommunityIcons size={22} color={primaryColor} name="voice" />
   );
@@ -269,10 +280,7 @@ const FairCopy: React.FC<Props> = ({
         <Space size={32} />
         <View style={styles.button}>
           {Platform.OS !== 'web' ? (
-            <ShareButton
-              viewShotRef={viewShotRef}
-              nativeLanguage={profile.nativeLanguage}
-            />
+            <ShareButton onPressShare={onPressShare} />
           ) : null}
         </View>
         <Space size={48} />
