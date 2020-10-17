@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   fontSizeS,
@@ -72,11 +72,16 @@ const DiaryListItem = ({
   const { createdAt, title, text, correction, correction2, correction3 } = item;
   const postDay = getAlgoliaDay(createdAt);
 
+  const onPressRow = useCallback(() => {
+    onPressItem(item);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Hoverable
       hoverStyle={styles.hover}
       style={styles.container}
-      onPress={(): void => onPressItem(item)}
+      onPress={onPressRow}
     >
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
@@ -106,4 +111,4 @@ const DiaryListItem = ({
   );
 };
 
-export default DiaryListItem;
+export default React.memo(DiaryListItem);

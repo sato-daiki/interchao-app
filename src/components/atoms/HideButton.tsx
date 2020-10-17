@@ -53,4 +53,4 @@ const HideButton: React.FC<Props> = ({
   );
 };
 
-export default HideButton;
+export default React.memo(HideButton);

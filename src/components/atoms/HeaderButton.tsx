@@ -38,4 +38,4 @@ const HeaderButton: React.FC<Props> = ({ title, color, onPress }: Props) => {
   );
 };
 
-export default HeaderButton;
+export default React.memo(HeaderButton);

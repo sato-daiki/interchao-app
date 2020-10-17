@@ -60,4 +60,4 @@ const AutoHeightTextInput: React.FC<Props> = ({
   );
 };
 
-export default AutoHeightTextInput;
+export default React.memo(AutoHeightTextInput);

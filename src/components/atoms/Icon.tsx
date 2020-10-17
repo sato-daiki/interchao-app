@@ -52,4 +52,4 @@ const Icon: React.FC<Props> = ({
   return null;
 };
 
-export default Icon;
+export default React.memo(Icon);

@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+
 import { YellowBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
@@ -49,6 +51,12 @@ const App = (): JSX.Element => {
   const routeNameRef = React.useRef<string | undefined | null>(null);
   const navigationRef = React.useRef<NavigationContainerRef | null>(null);
 
+  if (__DEV__) {
+    whyDidYouRender(React, {
+      trackAllPureComponents: true,
+    });
+  }
+
   const checkUpdate = async (): Promise<void> => {
     if (__DEV__ || Platform.OS === 'web') return;
 
@@ -71,8 +79,10 @@ const App = (): JSX.Element => {
       // The line below uses the expo-firebase-analytics tracker
       // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
       // Change this line to use another Mobile analytics SDK
-      console.log('currentRouteName', currentRouteName);
-      Analytics.setCurrentScreen(currentRouteName);
+      console.log(currentRouteName);
+      if (!__DEV__) {
+        Analytics.setCurrentScreen(currentRouteName);
+      }
     }
 
     // Save the current route name for later comparision

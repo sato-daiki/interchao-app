@@ -19,6 +19,8 @@ import {
 import I18n from '../utils/I18n';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from './RootNavigator';
+import EditCountryScreen from '../screens/EditCountryScreen';
+import { CountryCode } from '../types';
 
 export type AuthNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -28,6 +30,10 @@ export type AuthNavigationProp = StackNavigationProp<
 export type AuthStackParamList = {
   Initialize: { lang?: string } | undefined;
   SelectLanguage: undefined;
+  EditCountry: {
+    nationalityCode: CountryCode | undefined;
+    setNationalityCode: (nationalityCode: CountryCode) => void;
+  };
   InputUserName: undefined;
   SignIn: undefined;
   SignUp: undefined;
@@ -58,6 +64,14 @@ export const AuthNavigator = (): JSX.Element => {
         options={{
           ...DefaultAuthLayoutOptions,
           title: I18n.t('selectLanguage.headerTitle'),
+        }}
+      />
+      <Stack.Screen
+        name="EditCountry"
+        component={EditCountryScreen}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('profileNationality.nationality'),
         }}
       />
       <Stack.Screen
