@@ -77,7 +77,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
   const [refreshing, setRefreshing] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
-  const fillters = useRef<string | null>(null);
+  const filters = useRef<string | null>(null);
   const page = useRef<number>(0);
   const readingNext = useRef(false);
   const readAllResults = useRef(false);
@@ -133,10 +133,10 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
           profile.spokenLanguages
         );
 
-        fillters.current = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
+        filters.current = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
 
         const res = await index.search('', {
-          filters: fillters.current || undefined,
+          filters: filters.current || undefined,
           page: 0,
           hitsPerPage: HIT_PER_PAGE,
         });
@@ -177,14 +177,14 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!readingNext.current && !readAllResults.current && fillters.current) {
+      if (!readingNext.current && !readAllResults.current && filters.current) {
         try {
           const nextPage = page.current + 1;
           readingNext.current = true;
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
-            filters: fillters.current,
+            filters: filters.current,
             page: nextPage,
             hitsPerPage: HIT_PER_PAGE,
           });
