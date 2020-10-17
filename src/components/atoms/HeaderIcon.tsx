@@ -33,4 +33,4 @@ const HeaderIcon: React.FC<Props> = ({
   );
 };
 
-export default HeaderIcon;
+export default React.memo(HeaderIcon);

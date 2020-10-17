@@ -29,4 +29,4 @@ const ProfileIcon: React.FC<Props> = ({
   );
 };
 
-export default ProfileIcon;
+export default React.memo(ProfileIcon);

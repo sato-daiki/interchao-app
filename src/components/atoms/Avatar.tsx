@@ -47,4 +47,4 @@ const Avatar = ({ photoUrl = '', pickImage }: Props): JSX.Element => (
   </Hoverable>
 );
 
-export default Avatar;
+export default React.memo(Avatar);

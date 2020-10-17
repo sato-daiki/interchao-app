@@ -1,6 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, TextInput, Platform } from 'react-native';
-import CountryPicker, { Country } from 'react-native-country-picker-modal';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -16,16 +15,16 @@ import firebase from '../constants/firebase';
 import {
   LoadingModal,
   Avatar,
-  SubmitButton,
   Space,
   Hoverable,
   HeaderText,
+  CountryNameWithFlag,
 } from '../components/atoms';
-import { Profile, Language } from '../types';
+import { Profile, Language, CountryCode } from '../types';
 import I18n from '../utils/I18n';
 import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
 import {
-  getAllLanguage,
+  allLanguage,
   getLanguage,
   getTargetLanguages,
   getLanguageNum,
@@ -158,18 +157,15 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   const [introduction, setIntroduction] = useState(profile.introduction);
   const [photoUrl, setPhotoUrl] = useState(profile.photoUrl);
   const [isLoading, setIsLoading] = useState(false);
-  const [nationalityCode, setNationalityCode] = useState(
-    profile.nationalityCode
-  );
-  const [isNationality, setIsNationality] = useState(false);
+  const [nationalityCode, setNationalityCode] = useState<
+    CountryCode | undefined
+  >(profile.nationalityCode);
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isKeyboard, setIsKeyboard] = useState(false);
-
-  const onPressCloseError = (): void => {
-    setErrorMessage('');
-    setIsModalError(false);
-  };
+  const targetLanguages = useRef(
+    getTargetLanguages(learnLanguage, nativeLanguage, spokenLanguages)
+  );
 
   const onPressSubmit = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -225,34 +221,33 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     };
     f();
   }, [
-    isLoading,
-    profile,
-    photoUrl,
-    name,
-    userName,
-    learnLanguage,
-    nativeLanguage,
-    spokenLanguages,
-    nationalityCode,
     introduction,
-    setProfile,
+    isLoading,
+    learnLanguage,
+    name,
+    nationalityCode,
+    nativeLanguage,
     navigation,
+    photoUrl,
+    profile,
+    setProfile,
+    spokenLanguages,
+    userName,
   ]);
+
+  const onPressGoBack = useCallback(() => {
+    navigation.goBack();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (): JSX.Element => (
-        <HeaderText
-          text={I18n.t('common.close')}
-          onPress={(): void => {
-            navigation.goBack();
-          }}
-        />
+        <HeaderText text={I18n.t('common.close')} onPress={onPressGoBack} />
       ),
-      headerRight: (): JSX.Element | null =>
-        Platform.OS === 'web' ? null : (
-          <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />
-        ),
+      headerRight: (): JSX.Element | null => (
+        <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />
+      ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -265,6 +260,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     introduction,
     photoUrl,
   ]);
+
   const pickImage = useCallback(() => {
     const f = async (): Promise<void> => {
       const result = await openCameraRoll({
@@ -278,6 +274,11 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     f();
   }, []);
 
+  const onPressCloseError = useCallback((): void => {
+    setErrorMessage('');
+    setIsModalError(false);
+  }, []);
+
   const onPressUserName = useCallback(() => {
     // 次ページのuserNameは最終更新でないためstateで渡す
     navigation.navigate('EditUserName', {
@@ -286,7 +287,72 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     });
   }, [navigation, userName]);
 
-  const rowStyle = { paddingVertical: nationalityCode ? 6 : 16 };
+  const onChangeTextName = useCallback((text: string): void => {
+    setName(text);
+  }, []);
+
+  const onChangeTextIntroduction = useCallback((text: string): void => {
+    setIntroduction(text);
+  }, []);
+
+  const onBlurIntroduction = useCallback((): void => {
+    setIsKeyboard(false);
+  }, []);
+
+  const onOpenCountryPicker = useCallback((): void => {
+    navigation.navigate('EditCountry', {
+      nationalityCode,
+      setNationalityCode: (code: CountryCode): void => setNationalityCode(code),
+    });
+  }, [nationalityCode, navigation]);
+
+  const onPressSubmitLanguagesLearn = useCallback(
+    (language: Language): void => {
+      setLearnLanguage(language);
+      setIsLearn(false);
+    },
+    []
+  );
+
+  const onPressCloseLanguagesLearn = useCallback((): void => {
+    setIsLearn(false);
+  }, []);
+
+  const onPressOpenLanguagesLearn = useCallback((): void => {
+    setIsLearn(true);
+  }, []);
+
+  const onPressSubmitLanguagesNative = useCallback(
+    (language: Language): void => {
+      setNativeLanguage(language);
+      setIsNative(false);
+    },
+    []
+  );
+
+  const onPressCloseLanguagesNative = useCallback((): void => {
+    setIsNative(false);
+  }, []);
+
+  const onPressOpenLanguagesNative = useCallback((): void => {
+    setIsNative(true);
+  }, []);
+
+  const onPressSubmitLanguagesSpoken = useCallback(
+    (language: Language): void => {
+      setSpokenLanguages([...spokenLanguages, language]);
+      setIsSpoken(false);
+    },
+    [spokenLanguages]
+  );
+
+  const onPressCloseLanguagesSpoken = useCallback((): void => {
+    setIsSpoken(false);
+  }, []);
+
+  const onPressOpenLanguagesSpoken = useCallback((): void => {
+    setIsSpoken(true);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -300,35 +366,23 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       <ModalSpokenLanguages
         visible={isLearn}
         defaultLanguage={learnLanguage}
-        languages={getAllLanguage()}
-        onPressSubmit={(language: Language): void => {
-          setLearnLanguage(language);
-          setIsLearn(false);
-        }}
-        onPressClose={(): void => setIsLearn(false)}
+        languages={allLanguage}
+        onPressSubmit={onPressSubmitLanguagesLearn}
+        onPressClose={onPressCloseLanguagesLearn}
       />
+
       <ModalSpokenLanguages
         visible={isNative}
         defaultLanguage={nativeLanguage}
-        languages={getAllLanguage()}
-        onPressSubmit={(language: Language): void => {
-          setNativeLanguage(language);
-          setIsNative(false);
-        }}
-        onPressClose={(): void => setIsNative(false)}
+        languages={allLanguage}
+        onPressSubmit={onPressSubmitLanguagesNative}
+        onPressClose={onPressCloseLanguagesNative}
       />
       <ModalSpokenLanguages
         visible={isSpoken}
-        languages={getTargetLanguages(
-          learnLanguage,
-          nativeLanguage,
-          spokenLanguages
-        )}
-        onPressSubmit={(language: Language): void => {
-          setSpokenLanguages([...spokenLanguages, language]);
-          setIsSpoken(false);
-        }}
-        onPressClose={(): void => setIsSpoken(false)}
+        languages={targetLanguages.current}
+        onPressSubmit={onPressSubmitLanguagesSpoken}
+        onPressClose={onPressCloseLanguagesSpoken}
       />
       <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
         <LoadingModal visible={isLoading} />
@@ -349,7 +403,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
             returnKeyType="done"
             autoCapitalize="none"
             underlineColorAndroid="transparent"
-            onChangeText={(text: string): void => setName(text)}
+            onChangeText={onChangeTextName}
           />
         </View>
 
@@ -365,7 +419,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
         <Hoverable
           style={styles.row}
           activeOpacity={1}
-          onPress={(): void => setIsLearn(true)}
+          onPress={onPressOpenLanguagesLearn}
         >
           <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
           <Text>{getLanguage(learnLanguage)}</Text>
@@ -373,7 +427,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
         <Hoverable
           style={styles.row}
           activeOpacity={1}
-          onPress={(): void => setIsNative(true)}
+          onPress={onPressOpenLanguagesNative}
         >
           <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
           <Text>{getLanguage(nativeLanguage)}</Text>
@@ -404,7 +458,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
             {spokenLanguages.length < getLanguageNum() - 2 ? (
               <Hoverable
                 style={styles.addRow}
-                onPress={(): void => setIsSpoken(true)}
+                onPress={onPressOpenLanguagesSpoken}
               >
                 <MaterialCommunityIcons
                   size={24}
@@ -418,36 +472,20 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
             ) : null}
           </View>
         </View>
-        <Hoverable
-          style={[styles.row, rowStyle]}
-          activeOpacity={1}
-          onPress={(): void => setIsNationality(true)}
-        >
+        <Hoverable style={styles.row} onPress={onOpenCountryPicker}>
           <Text style={styles.label}>
             {I18n.t('selectLanguage.nationality')}
           </Text>
-          <CountryPicker
-            // @ts-ignore
-            countryCode={nationalityCode}
-            placeholder={I18n.t('selectLanguage.placeholder')}
-            withFilter
-            withFlag
-            withCountryNameButton
-            withEmoji
-            withModal
-            withAlphaFilter
-            onSelect={(country: Country): void => {
-              setNationalityCode(country.cca2);
-            }}
-            onClose={(): void => setIsNationality(false)}
-            onOpen={(): void => setIsNationality(true)}
-            visible={isNationality}
-          />
+          {nationalityCode ? (
+            <CountryNameWithFlag nationalityCode={nationalityCode} />
+          ) : (
+            <Text>{I18n.t('selectLanguage.placeholder')}</Text>
+          )}
         </Hoverable>
         <TextInput
           style={styles.introduction}
           value={introduction || ''}
-          onChangeText={(text: string): void => setIntroduction(text)}
+          onChangeText={onChangeTextIntroduction}
           maxLength={200}
           placeholder={I18n.t('editMyProfile.placeholderIntroduction')}
           multiline
@@ -455,16 +493,9 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           spellCheck
           autoCorrect
           underlineColorAndroid="transparent"
-          onBlur={(): void => setIsKeyboard(false)}
+          onBlur={onBlurIntroduction}
         />
         <Space size={32} />
-        {Platform.OS === 'web' ? (
-          <SubmitButton
-            isLoading={isLoading}
-            title={I18n.t('common.done')}
-            onPress={onPressSubmit}
-          />
-        ) : null}
       </KeyboardAwareScrollView>
       <KeyboardHideButton
         isKeyboard={isKeyboard}

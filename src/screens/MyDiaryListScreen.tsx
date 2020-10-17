@@ -89,10 +89,12 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isStillLoading, setIsStillLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [page, setPage] = useState(0);
-  const [readingNext, setReadingNext] = useState(false);
-  const [readAllResults, setReadAllResults] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
+
+  const page = useRef<number>(0);
+  const readingNext = useRef(false);
+  const readAllResults = useRef(false);
+
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
@@ -222,10 +224,10 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
   const loadNextPage = useCallback(() => {
     const f = async (): Promise<void> => {
-      if (!readingNext && !readAllResults) {
+      if (!readingNext.current && !readAllResults.current) {
         try {
-          const nextPage = page + 1;
-          setReadingNext(true);
+          const nextPage = page.current + 1;
+          readingNext.current = true;
 
           const index = await Algolia.getDiaryIndex();
           const res = await index.search('', {
@@ -236,21 +238,21 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
           const { hits } = res;
 
           if (hits.length === 0) {
-            setReadAllResults(true);
-            setReadingNext(false);
+            readAllResults.current = true;
+            readingNext.current = false;
           } else {
             setDiaries([...diaries, ...(hits as Diary[])]);
-            setPage(nextPage);
-            setReadingNext(false);
+            page.current = nextPage;
+            readingNext.current = false;
           }
         } catch (err) {
-          setReadingNext(false);
+          readingNext.current = false;
           alert({ err });
         }
       }
     };
     f();
-  }, [diaries, page, readAllResults, readingNext, setDiaries, user.uid]);
+  }, [diaries, setDiaries, user.uid]);
 
   const onClose = useCallback(() => {
     setIsMenu(false);
@@ -340,6 +342,11 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     ]
   );
 
+  const onPressUser = useCallback((uid: string, userName: string) => {
+    navigation.navigate('UserProfile', { userName });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
     ({ item }: RenderItemProps): JSX.Element => {
@@ -347,16 +354,13 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         <DiaryListItem
           mine
           item={item}
-          onPressUser={(uid: string, userName: string): void => {
-            navigation.navigate('UserProfile', {
-              userName,
-            });
-          }}
+          onPressUser={onPressUser}
           onPressItem={onPressItem}
         />
       );
     },
-    [navigation, onPressItem]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   const listHeaderComponent = useCallback(() => {

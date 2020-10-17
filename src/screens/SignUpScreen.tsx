@@ -148,7 +148,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
           learnLanguage: profile.learnLanguage,
           nativeLanguage: profile.nativeLanguage,
           spokenLanguages: profile.spokenLanguages || null,
-          nationalityCode: profile.nationalityCode || null,
+          nationalityCode: profile.nationalityCode,
           introduction: null,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),

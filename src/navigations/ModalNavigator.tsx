@@ -16,10 +16,11 @@ import {
   DefaultModalLayoutOptions,
 } from '../constants/NavigationOptions';
 import I18n from '../utils/I18n';
-import { Diary } from '../types';
+import { CountryCode, Diary } from '../types';
 import { MainStackParamList } from './MainNavigator';
 import AboutScreen from '../screens/About';
 import RecordScreenContainer from '../containers/RecordScreenContainer';
+import EditCountryScreen from '../screens/EditCountryScreen';
 
 export type ModalPostDiaryStackParamList = {
   PostDiary: undefined;
@@ -30,6 +31,10 @@ export type ModalPostDraftDiaryStackParamList = {
 export type ModalEditMyProfileStackParamList = {
   EditMyProfile: undefined;
   EditUserName: { userName: string; setUserName: (text: string) => void };
+  EditCountry: {
+    nationalityCode: CountryCode | undefined;
+    setNationalityCode: (nationalityCode: CountryCode) => void;
+  };
 };
 export type ModalReviewStackParamList = {
   Review: { objectID: string; correctedNum: number; userName: string };
@@ -163,6 +168,15 @@ export const ModalEditMyProfileNavigator = (): JSX.Element => {
           ...DefaultNavigationOptions,
           ...DefaultModalLayoutOptions,
           title: I18n.t('editUserName.headerTitle'),
+        }}
+      />
+      <ModalEditMyProfileStack.Screen
+        name="EditCountry"
+        component={EditCountryScreen}
+        options={{
+          ...DefaultNavigationOptions,
+          ...DefaultModalLayoutOptions,
+          title: I18n.t('profileNationality.nationality'),
         }}
       />
     </ModalEditMyProfileStack.Navigator>

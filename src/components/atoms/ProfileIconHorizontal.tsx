@@ -60,4 +60,4 @@ const ProfileIconHorizontal: React.FC<Props> = ({
   );
 };
 
-export default ProfileIconHorizontal;
+export default React.memo(ProfileIconHorizontal);

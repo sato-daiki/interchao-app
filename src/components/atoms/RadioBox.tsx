@@ -42,4 +42,4 @@ const RadioBox: React.FC<Props> = ({
   );
 };
 
-export default RadioBox;
+export default React.memo(RadioBox);

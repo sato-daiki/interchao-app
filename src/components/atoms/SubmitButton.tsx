@@ -60,4 +60,4 @@ const SubmitButton: React.FC<Props> = ({
   );
 };
 
-export default SubmitButton;
+export default React.memo(SubmitButton);

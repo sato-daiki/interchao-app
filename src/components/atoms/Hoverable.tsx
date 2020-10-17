@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   ViewStyle,
   StyleProp,
@@ -20,12 +20,20 @@ const Hoverable: React.FC<Props> = ({
   ...props
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const onMouseEnter = useCallback(() => {
+    setIsHover(true);
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    setIsHover(false);
+  }, []);
+
   return (
     <TouchableOpacity
       style={[style, isHover ? hoverStyle : undefined]}
       // @ts-ignore
-      onMouseEnter={(): void => setIsHover(true)}
-      onMouseLeave={(): void => setIsHover(false)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       {...props}
     >
       {children}

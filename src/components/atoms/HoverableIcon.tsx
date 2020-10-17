@@ -87,4 +87,4 @@ const HoverableIcon: React.FC<Props> = ({
   );
 };
 
-export default HoverableIcon;
+export default React.memo(HoverableIcon);

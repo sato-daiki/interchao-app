@@ -30,4 +30,4 @@ const DiaryStatus = ({ color, text }: Props): JSX.Element => (
   </View>
 );
 
-export default DiaryStatus;
+export default React.memo(DiaryStatus);

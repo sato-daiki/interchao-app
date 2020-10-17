@@ -56,4 +56,4 @@ const SmallButtonWhite: React.FC<Props> = ({
   );
 };
 
-export default SmallButtonWhite;
+export default React.memo(SmallButtonWhite);

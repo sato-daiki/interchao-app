@@ -33,4 +33,4 @@ const FixText: React.FC<Props> = ({ diffs }: Props) => {
   return <>{diffText}</>;
 };
 
-export default FixText;
+export default React.memo(FixText);

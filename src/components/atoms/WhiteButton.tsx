@@ -71,4 +71,4 @@ const WhiteButton: React.FC<Props> = ({
   );
 };
 
-export default WhiteButton;
+export default React.memo(WhiteButton);
