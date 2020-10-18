@@ -237,7 +237,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
 
   const onPressGoBack = useCallback(() => {
     navigation.goBack();
-  }, []);
+  }, [navigation]);
 
   useEffect(() => {
     navigation.setOptions({
