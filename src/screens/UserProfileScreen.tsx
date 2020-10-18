@@ -385,19 +385,23 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     [profile, user.uid]
   );
 
-  const onPressUser = useCallback((uid: string, userName: string) => {
-    navigation.navigate('UserProfile', { userName });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onPressUser = useCallback(
+    (uid: string, userName: string) => {
+      navigation.navigate('UserProfile', { userName });
+    },
+    [navigation]
+  );
 
-  const onPressItem = useCallback((item: Diary) => {
-    if (!item.objectID) return;
-    navigation.push('UserDiary', {
-      objectID: item.objectID,
-      userName: item.profile.userName,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onPressItem = useCallback(
+    (item: Diary) => {
+      if (!item.objectID) return;
+      navigation.push('UserDiary', {
+        objectID: item.objectID,
+        userName: item.profile.userName,
+      });
+    },
+    [navigation]
+  );
 
   const listEmptyDiaryComponent =
     loadingDiary || refreshing ? null : <EmptyDiary />;
@@ -476,8 +480,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         />
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [onPressItem, onPressUser]
   );
 
   return (

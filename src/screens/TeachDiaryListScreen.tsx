@@ -214,8 +214,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
         userName: item.profile.userName,
       });
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [navigation]
   );
 
   const onPressTutorial = useCallback((): void => {
@@ -237,22 +236,26 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     f();
   }, [setUser, user]);
 
-  const onPressUser = useCallback((uid: string, userName: string) => {
-    navigation.navigate('UserProfile', { userName });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onPressUser = useCallback(
+    (uid: string, userName: string) => {
+      navigation.navigate('UserProfile', { userName });
+    },
+    [navigation]
+  );
 
   type RenderItemProps = { item: Diary };
-  const renderItem = useCallback(({ item }: RenderItemProps): JSX.Element => {
-    return (
-      <TeachDiaryListItem
-        item={item}
-        onPressUser={onPressUser}
-        onPressItem={onPressItem}
-      />
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const renderItem = useCallback(
+    ({ item }: RenderItemProps): JSX.Element => {
+      return (
+        <TeachDiaryListItem
+          item={item}
+          onPressUser={onPressUser}
+          onPressItem={onPressItem}
+        />
+      );
+    },
+    [onPressItem, onPressUser]
+  );
 
   const listHeaderComponent = useCallback(
     () => <GrayHeader title={I18n.t('teachDiaryList.diaryList')} />,

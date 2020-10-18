@@ -89,13 +89,11 @@ const TeachDiaryListItem = ({
 
   const onPressRow = useCallback(() => {
     onPressItem(item);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [item, onPressItem]);
 
   const onPressProfileIcon = useCallback(() => {
     onPressUser(uid, userName);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onPressUser, uid, userName]);
 
   return (
     <Hoverable
