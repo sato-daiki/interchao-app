@@ -342,10 +342,12 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     ]
   );
 
-  const onPressUser = useCallback((uid: string, userName: string) => {
-    navigation.navigate('UserProfile', { userName });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const onPressUser = useCallback(
+    (uid: string, userName: string) => {
+      navigation.navigate('UserProfile', { userName });
+    },
+    [navigation]
+  );
 
   type RenderItemProps = { item: Diary };
   const renderItem = useCallback(
@@ -359,8 +361,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         />
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [onPressItem, onPressUser]
   );
 
   const listHeaderComponent = useCallback(() => {
