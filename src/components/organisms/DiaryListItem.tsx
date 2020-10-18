@@ -74,8 +74,7 @@ const DiaryListItem = ({
 
   const onPressRow = useCallback(() => {
     onPressItem(item);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [item, onPressItem]);
 
   return (
     <Hoverable

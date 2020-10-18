@@ -237,8 +237,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
 
   const onPressGoBack = useCallback(() => {
     navigation.goBack();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigation]);
 
   useEffect(() => {
     navigation.setOptions({
