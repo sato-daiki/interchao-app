@@ -37,7 +37,12 @@ export type ModalEditMyProfileStackParamList = {
   };
 };
 export type ModalReviewStackParamList = {
-  Review: { objectID: string; correctedNum: number; userName: string };
+  Review: {
+    objectID: string;
+    correctedNum: number;
+    userName: string;
+    onOpenModalAppReviewRequest: () => void;
+  };
 };
 export type ModalCorrectingStackParamList = {
   Correcting: { objectID: string; userName: string };

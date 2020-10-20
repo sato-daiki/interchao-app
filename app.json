@@ -6,7 +6,7 @@
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.5.2",
+    "version": "1.5.3",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
@@ -24,16 +24,18 @@
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
-      "buildNumber": "1050200"
+      "appStoreUrl": "https://itunes.apple.com/jp/app/id1510150748",
+      "buildNumber": "1050300"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1050200,
+      "versionCode": 1050300,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
         "backgroundColor": "#fff"
       },
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=app.interchao",
       "useNextNotificationsApi": true
     },
     "web": {
@@ -81,8 +83,8 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 2,
-      "webRevision": 2
+      "revision": 1,
+      "webRevision": 1
     },
     "hooks": {
       "postPublish": [

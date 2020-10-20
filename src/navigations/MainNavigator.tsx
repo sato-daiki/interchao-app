@@ -55,7 +55,12 @@ export type MainStackParamList = {
   };
   ModalReview: {
     screen: keyof ModalReviewStackParamList;
-    params: { objectID: string; correctedNum: number; userName: string };
+    params: {
+      objectID: string;
+      correctedNum: number;
+      userName: string;
+      onOpenModalAppReviewRequest: () => void;
+    };
   };
   ModalRecord: {
     screen: keyof ModalRecordStackParamList;
