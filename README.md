@@ -94,6 +94,8 @@ https://white-zebra-dev.web.app
 ## メモ
 
 firebase deploy --only firestore:rules -P default
+androi がうまく起動しない時
+expo start --tunnel
 
 - master に merge する。（CircleCI でチェク OK なら次へ。結果は slack の develop チャンネルに返ってくる）
   https://github.com/interchao/interchao-app/compare/master...develop

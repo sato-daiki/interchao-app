@@ -41,7 +41,6 @@ export type ModalReviewStackParamList = {
     objectID: string;
     correctedNum: number;
     userName: string;
-    onOpenModalAppReviewRequest: () => void;
   };
 };
 export type ModalCorrectingStackParamList = {

@@ -6,6 +6,7 @@ const initialState: LocalStatus = {
   unreadCorrectionNum: 0,
   isLoading: true,
   isSignout: false,
+  isModalAppReviewRequest: false,
   uid: null,
 };
 
