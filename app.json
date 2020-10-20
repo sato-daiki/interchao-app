@@ -24,6 +24,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
+      "appStoreUrl": "https://itunes.apple.com/jp/app/id1510150748",
       "buildNumber": "1050200"
     },
     "android": {
@@ -34,6 +35,7 @@
         "foregroundImage": "./assets/images/foreground.png",
         "backgroundColor": "#fff"
       },
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=app.interchao",
       "useNextNotificationsApi": true
     },
     "web": {

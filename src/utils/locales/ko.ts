@@ -458,6 +458,20 @@ const modalAlertPublish = {
   good: '게시물 수고하셨습니다\n내일도 노력합시다',
 };
 
+const modalAppReviewRequest = {
+  title: 'Interchao의 응원을 부탁합니다!',
+  improveTitle: 'Interchao 기능 개선에 협력 부탁합니다!',
+  text:
+    '항상 Interchao를 이용해 주셔서 감사합니다. 추가 개선을위한 의견을 들려주세요',
+  thanks:
+    '댓글 감사합니다. 개선에 큰 도움이됩니다. 앞으로도 Interchao를 잘 부탁합니다',
+  improve: '개선했으면 좋겠다 것을 쓴다',
+  review: '리뷰하기',
+  notYet: '나중에 쓰기',
+  never: '리뷰하지',
+  supplement: '☆을 눌러 평가하십시오',
+};
+
 const modalBlock = {
   blockedQuestion: '계정 차단',
   blockedSuccess: '{{userName}} 님 차단 함',
@@ -656,6 +670,7 @@ const ko = {
   emptyMyDiaryList,
   modalAlertCorrection,
   modalAlertPublish,
+  modalAppReviewRequest,
   modalBlock,
   modalCorrectingDone,
   modalDeleteAcount,

@@ -7,7 +7,7 @@ import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
 import { Space, LoadingModal, HeaderText } from '../components/atoms';
 import { KeyboardHideButton, UserListItem } from '../components/molecules';
-import { Diary, Profile, Review, Reviewer } from '../types';
+import { Diary, Profile, Review, Reviewer, User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
@@ -20,6 +20,7 @@ import {
 export interface Props {
   diary?: Diary;
   profile: Profile;
+  user: User;
 }
 
 interface DispatchProps {
@@ -64,6 +65,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
   navigation,
   route,
   diary,
+  user,
   profile,
   editDiary,
 }) => {
@@ -165,6 +167,9 @@ const ReviewScreen: React.FC<ScreenType> = ({
     });
 
     navigation.goBack();
+    if (rating > 3 || !user.appReviewState || user.appReviewState === 'yet') {
+      route.params.onOpenModalAppReviewRequest();
+    }
     setIsLoading(false);
   }, [
     comment,
@@ -179,6 +184,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
     profile.userName,
     rating,
     route.params,
+    user.appReviewState,
   ]);
 
   useEffect(() => {
@@ -193,6 +199,34 @@ const ReviewScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rating, comment]);
 
+  const onBlur = useCallback(() => {
+    setIsKeyboard(false);
+  }, []);
+
+  const onChangeText = useCallback((text: string): void => {
+    setComment(text);
+  }, []);
+
+  const onPressMainNotFound = useCallback((): void => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const onPressMainError = useCallback((): void => {
+    setIsModalError(false);
+  }, []);
+
+  const onPressCloseConfirmation = useCallback((): void => {
+    setIsModalConfirmation(false);
+  }, []);
+
+  const onFinishRating = useCallback((num: number): void => {
+    setRating(num);
+  }, []);
+
+  const onPressMainConfirmation = useCallback((): void => {
+    navigation.goBack();
+  }, [navigation]);
+
   if (!diary) {
     return (
       <View style={styles.container}>
@@ -201,9 +235,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
           title={I18n.t('common.error')}
           message={I18n.t('errorMessage.notFound')}
           mainButtonText={I18n.t('common.close')}
-          onPressMain={(): void => {
-            navigation.goBack();
-          }}
+          onPressMain={onPressMainNotFound}
         />
       </View>
     );
@@ -217,19 +249,15 @@ const ReviewScreen: React.FC<ScreenType> = ({
         title={I18n.t('common.error')}
         message={I18n.t('errorMessage.invalidRaiting')}
         mainButtonText={I18n.t('common.close')}
-        onPressMain={(): void => setIsModalError(false)}
+        onPressMain={onPressMainError}
       />
       <ModalConfirm
         visible={isModalConfirmation}
         title={I18n.t('common.confirmation')}
         message={I18n.t('review.confirmation')}
         mainButtonText="OK"
-        onPressMain={(): void => {
-          navigation.goBack();
-        }}
-        onPressClose={(): void => {
-          setIsModalConfirmation(false);
-        }}
+        onPressMain={onPressMainConfirmation}
+        onPressClose={onPressCloseConfirmation}
       />
       <UserListItem
         userName={diary.profile.userName}
@@ -241,13 +269,13 @@ const ReviewScreen: React.FC<ScreenType> = ({
       <AirbnbRating
         showRating={false}
         defaultRating={0}
-        onFinishRating={(num: number): void => setRating(num)}
+        onFinishRating={onFinishRating}
       />
       <Space size={24} />
       <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
         <TextInput
           value={comment}
-          onChangeText={(text: string): void => setComment(text)}
+          onChangeText={onChangeText}
           maxLength={140}
           placeholder={I18n.t('review.placeholder')}
           multiline
@@ -256,7 +284,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
           autoCorrect
           underlineColorAndroid="transparent"
           style={styles.review}
-          onBlur={(): void => setIsKeyboard(false)}
+          onBlur={onBlur}
         />
       </KeyboardAwareScrollView>
       <KeyboardHideButton

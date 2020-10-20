@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Space, SubmitButton, WhiteButton } from '../../atoms';
-import { KeyboardHideButton } from '../../molecules';
 import {
   borderLightColor,
   fontSizeL,
@@ -12,23 +11,16 @@ import {
 } from '../../../styles/Common';
 import I18n from '../../../utils/I18n';
 
-const { height } = Dimensions.get('window');
-
 interface Props {
   comment: string;
-  isKeyboard: boolean;
   isLoading: boolean;
-  setIsKeyboard: (isKeyboard: boolean) => void;
+  isPublishEnd: boolean;
   onChangeTextComment: (comment: string) => void;
-  onBlur: () => void;
-  onPressCancel: () => void;
+  onClose: () => void;
   onPressPublish: () => void;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-  },
   title: {
     fontSize: fontSizeL,
     color: primaryColor,
@@ -38,14 +30,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: fontSizeL * 1.3,
   },
+  thanks: {
+    fontSize: fontSizeM,
+    color: primaryColor,
+    marginVertical: 6,
+    lineHeight: fontSizeM * 1.3,
+  },
   line: {
     width: '100%',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
     marginBottom: 24,
-  },
-  keyboardAwareScrollView: {
-    flex: 1,
   },
   review: {
     paddingTop: 12,
@@ -53,7 +48,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomColor: borderLightColor,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    height: height - 400,
+    height: 170,
     backgroundColor: offWhite,
     textAlignVertical: 'top',
     fontSize: fontSizeM,
@@ -63,46 +58,56 @@ const styles = StyleSheet.create({
 
 const Comment: React.FC<Props> = ({
   comment,
-  isKeyboard,
   isLoading,
-  setIsKeyboard,
+  isPublishEnd,
   onChangeTextComment,
-  onBlur,
-  onPressCancel,
+  onClose,
   onPressPublish,
 }: Props): JSX.Element => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
-        {I18n.t('modalAppReviewRequest.improveTitle')}
-      </Text>
-      <View style={styles.line} />
-      {/* <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}> */}
-      <TextInput
-        value={comment}
-        onChangeText={onChangeTextComment}
-        placeholder={I18n.t('review.placeholder')}
-        multiline
-        spellCheck
-        autoCorrect
-        underlineColorAndroid="transparent"
-        style={styles.review}
-        onBlur={onBlur}
-      />
-      <Space size={32} />
-      {/* </KeyboardAwareScrollView> */}
-      <SubmitButton
-        isLoading={isLoading}
-        title={I18n.t('common.publish')}
-        onPress={onPressPublish}
-      />
-      <Space size={16} />
-      <WhiteButton title={I18n.t('common.cancel')} onPress={onPressCancel} />
-      <KeyboardHideButton
-        isKeyboard={isKeyboard}
-        setIsKeyboard={setIsKeyboard}
-      />
-    </View>
+    <>
+      {!isPublishEnd ? (
+        <>
+          <Text style={styles.title}>
+            {I18n.t('modalAppReviewRequest.improveTitle')}
+          </Text>
+          <View style={styles.line} />
+          <KeyboardAwareScrollView
+            keyboardShouldPersistTaps="handled"
+            extraScrollHeight={32}
+          >
+            <TextInput
+              value={comment}
+              multiline
+              spellCheck
+              autoCorrect
+              blurOnSubmit
+              keyboardType="default"
+              returnKeyType="done"
+              underlineColorAndroid="transparent"
+              style={styles.review}
+              onChangeText={onChangeTextComment}
+            />
+          </KeyboardAwareScrollView>
+          <Space size={32} />
+          <SubmitButton
+            isLoading={isLoading}
+            title={I18n.t('common.publish')}
+            onPress={onPressPublish}
+          />
+          <Space size={16} />
+          <WhiteButton title={I18n.t('common.cancel')} onPress={onClose} />
+        </>
+      ) : (
+        <>
+          <Text style={styles.thanks}>
+            {I18n.t('modalAppReviewRequest.thanks')}
+          </Text>
+          <Space size={16} />
+          <WhiteButton title={I18n.t('common.close')} onPress={onClose} />
+        </>
+      )}
+    </>
   );
 };
 
