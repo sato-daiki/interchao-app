@@ -14,7 +14,7 @@ import {
   emaillExistCheck,
 } from '../utils/common';
 import firebase from '../constants/firebase';
-import { Profile, User } from '../types';
+import { AppReviewState, Profile, User } from '../types';
 import { CheckTextInput } from '../components/molecules';
 import {
   Space,
@@ -110,6 +110,8 @@ const SignUpScreen: React.FC<ScreenType> = ({
 
   const createUser = useCallback(
     (credentUser: firebase.User, loginMethod: LoginMethod): void => {
+      const appReviewState: AppReviewState = 'yet';
+
       const f = async (): Promise<void> => {
         const userInfo = {
           diaryPosted: false,
@@ -133,7 +135,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
           // mailReminderOneWeek: true,
           // mailReminderOneMonth: true,
           // mailReminderThreeMonths: false,
-          appReviewState: 'yet',
+          appReviewState,
           runningDays: 0,
           runningWeeks: 0,
           lastDiaryPostedAt: null,
