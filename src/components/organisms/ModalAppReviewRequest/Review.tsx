@@ -1,12 +1,13 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
-import { AirbnbRating } from 'react-native-elements';
+import { View, StyleSheet, Text } from 'react-native';
+import { AirbnbRating } from 'react-native-ratings';
 import { Space, SubmitButton, WhiteButton } from '../../atoms';
 import {
   borderLightColor,
   fontSizeL,
   fontSizeM,
   primaryColor,
+  subTextColor,
 } from '../../../styles/Common';
 import I18n from '../../../utils/I18n';
 
@@ -41,6 +42,12 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
     color: primaryColor,
   },
+  supplement: {
+    textAlign: 'center',
+    fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
+    color: subTextColor,
+  },
   buttonTopContainer: {
     marginTop: 32,
     height: 62,
@@ -66,6 +73,10 @@ const Review: React.FC<Props> = ({
         defaultRating={0}
         onFinishRating={onFinishRating}
       />
+      <Space size={16} />
+      <Text style={styles.supplement}>
+        {I18n.t('modalAppReviewRequest.supplement')}
+      </Text>
       <Space size={16} />
       <View style={styles.buttonTopContainer}>
         {rating === 0 ? null : (

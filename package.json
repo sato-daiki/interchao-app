@@ -82,6 +82,7 @@
     "expo-random": "~8.2.1",
     "expo-sharing": "~8.2.1",
     "expo-speech": "~8.2.1",
+    "expo-store-review": "~2.1.2",
     "expo-updates": "~0.2.8",
     "expo-web-browser": "~8.3.1",
     "firebase": "7.9.0",

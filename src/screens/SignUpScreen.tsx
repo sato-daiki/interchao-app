@@ -133,6 +133,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
           // mailReminderOneWeek: true,
           // mailReminderOneMonth: true,
           // mailReminderThreeMonths: false,
+          appReviewState: 'yet',
           runningDays: 0,
           runningWeeks: 0,
           lastDiaryPostedAt: null,

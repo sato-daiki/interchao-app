@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Linking, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import * as Linking from 'expo-linking';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { maxLayoutChange, offBlack, offWhite } from '../../../styles/Common';
 import { Hoverable } from '../../atoms';

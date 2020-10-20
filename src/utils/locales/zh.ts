@@ -445,6 +445,19 @@ const modalAlertPublish = {
   good: '感谢您的发表\n明天努力吧',
 };
 
+const modalAppReviewRequest = {
+  title: '感谢您对Interchao的支持',
+  improveTitle: '感谢您在改善Interchao功能方面的合作',
+  text: '感谢您使用Interchao。请让我们知道您对进一步改进的想法',
+  thanks:
+    '感谢您的评论。我们将使用它进行改进。我们期待您对Interchao的持续支持。',
+  improve: '写下您要改善的地方',
+  review: '评论',
+  notYet: '以后写',
+  never: '不审查',
+  supplement: '请点击☆评分',
+};
+
 const modalBlock = {
   blockedQuestion: '拉黑帐户',
   blockedSuccess: '{{userName}}已被拉黑',
@@ -640,6 +653,7 @@ const zh = {
   emptyMyDiaryList,
   modalAlertCorrection,
   modalAlertPublish,
+  modalAppReviewRequest,
   modalBlock,
   modalCorrectingDone,
   modalDeleteAcount,

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import * as Linking from 'expo-linking';
-
+import * as StoreReview from 'expo-store-review';
 import firebase from '../../../constants/firebase';
 import { alert } from '../../../utils/ErrorAlert';
 import { Modal } from '../../template';
@@ -31,8 +31,17 @@ const ModalAppReviewRequest: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [isCommentBox, setIsCommentBox] = useState(false);
-  const [isKeyboard, setIsKeyboard] = useState(false);
+  const [isPublishEnd, setIsPublishEnd] = useState(false);
   const [comment, setComment] = useState('');
+
+  const close = useCallback(() => {
+    onClose();
+    setIsLoading(false);
+    setRating(0);
+    setIsCommentBox(false);
+    setIsPublishEnd(false);
+    setComment('');
+  }, [onClose]);
 
   const updateUserAppReviewState = useCallback(
     (appReviewState: AppReviewState) => {
@@ -52,26 +61,21 @@ const ModalAppReviewRequest: React.FC<Props> = ({
   );
 
   const onPressOk = useCallback(() => {
-    if (rating >= 4) {
+    if (Platform.OS !== 'web' && rating >= 4) {
       if (Platform.OS === 'ios') {
         Linking.openURL(
           `https://apps.apple.com/app/apple-store/id1510150748?action=write-review`
         );
-        updateUserAppReviewState('done');
       } else if (Platform.OS === 'android') {
-        Linking.openURL(
-          `https://play.google.com/store/apps/details?id=app.interchao?showAllReviews=true`
-        );
-        updateUserAppReviewState('done');
-      } else if (Platform.OS === 'web') {
-        // webの場合もその場でコメントをもらう
-        setIsCommentBox(true);
+        StoreReview.requestReview();
       }
+      updateUserAppReviewState('done');
+      close();
     } else {
       // 低評価の時は用意したコメント欄からコメントをもらう
       setIsCommentBox(true);
     }
-  }, [rating, updateUserAppReviewState]);
+  }, [close, rating, updateUserAppReviewState]);
 
   const onFinishRating = useCallback((num: number): void => {
     setRating(num);
@@ -79,10 +83,6 @@ const ModalAppReviewRequest: React.FC<Props> = ({
 
   const onChangeTextComment = useCallback((text: string): void => {
     setComment(text);
-  }, []);
-
-  const onBlur = useCallback(() => {
-    setIsKeyboard(false);
   }, []);
 
   const onPressCloseNever = useCallback((): void => {
@@ -95,10 +95,10 @@ const ModalAppReviewRequest: React.FC<Props> = ({
         alert({ err });
         setIsLoading(false);
       }
-      onClose();
+      close();
     };
     f();
-  }, [isLoading, onClose, updateUserAppReviewState]);
+  }, [close, isLoading, updateUserAppReviewState]);
 
   const onPressPublish = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -120,17 +120,16 @@ const ModalAppReviewRequest: React.FC<Props> = ({
         await updateUserAppReviewState('done');
 
         setIsLoading(false);
+        setIsPublishEnd(true);
       } catch (err) {
         alert({ err });
         setIsLoading(false);
       }
-      onClose();
     };
     f();
   }, [
     comment,
     isLoading,
-    onClose,
     profile.nativeLanguage,
     profile.uid,
     profile.userName,
@@ -139,8 +138,8 @@ const ModalAppReviewRequest: React.FC<Props> = ({
   ]);
 
   const onPressCancel = useCallback(() => {
-    onClose();
-  }, [onClose]);
+    close();
+  }, [close]);
 
   return (
     <Modal visible={visible}>
@@ -156,12 +155,10 @@ const ModalAppReviewRequest: React.FC<Props> = ({
         ) : (
           <Comment
             comment={comment}
-            isKeyboard={isKeyboard}
             isLoading={isLoading}
-            setIsKeyboard={setIsKeyboard}
+            isPublishEnd={isPublishEnd}
             onChangeTextComment={onChangeTextComment}
-            onBlur={onBlur}
-            onPressCancel={onPressCancel}
+            onClose={onPressCancel}
             onPressPublish={onPressPublish}
           />
         )}
