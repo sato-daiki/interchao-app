@@ -72,10 +72,7 @@ const Comment: React.FC<Props> = ({
             {I18n.t('modalAppReviewRequest.improveTitle')}
           </Text>
           <View style={styles.line} />
-          <KeyboardAwareScrollView
-            keyboardShouldPersistTaps="handled"
-            extraScrollHeight={32}
-          >
+          <KeyboardAwareScrollView extraScrollHeight={32}>
             <TextInput
               value={comment}
               multiline

@@ -59,7 +59,6 @@ export type MainStackParamList = {
       objectID: string;
       correctedNum: number;
       userName: string;
-      onOpenModalAppReviewRequest: () => void;
     };
   };
   ModalRecord: {

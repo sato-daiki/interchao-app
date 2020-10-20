@@ -12,7 +12,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import * as Linking from 'expo-linking';
 import firebase from '../constants/firebase';
-import { AppReviewState, Diary, Profile, User } from '../types';
+import { AppReviewState, Diary, LocalStatus, Profile, User } from '../types';
 import { ModalConfirm } from '../components/organisms';
 import {
   LoadingModal,
@@ -36,12 +36,14 @@ export interface Props {
   diary?: Diary;
   profile: Profile;
   user: User;
+  localStatus: LocalStatus;
 }
 
 interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
   deleteDiary: (objectID: string) => void;
   setUser: (user: User) => void;
+  setLocalStatus: (localStatus: LocalStatus) => void;
 }
 
 type MyDiaryNavigationProp = CompositeNavigationProp<
@@ -71,9 +73,11 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   profile,
   diary,
   user,
+  localStatus,
   deleteDiary,
   editDiary,
   setUser,
+  setLocalStatus,
 }) => {
   const initFairCopyTitle = (): string => {
     if (!diary) return '';
@@ -94,7 +98,6 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const [fairCopyTitle, setFairCopyTitle] = useState<string>(
     initFairCopyTitle()
   );
-  const [isModalAppReviewRequest, setIsModalAppReviewRequest] = useState(false);
   const [fairCopyText, setFairCopyText] = useState<string>(initFairCopyText());
 
   const [index, setIndex] = useState(0);
@@ -181,13 +184,9 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     [setUser, user]
   );
 
-  const onOpenModalAppReviewRequest = useCallback((): void => {
-    setIsModalAppReviewRequest(true);
-  }, []);
-
   const onCloseModalAppReviewRequest = useCallback((): void => {
-    setIsModalAppReviewRequest(false);
-  }, []);
+    setLocalStatus({ ...localStatus, isModalAppReviewRequest: false });
+  }, [localStatus, setLocalStatus]);
 
   const headerRight = (): ReactNode => {
     if (!isEditing) {
@@ -253,7 +252,6 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         objectID: diary.objectID,
         correctedNum,
         userName: diary.profile.userName,
-        onOpenModalAppReviewRequest,
       },
     });
     setIsLoading(false);
@@ -338,7 +336,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
       <ModalAppReviewRequest
-        visible={isModalAppReviewRequest}
+        visible={localStatus.isModalAppReviewRequest || false}
         profile={profile}
         updateAppReviewState={updateAppReviewState}
         onClose={onCloseModalAppReviewRequest}

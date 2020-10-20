@@ -7,7 +7,7 @@ import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 import { borderLightColor, offWhite, fontSizeM } from '../styles/Common';
 import { Space, LoadingModal, HeaderText } from '../components/atoms';
 import { KeyboardHideButton, UserListItem } from '../components/molecules';
-import { Diary, Profile, Review, Reviewer, User } from '../types';
+import { Diary, LocalStatus, Profile, Review, Reviewer, User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
@@ -21,10 +21,12 @@ export interface Props {
   diary?: Diary;
   profile: Profile;
   user: User;
+  localStatus: LocalStatus;
 }
 
 interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
+  setLocalStatus: (localStatus: LocalStatus) => void;
 }
 
 type NavigationProp = CompositeNavigationProp<
@@ -66,8 +68,10 @@ const ReviewScreen: React.FC<ScreenType> = ({
   route,
   diary,
   user,
+  localStatus,
   profile,
   editDiary,
+  setLocalStatus,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
@@ -167,8 +171,8 @@ const ReviewScreen: React.FC<ScreenType> = ({
     });
 
     navigation.goBack();
-    if (rating > 3 || !user.appReviewState || user.appReviewState === 'yet') {
-      route.params.onOpenModalAppReviewRequest();
+    if (rating > 3 && (!user.appReviewState || user.appReviewState === 'yet')) {
+      setLocalStatus({ ...localStatus, isModalAppReviewRequest: true });
     }
     setIsLoading(false);
   }, [
@@ -176,6 +180,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
     diary,
     editDiary,
     isLoading,
+    localStatus,
     navigation,
     profile.nationalityCode,
     profile.nativeLanguage,
@@ -184,6 +189,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
     profile.userName,
     rating,
     route.params,
+    setLocalStatus,
     user.appReviewState,
   ]);
 
