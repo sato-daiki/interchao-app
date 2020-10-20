@@ -1,5 +1,7 @@
 import { firestore } from 'firebase';
 
+export type AppReviewState = 'yet' | 'never' | 'done';
+
 export interface User {
   uid: string;
   diaryPosted: boolean;
@@ -23,6 +25,7 @@ export interface User {
   // mailReminderOneWeek?: boolean;
   // mailReminderOneMonth?: boolean;
   // mailReminderThreeMonths?: boolean;
+  appReviewState?: AppReviewState;
   runningDays?: number;
   runningWeeks?: number;
   lastDiaryPostedAt?: firestore.Timestamp | null;

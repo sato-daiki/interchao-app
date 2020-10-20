@@ -463,6 +463,20 @@ const modalAlertPublish = {
   good: '投稿おつかれさまです\n明日も頑張りましょう！',
 };
 
+const modalAppReviewRequest = {
+  title: 'Interchaoの\n応援をお願いします！',
+  improveTitle: 'Interchaoの\n機能改善にご協力お願いします！',
+  text:
+    'いつもInterchaoをご利用いただきありがとうございます。さらなる改善のため、ご意見をお聞かせください',
+  thanks:
+    'コメントありがとうございました。改善に役立たせていただきます。今後ともInterchaoをよろしくお願いします。',
+  improve: '改善して欲しいことを書く',
+  review: 'レビューする',
+  notYet: 'いまはレビューを書かない',
+  never: 'レビューしない',
+  supplement: '☆をタップして評価してください',
+};
+
 const modalBlock = {
   blockedQuestion: '{{userName}}をブロックしますか？',
   blockedSuccess: '{{userName}}をブロックしました',
@@ -662,6 +676,7 @@ const ja = {
   emptyMyDiaryList,
   modalAlertCorrection,
   modalAlertPublish,
+  modalAppReviewRequest,
   modalBlock,
   modalCorrectingDone,
   modalDeleteAcount,
