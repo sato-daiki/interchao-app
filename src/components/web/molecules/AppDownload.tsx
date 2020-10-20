@@ -8,7 +8,7 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
-import { Linking } from 'expo';
+import * as Linking from 'expo-linking';
 import I18n from '../../../utils/I18n';
 import { GooglePlayBadge, Appstore } from '../../../images/web/index';
 import {

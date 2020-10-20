@@ -474,6 +474,21 @@ const modalAlertPublish = {
   good: "Thank you for posting.\nLet's do your best tomorrow too",
 };
 
+const modalAppReviewRequest = {
+  title: 'Thank you for your support of Interchao',
+  improveTitle:
+    'We kindly ask for your cooperation in improving the functionality of Interchao',
+  text:
+    'Thank you for using Interchao. Please let us know what you think for further improvement',
+  thanks:
+    'Thank you for your comment. We will use it for improvement. We look forward to your continued support of Interchao',
+  improve: 'Write what you want to improve',
+  review: 'Review',
+  notYet: 'Do not write a review now',
+  never: 'Do not review',
+  supplement: 'Please tap ☆ to evaluate',
+};
+
 const modalBlock = {
   blockedQuestion: 'Block {{userName}}?',
   blockedSuccess: '{{userName}} Blocked',
@@ -675,6 +690,7 @@ const en = {
   emptyMyDiaryList,
   modalAlertCorrection,
   modalAlertPublish,
+  modalAppReviewRequest,
   modalBlock,
   modalCorrectingDone,
   modalDeleteAcount,

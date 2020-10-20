@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as Random from 'expo-random';
 import Constants from 'expo-constants';
-import { Share, Platform, Linking } from 'react-native';
+import { Share, Platform } from 'react-native';
+import * as Linking from 'expo-linking';
 import firebase, { firestore } from 'firebase';
 import * as Sharing from 'expo-sharing';
 import I18n from './I18n';
