@@ -1,5 +1,7 @@
 module.exports = {
   BagPoints: require('./bagPoints.png'),
+  FlashLeft: require('./flash_left.png'),
+  FlashRight: require('./flash_right.png'),
   GetPoints: require('./getPoints.png'),
   Loading: require('./loading.gif'),
   LogoVercitacl: require('./logo_vertical.png'),
