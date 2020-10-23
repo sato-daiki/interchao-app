@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { LoadingModal } from '../atoms';
-import ModalAlertPublish from './ModalAlertPublish';
+import { ModalAlertPublish } from './ModalAlertPublish';
 import ModalLackPoint from './ModalLackPoint';
 import ModalDiaryCancel from './ModalDiaryCancel';
 import {
@@ -221,7 +221,6 @@ const PostDiary = ({
         usePoints={usePoints}
         points={points}
         publishMessage={publishMessage}
-        nativeLanguage={nativeLanguage}
         onPressSubmit={onPressSubmit}
         onPressCloseCancel={onPressCloseModalPublish}
         onPressCloseSns={onPressCloseSns}
