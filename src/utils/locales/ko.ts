@@ -168,6 +168,7 @@ const editMyProfile = {
   learn: '공부중',
   native: '원어민',
   spoken: '기타 할 줄 아는 언어',
+  imageButton: '이미지를 변경하려면',
 };
 
 const editPassword = {
