@@ -19,6 +19,7 @@ import {
   Hoverable,
   HeaderText,
   CountryNameWithFlag,
+  SmallButtonWhite,
 } from '../components/atoms';
 import { Profile, Language, CountryCode } from '../types';
 import I18n from '../utils/I18n';
@@ -387,6 +388,12 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
         <LoadingModal visible={isLoading} />
         <View style={styles.avatar}>
           <Avatar photoUrl={photoUrl} pickImage={pickImage} />
+          <Space size={12} />
+          <SmallButtonWhite
+            title={I18n.t('editMyProfile.imageButton')}
+            onPress={pickImage}
+            color={primaryColor}
+          />
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>{I18n.t('editMyProfile.name')}</Text>
