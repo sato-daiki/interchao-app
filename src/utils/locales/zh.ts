@@ -159,6 +159,7 @@ const editMyProfile = {
   learn: '您想学习的',
   native: '你说的',
   spoken: '您会说的\n其他语言',
+  imageButton: '变更图片',
 };
 
 const editPassword = {

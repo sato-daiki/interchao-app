@@ -171,6 +171,7 @@ const editMyProfile = {
   learn: '勉強中',
   native: '話せる言語',
   spoken: 'その他の\n話せる言語',
+  imageButton: '画像を変更する',
 };
 
 const editPassword = {

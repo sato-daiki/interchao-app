@@ -79,12 +79,10 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontWeight: 'bold',
     fontSize: fontSizeM,
-    paddingBottom: 16,
   },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
-    paddingBottom: 32,
     lineHeight: fontSizeM * 1.3,
   },
 });
@@ -217,12 +215,14 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
                 nativeLanguage={profile.nativeLanguage}
                 textLanguage={targetProfile.learnLanguage}
               />
+              <Space size={16} />
               <RichText
                 style={styles.text}
                 text={teachDiary.text}
                 nativeLanguage={profile.nativeLanguage}
                 textLanguage={targetProfile.learnLanguage}
               />
+              <Space size={32} />
             </>
           ) : (
             <ActivityIndicator />

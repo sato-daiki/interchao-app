@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import { Language } from '../../types';
+import { Space } from '../atoms';
 import RichText from '../organisms/RichText';
 
 interface Props {
@@ -16,13 +17,11 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontWeight: 'bold',
     fontSize: fontSizeM,
-    paddingBottom: 16,
   },
   text: {
     lineHeight: fontSizeM * 1.3,
     fontSize: fontSizeM,
     color: primaryColor,
-    paddingBottom: 16,
   },
 });
 
@@ -40,12 +39,14 @@ const DiaryTitleAndText: React.FC<Props> = ({
         nativeLanguage={nativeLanguage}
         textLanguage={textLanguage}
       />
+      <Space size={16} />
       <RichText
         style={styles.text}
         text={text}
         nativeLanguage={nativeLanguage}
         textLanguage={textLanguage}
       />
+      <Space size={16} />
     </>
   );
 };

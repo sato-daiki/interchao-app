@@ -10,7 +10,7 @@ import {
 } from '../../styles/Common';
 import { getDay } from '../../utils/diary';
 import { Review, Language } from '../../types';
-import { ProfileIconHorizontal } from '../atoms';
+import { ProfileIconHorizontal, Space } from '../atoms';
 import RichText from './RichText';
 
 interface Props {
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
-    paddingBottom: 16,
   },
   rating: {
     alignItems: 'flex-start',
@@ -75,6 +74,7 @@ const ReviewListItem = ({
         nativeLanguage={nativeLanguage}
         textLanguage={textLanguage}
       />
+      <Space size={16} />
       <ProfileIconHorizontal
         userName={reviewer.userName}
         photoUrl={reviewer.photoUrl}
