@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
-import RichText from '../organisms/RichText';
+import RichText from '../features/RichText';
 import { Language } from '../../types';
 
 interface Props {

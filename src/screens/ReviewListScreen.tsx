@@ -6,7 +6,7 @@ import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { Review, Profile } from '../types';
 import { LoadingModal, GrayHeader } from '../components/atoms';
 import { getReviews } from '../utils/review';
-import ReviewListItem from '../components/organisms/ReviewListItem';
+import ReviewListItem from '../components/features/ReviewListItem';
 import { EmptyReview } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';

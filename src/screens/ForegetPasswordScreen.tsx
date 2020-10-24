@@ -12,7 +12,7 @@ import {
   fontSizeL,
   subTextColor,
 } from '../styles/Common';
-import ModalSendEmail from '../components/organisms/ModalSendEmail';
+import ModalSendEmail from '../components/features/ModalSendEmail';
 import I18n from '../utils/I18n';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
 import {

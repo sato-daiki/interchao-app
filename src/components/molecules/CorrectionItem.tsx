@@ -9,7 +9,7 @@ import {
 import I18n from '../../utils/I18n';
 import { Diff, Language } from '../../types';
 import { Space } from '../atoms';
-import RichText from '../organisms/RichText';
+import RichText from '../features/RichText';
 import CorrectingText from './CorrectingText';
 
 interface Props {

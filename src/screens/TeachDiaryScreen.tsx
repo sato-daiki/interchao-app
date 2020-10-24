@@ -25,7 +25,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
-import { ModalAlertCorrection, ModalConfirm } from '../components/organisms';
+import { ModalAlertCorrection, ModalConfirm } from '../components/features';
 import {
   LoadingModal,
   SubmitButton,
@@ -46,8 +46,8 @@ import Algolia from '../utils/Algolia';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import { track, events } from '../utils/Analytics';
-import Corrections from '../components/organisms/Corrections';
-import RichText from '../components/organisms/RichText';
+import Corrections from '../components/features/Corrections';
+import RichText from '../components/features/RichText';
 import { appShare, diaryShare } from '../utils/common';
 import {
   TeachDiaryTabStackParamList,

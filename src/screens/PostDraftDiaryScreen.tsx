@@ -13,7 +13,7 @@ import { User } from '../types/user';
 import { HeaderText } from '../components/atoms';
 import { DiaryStatus, Profile, Diary } from '../types';
 import { track, events } from '../utils/Analytics';
-import PostDiary from '../components/organisms/PostDiary';
+import PostDiary from '../components/features/PostDiary';
 import {
   getDisplayProfile,
   checkBeforePost,

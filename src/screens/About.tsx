@@ -1,5 +1,5 @@
 import React from 'react';
-import Lp from '../components/organisms/Lp';
+import Lp from '../components/features/Lp';
 
 const AboutScreen: React.FC = () => {
   return <Lp isAbout />;

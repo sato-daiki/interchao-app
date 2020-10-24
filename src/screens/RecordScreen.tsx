@@ -29,7 +29,7 @@ import {
   subTextColor,
 } from '../styles/Common';
 import { uploadStorageAsync } from '../utils/storage';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 
 export type Props = {
   diary?: Diary;

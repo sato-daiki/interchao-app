@@ -17,7 +17,7 @@ import {
   offWhite,
 } from '../styles/Common';
 import { alert } from '../utils/ErrorAlert';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 import {
   MyPageTabNavigationProp,
   MyPageTabStackParamList,

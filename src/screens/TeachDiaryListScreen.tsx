@@ -13,16 +13,16 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
 import { Diary, Profile, User } from '../types';
-import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
+import TeachDiaryListItem from '../components/features/TeachDiaryListItem';
 import { EmptyList } from '../components/molecules';
 import firebase from '../constants/firebase';
 import { getBlockers, getBlockees } from '../utils/blockUser';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import { getExceptUser, getFillterLanguages } from '../utils/diary';
-import TutorialTeachDiaryList from '../components/organisms/TutorialTeachDiaryList';
+import TutorialTeachDiaryList from '../components/features/TutorialTeachDiaryList';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import TeachDiaryListMenu from '../components/organisms/TeachDiaryListMenu';
+import TeachDiaryListMenu from '../components/features/TeachDiaryListMenu';
 import {
   TeachDiaryTabNavigationProp,
   TeachDiaryTabStackParamList,

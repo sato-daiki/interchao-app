@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import Lp from '../components/organisms/Lp';
+import Lp from '../components/features/Lp';
 import HtmlHeader from '../components/web/organisms/HtmlHeader';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
 

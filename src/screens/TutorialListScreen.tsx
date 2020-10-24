@@ -4,8 +4,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { offWhite } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
-import TutorialPostDiary from '../components/organisms/TutorialPostDiary';
-import TutorialPoints from '../components/organisms/TutorialPoints';
+import TutorialPostDiary from '../components/features/TutorialPostDiary';
+import TutorialPoints from '../components/features/TutorialPoints';
 import I18n from '../utils/I18n';
 import { Profile } from '../types';
 import {

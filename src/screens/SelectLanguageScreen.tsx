@@ -15,14 +15,14 @@ import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
 
 import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
-import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
+import ModalSpokenLanguages from '../components/features/ModalSpokenLanguages';
 import {
   getLanguage,
   getTargetLanguages,
   getLanguageNum,
   checkSelectLanguage,
 } from '../utils/diary';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 import { AuthStackParamList } from '../navigations/AuthNavigator';
 import {
   Hoverable,

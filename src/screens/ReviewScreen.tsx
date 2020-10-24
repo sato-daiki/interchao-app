@@ -11,7 +11,7 @@ import { Diary, LocalStatus, Profile, Review, Reviewer, User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
 import { track, events } from '../utils/Analytics';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 import {
   ModalReviewStackParamList,
   ModalReviewStackNavigationProp,

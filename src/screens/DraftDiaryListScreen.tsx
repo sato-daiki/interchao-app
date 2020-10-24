@@ -20,7 +20,7 @@ import firebase from '../constants/firebase';
 import Algolia from '../utils/Algolia';
 import { GrayHeader, LoadingModal, HeaderText } from '../components/atoms';
 import { Diary, User } from '../types';
-import DraftListItem from '../components/organisms/DraftListItem';
+import DraftListItem from '../components/features/DraftListItem';
 import { EmptyList } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';

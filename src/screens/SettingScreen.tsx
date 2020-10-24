@@ -17,7 +17,7 @@ import { track, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { appShare, getVersionText } from '../utils/common';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 import {
   MyPageTabStackParamList,
   MyPageTabNavigationProp,

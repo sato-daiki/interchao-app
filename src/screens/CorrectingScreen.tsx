@@ -11,8 +11,8 @@ import {
   Space,
 } from '../components/atoms';
 import { CorrectingHeader, KeyboardHideButton } from '../components/molecules';
-import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
-import ModalTimeUp from '../components/organisms/ModalTimeUp';
+import ModalCorrectingDone from '../components/features/ModalCorrectingDone';
+import ModalTimeUp from '../components/features/ModalTimeUp';
 
 import { User, Diary, Profile, Correction, TextInfo, Diff } from '../types';
 import I18n from '../utils/I18n';
@@ -20,12 +20,12 @@ import { getUsePoints } from '../utils/diary';
 import { getProfile } from '../utils/profile';
 import { updateDone, onUpdateTimeUp, onClose } from '../utils/correcting';
 import { getCorrection } from '../utils/corrections';
-import CorrectingListItem from '../components/organisms/CorrectingListItem';
+import CorrectingListItem from '../components/features/CorrectingListItem';
 import { mainColor } from '../styles/Common';
-import Corrections from '../components/organisms/Corrections';
-import { ModalConfirm } from '../components/organisms';
-import CorrectingSummaryNative from '../components/organisms/CorrectingSummaryNative';
-import CorrectingSummaryWeb from '../components/organisms/CorrectingSummaryWeb';
+import Corrections from '../components/features/Corrections';
+import { ModalConfirm } from '../components/features';
+import CorrectingSummaryNative from '../components/features/CorrectingSummaryNative';
+import CorrectingSummaryWeb from '../components/features/CorrectingSummaryWeb';
 import {
   ModalCorrectingStackNavigationProp,
   ModalCorrectingStackParamList,

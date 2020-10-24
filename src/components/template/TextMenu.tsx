@@ -10,7 +10,7 @@ import {
 } from 'react-native-popup-menu';
 import I18n from '../../utils/I18n';
 import { clipboard } from '../../styles/Common';
-import ModalSpeech from '../organisms/ModalSpeech';
+import ModalSpeech from '../features/ModalSpeech';
 import { Language } from '../../types';
 import { Hoverable } from '../atoms';
 

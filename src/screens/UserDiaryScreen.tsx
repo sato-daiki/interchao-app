@@ -22,8 +22,8 @@ import {
 import { getCorrection } from '../utils/corrections';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
-import Corrections from '../components/organisms/Corrections';
-import RichText from '../components/organisms/RichText';
+import Corrections from '../components/features/Corrections';
+import RichText from '../components/features/RichText';
 import {
   CommonStackParamList,
   CommonNavigationProp,

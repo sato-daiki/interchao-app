@@ -30,13 +30,13 @@ import {
 import { linkBlue, fontSizeM } from '../styles/Common';
 import { getProfile, getUid } from '../utils/profile';
 import Algolia from '../utils/Algolia';
-import DiaryListItem from '../components/organisms/DiaryListItem';
-import { ModalBlock, ModalConfirm } from '../components/organisms';
+import DiaryListItem from '../components/features/DiaryListItem';
+import { ModalBlock, ModalConfirm } from '../components/features';
 import { checkBlockee, checkBlocker } from '../utils/blockUser';
 import { getUserReview } from '../utils/userReview';
-import UserProfileHeader from '../components/organisms/UserProfileHeader';
+import UserProfileHeader from '../components/features/UserProfileHeader';
 import { getTopReviews, getReviewNum } from '../utils/review';
-import ReviewListItem from '../components/organisms/ReviewListItem';
+import ReviewListItem from '../components/features/ReviewListItem';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import UserProfileMenu from '../components/web/organisms/UserProfileMenu';

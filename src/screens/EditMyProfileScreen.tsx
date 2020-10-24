@@ -23,7 +23,7 @@ import {
 } from '../components/atoms';
 import { Profile, Language, CountryCode } from '../types';
 import I18n from '../utils/I18n';
-import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
+import ModalSpokenLanguages from '../components/features/ModalSpokenLanguages';
 import {
   allLanguage,
   getLanguage,
@@ -31,7 +31,7 @@ import {
   getLanguageNum,
   checkSelectLanguage,
 } from '../utils/diary';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 import { MyPageTabNavigationProp } from '../navigations/MyPageTabNavigator';
 import {
   ModalEditMyProfileStackNavigationProp,

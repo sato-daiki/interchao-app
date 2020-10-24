@@ -13,7 +13,7 @@ import * as Permissions from 'expo-permissions';
 import * as Linking from 'expo-linking';
 import firebase from '../constants/firebase';
 import { AppReviewState, Diary, LocalStatus, Profile, User } from '../types';
-import { ModalConfirm } from '../components/organisms';
+import { ModalConfirm } from '../components/features';
 import {
   LoadingModal,
   HeaderIcon,
@@ -26,11 +26,11 @@ import {
   MyDiaryTabNavigationProp,
   MyDiaryTabStackParamList,
 } from '../navigations/MyDiaryTabNavigator';
-import Posted from '../components/organisms/Posted';
-import FairCopy from '../components/organisms/FairCopy';
-import FairCopyEdit from '../components/organisms/FairCopyEdit';
+import Posted from '../components/features/Posted';
+import FairCopy from '../components/features/FairCopy';
+import FairCopyEdit from '../components/features/FairCopyEdit';
 import { MyDiaryTabBar } from '../components/molecules';
-import ModalAppReviewRequest from '../components/organisms/ModalAppReviewRequest';
+import ModalAppReviewRequest from '../components/features/ModalAppReviewRequest';
 
 export interface Props {
   diary?: Diary;

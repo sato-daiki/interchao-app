@@ -12,7 +12,7 @@ import {
   softRed,
 } from '../styles/Common';
 import { track, events } from '../utils/Analytics';
-import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
+import ModalDeleteAcount from '../components/features/ModalDeleteAcount';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import {

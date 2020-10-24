@@ -9,26 +9,24 @@ import {
   Easing,
   Platform,
 } from 'react-native';
-
-import { LoadingModal } from '../atoms';
-import { ModalAlertPublish } from './ModalAlertPublish';
-import ModalLackPoint from './ModalLackPoint';
-import ModalDiaryCancel from './ModalDiaryCancel';
 import {
   primaryColor,
   borderLightColor,
   offWhite,
   fontSizeSS,
-} from '../../styles/Common';
-import { Points } from '../../images';
-import { getUsePoints } from '../../utils/diary';
-import { Language } from '../../types';
-import TutorialPostDiary from './TutorialPostDiary';
-import I18n from '../../utils/I18n';
-import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
-import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
-import ModalConfirm from './ModalConfirm';
-import PostDiaryKeybordWeb from './PostDiaryKeybordWeb';
+} from '@/styles/Common';
+import { Points } from '@/images';
+import { getUsePoints } from '@/utils/diary';
+import { Language } from '@/types';
+import I18n from '@/utils/I18n';
+import { LoadingModal } from '@/components/atoms';
+import { ModalAlertPublish } from '@/components/features/ModalAlertPublish';
+import ModalLackPoint from '@/components/features/ModalLackPoint';
+import ModalDiaryCancel from '@/components/features/ModalDiaryCancel';
+import TutorialPostDiary from '@/components/features/TutorialPostDiary';
+import PostDiaryKeyboardIOS from '@/components/features/PostDiaryKeyboardIOS';
+import PostDiaryKeybordAndroid from '@/components/features/PostDiaryKeybordAndroid';
+import ModalConfirm from '@/components/features/ModalConfirm';
 
 interface Props {
   isLoading: boolean;
@@ -150,48 +148,6 @@ const PostDiary = ({
 
   const onBlurText = useCallback((): void => setIsForce(false), []);
 
-  const renderKeyboard = (): JSX.Element => {
-    if (Platform.OS === 'ios') {
-      return (
-        <PostDiaryKeyboardIOS
-          title={title}
-          text={text}
-          isForce={isForce}
-          fadeAnim={fadeAnim}
-          onChangeTextTitle={onChangeTextTitle}
-          onChangeTextText={onChangeTextText}
-          onPressDraft={onPressDraft}
-          onFocusText={onFocusText}
-          onBlurText={onBlurText}
-        />
-      );
-    }
-
-    if (Platform.OS === 'web') {
-      return (
-        <PostDiaryKeybordWeb
-          title={title}
-          text={text}
-          onChangeTextTitle={onChangeTextTitle}
-          onChangeTextText={onChangeTextText}
-          onPressDraft={onPressDraft}
-        />
-      );
-    }
-
-    return (
-      <PostDiaryKeybordAndroid
-        title={title}
-        text={text}
-        onChangeTextTitle={onChangeTextTitle}
-        onChangeTextText={onChangeTextText}
-        onPressDraft={onPressDraft}
-        onFocusText={onFocusText}
-        onBlurText={onBlurText}
-      />
-    );
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <LoadingModal visible={isLoading} />
@@ -251,7 +207,29 @@ const PostDiary = ({
           <Text style={styles.headerValue}>{points}</Text>
         </View>
       </View>
-      {renderKeyboard()}
+      {Platform.OS === 'ios' ? (
+        <PostDiaryKeyboardIOS
+          title={title}
+          text={text}
+          isForce={isForce}
+          fadeAnim={fadeAnim}
+          onChangeTextTitle={onChangeTextTitle}
+          onChangeTextText={onChangeTextText}
+          onPressDraft={onPressDraft}
+          onFocusText={onFocusText}
+          onBlurText={onBlurText}
+        />
+      ) : (
+        <PostDiaryKeybordAndroid
+          title={title}
+          text={text}
+          onChangeTextTitle={onChangeTextTitle}
+          onChangeTextText={onChangeTextText}
+          onPressDraft={onPressDraft}
+          onFocusText={onFocusText}
+          onBlurText={onBlurText}
+        />
+      )}
     </SafeAreaView>
   );
 };

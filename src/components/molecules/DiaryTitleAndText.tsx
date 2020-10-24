@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { fontSizeM, primaryColor } from '../../styles/Common';
 import { Language } from '../../types';
 import { Space } from '../atoms';
-import RichText from '../organisms/RichText';
+import RichText from '../features/RichText';
 
 interface Props {
   nativeLanguage: Language;
