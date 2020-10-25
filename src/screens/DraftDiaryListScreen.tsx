@@ -12,6 +12,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   Animated,
+  Platform,
 } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -195,10 +196,17 @@ const DraftDiaryListScreen: React.FC<ScreenType> = ({ navigation, user }) => {
   const onPressItem = useCallback(
     (item: Diary) => {
       if (!item.objectID) return;
-      navigation.navigate('ModalPostDraftDiary', {
-        screen: 'PostDraftDiary',
-        params: { item, objectID: item.objectID },
-      });
+      if (Platform.OS === 'web') {
+        navigation.navigate('ModalPostDraftDiaryWeb', {
+          screen: 'PostDraftDiaryWeb',
+          params: { item, objectID: item.objectID },
+        });
+      } else {
+        navigation.navigate('ModalPostDraftDiary', {
+          screen: 'PostDraftDiary',
+          params: { item, objectID: item.objectID },
+        });
+      }
     },
     [navigation]
   );
