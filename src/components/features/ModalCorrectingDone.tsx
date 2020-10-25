@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
+import LottieViewWeb from 'react-native-web-lottie';
+
 import {
   primaryColor,
   fontSizeL,
   borderLightColor,
   fontSizeM,
-} from '../../styles/Common';
-import { Modal } from '../template';
-import { Space, UserPointsBig, SubmitButton } from '../atoms';
-import I18n from '../../utils/I18n';
-import { FlashLeft, FlashRight } from '../../images';
+} from '@/styles/Common';
+import I18n from '@/utils/I18n';
+import { FlashLeft, FlashRight } from '@/images';
+import { Modal } from '@/components/template';
+import { Space, UserPointsBig, SubmitButton } from '@/components/atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -42,14 +44,14 @@ const styles = StyleSheet.create({
   },
   img: {
     position: 'absolute',
-    right: 20,
+    right: Platform.OS === 'web' ? 0 : 20,
     top: 20,
     width: 30,
     height: 30,
   },
   img2: {
     position: 'absolute',
-    left: 20,
+    left: Platform.OS === 'web' ? 0 : 20,
     top: 20,
     width: 30,
     height: 30,
@@ -73,11 +75,20 @@ const ModalCorrectingDone: React.FC<Props> = ({
   onPressClose,
 }: Props): JSX.Element | null => {
   const [isShowFlash, setIsShowFlash] = useState(false);
+  const refLottieViewWeb = useRef<LottieViewWeb | null>(null);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (visible) setIsShowFlash(true);
-    }, 1700);
+    }, 2300);
     return (): void => clearTimeout(timer);
+  }, [visible]);
+
+  useEffect(() => {
+    const timer2 = setTimeout(() => {
+      if (visible && refLottieViewWeb.current) refLottieViewWeb.current.play();
+    }, 500);
+    return (): void => clearTimeout(timer2);
   }, [visible]);
 
   return (
@@ -92,13 +103,23 @@ const ModalCorrectingDone: React.FC<Props> = ({
               <Image style={styles.img2} source={FlashRight} />
             </>
           ) : null}
-          <LottieView
-            style={styles.lottieView}
-            // eslint-disable-next-line global-require
-            source={require('../../animations/points-get.json')}
-            autoPlay
-            loop={false}
-          />
+          {Platform.OS === 'web' ? (
+            <LottieViewWeb
+              ref={refLottieViewWeb}
+              style={styles.lottieView}
+              // eslint-disable-next-line global-require
+              source={require('../../animations/points-get.json')}
+              loop={false}
+            />
+          ) : (
+            <LottieView
+              ref={refLottieViewWeb}
+              style={styles.lottieView}
+              // eslint-disable-next-line global-require
+              source={require('../../animations/points-get.json')}
+              loop={false}
+            />
+          )}
         </View>
         <Text style={styles.text}>
           {I18n.t('modalCorrectingDone.text', { getPoints })}

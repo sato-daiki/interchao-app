@@ -1,14 +1,15 @@
 import React from 'react';
 import LottieView from 'lottie-react-native';
-import { View, Text, StyleSheet } from 'react-native';
+import LottieViewWeb from 'react-native-web-lottie';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
   borderLightColor,
   fontSizeM,
-} from '../../../styles/Common';
-import { WhiteButton, Space } from '../../atoms';
-import I18n from '../../../utils/I18n';
+} from '@/styles/Common';
+import I18n from '@/utils/I18n';
+import { WhiteButton, Space } from '@/components/atoms';
 
 interface Props {
   publishMessage: string | null;
@@ -46,6 +47,15 @@ const styles = StyleSheet.create({
   lottieViewWrapper: {
     height: 100,
   },
+  lottieViewWebWrapper: {
+    height: 70,
+  },
+  lottieViewWeb: {
+    position: 'absolute',
+    height: 180,
+    top: -60,
+    alignSelf: 'center',
+  },
   lottieView: {
     position: 'absolute',
     height: 180,
@@ -63,15 +73,27 @@ const AfterPublished: React.FC<Props> = ({
       <Text style={styles.title}>{I18n.t('modalAlertPublish.publish')}</Text>
       <View>
         <View style={styles.line} />
-        <View style={styles.lottieViewWrapper}>
-          <LottieView
-            style={styles.lottieView}
-            // eslint-disable-next-line global-require
-            source={require('../../../animations/taking-notes.json')}
-            autoPlay
-            loop={false}
-          />
-        </View>
+        {Platform.OS === 'web' ? (
+          <View style={styles.lottieViewWebWrapper}>
+            <LottieViewWeb
+              style={styles.lottieViewWeb}
+              // eslint-disable-next-line global-require
+              source={require('../../../animations/taking-notes.json')}
+              autoPlay
+              loop={false}
+            />
+          </View>
+        ) : (
+          <View style={styles.lottieViewWrapper}>
+            <LottieView
+              style={styles.lottieView}
+              // eslint-disable-next-line global-require
+              source={require('../../../animations/taking-notes.json')}
+              autoPlay
+              loop={false}
+            />
+          </View>
+        )}
       </View>
       <View>
         <Text style={styles.text}>{publishMessage}</Text>

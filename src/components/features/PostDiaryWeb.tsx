@@ -1,34 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  Image,
-  Animated,
-  Easing,
-  Platform,
-} from 'react-native';
-
-import { LoadingModal } from '../atoms';
+  fontSizeLL,
+  fontSizeL,
+  fontSizeM,
+  maxLayoutChange,
+  primaryColor,
+  subTextColor,
+} from '@/styles/Common';
+import { getUsePoints } from '@/utils/diary';
+import { Language } from '@/types';
+import I18n from '@/utils/I18n';
+import {
+  LoadingModal,
+  Space,
+  TextInputText,
+  TextInputTitle,
+} from '@/components/atoms';
+import { ScrollView } from 'react-native-gesture-handler';
 import { ModalAlertPublish } from './ModalAlertPublish';
 import ModalLackPoint from './ModalLackPoint';
 import ModalDiaryCancel from './ModalDiaryCancel';
-import {
-  primaryColor,
-  borderLightColor,
-  offWhite,
-  fontSizeSS,
-} from '../../styles/Common';
-import { Points } from '../../images';
-import { getUsePoints } from '../../utils/diary';
-import { Language } from '../../types';
 import TutorialPostDiary from './TutorialPostDiary';
-import I18n from '../../utils/I18n';
-import PostDiaryKeyboardIOS from './PostDiaryKeyboardIOS';
-import PostDiaryKeybordAndroid from './PostDiaryKeybordAndroid';
 import ModalConfirm from './ModalConfirm';
-import PostDiaryKeybordWeb from './PostDiaryKeybordWeb';
 
 interface Props {
   isLoading: boolean;
@@ -61,43 +55,48 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  warapper: {
+    width: '100%',
+    backgroundColor: '#fff',
     flex: 1,
-    backgroundColor: offWhite,
   },
-  header: {
+  container: {
+    width: '100%',
+    flex: 1,
+    paddingVertical: 32,
+  },
+  mainContainer: {
     flexDirection: 'row',
-    backgroundColor: offWhite,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingLeft: 16,
-    borderColor: borderLightColor,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    flex: 1,
   },
-  left: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  leftContainer: {
+    flex: 1,
+    maxWidth: maxLayoutChange,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
-  right: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  titleInput: {
+    paddingVertical: 32,
+    fontSize: fontSizeLL,
+    borderBottomWidth: 0,
   },
-  points: {
-    width: 16,
-    height: 16,
-    tintColor: primaryColor,
-    marginRight: 3,
-  },
-  headerLabel: {
+  textInput: {
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingHorizontal: 16,
     color: primaryColor,
-    fontSize: fontSizeSS,
-    marginRight: 4,
+    fontSize: fontSizeL,
+    lineHeight: fontSizeL * 1.3,
+    textAlignVertical: 'top',
   },
-  headerValue: {
-    color: primaryColor,
-    fontSize: fontSizeSS,
-    marginRight: 16,
+  rightContainer: {
+    width: 124,
+    alignItems: 'flex-end',
+    paddingRight: 8,
+  },
+  subText: {
+    fontSize: fontSizeM,
+    color: subTextColor,
   },
 });
 
@@ -130,80 +129,79 @@ const PostDiaryWeb = ({
   onPressTutorial,
   onPressCloseError,
 }: Props): JSX.Element => {
-  const [isForce, setIsForce] = useState(false);
-
   const usePoints = getUsePoints(text.length, learnLanguage);
 
-  const onBlurText = useCallback((): void => setIsForce(false), []);
-
   return (
-    <SafeAreaView style={styles.container}>
-      <LoadingModal visible={isLoading} />
-      <ModalConfirm
-        visible={isModalError}
-        title={I18n.t('common.error')}
-        message={errorMessage}
-        mainButtonText={I18n.t('common.close')}
-        onPressMain={onPressCloseError}
-      />
-      <TutorialPostDiary
-        isLoading={isTutorialLoading}
-        displayed={tutorialPostDiary}
-        learnLanguage={learnLanguage}
-        onPress={onPressTutorial}
-      />
-      <ModalLackPoint
-        visible={isModalLack}
-        learnLanguage={learnLanguage}
-        onPressSubmit={onPressSubmitModalLack}
-        onPressClose={onPressCloseModalLack}
-      />
-      <ModalAlertPublish
-        visible={isModalAlert}
-        isPublish={isPublish}
-        isLoading={isLoading}
-        usePoints={usePoints}
-        points={points}
-        publishMessage={publishMessage}
-        onPressSubmit={onPressSubmit}
-        onPressCloseCancel={onPressCloseModalPublish}
-        onPressCloseSns={onPressCloseSns}
-      />
-      <ModalDiaryCancel
-        visible={isModalCancel}
-        isLoading={isLoading}
-        onPressSave={onPressDraft}
-        onPressNotSave={onPressNotSave}
-        onPressClose={onPressCloseModalCancel}
-      />
-      <Text style={styles.logo}>Interchao</Text>
-      <View style={styles.header}>
-        <View style={styles.left}>
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.usePoints')}
-          </Text>
-          <Text style={styles.headerValue}>{usePoints}</Text>
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.textLength')}
-          </Text>
-          <Text style={styles.headerValue}>{text.length}</Text>
-        </View>
-        <View style={styles.right}>
-          <Image style={styles.points} source={Points} />
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.points')}
-          </Text>
-          <Text style={styles.headerValue}>{points}</Text>
+    <ScrollView style={styles.warapper}>
+      <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
+        <ModalConfirm
+          visible={isModalError}
+          title={I18n.t('common.error')}
+          message={errorMessage}
+          mainButtonText={I18n.t('common.close')}
+          onPressMain={onPressCloseError}
+        />
+        <TutorialPostDiary
+          isLoading={isTutorialLoading}
+          displayed={tutorialPostDiary}
+          learnLanguage={learnLanguage}
+          onPress={onPressTutorial}
+        />
+        <ModalLackPoint
+          visible={isModalLack}
+          learnLanguage={learnLanguage}
+          onPressSubmit={onPressSubmitModalLack}
+          onPressClose={onPressCloseModalLack}
+        />
+        <ModalAlertPublish
+          visible={isModalAlert}
+          isPublish={isPublish}
+          isLoading={isLoading}
+          usePoints={usePoints}
+          points={points}
+          publishMessage={publishMessage}
+          onPressSubmit={onPressSubmit}
+          onPressCloseCancel={onPressCloseModalPublish}
+          onPressCloseSns={onPressCloseSns}
+        />
+        <ModalDiaryCancel
+          visible={isModalCancel}
+          isLoading={isLoading}
+          onPressSave={onPressDraft}
+          onPressNotSave={onPressNotSave}
+          onPressClose={onPressCloseModalCancel}
+        />
+        <View style={styles.mainContainer}>
+          <View style={styles.leftContainer}>
+            <TextInputTitle
+              style={styles.titleInput}
+              value={title}
+              onChangeText={onChangeTextTitle}
+            />
+            <TextInput
+              style={styles.textInput}
+              value={text}
+              placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
+              underlineColorAndroid="transparent"
+              multiline
+              autoCorrect={false}
+              keyboardType="default"
+              spellCheck
+              onChangeText={onChangeTextText}
+              numberOfLines={100}
+            />
+          </View>
+          <View style={styles.rightContainer}>
+            <Text style={styles.subText}>{`${text.length} 文字`}</Text>
+            <Space size={16} />
+            <Text style={styles.subText}>
+              {`${I18n.t('postDiaryComponent.usePoints')} ${usePoints}`}
+            </Text>
+          </View>
         </View>
       </View>
-      <PostDiaryKeybordWeb
-        title={title}
-        text={text}
-        onChangeTextTitle={onChangeTextTitle}
-        onChangeTextText={onChangeTextText}
-        onPressDraft={onPressDraft}
-      />
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 
