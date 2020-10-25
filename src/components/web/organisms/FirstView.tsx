@@ -4,8 +4,8 @@ import {
   maxLayoutChange,
   offBlack,
   maxPartS,
-  fontSizeLLL,
   fontSizeLL,
+  fontSizeL,
   fontSizeTitle,
 } from '../../../styles/Common';
 import { WhiteButton, Space, SubmitButton } from '../../atoms';
@@ -119,8 +119,8 @@ const FirstView = ({
             style={[
               styles.text,
               {
-                fontSize: getSize(isMobileDevice, fontSizeLLL),
-                lineHeight: getSize(isMobileDevice, fontSizeLLL) * 1.3,
+                fontSize: getSize(isMobileDevice, fontSizeLL),
+                lineHeight: getSize(isMobileDevice, fontSizeLL) * 1.3,
               },
               setLeft(),
             ]}
@@ -135,8 +135,8 @@ const FirstView = ({
               style={[
                 styles.loginText,
                 {
-                  fontSize: getSize(isMobileDevice, fontSizeLL),
-                  lineHeight: getSize(isMobileDevice, fontSizeLL) * 1.3,
+                  fontSize: getSize(isMobileDevice, fontSizeL),
+                  lineHeight: getSize(isMobileDevice, fontSizeL) * 1.3,
                 },
                 setRight(),
               ]}
