@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import LottieView from 'lottie-react-native';
+import React, { createRef, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -8,7 +7,7 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { Space, UserPointsBig, SubmitButton } from '../atoms';
+import { Space, UserPointsBig, SubmitButton, Lottie } from '../atoms';
 import I18n from '../../utils/I18n';
 import { FlashLeft, FlashRight } from '../../images';
 
@@ -42,14 +41,14 @@ const styles = StyleSheet.create({
   },
   img: {
     position: 'absolute',
-    right: 20,
+    right: Platform.OS === 'web' ? 0 : 20,
     top: 20,
     width: 30,
     height: 30,
   },
   img2: {
     position: 'absolute',
-    left: 20,
+    left: Platform.OS === 'web' ? 0 : 20,
     top: 20,
     width: 30,
     height: 30,
@@ -73,12 +72,22 @@ const ModalCorrectingDone: React.FC<Props> = ({
   onPressClose,
 }: Props): JSX.Element | null => {
   const [isShowFlash, setIsShowFlash] = useState(false);
+  const refLottie = createRef<Lottie>();
+
   useEffect(() => {
     const timer = setTimeout(() => {
       if (visible) setIsShowFlash(true);
-    }, 1700);
-    return (): void => clearTimeout(timer);
-  }, [visible]);
+    }, 2300);
+
+    const timer2 = setTimeout(() => {
+      if (visible && refLottie.current) refLottie.current.play();
+    }, 500);
+
+    return (): void => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+    };
+  }, [refLottie, visible]);
 
   return (
     <Modal visible={visible}>
@@ -92,11 +101,12 @@ const ModalCorrectingDone: React.FC<Props> = ({
               <Image style={styles.img2} source={FlashRight} />
             </>
           ) : null}
-          <LottieView
+          <Lottie
+            ref={refLottie}
             style={styles.lottieView}
             // eslint-disable-next-line global-require
             source={require('../../animations/points-get.json')}
-            autoPlay
+            autoPlay={Platform.OS !== 'web'}
             loop={false}
           />
         </View>
