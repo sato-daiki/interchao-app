@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   lottieViewWebWrapper: {
-    height: 70,
+    height: 82,
   },
   lottieViewWeb: {
     position: 'absolute',
@@ -71,9 +71,17 @@ const AfterPublished: React.FC<Props> = ({
       <Text style={styles.title}>{I18n.t('modalAlertPublish.publish')}</Text>
       <View>
         <View style={styles.line} />
-        <View style={styles.lottieViewWrapper}>
+        <View
+          style={
+            Platform.OS === 'web'
+              ? styles.lottieViewWebWrapper
+              : styles.lottieViewWrapper
+          }
+        >
           <Lottie
-            style={styles.lottieView}
+            style={
+              Platform.OS === 'web' ? styles.lottieViewWeb : styles.lottieView
+            }
             // eslint-disable-next-line global-require
             source={require('../../../animations/taking-notes.json')}
             autoPlay

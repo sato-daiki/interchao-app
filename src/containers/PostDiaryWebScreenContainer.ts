@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
+import PostDiaryWebScreen, {
+  WebProps,
+} from '@/screens/PostDiaryScreen/PostDiaryWebScreen';
 import { State } from '@/types/state';
 import { setUser } from '@/stores/actions/user';
 import { addDiary } from '@/stores/actions/diaryList';
-import PostDiaryScreen, {
-  Props,
-} from '@/screens/PostDiaryScreen/PostDiaryScreen';
 
-const mapStateToProps = (state: State): Props => {
+const mapStateToProps = (state: State): WebProps => {
   return {
     user: state.rootReducer.user,
     profile: state.rootReducer.profile,
@@ -18,4 +18,4 @@ const mapDispatchToProps = {
   addDiary,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostDiaryScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(PostDiaryWebScreen);
