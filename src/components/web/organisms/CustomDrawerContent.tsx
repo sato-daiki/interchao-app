@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 
 const CustomDrawerContent = ({
   isMaxLayoutChange,
+  navigation,
   ...props
 }: Props): JSX.Element => {
   const containerStyle = {
@@ -38,6 +39,16 @@ const CustomDrawerContent = ({
     alignItems: isMaxLayoutChange ? 'flex-start' : 'center',
   } as StyleProp<ViewStyle>;
 
+  const onPressHome = useCallback(() => {
+    navigation.navigate('MyDiaryTab');
+  }, [navigation]);
+
+  const onPressPost = useCallback(() => {
+    navigation.navigate('ModalPostDiaryWeb', {
+      screen: 'PostDiaryWeb',
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={containerStyle}>
@@ -45,27 +56,23 @@ const CustomDrawerContent = ({
           label={(): JSX.Element => (
             <DrawerLogo isMaxLayoutChange={isMaxLayoutChange} />
           )}
-          onPress={(): void => props.navigation.navigate('MyDiaryTab')}
+          onPress={onPressHome}
         />
 
-        <DrawerItemList itemStyle={itemStyle} {...props} />
+        <DrawerItemList
+          itemStyle={itemStyle}
+          navigation={navigation}
+          {...props}
+        />
 
         <DrawerItem
           label={(): JSX.Element => (
             <DrawerPostButton
               isMaxLayoutChange={isMaxLayoutChange}
-              onPress={(): void => {
-                props.navigation.navigate('ModalPostDiary', {
-                  screen: 'PostDiary',
-                });
-              }}
+              onPress={onPressPost}
             />
           )}
-          onPress={(): void => {
-            props.navigation.navigate('ModalPostDiary', {
-              screen: 'PostDiary',
-            });
-          }}
+          onPress={onPressPost}
         />
       </View>
     </SafeAreaView>

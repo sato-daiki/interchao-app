@@ -15,7 +15,9 @@ import {
   ModalReviewNavigator,
   ModalCorrectingNavigator,
   ModalPostDiaryStackParamList,
+  ModalPostDiaryWebStackParamList,
   ModalPostDraftDiaryStackParamList,
+  ModalPostDraftDiaryWebStackParamList,
   ModalEditMyProfileStackParamList,
   ModalCorrectingStackParamList,
   ModalReviewStackParamList,
@@ -23,6 +25,8 @@ import {
   ModalAboutStackParamList,
   ModalRecordNavigator,
   ModalRecordStackParamList,
+  ModalPostDiaryWebNavigator,
+  ModalPostDraftDiaryWebNavigator,
 } from './ModalNavigator';
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
@@ -44,8 +48,13 @@ export type MainStackParamList = {
     };
   };
   ModalPostDiary: { screen: keyof ModalPostDiaryStackParamList };
+  ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
   ModalPostDraftDiary: {
     screen: keyof ModalPostDraftDiaryStackParamList;
+    params: { item: Diary; objectID: string };
+  };
+  ModalPostDraftDiaryWeb: {
+    screen: keyof ModalPostDraftDiaryWebStackParamList;
     params: { item: Diary; objectID: string };
   };
   ModalEditMyProfile: { screen: keyof ModalEditMyProfileStackParamList };
@@ -93,8 +102,16 @@ const MainNavigator = (): JSX.Element => {
         component={ModalPostDiaryNavigator}
       />
       <MainStack.Screen
+        name="ModalPostDiaryWeb"
+        component={ModalPostDiaryWebNavigator}
+      />
+      <MainStack.Screen
         name="ModalPostDraftDiary"
         component={ModalPostDraftDiaryNavigator}
+      />
+      <MainStack.Screen
+        name="ModalPostDraftDiaryWeb"
+        component={ModalPostDraftDiaryWebNavigator}
       />
       <MainStack.Screen name="ModalReview" component={ModalReviewNavigator} />
       <MainStack.Screen
