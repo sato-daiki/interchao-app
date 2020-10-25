@@ -1,5 +1,4 @@
 import React from 'react';
-import LottieView from 'lottie-react-native';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   primaryColor,
@@ -7,7 +6,7 @@ import {
   borderLightColor,
   fontSizeM,
 } from '../../../styles/Common';
-import { WhiteButton, Space } from '../../atoms';
+import { WhiteButton, Space, Lottie } from '../../atoms';
 import I18n from '../../../utils/I18n';
 
 interface Props {
@@ -52,6 +51,15 @@ const styles = StyleSheet.create({
     top: -15,
     alignSelf: 'center',
   },
+  lottieViewWebWrapper: {
+    height: 70,
+  },
+  lottieViewWeb: {
+    position: 'absolute',
+    height: 180,
+    top: -60,
+    alignSelf: 'center',
+  },
 });
 
 const AfterPublished: React.FC<Props> = ({
@@ -64,7 +72,7 @@ const AfterPublished: React.FC<Props> = ({
       <View>
         <View style={styles.line} />
         <View style={styles.lottieViewWrapper}>
-          <LottieView
+          <Lottie
             style={styles.lottieView}
             // eslint-disable-next-line global-require
             source={require('../../../animations/taking-notes.json')}
