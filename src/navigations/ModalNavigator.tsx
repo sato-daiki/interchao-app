@@ -23,6 +23,7 @@ import AboutScreen from '@/screens/About';
 import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
 import PostDiaryWebScreenContainer from '@/containers/PostDiaryWebScreenContainer';
+import PostDraftDiaryWebScreenContainer from '@/containers/PostDraftDiaryWebScreenContainer';
 import { MainStackParamList } from './MainNavigator';
 
 export type ModalPostDiaryStackParamList = {
@@ -143,9 +144,6 @@ export const ModalPostDiaryWebNavigator = (): JSX.Element => {
       <ModalPostDiaryWebStack.Screen
         name="PostDiaryWeb"
         component={PostDiaryWebScreenContainer}
-        options={{
-          headerTitle: (): JSX.Element => <HeaderTitle />,
-        }}
       />
     </ModalPostDiaryWebStack.Navigator>
   );
@@ -170,15 +168,10 @@ export const ModalPostDraftDiaryNavigator = (): JSX.Element => {
 export const ModalPostDraftDiaryWebNavigator = (): JSX.Element => {
   return (
     <ModalPostDraftDiaryWebStack.Navigator initialRouteName="PostDraftDiaryWeb">
-      {/* <ModalPostDraftDiaryWebStack.Screen
+      <ModalPostDraftDiaryWebStack.Screen
         name="PostDraftDiaryWeb"
         component={PostDraftDiaryWebScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('postDraftDiary.headerTitle'),
-        }}
-      /> */}
+      />
     </ModalPostDraftDiaryWebStack.Navigator>
   );
 };

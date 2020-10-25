@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import { State } from '../types/state';
 import { setUser } from '../stores/actions/user';
 import { addDiary } from '../stores/actions/diaryList';
-import PostDraftDiaryScreen, {
-  Props,
-} from '../screens/PostDraftDiaryScreen/PostDraftDiaryScreen';
+import PostDraftDiaryWebScreen, {
+  WebProps,
+} from '../screens/PostDraftDiaryScreen/PostDraftDiaryWebScreen';
 
-const mapStateToProps = (state: State): Props => {
+const mapStateToProps = (state: State): WebProps => {
   return {
     user: state.rootReducer.user,
     profile: state.rootReducer.profile,
@@ -21,4 +21,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostDraftDiaryScreen);
+)(PostDraftDiaryWebScreen);
