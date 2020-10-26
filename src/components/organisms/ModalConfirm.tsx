@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   text: {
-    textAlign: 'center',
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
     color: primaryColor,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import { primaryColor, fontSizeM, mainColor } from '../../styles/Common';
 import { Space } from '../atoms';
 import { People } from '../../images';
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   img: {
     alignSelf: 'center',
