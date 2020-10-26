@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
     marginBottom: 24,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   text: {
     textAlign: 'center',

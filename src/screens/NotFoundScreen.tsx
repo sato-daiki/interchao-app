@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import {
   primaryColor,
   fontSizeM,
-  fontSizeLLLL,
+  fontSizeLLL,
   linkBlue,
 } from '../styles/Common';
 import { Fotter, Header } from '../components/web/molecules';
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     marginTop: 64,
-    fontSize: fontSizeLLLL,
+    fontSize: fontSizeLLL,
     fontWeight: 'bold',
     color: primaryColor,
     marginBottom: 16,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Animation, CustomAnimation } from 'react-native-animatable';
 import {
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   text: {
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
     fontSize: fontSizeM,
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { primaryColor, fontSizeLLLL } from '../../../styles/Common';
+import { primaryColor, fontSizeLLL } from '../../../styles/Common';
 import { getSize } from '../../../utils/responsibleCss';
 
 interface Props {
@@ -21,8 +21,8 @@ const Title = ({ text, isMobileDevice = false }: Props): JSX.Element => {
       style={[
         styles.title,
         {
-          fontSize: getSize(isMobileDevice, fontSizeLLLL),
-          lineHeight: getSize(isMobileDevice, fontSizeLLLL) * 1.3,
+          fontSize: getSize(isMobileDevice, fontSizeLLL),
+          lineHeight: getSize(isMobileDevice, fontSizeLLL) * 1.3,
         },
       ]}
     >
