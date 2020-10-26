@@ -12,7 +12,7 @@ type Props = {
 };
 
 const Lottie: React.FC<Props> = React.forwardRef(
-  ({ style, source, autoPlay, loop }): JSX.Element => {
+  ({ style, source, autoPlay, loop }, ref): JSX.Element => {
     return (
       <LottieView
         style={style}
