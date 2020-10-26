@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, Image } from 'react-native';
+import { Note } from '@/images';
 import {
   primaryColor,
   fontSizeL,
@@ -60,6 +61,11 @@ const styles = StyleSheet.create({
     top: -60,
     alignSelf: 'center',
   },
+  note: {
+    alignSelf: 'center',
+    width: 160,
+    height: 160,
+  },
 });
 
 const AfterPublished: React.FC<Props> = ({
@@ -71,23 +77,30 @@ const AfterPublished: React.FC<Props> = ({
       <Text style={styles.title}>{I18n.t('modalAlertPublish.publish')}</Text>
       <View>
         <View style={styles.line} />
-        <View
-          style={
-            Platform.OS === 'web'
-              ? styles.lottieViewWebWrapper
-              : styles.lottieViewWrapper
-          }
-        >
-          <Lottie
+        {Platform.OS === 'android' ? (
+          <>
+            <Image style={styles.note} source={Note} />
+            <Space size={32} />
+          </>
+        ) : (
+          <View
             style={
-              Platform.OS === 'web' ? styles.lottieViewWeb : styles.lottieView
+              Platform.OS === 'web'
+                ? styles.lottieViewWebWrapper
+                : styles.lottieViewWrapper
             }
-            // eslint-disable-next-line global-require
-            source={require('../../../animations/taking-notes.json')}
-            autoPlay
-            loop={false}
-          />
-        </View>
+          >
+            <Lottie
+              style={
+                Platform.OS === 'web' ? styles.lottieViewWeb : styles.lottieView
+              }
+              // eslint-disable-next-line global-require
+              source={require('../../../animations/taking-notes.json')}
+              autoPlay
+              loop={false}
+            />
+          </View>
+        )}
       </View>
       <View>
         <Text style={styles.text}>{publishMessage}</Text>
