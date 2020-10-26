@@ -90,7 +90,7 @@
     "getenv": "^1.0.0",
     "i18n-js": "^3.5.1",
     "jsog": "^1.0.7",
-    "lottie-react-native": "^3.5.0",
+    "lottie-react-native": "~2.6.1",
     "modal-enhanced-react-native-web": "^0.2.0",
     "moment": "^2.24.0",
     "node-gyp": "^6.1.0",

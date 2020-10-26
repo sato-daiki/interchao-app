@@ -144,6 +144,7 @@ export const ModalPostDiaryWebNavigator = (): JSX.Element => {
       <ModalPostDiaryWebStack.Screen
         name="PostDiaryWeb"
         component={PostDiaryWebScreenContainer}
+        options={{ title: 'Interchao' }}
       />
     </ModalPostDiaryWebStack.Navigator>
   );
@@ -171,6 +172,7 @@ export const ModalPostDraftDiaryWebNavigator = (): JSX.Element => {
       <ModalPostDraftDiaryWebStack.Screen
         name="PostDraftDiaryWeb"
         component={PostDraftDiaryWebScreenContainer}
+        options={{ title: 'Interchao' }}
       />
     </ModalPostDraftDiaryWebStack.Navigator>
   );
