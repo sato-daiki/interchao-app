@@ -6,10 +6,11 @@ import {
   borderLightColor,
   fontSizeM,
 } from '../../styles/Common';
+import { GetPoints, FlashLeft, FlashRight } from '../../images';
+
 import { Modal } from '../template';
 import { Space, UserPointsBig, SubmitButton, Lottie } from '../atoms';
 import I18n from '../../utils/I18n';
-import { FlashLeft, FlashRight } from '../../images';
 
 const styles = StyleSheet.create({
   container: {
@@ -38,6 +39,10 @@ const styles = StyleSheet.create({
   lottieView: {
     height: 160,
     alignSelf: 'center',
+  },
+  getPoints: {
+    width: 120,
+    height: 120,
   },
   img: {
     position: 'absolute',
@@ -94,25 +99,34 @@ const ModalCorrectingDone: React.FC<Props> = ({
       <View style={styles.container}>
         <Text style={styles.title}>{I18n.t('modalCorrectingDone.title')}</Text>
         <View style={styles.line} />
-        <View style={styles.flashWrapper}>
-          {isShowFlash ? (
-            <>
-              <Image style={styles.img} source={FlashLeft} />
-              <Image style={styles.img2} source={FlashRight} />
-            </>
-          ) : null}
-          <Lottie
-            ref={refLottie}
-            style={styles.lottieView}
-            // eslint-disable-next-line global-require
-            source={require('../../animations/points-get.json')}
-            autoPlay={Platform.OS !== 'web'}
-            loop={false}
-          />
-        </View>
-        <Text style={styles.text}>
-          {I18n.t('modalCorrectingDone.text', { getPoints })}
-        </Text>
+        {Platform.OS === 'android' ? (
+          <>
+            <Image style={styles.getPoints} source={GetPoints} />
+            <Space size={32} />
+          </>
+        ) : (
+          <>
+            <View style={styles.flashWrapper}>
+              {isShowFlash ? (
+                <>
+                  <Image style={styles.img} source={FlashLeft} />
+                  <Image style={styles.img2} source={FlashRight} />
+                </>
+              ) : null}
+              <Lottie
+                ref={refLottie}
+                style={styles.lottieView}
+                // eslint-disable-next-line global-require
+                source={require('../../animations/points-get.json')}
+                autoPlay={Platform.OS !== 'web'}
+                loop={false}
+              />
+            </View>
+            <Text style={styles.text}>
+              {I18n.t('modalCorrectingDone.text', { getPoints })}
+            </Text>
+          </>
+        )}
         <Space size={24} />
         <UserPointsBig points={points} />
         <Space size={32} />
