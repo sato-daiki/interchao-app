@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { createRef, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import {
   primaryColor,
   fontSizeL,
@@ -7,9 +7,9 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { Modal } from '../template';
-import { Space, UserPointsBig, SubmitButton } from '../atoms';
-import { GetPoints } from '../../images';
+import { Space, UserPointsBig, SubmitButton, Lottie } from '../atoms';
 import I18n from '../../utils/I18n';
+import { FlashLeft, FlashRight } from '../../images';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
-    marginBottom: 24,
   },
   text: {
     textAlign: 'center',
@@ -36,9 +35,26 @@ const styles = StyleSheet.create({
     color: primaryColor,
     lineHeight: fontSizeM * 1.3,
   },
+  lottieView: {
+    height: 160,
+    alignSelf: 'center',
+  },
   img: {
-    width: 120,
-    height: 120,
+    position: 'absolute',
+    right: Platform.OS === 'web' ? 0 : 20,
+    top: 20,
+    width: 30,
+    height: 30,
+  },
+  img2: {
+    position: 'absolute',
+    left: Platform.OS === 'web' ? 0 : 20,
+    top: 20,
+    width: 30,
+    height: 30,
+  },
+  flashWrapper: {
+    position: 'relative',
   },
 });
 
@@ -55,13 +71,45 @@ const ModalCorrectingDone: React.FC<Props> = ({
   getPoints,
   onPressClose,
 }: Props): JSX.Element | null => {
+  const [isShowFlash, setIsShowFlash] = useState(false);
+  const refLottie = createRef<Lottie>();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (visible) setIsShowFlash(true);
+    }, 2300);
+
+    const timer2 = setTimeout(() => {
+      if (visible && refLottie.current) refLottie.current.play();
+    }, 500);
+
+    return (): void => {
+      clearTimeout(timer);
+      clearTimeout(timer2);
+    };
+  }, [refLottie, visible]);
+
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
         <Text style={styles.title}>{I18n.t('modalCorrectingDone.title')}</Text>
         <View style={styles.line} />
-        <Image style={styles.img} source={GetPoints} />
-        <Space size={32} />
+        <View style={styles.flashWrapper}>
+          {isShowFlash ? (
+            <>
+              <Image style={styles.img} source={FlashLeft} />
+              <Image style={styles.img2} source={FlashRight} />
+            </>
+          ) : null}
+          <Lottie
+            ref={refLottie}
+            style={styles.lottieView}
+            // eslint-disable-next-line global-require
+            source={require('../../animations/points-get.json')}
+            autoPlay={Platform.OS !== 'web'}
+            loop={false}
+          />
+        </View>
         <Text style={styles.text}>
           {I18n.t('modalCorrectingDone.text', { getPoints })}
         </Text>

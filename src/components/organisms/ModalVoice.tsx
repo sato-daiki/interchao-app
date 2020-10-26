@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { primaryColor, fontSizeM, fontSizeS } from '../../styles/Common';
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   playButtonContainer: {
     alignItems: 'center',

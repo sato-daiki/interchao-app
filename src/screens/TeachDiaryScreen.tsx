@@ -116,13 +116,11 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontWeight: 'bold',
     fontSize: fontSizeM,
-    paddingBottom: 16,
   },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
-    paddingBottom: 16,
   },
   textLength: {
     color: subTextColor,
@@ -509,12 +507,14 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
               nativeLanguage={profile.nativeLanguage}
               textLanguage={teachDiary.profile.learnLanguage}
             />
+            <Space size={16} />
             <RichText
               style={styles.text}
               text={teachDiary.text}
               nativeLanguage={profile.nativeLanguage}
               textLanguage={teachDiary.profile.learnLanguage}
             />
+            <Space size={16} />
             <Text style={styles.textLength}>
               {I18n.t('postDiaryComponent.textLength')}
               {` ${teachDiary.text.length}`}

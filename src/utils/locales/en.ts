@@ -176,6 +176,7 @@ const editMyProfile = {
   learn: 'Leaning',
   native: 'Teaching',
   spoken: 'Other Languages\nyou can speak',
+  imageButton: 'Upload an Image',
 };
 
 const editPassword = {

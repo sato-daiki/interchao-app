@@ -19,9 +19,8 @@ export const fontSizeL = 18;
 
 // web用
 export const fontSizeTitle = 40;
-export const fontSizeLLLL = 32;
-export const fontSizeLLL = 20;
-export const fontSizeLL = 18;
+export const fontSizeLLL = 32;
+export const fontSizeLL = 20;
 
 export const offBlack = '#2b3137';
 export const headerBlack = '#24292E';

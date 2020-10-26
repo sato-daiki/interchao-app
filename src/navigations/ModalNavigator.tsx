@@ -4,29 +4,39 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 
-/* screens */
-import ReviewScreenContainer from '../containers/ReviewScreenContainer';
-import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
-import EditMyProfileScreenContainer from '../containers/EditMyProfileScreenContainer';
-import EditUserNameScreenContainer from '../containers/EditUserNameScreenContainer';
-import PostDraftDiaryScreenContainer from '../containers/PostDraftDiaryScreenContainer';
-import CorrectingScreenContainer from '../containers/CorrectingScreenContainer';
 import {
   DefaultNavigationOptions,
   DefaultModalLayoutOptions,
-} from '../constants/NavigationOptions';
-import I18n from '../utils/I18n';
-import { CountryCode, Diary } from '../types';
+} from '@/constants/NavigationOptions';
+import I18n from '@/utils/I18n';
+import { CountryCode, Diary } from '@/types';
+import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
+
+/* screens */
+import ReviewScreenContainer from '@/containers/ReviewScreenContainer';
+import PostDiaryScreenContainer from '@/containers/PostDiaryScreenContainer';
+import EditMyProfileScreenContainer from '@/containers/EditMyProfileScreenContainer';
+import EditUserNameScreenContainer from '@/containers/EditUserNameScreenContainer';
+import PostDraftDiaryScreenContainer from '@/containers/PostDraftDiaryScreenContainer';
+import CorrectingScreenContainer from '@/containers/CorrectingScreenContainer';
+import AboutScreen from '@/screens/About';
+import RecordScreenContainer from '@/containers/RecordScreenContainer';
+import EditCountryScreen from '@/screens/EditCountryScreen';
+import PostDiaryWebScreenContainer from '@/containers/PostDiaryWebScreenContainer';
+import PostDraftDiaryWebScreenContainer from '@/containers/PostDraftDiaryWebScreenContainer';
 import { MainStackParamList } from './MainNavigator';
-import AboutScreen from '../screens/About';
-import RecordScreenContainer from '../containers/RecordScreenContainer';
-import EditCountryScreen from '../screens/EditCountryScreen';
 
 export type ModalPostDiaryStackParamList = {
   PostDiary: undefined;
 };
+export type ModalPostDiaryWebStackParamList = {
+  PostDiaryWeb: undefined;
+};
 export type ModalPostDraftDiaryStackParamList = {
   PostDraftDiary: { item: Diary; objectID: string };
+};
+export type ModalPostDraftDiaryWebStackParamList = {
+  PostDraftDiaryWeb: { item: Diary; objectID: string };
 };
 export type ModalEditMyProfileStackParamList = {
   EditMyProfile: undefined;
@@ -57,9 +67,17 @@ export type ModalPostDiaryStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalPostDiary'
 >;
+export type ModalPostDiaryWebStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalPostDiaryWeb'
+>;
 export type ModalPostDraftDiaryStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalPostDraftDiary'
+>;
+export type ModalPostDraftDiaryWebStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalPostDraftDiaryWeb'
 >;
 export type ModalEditMyProfileStackNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -85,8 +103,14 @@ export type ModalAboutStackNavigationProp = StackNavigationProp<
 const ModalPostDiaryStack = createStackNavigator<
   ModalPostDiaryStackParamList
 >();
+const ModalPostDiaryWebStack = createStackNavigator<
+  ModalPostDiaryWebStackParamList
+>();
 const ModalPostDraftDiaryStack = createStackNavigator<
   ModalPostDraftDiaryStackParamList
+>();
+const ModalPostDraftDiaryWebStack = createStackNavigator<
+  ModalPostDraftDiaryWebStackParamList
 >();
 const ModalReviewStack = createStackNavigator<ModalReviewStackParamList>();
 const ModalEditMyProfileStack = createStackNavigator<
@@ -114,6 +138,17 @@ export const ModalPostDiaryNavigator = (): JSX.Element => {
   );
 };
 
+export const ModalPostDiaryWebNavigator = (): JSX.Element => {
+  return (
+    <ModalPostDiaryWebStack.Navigator initialRouteName="PostDiaryWeb">
+      <ModalPostDiaryWebStack.Screen
+        name="PostDiaryWeb"
+        component={PostDiaryWebScreenContainer}
+      />
+    </ModalPostDiaryWebStack.Navigator>
+  );
+};
+
 export const ModalPostDraftDiaryNavigator = (): JSX.Element => {
   return (
     <ModalPostDraftDiaryStack.Navigator initialRouteName="PostDraftDiary">
@@ -127,6 +162,17 @@ export const ModalPostDraftDiaryNavigator = (): JSX.Element => {
         }}
       />
     </ModalPostDraftDiaryStack.Navigator>
+  );
+};
+
+export const ModalPostDraftDiaryWebNavigator = (): JSX.Element => {
+  return (
+    <ModalPostDraftDiaryWebStack.Navigator initialRouteName="PostDraftDiaryWeb">
+      <ModalPostDraftDiaryWebStack.Screen
+        name="PostDraftDiaryWeb"
+        component={PostDraftDiaryWebScreenContainer}
+      />
+    </ModalPostDraftDiaryWebStack.Navigator>
   );
 };
 

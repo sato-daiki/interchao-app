@@ -1,9 +1,10 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { fontSizeM, mainColor } from '../../styles/Common';
 import Hoverable from './Hoverable';
 
 interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
   title: string;
   color: string;
   onPress: () => void;
@@ -26,12 +27,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderButton: React.FC<Props> = ({ title, color, onPress }: Props) => {
+const HeaderButton: React.FC<Props> = ({
+  containerStyle,
+  title,
+  color,
+  onPress,
+}: Props) => {
   if (!title) return null;
   return (
     <Hoverable
       onPress={onPress}
-      style={[styles.container, { backgroundColor: color }]}
+      style={[styles.container, containerStyle, { backgroundColor: color }]}
     >
       <Text style={styles.title}>{title}</Text>
     </Hoverable>

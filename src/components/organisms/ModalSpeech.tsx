@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   switchContainer: {
     position: 'absolute',
