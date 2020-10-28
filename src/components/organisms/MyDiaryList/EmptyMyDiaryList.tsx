@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, Text, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { subTextColor, mainColor, fontSizeS } from '../../styles/Common';
-import { Space } from '../atoms';
-import I18n from '../../utils/I18n';
+import { Space } from '@/components/atoms';
+import { subTextColor, mainColor, fontSizeS } from '@/styles/Common';
+import I18n from '@/utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyMyDiaryList: React.FC = (): JSX.Element => {
+const EmptyMyDiaryList: React.FC = () => {
   return (
     <View style={styles.container}>
       <View style={styles.emptyUpper}>
@@ -80,4 +80,4 @@ const EmptyMyDiaryList: React.FC = (): JSX.Element => {
   );
 };
 
-export default EmptyMyDiaryList;
+export default React.memo(EmptyMyDiaryList);
