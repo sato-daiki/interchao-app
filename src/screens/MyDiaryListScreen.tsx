@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { Subscription } from '@unimodules/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
+import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
+import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
+import { LoadingModal, HeaderIcon } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
-import DiaryListItem from '../components/organisms/DiaryListItem';
 import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
 import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
-import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
 import { updateUnread, updateYet } from '../utils/diary';
@@ -62,13 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
-  flatList: {
-    flex: 1,
-  },
 });
 
 const HIT_PER_PAGE = 20;
-const keyExtractor = (item: Diary, index: number): string => String(index);
 
 /**
  * マイ日記一覧
@@ -349,37 +345,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     [navigation]
   );
 
-  type RenderItemProps = { item: Diary };
-  const renderItem = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
-      return (
-        <DiaryListItem
-          mine
-          item={item}
-          onPressUser={onPressUser}
-          onPressItem={onPressItem}
-        />
-      );
-    },
-    [onPressItem, onPressUser]
-  );
-
-  const listHeaderComponent = useCallback(() => {
-    return (
-      <GrayHeader
-        title={I18n.t('myDiaryList.diaryList', { count: diaryTotalNum })}
-      />
-    );
-  }, [diaryTotalNum]);
-
-  const isEmpty = !isLoading && !refreshing && diaries.length < 1;
-  const ListEmptyComponent = useCallback(() => {
-    if (isEmpty) {
-      return <EmptyMyDiaryList />;
-    }
-    return null;
-  }, [isEmpty]);
-
   return (
     <View style={styles.container}>
       <MyDiaryListMenu
@@ -394,20 +359,21 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         onPress={onPressModalStill}
       />
       <ModalAppSuggestion user={user} setUser={setUser} />
-      <FlatList
-        // emptyの時のレイアウトのため
-        contentContainerStyle={isEmpty ? styles.flatList : null}
-        data={diaries}
-        keyExtractor={keyExtractor}
-        refreshing={refreshing}
-        renderItem={renderItem}
-        ListEmptyComponent={ListEmptyComponent}
-        ListHeaderComponent={listHeaderComponent}
-        onEndReached={loadNextPage}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      {'aaa' === 'aaa' ? (
+        <MyDiaryListCalendar />
+      ) : (
+        <MyDiaryListFlatList
+          // emptyの時のレイアウトのため
+          isEmpty={!isLoading && !refreshing && diaries.length < 1}
+          refreshing={refreshing}
+          diaries={diaries}
+          diaryTotalNum={diaryTotalNum}
+          loadNextPage={loadNextPage}
+          onPressUser={onPressUser}
+          onPressItem={onPressItem}
+          onRefresh={onRefresh}
+        />
+      )}
     </View>
   );
 };
