@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
@@ -60,37 +60,42 @@ const NoticeScreen: React.FC<ScreenType> = ({ user, setUser }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { currentUser } = firebase.auth();
 
-  const onUpdate = async (
-    data: firebase.firestore.UpdateData
-  ): Promise<void> => {
-    if (isLoading) return;
-    setIsLoading(true);
+  const onUpdate = useCallback(
+    async (data: firebase.firestore.UpdateData): Promise<void> => {
+      if (isLoading) return;
+      setIsLoading(true);
 
-    await firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
+      await firebase
+        .firestore()
+        .doc(`users/${user.uid}`)
+        .update({
+          ...data,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      setUser({
+        ...user,
         ...data,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
-    setUser({
-      ...user,
-      ...data,
-    });
-    setIsLoading(false);
-  };
+      setIsLoading(false);
+    },
+    [isLoading, setUser, user]
+  );
 
-  const onPressCorrection = async (): Promise<void> => {
+  const onPressCorrection = useCallback(async (): Promise<void> => {
     await onUpdate({ notificationCorrection: !user.notificationCorrection });
-  };
+  }, [onUpdate, user.notificationCorrection]);
 
-  const onPressMailCorrection = async (): Promise<void> => {
+  const onPressMailCorrection = useCallback(async (): Promise<void> => {
     await onUpdate({ mailCorrection: !user.mailCorrection });
-  };
+  }, [onUpdate, user.mailCorrection]);
+
+  const onPressMailOperation = useCallback(async (): Promise<void> => {
+    await onUpdate({ mailOperation: !user.mailOperation });
+  }, [onUpdate, user.mailOperation]);
 
   return (
     <View style={styles.container}>
-      <LoadingModal />
+      <LoadingModal visible={isLoading} />
       <Text style={styles.title}>{I18n.t('notice.push')}</Text>
       <CheckItem
         checked={user.notificationCorrection}
@@ -112,6 +117,12 @@ const NoticeScreen: React.FC<ScreenType> = ({ user, setUser }) => {
         checked={user.mailCorrection || false}
         title={I18n.t('notice.finishCorrection')}
         onPress={onPressMailCorrection}
+        disable={!currentUser || !currentUser.email}
+      />
+      <CheckItem
+        checked={user.mailOperation || false}
+        title={I18n.t('notice.operation')}
+        onPress={onPressMailOperation}
         disable={!currentUser || !currentUser.email}
       />
     </View>
