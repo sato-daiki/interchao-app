@@ -77,31 +77,28 @@ export const usePostDiary = ({
     [profile, text, title, user.diaryPosted]
   );
 
-  const onPressDraft = useCallback(() => {
-    const f = async (): Promise<void> => {
-      Keyboard.dismiss();
-      if (isLoadingDraft || isLoadingPublish || isModalLack) return;
-      try {
-        setIsLoadingDraft(true);
-        const diary = getDiary('draft');
-        await firebase
-          .firestore()
-          .collection('diaries')
-          .add(diary);
+  const onPressDraft = useCallback(async (): Promise<void> => {
+    Keyboard.dismiss();
+    if (isLoadingDraft || isLoadingPublish || isModalLack) return;
+    try {
+      setIsLoadingDraft(true);
+      const diary = getDiary('draft');
+      await firebase
+        .firestore()
+        .collection('diaries')
+        .add(diary);
 
-        track(events.CREATED_DIARY, { diaryStatus: 'draft' });
-        navigation.navigate('Home', {
-          screen: 'MyDiaryTab',
-          params: { screen: 'MyDiaryList' },
-        });
-        setIsLoadingDraft(false);
-        setIsModalAlert(false);
-      } catch (err) {
-        alert({ err });
-        setIsLoadingDraft(false);
-      }
-    };
-    f();
+      track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+      navigation.navigate('Home', {
+        screen: 'MyDiaryTab',
+        params: { screen: 'MyDiaryList' },
+      });
+      setIsLoadingDraft(false);
+      setIsModalAlert(false);
+    } catch (err) {
+      alert({ err });
+      setIsLoadingDraft(false);
+    }
   }, [getDiary, isLoadingDraft, isLoadingPublish, isModalLack, navigation]);
 
   const onPressClose = useCallback((): void => {
@@ -156,92 +153,89 @@ export const usePostDiary = ({
       BackHandler.removeEventListener('hardwareBackPress', backAction);
   }, [navigation]);
 
-  const onPressSubmit = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isLoadingDraft || isLoadingPublish) return;
-      setIsLoadingPublish(true);
-      const diary = getDiary('publish');
-      const usePoints = getUsePoints(text.length, profile.learnLanguage);
-      const newPoints = user.points - usePoints;
-      const runningDays = getRunningDays(
-        user.runningDays,
-        user.lastDiaryPostedAt
-      );
-      const runningWeeks = getRunningWeeks(
-        user.runningWeeks,
-        user.lastDiaryPostedAt
-      );
+  const onPressSubmit = useCallback(async (): Promise<void> => {
+    if (isLoadingDraft || isLoadingPublish) return;
+    setIsLoadingPublish(true);
+    const diary = getDiary('publish');
+    const usePoints = getUsePoints(text.length, profile.learnLanguage);
+    const newPoints = user.points - usePoints;
+    const runningDays = getRunningDays(
+      user.runningDays,
+      user.lastDiaryPostedAt
+    );
+    const runningWeeks = getRunningWeeks(
+      user.runningWeeks,
+      user.lastDiaryPostedAt
+    );
 
-      const message = getPublishMessage(
-        user.runningDays,
-        user.runningWeeks,
-        runningDays,
-        runningWeeks
-      );
+    const message = getPublishMessage(
+      user.runningDays,
+      user.runningWeeks,
+      runningDays,
+      runningWeeks
+    );
 
-      let diaryId = '';
-      // 日記の更新とpointsの整合性をとるためtransactionを使う
-      await firebase
-        .firestore()
-        .runTransaction(async transaction => {
-          const diaryRef = firebase
-            .firestore()
-            .collection('diaries')
-            .doc();
-          diaryId = diaryRef.id;
-          transaction.set(diaryRef, diary);
+    let diaryId = '';
+    // 日記の更新とpointsの整合性をとるためtransactionを使う
+    await firebase
+      .firestore()
+      .runTransaction(async transaction => {
+        const diaryRef = firebase
+          .firestore()
+          .collection('diaries')
+          .doc();
+        diaryId = diaryRef.id;
+        transaction.set(diaryRef, diary);
 
-          const refUser = firebase.firestore().doc(`users/${user.uid}`);
-          // 初回の場合はdiaryPostedを更新する
-          const updateUser = {
-            points: newPoints,
-            runningDays,
-            runningWeeks,
-            lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as Pick<
-            User,
-            | 'points'
-            | 'runningDays'
-            | 'runningWeeks'
-            | 'lastDiaryPostedAt'
-            | 'updatedAt'
-            | 'diaryPosted'
-          >;
-          if (!user.diaryPosted) {
-            updateUser.diaryPosted = true;
-          }
-          transaction.update(refUser, updateUser);
-        })
-        .catch(err => {
-          setIsLoadingPublish(false);
-          alert({ err });
-        });
-
-      track(events.CREATED_DIARY, {
-        usePoints,
-        characters: text.length,
-        diaryStatus: 'publish',
+        const refUser = firebase.firestore().doc(`users/${user.uid}`);
+        // 初回の場合はdiaryPostedを更新する
+        const updateUser = {
+          points: newPoints,
+          runningDays,
+          runningWeeks,
+          lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as Pick<
+          User,
+          | 'points'
+          | 'runningDays'
+          | 'runningWeeks'
+          | 'lastDiaryPostedAt'
+          | 'updatedAt'
+          | 'diaryPosted'
+        >;
+        if (!user.diaryPosted) {
+          updateUser.diaryPosted = true;
+        }
+        transaction.update(refUser, updateUser);
+      })
+      .catch(err => {
+        setIsLoadingPublish(false);
+        alert({ err });
       });
 
-      // reduxに追加
-      addDiary({
-        objectID: diaryId,
-        ...diary,
-      });
-      setUser({
-        ...user,
-        runningDays,
-        runningWeeks,
-        lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
-        diaryPosted: true,
-        points: newPoints,
-      });
-      setPublishMessage(message);
-      setIsLoadingPublish(false);
-      setIsPublish(true);
-    };
-    f();
+    track(events.CREATED_DIARY, {
+      usePoints,
+      characters: text.length,
+      diaryStatus: 'publish',
+    });
+
+    // reduxに追加
+    addDiary({
+      objectID: diaryId,
+      ...diary,
+    });
+    setUser({
+      ...user,
+      runningDays,
+      runningWeeks,
+      lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
+      diaryPosted: true,
+      points: newPoints,
+    });
+    setPublishMessage(message);
+    setIsLoadingPublish(false);
+    setIsPublish(true);
   }, [
     addDiary,
     getDiary,
@@ -267,23 +261,20 @@ export const usePostDiary = ({
     navigation.goBack();
   }, [navigation]);
 
-  const onPressTutorial = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      setIsTutorialLoading(true);
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({
-          tutorialPostDiary: true,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      setUser({
-        ...user,
+  const onPressTutorial = useCallback(async (): Promise<void> => {
+    setIsTutorialLoading(true);
+    await firebase
+      .firestore()
+      .doc(`users/${user.uid}`)
+      .update({
         tutorialPostDiary: true,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
-      setIsTutorialLoading(false);
-    };
-    f();
+    setUser({
+      ...user,
+      tutorialPostDiary: true,
+    });
+    setIsTutorialLoading(false);
   }, [setUser, user]);
 
   const onPressCloseError = useCallback((): void => {

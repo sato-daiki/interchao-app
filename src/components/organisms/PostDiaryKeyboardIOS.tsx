@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+import { Language } from '@/types';
 import { TextButtun, TextInputTitle, TextInputText, Hoverable } from '../atoms';
 import { offWhite, mainColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
@@ -15,6 +16,7 @@ import I18n from '../../utils/I18n';
 interface Props {
   title: string;
   text: string;
+  learnLanguage: Language;
   isForce: boolean;
   fadeAnim: Animated.Value;
   onChangeTextTitle: (txt: string) => void;
@@ -43,6 +45,7 @@ const styles = StyleSheet.create({
 const PostDiaryKeyboardIOS = ({
   title,
   text,
+  learnLanguage,
   isForce,
   fadeAnim,
   onChangeTextTitle,
@@ -60,6 +63,7 @@ const PostDiaryKeyboardIOS = ({
       />
       <TextInputText
         value={text}
+        learnLanguage={learnLanguage}
         onFocus={onFocusText}
         onChangeText={onChangeTextText}
         onBlur={onBlurText}

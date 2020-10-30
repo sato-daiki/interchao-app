@@ -1,3 +1,5 @@
+import { Language } from '@/types';
+import { getMaxPostText } from '@/utils/diary';
 import React from 'react';
 import { StyleSheet, TextInput, StyleProp, TextStyle } from 'react-native';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
@@ -6,6 +8,7 @@ import I18n from '../../utils/I18n';
 interface Props {
   style?: StyleProp<TextStyle>;
   value: string;
+  learnLanguage: Language;
   onChangeText: (txt: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -33,6 +36,7 @@ const TextInputText: React.FC<Props> = ({
   onChangeText,
   onBlur,
   style,
+  learnLanguage,
 }: Props): JSX.Element => {
   return (
     <TextInput
@@ -47,6 +51,7 @@ const TextInputText: React.FC<Props> = ({
       onChangeText={onChangeText}
       onFocus={onFocus}
       onBlur={onBlur}
+      maxLength={getMaxPostText(learnLanguage)}
     />
   );
 };

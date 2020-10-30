@@ -118,6 +118,8 @@ const errorMessage = {
   lackPointsTitle: '포인트 부족',
   lackPointsText:
     '글자수{{textLength}인 일기를 업로드하려면 {{usePoint}}포인트가 필요합니다. 포인트는 일기를 첨삭하면 얻을 수 있습니다.',
+  exceedingCharacter:
+    '최대 문자 수를 초과합니다. 최대 문자 수 : {{textLength}}',
 };
 const app = {
   updateTitle: '최신버전으로 이용가능합니다',

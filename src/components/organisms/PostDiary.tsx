@@ -14,9 +14,10 @@ import {
   borderLightColor,
   offWhite,
   fontSizeSS,
+  softRed,
 } from '@/styles/Common';
 import { Points } from '@/images';
-import { getUsePoints } from '@/utils/diary';
+import { getMaxPostText, getUsePoints } from '@/utils/diary';
 import { Language } from '@/types';
 import I18n from '@/utils/I18n';
 import { LoadingModal } from '@/components/atoms';
@@ -145,6 +146,7 @@ const PostDiary = ({
   }, []);
 
   const usePoints = getUsePoints(text.length, learnLanguage);
+  const maxPostText = getMaxPostText(learnLanguage);
 
   const onBlurText = useCallback((): void => setIsForce(false), []);
 
@@ -197,7 +199,14 @@ const PostDiary = ({
           <Text style={styles.headerLabel}>
             {I18n.t('postDiaryComponent.textLength')}
           </Text>
-          <Text style={styles.headerValue}>{text.length}</Text>
+          <Text
+            style={[
+              styles.headerValue,
+              { color: text.length === maxPostText ? softRed : primaryColor },
+            ]}
+          >
+            {text.length}
+          </Text>
         </View>
         <View style={styles.right}>
           <Image style={styles.points} source={Points} />
@@ -211,6 +220,7 @@ const PostDiary = ({
         <PostDiaryKeyboardIOS
           title={title}
           text={text}
+          learnLanguage={learnLanguage}
           isForce={isForce}
           fadeAnim={fadeAnim}
           onChangeTextTitle={onChangeTextTitle}
@@ -223,6 +233,7 @@ const PostDiary = ({
         <PostDiaryKeybordAndroid
           title={title}
           text={text}
+          learnLanguage={learnLanguage}
           onChangeTextTitle={onChangeTextTitle}
           onChangeTextText={onChangeTextText}
           onPressDraft={onPressDraft}
