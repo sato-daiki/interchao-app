@@ -7,6 +7,7 @@ import {
   maxLayoutChange,
   primaryColor,
   subTextColor,
+  softRed,
 } from '@/styles/Common';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
 import { Language } from '@/types';
@@ -125,6 +126,7 @@ const PostDiaryWeb = ({
   onPressCloseError,
 }: Props): JSX.Element => {
   const usePoints = getUsePoints(text.length, learnLanguage);
+  const maxPostText = getMaxPostText(learnLanguage);
 
   return (
     <ScrollView style={styles.warapper}>
@@ -185,11 +187,18 @@ const PostDiaryWeb = ({
               spellCheck
               onChangeText={onChangeTextText}
               numberOfLines={100}
-              maxLength={getMaxPostText(learnLanguage)}
+              maxLength={maxPostText}
             />
           </View>
           <View style={styles.rightContainer}>
-            <Text style={styles.subText}>{`${text.length} 文字`}</Text>
+            <Text
+              style={[
+                styles.subText,
+                { color: text.length === maxPostText ? softRed : primaryColor },
+              ]}
+            >
+              {`${text.length} 文字`}
+            </Text>
             <Space size={16} />
             <Text style={styles.subText}>
               {`${I18n.t('postDiaryComponent.usePoints')} ${usePoints}`}
