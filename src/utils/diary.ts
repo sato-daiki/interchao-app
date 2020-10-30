@@ -225,7 +225,7 @@ export const updateUnread = async (
 
 export const getMaxPostText = (learnLanguage: Language): number => {
   const basePoints = getBasePoints(learnLanguage);
-  return basePoints * 2;
+  return basePoints * 4;
 };
 
 export const getUsePoints = (
