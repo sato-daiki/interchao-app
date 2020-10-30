@@ -3,7 +3,7 @@ import { Keyboard, BackHandler, Alert } from 'react-native';
 import { track, events } from '@/utils/Analytics';
 import firebase from '@/constants/firebase';
 import { User } from '@/types/user';
-import { DiaryStatus, Profile, Diary, LocalStatus } from '@/types';
+import { DiaryStatus, Profile, Diary } from '@/types';
 import {
   checkBeforePost,
   getUsePoints,
