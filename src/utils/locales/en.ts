@@ -124,6 +124,8 @@ const errorMessage = {
   lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
     '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries.',
+  exceedingCharacter:
+    'Exceeding maximum character count. Maximum number of characters:{{textLength}}',
 };
 
 const app = {

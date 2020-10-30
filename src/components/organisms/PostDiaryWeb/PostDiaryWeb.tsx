@@ -8,7 +8,7 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
-import { getUsePoints } from '@/utils/diary';
+import { getMaxPostText, getUsePoints } from '@/utils/diary';
 import { Language } from '@/types';
 import I18n from '@/utils/I18n';
 import { LoadingModal, Space, TextInputTitle } from '@/components/atoms';
@@ -185,6 +185,7 @@ const PostDiaryWeb = ({
               spellCheck
               onChangeText={onChangeTextText}
               numberOfLines={100}
+              maxLength={getMaxPostText(learnLanguage)}
             />
           </View>
           <View style={styles.rightContainer}>

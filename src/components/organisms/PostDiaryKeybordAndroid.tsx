@@ -7,13 +7,20 @@ import {
   Keyboard,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { TextButtun, TextInputTitle, TextInputText, Hoverable } from '../atoms';
-import { offWhite, mainColor } from '../../styles/Common';
-import I18n from '../../utils/I18n';
+import I18n from '@/utils/I18n';
+import { Language } from '@/types';
+import { offWhite, mainColor } from '@/styles/Common';
+import {
+  TextButtun,
+  TextInputTitle,
+  TextInputText,
+  Hoverable,
+} from '@/components/atoms';
 
 interface Props {
   title: string;
   text: string;
+  learnLanguage: Language;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
   onPressDraft: () => void;
@@ -50,6 +57,7 @@ const styles = StyleSheet.create({
 const PostDiaryKeybordAndroid = ({
   title,
   text,
+  learnLanguage,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
@@ -92,6 +100,7 @@ const PostDiaryKeybordAndroid = ({
           <TextInputText
             style={styles.textInput}
             value={text}
+            learnLanguage={learnLanguage}
             onChangeText={onChangeTextText}
             onFocus={onFocusText}
             onBlur={onBlurText}

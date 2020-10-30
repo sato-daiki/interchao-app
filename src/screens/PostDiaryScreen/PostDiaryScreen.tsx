@@ -42,7 +42,6 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
   profile,
   setUser,
   addDiary,
-  setLocalStatus,
 }) => {
   const {
     isLoadingPublish,

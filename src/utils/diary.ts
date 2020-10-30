@@ -1,6 +1,7 @@
 import moment from 'moment';
 import 'moment/locale/ja';
 import { firestore } from 'firebase';
+import firebase from '@/constants/firebase';
 import {
   CorrectionStatus,
   Language,
@@ -8,9 +9,8 @@ import {
   DisplayProfile,
   Diary,
   CountryCode,
-} from '../types';
-import { softRed, subTextColor, mainColor } from '../styles/Common';
-import firebase from '../constants/firebase';
+} from '@/types';
+import { softRed, subTextColor, mainColor } from '@/styles/Common';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -223,6 +223,11 @@ export const updateUnread = async (
     });
 };
 
+export const getMaxPostText = (learnLanguage: Language): number => {
+  const basePoints = getBasePoints(learnLanguage);
+  return basePoints * 2;
+};
+
 export const getUsePoints = (
   length: number,
   learnLanguage: Language
@@ -322,6 +327,14 @@ export const checkBeforePost = (
   }
   if (!text) {
     return { result: false, errorMessage: I18n.t('errorMessage.emptyText') };
+  }
+  if (text.length > getMaxPostText(learnLanguage)) {
+    return {
+      result: false,
+      errorMessage: I18n.t('errorMessage.exceedingCharacter', {
+        textLength: getMaxPostText(learnLanguage),
+      }),
+    };
   }
   const usePoint = getUsePoints(text.length, learnLanguage);
   if (usePoint > points) {
