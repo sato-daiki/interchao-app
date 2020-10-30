@@ -9,9 +9,15 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { Language } from '@/types';
-import { TextButtun, TextInputTitle, TextInputText, Hoverable } from '../atoms';
-import { offWhite, mainColor } from '../../styles/Common';
-import I18n from '../../utils/I18n';
+import { getMaxPostText } from '@/utils/diary';
+import { offWhite, mainColor } from '@/styles/Common';
+import I18n from '@/utils/I18n';
+import {
+  TextButtun,
+  TextInputTitle,
+  TextInputText,
+  Hoverable,
+} from '@/components/atoms';
 
 interface Props {
   title: string;
@@ -63,7 +69,7 @@ const PostDiaryKeyboardIOS = ({
       />
       <TextInputText
         value={text}
-        learnLanguage={learnLanguage}
+        maxLength={getMaxPostText(learnLanguage)}
         onFocus={onFocusText}
         onChangeText={onChangeTextText}
         onBlur={onBlurText}

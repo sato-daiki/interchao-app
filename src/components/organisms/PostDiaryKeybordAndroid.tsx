@@ -16,6 +16,7 @@ import {
   TextInputText,
   Hoverable,
 } from '@/components/atoms';
+import { getMaxPostText } from '@/utils/diary';
 
 interface Props {
   title: string;
@@ -100,7 +101,7 @@ const PostDiaryKeybordAndroid = ({
           <TextInputText
             style={styles.textInput}
             value={text}
-            learnLanguage={learnLanguage}
+            maxLength={getMaxPostText(learnLanguage)}
             onChangeText={onChangeTextText}
             onFocus={onFocusText}
             onBlur={onBlurText}
