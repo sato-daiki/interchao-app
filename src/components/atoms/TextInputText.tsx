@@ -9,6 +9,7 @@ interface Props {
   onChangeText: (txt: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  maxLength?: number;
 }
 
 const styles = StyleSheet.create({
@@ -33,6 +34,7 @@ const TextInputText: React.FC<Props> = ({
   onChangeText,
   onBlur,
   style,
+  maxLength,
 }: Props): JSX.Element => {
   return (
     <TextInput
@@ -47,6 +49,7 @@ const TextInputText: React.FC<Props> = ({
       onChangeText={onChangeText}
       onFocus={onFocus}
       onBlur={onBlur}
+      maxLength={maxLength}
     />
   );
 };

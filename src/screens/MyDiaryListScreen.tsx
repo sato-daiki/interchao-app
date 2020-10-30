@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { Subscription } from '@unimodules/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
+import FirstPageComponents from '@/components/organisms/FirstPageComponents';
 import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
 import { User, Diary, Profile } from '../types';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -14,14 +15,11 @@ import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
 import EmptyMyDiaryList from '../components/organisms/EmptyMyDiaryList';
 import SearchBarButton from '../components/molecules/SearchBarButton';
 import Algolia from '../utils/Algolia';
-import { updateUnread, updateYet } from '../utils/diary';
-import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
+import { updateUnread } from '../utils/diary';
 import { getUnreadCorrectionNum } from '../utils/localStatus';
 import { LocalStatus } from '../types/localStatus';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { getDataCorrectionStatus } from '../utils/correcting';
-import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
 import {
   getExpoPushToken,
   registerForPushNotificationsAsync,
@@ -87,7 +85,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isStillLoading, setIsStillLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
@@ -101,10 +98,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
-
-  const [correctingObjectID, setCorrectingObjectID] = useState(
-    user.correctingObjectID
-  );
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('MyDiarySearch');
@@ -258,26 +251,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     setIsMenu(false);
   }, []);
 
-  const onPressModalStill = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isStillLoading || !user.correctingObjectID) return;
-      setIsStillLoading(true);
-      // ステータスを戻す
-      const data = getDataCorrectionStatus(user.correctingCorrectedNum, 'yet');
-      if (!data) return;
-      updateYet(user.correctingObjectID, user.uid, data);
-
-      setUser({
-        ...user,
-        correctingObjectID: null,
-        correctingCorrectedNum: null,
-      });
-      setIsStillLoading(false);
-      setCorrectingObjectID(null);
-    };
-    f();
-  }, [isStillLoading, setUser, user]);
-
   const onPressItem = useCallback(
     (item: Diary) => {
       const f = async (): Promise<void> => {
@@ -382,18 +355,13 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
   return (
     <View style={styles.container}>
+      <LoadingModal visible={isLoading} />
       <MyDiaryListMenu
         isMenu={isMenu}
         nativeLanguage={profile.nativeLanguage}
         onClose={onClose}
       />
-      <LoadingModal visible={isLoading} />
-      <ModalStillCorrecting
-        visible={!!correctingObjectID}
-        isLoading={isStillLoading}
-        onPress={onPressModalStill}
-      />
-      <ModalAppSuggestion user={user} setUser={setUser} />
+      <FirstPageComponents user={user} setUser={setUser} />
       <FlatList
         // emptyの時のレイアウトのため
         contentContainerStyle={isEmpty ? styles.flatList : null}
