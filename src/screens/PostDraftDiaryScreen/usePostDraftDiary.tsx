@@ -260,7 +260,7 @@ export const usePostDraftDiary = ({
     user,
   ]);
 
-  const onPressCloseSns = useCallback((): void => {
+  const onClosePostDiary = useCallback((): void => {
     navigation.navigate('Home', {
       screen: 'MyDiaryTab',
       params: { screen: 'MyDiaryList' },
@@ -322,7 +322,7 @@ export const usePostDraftDiary = ({
     onPressCloseModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
-    onPressCloseSns,
+    onClosePostDiary,
     onChangeTextTitle,
     onChangeTextText,
     onPressSubmit,
