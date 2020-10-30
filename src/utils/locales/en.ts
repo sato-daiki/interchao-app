@@ -124,6 +124,8 @@ const errorMessage = {
   lackPointsTitle: 'You do not have enough points.',
   lackPointsText:
     '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries.',
+  exceedingCharacter:
+    'Exceeding maximum character count. Maximum number of characters:{{textLength}}',
 };
 
 const app = {
@@ -237,6 +239,7 @@ const myDiaryList = {
     other: 'My Journal Entries: {{count}} entries',
     zero: 'My Journal Entries',
   },
+  notficationSetting: `Interchao app notifications are turned off. Let's turn on "Notification" from "Settings" so that you can check when the journal entries correction arrives.`,
 };
 
 const myDiarySerch = {
@@ -254,6 +257,7 @@ const notice = {
   finishReview: 'When I get reviews',
   push: 'Push notifications',
   mail: 'Email notifications',
+  operation: 'Notice from the management',
   noMail:
     '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
 };

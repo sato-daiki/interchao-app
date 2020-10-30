@@ -6,13 +6,13 @@ import {
   fontSizeL,
   borderLightColor,
   fontSizeM,
-} from '../../../styles/Common';
-import { WhiteButton, Space, Lottie } from '../../atoms';
-import I18n from '../../../utils/I18n';
+} from '@/styles/Common';
+import { WhiteButton, Space, Lottie } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 
 interface Props {
   publishMessage: string | null;
-  onPressCloseSns: () => void;
+  onPressClose: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -70,13 +70,14 @@ const styles = StyleSheet.create({
 
 const AfterPublished: React.FC<Props> = ({
   publishMessage,
-  onPressCloseSns,
+  onPressClose,
 }: Props): JSX.Element | null => {
   return (
     <>
       <Text style={styles.title}>{I18n.t('modalAlertPublish.publish')}</Text>
       <View>
         <View style={styles.line} />
+        {/* androidがLottie対応していないため */}
         {Platform.OS === 'android' ? (
           <>
             <Image style={styles.note} source={Note} />
@@ -106,7 +107,7 @@ const AfterPublished: React.FC<Props> = ({
         <Text style={styles.text}>{publishMessage}</Text>
       </View>
       <Space size={16} />
-      <WhiteButton title={I18n.t('common.close')} onPress={onPressCloseSns} />
+      <WhiteButton title={I18n.t('common.close')} onPress={onPressClose} />
     </>
   );
 };

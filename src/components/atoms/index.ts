@@ -20,6 +20,7 @@ export { default as LoadingModal } from './LoadingModal';
 // @ts-ignore
 // eslint-disable-next-line import/extensions
 export { default as Lottie } from './Lottie';
+export { default as Note } from './Note';
 export { default as OriginalText } from './OriginalText';
 export { default as ProfileIcon } from './ProfileIcon';
 export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';

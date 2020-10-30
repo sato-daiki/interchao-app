@@ -1,13 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import I18n from '@/utils/I18n';
 import {
   primaryColor,
   fontSizeL,
   borderLightColor,
   fontSizeM,
-} from '../../../styles/Common';
-import { SubmitButton, WhiteButton, Space, UserPointsBig } from '../../atoms';
-import I18n from '../../../utils/I18n';
+} from '@/styles/Common';
+import {
+  SubmitButton,
+  WhiteButton,
+  Space,
+  UserPointsBig,
+} from '@/components/atoms';
 
 interface Props {
   isLoading: boolean;

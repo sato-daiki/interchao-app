@@ -7,13 +7,14 @@ import {
   maxLayoutChange,
   primaryColor,
   subTextColor,
+  softRed,
 } from '@/styles/Common';
-import { getUsePoints } from '@/utils/diary';
+import { getMaxPostText, getUsePoints } from '@/utils/diary';
 import { Language } from '@/types';
 import I18n from '@/utils/I18n';
 import { LoadingModal, Space, TextInputTitle } from '@/components/atoms';
 import { ScrollView } from 'react-native-gesture-handler';
-import { ModalAlertPublish } from '../ModalAlertPublish';
+import { ModalPublish } from '../ModalPublish';
 import ModalLackPoint from '../ModalLackPoint';
 import ModalDiaryCancel from '../ModalDiaryCancel';
 import TutorialPostDiary from '../TutorialPostDiary';
@@ -39,7 +40,7 @@ interface Props {
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
-  onPressCloseSns: () => void;
+  onClosePostDiary: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
   onPressSubmit: () => void;
@@ -115,7 +116,7 @@ const PostDiaryWeb = ({
   onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
-  onPressCloseSns,
+  onClosePostDiary,
   onChangeTextTitle,
   onChangeTextText,
   onPressSubmit,
@@ -125,6 +126,7 @@ const PostDiaryWeb = ({
   onPressCloseError,
 }: Props): JSX.Element => {
   const usePoints = getUsePoints(text.length, learnLanguage);
+  const maxPostText = getMaxPostText(learnLanguage);
 
   return (
     <ScrollView style={styles.warapper}>
@@ -149,7 +151,7 @@ const PostDiaryWeb = ({
           onPressSubmit={onPressSubmitModalLack}
           onPressClose={onPressCloseModalLack}
         />
-        <ModalAlertPublish
+        <ModalPublish
           visible={isModalAlert}
           isPublish={isPublish}
           isLoading={isLoading}
@@ -158,7 +160,7 @@ const PostDiaryWeb = ({
           publishMessage={publishMessage}
           onPressSubmit={onPressSubmit}
           onPressCloseCancel={onPressCloseModalPublish}
-          onPressCloseSns={onPressCloseSns}
+          onClosePostDiary={onClosePostDiary}
         />
         <ModalDiaryCancel
           visible={isModalCancel}
@@ -185,10 +187,18 @@ const PostDiaryWeb = ({
               spellCheck
               onChangeText={onChangeTextText}
               numberOfLines={100}
+              maxLength={maxPostText}
             />
           </View>
           <View style={styles.rightContainer}>
-            <Text style={styles.subText}>{`${text.length} 文字`}</Text>
+            <Text
+              style={[
+                styles.subText,
+                { color: text.length === maxPostText ? softRed : primaryColor },
+              ]}
+            >
+              {`${text.length} 文字`}
+            </Text>
             <Space size={16} />
             <Text style={styles.subText}>
               {`${I18n.t('postDiaryComponent.usePoints')} ${usePoints}`}
