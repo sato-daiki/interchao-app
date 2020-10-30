@@ -83,7 +83,7 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
     onPressCloseModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
-    onPressCloseSns,
+    onClosePostDiary,
     onChangeTextTitle,
     onChangeTextText,
     onPressSubmit,
@@ -156,7 +156,7 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
       nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
-      onPressCloseSns={onPressCloseSns}
+      onClosePostDiary={onClosePostDiary}
       onPressCloseModalPublish={onPressCloseModalPublish}
       onPressCloseModalCancel={onPressCloseModalCancel}
       onChangeTextTitle={onChangeTextTitle}

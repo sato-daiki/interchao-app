@@ -121,6 +121,8 @@ const errorMessage = {
   lackPointsTitle: 'ポイント不足',
   lackPointsText:
     '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは日記を添削することで溜めることができます',
+  exceedingCharacter:
+    '文字数オーバーです。{{textLength}}以下で投稿してください',
 };
 const app = {
   updateTitle: '最新版が利用可能です',
@@ -229,6 +231,8 @@ const myDiaryList = {
     other: 'マイ日記一覧{{count}}件',
     zero: 'マイ日記一覧',
   },
+  notficationSetting:
+    'Interchaoアプリの通知がオフになっています。日記の添削が届いた時にチェックできるように、『設定』から『通知』をオンにしましょう',
 };
 
 const myDiarySerch = {
