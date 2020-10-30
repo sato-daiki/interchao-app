@@ -20,7 +20,7 @@ import { getUsePoints } from '@/utils/diary';
 import { Language } from '@/types';
 import I18n from '@/utils/I18n';
 import { LoadingModal } from '@/components/atoms';
-import { ModalAlertPublish } from '@/components/organisms/ModalAlertPublish';
+import { ModalPublish } from '@/components/organisms/ModalPublish';
 import ModalLackPoint from '@/components/organisms/ModalLackPoint';
 import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
 import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
@@ -48,7 +48,7 @@ interface Props {
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
-  onPressCloseSns: () => void;
+  onClosePostDiary: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
   onPressSubmit: () => void;
@@ -119,7 +119,7 @@ const PostDiary = ({
   onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
-  onPressCloseSns,
+  onClosePostDiary,
   onChangeTextTitle,
   onChangeTextText,
   onPressSubmit,
@@ -170,7 +170,7 @@ const PostDiary = ({
         onPressSubmit={onPressSubmitModalLack}
         onPressClose={onPressCloseModalLack}
       />
-      <ModalAlertPublish
+      <ModalPublish
         visible={isModalAlert}
         isPublish={isPublish}
         isLoading={isLoading}
@@ -179,7 +179,7 @@ const PostDiary = ({
         publishMessage={publishMessage}
         onPressSubmit={onPressSubmit}
         onPressCloseCancel={onPressCloseModalPublish}
-        onPressCloseSns={onPressCloseSns}
+        onClosePostDiary={onClosePostDiary}
       />
       <ModalDiaryCancel
         visible={isModalCancel}

@@ -229,6 +229,8 @@ const myDiaryList = {
     other: 'マイ日記一覧{{count}}件',
     zero: 'マイ日記一覧',
   },
+  notficationSetting:
+    'Interchaoアプリの通知がオフになっています。日記の添削が届いた時にチェックできるように、『設定』から『通知』をオンにしましょう',
 };
 
 const myDiarySerch = {

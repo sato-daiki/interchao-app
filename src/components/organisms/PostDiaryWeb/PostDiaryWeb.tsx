@@ -13,7 +13,7 @@ import { Language } from '@/types';
 import I18n from '@/utils/I18n';
 import { LoadingModal, Space, TextInputTitle } from '@/components/atoms';
 import { ScrollView } from 'react-native-gesture-handler';
-import { ModalAlertPublish } from '../ModalAlertPublish';
+import { ModalPublish } from '../ModalPublish';
 import ModalLackPoint from '../ModalLackPoint';
 import ModalDiaryCancel from '../ModalDiaryCancel';
 import TutorialPostDiary from '../TutorialPostDiary';
@@ -39,7 +39,7 @@ interface Props {
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
-  onPressCloseSns: () => void;
+  onClosePostDiary: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
   onPressSubmit: () => void;
@@ -115,7 +115,7 @@ const PostDiaryWeb = ({
   onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
-  onPressCloseSns,
+  onClosePostDiary,
   onChangeTextTitle,
   onChangeTextText,
   onPressSubmit,
@@ -149,7 +149,7 @@ const PostDiaryWeb = ({
           onPressSubmit={onPressSubmitModalLack}
           onPressClose={onPressCloseModalLack}
         />
-        <ModalAlertPublish
+        <ModalPublish
           visible={isModalAlert}
           isPublish={isPublish}
           isLoading={isLoading}
@@ -158,7 +158,7 @@ const PostDiaryWeb = ({
           publishMessage={publishMessage}
           onPressSubmit={onPressSubmit}
           onPressCloseCancel={onPressCloseModalPublish}
-          onPressCloseSns={onPressCloseSns}
+          onClosePostDiary={onClosePostDiary}
         />
         <ModalDiaryCancel
           visible={isModalCancel}

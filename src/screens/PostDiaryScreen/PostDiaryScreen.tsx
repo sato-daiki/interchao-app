@@ -42,6 +42,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
   profile,
   setUser,
   addDiary,
+  setLocalStatus,
 }) => {
   const {
     isLoadingPublish,
@@ -60,7 +61,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressCloseModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
-    onPressCloseSns,
+    onClosePostDiary,
     onChangeTextTitle,
     onChangeTextText,
     onPressSubmit,
@@ -121,7 +122,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       onPressCloseModalLack={onPressCloseModalLack}
       onPressCloseModalPublish={onPressCloseModalPublish}
       onPressCloseModalCancel={onPressCloseModalCancel}
-      onPressCloseSns={onPressCloseSns}
+      onClosePostDiary={onClosePostDiary}
       onChangeTextTitle={onChangeTextTitle}
       onChangeTextText={onChangeTextText}
       onPressSubmit={onPressSubmit}

@@ -216,6 +216,8 @@ const myDiaryList = {
     other: '我的日记列表{{count}}项',
     zero: '我的日记列表',
   },
+  notficationSetting:
+    'Interchao应用程序通知已关闭。让我们从“设置”中打开“通知”，以便您可以检查日记的更正时间',
 };
 
 const myDiarySerch = {

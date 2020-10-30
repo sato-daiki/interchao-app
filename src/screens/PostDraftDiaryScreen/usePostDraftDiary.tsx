@@ -3,7 +3,7 @@ import { Keyboard, BackHandler, Alert } from 'react-native';
 import { track, events } from '@/utils/Analytics';
 import firebase from '@/constants/firebase';
 import { User } from '@/types/user';
-import { DiaryStatus, Profile, Diary } from '@/types';
+import { DiaryStatus, Profile, Diary, LocalStatus } from '@/types';
 import {
   checkBeforePost,
   getUsePoints,
@@ -260,7 +260,7 @@ export const usePostDraftDiary = ({
     user,
   ]);
 
-  const onPressCloseSns = useCallback((): void => {
+  const onClosePostDiary = useCallback((): void => {
     navigation.navigate('Home', {
       screen: 'MyDiaryTab',
       params: { screen: 'MyDiaryList' },
@@ -322,7 +322,7 @@ export const usePostDraftDiary = ({
     onPressCloseModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
-    onPressCloseSns,
+    onClosePostDiary,
     onChangeTextTitle,
     onChangeTextText,
     onPressSubmit,
