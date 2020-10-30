@@ -30,6 +30,7 @@ export interface User {
   runningWeeks?: number;
   lastDiaryPostedAt?: firestore.Timestamp | null;
   lastModalAppSuggestionAt?: firestore.Timestamp | null;
+  lastModalNotficationSettingAt?: firestore.Timestamp | null;
   createdAt: firestore.FieldValue;
   updatedAt: firestore.FieldValue;
 }

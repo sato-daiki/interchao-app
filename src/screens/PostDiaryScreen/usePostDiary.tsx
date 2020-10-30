@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Keyboard, BackHandler, Alert } from 'react-native';
 import { track, events } from '@/utils/Analytics';
 import firebase from '@/constants/firebase';
@@ -253,7 +253,7 @@ export const usePostDiary = ({
     user,
   ]);
 
-  const onPressCloseSns = useCallback((): void => {
+  const onClosePostDiary = useCallback((): void => {
     navigation.navigate('Home', {
       screen: 'MyDiaryTab',
       params: { screen: 'MyDiaryList' },
@@ -344,7 +344,7 @@ export const usePostDiary = ({
     onPressCloseModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
-    onPressCloseSns,
+    onClosePostDiary,
     onChangeTextTitle,
     onChangeTextText,
     onPressSubmit,

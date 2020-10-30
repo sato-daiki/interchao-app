@@ -38,6 +38,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
         runningWeeks,
         lastDiaryPostedAt,
         lastModalAppSuggestionAt,
+        lastModalNotficationSettingAt,
         createdAt,
         updatedAt,
       } = data;
@@ -70,6 +71,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
         runningWeeks,
         lastDiaryPostedAt,
         lastModalAppSuggestionAt,
+        lastModalNotficationSettingAt,
         createdAt,
         updatedAt,
       };

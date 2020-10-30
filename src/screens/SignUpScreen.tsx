@@ -140,6 +140,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
           runningWeeks: 0,
           lastDiaryPostedAt: null,
           lastModalAppSuggestionAt: null,
+          lastModalNotficationSettingAt: null,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         };
