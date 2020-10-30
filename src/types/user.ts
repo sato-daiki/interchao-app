@@ -20,6 +20,7 @@ export interface User {
   // notificationReminderOneMonth?: boolean;
   // notificationReminderThreeMonths?: boolean;
   mailCorrection?: boolean;
+  mailOperation?: boolean;
   // mailReminderNextDay?: boolean;
   // mailReminderThreeDays?: boolean;
   // mailReminderOneWeek?: boolean;
