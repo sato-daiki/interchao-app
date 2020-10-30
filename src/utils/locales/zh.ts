@@ -109,6 +109,7 @@ const errorMessage = {
   lackPointsTitle: '积分不足',
   lackPointsText:
     '您需要{{usePoint}}个积分才能发布{{textLength}}个字符的日记。可以通过批改日记来累积积分',
+  exceedingCharacter: '超过最大字符数。最大字符数:{{textLength}}',
 };
 const app = {
   updateTitle: '最新版本已经发布',
@@ -216,6 +217,8 @@ const myDiaryList = {
     other: '我的日记列表{{count}}项',
     zero: '我的日记列表',
   },
+  notficationSetting:
+    'Interchao应用程序通知已关闭。让我们从“设置”中打开“通知”，以便您可以检查日记的更正时间',
 };
 
 const myDiarySerch = {
