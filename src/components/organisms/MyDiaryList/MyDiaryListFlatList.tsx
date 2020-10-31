@@ -1,5 +1,10 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, FlatList, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ListRenderItem,
+} from 'react-native';
 import { Diary } from '@/types';
 import { GrayHeader } from '@/components/atoms';
 import I18n from '@/utils/I18n';
@@ -51,9 +56,8 @@ const MyDiaryListFlatList: React.FC<Props> = ({
     );
   }, [diaryTotalNum]);
 
-  type RenderItemProps = { item: Diary };
-  const renderItem = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
+  const renderItem: ListRenderItem<Diary> = useCallback(
+    ({ item }): JSX.Element => {
       return (
         <DiaryListItem
           mine
