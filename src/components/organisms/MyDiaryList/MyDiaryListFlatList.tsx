@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -7,20 +7,23 @@ import {
 } from 'react-native';
 import { Diary } from '@/types';
 import { GrayHeader } from '@/components/atoms';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import I18n from '@/utils/I18n';
 
-import DiaryListItem from '../DiaryListItem';
 import EmptyMyDiaryList from './EmptyMyDiaryList';
+import MyDiaryListItem from './MyDiaryListItem';
 
 interface Props {
+  elRefs: React.MutableRefObject<Swipeable[]>;
   isEmpty: boolean;
   refreshing: boolean;
   diaries: Diary[];
   diaryTotalNum: number;
   loadNextPage: () => void;
   onPressUser: (uid: string, userName: string) => void;
-  onPressItem: (item: Diary) => void;
   onRefresh: () => void;
+  handlePressItem: (item: Diary) => void;
+  handlePressDelete: (item: Diary, index: number) => void;
 }
 
 const styles = StyleSheet.create({
@@ -32,14 +35,16 @@ const styles = StyleSheet.create({
 const keyExtractor = (item: Diary, index: number): string => String(index);
 
 const MyDiaryListFlatList: React.FC<Props> = ({
+  elRefs,
   isEmpty,
   refreshing,
   diaries,
   diaryTotalNum,
   loadNextPage,
   onPressUser,
-  onPressItem,
+  handlePressItem,
   onRefresh,
+  handlePressDelete,
 }) => {
   const ListEmptyComponent = useCallback(() => {
     if (isEmpty) {
@@ -57,18 +62,24 @@ const MyDiaryListFlatList: React.FC<Props> = ({
   }, [diaryTotalNum]);
 
   const renderItem: ListRenderItem<Diary> = useCallback(
-    ({ item }): JSX.Element => {
+    ({ item, index }): JSX.Element => {
       return (
-        <DiaryListItem
-          mine
+        <MyDiaryListItem
+          index={index}
           item={item}
+          elRefs={elRefs}
           onPressUser={onPressUser}
-          onPressItem={onPressItem}
+          handlePressItem={handlePressItem}
+          handlePressDelete={handlePressDelete}
         />
       );
     },
-    [onPressItem, onPressUser]
+    [elRefs, handlePressDelete, handlePressItem, onPressUser]
   );
+
+  const refreshControl = useMemo(() => {
+    return <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
+  }, [onRefresh, refreshing]);
 
   return (
     <FlatList
@@ -81,11 +92,9 @@ const MyDiaryListFlatList: React.FC<Props> = ({
       ListEmptyComponent={ListEmptyComponent}
       ListHeaderComponent={listHeaderComponent}
       onEndReached={loadNextPage}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      refreshControl={refreshControl}
     />
   );
 };
 
-export default MyDiaryListFlatList;
+export default React.memo(MyDiaryListFlatList);

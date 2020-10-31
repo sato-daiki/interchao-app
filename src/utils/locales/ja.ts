@@ -612,6 +612,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: '添削待ち',
+  done: '添削完了',
   correcting: '添削中',
   unread: '未読',
 };

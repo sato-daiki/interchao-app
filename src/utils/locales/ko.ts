@@ -606,6 +606,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: '첨삭 대기중',
+  done: '첨삭 완료',
   correcting: '첨삭중',
   unread: '안읽음',
 };

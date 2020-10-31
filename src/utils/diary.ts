@@ -10,7 +10,9 @@ import {
   Diary,
   CountryCode,
 } from '@/types';
-import { softRed, subTextColor, mainColor } from '@/styles/Common';
+import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
+
+import { CustomMarking, CustomMarkingProps } from 'react-native-calendars';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -97,6 +99,13 @@ export const getUserDiaryStatus = (
   return null;
 };
 
+export const MY_STATUS = {
+  unread: { text: I18n.t('myDiaryStatus.unread'), color: softRed },
+  draft: { text: I18n.t('draftListItem.draft'), color: subTextColor },
+  yet: { text: I18n.t('myDiaryStatus.yet'), color: mainColor },
+  done: { text: I18n.t('myDiaryStatus.done'), color: green },
+};
+
 export const getMyDiaryStatus = (diary: Diary): Status | null => {
   const {
     diaryStatus,
@@ -105,19 +114,18 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
     correctionStatus3,
   } = diary;
 
-  if (diaryStatus === 'draft')
-    return { text: I18n.t('draftListItem.draft'), color: subTextColor };
+  if (diaryStatus === 'draft') return MY_STATUS.draft;
 
   if (
     correctionStatus === 'unread' ||
     correctionStatus2 === 'unread' ||
     correctionStatus3 === 'unread'
   ) {
-    return { text: I18n.t('myDiaryStatus.unread'), color: softRed };
+    return MY_STATUS.unread;
   }
 
   if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
-    return { text: I18n.t('myDiaryStatus.yet'), color: mainColor };
+    return MY_STATUS.yet;
   }
 
   return null;
@@ -432,3 +440,22 @@ export const checkSelectLanguage = (
     errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
   };
 };
+
+type MarkedDates = {
+  [date: string]: CustomMarking;
+};
+
+// 投稿済みの時はpublishedAt、下書きの時または以前verの時はcreatedAt
+export const getMarkedDates = (newDiaries: Diary[]) =>
+  newDiaries.reduce((prev, d) => {
+    const myDiaryStatus = getMyDiaryStatus(d);
+    const date = getAlgoliaDay(d.publishedAt || d.createdAt);
+    return {
+      ...prev,
+      [date]: {
+        marked: true,
+        color: myDiaryStatus?.color,
+        title: d.title,
+      },
+    };
+  }, {});
