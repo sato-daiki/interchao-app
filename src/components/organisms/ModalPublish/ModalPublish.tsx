@@ -13,7 +13,7 @@ interface Props {
   publishMessage: string | null;
   onPressSubmit: () => void;
   onPressCloseCancel: () => void;
-  onPressCloseSns: () => void;
+  onClosePostDiary: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ModalAlertPublish: React.FC<Props> = ({
+export const ModalPublish: React.FC<Props> = ({
   visible,
   isPublish,
   isLoading,
@@ -31,7 +31,7 @@ export const ModalAlertPublish: React.FC<Props> = ({
   publishMessage,
   onPressSubmit,
   onPressCloseCancel,
-  onPressCloseSns,
+  onClosePostDiary,
 }: Props): JSX.Element | null => {
   return (
     <Modal visible={visible}>
@@ -47,7 +47,7 @@ export const ModalAlertPublish: React.FC<Props> = ({
         ) : (
           <AfterPublished
             publishMessage={publishMessage}
-            onPressCloseSns={onPressCloseSns}
+            onPressClose={onClosePostDiary}
           />
         )}
       </View>

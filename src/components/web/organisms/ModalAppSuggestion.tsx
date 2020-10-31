@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import firebase from '../../../constants/firebase';
-import { mainColor } from '../../../styles/Common';
-import { getIsAfterDay } from '../../../utils/common';
-import { AppDownload } from '../molecules';
-import { User } from '../../../types';
-import { Hoverable } from '../../atoms';
+import firebase from '@/constants/firebase';
+import { mainColor } from '@/styles/Common';
+import { getIsAfterDay } from '@/utils/common';
+import { User } from '@/types';
+import { AppDownload } from '@/components/web/molecules';
+import { Hoverable } from '@/components/atoms';
 
 interface Props {
   user: User;
@@ -41,25 +41,21 @@ const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
     maxDeviceWidth: 1224,
   });
 
-  const onPressClose = (): void => {
-    const f = async (): Promise<void> => {
-      setVisible(false);
-
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({
-          lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-      setUser({
-        ...user,
-        lastModalAppSuggestionAt: firebase.firestore.Timestamp.now(),
+  const onPressClose = useCallback(async () => {
+    setVisible(false);
+    await firebase
+      .firestore()
+      .doc(`users/${user.uid}`)
+      .update({
+        lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
-    };
-    f();
-  };
+
+    setUser({
+      ...user,
+      lastModalAppSuggestionAt: firebase.firestore.Timestamp.now(),
+    });
+  }, [setUser, user]);
 
   if (
     Platform.OS === 'web' &&
