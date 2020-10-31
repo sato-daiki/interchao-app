@@ -105,7 +105,8 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
     correctionStatus3,
   } = diary;
 
-  if (diaryStatus === 'draft') return null;
+  if (diaryStatus === 'draft')
+    return { text: I18n.t('draftListItem.draft'), color: subTextColor };
 
   if (
     correctionStatus === 'unread' ||
@@ -116,7 +117,7 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
   }
 
   if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
-    return { text: I18n.t('myDiaryStatus.yet'), color: subTextColor };
+    return { text: I18n.t('myDiaryStatus.yet'), color: mainColor };
   }
 
   return null;

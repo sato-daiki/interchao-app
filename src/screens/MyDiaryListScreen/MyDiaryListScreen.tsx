@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import { Subscription } from '@unimodules/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
@@ -20,14 +19,11 @@ import { LocalStatus } from '@/types/localStatus';
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
 import {
-  getExpoPushToken,
-  registerForPushNotificationsAsync,
-} from '@/utils/Notification';
-import {
   MyDiaryTabStackParamList,
   MyDiaryTabNavigationProp,
 } from '@/navigations/MyDiaryTabNavigator';
-import { User, Diary, Profile } from '../types';
+import { User, Diary, Profile } from '../../types';
+import { useFirstScreen } from './useFirstScreen';
 
 export interface Props {
   user: User;
@@ -88,9 +84,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const readingNext = useRef(false);
   const readAllResults = useRef(false);
 
-  const notificationListener = useRef<Subscription>();
-  const responseListener = useRef<Subscription>();
-
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
@@ -127,7 +120,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       const index = await Algolia.getDiaryIndex();
       await Algolia.setSettings(index);
       const res = await index.search('', {
-        filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
+        filters: `profile.uid: ${user.uid}`,
         page: 0,
         hitsPerPage: HIT_PER_PAGE,
       });
@@ -163,47 +156,17 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     const f = async (): Promise<void> => {
       await getNewDiary();
-      // expoへの登録
-      const expoPushToken = await getExpoPushToken();
-      if (expoPushToken && localStatus.uid) {
-        // localStatusの方を使わないと初回登録時落ちる
-        await registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
-      }
     };
     f();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    // This listener is fired whenever a notification is received while the app is foregrounded
-    // notificationListener.current = Notifications.addNotificationReceivedListener(
-    //   prm => {
-    //     console.log('[usePushNotification] catched notification', prm);
-    //     onRefresh();
-    //   }
-    // );
-
-    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      response => {
-        console.log('[usePushNotification] catched notificationRes', response);
-        onRefresh();
-      }
-    );
-
-    return (): void => {
-      // if (notificationListener.current) {
-      //   Notifications.removeNotificationSubscription(
-      //     notificationListener.current
-      //   );
-      // }
-
-      if (responseListener.current) {
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useFirstScreen({
+    user,
+    localStatus,
+    onResponseReceived: onRefresh,
+    setLocalStatus,
+  });
 
   const loadNextPage = useCallback(async (): Promise<void> => {
     if (!readingNext.current && !readAllResults.current) {
@@ -213,7 +176,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
         const index = await Algolia.getDiaryIndex();
         const res = await index.search('', {
-          filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
+          filters: `profile.uid: ${user.uid}`,
           page: nextPage,
           hitsPerPage: HIT_PER_PAGE,
         });
@@ -241,6 +204,22 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const onPressItem = useCallback(
     async (item: Diary): Promise<void> => {
       if (!item.objectID) return;
+
+      if (item.diaryStatus === 'draft') {
+        if (Platform.OS === 'web') {
+          navigation.navigate('ModalPostDraftDiaryWeb', {
+            screen: 'PostDraftDiaryWeb',
+            params: { item, objectID: item.objectID },
+          });
+        } else {
+          navigation.navigate('ModalPostDraftDiary', {
+            screen: 'PostDraftDiary',
+            params: { item, objectID: item.objectID },
+          });
+        }
+        return;
+      }
+
       if (
         item.correctionStatus === 'unread' ||
         item.correctionStatus2 === 'unread' ||
@@ -313,21 +292,21 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         onClose={onClose}
       />
       <FirstPageComponents user={user} setUser={setUser} />
-      {'aaa' === 'aaa' ? (
+      {/* {'aaa' === 'aaa' ? (
         <MyDiaryListCalendar />
-      ) : (
-        <MyDiaryListFlatList
-          // emptyの時のレイアウトのため
-          isEmpty={!isLoading && !refreshing && diaries.length < 1}
-          refreshing={refreshing}
-          diaries={diaries}
-          diaryTotalNum={diaryTotalNum}
-          loadNextPage={loadNextPage}
-          onPressUser={onPressUser}
-          onPressItem={onPressItem}
-          onRefresh={onRefresh}
-        />
-      )}
+      ) : ( */}
+      <MyDiaryListFlatList
+        // emptyの時のレイアウトのため
+        isEmpty={!isLoading && !refreshing && diaries.length < 1}
+        refreshing={refreshing}
+        diaries={diaries}
+        diaryTotalNum={diaryTotalNum}
+        loadNextPage={loadNextPage}
+        onPressUser={onPressUser}
+        onPressItem={onPressItem}
+        onRefresh={onRefresh}
+      />
+      {/* )} */}
     </View>
   );
 };
