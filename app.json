@@ -39,7 +39,7 @@
       "useNextNotificationsApi": true
     },
     "web": {
-      "name": "Interchao",
+      "name": "Interchao - Language Learning",
       "shortName": "Interchao",
       "lang": "en",
       "startUrl": "https://interchao.app",
@@ -83,8 +83,8 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 0,
-      "webRevision": 0
+      "revision": 2,
+      "webRevision": 2
     },
     "hooks": {
       "postPublish": [

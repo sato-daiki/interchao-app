@@ -129,7 +129,8 @@ const SignUpScreen: React.FC<ScreenType> = ({
           // notificationReminderOneWeek: false,
           // notificationReminderOneMonth: false,
           // notificationReminderThreeMonths: false,
-          mailCorrection: false,
+          mailCorrection: true,
+          mailOperation: true,
           // mailReminderNextDay: true,
           // mailReminderThreeDays: false,
           // mailReminderOneWeek: true,
@@ -140,6 +141,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
           runningWeeks: 0,
           lastDiaryPostedAt: null,
           lastModalAppSuggestionAt: null,
+          lastModalNotficationSettingAt: null,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         };

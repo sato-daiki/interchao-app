@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 
 import { HeaderText } from '@/components/atoms';
-import { Profile, Diary, User } from '@/types';
+import { Profile, Diary, User, LocalStatus } from '@/types';
 import PostDiary from '@/components/organisms/PostDiary';
 import I18n from '@/utils/I18n';
 import {
@@ -64,7 +64,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     onPressCloseModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
-    onPressCloseSns,
+    onClosePostDiary,
     onChangeTextTitle,
     onChangeTextText,
     onPressSubmit,
@@ -121,7 +121,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
-      onPressCloseSns={onPressCloseSns}
+      onClosePostDiary={onClosePostDiary}
       onPressCloseModalPublish={onPressCloseModalPublish}
       onPressCloseModalCancel={onPressCloseModalCancel}
       onChangeTextTitle={onChangeTextTitle}

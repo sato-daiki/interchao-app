@@ -8,28 +8,26 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
 import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
-import { LoadingModal, HeaderIcon } from '../components/atoms';
-import { User, Diary, Profile } from '../types';
-import MyDiaryListMenu from '../components/organisms/MyDiaryListMenu';
-import MyDiaryListMenuWebPc from '../components/web/organisms/MyDiaryListMenu';
-import SearchBarButton from '../components/molecules/SearchBarButton';
-import Algolia from '../utils/Algolia';
-import { updateUnread, updateYet } from '../utils/diary';
-import ModalStillCorrecting from '../components/organisms/ModalStillCorrecting';
-import { getUnreadCorrectionNum } from '../utils/localStatus';
-import { LocalStatus } from '../types/localStatus';
-import I18n from '../utils/I18n';
-import { alert } from '../utils/ErrorAlert';
-import { getDataCorrectionStatus } from '../utils/correcting';
-import ModalAppSuggestion from '../components/web/organisms/ModalAppSuggestion';
+import { LoadingModal, HeaderIcon } from '@/components/atoms';
+import FirstPageComponents from '@/components/organisms/FirstPageComponents';
+import MyDiaryListMenu from '@/components/organisms/MyDiaryListMenu';
+import MyDiaryListMenuWebPc from '@/components/web/organisms/MyDiaryListMenu';
+import SearchBarButton from '@/components/molecules/SearchBarButton';
+import Algolia from '@/utils/Algolia';
+import { updateUnread } from '@/utils/diary';
+import { getUnreadCorrectionNum } from '@/utils/localStatus';
+import { LocalStatus } from '@/types/localStatus';
+import I18n from '@/utils/I18n';
+import { alert } from '@/utils/ErrorAlert';
 import {
   getExpoPushToken,
   registerForPushNotificationsAsync,
-} from '../utils/Notification';
+} from '@/utils/Notification';
 import {
   MyDiaryTabStackParamList,
   MyDiaryTabNavigationProp,
-} from '../navigations/MyDiaryTabNavigator';
+} from '@/navigations/MyDiaryTabNavigator';
+import { User, Diary, Profile } from '../types';
 
 export interface Props {
   user: User;
@@ -83,7 +81,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isStillLoading, setIsStillLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
 
@@ -97,10 +94,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
-
-  const [correctingObjectID, setCorrectingObjectID] = useState(
-    user.correctingObjectID
-  );
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('MyDiarySearch');
@@ -129,47 +122,41 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getNewDiary = useCallback(() => {
-    const f = async (): Promise<void> => {
-      try {
-        const index = await Algolia.getDiaryIndex();
-        await Algolia.setSettings(index);
-        const res = await index.search('', {
-          filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
-          page: 0,
-          hitsPerPage: HIT_PER_PAGE,
+  const getNewDiary = useCallback(async (): Promise<void> => {
+    try {
+      const index = await Algolia.getDiaryIndex();
+      await Algolia.setSettings(index);
+      const res = await index.search('', {
+        filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
+        page: 0,
+        hitsPerPage: HIT_PER_PAGE,
+      });
+
+      const { hits, nbHits } = res;
+      setDiaries(hits as Diary[]);
+      setDiaryTotalNum(nbHits);
+
+      // ユーザ情報も更新し直す（badgeのカウントの対応のため）
+      const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
+      if (newUnreadCorrectionNum !== null) {
+        Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
+        setLocalStatus({
+          ...localStatus,
+          unreadCorrectionNum: newUnreadCorrectionNum,
         });
-
-        const { hits, nbHits } = res;
-        setDiaries(hits as Diary[]);
-        setDiaryTotalNum(nbHits);
-
-        // ユーザ情報も更新し直す（badgeのカウントの対応のため）
-        const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
-        if (newUnreadCorrectionNum !== null) {
-          Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
-          setLocalStatus({
-            ...localStatus,
-            unreadCorrectionNum: newUnreadCorrectionNum,
-          });
-        }
-      } catch (err) {
-        setIsLoading(false);
-        setRefreshing(false);
-        alert({ err });
       }
+    } catch (err) {
       setIsLoading(false);
-    };
-    f();
+      setRefreshing(false);
+      alert({ err });
+    }
+    setIsLoading(false);
   }, [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]);
 
-  const onRefresh = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setRefreshing(true);
-      await getNewDiary();
-      setRefreshing(false);
-    };
-    f();
+  const onRefresh = useCallback(async (): Promise<void> => {
+    setRefreshing(true);
+    await getNewDiary();
+    setRefreshing(false);
   }, [getNewDiary]);
 
   // 初期データの取得
@@ -218,115 +205,87 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loadNextPage = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!readingNext.current && !readAllResults.current) {
-        try {
-          const nextPage = page.current + 1;
-          readingNext.current = true;
+  const loadNextPage = useCallback(async (): Promise<void> => {
+    if (!readingNext.current && !readAllResults.current) {
+      try {
+        const nextPage = page.current + 1;
+        readingNext.current = true;
 
-          const index = await Algolia.getDiaryIndex();
-          const res = await index.search('', {
-            filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
-            page: nextPage,
-            hitsPerPage: HIT_PER_PAGE,
-          });
-          const { hits } = res;
+        const index = await Algolia.getDiaryIndex();
+        const res = await index.search('', {
+          filters: `profile.uid: ${user.uid} AND diaryStatus: publish`,
+          page: nextPage,
+          hitsPerPage: HIT_PER_PAGE,
+        });
+        const { hits } = res;
 
-          if (hits.length === 0) {
-            readAllResults.current = true;
-            readingNext.current = false;
-          } else {
-            setDiaries([...diaries, ...(hits as Diary[])]);
-            page.current = nextPage;
-            readingNext.current = false;
-          }
-        } catch (err) {
+        if (hits.length === 0) {
+          readAllResults.current = true;
           readingNext.current = false;
-          alert({ err });
+        } else {
+          setDiaries([...diaries, ...(hits as Diary[])]);
+          page.current = nextPage;
+          readingNext.current = false;
         }
+      } catch (err) {
+        readingNext.current = false;
+        alert({ err });
       }
-    };
-    f();
+    }
   }, [diaries, setDiaries, user.uid]);
 
   const onClose = useCallback(() => {
     setIsMenu(false);
   }, []);
 
-  const onPressModalStill = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isStillLoading || !user.correctingObjectID) return;
-      setIsStillLoading(true);
-      // ステータスを戻す
-      const data = getDataCorrectionStatus(user.correctingCorrectedNum, 'yet');
-      if (!data) return;
-      updateYet(user.correctingObjectID, user.uid, data);
-
-      setUser({
-        ...user,
-        correctingObjectID: null,
-        correctingCorrectedNum: null,
-      });
-      setIsStillLoading(false);
-      setCorrectingObjectID(null);
-    };
-    f();
-  }, [isStillLoading, setUser, user]);
-
   const onPressItem = useCallback(
-    (item: Diary) => {
-      const f = async (): Promise<void> => {
-        if (!item.objectID) return;
-        if (
-          item.correctionStatus === 'unread' ||
-          item.correctionStatus2 === 'unread' ||
-          item.correctionStatus3 === 'unread'
-        ) {
-          // 未読の場合
-          if (isLoading) return;
-          setIsLoading(true);
+    async (item: Diary): Promise<void> => {
+      if (!item.objectID) return;
+      if (
+        item.correctionStatus === 'unread' ||
+        item.correctionStatus2 === 'unread' ||
+        item.correctionStatus3 === 'unread'
+      ) {
+        // 未読の場合
+        if (isLoading) return;
+        setIsLoading(true);
 
-          if (localStatus.unreadCorrectionNum) {
-            const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
-            // アプリの通知数を設定
-            Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
-            setLocalStatus({
-              ...localStatus,
-              unreadCorrectionNum: newUnreadCorrectionNum,
-            });
-          }
-
-          const data = {
-            correctionStatus:
-              item.correctionStatus === 'unread'
-                ? 'done'
-                : item.correctionStatus,
-            correctionStatus2:
-              item.correctionStatus2 === 'unread'
-                ? 'done'
-                : item.correctionStatus2,
-            correctionStatus3:
-              item.correctionStatus3 === 'unread'
-                ? 'done'
-                : item.correctionStatus3,
-          };
-          // DBを更新
-          await updateUnread(item.objectID, data);
-          // reduxを更新
-          editDiary(item.objectID, {
-            ...item,
-            ...data,
+        if (localStatus.unreadCorrectionNum) {
+          const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
+          // アプリの通知数を設定
+          Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
+          setLocalStatus({
+            ...localStatus,
+            unreadCorrectionNum: newUnreadCorrectionNum,
           });
-
-          setIsLoading(false);
         }
-        navigation.navigate('MyDiary', {
-          objectID: item.objectID,
-          userName: profile.userName,
+
+        const data = {
+          correctionStatus:
+            item.correctionStatus === 'unread' ? 'done' : item.correctionStatus,
+          correctionStatus2:
+            item.correctionStatus2 === 'unread'
+              ? 'done'
+              : item.correctionStatus2,
+          correctionStatus3:
+            item.correctionStatus3 === 'unread'
+              ? 'done'
+              : item.correctionStatus3,
+        };
+        // DBを更新
+        await updateUnread(item.objectID, data);
+        // reduxを更新
+        editDiary(item.objectID, {
+          ...item,
+          ...data,
         });
-      };
-      f();
+
+        setIsLoading(false);
+      }
+      navigation.navigate('MyDiary', {
+        objectID: item.objectID,
+        userName: profile.userName,
+      });
     },
     [
       editDiary,
@@ -347,18 +306,13 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
 
   return (
     <View style={styles.container}>
+      <LoadingModal visible={isLoading} />
       <MyDiaryListMenu
         isMenu={isMenu}
         nativeLanguage={profile.nativeLanguage}
         onClose={onClose}
       />
-      <LoadingModal visible={isLoading} />
-      <ModalStillCorrecting
-        visible={!!correctingObjectID}
-        isLoading={isStillLoading}
-        onPress={onPressModalStill}
-      />
-      <ModalAppSuggestion user={user} setUser={setUser} />
+      <FirstPageComponents user={user} setUser={setUser} />
       {'aaa' === 'aaa' ? (
         <MyDiaryListCalendar />
       ) : (
