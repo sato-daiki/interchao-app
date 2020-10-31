@@ -588,6 +588,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: '待批改',
+  done: '批改结束',
   correcting: '正在批改',
   unread: '未读',
 };

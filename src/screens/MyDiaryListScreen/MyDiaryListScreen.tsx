@@ -1,29 +1,39 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from 'react';
+import { View, StyleSheet, Platform, Alert } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
-import { useMediaQuery } from 'react-responsive';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
-import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
-import { LoadingModal, HeaderIcon } from '@/components/atoms';
+import { LoadingModal, HeaderText } from '@/components/atoms';
 import FirstPageComponents from '@/components/organisms/FirstPageComponents';
-import MyDiaryListMenu from '@/components/organisms/MyDiaryListMenu';
-import MyDiaryListMenuWebPc from '@/components/web/organisms/MyDiaryListMenu';
 import SearchBarButton from '@/components/molecules/SearchBarButton';
 import Algolia from '@/utils/Algolia';
-import { updateUnread } from '@/utils/diary';
+import { getMarkedDates, updateUnread } from '@/utils/diary';
 import { getUnreadCorrectionNum } from '@/utils/localStatus';
 import { LocalStatus } from '@/types/localStatus';
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
+import firebase from '@/constants/firebase';
 import {
   MyDiaryTabStackParamList,
   MyDiaryTabNavigationProp,
 } from '@/navigations/MyDiaryTabNavigator';
-import { User, Diary, Profile } from '../../types';
+import { ModalConfirm } from '@/components/organisms';
+import { commonAlert } from '@/utils/locales/alert';
+import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
+import { User, Diary, Profile } from '@/types';
+import { CustomMarking } from 'react-native-calendars';
 import { useFirstScreen } from './useFirstScreen';
+
+const EDIT_WIDTH = 48;
 
 export interface Props {
   user: User;
@@ -31,6 +41,10 @@ export interface Props {
   diaries: Diary[];
   diaryTotalNum: number;
   localStatus: LocalStatus;
+}
+
+export interface MarkedDates {
+  [date: string]: CustomMarking;
 }
 
 interface DispatchProps {
@@ -76,21 +90,24 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   setLocalStatus,
   navigation,
 }) => {
+  // const [markedDates, setMarkedDates] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [isMenu, setIsMenu] = useState(false);
+  const elRefs = useRef<Swipeable[]>([]);
 
   const page = useRef<number>(0);
   const readingNext = useRef(false);
   const readAllResults = useRef(false);
 
-  const isDesktopOrLaptopDevice = useMediaQuery({
-    minDeviceWidth: 1224,
-  });
-
   const onPressSearch = useCallback(() => {
     navigation.navigate('MyDiarySearch');
   }, [navigation]);
+
+  const markedDates = useMemo(() => getMarkedDates(diaries), [diaries]);
+
+  // const onPressEdit = useCallback(() => {
+  //   navigation.navigate('EditMyDiaryList');
+  // }, [navigation]);
 
   // 第二引数をなしにするのがポイント
   React.useLayoutEffect(() => {
@@ -101,19 +118,17 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
           onPress={onPressSearch}
         />
       ),
-      headerRight: (): JSX.Element =>
-        isDesktopOrLaptopDevice ? (
-          <MyDiaryListMenuWebPc nativeLanguage={profile.nativeLanguage} />
-        ) : (
-          <HeaderIcon
-            icon="community"
-            name="dots-horizontal"
-            onPress={(): void => setIsMenu(true)}
-          />
-        ),
+      // headerRight: (): JSX.Element | null => {
+      //   if (diaryTotalNum > 0) {
+      //     return (
+      //       <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
+      //     );
+      //   }
+      //   return null;
+      // },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [diaryTotalNum]);
 
   const getNewDiary = useCallback(async (): Promise<void> => {
     try {
@@ -126,8 +141,10 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       });
 
       const { hits, nbHits } = res;
-      setDiaries(hits as Diary[]);
+      const newDiaries = hits as Diary[];
+      setDiaries(newDiaries);
       setDiaryTotalNum(nbHits);
+      setIsLoading(false);
 
       // ユーザ情報も更新し直す（badgeのカウントの対応のため）
       const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
@@ -143,7 +160,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       setRefreshing(false);
       alert({ err });
     }
-    setIsLoading(false);
   }, [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]);
 
   const onRefresh = useCallback(async (): Promise<void> => {
@@ -197,11 +213,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     }
   }, [diaries, setDiaries, user.uid]);
 
-  const onClose = useCallback(() => {
-    setIsMenu(false);
-  }, []);
-
-  const onPressItem = useCallback(
+  const handlePressItem = useCallback(
     async (item: Diary): Promise<void> => {
       if (!item.objectID) return;
 
@@ -283,30 +295,71 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     [navigation]
   );
 
+  const onDeleteDiary = useCallback(
+    async (item: Diary, index: number) => {
+      if (!item.objectID) return;
+      setIsLoading(true);
+
+      await firebase
+        .firestore()
+        .collection('diaries')
+        .doc(item.objectID)
+        .delete();
+
+      setDiaries(diaries.filter(c => c.objectID !== item.objectID));
+      setDiaryTotalNum(diaryTotalNum - 1);
+
+      if (elRefs.current[index]) {
+        elRefs.current[index].close();
+      }
+      setIsLoading(false);
+    },
+    [diaries, diaryTotalNum, setDiaries, setDiaryTotalNum]
+  );
+
+  const handlePressDelete = useCallback(
+    (item: Diary, index: number) => {
+      commonAlert({
+        title: I18n.t('common.confirmation'),
+        message: I18n.t('myDiary.confirmMessage'),
+        buttons: [
+          {
+            text: 'Cancel',
+            onPress: (): void => undefined,
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async (): Promise<void> => onDeleteDiary(item, index),
+          },
+        ],
+        options: { cancelable: false },
+      });
+    },
+    [onDeleteDiary]
+  );
+
   return (
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <MyDiaryListMenu
-        isMenu={isMenu}
-        nativeLanguage={profile.nativeLanguage}
-        onClose={onClose}
-      />
       <FirstPageComponents user={user} setUser={setUser} />
-      {/* {'aaa' === 'aaa' ? (
-        <MyDiaryListCalendar />
-      ) : ( */}
-      <MyDiaryListFlatList
-        // emptyの時のレイアウトのため
-        isEmpty={!isLoading && !refreshing && diaries.length < 1}
-        refreshing={refreshing}
-        diaries={diaries}
-        diaryTotalNum={diaryTotalNum}
-        loadNextPage={loadNextPage}
-        onPressUser={onPressUser}
-        onPressItem={onPressItem}
-        onRefresh={onRefresh}
-      />
-      {/* )} */}
+      {'aaa' === 'aaa' ? (
+        <MyDiaryListCalendar diaries={diaries} markedDates={markedDates} />
+      ) : (
+        <MyDiaryListFlatList
+          // emptyの時のレイアウトのため
+          elRefs={elRefs}
+          isEmpty={!isLoading && !refreshing && diaries.length < 1}
+          refreshing={refreshing}
+          diaries={diaries}
+          diaryTotalNum={diaryTotalNum}
+          loadNextPage={loadNextPage}
+          onPressUser={onPressUser}
+          onRefresh={onRefresh}
+          handlePressItem={handlePressItem}
+          handlePressDelete={handlePressDelete}
+        />
+      )}
     </View>
   );
 };

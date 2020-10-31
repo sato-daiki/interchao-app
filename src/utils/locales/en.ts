@@ -625,6 +625,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: 'Waiting for Corrections',
+  done: 'Corrected',
   correcting: 'Being Corrected',
   unread: 'Unread',
 };
