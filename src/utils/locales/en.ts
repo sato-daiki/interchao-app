@@ -240,6 +240,7 @@ const myDiaryList = {
     zero: 'My Journal Entries',
   },
   notficationSetting: `Interchao app notifications are turned off. Let's turn on "Notification" from "Settings" so that you can check when the journal entries correction arrives.`,
+  emptyDiary: 'No Journal Entries',
 };
 
 const myDiarySerch = {

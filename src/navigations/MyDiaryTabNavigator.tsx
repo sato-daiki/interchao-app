@@ -30,7 +30,6 @@ export type MyDiaryTabNavigationProp = CompositeNavigationProp<
 export type MyDiaryTabStackParamList = {
   MyDiaryList: undefined;
   MyDiarySearch: undefined;
-  DraftDiaryList: undefined;
   MyDiary: { objectID: string; userName: string };
   RecommendedMethod: { url: string };
 } & CommonStackParamList;
@@ -58,11 +57,6 @@ const MyDiaryTabNavigator = (): JSX.Element => {
           headerShown: false,
           title: I18n.t('myDiaryList.searchText'),
         }}
-      />
-      <MyDiaryTabStack.Screen
-        name="DraftDiaryList"
-        component={DraftDiaryListScreenContainer}
-        options={{ title: I18n.t('draftDiary.headerTitle') }}
       />
       <MyDiaryTabStack.Screen
         name="MyDiary"

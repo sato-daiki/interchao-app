@@ -19,7 +19,7 @@ export interface Props {
 
 interface DispatchProps {
   setUser: (user: User) => void;
-  addDiary: (diary: Diary) => void;
+  editDiary: (objectID: string, diary: Diary) => void;
 }
 
 export type NavigationProp = CompositeNavigationProp<
@@ -47,7 +47,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
   user,
   profile,
   setUser,
-  addDiary,
+  editDiary,
 }) => {
   const {
     isLoading,
@@ -79,7 +79,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     user,
     profile,
     setUser,
-    addDiary,
+    editDiary,
   });
 
   useLayoutEffect(() => {
