@@ -12,7 +12,7 @@ import {
 } from '@/types';
 import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
 
-import { CustomMarking, CustomMarkingProps } from 'react-native-calendars';
+import { MarkedDates } from '@/screens/MyDiaryListScreen';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -23,7 +23,7 @@ interface Status {
 }
 
 /** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
-export const getAlgoliaDay = (timestamp: any): string => {
+export const getAlgoliaDay = (timestamp: any, format = 'Y-M-D'): string => {
   // eslint-disable-next-line no-underscore-dangle
   if (!timestamp) {
     return '';
@@ -32,10 +32,10 @@ export const getAlgoliaDay = (timestamp: any): string => {
   // eslint-disable-next-line no-underscore-dangle
   if (!timestamp._seconds) {
     // reduxに登録された状態（日記投稿直後だとこちらに入る）
-    return moment(timestamp).format('Y-M-D');
+    return moment(timestamp).format(format);
   }
   // eslint-disable-next-line no-underscore-dangle
-  return moment.unix(timestamp._seconds).format('Y-M-D');
+  return moment.unix(timestamp._seconds).format(format);
 };
 
 export const getDay = (timestamp: any): string => {
@@ -441,15 +441,11 @@ export const checkSelectLanguage = (
   };
 };
 
-type MarkedDates = {
-  [date: string]: CustomMarking;
-};
-
 // 投稿済みの時はpublishedAt、下書きの時または以前verの時はcreatedAt
-export const getMarkedDates = (newDiaries: Diary[]) =>
+export const getMarkedDates = (newDiaries: Diary[]): MarkedDates =>
   newDiaries.reduce((prev, d) => {
     const myDiaryStatus = getMyDiaryStatus(d);
-    const date = getAlgoliaDay(d.publishedAt || d.createdAt);
+    const date = getAlgoliaDay(d.publishedAt || d.createdAt, 'YYYY-MM-DD');
     return {
       ...prev,
       [date]: {

@@ -26,7 +26,7 @@ export interface WebProps {
 
 interface DispatchProps {
   setUser: (user: User) => void;
-  addDiary: (diary: Diary) => void;
+  editDiary: (objectID: string, diary: Diary) => void;
 }
 
 type NavigationProp = CompositeNavigationProp<
@@ -65,7 +65,7 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
   user,
   profile,
   setUser,
-  addDiary,
+  editDiary,
 }) => {
   const {
     isLoadingDraft,
@@ -98,7 +98,7 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
     user,
     profile,
     setUser,
-    addDiary,
+    editDiary,
   });
 
   const headerLeft = useCallback(

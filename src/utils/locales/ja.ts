@@ -233,6 +233,7 @@ const myDiaryList = {
   },
   notficationSetting:
     'Interchaoアプリの通知がオフになっています。日記の添削が届いた時にチェックできるように、『設定』から『通知』をオンにしましょう',
+  emptyDiary: '日記がありません',
 };
 
 const myDiarySerch = {

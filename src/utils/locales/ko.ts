@@ -229,6 +229,7 @@ const myDiaryList = {
   },
   notficationSetting:
     'Interchao 앱 알림이 꺼져 있습니다. 일기 첨삭이 도착하면 확인 하시려면 "설정"에서 "알림"을 선택하자',
+  emptyDiary: '일기 없음',
 };
 
 const myDiarySerch = {

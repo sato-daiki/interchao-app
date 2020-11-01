@@ -63,9 +63,6 @@ export const getConfig = ():
                   MyDiarySearch: {
                     path: 'my/search',
                   },
-                  DraftDiaryList: {
-                    path: 'drafts',
-                  },
                   MyDiary: {
                     path: 'my/:userName/:objectID',
                   },
