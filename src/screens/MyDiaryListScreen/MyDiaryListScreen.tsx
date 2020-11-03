@@ -1,22 +1,16 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-} from 'react';
-import { View, StyleSheet, Platform, Alert } from 'react-native';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
-import { LoadingModal, HeaderText } from '@/components/atoms';
+import { HeaderText, LoadingModal } from '@/components/atoms';
 import FirstPageComponents from '@/components/organisms/FirstPageComponents';
 import SearchBarButton from '@/components/molecules/SearchBarButton';
 import Algolia from '@/utils/Algolia';
-import { getMarkedDates, updateUnread } from '@/utils/diary';
+import { updateUnread } from '@/utils/diary';
 import { getUnreadCorrectionNum } from '@/utils/localStatus';
 import { LocalStatus } from '@/types/localStatus';
 import I18n from '@/utils/I18n';
@@ -26,14 +20,10 @@ import {
   MyDiaryTabStackParamList,
   MyDiaryTabNavigationProp,
 } from '@/navigations/MyDiaryTabNavigator';
-import { ModalConfirm } from '@/components/organisms';
 import { commonAlert } from '@/utils/locales/alert';
 import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
 import { User, Diary, Profile } from '@/types';
-import { CustomMarking } from 'react-native-calendars';
 import { useFirstScreen } from './useFirstScreen';
-
-const EDIT_WIDTH = 48;
 
 export interface Props {
   user: User;
@@ -41,10 +31,6 @@ export interface Props {
   diaries: Diary[];
   diaryTotalNum: number;
   localStatus: LocalStatus;
-}
-
-export interface MarkedDates {
-  [date: string]: CustomMarking;
 }
 
 interface DispatchProps {
@@ -64,6 +50,8 @@ type ScreenType = {
   navigation: MyDiaryListNavigationProp;
 } & Props &
   DispatchProps;
+
+type Mode = 'list' | 'calendar';
 
 const styles = StyleSheet.create({
   container: {
@@ -90,8 +78,8 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   setLocalStatus,
   navigation,
 }) => {
-  // const [markedDates, setMarkedDates] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [mode, setMode] = useState<Mode>('list');
   const [refreshing, setRefreshing] = useState(false);
   const elRefs = useRef<Swipeable[]>([]);
 
@@ -103,29 +91,32 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     navigation.navigate('MyDiarySearch');
   }, [navigation]);
 
-  const markedDates = useMemo(() => getMarkedDates(diaries), [diaries]);
-
-  // const onPressEdit = useCallback(() => {
-  //   navigation.navigate('EditMyDiaryList');
-  // }, [navigation]);
+  const onPressEdit = useCallback(() => {
+    navigation.navigate('EditMyDiaryList');
+  }, [navigation]);
 
   // 第二引数をなしにするのがポイント
   React.useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: (): JSX.Element | null => {
+        if (diaryTotalNum > 0) {
+          return (
+            <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
+          );
+        }
+        return null;
+      },
       headerTitle: (): JSX.Element => (
         <SearchBarButton
           title={I18n.t('myDiaryList.searchText')}
           onPress={onPressSearch}
         />
       ),
-      // headerRight: (): JSX.Element | null => {
-      //   if (diaryTotalNum > 0) {
-      //     return (
-      //       <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
-      //     );
-      //   }
-      //   return null;
-      // },
+      headerRight: (): JSX.Element | null => {
+        return (
+          <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
+        );
+      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [diaryTotalNum]);
@@ -344,7 +335,16 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       <LoadingModal visible={isLoading} />
       <FirstPageComponents user={user} setUser={setUser} />
       {'aaa' === 'aaa' ? (
-        <MyDiaryListCalendar diaries={diaries} markedDates={markedDates} />
+        <MyDiaryListCalendar
+          elRefs={elRefs}
+          diaries={diaries}
+          // loadNextPage={loadNextPage}
+          loadNextPage={loadNextPage}
+          onRefresh={onRefresh}
+          onPressUser={onPressUser}
+          handlePressItem={handlePressItem}
+          handlePressDelete={handlePressDelete}
+        />
       ) : (
         <MyDiaryListFlatList
           // emptyの時のレイアウトのため

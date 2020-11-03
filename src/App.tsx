@@ -52,9 +52,9 @@ const App = (): JSX.Element => {
   const navigationRef = React.useRef<NavigationContainerRef | null>(null);
 
   if (__DEV__) {
-    whyDidYouRender(React, {
-      trackAllPureComponents: true,
-    });
+    // whyDidYouRender(React, {
+    //   trackAllPureComponents: true,
+    // });
   }
 
   const checkUpdate = async (): Promise<void> => {

@@ -33,6 +33,7 @@ interface Props {
   elRefs: React.MutableRefObject<Swipeable[]>;
   diaries: Diary[];
   markedDates: MarkedDates;
+  loadNextPage: () => void;
   onPressUser: (uid: string, userName: string) => void;
   handlePressItem: (item: Diary) => void;
   handlePressDelete: (item: Diary, index: number) => void;
@@ -89,6 +90,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
   onPressUser,
   handlePressItem,
   handlePressDelete,
+  loadNextPage,
 }) => {
   const [selectedDay, setSelectedDay] = useState<string | null>(
     getAlgoliaDay(new Date(), 'YYYY-MM-DD')
@@ -123,6 +125,11 @@ const MyDiaryListCalendar: React.FC<Props> = ({
   const onDayPress = useCallback((date: DateObject) => {
     setSelectedDay(date.dateString);
   }, []);
+
+  const onMonthChange = useCallback((date: DateObject) => {
+    setSelectedDay(date.dateString);
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.statusContainer}>
@@ -137,7 +144,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         markedDates={markedDates}
         markingType="multi-dot"
         onDayPress={onDayPress}
-        disableMonthChange
+        onMonthChange={onMonthChange}
       />
       {targetDayDiaries.length > 0 ? (
         targetDayDiaries.map((item, index) => (
