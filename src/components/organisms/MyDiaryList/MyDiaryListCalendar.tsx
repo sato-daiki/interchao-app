@@ -1,16 +1,41 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { DateObject } from 'react-native-calendars';
 
 import { Diary } from '@/types';
 import { Calendar } from '@/components/molecules';
-import { fontSizeM, primaryColor } from '@/styles/Common';
-import { MY_STATUS } from '@/utils/diary';
-import { Day } from './Day';
+import {
+  fontSizeM,
+  fontSizeS,
+  primaryColor,
+  subTextColor,
+} from '@/styles/Common';
+import { getAlgoliaDay, getMarkedDates, MY_STATUS } from '@/utils/diary';
+import { ScrollView } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
+import I18n from '@/utils/I18n';
+import MyDiaryListItem from './MyDiaryListItem';
+
+export interface Dot {
+  id: string;
+  color?: string;
+}
+
+export interface MarkedDates {
+  [date: string]: {
+    dots?: Dot[];
+    selected: boolean;
+  };
+}
 
 interface Props {
-  markedDates: any;
-  onPressItem: (item: Diary) => void;
-  onRefresh: () => void;
+  elRefs: React.MutableRefObject<Swipeable[]>;
+  diaries: Diary[];
+  markedDates: MarkedDates;
+  onPressUser: (uid: string, userName: string) => void;
+  handlePressItem: (item: Diary) => void;
+  handlePressDelete: (item: Diary, index: number) => void;
 }
 
 const styles = StyleSheet.create({
@@ -19,22 +44,35 @@ const styles = StyleSheet.create({
   },
   statusContainer: {
     marginTop: 16,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginLeft: 8,
   },
   statusText: {
-    marginLeft: 8,
-    fontSize: fontSizeM,
+    fontSize: fontSizeS,
     color: primaryColor,
   },
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
+    marginRight: 4,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 32,
+  },
+  emptyText: {
+    color: subTextColor,
+    fontSize: fontSizeM,
   },
 });
 
@@ -45,17 +83,48 @@ const status = [
   { id: 4, color: MY_STATUS.done.color, text: MY_STATUS.done.text },
 ];
 
-const MyDiaryListCalendar: React.FC<Props> = ({ markedDates }) => {
-  const today = React.useMemo(() => new Date(), []);
-
-  const dayComponent = React.useCallback(
-    props => <Day today={today} {...props} />,
-    [today]
+const MyDiaryListCalendar: React.FC<Props> = ({
+  diaries,
+  elRefs,
+  onPressUser,
+  handlePressItem,
+  handlePressDelete,
+}) => {
+  const [selectedDay, setSelectedDay] = useState<string | null>(
+    getAlgoliaDay(new Date(), 'YYYY-MM-DD')
   );
 
+  const markedDates = useMemo(() => {
+    const newMarkedDates = getMarkedDates(diaries);
+    if (selectedDay) {
+      return {
+        ...newMarkedDates,
+        [selectedDay]: {
+          selected: true,
+        },
+      };
+    }
+    return {
+      ...newMarkedDates,
+    };
+  }, [diaries, selectedDay]);
+
+  const [targetDayDiaries, setTargetDayDiaries] = useState<Diary[]>([]);
+
+  useEffect(() => {
+    const newDiaries = diaries.filter(
+      item =>
+        getAlgoliaDay(item.publishedAt || item.createdAt, 'YYYY-MM-DD') ===
+        selectedDay
+    );
+    setTargetDayDiaries(newDiaries);
+  }, [diaries, selectedDay]);
+
+  const onDayPress = useCallback((date: DateObject) => {
+    setSelectedDay(date.dateString);
+  }, []);
   return (
-    <View style={styles.container}>
-      <Calendar markedDates={markedDates} dayComponent={dayComponent} />
+    <ScrollView style={styles.container}>
       <View style={styles.statusContainer}>
         {status.map(s => (
           <View key={s.id} style={styles.row}>
@@ -64,7 +133,32 @@ const MyDiaryListCalendar: React.FC<Props> = ({ markedDates }) => {
           </View>
         ))}
       </View>
-    </View>
+      <Calendar
+        markedDates={markedDates}
+        markingType="multi-dot"
+        onDayPress={onDayPress}
+        disableMonthChange
+      />
+      {targetDayDiaries.length > 0 ? (
+        targetDayDiaries.map((item, index) => (
+          <MyDiaryListItem
+            key={item.objectID}
+            index={index}
+            item={item}
+            elRefs={elRefs}
+            onPressUser={onPressUser}
+            handlePressItem={handlePressItem}
+            handlePressDelete={handlePressDelete}
+          />
+        ))
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>
+            {I18n.t('myDiaryList.emptyDiary')}
+          </Text>
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
