@@ -12,7 +12,7 @@ import {
 } from '@/types';
 import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
 
-import { MarkedDates } from '@/screens/MyDiaryListScreen';
+import { MarkedDates } from '@/components/organisms/MyDiaryList';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -444,14 +444,18 @@ export const checkSelectLanguage = (
 // 投稿済みの時はpublishedAt、下書きの時または以前verの時はcreatedAt
 export const getMarkedDates = (newDiaries: Diary[]): MarkedDates =>
   newDiaries.reduce((prev, d) => {
+    if (!d.objectID) return prev;
     const myDiaryStatus = getMyDiaryStatus(d);
     const date = getAlgoliaDay(d.publishedAt || d.createdAt, 'YYYY-MM-DD');
+    const params = {
+      id: d.objectID,
+      color: myDiaryStatus?.color,
+    };
+
     return {
       ...prev,
       [date]: {
-        marked: true,
-        color: myDiaryStatus?.color,
-        title: d.title,
+        dots: prev[date] ? [...prev[date].dots, params] : [params],
       },
     };
   }, {});
