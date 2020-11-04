@@ -385,7 +385,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     [profile, user.uid]
   );
 
-  const onPressUser = useCallback(
+  const handlePressUser = useCallback(
     (uid: string, userName: string) => {
       navigation.navigate('UserProfile', { userName });
     },
@@ -432,7 +432,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
                   key={index}
                   item={item}
                   textLanguage={profile.learnLanguage}
-                  onPressUser={onPressUser}
+                  handlePressUser={handlePressUser}
                 />
               );
             }
@@ -475,12 +475,12 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       return (
         <DiaryListItem
           item={item}
-          onPressUser={onPressUser}
+          onPressUser={handlePressUser}
           onPressItem={onPressItem}
         />
       );
     },
-    [onPressItem, onPressUser]
+    [handlePressUser, onPressItem]
   );
 
   return (
