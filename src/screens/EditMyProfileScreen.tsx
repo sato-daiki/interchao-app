@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   label: {
     color: primaryColor,
     fontSize: fontSizeM,
-    width: 96,
+    width: 98,
     lineHeight: fontSizeM * 1.3,
   },
   textInput: {
@@ -394,7 +394,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           <TextInput
             style={styles.textInput}
             value={name || ''}
-            placeholder="username"
+            placeholder="name"
             maxLength={20}
             autoCorrect={false}
             blurOnSubmit
@@ -412,7 +412,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           activeOpacity={1}
           onPress={onPressUserName}
         >
-          <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
+          <Text style={[styles.label]}>{I18n.t('editMyProfile.userName')}</Text>
           <Text>{userName}</Text>
         </Hoverable>
 
