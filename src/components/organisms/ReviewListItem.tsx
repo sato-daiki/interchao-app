@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import {
@@ -17,7 +17,7 @@ interface Props {
   item: Review;
   nativeLanguage?: Language;
   textLanguage: Language;
-  onPressUser: (uid: string, userName: string) => void;
+  handlePressUser: (uid: string, userName: string) => void;
 }
 
 const styles = StyleSheet.create({
@@ -51,9 +51,13 @@ const ReviewListItem = ({
   item,
   nativeLanguage,
   textLanguage,
-  onPressUser,
+  handlePressUser,
 }: Props): JSX.Element => {
   const { rating, createdAt, comment, reviewer } = item;
+
+  const onPressUser = useCallback(() => {
+    handlePressUser(reviewer.uid, reviewer.userName);
+  }, [handlePressUser, reviewer.uid, reviewer.userName]);
 
   return (
     <View style={styles.container}>
@@ -80,10 +84,10 @@ const ReviewListItem = ({
         photoUrl={reviewer.photoUrl}
         nativeLanguage={reviewer.nativeLanguage}
         nationalityCode={reviewer.nationalityCode}
-        onPress={(): void => onPressUser(reviewer.uid, reviewer.userName)}
+        onPress={onPressUser}
       />
     </View>
   );
 };
 
-export default ReviewListItem;
+export default React.memo(ReviewListItem);
