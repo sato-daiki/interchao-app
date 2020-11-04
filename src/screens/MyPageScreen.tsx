@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
+import TopReviewList from '@/components/organisms/TopReviewList';
 import { primaryColor, fontSizeM } from '../styles/Common';
 import { Profile, UserReview, User } from '../types';
 import {
@@ -42,6 +43,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
     paddingVertical: 16,
+  },
+  main: {
     paddingHorizontal: 16,
   },
   header: {
@@ -70,18 +73,6 @@ const styles = StyleSheet.create({
 const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
 
-  const {
-    uid,
-    userName,
-    name,
-    photoUrl,
-    introduction,
-    nativeLanguage,
-    learnLanguage,
-    spokenLanguages,
-    nationalityCode,
-  } = profile;
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: (): JSX.Element => (
@@ -99,7 +90,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
     let isMounted = true;
 
     const f = async (): Promise<void> => {
-      const newUserReivew = await getUserReview(uid);
+      const newUserReivew = await getUserReview(profile.uid);
       if (isMounted) {
         setUserReview(newUserReivew);
       }
@@ -109,42 +100,69 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uid]);
+  }, [profile.uid]);
 
   const onPressEdit = useCallback(() => {
     navigation.navigate('ModalEditMyProfile', { screen: 'EditMyProfile' });
   }, [navigation]);
 
+  const handlePressUser = useCallback(
+    (uid: string, userName: string) => {
+      navigation.navigate('UserProfile', { userName });
+    },
+    [navigation]
+  );
+
+  const onPressMoreReview = useCallback((): void => {
+    if (!profile) return;
+    navigation.push('ReviewList', {
+      userName: profile.userName,
+    });
+  }, [navigation, profile]);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <ProfileIconHorizontal
-          userName={userName}
-          photoUrl={photoUrl}
-          nativeLanguage={nativeLanguage}
+    <ScrollView style={styles.container}>
+      <View style={styles.main}>
+        <View style={styles.header}>
+          <ProfileIconHorizontal
+            userName={profile.userName}
+            photoUrl={profile.photoUrl}
+            nativeLanguage={profile.nativeLanguage}
+          />
+          <SmallButtonWhite
+            title={I18n.t('myPage.editButton')}
+            onPress={onPressEdit}
+          />
+        </View>
+        {profile.name ? <Text style={styles.name}>{profile.name}</Text> : null}
+        {userReview ? (
+          <ScoreStar
+            score={userReview.score}
+            reviewNum={userReview.reviewNum}
+          />
+        ) : null}
+        <Space size={8} />
+        <Text style={styles.introduction}>{profile.introduction}</Text>
+        <UserPoints points={user.points} />
+        <Space size={8} />
+        <ProfileLanguage
+          nativeLanguage={profile.nativeLanguage}
+          learnLanguage={profile.learnLanguage}
+          spokenLanguages={profile.spokenLanguages}
         />
-        <SmallButtonWhite
-          title={I18n.t('myPage.editButton')}
-          onPress={onPressEdit}
-        />
+        {profile.nationalityCode ? (
+          <ProfileNationalityCode nationalityCode={profile.nationalityCode} />
+        ) : null}
       </View>
-      {name ? <Text style={styles.name}>{name}</Text> : null}
-      {userReview ? (
-        <ScoreStar score={userReview.score} reviewNum={userReview.reviewNum} />
-      ) : null}
-      <Space size={8} />
-      <Text style={styles.introduction}>{introduction}</Text>
-      <UserPoints points={user.points} />
-      <Space size={8} />
-      <ProfileLanguage
-        nativeLanguage={nativeLanguage}
-        learnLanguage={learnLanguage}
-        spokenLanguages={spokenLanguages}
+      <Space size={32} />
+      <TopReviewList
+        profile={profile}
+        refreshing={false}
+        userName={profile.userName}
+        handlePressUser={handlePressUser}
+        onPressMoreReview={onPressMoreReview}
       />
-      {nationalityCode ? (
-        <ProfileNationalityCode nationalityCode={nationalityCode} />
-      ) : null}
-    </View>
+    </ScrollView>
   );
 };
 
