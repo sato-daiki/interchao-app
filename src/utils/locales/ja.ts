@@ -168,7 +168,7 @@ const editEmail = {
 const editMyProfile = {
   headerTitle: 'プロフィール変更',
   name: '名前',
-  userName: 'ユーザーネーム',
+  userName: 'ユーザー\nネーム',
   placeholderIntroduction: '自己紹介(200字以内)',
   learn: '勉強中',
   native: '話せる言語',
