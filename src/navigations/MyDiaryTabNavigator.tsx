@@ -8,7 +8,6 @@ import I18n from '../utils/I18n';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
-import DraftDiaryListScreenContainer from '../containers/DraftDiaryListScreenContainer';
 import MyDiaryScreenContainer from '../containers/MyDiaryScreenContainer';
 import MyDiarySerchScreenContainer from '../containers/MyDiarySearchScreenContainer';
 import {

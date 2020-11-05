@@ -242,6 +242,10 @@ const notice = {
     '※电子邮件地址未注册。如果要使用电子邮件通知，请在"电子邮件地址/密码注册"注册屏幕上进行设置',
 };
 
+const editMyDiaryList = {
+  headerTitle: '编辑日记清单',
+};
+
 const postDiary = {
   headerTitle: '新日记',
 };
@@ -630,6 +634,7 @@ const zh = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,

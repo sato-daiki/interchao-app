@@ -32,7 +32,6 @@ export interface MarkedDates {
 interface Props {
   elRefs: React.MutableRefObject<Swipeable[]>;
   diaries: Diary[];
-  markedDates: MarkedDates;
   loadNextPage: () => void;
   onPressUser: (uid: string, userName: string) => void;
   handlePressItem: (item: Diary) => void;

@@ -256,6 +256,10 @@ const notice = {
     '※メールアドレスが登録されていません。メール通知を利用する場合は、メールアドレス/パスワード登録画面から設定してください',
 };
 
+const editMyDiaryList = {
+  headerTitle: '日記一覧の編集',
+};
+
 const postDiary = {
   headerTitle: '新規日記',
 };
@@ -654,6 +658,7 @@ const ja = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,

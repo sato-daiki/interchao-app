@@ -263,6 +263,10 @@ const notice = {
     '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
 };
 
+const editMyDiaryList = {
+  headerTitle: 'Edit Journal Entries',
+};
+
 const postDiary = {
   headerTitle: 'New Journal Entry',
 };
@@ -667,6 +671,7 @@ const en = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,
