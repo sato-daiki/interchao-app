@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { firestore } from 'firebase';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -50,12 +50,11 @@ const ReviewListScreen: React.FC<ScreenType> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [readingNext, setReadingNext] = useState(false);
-  const [readAllResults, setReadAllResults] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [lastVisible, setLastVisible] = useState<firestore.FieldValue | null>(
-    null
-  );
+
+  const lastVisible = useRef<firestore.FieldValue | null>(null);
+  const readingNext = useRef(false);
+  const readAllResults = useRef(false);
 
   // 初期データの取得
   useEffect(() => {
@@ -70,66 +69,66 @@ const ReviewListScreen: React.FC<ScreenType> = ({
       setReviews(newReviews);
       if (newReviews.length > 0) {
         const { createdAt } = newReviews[newReviews.length - 1];
-        setLastVisible(createdAt);
-        setReadAllResults(true);
+        lastVisible.current = createdAt;
       }
       setIsLoading(false);
     };
     f();
   }, [route.params.userName]);
 
-  const onRefresh = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setRefreshing(true);
-      const targetUid = await getUid(route.params.userName);
-      if (!targetUid) {
-        setIsLoading(false);
-        return;
-      }
-      const newReviews = await getReviews(targetUid, null, HIT_PER_PAGE);
+  const onRefresh = useCallback(async (): Promise<void> => {
+    setRefreshing(true);
+    const targetUid = await getUid(route.params.userName);
+    if (!targetUid) {
+      setIsLoading(false);
+      return;
+    }
+    const newReviews = await getReviews(targetUid, null, HIT_PER_PAGE);
 
-      setReviews(newReviews);
-      if (newReviews.length > 0) {
-        const { createdAt } = newReviews[newReviews.length - 1];
-        setLastVisible(createdAt);
-      }
-      setRefreshing(false);
-    };
-    f();
+    setReviews(newReviews);
+    if (newReviews.length > 0) {
+      const { createdAt } = newReviews[newReviews.length - 1];
+      lastVisible.current = createdAt;
+    }
+    setRefreshing(false);
   }, [route.params]);
 
-  const loadNextPage = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!readingNext && !readAllResults) {
-        try {
-          const targetUid = await getUid(route.params.userName);
-          if (!targetUid) {
-            setIsLoading(false);
-            return;
-          }
-          setReadingNext(true);
-          const nextReviews = await getReviews(
-            targetUid,
-            lastVisible,
-            HIT_PER_PAGE
-          );
-
-          if (nextReviews.length === 0) {
-            setReadAllResults(true);
-            setReadingNext(false);
-          } else {
-            setReviews([...reviews, ...nextReviews]);
-            setLastVisible(nextReviews[nextReviews.length - 1].createdAt);
-            setReadingNext(false);
-          }
-        } catch (err) {
-          setReadingNext(false);
-          alert({ err });
+  const loadNextPage = useCallback(async (): Promise<void> => {
+    if (!readingNext.current && !readAllResults.current) {
+      try {
+        const targetUid = await getUid(route.params.userName);
+        if (!targetUid) {
+          setIsLoading(false);
+          return;
         }
+        readingNext.current = true;
+        const nextReviews = await getReviews(
+          targetUid,
+          lastVisible.current,
+          HIT_PER_PAGE
+        );
+
+        if (nextReviews.length === 0) {
+          readAllResults.current = true;
+          readingNext.current = false;
+        } else {
+          setReviews([...reviews, ...nextReviews]);
+          lastVisible.current = nextReviews[nextReviews.length - 1].createdAt;
+          readingNext.current = false;
+        }
+      } catch (err) {
+        readingNext.current = false;
+        alert({ err });
       }
-    };
-    f();
+    }
   }, [lastVisible, route.params, readAllResults, readingNext, reviews]);
+
+  const handlePressUser = useCallback(
+    (uid: string, userName: string) => {
+      navigation.push('UserProfile', { userName });
+    },
+    [navigation]
+  );
 
   const listEmptyComponent = isLoading || refreshing ? null : <EmptyReview />;
 
@@ -145,13 +144,11 @@ const ReviewListScreen: React.FC<ScreenType> = ({
           item={item}
           nativeLanguage={profile.nativeLanguage}
           textLanguage={profile.learnLanguage}
-          onPressUser={(uid: string, userName: string): void => {
-            navigation.push('UserProfile', { userName });
-          }}
+          handlePressUser={handlePressUser}
         />
       );
     },
-    [navigation, profile.learnLanguage, profile.nativeLanguage]
+    [handlePressUser, profile.learnLanguage, profile.nativeLanguage]
   );
 
   return (
