@@ -69,33 +69,25 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
     setErrorPassword('');
   };
 
-  const onPressLogin = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setIsLoading(true);
-      clearErrorMessage();
-      try {
-        const credent = await firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password);
-        if (credent.user) {
-          track(events.SIGN_IN);
-          // const user = await getUser(credent.user.uid);
-          // const profile = await getProfile(credent.user.uid);
-          // setUser(user);
-          // setProfile(profile);
-          // navigation.navigate('MainTab');
-        }
-      } catch (err) {
-        emailInputError(
-          err,
-          setErrorPassword,
-          setErrorEmail,
-          clearErrorMessage
-        );
-        setIsLoading(false);
+  const onPressLogin = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
+    clearErrorMessage();
+    try {
+      const credent = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
+      if (credent.user) {
+        track(events.SIGN_IN);
+        // const user = await getUser(credent.user.uid);
+        // const profile = await getProfile(credent.user.uid);
+        // setUser(user);
+        // setProfile(profile);
+        // navigation.navigate('MainTab');
       }
-    };
-    f();
+    } catch (err) {
+      emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
+      setIsLoading(false);
+    }
   }, [email, password]);
 
   const onPressForget = useCallback(() => {
