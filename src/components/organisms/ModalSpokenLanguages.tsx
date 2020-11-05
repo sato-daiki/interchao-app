@@ -7,7 +7,7 @@ import { Language } from '../../types';
 import { getLanguage } from '../../utils/diary';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
-import { maxPartL } from '../../styles/Common';
+import { fontSizeL, fontSizeM, maxPartL } from '../../styles/Common';
 import { getEachOS } from '../../utils/common';
 
 export interface Props {
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
   picker: {
     maxWidth: maxPartL,
     width: '100%',
-    paddingVertical: getEachOS({ ios: 0, android: 8, web: 8 }),
-    paddingHorizontal: getEachOS({ ios: 0, android: 8, web: 8 }),
+    height: getEachOS({ ios: undefined, android: 30, web: 40 }),
+    fontSize: Platform.OS === 'web' ? fontSizeL : fontSizeM,
   },
 });
 

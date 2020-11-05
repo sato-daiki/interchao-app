@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   label: {
     color: primaryColor,
     fontSize: fontSizeM,
-    width: 96,
+    width: 98,
     lineHeight: fontSizeM * 1.3,
   },
   textInput: {
@@ -168,59 +168,56 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     getTargetLanguages(learnLanguage, nativeLanguage, spokenLanguages)
   );
 
-  const onPressSubmit = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isLoading) return;
+  const onPressSubmit = useCallback(async (): Promise<void> => {
+    if (isLoading) return;
 
-      const checked = checkSelectLanguage(
-        nationalityCode,
-        learnLanguage,
-        nativeLanguage,
-        spokenLanguages
-      );
-      if (!checked.result) {
-        setErrorMessage(checked.errorMessage);
-        setIsModalError(true);
-        return;
-      }
-      setIsLoading(true);
-      // 画像のuodate
-      let newPhotoUrl = '';
-      const postIndex = Date.now().toString();
-      const path = `profileImages/${profile.uid}/${postIndex}`;
-      if (photoUrl && profile.photoUrl !== photoUrl) {
-        // 変更があった場合のみ
-        newPhotoUrl = await uploadImageAsync(photoUrl, path, 300);
-      }
+    const checked = checkSelectLanguage(
+      nationalityCode,
+      learnLanguage,
+      nativeLanguage,
+      spokenLanguages
+    );
+    if (!checked.result) {
+      setErrorMessage(checked.errorMessage);
+      setIsModalError(true);
+      return;
+    }
+    setIsLoading(true);
+    // 画像のuodate
+    let newPhotoUrl = '';
+    const postIndex = Date.now().toString();
+    const path = `profileImages/${profile.uid}/${postIndex}`;
+    if (photoUrl && profile.photoUrl !== photoUrl) {
+      // 変更があった場合のみ
+      newPhotoUrl = await uploadImageAsync(photoUrl, path, 300);
+    }
 
-      const ref = firebase
-        .firestore()
-        .collection('profiles')
-        .doc(profile.uid);
+    const ref = firebase
+      .firestore()
+      .collection('profiles')
+      .doc(profile.uid);
 
-      const profileInfo = {
-        name,
-        userName,
-        learnLanguage,
-        nativeLanguage,
-        spokenLanguages: spokenLanguages || null,
-        nationalityCode,
-        introduction,
-        photoUrl: newPhotoUrl || photoUrl,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      };
-
-      await ref.update({
-        ...profileInfo,
-      });
-      setIsLoading(false);
-      setProfile({
-        ...profile,
-        ...profileInfo,
-      });
-      navigation.navigate('MyPageTab');
+    const profileInfo = {
+      name,
+      userName,
+      learnLanguage,
+      nativeLanguage,
+      spokenLanguages: spokenLanguages || null,
+      nationalityCode,
+      introduction,
+      photoUrl: newPhotoUrl || photoUrl,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     };
-    f();
+
+    await ref.update({
+      ...profileInfo,
+    });
+    setIsLoading(false);
+    setProfile({
+      ...profile,
+      ...profileInfo,
+    });
+    navigation.navigate('MyPageTab');
   }, [
     introduction,
     isLoading,
@@ -261,17 +258,14 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     photoUrl,
   ]);
 
-  const pickImage = useCallback(() => {
-    const f = async (): Promise<void> => {
-      const result = await openCameraRoll({
-        allowsEditing: true,
-        aspect: [1, 1],
-      });
-      if (!result.cancelled) {
-        setPhotoUrl(result.uri);
-      }
-    };
-    f();
+  const pickImage = useCallback(async (): Promise<void> => {
+    const result = await openCameraRoll({
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
+    if (!result.cancelled) {
+      setPhotoUrl(result.uri);
+    }
   }, []);
 
   const onPressCloseError = useCallback((): void => {
@@ -400,7 +394,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           <TextInput
             style={styles.textInput}
             value={name || ''}
-            placeholder="username"
+            placeholder="name"
             maxLength={20}
             autoCorrect={false}
             blurOnSubmit
@@ -418,7 +412,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           activeOpacity={1}
           onPress={onPressUserName}
         >
-          <Text style={styles.label}>{I18n.t('editMyProfile.userName')}</Text>
+          <Text style={[styles.label]}>{I18n.t('editMyProfile.userName')}</Text>
           <Text>{userName}</Text>
         </Hoverable>
 
@@ -445,7 +439,6 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
             {spokenLanguages.map(item => (
               <View style={styles.spokenRow} key={item}>
                 <Text style={styles.spoken}>{getLanguage(item)}</Text>
-
                 <Hoverable
                   style={styles.trash}
                   onPress={(): void => {

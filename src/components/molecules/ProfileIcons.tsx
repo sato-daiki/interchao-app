@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ProfileIcon } from '../atoms';
 import { DisplaCorrection } from '../../types';
@@ -29,15 +29,31 @@ const ProfileIcons: React.FC<Props> = ({
   correction3,
   onPressUser,
 }: Props): JSX.Element | null => {
+  const onPressUser1 = useCallback(() => {
+    if (correction) {
+      onPressUser(correction.profile.uid, correction.profile.userName);
+    }
+  }, [correction, onPressUser]);
+
+  const onPressUser2 = useCallback(() => {
+    if (correction2) {
+      onPressUser(correction2.profile.uid, correction2.profile.userName);
+    }
+  }, [correction2, onPressUser]);
+
+  const onPressUser3 = useCallback(() => {
+    if (correction3) {
+      onPressUser(correction3.profile.uid, correction3.profile.userName);
+    }
+  }, [correction3, onPressUser]);
+
   // 1個
   if (!!correction && !correction2 && !correction3) {
     return (
       <ProfileIcon
         photoUrl={correction.profile.photoUrl}
         nativeLanguage={correction.profile.nativeLanguage}
-        onPress={(): void => {
-          onPressUser(correction.profile.uid, correction.profile.userName);
-        }}
+        onPress={onPressUser1}
       />
     );
   }
@@ -51,18 +67,14 @@ const ProfileIcons: React.FC<Props> = ({
             size={24}
             photoUrl={correction.profile.photoUrl}
             nativeLanguage={correction.profile.nativeLanguage}
-            onPress={(): void => {
-              onPressUser(correction.profile.uid, correction.profile.userName);
-            }}
+            onPress={onPressUser1}
           />
         </View>
         <ProfileIcon
           size={24}
           photoUrl={correction2.profile.photoUrl}
           nativeLanguage={correction2.profile.nativeLanguage}
-          onPress={(): void => {
-            onPressUser(correction2.profile.uid, correction.profile.userName);
-          }}
+          onPress={onPressUser2}
         />
       </View>
     );
@@ -76,9 +88,7 @@ const ProfileIcons: React.FC<Props> = ({
             size={18}
             photoUrl={correction.profile.photoUrl}
             nativeLanguage={correction.profile.nativeLanguage}
-            onPress={(): void => {
-              onPressUser(correction.profile.uid, correction.profile.userName);
-            }}
+            onPress={onPressUser1}
           />
         </View>
         <View style={styles.center}>
@@ -86,18 +96,14 @@ const ProfileIcons: React.FC<Props> = ({
             size={18}
             photoUrl={correction2.profile.photoUrl}
             nativeLanguage={correction2.profile.nativeLanguage}
-            onPress={(): void => {
-              onPressUser(correction2.profile.uid, correction.profile.userName);
-            }}
+            onPress={onPressUser2}
           />
         </View>
         <ProfileIcon
           size={18}
           photoUrl={correction3.profile.photoUrl}
           nativeLanguage={correction3.profile.nativeLanguage}
-          onPress={(): void => {
-            onPressUser(correction3.profile.uid, correction.profile.userName);
-          }}
+          onPress={onPressUser3}
         />
       </View>
     );
