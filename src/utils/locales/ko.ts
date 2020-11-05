@@ -252,6 +252,10 @@ const notice = {
     '※이메일 주소가 등록되어 있지 않습니다. 메일 통지를 이용하는 경우는 "이메일 주소/비밀번호 등록" 화면에서 설정하십시오',
 };
 
+const editMyDiaryList = {
+  headerTitle: '일기 목록 편집',
+};
+
 const postDiary = {
   headerTitle: '새로운 일기',
 };
@@ -648,6 +652,7 @@ const ko = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,

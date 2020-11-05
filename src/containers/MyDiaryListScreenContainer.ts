@@ -9,16 +9,18 @@ import {
   setDiaries,
   setDiaryTotalNum,
   editDiary,
+  setFetchInfo,
 } from '@/stores/actions/diaryList';
 
 const mapStateToProps = (state: State): Props => {
-  const { diaries, diaryTotalNum } = state.rootReducer.diaryList;
+  const { diaries, diaryTotalNum, fetchInfo } = state.rootReducer.diaryList;
   return {
     localStatus: state.rootReducer.localStatus,
     user: state.rootReducer.user,
     profile: state.rootReducer.profile,
     diaries,
     diaryTotalNum,
+    fetchInfo,
   };
 };
 
@@ -28,6 +30,7 @@ const mapDispatchToProps = {
   editDiary,
   setDiaries,
   setDiaryTotalNum,
+  setFetchInfo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyDiaryListScreen);

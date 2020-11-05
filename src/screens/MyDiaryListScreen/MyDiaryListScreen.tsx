@@ -6,7 +6,7 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
-import { HeaderText, LoadingModal } from '@/components/atoms';
+import { HeaderIcon, HeaderText, LoadingModal } from '@/components/atoms';
 import FirstPageComponents from '@/components/organisms/FirstPageComponents';
 import SearchBarButton from '@/components/molecules/SearchBarButton';
 import Algolia from '@/utils/Algolia';
@@ -23,12 +23,14 @@ import {
 import { commonAlert } from '@/utils/locales/alert';
 import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
 import { User, Diary, Profile } from '@/types';
+import { FetchInfoState } from '@/stores/reducers/diaryList';
 import { useFirstScreen } from './useFirstScreen';
 
 export interface Props {
   user: User;
   profile: Profile;
   diaries: Diary[];
+  fetchInfo: FetchInfoState;
   diaryTotalNum: number;
   localStatus: LocalStatus;
 }
@@ -38,6 +40,7 @@ interface DispatchProps {
   setUser: (user: User) => void;
   setDiaries: (diaries: Diary[]) => void;
   setLocalStatus: (localStatus: LocalStatus) => void;
+  setFetchInfo: (fetchInfo: FetchInfoState) => void;
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
 
@@ -51,8 +54,6 @@ type ScreenType = {
 } & Props &
   DispatchProps;
 
-type Mode = 'list' | 'calendar';
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HIT_PER_PAGE = 20;
+const HIT_PER_PAGE = 5;
 
 /**
  * マイ日記一覧
@@ -69,31 +70,36 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   user,
   profile,
   diaries,
+  fetchInfo,
   diaryTotalNum,
   localStatus,
   editDiary,
   setUser,
   setDiaries,
   setDiaryTotalNum,
+  setFetchInfo,
   setLocalStatus,
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [mode, setMode] = useState<Mode>('list');
   const [refreshing, setRefreshing] = useState(false);
   const elRefs = useRef<Swipeable[]>([]);
-
-  const page = useRef<number>(0);
-  const readingNext = useRef(false);
-  const readAllResults = useRef(false);
 
   const onPressSearch = useCallback(() => {
     navigation.navigate('MyDiarySearch');
   }, [navigation]);
 
   const onPressEdit = useCallback(() => {
-    navigation.navigate('EditMyDiaryList');
+    navigation.navigate('ModalEditMyDiaryList', { screen: 'EditMyDiaryList' });
   }, [navigation]);
+
+  const onPressRight = useCallback(() => {
+    setLocalStatus({
+      ...localStatus,
+      myDiaryListView:
+        localStatus.myDiaryListView === 'list' ? 'calendar' : 'list',
+    });
+  }, [localStatus, setLocalStatus]);
 
   // 第二引数をなしにするのがポイント
   React.useLayoutEffect(() => {
@@ -114,12 +120,26 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       ),
       headerRight: (): JSX.Element | null => {
         return (
-          <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
+          <HeaderIcon
+            icon="community"
+            name={
+              localStatus.myDiaryListView === 'list'
+                ? 'calendar'
+                : 'format-list-bulleted'
+            }
+            onPress={onPressRight}
+          />
         );
       },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diaryTotalNum]);
+  }, [
+    diaryTotalNum,
+    localStatus.myDiaryListView,
+    navigation,
+    onPressEdit,
+    onPressRight,
+    onPressSearch,
+  ]);
 
   const getNewDiary = useCallback(async (): Promise<void> => {
     try {
@@ -135,6 +155,11 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       const newDiaries = hits as Diary[];
       setDiaries(newDiaries);
       setDiaryTotalNum(nbHits);
+      setFetchInfo({
+        page: 0,
+        readingNext: false,
+        readAllResults: false,
+      });
       setIsLoading(false);
 
       // ユーザ情報も更新し直す（badgeのカウントの対応のため）
@@ -151,7 +176,14 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       setRefreshing(false);
       alert({ err });
     }
-  }, [localStatus, setDiaries, setDiaryTotalNum, setLocalStatus, user.uid]);
+  }, [
+    localStatus,
+    setDiaries,
+    setDiaryTotalNum,
+    setFetchInfo,
+    setLocalStatus,
+    user.uid,
+  ]);
 
   const onRefresh = useCallback(async (): Promise<void> => {
     setRefreshing(true);
@@ -176,10 +208,13 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   });
 
   const loadNextPage = useCallback(async (): Promise<void> => {
-    if (!readingNext.current && !readAllResults.current) {
+    if (!fetchInfo.readingNext && !fetchInfo.readAllResults) {
       try {
-        const nextPage = page.current + 1;
-        readingNext.current = true;
+        const nextPage = fetchInfo.page + 1;
+        setFetchInfo({
+          ...fetchInfo,
+          readingNext: true,
+        });
 
         const index = await Algolia.getDiaryIndex();
         const res = await index.search('', {
@@ -190,19 +225,28 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         const { hits } = res;
 
         if (hits.length === 0) {
-          readAllResults.current = true;
-          readingNext.current = false;
+          setFetchInfo({
+            ...fetchInfo,
+            readAllResults: true,
+            readingNext: false,
+          });
         } else {
           setDiaries([...diaries, ...(hits as Diary[])]);
-          page.current = nextPage;
-          readingNext.current = false;
+          setFetchInfo({
+            ...fetchInfo,
+            page: nextPage,
+            readingNext: false,
+          });
         }
       } catch (err) {
-        readingNext.current = false;
+        setFetchInfo({
+          ...fetchInfo,
+          readingNext: false,
+        });
         alert({ err });
       }
     }
-  }, [diaries, setDiaries, user.uid]);
+  }, [diaries, fetchInfo, setDiaries, setFetchInfo, user.uid]);
 
   const handlePressItem = useCallback(
     async (item: Diary): Promise<void> => {
@@ -334,18 +378,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     <View style={styles.container}>
       <LoadingModal visible={isLoading} />
       <FirstPageComponents user={user} setUser={setUser} />
-      {'aaa' === 'aaa' ? (
-        <MyDiaryListCalendar
-          elRefs={elRefs}
-          diaries={diaries}
-          // loadNextPage={loadNextPage}
-          loadNextPage={loadNextPage}
-          onRefresh={onRefresh}
-          onPressUser={onPressUser}
-          handlePressItem={handlePressItem}
-          handlePressDelete={handlePressDelete}
-        />
-      ) : (
+      {localStatus.myDiaryListView === 'list' ? (
         <MyDiaryListFlatList
           // emptyの時のレイアウトのため
           elRefs={elRefs}
@@ -356,6 +389,15 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
           loadNextPage={loadNextPage}
           onPressUser={onPressUser}
           onRefresh={onRefresh}
+          handlePressItem={handlePressItem}
+          handlePressDelete={handlePressDelete}
+        />
+      ) : (
+        <MyDiaryListCalendar
+          elRefs={elRefs}
+          diaries={diaries}
+          loadNextPage={loadNextPage}
+          onPressUser={onPressUser}
           handlePressItem={handlePressItem}
           handlePressDelete={handlePressDelete}
         />

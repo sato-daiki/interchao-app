@@ -8,6 +8,7 @@ const initialState: LocalStatus = {
   isSignout: false,
   isModalAppReviewRequest: false,
   uid: null,
+  myDiaryListView: 'list',
 };
 
 const localStatus = (state = initialState, action: Actions): LocalStatus => {
