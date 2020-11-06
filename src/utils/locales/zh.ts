@@ -211,7 +211,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: '我的日记',
-  searchText: '搜索我的日记',
   diaryList: {
     one: '我的日记列表{{count}}项',
     other: '我的日记列表{{count}}项',

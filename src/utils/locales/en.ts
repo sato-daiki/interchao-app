@@ -233,7 +233,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: 'My Entries',
-  searchText: 'Search My Entries',
   diaryList: {
     one: 'My Journal Entries: {{count}} entry',
     other: 'My Journal Entries: {{count}} entries',

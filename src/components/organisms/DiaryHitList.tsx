@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, ListRenderItem } from 'react-native';
 import { connectInfiniteHits } from 'react-instantsearch-native';
 import { Diary } from '../../types';
 import SearchDiaryList from './SearchDiaryList';
@@ -8,7 +8,6 @@ import { EmptyList } from '../molecules';
 import I18n from '../../utils/I18n';
 
 interface Props {
-  me: boolean;
   isEmpty: boolean;
   onPressItem: (objectID: string, userName: string) => void;
   hits: Diary[];
@@ -17,7 +16,6 @@ interface Props {
 }
 
 const DiaryHitList = ({
-  me,
   isEmpty,
   onPressItem,
   hits,
@@ -41,12 +39,10 @@ const DiaryHitList = ({
     [isEmpty]
   );
 
-  type RenderItemProps = { item: Diary };
-  const renderItem = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
+  const renderItem: ListRenderItem<Diary> = useCallback(
+    ({ item }): JSX.Element => {
       return (
         <SearchDiaryList
-          me={me}
           item={item}
           onPressItem={(): void => {
             if (!item.objectID) return;
@@ -55,7 +51,7 @@ const DiaryHitList = ({
         />
       );
     },
-    [me, onPressItem]
+    [onPressItem]
   );
 
   const onEndReached = useCallback((): void => {

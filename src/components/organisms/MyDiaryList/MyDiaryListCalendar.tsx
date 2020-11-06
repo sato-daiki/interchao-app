@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { DateObject } from 'react-native-calendars';
+import { CalendarTheme, DateObject } from 'react-native-calendars';
 
 import { Diary } from '@/types';
 import { Calendar } from '@/components/molecules';
 import {
   fontSizeM,
   fontSizeS,
+  mainColor,
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
@@ -15,6 +16,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import I18n from '@/utils/I18n';
+import { HoverableIcon } from '@/components/atoms';
 import MyDiaryListItem from './MyDiaryListItem';
 
 export interface Dot {
@@ -76,6 +78,15 @@ const styles = StyleSheet.create({
   },
 });
 
+const custumTheme: CalendarTheme = {
+  todayTextColor: mainColor,
+  selectedDayBackgroundColor: mainColor,
+  dayTextColor: primaryColor,
+  textDayFontSize: fontSizeM,
+  textDayFontWeight: '400',
+  textDayHeaderFontWeight: '400',
+};
+
 const status = [
   { id: 1, color: MY_STATUS.unread.color, text: MY_STATUS.unread.text },
   { id: 2, color: MY_STATUS.draft.color, text: MY_STATUS.draft.text },
@@ -126,6 +137,20 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     [setSelectedDay]
   );
 
+  const renderArrow = useCallback(
+    (direction: 'left' | 'right'): JSX.Element => {
+      return (
+        <HoverableIcon
+          icon="community"
+          name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
+          size={32}
+          color={mainColor}
+        />
+      );
+    },
+    []
+  );
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.statusContainer}>
@@ -140,6 +165,8 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         markedDates={markedDates}
         markingType="multi-dot"
         onDayPress={onDayPress}
+        renderArrow={renderArrow}
+        theme={custumTheme}
       />
       {targetDayDiaries.length > 0 ? (
         targetDayDiaries.map((item, index) => (

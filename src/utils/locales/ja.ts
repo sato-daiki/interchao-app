@@ -225,7 +225,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: 'マイ日記',
-  searchText: 'マイ日記を探す',
   diaryList: {
     one: 'マイ日記一覧{{count}}件',
     other: 'マイ日記一覧{{count}}件',
