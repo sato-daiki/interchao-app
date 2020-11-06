@@ -6,13 +6,9 @@ import {
 import { Subscription } from '@unimodules/core';
 import * as Notifications from 'expo-notifications';
 import { LocalStatus } from '@/types';
-import { getUnreadCorrectionNum } from '@/utils/localStatus';
-import { User } from 'sentry-expo';
 
 interface Props {
-  user: User;
   localStatus: LocalStatus;
-  setLocalStatus: (localStatus: LocalStatus) => void;
   onResponseReceived: () => void;
 }
 
@@ -20,10 +16,8 @@ interface Props {
  * 一番最初の画面で行う処理一覧
  */
 export const useFirstScreen = ({
-  user,
   localStatus,
   onResponseReceived,
-  setLocalStatus,
 }: Props): void => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
@@ -36,23 +30,6 @@ export const useFirstScreen = ({
       if (expoPushToken && localStatus.uid) {
         // localStatusの方を使わないと初回登録時落ちる
         await registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
-      }
-    };
-    f();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 初期データの取得
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      // ユーザ情報を更新し直す（badgeのカウントの対応のため）
-      const newUnreadCorrectionNum = await getUnreadCorrectionNum(user.uid);
-      if (newUnreadCorrectionNum !== null) {
-        Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
-        setLocalStatus({
-          ...localStatus,
-          unreadCorrectionNum: newUnreadCorrectionNum,
-        });
       }
     };
     f();
