@@ -84,16 +84,16 @@ const status = [
 ];
 
 const MyDiaryListCalendar: React.FC<Props> = ({
-  diaries,
   elRefs,
+  diaries,
   onPressUser,
   handlePressItem,
   handlePressDelete,
-  loadNextPage,
 }) => {
   const [selectedDay, setSelectedDay] = useState<string | null>(
     getAlgoliaDay(new Date(), 'YYYY-MM-DD')
   );
+  const [targetDayDiaries, setTargetDayDiaries] = useState<Diary[]>([]);
 
   const markedDates = useMemo(() => {
     const newMarkedDates = getMarkedDates(diaries);
@@ -110,8 +110,6 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     };
   }, [diaries, selectedDay]);
 
-  const [targetDayDiaries, setTargetDayDiaries] = useState<Diary[]>([]);
-
   useEffect(() => {
     const newDiaries = diaries.filter(
       item =>
@@ -121,13 +119,12 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     setTargetDayDiaries(newDiaries);
   }, [diaries, selectedDay]);
 
-  const onDayPress = useCallback((date: DateObject) => {
-    setSelectedDay(date.dateString);
-  }, []);
-
-  const onMonthChange = useCallback((date: DateObject) => {
-    setSelectedDay(date.dateString);
-  }, []);
+  const onDayPress = useCallback(
+    (date: DateObject) => {
+      setSelectedDay(date.dateString);
+    },
+    [setSelectedDay]
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -143,7 +140,6 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         markedDates={markedDates}
         markingType="multi-dot"
         onDayPress={onDayPress}
-        onMonthChange={onMonthChange}
       />
       {targetDayDiaries.length > 0 ? (
         targetDayDiaries.map((item, index) => (
