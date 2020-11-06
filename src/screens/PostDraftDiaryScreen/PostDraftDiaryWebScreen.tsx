@@ -1,7 +1,8 @@
 import React, { useCallback, useLayoutEffect } from 'react';
-import { HeaderTitle, StackNavigationProp } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
 
+import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
 import {
   HeaderText,
   SmallButtonSubmit,

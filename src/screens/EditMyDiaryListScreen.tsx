@@ -26,6 +26,7 @@ import { borderLightColor, fontSizeS, softRed } from '@/styles/Common';
 import firebase from '@/constants/firebase';
 import Algolia from '@/utils/Algolia';
 import { alert } from '@/utils/ErrorAlert';
+import { ModalConfirm } from '@/components/organisms';
 
 export interface Props {
   user: User;
@@ -81,6 +82,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
   setFetchInfo,
   navigation,
 }) => {
+  const [isModalDelete, setIsModalDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
 
@@ -178,6 +180,14 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
     [checkedIds]
   );
 
+  const handleOpenModalDelete = useCallback(() => {
+    setIsModalDelete(true);
+  }, []);
+
+  const handleCloseModalDelete = useCallback(() => {
+    setIsModalDelete(false);
+  }, []);
+
   const renderItem: ListRenderItem<Diary> = useCallback(
     ({ item }): JSX.Element => {
       return <EditMyDiaryListItem item={item} handlePress={handlePress} />;
@@ -189,6 +199,14 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <LoadingModal visible={isLoading} />
+        <ModalConfirm
+          visible={isModalDelete}
+          title={I18n.t('common.confirmation')}
+          message={I18n.t('myDiary.confirmMessage')}
+          mainButtonText="OK"
+          onPressMain={onDeleteDiaries}
+          onPressClose={handleCloseModalDelete}
+        />
         <FlatList
           data={diaries}
           keyExtractor={keyExtractor}
@@ -205,7 +223,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
             title={`${I18n.t('common.delete')}${
               checkedIds.length !== 0 ? `(${checkedIds.length})` : ''
             }`}
-            onPress={onDeleteDiaries}
+            onPress={handleOpenModalDelete}
             backgroundColor={softRed}
           />
         </View>

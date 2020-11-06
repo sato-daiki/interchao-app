@@ -221,7 +221,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: '내 일기',
-  searchText: '내 일기 검색하기',
   diaryList: {
     one: '내 일기 리스트{{count}}건',
     other: '내 일기 리스트{{count}}건',

@@ -15,6 +15,7 @@ import { Hoverable } from '@/components/atoms';
 import { MyDiaryStatus, ProfileIcons } from '@/components/molecules';
 import { getAlgoliaDay } from '@/utils/diary';
 import { Diary } from '@/types';
+import { Platform } from '@unimodules/core';
 
 interface Props {
   index: number;
@@ -110,7 +111,8 @@ const MyDiaryListItem = ({
     (
       progress: Animated.AnimatedInterpolation,
       dragX: Animated.AnimatedInterpolation
-    ): JSX.Element => {
+    ): JSX.Element | null => {
+      if (Platform.OS === 'web') return null;
       const trans = dragX.interpolate({
         inputRange: [-100, 0],
         outputRange: [1, 0],

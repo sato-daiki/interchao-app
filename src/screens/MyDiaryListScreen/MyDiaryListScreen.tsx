@@ -98,10 +98,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     setLocalStatus,
   });
 
-  const onPressSearch = useCallback(() => {
-    navigation.navigate('MyDiarySearch');
-  }, [navigation]);
-
   const onPressEdit = useCallback(() => {
     navigation.navigate('ModalEditMyDiaryList', { screen: 'EditMyDiaryList' });
   }, [navigation]);
@@ -125,12 +121,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         }
         return null;
       },
-      headerTitle: (): JSX.Element => (
-        <SearchBarButton
-          title={I18n.t('myDiaryList.searchText')}
-          onPress={onPressSearch}
-        />
-      ),
       headerRight: (): JSX.Element | null => {
         return (
           <HeaderIcon
