@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -84,7 +84,8 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
 }) => {
   const [isModalDelete, setIsModalDelete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [checkedIds, setCheckedIds] = useState<string[]>([]);
+  const [checkedIdsLength, setCheckedIdsLength] = useState(0);
+  const checkedIds = useRef<string[]>([]);
 
   const loadNextPage = useCallback(async (): Promise<void> => {
     if (!fetchInfo.readingNext && !fetchInfo.readAllResults) {
@@ -145,12 +146,12 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
   }, []);
 
   const onDeleteDiaries = useCallback(async () => {
-    if (checkedIds.length === 0) return;
+    if (checkedIds.current.length === 0) return;
     setIsLoading(true);
 
     const batch = firebase.firestore().batch();
 
-    checkedIds.forEach(id => {
+    checkedIds.current.forEach(id => {
       const ref = firebase
         .firestore()
         .collection('diaries')
@@ -161,24 +162,22 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
     await batch.commit();
     setIsLoading(false);
 
-    checkedIds.forEach(id => {
+    checkedIds.current.forEach(id => {
       deleteDiary(id);
     });
     navigation.goBack();
-  }, [checkedIds, deleteDiary, navigation]);
+  }, [deleteDiary, navigation]);
 
-  const handlePress = useCallback(
-    (objectID: string) => {
-      const res = checkedIds.includes(objectID);
-      if (res) {
-        const newCheckedIds = checkedIds.filter(id => id !== objectID);
-        setCheckedIds(newCheckedIds);
-      } else {
-        setCheckedIds([...checkedIds, objectID]);
-      }
-    },
-    [checkedIds]
-  );
+  const handlePress = useCallback((objectID: string) => {
+    const res = checkedIds.current.includes(objectID);
+    if (res) {
+      const newCheckedIds = checkedIds.current.filter(id => id !== objectID);
+      checkedIds.current = newCheckedIds;
+    } else {
+      checkedIds.current = [...checkedIds.current, objectID];
+    }
+    setCheckedIdsLength(checkedIds.current.length);
+  }, []);
 
   const handleOpenModalDelete = useCallback(() => {
     setIsModalDelete(true);
@@ -201,6 +200,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
         <LoadingModal visible={isLoading} />
         <ModalConfirm
           visible={isModalDelete}
+          isLoading={isLoading}
           title={I18n.t('common.confirmation')}
           message={I18n.t('myDiary.confirmMessage')}
           mainButtonText="OK"
@@ -216,12 +216,11 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
         <View style={styles.buttonContainer}>
           <SmallButtonSubmit
             titleStyle={
-              checkedIds.length === 0 ? styles.disableTitileText : undefined
+              checkedIdsLength === 0 ? styles.disableTitileText : undefined
             }
-            isLoading={isLoading}
-            disable={checkedIds.length === 0}
+            disable={checkedIdsLength === 0}
             title={`${I18n.t('common.delete')}${
-              checkedIds.length !== 0 ? `(${checkedIds.length})` : ''
+              checkedIdsLength === 0 ? '' : `(${checkedIds.current.length})`
             }`}
             onPress={handleOpenModalDelete}
             backgroundColor={softRed}

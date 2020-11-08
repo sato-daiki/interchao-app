@@ -448,7 +448,8 @@ export const getMarkedDates = (newDiaries: Diary[]): MarkedDates =>
     const myDiaryStatus = getMyDiaryStatus(d);
     const date = getAlgoliaDay(d.publishedAt || d.createdAt, 'YYYY-MM-DD');
     const params = {
-      id: d.objectID,
+      key: d.objectID,
+      selectedDotColor: '#fff',
       color: myDiaryStatus?.color,
     };
 

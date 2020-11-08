@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { CalendarTheme, DateObject } from 'react-native-calendars';
+import * as Localization from 'expo-localization';
 
 import { Diary } from '@/types';
 import { Calendar } from '@/components/molecules';
 import {
+  fontSizeL,
   fontSizeM,
   fontSizeS,
   mainColor,
@@ -33,9 +35,11 @@ export interface MarkedDates {
 
 interface Props {
   elRefs: React.MutableRefObject<Swipeable[]>;
+  refreshing: boolean;
   diaries: Diary[];
   loadNextPage: () => void;
   onPressUser: (uid: string, userName: string) => void;
+  onRefresh: () => void;
   handlePressItem: (item: Diary) => void;
   handlePressDelete: (item: Diary, index: number) => void;
 }
@@ -43,6 +47,10 @@ interface Props {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    fontSize: fontSizeL,
+    color: primaryColor,
   },
   statusContainer: {
     marginTop: 16,
@@ -94,10 +102,14 @@ const status = [
   { id: 4, color: MY_STATUS.done.color, text: MY_STATUS.done.text },
 ];
 
+const code = Localization.locale.split('-')[0];
+
 const MyDiaryListCalendar: React.FC<Props> = ({
   elRefs,
+  refreshing,
   diaries,
   onPressUser,
+  onRefresh,
   handlePressItem,
   handlePressDelete,
 }) => {
@@ -112,6 +124,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
       return {
         ...newMarkedDates,
         [selectedDay]: {
+          ...newMarkedDates[selectedDay],
           selected: true,
         },
       };
@@ -137,6 +150,15 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     [setSelectedDay]
   );
 
+  const renderHeader = useCallback(
+    date => (
+      <Text style={styles.header}>
+        {date.toString(code === 'ja' ? 'yyyy年M月' : 'MM yyyy')}
+      </Text>
+    ),
+    []
+  );
+
   const renderArrow = useCallback(
     (direction: 'left' | 'right'): JSX.Element => {
       return (
@@ -151,8 +173,12 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     []
   );
 
+  const refreshControl = useMemo(() => {
+    return <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
+  }, [onRefresh, refreshing]);
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} refreshControl={refreshControl}>
       <View style={styles.statusContainer}>
         {status.map(s => (
           <View key={s.id} style={styles.row}>
@@ -166,6 +192,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         markingType="multi-dot"
         onDayPress={onDayPress}
         renderArrow={renderArrow}
+        renderHeader={renderHeader}
         theme={custumTheme}
       />
       {targetDayDiaries.length > 0 ? (
