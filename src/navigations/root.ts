@@ -60,12 +60,6 @@ export const getConfig = ():
                   MyDiaryList: {
                     path: 'home',
                   },
-                  MyDiarySearch: {
-                    path: 'my/search',
-                  },
-                  DraftDiaryList: {
-                    path: 'drafts',
-                  },
                   MyDiary: {
                     path: 'my/:userName/:objectID',
                   },
@@ -124,6 +118,14 @@ export const getConfig = ():
                   },
                   ...common,
                 },
+              },
+            },
+          },
+          ModalEditMyDiaryList: {
+            path: '',
+            screens: {
+              EditMyDiaryList: {
+                path: 'home/edit',
               },
             },
           },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import {
   subTextColor,
@@ -14,7 +14,6 @@ import Highlight from './Highlight';
 import { Space, Hoverable } from '../atoms';
 
 interface Props {
-  me: boolean;
   item: Diary;
   onPressItem: (item: Diary) => void;
 }
@@ -56,18 +55,21 @@ const styles = StyleSheet.create({
 });
 
 const SearchDiaryList: React.FC<Props> = ({
-  me,
   item,
   onPressItem,
 }): JSX.Element => {
   const { createdAt } = item;
   const postDay = getAlgoliaDay(createdAt);
 
+  const onPress = useCallback(() => {
+    onPressItem(item);
+  }, [item, onPressItem]);
+
   return (
-    <Hoverable style={styles.container} onPress={(): void => onPressItem(item)}>
+    <Hoverable style={styles.container} onPress={onPress}>
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
-        {me ? <MyDiaryStatus diary={item} /> : <UserDiaryStatus diary={item} />}
+        <UserDiaryStatus diary={item} />
       </View>
       <Highlight
         textStyle={styles.title}
@@ -88,4 +90,4 @@ const SearchDiaryList: React.FC<Props> = ({
   );
 };
 
-export default SearchDiaryList;
+export default React.memo(SearchDiaryList);

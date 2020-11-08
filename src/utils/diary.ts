@@ -10,7 +10,9 @@ import {
   Diary,
   CountryCode,
 } from '@/types';
-import { softRed, subTextColor, mainColor } from '@/styles/Common';
+import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
+
+import { MarkedDates } from '@/components/organisms/MyDiaryList';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -21,7 +23,7 @@ interface Status {
 }
 
 /** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
-export const getAlgoliaDay = (timestamp: any): string => {
+export const getAlgoliaDay = (timestamp: any, format = 'Y-M-D'): string => {
   // eslint-disable-next-line no-underscore-dangle
   if (!timestamp) {
     return '';
@@ -30,10 +32,10 @@ export const getAlgoliaDay = (timestamp: any): string => {
   // eslint-disable-next-line no-underscore-dangle
   if (!timestamp._seconds) {
     // reduxに登録された状態（日記投稿直後だとこちらに入る）
-    return moment(timestamp).format('Y-M-D');
+    return moment(timestamp).format(format);
   }
   // eslint-disable-next-line no-underscore-dangle
-  return moment.unix(timestamp._seconds).format('Y-M-D');
+  return moment.unix(timestamp._seconds).format(format);
 };
 
 export const getDay = (timestamp: any): string => {
@@ -97,6 +99,13 @@ export const getUserDiaryStatus = (
   return null;
 };
 
+export const MY_STATUS = {
+  unread: { text: I18n.t('myDiaryStatus.unread'), color: softRed },
+  draft: { text: I18n.t('draftListItem.draft'), color: subTextColor },
+  yet: { text: I18n.t('myDiaryStatus.yet'), color: mainColor },
+  done: { text: I18n.t('myDiaryStatus.done'), color: green },
+};
+
 export const getMyDiaryStatus = (diary: Diary): Status | null => {
   const {
     diaryStatus,
@@ -105,18 +114,18 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
     correctionStatus3,
   } = diary;
 
-  if (diaryStatus === 'draft') return null;
+  if (diaryStatus === 'draft') return MY_STATUS.draft;
 
   if (
     correctionStatus === 'unread' ||
     correctionStatus2 === 'unread' ||
     correctionStatus3 === 'unread'
   ) {
-    return { text: I18n.t('myDiaryStatus.unread'), color: softRed };
+    return MY_STATUS.unread;
   }
 
   if (correctionStatus === 'yet' || correctionStatus === 'correcting') {
-    return { text: I18n.t('myDiaryStatus.yet'), color: subTextColor };
+    return MY_STATUS.yet;
   }
 
   return null;
@@ -431,3 +440,23 @@ export const checkSelectLanguage = (
     errorMessage: I18n.t('selectLanguage.sameSpokenAlert'),
   };
 };
+
+// 投稿済みの時はpublishedAt、下書きの時または以前verの時はcreatedAt
+export const getMarkedDates = (newDiaries: Diary[]): MarkedDates =>
+  newDiaries.reduce((prev, d) => {
+    if (!d.objectID) return prev;
+    const myDiaryStatus = getMyDiaryStatus(d);
+    const date = getAlgoliaDay(d.publishedAt || d.createdAt, 'YYYY-MM-DD');
+    const params = {
+      key: d.objectID,
+      selectedDotColor: '#fff',
+      color: myDiaryStatus?.color,
+    };
+
+    return {
+      ...prev,
+      [date]: {
+        dots: prev[date] ? [...prev[date].dots, params] : [params],
+      },
+    };
+  }, {});

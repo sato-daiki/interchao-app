@@ -93,6 +93,12 @@ https://white-zebra-dev.web.app
 
 ## メモ
 
+試験用アカウント
+
+- データたくさんあり
+  bigdata@aa.aa
+  aaaaaa
+
 firebase deploy --only firestore:rules -P default
 androi がうまく起動しない時
 expo start --tunnel
