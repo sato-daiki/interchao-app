@@ -1,57 +1,29 @@
 import React, { useLayoutEffect } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { CompositeNavigationProp } from '@react-navigation/native';
-import { User } from '@/types/user';
-import { Profile, Diary } from '@/types';
-import PostDiary from '@/components/organisms/PostDiary';
+
 import { HeaderText } from '@/components/atoms';
-import {
-  ModalPostDiaryStackParamList,
-  ModalPostDiaryStackNavigationProp,
-} from '@/navigations/ModalNavigator';
+import PostDiary from '@/components/organisms/PostDiary';
 import I18n from '@/utils/I18n';
-
-import { usePostDiary } from './usePostDiary';
-
-export interface Props {
-  user: User;
-  profile: Profile;
-}
-
-interface DispatchProps {
-  setUser: (user: User) => void;
-  addDiary: (diary: Diary) => void;
-}
-
-export type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalPostDiaryStackParamList, 'PostDiary'>,
-  ModalPostDiaryStackNavigationProp
->;
-
-type ScreenType = {
-  navigation: NavigationProp;
-} & Props &
-  DispatchProps;
+import { usePostDraftDiary } from './usePostDraftDiary';
+import { ScreenType } from './interfaces';
 
 /**
  * 概要：日記投稿画面
  */
-const PostDiaryScreen: React.FC<ScreenType> = ({
+const PostDraftDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   user,
   profile,
   setUser,
-  addDiary,
+  editDiary,
 }) => {
   const {
-    isLoadingPublish,
-    isLoadingDraft,
+    isLoading,
     isModalLack,
     isModalAlert,
     isModalCancel,
     isModalError,
     isPublish,
-    isTutorialLoading,
     errorMessage,
     title,
     text,
@@ -66,16 +38,16 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressSubmit,
     onPressDraft,
     onPressNotSave,
-    onPressTutorial,
     onPressCloseError,
     onPressPublic,
     onPressClose,
-  } = usePostDiary({
+  } = usePostDraftDiary({
     navigation,
+    route,
     user,
     profile,
     setUser,
-    addDiary,
+    editDiary,
   });
 
   useLayoutEffect(() => {
@@ -102,14 +74,12 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiary
-      isLoading={isLoadingDraft || isLoadingPublish}
+      isLoading={isLoading}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
       isModalError={isModalError}
       isPublish={isPublish}
-      isTutorialLoading={isTutorialLoading}
-      tutorialPostDiary={user.tutorialPostDiary}
       errorMessage={errorMessage}
       title={title}
       text={text}
@@ -119,18 +89,17 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
+      onClosePostDiary={onClosePostDiary}
       onPressCloseModalPublish={onPressCloseModalPublish}
       onPressCloseModalCancel={onPressCloseModalCancel}
-      onClosePostDiary={onClosePostDiary}
       onChangeTextTitle={onChangeTextTitle}
       onChangeTextText={onChangeTextText}
       onPressSubmit={onPressSubmit}
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
-      onPressTutorial={onPressTutorial}
       onPressCloseError={onPressCloseError}
     />
   );
 };
 
-export default PostDiaryScreen;
+export default PostDraftDiaryScreen;
