@@ -128,7 +128,7 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
     return MY_STATUS.yet;
   }
 
-  return null;
+  return MY_STATUS.done;
 };
 
 export const allLanguage: Language[] = ['ja', 'en', 'zh', 'ko'];
