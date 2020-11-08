@@ -6,8 +6,8 @@ import { Diary, LocalStatus } from '@/types';
 import { FetchInfoState } from '@/stores/reducers/diaryList';
 import { getUnreadCorrectionNum } from '@/utils/localStatus';
 
-const HIT_PER_PAGE_LIST = 3;
-const HIT_PER_PAGE_CALENDAR = 3;
+const HIT_PER_PAGE_LIST = 20;
+const HIT_PER_PAGE_CALENDAR = 20;
 
 interface Props {
   uid: string;
@@ -51,7 +51,7 @@ export const useMyDiaryList = ({
     if (!fetchInfo.readingNext && !fetchInfo.readAllResults) {
       try {
         const hitsPerPage =
-          localStatus.myDiaryListView === 'list'
+          !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
             ? HIT_PER_PAGE_LIST
             : HIT_PER_PAGE_CALENDAR;
 
@@ -105,7 +105,7 @@ export const useMyDiaryList = ({
     console.log('getNewDiary');
     try {
       const hitsPerPage =
-        localStatus.myDiaryListView === 'list'
+        !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
           ? HIT_PER_PAGE_LIST
           : HIT_PER_PAGE_CALENDAR;
 
@@ -147,14 +147,20 @@ export const useMyDiaryList = ({
         localStatus.myDiaryListView === 'calendar' &&
         !fetchInfo.readAllResults &&
         !fetchInfo.readingNext &&
-        !isInitialLoading
+        !isInitialLoading &&
+        !refreshing
       ) {
         await loadNextPage();
       }
     };
     f();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchInfo.readingNext, localStatus.myDiaryListView, isInitialLoading]);
+  }, [
+    fetchInfo.readingNext,
+    localStatus.myDiaryListView,
+    isInitialLoading,
+    refreshing,
+  ]);
 
   return {
     isInitialLoading,

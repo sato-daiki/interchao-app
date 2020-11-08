@@ -8,7 +8,6 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListFlatList';
 import { HeaderIcon, HeaderText, LoadingModal } from '@/components/atoms';
 import FirstPageComponents from '@/components/organisms/FirstPageComponents';
-import SearchBarButton from '@/components/molecules/SearchBarButton';
 import { updateUnread } from '@/utils/diary';
 import { LocalStatus } from '@/types/localStatus';
 import I18n from '@/utils/I18n';
@@ -106,34 +105,39 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     setLocalStatus({
       ...localStatus,
       myDiaryListView:
-        localStatus.myDiaryListView === 'list' ? 'calendar' : 'list',
+        !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
+          ? 'calendar'
+          : 'list',
     });
   }, [localStatus, setLocalStatus]);
+
+  const headerLeft = useCallback(() => {
+    if (diaryTotalNum > 0) {
+      return <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />;
+    }
+    return null;
+  }, [diaryTotalNum, onPressEdit]);
+
+  const headerRight = useCallback(
+    () => (
+      <HeaderIcon
+        icon="community"
+        name={
+          !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
+            ? 'calendar'
+            : 'format-list-bulleted'
+        }
+        onPress={onPressRight}
+      />
+    ),
+    [localStatus.myDiaryListView, onPressRight]
+  );
 
   // // 第二引数をなしにするのがポイント
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: (): JSX.Element | null => {
-        if (diaryTotalNum > 0) {
-          return (
-            <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
-          );
-        }
-        return null;
-      },
-      headerRight: (): JSX.Element | null => {
-        return (
-          <HeaderIcon
-            icon="community"
-            name={
-              localStatus.myDiaryListView === 'list'
-                ? 'calendar'
-                : 'format-list-bulleted'
-            }
-            onPress={onPressRight}
-          />
-        );
-      },
+      headerLeft,
+      headerRight,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localStatus.myDiaryListView, diaryTotalNum]);
@@ -291,7 +295,8 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     <View style={styles.container}>
       <LoadingModal visible={isLoading || isInitialLoading} />
       <FirstPageComponents user={user} setUser={setUser} />
-      {localStatus.myDiaryListView === 'list' ? (
+      {!localStatus.myDiaryListView ||
+      localStatus.myDiaryListView === 'list' ? (
         <MyDiaryListFlatList
           // emptyの時のレイアウトのため
           elRefs={elRefs}
@@ -308,9 +313,11 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       ) : (
         <MyDiaryListCalendar
           elRefs={elRefs}
+          refreshing={refreshing}
           diaries={diaries}
           loadNextPage={loadNextPage}
           onPressUser={onPressUser}
+          onRefresh={onRefresh}
           handlePressItem={handlePressItem}
           handlePressDelete={handlePressDelete}
         />
