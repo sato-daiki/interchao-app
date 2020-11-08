@@ -83,8 +83,8 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 3,
-      "webRevision": 4
+      "revision": 6,
+      "webRevision": 6
     },
     "hooks": {
       "postPublish": [
