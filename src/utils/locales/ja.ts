@@ -225,7 +225,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: 'マイ日記',
-  searchText: 'マイ日記を探す',
   diaryList: {
     one: 'マイ日記一覧{{count}}件',
     other: 'マイ日記一覧{{count}}件',
@@ -233,6 +232,7 @@ const myDiaryList = {
   },
   notficationSetting:
     'Interchaoアプリの通知がオフになっています。日記の添削が届いた時にチェックできるように、『設定』から『通知』をオンにしましょう',
+  emptyDiary: '日記がありません',
 };
 
 const myDiarySerch = {
@@ -253,6 +253,10 @@ const notice = {
   operation: '運営からのお知らせ',
   noMail:
     '※メールアドレスが登録されていません。メール通知を利用する場合は、メールアドレス/パスワード登録画面から設定してください',
+};
+
+const editMyDiaryList = {
+  headerTitle: '日記一覧の編集',
 };
 
 const postDiary = {
@@ -612,6 +616,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: '添削待ち',
+  done: '添削完了',
   correcting: '添削中',
   unread: '未読',
 };
@@ -652,6 +657,7 @@ const ja = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,

@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 import { Types } from '../types';
 import { Diary } from '../../types';
+import { FetchInfoState } from '../reducers/diaryList';
 
 export interface SetDiariesAction extends Action {
   type: Types.SET_DIARIES;
@@ -10,6 +11,18 @@ export interface SetDiariesAction extends Action {
 export const setDiaries = (diaries: Diary[]): SetDiariesAction => ({
   type: Types.SET_DIARIES,
   diaries,
+});
+
+export interface SetFetchInfoAction extends Action {
+  type: Types.SET_FETCH_INFO;
+  fetchInfo: FetchInfoState;
+}
+
+export const setFetchInfo = (
+  fetchInfo: FetchInfoState
+): SetFetchInfoAction => ({
+  type: Types.SET_FETCH_INFO,
+  fetchInfo,
 });
 
 export interface SetDiaryTotalNumAction extends Action {

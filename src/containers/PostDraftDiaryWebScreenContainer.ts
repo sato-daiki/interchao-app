@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { State } from '../types/state';
 import { setUser } from '../stores/actions/user';
-import { addDiary } from '../stores/actions/diaryList';
+import { editDiary } from '../stores/actions/diaryList';
 import PostDraftDiaryWebScreen, {
   WebProps,
 } from '../screens/PostDraftDiaryScreen/PostDraftDiaryWebScreen';
@@ -15,7 +15,7 @@ const mapStateToProps = (state: State): WebProps => {
 
 const mapDispatchToProps = {
   setUser,
-  addDiary,
+  editDiary,
 };
 
 export default connect(

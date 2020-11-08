@@ -8,9 +8,7 @@ import I18n from '../utils/I18n';
 
 /* screens */
 import MyDiaryListScreenContainer from '../containers/MyDiaryListScreenContainer';
-import DraftDiaryListScreenContainer from '../containers/DraftDiaryListScreenContainer';
 import MyDiaryScreenContainer from '../containers/MyDiaryScreenContainer';
-import MyDiarySerchScreenContainer from '../containers/MyDiarySearchScreenContainer';
 import {
   DefaultNavigationOptions,
   DefaultSearchBarOptions,
@@ -29,8 +27,6 @@ export type MyDiaryTabNavigationProp = CompositeNavigationProp<
 
 export type MyDiaryTabStackParamList = {
   MyDiaryList: undefined;
-  MyDiarySearch: undefined;
-  DraftDiaryList: undefined;
   MyDiary: { objectID: string; userName: string };
   RecommendedMethod: { url: string };
 } & CommonStackParamList;
@@ -50,19 +46,6 @@ const MyDiaryTabNavigator = (): JSX.Element => {
           ...DefaultSearchBarOptions,
           title: I18n.t('myDiaryList.headerTitle'),
         }}
-      />
-      <MyDiaryTabStack.Screen
-        name="MyDiarySearch"
-        component={MyDiarySerchScreenContainer}
-        options={{
-          headerShown: false,
-          title: I18n.t('myDiaryList.searchText'),
-        }}
-      />
-      <MyDiaryTabStack.Screen
-        name="DraftDiaryList"
-        component={DraftDiaryListScreenContainer}
-        options={{ title: I18n.t('draftDiary.headerTitle') }}
       />
       <MyDiaryTabStack.Screen
         name="MyDiary"

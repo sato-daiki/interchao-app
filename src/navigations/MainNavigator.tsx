@@ -9,11 +9,13 @@ import HomeBottomTabNavigator, {
 
 import { Diary } from '../types';
 import {
+  ModalEditMyDiaryListNavigator,
   ModalPostDiaryNavigator,
   ModalPostDraftDiaryNavigator,
   ModalEditMyProfileNavigator,
   ModalReviewNavigator,
   ModalCorrectingNavigator,
+  ModalEditMyDiaryListStackParamList,
   ModalPostDiaryStackParamList,
   ModalPostDiaryWebStackParamList,
   ModalPostDraftDiaryStackParamList,
@@ -46,6 +48,9 @@ export type MainStackParamList = {
         | keyof MyDiaryTabStackParamList
         | keyof TeachDiaryTabStackParamList;
     };
+  };
+  ModalEditMyDiaryList: {
+    screen: keyof ModalEditMyDiaryListStackParamList;
   };
   ModalPostDiary: { screen: keyof ModalPostDiaryStackParamList };
   ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
@@ -97,6 +102,10 @@ const MainNavigator = (): JSX.Element => {
       }}
     >
       <MainStack.Screen name="Home" component={HomeBottomTabNavigator} />
+      <MainStack.Screen
+        name="ModalEditMyDiaryList"
+        component={ModalEditMyDiaryListNavigator}
+      />
       <MainStack.Screen
         name="ModalPostDiary"
         component={ModalPostDiaryNavigator}

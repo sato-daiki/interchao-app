@@ -3,14 +3,26 @@ import { Types } from '../types';
 import { Diary } from '../../types';
 import { DeleteDiaryAction } from '../actions/diaryList';
 
+export interface FetchInfoState {
+  page: number;
+  readingNext: boolean;
+  readAllResults: boolean;
+}
+
 export interface DiaryListState {
   diaries: Diary[];
   diaryTotalNum: number;
+  fetchInfo: FetchInfoState;
 }
 
 const initialState: DiaryListState = {
   diaries: [],
   diaryTotalNum: 0,
+  fetchInfo: {
+    page: 0,
+    readingNext: false,
+    readAllResults: false,
+  },
 };
 
 const editDiary = (
@@ -50,6 +62,11 @@ const deleteDiary = (
 
 const diaryList = (state = initialState, action: Actions): DiaryListState => {
   switch (action.type) {
+    case Types.SET_FETCH_INFO:
+      return {
+        ...state,
+        fetchInfo: action.fetchInfo,
+      };
     case Types.SET_DIARIES:
       return {
         ...state,

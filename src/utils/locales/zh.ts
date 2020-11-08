@@ -211,7 +211,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: '我的日记',
-  searchText: '搜索我的日记',
   diaryList: {
     one: '我的日记列表{{count}}项',
     other: '我的日记列表{{count}}项',
@@ -219,6 +218,7 @@ const myDiaryList = {
   },
   notficationSetting:
     'Interchao应用程序通知已关闭。让我们从“设置”中打开“通知”，以便您可以检查日记的更正时间',
+  emptyDiary: '没有日记',
 };
 
 const myDiarySerch = {
@@ -239,6 +239,10 @@ const notice = {
   operation: '管理层通知',
   noMail:
     '※电子邮件地址未注册。如果要使用电子邮件通知，请在"电子邮件地址/密码注册"注册屏幕上进行设置',
+};
+
+const editMyDiaryList = {
+  headerTitle: '编辑日记清单',
 };
 
 const postDiary = {
@@ -588,6 +592,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: '待批改',
+  done: '批改结束',
   correcting: '正在批改',
   unread: '未读',
 };
@@ -628,6 +633,7 @@ const zh = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,
