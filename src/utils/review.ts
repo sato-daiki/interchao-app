@@ -8,7 +8,7 @@ export const getTopReviews = async (uid: string): Promise<Review[]> => {
       .firestore()
       .collection('reviews')
       .where('revieweeUid', '==', uid)
-      .orderBy('createdAt')
+      .orderBy('createdAt', 'desc')
       .limit(3)
       .get();
     const topReviews: Review[] = [];
@@ -31,7 +31,7 @@ export const getReviews = async (
       .firestore()
       .collection('reviews')
       .where('revieweeUid', '==', uid)
-      .orderBy('createdAt')
+      .orderBy('createdAt', 'desc')
       .startAfter(lastVisible)
       .limit(hitPerPage)
       .get();
