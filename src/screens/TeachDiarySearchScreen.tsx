@@ -78,6 +78,10 @@ const TeachDiarySerchScreen: React.FC<ScreenType> = ({
     [navigation]
   );
 
+  const onPressClose = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -93,11 +97,9 @@ const TeachDiarySerchScreen: React.FC<ScreenType> = ({
         <SearchBar
           placeholder={I18n.t('teachDiarySerch.searchBar')}
           setIsEmpty={setIsEmpty}
-          onPressClose={(): void => {
-            navigation.goBack();
-          }}
+          onPressClose={onPressClose}
         />
-        <DiaryHitList me={false} isEmpty={isEmpty} onPressItem={onPressItem} />
+        <DiaryHitList isEmpty={isEmpty} onPressItem={onPressItem} />
       </InstantSearch>
     </SafeAreaView>
   );

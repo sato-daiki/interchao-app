@@ -10,7 +10,6 @@ import {
 } from '@/constants/NavigationOptions';
 import I18n from '@/utils/I18n';
 import { CountryCode, Diary } from '@/types';
-import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
 
 /* screens */
 import ReviewScreenContainer from '@/containers/ReviewScreenContainer';
@@ -24,8 +23,12 @@ import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
 import PostDiaryWebScreenContainer from '@/containers/PostDiaryWebScreenContainer';
 import PostDraftDiaryWebScreenContainer from '@/containers/PostDraftDiaryWebScreenContainer';
+import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
 import { MainStackParamList } from './MainNavigator';
 
+export type ModalEditMyDiaryListStackParamList = {
+  EditMyDiaryList: undefined;
+};
 export type ModalPostDiaryStackParamList = {
   PostDiary: undefined;
 };
@@ -63,6 +66,10 @@ export type ModalAboutStackParamList = {
   About: undefined;
 };
 
+export type ModalEditMyDiaryListStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalEditMyDiaryList'
+>;
 export type ModalPostDiaryStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalPostDiary'
@@ -100,6 +107,9 @@ export type ModalAboutStackNavigationProp = StackNavigationProp<
   'ModalAbout'
 >;
 
+const ModalEditMyDiaryListStack = createStackNavigator<
+  ModalEditMyDiaryListStackParamList
+>();
 const ModalPostDiaryStack = createStackNavigator<
   ModalPostDiaryStackParamList
 >();
@@ -122,6 +132,21 @@ const ModalCorrectingStack = createStackNavigator<
 const ModalRecordStack = createStackNavigator<ModalRecordStackParamList>();
 const ModalAboutStack = createStackNavigator<ModalAboutStackParamList>();
 
+export const ModalEditMyDiaryListNavigator = (): JSX.Element => {
+  return (
+    <ModalEditMyDiaryListStack.Navigator initialRouteName="EditMyDiaryList">
+      <ModalEditMyDiaryListStack.Screen
+        name="EditMyDiaryList"
+        component={EditMyDiaryListScreenContainer}
+        options={{
+          ...DefaultNavigationOptions,
+          ...DefaultModalLayoutOptions,
+          title: I18n.t('editMyDiaryList.headerTitle'),
+        }}
+      />
+    </ModalEditMyDiaryListStack.Navigator>
+  );
+};
 export const ModalPostDiaryNavigator = (): JSX.Element => {
   return (
     <ModalPostDiaryStack.Navigator initialRouteName="PostDiary">

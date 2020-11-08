@@ -83,23 +83,37 @@ export const usePostDiary = ({
     try {
       setIsLoadingDraft(true);
       const diary = getDiary('draft');
-      await firebase
+
+      const diaryRef = await firebase
         .firestore()
         .collection('diaries')
         .add(diary);
+
+      // reduxに追加
+      addDiary({
+        objectID: diaryRef.id,
+        ...diary,
+      });
+      setIsLoadingDraft(false);
+      setIsModalAlert(false);
 
       track(events.CREATED_DIARY, { diaryStatus: 'draft' });
       navigation.navigate('Home', {
         screen: 'MyDiaryTab',
         params: { screen: 'MyDiaryList' },
       });
-      setIsLoadingDraft(false);
-      setIsModalAlert(false);
     } catch (err) {
       alert({ err });
       setIsLoadingDraft(false);
     }
-  }, [getDiary, isLoadingDraft, isLoadingPublish, isModalLack, navigation]);
+  }, [
+    addDiary,
+    getDiary,
+    isLoadingDraft,
+    isLoadingPublish,
+    isModalLack,
+    navigation,
+  ]);
 
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();

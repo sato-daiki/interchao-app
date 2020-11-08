@@ -23,7 +23,7 @@ interface UsePostDiary {
   user: User;
   profile: Profile;
   setUser: (user: User) => void;
-  addDiary: (diary: Diary) => void;
+  editDiary: (objectID: string, diary: Diary) => void;
   navigation: NavigationProp;
   route: PostDraftDiaryRouteProp;
 }
@@ -34,7 +34,7 @@ export const usePostDraftDiary = ({
   user,
   profile,
   setUser,
-  addDiary,
+  editDiary,
 }: UsePostDiary) => {
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -116,12 +116,19 @@ export const usePostDraftDiary = ({
           characters: text.length,
           diaryStatus: 'draft',
         });
+
+        // reduxを更新
+        editDiary(item.objectID, {
+          ...item,
+          ...diary,
+        });
+        setIsLoadingDraft(false);
+        setIsModalAlert(false);
+
         navigation.navigate('Home', {
           screen: 'MyDiaryTab',
           params: { screen: 'MyDiaryList' },
         });
-        setIsLoadingDraft(false);
-        setIsModalAlert(false);
       } catch (err) {
         setIsLoadingDraft(false);
         alert({ err });
@@ -129,6 +136,7 @@ export const usePostDraftDiary = ({
     };
     f();
   }, [
+    editDiary,
     getDiary,
     isLoadingDraft,
     isModalLack,
@@ -161,95 +169,93 @@ export const usePostDraftDiary = ({
     setIsModalAlert(true);
   }, [profile.learnLanguage, text, title, user.points]);
 
-  const onPressSubmit = useCallback(() => {
-    const f = async (): Promise<void> => {
-      Keyboard.dismiss();
-      if (isLoading) return;
-      setIsLoading(true);
-      const diary = getDiary('publish');
-      const usePoints = getUsePoints(text.length, profile.learnLanguage);
-      const newPoints = user.points - usePoints;
-      const runningDays = getRunningDays(
-        user.runningDays,
-        user.lastDiaryPostedAt
-      );
-      const runningWeeks = getRunningWeeks(
-        user.runningWeeks,
-        user.lastDiaryPostedAt
-      );
+  const onPressSubmit = useCallback(async (): Promise<void> => {
+    Keyboard.dismiss();
+    if (isLoading) return;
+    const { item } = route.params;
+    if (!item.objectID) return;
 
-      const message = getPublishMessage(
-        user.runningDays,
-        user.runningWeeks,
-        runningDays,
-        runningWeeks
-      );
+    setIsLoading(true);
+    const diary = getDiary('publish');
+    const usePoints = getUsePoints(text.length, profile.learnLanguage);
+    const newPoints = user.points - usePoints;
+    const runningDays = getRunningDays(
+      user.runningDays,
+      user.lastDiaryPostedAt
+    );
+    const runningWeeks = getRunningWeeks(
+      user.runningWeeks,
+      user.lastDiaryPostedAt
+    );
 
-      const { item } = route.params;
+    const message = getPublishMessage(
+      user.runningDays,
+      user.runningWeeks,
+      runningDays,
+      runningWeeks
+    );
 
-      await firebase
-        .firestore()
-        .runTransaction(async transaction => {
-          const diaryRef = firebase.firestore().doc(`diaries/${item.objectID}`);
-          transaction.update(diaryRef, diary);
+    await firebase
+      .firestore()
+      .runTransaction(async transaction => {
+        const diaryRef = firebase.firestore().doc(`diaries/${item.objectID}`);
+        transaction.update(diaryRef, diary);
 
-          const refUser = firebase.firestore().doc(`users/${user.uid}`);
-          // 初回の場合はdiaryPostedを更新する
-          const updateUser = {
-            points: newPoints,
-            runningDays,
-            runningWeeks,
-            lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as Pick<
-            User,
-            | 'points'
-            | 'runningDays'
-            | 'runningWeeks'
-            | 'lastDiaryPostedAt'
-            | 'updatedAt'
-            | 'diaryPosted'
-          >;
-          if (!user.diaryPosted) {
-            updateUser.diaryPosted = true;
-          }
-          transaction.update(refUser, updateUser);
-        })
-        .catch(err => {
-          setIsLoading(false);
-          alert({ err });
-        });
-
-      track(events.CREATED_DIARY, {
-        usePoints,
-        characters: text.length,
-        diaryStatus: 'publish',
+        const refUser = firebase.firestore().doc(`users/${user.uid}`);
+        // 初回の場合はdiaryPostedを更新する
+        const updateUser = {
+          points: newPoints,
+          runningDays,
+          runningWeeks,
+          lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as Pick<
+          User,
+          | 'points'
+          | 'runningDays'
+          | 'runningWeeks'
+          | 'lastDiaryPostedAt'
+          | 'updatedAt'
+          | 'diaryPosted'
+        >;
+        if (!user.diaryPosted) {
+          updateUser.diaryPosted = true;
+        }
+        transaction.update(refUser, updateUser);
+      })
+      .catch(err => {
+        setIsLoading(false);
+        alert({ err });
       });
+    track(events.CREATED_DIARY, {
+      usePoints,
+      characters: text.length,
+      diaryStatus: 'publish',
+    });
 
-      // reduxに追加
-      addDiary({
-        ...item,
-        title,
-        text,
-        diaryStatus: 'publish',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      setUser({
-        ...user,
-        runningDays,
-        runningWeeks,
-        lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
-        diaryPosted: true,
-        points: newPoints,
-      });
-      setPublishMessage(message);
+    // reduxを更新
+    editDiary(item.objectID, {
+      ...item,
+      title,
+      text,
+      diaryStatus: 'publish',
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 
-      setIsLoading(false);
-      setIsPublish(true);
-    };
-    f();
+    setUser({
+      ...user,
+      runningDays,
+      runningWeeks,
+      lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
+      diaryPosted: true,
+      points: newPoints,
+    });
+    setPublishMessage(message);
+
+    setIsLoading(false);
+    setIsPublish(true);
   }, [
-    addDiary,
+    editDiary,
     getDiary,
     isLoading,
     profile.learnLanguage,

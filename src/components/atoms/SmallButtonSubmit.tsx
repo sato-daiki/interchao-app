@@ -5,12 +5,14 @@ import {
   ActivityIndicator,
   StyleProp,
   ViewStyle,
+  TextStyle,
 } from 'react-native';
 import { mainColor, fontSizeM } from '../../styles/Common';
 import Hoverable from './Hoverable';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
+  titleStyle?: StyleProp<TextStyle>;
   isLoading?: boolean;
   disable?: boolean;
   backgroundColor?: string;
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
 
 const SmallButtonSubmit: React.FC<Props> = ({
   containerStyle,
+  titleStyle,
   isLoading = false,
   disable = false,
   title,
@@ -51,7 +54,9 @@ const SmallButtonSubmit: React.FC<Props> = ({
       {isLoading ? (
         <ActivityIndicator size="small" color="#fff" />
       ) : (
-        <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
+        <Text style={[styles.title, { color: titleColor }, titleStyle]}>
+          {title}
+        </Text>
       )}
     </Hoverable>
   );
