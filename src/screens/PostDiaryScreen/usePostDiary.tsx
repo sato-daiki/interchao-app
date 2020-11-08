@@ -14,6 +14,8 @@ import {
 } from '@/utils/diary';
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
+// @ts-ignore
+// eslint-disable-next-line import/extensions
 import { NavigationProp } from './PostDiaryScreen';
 
 interface UsePostDiary {
