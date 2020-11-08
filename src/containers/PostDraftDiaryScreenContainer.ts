@@ -4,7 +4,7 @@ import PostDraftDiaryScreen, {
 } from '@/screens/PostDraftDiaryScreen/PostDraftDiaryScreen';
 import { State } from '@/types/state';
 import { setUser } from '@/stores/actions/user';
-import { addDiary } from '@/stores/actions/diaryList';
+import { editDiary } from '@/stores/actions/diaryList';
 
 const mapStateToProps = (state: State): Props => {
   return {
@@ -15,7 +15,7 @@ const mapStateToProps = (state: State): Props => {
 
 const mapDispatchToProps = {
   setUser,
-  addDiary,
+  editDiary,
 };
 
 export default connect(

@@ -119,14 +119,6 @@ const SettingScreen: React.FC<ScreenType> = ({
           navigation.navigate('Notice');
         }}
       />
-      <OptionItem
-        title={I18n.t('myDiaryListMenu.reviewList')}
-        onPress={(): void => {
-          navigation.navigate('ReviewList', {
-            userName: profile.userName,
-          });
-        }}
-      />
       {currentUser && currentUser.email ? (
         <>
           <OptionItem

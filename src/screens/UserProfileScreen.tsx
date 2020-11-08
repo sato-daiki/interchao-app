@@ -5,7 +5,6 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
-  Text,
 } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
@@ -15,9 +14,10 @@ import {
 } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+import TopReviewList from '@/components/organisms/TopReviewList';
 import firebase from '../constants/firebase';
-import { EmptyDiary, EmptyReview } from '../components/molecules';
-import { Space, GrayHeader, Hoverable, HeaderIcon } from '../components/atoms';
+import { EmptyDiary } from '../components/molecules';
+import { Space, GrayHeader, HeaderIcon } from '../components/atoms';
 import {
   Diary,
   Profile,
@@ -27,7 +27,6 @@ import {
   Report,
   User,
 } from '../types';
-import { linkBlue, fontSizeM } from '../styles/Common';
 import { getProfile, getUid } from '../utils/profile';
 import Algolia from '../utils/Algolia';
 import DiaryListItem from '../components/organisms/DiaryListItem';
@@ -35,8 +34,6 @@ import { ModalBlock, ModalConfirm } from '../components/organisms';
 import { checkBlockee, checkBlocker } from '../utils/blockUser';
 import { getUserReview } from '../utils/userReview';
 import UserProfileHeader from '../components/organisms/UserProfileHeader';
-import { getTopReviews, getReviewNum } from '../utils/review';
-import ReviewListItem from '../components/organisms/ReviewListItem';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import UserProfileMenu from '../components/web/organisms/UserProfileMenu';
@@ -67,16 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF',
   },
-  moreRead: {
-    marginTop: 16,
-    marginBottom: 32,
-    paddingRight: 16,
-  },
-  moreReadText: {
-    color: linkBlue,
-    fontSize: fontSizeM,
-    textAlign: 'right',
-  },
 });
 
 const HIT_PER_PAGE = 20;
@@ -101,15 +88,12 @@ const UserProfileScreen: React.FC<ScreenType> = ({
   const [isModalDeleted, setIsModalDeleted] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [loadingDiary, setLoadingDiary] = useState(true);
-  const [loadingReview, setLoadingReview] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [profile, setProfile] = useState<Profile | null>();
   const [userReview, setUserReview] = useState<UserReview | null>();
   const [diaries, setDiaries] = useState<Diary[] | null | undefined>();
   const [diaryTotalNum, setDiaryTotalNum] = useState(0);
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
-  const [topReviews, setTopReviews] = useState<Review[]>([]);
-  const [reviewNum, setReviewNum] = useState<number>();
 
   const page = useRef<number>(0);
   const readingNext = useRef(false);
@@ -153,17 +137,6 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     f();
   }, []);
 
-  const getNewReview = useCallback((targetUid: string) => {
-    const f = async (): Promise<void> => {
-      const newReivews = await getTopReviews(targetUid);
-      const newReviewNum = await getReviewNum(targetUid);
-      setTopReviews(newReivews);
-      setReviewNum(newReviewNum);
-      setLoadingReview(false);
-    };
-    f();
-  }, []);
-
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -189,14 +162,10 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       setIsBlocked(resBlocker);
       // データを取得していく
 
-      await Promise.all([
-        getNewProfile(targetUid),
-        getNewDiary(targetUid),
-        getNewReview(targetUid),
-      ]);
+      await Promise.all([getNewProfile(targetUid), getNewDiary(targetUid)]);
     };
     f();
-  }, [getNewDiary, getNewProfile, getNewReview, route, user.uid]);
+  }, [getNewDiary, getNewProfile, route, user.uid]);
 
   const onRefresh = useCallback(() => {
     const f = async (): Promise<void> => {
@@ -330,30 +299,27 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     f();
   }, [profile, user.uid]);
 
-  const onPressUnblockSubmit = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      if (!profile) {
-        return;
-      }
-      setIsLoading(true);
-      // １データしか存在しない
-      const users = await firebase
-        .firestore()
-        .collection(`blockUsers`)
-        .where('blockerUid', '==', user.uid)
-        .where('blockeeUid', '==', profile.uid)
-        .get();
+  const onPressUnblockSubmit = useCallback(async (): Promise<void> => {
+    if (!profile) {
+      return;
+    }
+    setIsLoading(true);
+    // １データしか存在しない
+    const users = await firebase
+      .firestore()
+      .collection(`blockUsers`)
+      .where('blockerUid', '==', user.uid)
+      .where('blockeeUid', '==', profile.uid)
+      .get();
 
-      const batch = firebase.firestore().batch();
-      users.forEach(doc => {
-        batch.delete(doc.ref);
-      });
-      await batch.commit();
-      setIsBlockSuccess(true);
-      setIsLoading(false);
-      setIsBlocked(false);
-    };
-    f();
+    const batch = firebase.firestore().batch();
+    users.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+    setIsBlockSuccess(true);
+    setIsLoading(false);
+    setIsBlocked(false);
   }, [profile, user.uid]);
 
   const onPressCloseDeleted = useCallback(() => {
@@ -362,25 +328,22 @@ const UserProfileScreen: React.FC<ScreenType> = ({
   }, [navigation]);
 
   const onReportSubmit = useCallback(
-    (reason: string) => {
-      const f = async (): Promise<void> => {
-        if (!profile) {
-          return;
-        }
-        setIsLoading(true);
-        await firebase
-          .firestore()
-          .collection(`reports`)
-          .add({
-            uid: user.uid,
-            targetUid: profile.uid,
-            reason,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as Report);
-        setIsLoading(false);
-        setIsReportSuccess(true);
-      };
-      f();
+    async (reason: string): Promise<void> => {
+      if (!profile) {
+        return;
+      }
+      setIsLoading(true);
+      await firebase
+        .firestore()
+        .collection(`reports`)
+        .add({
+          uid: user.uid,
+          targetUid: profile.uid,
+          reason,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as Report);
+      setIsLoading(false);
+      setIsReportSuccess(true);
     },
     [profile, user.uid]
   );
@@ -406,9 +369,6 @@ const UserProfileScreen: React.FC<ScreenType> = ({
   const listEmptyDiaryComponent =
     loadingDiary || refreshing ? null : <EmptyDiary />;
 
-  const listEmptyReviewComponent =
-    loadingReview || refreshing ? null : <EmptyReview />;
-
   const listHeaderDiaryComponent = (
     <>
       <Space size={32} />
@@ -421,39 +381,13 @@ const UserProfileScreen: React.FC<ScreenType> = ({
           <Space size={16} />
         </>
       )}
-
-      <GrayHeader title={I18n.t('userProfile.topReview')} />
-      {topReviews.length > 0
-        ? topReviews.map((item, index) => {
-            if (profile) {
-              return (
-                <ReviewListItem
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  item={item}
-                  textLanguage={profile.learnLanguage}
-                  handlePressUser={handlePressUser}
-                />
-              );
-            }
-            return null;
-          })
-        : listEmptyReviewComponent}
-
-      {loadingReview && !refreshing ? (
-        <>
-          <Space size={16} />
-          <ActivityIndicator />
-          <Space size={16} />
-        </>
-      ) : null}
-      {!!reviewNum && reviewNum > 3 ? (
-        <Hoverable style={styles.moreRead} onPress={onPressMoreReview}>
-          <Text style={styles.moreReadText}>
-            {I18n.t('userProfile.moreRead', { count: reviewNum })}
-          </Text>
-        </Hoverable>
-      ) : null}
+      <TopReviewList
+        profile={profile}
+        userName={route.params.userName}
+        refreshing={refreshing}
+        handlePressUser={handlePressUser}
+        onPressMoreReview={onPressMoreReview}
+      />
       <GrayHeader
         title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
       />

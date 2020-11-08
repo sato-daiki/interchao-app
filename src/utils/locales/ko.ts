@@ -221,7 +221,6 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: '내 일기',
-  searchText: '내 일기 검색하기',
   diaryList: {
     one: '내 일기 리스트{{count}}건',
     other: '내 일기 리스트{{count}}건',
@@ -229,6 +228,7 @@ const myDiaryList = {
   },
   notficationSetting:
     'Interchao 앱 알림이 꺼져 있습니다. 일기 첨삭이 도착하면 확인 하시려면 "설정"에서 "알림"을 선택하자',
+  emptyDiary: '일기 없음',
 };
 
 const myDiarySerch = {
@@ -249,6 +249,10 @@ const notice = {
   operation: '경영진의 알림',
   noMail:
     '※이메일 주소가 등록되어 있지 않습니다. 메일 통지를 이용하는 경우는 "이메일 주소/비밀번호 등록" 화면에서 설정하십시오',
+};
+
+const editMyDiaryList = {
+  headerTitle: '일기 목록 편집',
 };
 
 const postDiary = {
@@ -606,6 +610,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: '첨삭 대기중',
+  done: '첨삭 완료',
   correcting: '첨삭중',
   unread: '안읽음',
 };
@@ -646,6 +651,7 @@ const ko = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,

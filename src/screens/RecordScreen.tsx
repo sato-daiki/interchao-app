@@ -217,16 +217,13 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
 
   async componentWillUnmount() {
     const { isRecording, isPlaying } = this.state;
-    console.log('componentWillUnmount');
     if (this.recording !== null) {
-      console.log('this.recording !== null');
       this.recording.setOnRecordingStatusUpdate(null);
       if (isRecording) await this.recording.stopAndUnloadAsync();
       this.recording = null;
     }
 
     if (this.sound !== null) {
-      console.log('this.sound !== null');
       this.sound.setOnPlaybackStatusUpdate(null);
       await this.sound.unloadAsync();
       this.sound = null;
@@ -262,7 +259,6 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     status: Audio.RecordingStatus
   ): void => {
     const { isLoading } = this.state;
-    console.log('updateScreenForRecordingStatus', status);
     if (status.canRecord) {
       this.setState({
         isRecording: status.isRecording,
@@ -280,7 +276,6 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
   };
 
   private stopPlaybackAndBeginRecording = async (): Promise<void> => {
-    console.log('stopPlaybackAndBeginRecording');
     this.setState({
       isLoading: true,
     });
@@ -351,7 +346,6 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       playThroughEarpieceAndroid: false,
       staysActiveInBackground: true,
     });
-    console.log(' aaaa');
     const { sound } = await this.recording.createNewLoadedSoundAsync(
       {
         isLooping: false,
@@ -362,9 +356,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       },
       this.updateScreenForSoundStatus
     );
-    console.log(' bbbbb');
 
-    console.log(' this.sound = sound;');
     this.sound = sound;
     this.setState({
       isLoading: false,
@@ -372,7 +364,6 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
   };
 
   private onRecordPressed = (): void => {
-    console.log('onRecordPressed');
     const { isRecording } = this.state;
     if (isRecording) {
       this.stopRecordingAndEnablePlayback();

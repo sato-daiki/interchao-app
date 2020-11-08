@@ -45,6 +45,7 @@ export interface Diary {
   isReview2?: boolean;
   isReview3?: boolean;
   voiceUrl?: string | null;
+  publishedAt?: Timestamp | firebase.firestore.FieldValue;
   createdAt?: Timestamp | firebase.firestore.FieldValue;
   updatedAt: Timestamp | firebase.firestore.FieldValue;
 }

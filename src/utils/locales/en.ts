@@ -233,13 +233,13 @@ const myDiary = {
 
 const myDiaryList = {
   headerTitle: 'My Entries',
-  searchText: 'Search My Entries',
   diaryList: {
     one: 'My Journal Entries: {{count}} entry',
     other: 'My Journal Entries: {{count}} entries',
     zero: 'My Journal Entries',
   },
   notficationSetting: `Interchao app notifications are turned off. Let's turn on "Notification" from "Settings" so that you can check when the journal entries correction arrives.`,
+  emptyDiary: 'No Journal Entries',
 };
 
 const myDiarySerch = {
@@ -260,6 +260,10 @@ const notice = {
   operation: 'Notice from the management',
   noMail:
     '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
+};
+
+const editMyDiaryList = {
+  headerTitle: 'Edit Journal Entries',
 };
 
 const postDiary = {
@@ -625,6 +629,7 @@ const cameraRoll = {
 
 const myDiaryStatus = {
   yet: 'Waiting for Corrections',
+  done: 'Corrected',
   correcting: 'Being Corrected',
   unread: 'Unread',
 };
@@ -665,6 +670,7 @@ const en = {
   myDiarySerch,
   myPage,
   notice,
+  editMyDiaryList,
   postDiary,
   postDraftDiary,
   registerEmailPassword,

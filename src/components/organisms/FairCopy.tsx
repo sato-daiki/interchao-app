@@ -79,7 +79,6 @@ const FairCopy: React.FC<Props> = ({
   const [soundDuration, setSoundDuration] = useState<number | null>(null);
 
   const updateScreenForSoundStatus = (status: AVPlaybackStatus): void => {
-    console.log('updateScreenForSoundStatus', status);
     if (status.isLoaded) {
       setSoundDuration(status.durationMillis ?? null);
       setSoundPosition(status.positionMillis);
@@ -97,7 +96,6 @@ const FairCopy: React.FC<Props> = ({
   };
 
   const onSeekSliderValueChange = (): void => {
-    console.log('onSeekSliderValueChange');
     if (sound != null && !isSeeking) {
       setIsSeeking(true);
       setShouldPlayAtEndOfSeek(shouldPlay);
@@ -163,8 +161,6 @@ const FairCopy: React.FC<Props> = ({
 
   const onPressClose = async (): Promise<void> => {
     if (sound !== null) {
-      console.log('soundObject !== null');
-
       sound.setOnPlaybackStatusUpdate(null);
       await sound.unloadAsync();
       // setSound(null);

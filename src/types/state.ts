@@ -12,6 +12,7 @@ import { SetProfileAction } from '../stores/actions/profile';
 import {
   SetDiariesAction,
   SetDiaryTotalNumAction,
+  SetFetchInfoAction,
   AddDiaryAction,
   EditDiaryAction,
   DeleteDiaryAction,
@@ -44,6 +45,7 @@ export type Actions =
   | SignOutAction
   | SetUserAction
   | SetProfileAction
+  | SetFetchInfoAction
   | SetDiariesAction
   | SetDiaryTotalNumAction
   | AddDiaryAction
