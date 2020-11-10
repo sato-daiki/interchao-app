@@ -17,7 +17,7 @@ export const getTopReviews = async (uid: string): Promise<Review[]> => {
     });
     return topReviews;
   } catch (e) {
-    console.log('topReviews', e);
+    console.warn('topReviews', e);
     return [];
   }
 };
@@ -44,7 +44,7 @@ export const getReviews = async (
     });
     return reviews;
   } catch (e) {
-    console.log('getReviews', e);
+    console.warn('getReviews', e);
     return [];
   }
 };
