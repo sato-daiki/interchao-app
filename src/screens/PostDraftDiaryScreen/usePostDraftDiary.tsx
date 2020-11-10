@@ -17,6 +17,8 @@ import { alert } from '@/utils/ErrorAlert';
 import {
   NavigationProp,
   PostDraftDiaryRouteProp,
+  // @ts-ignore
+  // eslint-disable-next-line import/extensions
 } from './PostDraftDiaryScreen';
 
 interface UsePostDiary {

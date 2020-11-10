@@ -5,6 +5,7 @@ import { addDiary } from '@/stores/actions/diaryList';
 
 import PostDiaryScreen, {
   Props,
+  // @ts-ignore
 } from '@/screens/PostDiaryScreen/PostDiaryScreen';
 
 const mapStateToProps = (state: State): Props => {

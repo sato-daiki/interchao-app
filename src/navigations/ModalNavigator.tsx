@@ -21,8 +21,6 @@ import CorrectingScreenContainer from '@/containers/CorrectingScreenContainer';
 import AboutScreen from '@/screens/About';
 import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
-import PostDiaryWebScreenContainer from '@/containers/PostDiaryWebScreenContainer';
-import PostDraftDiaryWebScreenContainer from '@/containers/PostDraftDiaryWebScreenContainer';
 import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
 import { MainStackParamList } from './MainNavigator';
 
@@ -168,7 +166,7 @@ export const ModalPostDiaryWebNavigator = (): JSX.Element => {
     <ModalPostDiaryWebStack.Navigator initialRouteName="PostDiaryWeb">
       <ModalPostDiaryWebStack.Screen
         name="PostDiaryWeb"
-        component={PostDiaryWebScreenContainer}
+        component={PostDiaryScreenContainer}
         options={{ title: 'Interchao' }}
       />
     </ModalPostDiaryWebStack.Navigator>
@@ -196,7 +194,7 @@ export const ModalPostDraftDiaryWebNavigator = (): JSX.Element => {
     <ModalPostDraftDiaryWebStack.Navigator initialRouteName="PostDraftDiaryWeb">
       <ModalPostDraftDiaryWebStack.Screen
         name="PostDraftDiaryWeb"
-        component={PostDraftDiaryWebScreenContainer}
+        component={PostDraftDiaryScreenContainer}
         options={{ title: 'Interchao' }}
       />
     </ModalPostDraftDiaryWebStack.Navigator>

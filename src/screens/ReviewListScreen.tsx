@@ -65,7 +65,7 @@ const ReviewListScreen: React.FC<ScreenType> = ({
         setIsLoading(false);
         return;
       }
-      const newReviews = await getReviews(targetUid, null, HIT_PER_PAGE);
+      const newReviews = await getReviews(targetUid, new Date(), HIT_PER_PAGE);
       setReviews(newReviews);
       if (newReviews.length > 0) {
         const { createdAt } = newReviews[newReviews.length - 1];
@@ -83,7 +83,7 @@ const ReviewListScreen: React.FC<ScreenType> = ({
       setIsLoading(false);
       return;
     }
-    const newReviews = await getReviews(targetUid, null, HIT_PER_PAGE);
+    const newReviews = await getReviews(targetUid, new Date(), HIT_PER_PAGE);
 
     setReviews(newReviews);
     if (newReviews.length > 0) {
