@@ -33,7 +33,7 @@ const { store, persistor } = configureStore();
 Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
-  enableInExpoDevelopment: true,
+  enableInExpoDevelopment: false,
   debug: false,
 });
 

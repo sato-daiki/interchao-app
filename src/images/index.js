@@ -1,5 +1,6 @@
 module.exports = {
   BagPoints: require('./bagPoints.png'),
+  PaperAndPen: require('./paperAndPen.png'),
   FlashLeft: require('./flash_left.png'),
   FlashRight: require('./flash_right.png'),
   GetPoints: require('./getPoints.png'),
@@ -11,6 +12,7 @@ module.exports = {
   Points: require('./points.png'),
   SavePoints: require('./savePoints.png'),
   Star: require('./star.png'),
+  StudentHat: require('./studentHat.png'),
   Zebbu: require('./zebbu.png'),
   Zenny: require('./zenny.png'),
 };
