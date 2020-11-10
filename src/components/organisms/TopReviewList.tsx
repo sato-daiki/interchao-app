@@ -63,7 +63,8 @@ const TopReviewList: React.FC<Props> = ({
       await getNewReview(targetUid);
     };
     f();
-  }, [getNewReview, userName, refreshing]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const listEmptyReviewComponent =
     loadingReview || refreshing ? null : <EmptyReview />;

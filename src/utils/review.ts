@@ -17,13 +17,14 @@ export const getTopReviews = async (uid: string): Promise<Review[]> => {
     });
     return topReviews;
   } catch (e) {
+    console.log('topReviews', e);
     return [];
   }
 };
 
 export const getReviews = async (
   uid: string,
-  lastVisible: firestore.FieldValue | null,
+  lastVisible: firestore.FieldValue | Date | null,
   hitPerPage: number
 ): Promise<Review[]> => {
   try {
@@ -35,6 +36,7 @@ export const getReviews = async (
       .startAfter(lastVisible)
       .limit(hitPerPage)
       .get();
+
     const reviews: Review[] = [];
 
     snapshot.forEach(doc => {
@@ -42,6 +44,7 @@ export const getReviews = async (
     });
     return reviews;
   } catch (e) {
+    console.log('getReviews', e);
     return [];
   }
 };
