@@ -22,6 +22,7 @@ export { default as LoadingModal } from './LoadingModal';
 export { default as Lottie } from './Lottie';
 export { default as Note } from './Note';
 export { default as OriginalText } from './OriginalText';
+export { default as Pill } from './Pill';
 export { default as ProfileIcon } from './ProfileIcon';
 export { default as ProfileIconHorizontal } from './ProfileIconHorizontal';
 export { default as RadioBox } from './RadioBox';
