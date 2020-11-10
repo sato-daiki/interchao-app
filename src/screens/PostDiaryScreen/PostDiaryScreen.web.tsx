@@ -1,45 +1,17 @@
 import React, { useCallback, useLayoutEffect } from 'react';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
-
+import { View, StyleSheet } from 'react-native';
+import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
 import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
+import I18n from '@/utils/I18n';
+
 import {
   HeaderText,
   SmallButtonSubmit,
   SmallButtonWhite,
 } from '@/components/atoms';
-import { Profile, Diary, User } from '@/types';
-import I18n from '@/utils/I18n';
-import {
-  ModalPostDraftDiaryStackParamList,
-  ModalPostDraftDiaryStackNavigationProp,
-} from '@/navigations/ModalNavigator';
-import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
-import { View } from 'react-native-animatable';
 import { primaryColor } from '@/styles/Common';
-import { StyleSheet } from 'react-native';
-import { usePostDraftDiary } from './usePostDraftDiary';
-
-export interface WebProps {
-  user: User;
-  profile: Profile;
-}
-
-interface DispatchProps {
-  setUser: (user: User) => void;
-  editDiary: (objectID: string, diary: Diary) => void;
-}
-
-type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalPostDraftDiaryStackParamList, 'PostDraftDiary'>,
-  ModalPostDraftDiaryStackNavigationProp
->;
-
-type ScreenType = {
-  navigation: NavigationProp;
-  route: RouteProp<ModalPostDraftDiaryStackParamList, 'PostDraftDiary'>;
-} & WebProps &
-  DispatchProps;
+import { usePostDiary } from './usePostDiary';
+import { ScreenType } from './interfaces';
 
 const styles = StyleSheet.create({
   headerWrapper: {
@@ -57,25 +29,23 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * 概要：日記投稿画面
- */
-const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
+const PostDiaryWebScreen: React.FC<ScreenType> = ({
   navigation,
-  route,
   user,
   profile,
   setUser,
-  editDiary,
+  addDiary,
 }) => {
   const {
     isLoadingDraft,
-    isLoading,
+    isLoadingPublish,
+    isFirstEdit,
     isModalLack,
     isModalAlert,
     isModalCancel,
     isModalError,
     isPublish,
+    isTutorialLoading,
     errorMessage,
     title,
     text,
@@ -90,16 +60,16 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
     onPressSubmit,
     onPressDraft,
     onPressNotSave,
+    onPressTutorial,
     onPressCloseError,
     onPressPublic,
     onPressClose,
-  } = usePostDraftDiary({
+  } = usePostDiary({
     navigation,
-    route,
     user,
     profile,
     setUser,
-    editDiary,
+    addDiary,
   });
 
   const headerLeft = useCallback(
@@ -108,28 +78,32 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
   );
 
   const headerRight = useCallback(() => {
-    if (user.points >= 10) {
+    if (isFirstEdit) {
+      if (user.points >= 10) {
+        return (
+          <View style={styles.headerWrapper}>
+            <SmallButtonWhite
+              isLoading={isLoadingDraft}
+              containerStyle={styles.draft}
+              title={I18n.t('common.draft')}
+              color={primaryColor}
+              onPress={onPressDraft}
+            />
+            <SmallButtonSubmit
+              containerStyle={styles.publish}
+              title={I18n.t('common.publish')}
+              onPress={onPressPublic}
+            />
+          </View>
+        );
+      }
       return (
-        <View style={styles.headerWrapper}>
-          <SmallButtonWhite
-            isLoading={isLoadingDraft}
-            containerStyle={styles.draft}
-            title={I18n.t('common.draft')}
-            color={primaryColor}
-            onPress={onPressDraft}
-          />
-          <SmallButtonSubmit
-            containerStyle={styles.publish}
-            title={I18n.t('common.publish')}
-            onPress={onPressPublic}
-          />
-        </View>
+        <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />
       );
     }
-    return <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />;
-
+    return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.points, text, title, isLoadingDraft]);
+  }, [user.points, text, title, isLoadingDraft, isFirstEdit]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -138,16 +112,18 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
       headerTitle: (): JSX.Element => <HeaderTitle />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.points, text, title, isLoadingDraft]);
+  }, [user.points, text, title, isLoadingDraft, isFirstEdit]);
 
   return (
     <PostDiaryWeb
-      isLoading={isLoading || isLoadingDraft}
+      isLoading={isLoadingPublish || isLoadingDraft}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
       isModalError={isModalError}
       isPublish={isPublish}
+      isTutorialLoading={isTutorialLoading}
+      tutorialPostDiary={user.tutorialPostDiary}
       errorMessage={errorMessage}
       title={title}
       text={text}
@@ -157,17 +133,18 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
       nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
-      onClosePostDiary={onClosePostDiary}
       onPressCloseModalPublish={onPressCloseModalPublish}
       onPressCloseModalCancel={onPressCloseModalCancel}
+      onClosePostDiary={onClosePostDiary}
       onChangeTextTitle={onChangeTextTitle}
       onChangeTextText={onChangeTextText}
       onPressSubmit={onPressSubmit}
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
+      onPressTutorial={onPressTutorial}
       onPressCloseError={onPressCloseError}
     />
   );
 };
 
-export default PostDraftDiaryWebScreen;
+export default PostDiaryWebScreen;
