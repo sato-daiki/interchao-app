@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 import { fontSizeM, primaryColor } from '@/styles/Common';
 import { SwipeGuid } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 import { IntroductionParams } from './interface';
+import Header from './Header';
 
 interface Props {
   source: ImageSourcePropType;
@@ -19,24 +21,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingTop: 16,
+  },
+  image: {
+    marginTop: 16,
+    alignSelf: 'center',
+    width: 80,
+    height: 80,
+    marginBottom: 32,
   },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
   },
-  image: {
-    width: 100,
-    height: 100,
-    marginBottom: 32,
-  },
 });
 
 const ThemeGuideIntroduction = ({ source, params }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
+      <Header title={I18n.t('themeGuide.introduction')} />
       <Image source={source} style={styles.image} />
       <Text style={styles.text}>{params.text}</Text>
       <SwipeGuid type="start" />

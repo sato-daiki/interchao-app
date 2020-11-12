@@ -300,7 +300,9 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         <MyDiaryListFlatList
           // emptyの時のレイアウトのため
           elRefs={elRefs}
-          isEmpty={!isLoading && !refreshing && diaries.length < 1}
+          isEmpty={
+            !isLoading && !isInitialLoading && !refreshing && diaries.length < 1
+          }
           refreshing={refreshing}
           diaries={diaries}
           diaryTotalNum={diaryTotalNum}

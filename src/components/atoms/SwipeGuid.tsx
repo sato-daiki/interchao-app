@@ -23,14 +23,15 @@ const styles = StyleSheet.create({
     left: 16,
   },
   icon: {
-    width: 54,
-    height: 42,
+    width: 40,
+    height: 32,
     marginBottom: 12,
   },
   text: {
     textAlign: 'center',
     color: primaryColor,
     fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
   },
 });
 

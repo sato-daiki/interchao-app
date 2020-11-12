@@ -6,9 +6,9 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
-import { Heading, Space } from '@/components/atoms';
 import I18n from '@/utils/I18n';
 import { WordParams } from './interface';
+import Header from './Header';
 
 interface Props {
   params: WordParams;
@@ -47,9 +47,7 @@ const ThemeGuideWord: React.FC<Props> = ({ params }) => {
       style={styles.scrollView}
       contentContainerStyle={styles.contentContainerStyle}
     >
-      <Space size={24} />
-      <Heading title={`${I18n.t('themeGuide.word')}`} />
-      <Space size={24} />
+      <Header title={I18n.t('themeGuide.word')} />
       <Text style={styles.title}>{`📖 ${params.title}`}</Text>
       {params.words.map(word => (
         <Text key={word.id} style={styles.text}>

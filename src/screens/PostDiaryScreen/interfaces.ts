@@ -23,6 +23,6 @@ export type NavigationProp = CompositeNavigationProp<
 
 export type ScreenType = {
   navigation: NavigationProp;
-  route: RouteProp<ModalPostDiaryStackParamList, 'PostDiary'>;
+  route?: RouteProp<ModalPostDiaryStackParamList, 'PostDiary'>;
 } & Props &
   DispatchProps;

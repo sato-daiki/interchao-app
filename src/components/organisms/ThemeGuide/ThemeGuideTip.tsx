@@ -6,9 +6,9 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
-import { Heading, Space } from '@/components/atoms';
 import I18n from '@/utils/I18n';
 import { StyleType, TipParams } from './interface';
+import Header from './Header';
 
 interface Props {
   params: TipParams;
@@ -70,9 +70,7 @@ const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
       style={styles.scrollView}
       contentContainerStyle={styles.contentContainerStyle}
     >
-      <Space size={24} />
-      <Heading title={I18n.t('themeGuide.guideTipTitle')} />
-      <Space size={24} />
+      <Header title={I18n.t('themeGuide.guideTipTitle')} />
       <View style={styles.section}>
         <Text style={styles.title}>
           {`⭐️ ${I18n.t('themeGuide.expression')}`}

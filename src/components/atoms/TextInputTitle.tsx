@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, StyleProp, TextStyle } from 'react-native';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
 
 interface Props {
+  editable: boolean;
   style?: StyleProp<TextStyle>;
   value: string;
   onChangeText: (txt: string) => void;
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
 });
 
 const TextInputTitle: React.FC<Props> = ({
+  editable,
   value,
   onChangeText,
   onFocus,
@@ -32,6 +34,7 @@ const TextInputTitle: React.FC<Props> = ({
 }: Props): JSX.Element => {
   return (
     <TextInput
+      editable={editable}
       style={[styles.titleInput, style]}
       value={value}
       placeholder="Title"

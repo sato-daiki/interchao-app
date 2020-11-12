@@ -41,10 +41,11 @@ const keyExtractor = (item: SubcatergoryInfo, index: number): string =>
 const SelectSubcategoryScreen: React.FC<ScreenType> = ({ navigation }) => {
   const onPressItem = useCallback(
     (item: SubcatergoryInfo) => {
-      navigation.navigate('ModalPostDiary', {
-        screen: 'PostDiary',
+      navigation.navigate('ModalThemeGuide', {
+        screen: 'ThemeGuide',
         params: {
           subcatergoryInfo: item,
+          caller: 'SelectSubcategory',
         },
       });
     },
