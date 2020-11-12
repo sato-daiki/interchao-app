@@ -7,7 +7,6 @@ import {
   Image,
   Animated,
   Easing,
-  Platform,
 } from 'react-native';
 import {
   primaryColor,
@@ -25,11 +24,10 @@ import { ModalPublish } from '@/components/organisms/ModalPublish';
 import ModalLackPoint from '@/components/organisms/ModalLackPoint';
 import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
 import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
-import PostDiaryKeyboardIOS from '@/components/organisms/PostDiaryKeyboardIOS';
-import PostDiaryKeybordAndroid from '@/components/organisms/PostDiaryKeybordAndroid';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
 import { SubcatergoryInfo } from '@/screens/SelectSubcategoryScreen/interface';
-import ModalThemeGuide from './ModalThemeGuide/ModalThemeGuide';
+// eslint-disable-next-line import/extensions
+import PostDiaryKeyboard from './PostDiaryKeyboard';
 
 interface Props {
   isLoading: boolean;
@@ -37,23 +35,20 @@ interface Props {
   isModalAlert: boolean;
   isModalCancel: boolean;
   isModalError: boolean;
-  isModalThemeGuide: boolean;
   isPublish: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
   errorMessage: string;
   title: string;
   text: string;
+  subcatergoryInfo?: SubcatergoryInfo;
   publishMessage: string | null;
   points: number;
   learnLanguage: Language;
-  nativeLanguage: Language;
-  subcatergoryInfo?: SubcatergoryInfo;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
-  onPressCloseModalThemeGuide: () => void;
   onClosePostDiary: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
@@ -62,6 +57,7 @@ interface Props {
   onPressNotSave: () => void;
   onPressTutorial?: () => void;
   onPressCloseError: () => void;
+  onPressThemeGuide: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -111,23 +107,20 @@ const PostDiary = ({
   isModalAlert,
   isModalCancel,
   isModalError,
-  isModalThemeGuide,
   isPublish,
   isTutorialLoading = false,
   tutorialPostDiary = true,
   errorMessage,
   title,
   text,
+  subcatergoryInfo,
   publishMessage,
   points,
   learnLanguage,
-  nativeLanguage,
-  subcatergoryInfo,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
-  onPressCloseModalThemeGuide,
   onClosePostDiary,
   onChangeTextTitle,
   onChangeTextText,
@@ -136,6 +129,7 @@ const PostDiary = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
+  onPressThemeGuide,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
@@ -168,13 +162,6 @@ const PostDiary = ({
         mainButtonText={I18n.t('common.close')}
         onPressMain={onPressCloseError}
       />
-      {subcatergoryInfo ? (
-        <ModalThemeGuide
-          visible={isModalThemeGuide}
-          subcatergoryInfo={subcatergoryInfo}
-          onPressCloe={onPressCloseModalThemeGuide}
-        />
-      ) : null}
       <TutorialPostDiary
         isLoading={isTutorialLoading}
         displayed={tutorialPostDiary}
@@ -231,31 +218,20 @@ const PostDiary = ({
           <Text style={styles.headerValue}>{points}</Text>
         </View>
       </View>
-      {Platform.OS === 'ios' ? (
-        <PostDiaryKeyboardIOS
-          title={title}
-          text={text}
-          learnLanguage={learnLanguage}
-          isForce={isForce}
-          fadeAnim={fadeAnim}
-          onChangeTextTitle={onChangeTextTitle}
-          onChangeTextText={onChangeTextText}
-          onPressDraft={onPressDraft}
-          onFocusText={onFocusText}
-          onBlurText={onBlurText}
-        />
-      ) : (
-        <PostDiaryKeybordAndroid
-          title={title}
-          text={text}
-          learnLanguage={learnLanguage}
-          onChangeTextTitle={onChangeTextTitle}
-          onChangeTextText={onChangeTextText}
-          onPressDraft={onPressDraft}
-          onFocusText={onFocusText}
-          onBlurText={onBlurText}
-        />
-      )}
+      <PostDiaryKeyboard
+        title={title}
+        text={text}
+        learnLanguage={learnLanguage}
+        subcatergoryInfo={subcatergoryInfo}
+        isForce={isForce}
+        fadeAnim={fadeAnim}
+        onPressThemeGuide={onPressThemeGuide}
+        onChangeTextTitle={onChangeTextTitle}
+        onChangeTextText={onChangeTextText}
+        onPressDraft={onPressDraft}
+        onFocusText={onFocusText}
+        onBlurText={onBlurText}
+      />
     </SafeAreaView>
   );
 };

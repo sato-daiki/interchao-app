@@ -7,27 +7,11 @@ import {
   Keyboard,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import I18n from '@/utils/I18n';
-import { Language } from '@/types';
-import { offWhite, mainColor } from '@/styles/Common';
-import {
-  TextButtun,
-  TextInputTitle,
-  TextInputText,
-  Hoverable,
-} from '@/components/atoms';
+import { mainColor } from '@/styles/Common';
+import { TextInputText, Hoverable, TextInputTitle } from '@/components/atoms';
 import { getMaxPostText } from '@/utils/diary';
-
-interface Props {
-  title: string;
-  text: string;
-  learnLanguage: Language;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressDraft: () => void;
-  onFocusText: () => void;
-  onBlurText: () => void;
-}
+import Footer from './Footer';
+import { PostDiaryKeyboardProps } from './interface';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,9 +19,6 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-  },
-  titleInput: {
-    paddingVertical: 8,
   },
   textInput: {
     height: 400,
@@ -48,23 +29,20 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
   },
-  footer: {
-    justifyContent: 'flex-end',
-    width: '100%',
-    backgroundColor: offWhite,
-  },
 });
 
-const PostDiaryKeybordAndroid = ({
+const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
+  subcatergoryInfo,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
   onFocusText,
   onBlurText,
-}: Props): JSX.Element => {
+  onPressThemeGuide,
+}) => {
   const [isKeyboard, setIsKeyboard] = useState(false);
   const onKeyboardDidShow = (): void => {
     setIsKeyboard(true);
@@ -94,8 +72,9 @@ const PostDiaryKeybordAndroid = ({
       >
         <View style={styles.inner}>
           <TextInputTitle
-            style={styles.titleInput}
+            editable={!subcatergoryInfo}
             value={title}
+            onFocus={onFocusText}
             onChangeText={onChangeTextTitle}
           />
           <TextInputText
@@ -110,14 +89,11 @@ const PostDiaryKeybordAndroid = ({
       </KeyboardAvoidingView>
       <SafeAreaView>
         {isKeyboard ? null : (
-          <View style={styles.footer}>
-            <TextButtun
-              isBorrderTop
-              isBorrderBottom
-              title={I18n.t('postDiaryComponent.draft')}
-              onPress={onPressDraft}
-            />
-          </View>
+          <Footer
+            subcatergoryInfo={subcatergoryInfo}
+            onPressThemeGuide={onPressThemeGuide}
+            onPressDraft={onPressDraft}
+          />
         )}
       </SafeAreaView>
       {isKeyboard ? (

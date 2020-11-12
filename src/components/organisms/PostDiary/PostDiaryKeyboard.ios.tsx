@@ -1,37 +1,12 @@
 import React from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Keyboard,
-  Animated,
-} from 'react-native';
+import { StyleSheet, SafeAreaView, Keyboard, Animated } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { Language } from '@/types';
 import { getMaxPostText } from '@/utils/diary';
 import { offWhite, mainColor } from '@/styles/Common';
-import I18n from '@/utils/I18n';
-import {
-  TextButtun,
-  TextInputTitle,
-  TextInputText,
-  Hoverable,
-} from '@/components/atoms';
-
-interface Props {
-  title: string;
-  text: string;
-  learnLanguage: Language;
-  isForce: boolean;
-  fadeAnim: Animated.Value;
-  onPressThemeGuide: () => void;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressDraft: () => void;
-  onFocusText: () => void;
-  onBlurText: () => void;
-}
+import { TextInputText, Hoverable, TextInputTitle } from '@/components/atoms';
+import Footer from './Footer';
+import { PostDiaryKeyboardProps } from './interface';
 
 const styles = StyleSheet.create({
   icon: {
@@ -49,11 +24,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryKeyboardIOS = ({
+const PostDiaryKeyboardIOS: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
   isForce,
+  subcatergoryInfo,
   fadeAnim,
   onPressThemeGuide,
   onChangeTextTitle,
@@ -61,10 +37,11 @@ const PostDiaryKeyboardIOS = ({
   onPressDraft,
   onFocusText,
   onBlurText,
-}: Props): JSX.Element => {
+}) => {
   return (
     <>
       <TextInputTitle
+        editable={!subcatergoryInfo}
         value={title}
         onFocus={onFocusText}
         onChangeText={onChangeTextTitle}
@@ -94,15 +71,11 @@ const PostDiaryKeyboardIOS = ({
       <KeyboardSpacer />
       {/* 画面下部がiOSX以上の時隠れてしまうのを対応 */}
       <SafeAreaView>
-        <View style={styles.footer}>
-          <TextButtun isBorrderTop title="ヒント" onPress={onPressThemeGuide} />
-          <TextButtun
-            isBorrderTop
-            isBorrderBottom
-            title={I18n.t('postDiaryComponent.draft')}
-            onPress={onPressDraft}
-          />
-        </View>
+        <Footer
+          subcatergoryInfo={subcatergoryInfo}
+          onPressThemeGuide={onPressThemeGuide}
+          onPressDraft={onPressDraft}
+        />
       </SafeAreaView>
     </>
   );
