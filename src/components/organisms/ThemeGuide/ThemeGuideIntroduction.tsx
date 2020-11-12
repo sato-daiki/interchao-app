@@ -6,51 +6,40 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
-import { fontSizeL, fontSizeM, primaryColor } from '@/styles/Common';
-import { Swipe } from '@/images';
+import { fontSizeM, primaryColor } from '@/styles/Common';
+import { SwipeGuid } from '@/components/atoms';
 import { IntroductionParams } from './interface';
 
 interface Props {
-  title: string;
   source: ImageSourcePropType;
   params: IntroductionParams;
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-  },
-  title: {
-    color: primaryColor,
-    fontSize: fontSizeL,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    flex: 1,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     color: primaryColor,
     fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
   },
   image: {
-    width: 60,
-    height: 60,
-  },
-  swipeIcon: {
-    width: 60,
-    height: 60,
+    width: 100,
+    height: 100,
+    marginBottom: 32,
   },
 });
 
-const ThemeGuideIntroduction = ({
-  title,
-  source,
-  params,
-}: Props): JSX.Element => {
+const ThemeGuideIntroduction = ({ source, params }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
       <Image source={source} style={styles.image} />
       <Text style={styles.text}>{params.text}</Text>
-      <Image source={Swipe} style={styles.swipeIcon} />
+      <SwipeGuid type="start" />
     </View>
   );
 };

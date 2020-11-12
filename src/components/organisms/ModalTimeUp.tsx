@@ -1,34 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
-import { Modal } from '../template';
-import { Space, SubmitButton } from '../atoms';
-import I18n from '../../utils/I18n';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import { Modal } from '@/components/template';
+import { Heading, Space, SubmitButton } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
     alignItems: 'center',
-  },
-  title: {
-    fontSize: fontSizeL,
-    color: primaryColor,
-    fontWeight: 'bold',
-    marginVertical: 6,
-    paddingBottom: 16,
-    textAlign: 'center',
-  },
-  line: {
-    width: '100%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-    marginBottom: 24,
   },
   text: {
     textAlign: 'center',
@@ -50,8 +31,7 @@ const ModalTimeUp: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>{I18n.t('modalTimeUp.title')}</Text>
-        <View style={styles.line} />
+        <Heading title={I18n.t('modalTimeUp.title')} />
         <Space size={16} />
         <MaterialCommunityIcons
           size={64}

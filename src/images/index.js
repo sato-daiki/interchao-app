@@ -22,6 +22,7 @@ module.exports = {
   StudentHat: require('./studentHat.png'),
   Study: require('./study.png'),
   Swipe: require('./swipe.png'),
+  Write: require('./write.png'),
   Zebbu: require('./zebbu.png'),
   Zenny: require('./zenny.png'),
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -8,11 +8,11 @@ import {
   Platform,
 } from 'react-native';
 import * as Speech from 'expo-speech';
-import { primaryColor, fontSizeM } from '../../styles/Common';
-import { Modal } from '../template';
-import { WhiteButton, Space, HoverableIcon } from '../atoms';
-import I18n from '../../utils/I18n';
-import { Language } from '../../types';
+import { Language } from '@/types';
+import I18n from '@/utils/I18n';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import { Modal } from '@/components/template';
+import { WhiteButton, Space, HoverableIcon } from '@/components/atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -51,8 +51,7 @@ const ModalSpeech: React.FC<Props> = ({
   text,
   textLanguage,
   onClose,
-}: // onValueChange,
-Props): JSX.Element | null => {
+}: Props): JSX.Element | null => {
   const [isSlow, setIsSlow] = useState(false);
 
   // 再生中のアイコンを制御
@@ -60,12 +59,12 @@ Props): JSX.Element | null => {
   // 一番最初から再生
   const [initial, setInitial] = useState(true);
 
-  const onDone = (): void => {
+  const onDone = useCallback((): void => {
     setPlaying(false);
     setInitial(true);
-  };
+  }, []);
 
-  const onSpeak = (): void => {
+  const onSpeak = useCallback((): void => {
     const option = {
       language: textLanguage,
       rate: isSlow ? 0.6 : 1.0,
@@ -74,25 +73,25 @@ Props): JSX.Element | null => {
     Speech.speak(text, option);
     setInitial(false);
     setPlaying(true);
-  };
+  }, [isSlow, onDone, text, textLanguage]);
 
-  const onPressClose = (): void => {
+  const onPressClose = useCallback((): void => {
     Speech.stop();
     onClose();
     setPlaying(false);
     setInitial(true);
-  };
+  }, [onClose]);
 
-  const onPressSpeak = (): void => {
+  const onPressSpeak = useCallback((): void => {
     if (initial) {
       onSpeak();
     } else {
       Speech.resume();
       setPlaying(true);
     }
-  };
+  }, [initial, onSpeak]);
 
-  const onPressPause = (): void => {
+  const onPressPause = useCallback((): void => {
     if (Platform.OS === 'ios') {
       Speech.pause();
       setPlaying(false);
@@ -102,7 +101,7 @@ Props): JSX.Element | null => {
       setInitial(true);
       setPlaying(false);
     }
-  };
+  }, []);
 
   return (
     <Modal visible={visible}>

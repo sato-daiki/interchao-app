@@ -6,6 +6,8 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
+import { Heading, Space } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 import { StyleType, TipParams } from './interface';
 
 interface Props {
@@ -14,22 +16,20 @@ interface Props {
 
 const styles = StyleSheet.create({
   scrollView: {
-    // flex: 1,
+    flex: 1,
+  },
+  contentContainerStyle: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
   section: {
-    marginBottom: 16,
+    marginBottom: 32,
   },
-  h1: {
+  title: {
     color: primaryColor,
     fontSize: fontSizeL,
     fontWeight: 'bold',
     marginBottom: 8,
-  },
-  title: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    fontWeight: 'bold',
-    marginBottom: 4,
   },
   text: {
     color: primaryColor,
@@ -59,24 +59,27 @@ const getStyle = (styleType: StyleType): TextStyle | undefined => {
       return styles.bold;
     case 'p':
       return undefined;
-
     default:
       return undefined;
   }
 };
 
-const ThemeGuideIntroduction = ({ params }: Props): JSX.Element => {
+const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
   return (
     <ScrollView
       style={styles.scrollView}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={styles.contentContainerStyle}
     >
-      <Text style={styles.h1}>よく使う表現</Text>
+      <Space size={24} />
+      <Heading title={I18n.t('themeGuide.guideTipTitle')} />
+      <Space size={24} />
       <View style={styles.section}>
-        <Text style={styles.title}>表現</Text>
+        <Text style={styles.title}>
+          {`⭐️ ${I18n.t('themeGuide.expression')}`}
+        </Text>
         {params.expressions.map(expression => (
-          <Text style={styles.text}>
-            {`${expression.learnText}`}
+          <Text key={expression.id} style={styles.text}>
+            {`・${expression.learnText}`}
             <Text style={styles.subTextAndMarginLeft}>
               {`（${expression.nativeText}）`}
             </Text>
@@ -84,31 +87,20 @@ const ThemeGuideIntroduction = ({ params }: Props): JSX.Element => {
         ))}
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.title}>単語</Text>
-        {params.words.map(word => (
+      <Text style={styles.title}>{`✍️ ${I18n.t('themeGuide.example')}`}</Text>
+      {params.examples.map(example => (
+        <View key={example.id} style={styles.example}>
           <Text style={styles.text}>
-            {word.learnText}
-            <Text style={styles.subTextAndMarginLeft}>
-              {` - ${word.nativeText}`}
-            </Text>
+            ・
+            {example.learnText.map(t => (
+              <Text key={t.id} style={[getStyle(t.styleType)]}>
+                {`${t.text} `}
+              </Text>
+            ))}
           </Text>
-        ))}
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.title}>例文</Text>
-        {params.examples.map(example => (
-          <View style={styles.example}>
-            <Text style={styles.text}>
-              {example.learnText.map(t => (
-                <Text style={[getStyle(t.styleType)]}>{`${t.text} `}</Text>
-              ))}
-            </Text>
-            <Text style={styles.subText}>{`（${example.nativeText}）`}</Text>
-          </View>
-        ))}
-      </View>
+          <Text style={styles.subText}>{`（${example.nativeText}）`}</Text>
+        </View>
+      ))}
     </ScrollView>
   );
 };
