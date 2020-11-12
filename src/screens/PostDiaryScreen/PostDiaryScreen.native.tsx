@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import PostDiary from '@/components/organisms/PostDiary';
+import { PostDiary } from '@/components/organisms/PostDiary';
 import { HeaderText } from '@/components/atoms';
 import I18n from '@/utils/I18n';
 
@@ -11,6 +11,7 @@ import { ScreenType } from './interfaces';
  */
 const PostDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   user,
   profile,
   setUser,
@@ -43,8 +44,10 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressCloseError,
     onPressPublic,
     onPressClose,
+    onPressThemeGuide,
   } = usePostDiary({
     navigation,
+    subcatergoryInfo: route?.params?.subcatergoryInfo,
     user,
     profile,
     setUser,
@@ -86,10 +89,10 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      subcatergoryInfo={route?.params?.subcatergoryInfo}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
-      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
       onPressCloseModalPublish={onPressCloseModalPublish}
@@ -102,6 +105,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       onPressNotSave={onPressNotSave}
       onPressTutorial={onPressTutorial}
       onPressCloseError={onPressCloseError}
+      onPressThemeGuide={onPressThemeGuide}
     />
   );
 };

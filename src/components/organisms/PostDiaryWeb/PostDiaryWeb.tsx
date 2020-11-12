@@ -172,6 +172,8 @@ const PostDiaryWeb = ({
         <View style={styles.mainContainer}>
           <View style={styles.leftContainer}>
             <TextInputTitle
+              // editable={!subcatergoryInfo}
+              editable
               style={styles.titleInput}
               value={title}
               onChangeText={onChangeTextTitle}

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react';
 
 import { HeaderText } from '@/components/atoms';
-import PostDiary from '@/components/organisms/PostDiary';
+import { PostDiary } from '@/components/organisms/PostDiary';
 import I18n from '@/utils/I18n';
 import { usePostDraftDiary } from './usePostDraftDiary';
 import { ScreenType } from './interfaces';
