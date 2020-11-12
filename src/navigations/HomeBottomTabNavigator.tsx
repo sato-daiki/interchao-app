@@ -153,7 +153,9 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           tabPress: e => {
             // Prevent default action
             e.preventDefault();
-            navigation.navigate('ModalPostDiary', { screen: 'PostDiary' });
+            navigation.navigate('ModalSelectPostType', {
+              screen: 'SelectType',
+            });
           },
         })}
       />

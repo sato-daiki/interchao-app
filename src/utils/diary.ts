@@ -104,6 +104,7 @@ export const MY_STATUS = {
   draft: { text: I18n.t('draftListItem.draft'), color: subTextColor },
   yet: { text: I18n.t('myDiaryStatus.yet'), color: mainColor },
   done: { text: I18n.t('myDiaryStatus.done'), color: green },
+  posted: { text: I18n.t('myDiaryStatus.posted'), color: green },
 };
 
 export const getMyDiaryStatus = (diary: Diary): Status | null => {

@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ListRenderItem,
+} from 'react-native';
 import { firestore } from 'firebase';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
@@ -136,9 +142,8 @@ const ReviewListScreen: React.FC<ScreenType> = ({
     <GrayHeader title={I18n.t('reviewList.reviewList')} />
   );
 
-  type RenderItemProps = { item: Review };
-  const renderItem = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
+  const renderItem: ListRenderItem<Review> = useCallback(
+    ({ item }) => {
       return (
         <ReviewListItem
           item={item}
