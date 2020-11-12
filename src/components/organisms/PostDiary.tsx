@@ -28,6 +28,8 @@ import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
 import PostDiaryKeyboardIOS from '@/components/organisms/PostDiaryKeyboardIOS';
 import PostDiaryKeybordAndroid from '@/components/organisms/PostDiaryKeybordAndroid';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
+import { SubcatergoryInfo } from '@/screens/SelectSubcategoryScreen/interface';
+import ModalThemeGuide from './ModalThemeGuide/ModalThemeGuide';
 
 interface Props {
   isLoading: boolean;
@@ -35,6 +37,7 @@ interface Props {
   isModalAlert: boolean;
   isModalCancel: boolean;
   isModalError: boolean;
+  isModalThemeGuide: boolean;
   isPublish: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
@@ -45,10 +48,12 @@ interface Props {
   points: number;
   learnLanguage: Language;
   nativeLanguage: Language;
+  subcatergoryInfo?: SubcatergoryInfo;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
+  onPressCloseModalThemeGuide: () => void;
   onClosePostDiary: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
@@ -106,6 +111,7 @@ const PostDiary = ({
   isModalAlert,
   isModalCancel,
   isModalError,
+  isModalThemeGuide,
   isPublish,
   isTutorialLoading = false,
   tutorialPostDiary = true,
@@ -116,10 +122,12 @@ const PostDiary = ({
   points,
   learnLanguage,
   nativeLanguage,
+  subcatergoryInfo,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
+  onPressCloseModalThemeGuide,
   onClosePostDiary,
   onChangeTextTitle,
   onChangeTextText,
@@ -160,6 +168,13 @@ const PostDiary = ({
         mainButtonText={I18n.t('common.close')}
         onPressMain={onPressCloseError}
       />
+      {subcatergoryInfo ? (
+        <ModalThemeGuide
+          visible={isModalThemeGuide}
+          subcatergoryInfo={subcatergoryInfo}
+          onPressCloe={onPressCloseModalThemeGuide}
+        />
+      ) : null}
       <TutorialPostDiary
         isLoading={isTutorialLoading}
         displayed={tutorialPostDiary}

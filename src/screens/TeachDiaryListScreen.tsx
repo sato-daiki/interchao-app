@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   Platform,
+  ListRenderItem,
 } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
@@ -243,9 +244,8 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     [navigation]
   );
 
-  type RenderItemProps = { item: Diary };
-  const renderItem = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
+  const renderItem: ListRenderItem<Diary> = useCallback(
+    ({ item }) => {
       return (
         <TeachDiaryListItem
           item={item}
