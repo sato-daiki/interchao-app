@@ -1,4 +1,5 @@
 import { Language, CountryCode } from './profile';
+import { Subcatergory } from './themeDiary';
 
 // algolia経由で取得するのでtimestamp型が他と異なる
 export type Timestamp = {
@@ -31,6 +32,7 @@ export interface Diary {
   hidden: boolean;
   title: string;
   text: string;
+  subcatergory?: Subcatergory | null;
   fairCopyTitle?: string | null;
   fairCopyText?: string | null;
   profile: DisplayProfile;

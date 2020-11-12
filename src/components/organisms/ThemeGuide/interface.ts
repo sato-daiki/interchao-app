@@ -1,10 +1,3 @@
-export type EntryKey = 'introduction' | 'tip';
-
-// export interface Entry {
-//   key: EntryKey;
-//   params: TipParams | IntroductionParams;
-// }
-
 export type Entry =
   | {
       key: 'introduction';
@@ -13,31 +6,45 @@ export type Entry =
   | {
       key: 'tip';
       params: TipParams;
+    }
+  | {
+      key: 'word';
+      params: WordParams;
+    }
+  | {
+      key: 'end';
     };
 
 export interface IntroductionParams {
   text: string;
 }
 
+export interface TipParams {
+  expressions: Sentence[];
+  examples: StyleSentence[];
+}
+
+export interface WordParams {
+  title: string;
+  words: Sentence[];
+}
+
 export type StyleType = 'bold' | 'p';
 
 interface StyleText {
+  id: number;
   text: string;
   styleType: StyleType;
 }
 
 interface StyleSentence {
+  id: number;
   learnText: StyleText[];
   nativeText: string;
 }
 
 interface Sentence {
+  id: number;
   learnText: string;
   nativeText: string;
-}
-
-export interface TipParams {
-  words: Sentence[];
-  expressions: Sentence[];
-  examples: StyleSentence[];
 }
