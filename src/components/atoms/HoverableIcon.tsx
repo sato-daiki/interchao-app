@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   ViewStyle,
   StyleProp,
@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacityProps,
 } from 'react-native';
-import { mainColor, hoverMain, primaryColor } from '../../styles/Common';
+import { mainColor, hoverMain, primaryColor } from '@/styles/Common';
 import Icon, { IconType } from './Icon';
 
 type Props = {
@@ -48,12 +48,20 @@ const HoverableIcon: React.FC<Props> = ({
     isHover ? { backgroundColor: hoverBackgroundColor } : undefined,
   ];
 
+  const onMouseEnter = useCallback(() => {
+    setIsHover(true);
+  }, []);
+
+  const onMouseLeave = useCallback(() => {
+    setIsHover(false);
+  }, []);
+
   return onPress ? (
     <TouchableOpacity
       style={touchableOpacityStyle}
       // @ts-ignore
-      onMouseEnter={(): void => setIsHover(true)}
-      onMouseLeave={(): void => setIsHover(false)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onPress={onPress}
       {...props}
     >
@@ -71,8 +79,8 @@ const HoverableIcon: React.FC<Props> = ({
     <View
       style={touchableOpacityStyle}
       // @ts-ignore
-      onMouseEnter={(): void => setIsHover(true)}
-      onMouseLeave={(): void => setIsHover(false)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       {...props}
     >
       <Icon

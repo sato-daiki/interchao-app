@@ -3,7 +3,10 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import { SubcatergoryInfo } from '@/screens/SelectSubcategoryScreen/interface';
+import {
+  CallerThemeGuide,
+  SubcatergoryInfo,
+} from '@/screens/SelectSubcategoryScreen/interface';
 import HomeBottomTabNavigator, {
   HomeBottomParamList,
 } from './HomeBottomTabNavigator';
@@ -32,6 +35,8 @@ import {
   ModalPostDraftDiaryWebNavigator,
   ModalSelectPostTypeStackParamList,
   ModalSelectPostTypeNavigator,
+  ModalThemeGuideStackParamList,
+  ModalThemeGuideNavigator,
 } from './ModalNavigator';
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
@@ -57,6 +62,10 @@ export type MainStackParamList = {
   };
   ModalSelectPostType: {
     screen: keyof ModalSelectPostTypeStackParamList;
+  };
+  ModalThemeGuide: {
+    screen: keyof ModalThemeGuideStackParamList;
+    params: { subcatergoryInfo: SubcatergoryInfo; caller: CallerThemeGuide };
   };
   ModalPostDiary: {
     screen: keyof ModalPostDiaryStackParamList;
@@ -118,6 +127,10 @@ const MainNavigator = (): JSX.Element => {
       <MainStack.Screen
         name="ModalSelectPostType"
         component={ModalSelectPostTypeNavigator}
+      />
+      <MainStack.Screen
+        name="ModalThemeGuide"
+        component={ModalThemeGuideNavigator}
       />
       <MainStack.Screen
         name="ModalPostDiary"

@@ -24,11 +24,18 @@ import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
 import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
 import SelectSubcategoryScreenContainer from '@/containers/SelectSubcategoryScreenContainer';
-import { SubcatergoryInfo } from '@/screens/SelectSubcategoryScreen/interface';
+import {
+  CallerThemeGuide,
+  SubcatergoryInfo,
+} from '@/screens/SelectSubcategoryScreen/interface';
+import ThemeGuideScreen from '@/screens/ThemeGuideScreen';
 import { MainStackParamList } from './MainNavigator';
 
 export type ModalEditMyDiaryListStackParamList = {
   EditMyDiaryList: undefined;
+};
+export type ModalThemeGuideStackParamList = {
+  ThemeGuide: { subcatergoryInfo: SubcatergoryInfo; caller: CallerThemeGuide };
 };
 export type ModalSelectPostTypeStackParamList = {
   SelectType: undefined;
@@ -80,6 +87,10 @@ export type ModalSelectPostTypeStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalSelectPostType'
 >;
+export type ModalThemeGuideStackNavigationProp = StackNavigationProp<
+  MainStackParamList,
+  'ModalThemeGuide'
+>;
 export type ModalPostDiaryStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalPostDiary'
@@ -122,6 +133,9 @@ const ModalEditMyDiaryListStack = createStackNavigator<
 >();
 const ModalSelectPostTypeStack = createStackNavigator<
   ModalSelectPostTypeStackParamList
+>();
+const ModalThemeGuideStack = createStackNavigator<
+  ModalThemeGuideStackParamList
 >();
 const ModalPostDiaryStack = createStackNavigator<
   ModalPostDiaryStackParamList
@@ -182,6 +196,23 @@ export const ModalSelectPostTypeNavigator = (): JSX.Element => {
         }}
       />
     </ModalSelectPostTypeStack.Navigator>
+  );
+};
+export const ModalThemeGuideNavigator = (): JSX.Element => {
+  return (
+    <ModalThemeGuideStack.Navigator
+      initialRouteName="ThemeGuide"
+      headerMode="none"
+    >
+      <ModalThemeGuideStack.Screen
+        name="ThemeGuide"
+        component={ThemeGuideScreen}
+        options={{
+          ...DefaultNavigationOptions,
+          ...DefaultModalLayoutOptions,
+        }}
+      />
+    </ModalThemeGuideStack.Navigator>
   );
 };
 export const ModalPostDiaryNavigator = (): JSX.Element => {

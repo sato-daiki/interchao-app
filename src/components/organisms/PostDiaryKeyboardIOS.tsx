@@ -25,6 +25,7 @@ interface Props {
   learnLanguage: Language;
   isForce: boolean;
   fadeAnim: Animated.Value;
+  onPressThemeGuide: () => void;
   onChangeTextTitle: (txt: string) => void;
   onChangeTextText: (txt: string) => void;
   onPressDraft: () => void;
@@ -54,6 +55,7 @@ const PostDiaryKeyboardIOS = ({
   learnLanguage,
   isForce,
   fadeAnim,
+  onPressThemeGuide,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
@@ -93,6 +95,7 @@ const PostDiaryKeyboardIOS = ({
       {/* 画面下部がiOSX以上の時隠れてしまうのを対応 */}
       <SafeAreaView>
         <View style={styles.footer}>
+          <TextButtun isBorrderTop title="ヒント" onPress={onPressThemeGuide} />
           <TextButtun
             isBorrderTop
             isBorrderBottom
