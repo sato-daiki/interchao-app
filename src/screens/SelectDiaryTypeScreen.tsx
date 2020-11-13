@@ -63,7 +63,7 @@ const SelectDiaryTypeScreen: React.FC<ScreenType> = ({ navigation }) => {
   }, [navigation]);
 
   const onPressTheme = useCallback(() => {
-    navigation.navigate('SelectSubcategory');
+    navigation.navigate('SelectThemeSubcategory');
   }, [navigation]);
 
   return (

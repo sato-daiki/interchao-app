@@ -35,7 +35,7 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
-  subcatergoryInfo,
+  themeSubcategoryInfo,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
@@ -72,7 +72,7 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
       >
         <View style={styles.inner}>
           <TextInputTitle
-            editable={!subcatergoryInfo}
+            editable={!themeSubcategoryInfo}
             value={title}
             onFocus={onFocusText}
             onChangeText={onChangeTextTitle}
@@ -90,7 +90,7 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
       <SafeAreaView>
         {isKeyboard ? null : (
           <Footer
-            subcatergoryInfo={subcatergoryInfo}
+            themeSubcategoryInfo={themeSubcategoryInfo}
             onPressThemeGuide={onPressThemeGuide}
             onPressDraft={onPressDraft}
           />

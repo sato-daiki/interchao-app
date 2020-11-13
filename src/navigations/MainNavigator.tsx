@@ -5,8 +5,8 @@ import {
 } from '@react-navigation/stack';
 import {
   CallerThemeGuide,
-  SubcatergoryInfo,
-} from '@/screens/SelectSubcategoryScreen/interface';
+  ThemeSubcategoryInfo,
+} from '@/screens/SelectThemeSubcategoryScreen/interface';
 import HomeBottomTabNavigator, {
   HomeBottomParamList,
 } from './HomeBottomTabNavigator';
@@ -65,11 +65,14 @@ export type MainStackParamList = {
   };
   ModalThemeGuide: {
     screen: keyof ModalThemeGuideStackParamList;
-    params: { subcatergoryInfo: SubcatergoryInfo; caller: CallerThemeGuide };
+    params: {
+      themeSubcategoryInfo: ThemeSubcategoryInfo;
+      caller: CallerThemeGuide;
+    };
   };
   ModalPostDiary: {
     screen: keyof ModalPostDiaryStackParamList;
-    params?: { subcatergoryInfo?: SubcatergoryInfo };
+    params?: { themeSubcategoryInfo?: ThemeSubcategoryInfo };
   };
   ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
   ModalPostDraftDiary: {
@@ -77,7 +80,7 @@ export type MainStackParamList = {
     params: {
       item: Diary;
       objectID: string;
-      subcatergoryInfo?: SubcatergoryInfo;
+      themeSubcategoryInfo?: ThemeSubcategoryInfo;
     };
   };
   ModalPostDraftDiaryWeb: {

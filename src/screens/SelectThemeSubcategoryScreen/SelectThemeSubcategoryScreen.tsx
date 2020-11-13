@@ -2,32 +2,32 @@ import React, { useCallback } from 'react';
 import { View, FlatList, StyleSheet, ListRenderItem } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
+
+import { SelectThemeSubcategoryListItem } from '@/components/molecules';
+
 import {
   ModalSelectPostTypeStackNavigationProp,
   ModalSelectPostTypeStackParamList,
 } from '@/navigations/ModalNavigator';
-import { ImageListItem } from '@/components/molecules';
-import { SubcatergoryInfo } from './interface';
+import { User } from '@/types';
+import { ThemeSubcategoryInfo } from './interface';
 import { first } from './config/first';
 
 export interface Props {
-  // profile: Profile;
-}
-
-interface DispatchProps {
-  // setProfile: (profile: Profile) => void;
+  user: User;
 }
 
 type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalSelectPostTypeStackParamList, 'SelectSubcategory'>,
+  StackNavigationProp<
+    ModalSelectPostTypeStackParamList,
+    'SelectThemeSubcategory'
+  >,
   ModalSelectPostTypeStackNavigationProp
 >;
 
 type ScreenType = {
   navigation: NavigationProp;
-} & Props &
-  DispatchProps;
-
+} & Props;
 const styles = StyleSheet.create({
   contaner: {
     flex: 1,
@@ -35,28 +35,38 @@ const styles = StyleSheet.create({
   },
 });
 
-const keyExtractor = (item: SubcatergoryInfo, index: number): string =>
+const keyExtractor = (item: ThemeSubcategoryInfo, index: number): string =>
   String(index);
 
-const SelectSubcategoryScreen: React.FC<ScreenType> = ({ navigation }) => {
+const SelectThemeSubcategoryScreen: React.FC<ScreenType> = ({
+  navigation,
+  user,
+}) => {
   const onPressItem = useCallback(
-    (item: SubcatergoryInfo) => {
+    (item: ThemeSubcategoryInfo) => {
       navigation.navigate('ModalThemeGuide', {
         screen: 'ThemeGuide',
         params: {
-          subcatergoryInfo: item,
-          caller: 'SelectSubcategory',
+          themeSubcategoryInfo: item,
+          caller: 'SelectThemeSubcategory',
         },
       });
     },
     [navigation]
   );
 
-  const renderItem: ListRenderItem<SubcatergoryInfo> = useCallback(
-    ({ item, index }): JSX.Element => {
+  const renderItem: ListRenderItem<ThemeSubcategoryInfo> = useCallback(
+    ({ item }) => {
+      // themeSubcategoryとthemeCategoryで一意になるからfindでOK
+      const newThemeDiary = user.themeDiaries?.find(
+        themeDiary =>
+          themeDiary.themeCategory === item.themeCategory &&
+          themeDiary.themeSubcategory === item.themeSubcategory
+      );
       return (
-        <ImageListItem
-          key={item.key}
+        <SelectThemeSubcategoryListItem
+          key={item.themeSubcategory}
+          themeDiary={newThemeDiary}
           item={item}
           source={item.source}
           title={item.title}
@@ -65,7 +75,7 @@ const SelectSubcategoryScreen: React.FC<ScreenType> = ({ navigation }) => {
         />
       );
     },
-    [onPressItem]
+    [onPressItem, user.themeDiaries]
   );
 
   return (
@@ -79,4 +89,4 @@ const SelectSubcategoryScreen: React.FC<ScreenType> = ({ navigation }) => {
   );
 };
 
-export default SelectSubcategoryScreen;
+export default SelectThemeSubcategoryScreen;

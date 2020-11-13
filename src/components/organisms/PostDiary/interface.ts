@@ -1,11 +1,11 @@
-import { SubcatergoryInfo } from '@/screens/SelectSubcategoryScreen/interface';
+import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import { Language } from '@/types';
 import { Animated } from 'react-native';
 
 export interface PostDiaryKeyboardProps {
   title: string;
   text: string;
-  subcatergoryInfo?: SubcatergoryInfo;
+  themeSubcategoryInfo?: ThemeSubcategoryInfo;
   learnLanguage: Language;
   isForce?: boolean;
   onChangeTextTitle: (txt: string) => void;

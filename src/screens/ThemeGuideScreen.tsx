@@ -47,23 +47,23 @@ const styles = StyleSheet.create({
 
 const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
   const window = useWindowDimensions();
-  const { subcatergoryInfo, caller } = route.params;
-  const entries = getEntries(subcatergoryInfo.key) || [];
+  const { themeSubcategoryInfo, caller } = route.params;
+  const entries = getEntries(themeSubcategoryInfo.themeSubcategory) || [];
   const [activeSlide, setActiveSlide] = useState(
     caller === 'PostDiary' ? entries.length - 1 : 0
   );
 
   const onPressEnd = useCallback(() => {
-    // SelectSubcategory選択からした場合は遷移 / PostDiaryからきた場合はback
-    if (caller === 'SelectSubcategory') {
+    // SelectThemeSubcategory選択からした場合は遷移 / PostDiaryからきた場合はback
+    if (caller === 'SelectThemeSubcategory') {
       navigation.navigate('ModalPostDiary', {
         screen: 'PostDiary',
-        params: { subcatergoryInfo },
+        params: { themeSubcategoryInfo },
       });
     } else {
       navigation.goBack();
     }
-  }, [caller, navigation, subcatergoryInfo]);
+  }, [caller, navigation, themeSubcategoryInfo]);
 
   const onSnapToItem = useCallback((index: number) => {
     setActiveSlide(index);
@@ -75,7 +75,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
         case 'introduction':
           return (
             <ThemeGuideIntroduction
-              source={subcatergoryInfo.source}
+              source={themeSubcategoryInfo.source}
               params={item.params}
             />
           );
@@ -89,7 +89,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           return null;
       }
     },
-    [onPressEnd, subcatergoryInfo.source]
+    [onPressEnd, themeSubcategoryInfo.source]
   );
 
   return (

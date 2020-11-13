@@ -15,13 +15,15 @@ import {
   NavigationContainerRef,
 } from '@react-navigation/native';
 import * as Analytics from 'expo-firebase-analytics';
-import { initAnalytics } from './utils/Analytics';
-import { configureStore } from './stores/Store';
-import { firebaseConfig } from './constants/firebase';
-import Loading from './screens/LoadingScreen';
-import Sentry from './constants/Sentry';
-import RootNavigatorContainer from './containers/RootNavigatorContainer';
-import { getConfig } from './navigations/root';
+
+import Loading from '@/screens/LoadingScreen';
+
+import { initAnalytics } from '@/utils/Analytics';
+import { configureStore } from '@/stores/Store';
+import { firebaseConfig } from '@/constants/firebase';
+import Sentry from '@/constants/Sentry';
+import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
+import { getConfig } from '@/navigations/root';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);

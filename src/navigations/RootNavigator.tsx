@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import firebase from 'firebase';
 import { createStackNavigator } from '@react-navigation/stack';
-import { getUser } from '../utils/user';
-import { getProfile } from '../utils/profile';
-import { setAnalyticsUser } from '../utils/Analytics';
-import { Profile, User, LocalStatus } from '../types';
+import { getUser } from '@/utils/user';
+import { getProfile } from '@/utils/profile';
+import { setAnalyticsUser } from '@/utils/Analytics';
+import { Profile, User, LocalStatus } from '@/types';
+
+import LoadingScreen from '@/screens/LoadingScreen';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
-import PublicNavigator from './PublicNavigator';
-import LoadingScreen from '../screens/LoadingScreen';
 
 export type RootStackParamList = {
   Loading: undefined;
@@ -35,8 +35,8 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
 }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const initNavigation = (authUser: firebase.User | null): void => {
-    const f = async (): Promise<void> => {
+  const initNavigation = useCallback(
+    async (authUser: firebase.User | null): Promise<void> => {
       if (authUser) {
         const newUser = await getUser(authUser.uid);
         const newProfile = await getProfile(authUser.uid);
@@ -52,9 +52,9 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
         restoreUid(null);
       }
       if (isLoading) setIsLoading(false);
-    };
-    f();
-  };
+    },
+    [isLoading, restoreUid, setProfile, setUser]
+  );
 
   useEffect(() => {
     const authSubscriber = firebase.auth().onAuthStateChanged(initNavigation);
@@ -64,7 +64,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
 
   const Stack = createStackNavigator<RootStackParamList>();
 
-  const renderScreen = (): JSX.Element => {
+  const renderScreen = useCallback(() => {
     if (localStatus.isLoading) {
       return <Stack.Screen name="Loading" component={LoadingScreen} />;
     }
@@ -72,7 +72,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       return <Stack.Screen name="Main" component={MainNavigator} />;
     }
     return <Stack.Screen name="Auth" component={AuthNavigator} />;
-  };
+  }, [localStatus.isLoading, localStatus.uid]);
 
   return (
     <Stack.Navigator
@@ -84,7 +84,6 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       }}
     >
       {renderScreen()}
-      {/* <Stack.Screen name="Public" component={PublicNavigator} /> */}
     </Stack.Navigator>
   );
 };

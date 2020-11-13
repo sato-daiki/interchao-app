@@ -25,23 +25,28 @@ import ModalLackPoint from '@/components/organisms/ModalLackPoint';
 import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
 import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
-import { SubcatergoryInfo } from '@/screens/SelectSubcategoryScreen/interface';
+import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
+import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
+
+// @ts-ignore
 // eslint-disable-next-line import/extensions
 import PostDiaryKeyboard from './PostDiaryKeyboard';
 
 interface Props {
+  navigation: PostDiaryNavigationProp | PostDraftDiaryNavigationProp;
   isLoading: boolean;
   isModalLack: boolean;
   isModalAlert: boolean;
-  isModalCancel: boolean;
   isModalError: boolean;
+  isModalCancel: boolean;
   isPublish: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
   errorMessage: string;
   title: string;
   text: string;
-  subcatergoryInfo?: SubcatergoryInfo;
+  themeSubcategoryInfo?: ThemeSubcategoryInfo;
   publishMessage: string | null;
   points: number;
   learnLanguage: Language;
@@ -57,7 +62,6 @@ interface Props {
   onPressNotSave: () => void;
   onPressTutorial?: () => void;
   onPressCloseError: () => void;
-  onPressThemeGuide: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
 });
 
 const PostDiary = ({
+  navigation,
   isLoading,
   isModalLack,
   isModalAlert,
@@ -113,7 +118,7 @@ const PostDiary = ({
   errorMessage,
   title,
   text,
-  subcatergoryInfo,
+  themeSubcategoryInfo,
   publishMessage,
   points,
   learnLanguage,
@@ -129,7 +134,6 @@ const PostDiary = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
-  onPressThemeGuide,
 }: Props): JSX.Element => {
   const [isForce, setIsForce] = useState(false);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
@@ -151,6 +155,14 @@ const PostDiary = ({
   const maxPostText = getMaxPostText(learnLanguage);
 
   const onBlurText = useCallback((): void => setIsForce(false), []);
+
+  const onPressThemeGuide = useCallback(() => {
+    if (!themeSubcategoryInfo) return;
+    navigation.push('ModalThemeGuide', {
+      screen: 'ThemeGuide',
+      params: { themeSubcategoryInfo, caller: 'PostDiary' },
+    });
+  }, [navigation, themeSubcategoryInfo]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -222,7 +234,7 @@ const PostDiary = ({
         title={title}
         text={text}
         learnLanguage={learnLanguage}
-        subcatergoryInfo={subcatergoryInfo}
+        themeSubcategoryInfo={themeSubcategoryInfo}
         isForce={isForce}
         fadeAnim={fadeAnim}
         onPressThemeGuide={onPressThemeGuide}
