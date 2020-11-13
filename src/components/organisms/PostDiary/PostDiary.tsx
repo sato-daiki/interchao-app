@@ -19,6 +19,7 @@ import { Points } from '@/images';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
 import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
 import I18n from '@/utils/I18n';
+
 import { LoadingModal } from '@/components/atoms';
 import { ModalPublish } from '@/components/organisms/ModalPublish';
 import ModalLackPoint from '@/components/organisms/ModalLackPoint';
@@ -27,7 +28,6 @@ import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
 import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
 import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
-
 // @ts-ignore
 // eslint-disable-next-line import/extensions
 import PostDiaryKeyboard from './PostDiaryKeyboard';
