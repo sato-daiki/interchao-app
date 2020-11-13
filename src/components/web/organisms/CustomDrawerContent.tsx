@@ -44,8 +44,8 @@ const CustomDrawerContent = ({
   }, [navigation]);
 
   const onPressPost = useCallback(() => {
-    navigation.navigate('ModalPostDiaryWeb', {
-      screen: 'PostDiaryWeb',
+    navigation.navigate('ModalSelectPostType', {
+      screen: 'SelectDiaryType',
     });
   }, [navigation]);
 

@@ -15,6 +15,7 @@ export type Entry =
     }
   | {
       key: 'end';
+      params: null;
     };
 
 export interface IntroductionParams {

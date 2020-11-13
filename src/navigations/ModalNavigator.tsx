@@ -25,6 +25,7 @@ import EditCountryScreen from '@/screens/EditCountryScreen';
 import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
 import SelectThemeSubcategoryScreenContainer from '@/containers/SelectThemeSubcategoryScreenContainer';
 import { CallerThemeGuide } from '@/screens/SelectThemeSubcategoryScreen/interface';
+// @ts-ignore
 import ThemeGuideScreen from '@/screens/ThemeGuideScreen';
 import { MainStackParamList } from './MainNavigator';
 
@@ -50,7 +51,10 @@ export type ModalPostDiaryStackParamList = {
   };
 };
 export type ModalPostDiaryWebStackParamList = {
-  PostDiaryWeb: undefined;
+  PostDiaryWeb: {
+    themeCategory?: ThemeCategory;
+    themeSubcategory?: ThemeSubcategory;
+  };
 };
 export type ModalPostDraftDiaryStackParamList = {
   PostDraftDiary: {
@@ -61,7 +65,12 @@ export type ModalPostDraftDiaryStackParamList = {
   };
 };
 export type ModalPostDraftDiaryWebStackParamList = {
-  PostDraftDiaryWeb: { item: Diary; objectID: string };
+  PostDraftDiaryWeb: {
+    item: Diary;
+    objectID: string;
+    themeCategory?: ThemeCategory;
+    themeSubcategory?: ThemeSubcategory;
+  };
 };
 export type ModalEditMyProfileStackParamList = {
   EditMyProfile: undefined;
