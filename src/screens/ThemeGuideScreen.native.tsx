@@ -1,13 +1,9 @@
-import React, { useCallback, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  ListRenderItem,
-  useWindowDimensions,
-} from 'react-native';
-
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, StyleSheet, ListRenderItem, Dimensions } from 'react-native';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+
 import {
   ThemeGuideIntroduction,
   ThemeGuideTip,
@@ -20,7 +16,6 @@ import {
   ModalThemeGuideStackParamList,
 } from '@/navigations/ModalNavigator';
 
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import ThemeGuideWord from '@/components/organisms/ThemeGuide/ThemeGuideWord';
 import { mainColor, primaryColor } from '@/styles/Common';
 
@@ -45,13 +40,21 @@ const styles = StyleSheet.create({
   },
 });
 
+const { width } = Dimensions.get('window');
+
 const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
-  const window = useWindowDimensions();
   const { themeCategory, themeSubcategory, caller } = route.params;
   const entries = getEntries(themeSubcategory) || [];
   const [activeSlide, setActiveSlide] = useState(
     caller === 'PostDiary' ? entries.length - 1 : 0
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: route.params.themeSubcategory,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onPressEnd = useCallback(() => {
     // SelectThemeSubcategory選択からした場合は遷移 / PostDiaryからきた場合はback
@@ -92,8 +95,8 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
       <Carousel
         data={entries}
         renderItem={renderItem}
-        sliderWidth={window.width}
-        itemWidth={window.width}
+        sliderWidth={width}
+        itemWidth={width}
         // PostDiaryから呼ばれた場合は最後から
         firstItem={caller === 'PostDiary' ? entries.length - 1 : 0}
         onSnapToItem={onSnapToItem}
