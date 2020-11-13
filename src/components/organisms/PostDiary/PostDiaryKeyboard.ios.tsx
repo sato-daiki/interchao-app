@@ -29,7 +29,7 @@ const PostDiaryKeyboardIOS: React.FC<PostDiaryKeyboardProps> = ({
   text,
   learnLanguage,
   isForce,
-  subcatergoryInfo,
+  themeSubcategoryInfo,
   fadeAnim,
   onPressThemeGuide,
   onChangeTextTitle,
@@ -41,7 +41,7 @@ const PostDiaryKeyboardIOS: React.FC<PostDiaryKeyboardProps> = ({
   return (
     <>
       <TextInputTitle
-        editable={!subcatergoryInfo}
+        editable={!themeSubcategoryInfo}
         value={title}
         onFocus={onFocusText}
         onChangeText={onChangeTextTitle}
@@ -72,7 +72,7 @@ const PostDiaryKeyboardIOS: React.FC<PostDiaryKeyboardProps> = ({
       {/* 画面下部がiOSX以上の時隠れてしまうのを対応 */}
       <SafeAreaView>
         <Footer
-          subcatergoryInfo={subcatergoryInfo}
+          themeSubcategoryInfo={themeSubcategoryInfo}
           onPressThemeGuide={onPressThemeGuide}
           onPressDraft={onPressDraft}
         />

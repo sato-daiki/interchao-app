@@ -23,11 +23,11 @@ import AboutScreen from '@/screens/About';
 import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
 import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
-import SelectSubcategoryScreenContainer from '@/containers/SelectSubcategoryScreenContainer';
+import SelectThemeSubcategoryScreenContainer from '@/containers/SelectThemeSubcategoryScreenContainer';
 import {
   CallerThemeGuide,
-  SubcatergoryInfo,
-} from '@/screens/SelectSubcategoryScreen/interface';
+  ThemeSubcategoryInfo,
+} from '@/screens/SelectThemeSubcategoryScreen/interface';
 import ThemeGuideScreen from '@/screens/ThemeGuideScreen';
 import { MainStackParamList } from './MainNavigator';
 
@@ -35,15 +35,18 @@ export type ModalEditMyDiaryListStackParamList = {
   EditMyDiaryList: undefined;
 };
 export type ModalThemeGuideStackParamList = {
-  ThemeGuide: { subcatergoryInfo: SubcatergoryInfo; caller: CallerThemeGuide };
+  ThemeGuide: {
+    themeSubcategoryInfo: ThemeSubcategoryInfo;
+    caller: CallerThemeGuide;
+  };
 };
 export type ModalSelectPostTypeStackParamList = {
   SelectDiaryType: undefined;
   // SelectCategory: undefined; // 大カテゴリー
-  SelectSubcategory: undefined; // 小カテゴリー
+  SelectThemeSubcategory: undefined; // 小カテゴリー
 };
 export type ModalPostDiaryStackParamList = {
-  PostDiary: { subcatergoryInfo?: SubcatergoryInfo };
+  PostDiary: { themeSubcategoryInfo?: ThemeSubcategoryInfo };
 };
 export type ModalPostDiaryWebStackParamList = {
   PostDiaryWeb: undefined;
@@ -52,7 +55,7 @@ export type ModalPostDraftDiaryStackParamList = {
   PostDraftDiary: {
     item: Diary;
     objectID: string;
-    subcatergoryInfo?: SubcatergoryInfo;
+    themeSubcategoryInfo?: ThemeSubcategoryInfo;
   };
 };
 export type ModalPostDraftDiaryWebStackParamList = {
@@ -191,12 +194,12 @@ export const ModalSelectPostTypeNavigator = (): JSX.Element => {
         }}
       />
       <ModalSelectPostTypeStack.Screen
-        name="SelectSubcategory"
-        component={SelectSubcategoryScreenContainer}
+        name="SelectThemeSubcategory"
+        component={SelectThemeSubcategoryScreenContainer}
         options={{
           ...DefaultNavigationOptions,
           ...DefaultModalLayoutOptions,
-          title: I18n.t('selectSubcategory.headerTitle'),
+          title: I18n.t('selectThemeSubcategory.headerTitle'),
         }}
       />
     </ModalSelectPostTypeStack.Navigator>

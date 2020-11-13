@@ -6,6 +6,9 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
+
+import { DiaryStatus, Hoverable } from '@/components/atoms';
+
 import {
   borderLightColor,
   fontSizeM,
@@ -14,15 +17,17 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
-import { DiaryStatus, Hoverable } from '@/components/atoms';
-import { MY_STATUS } from '@/utils/diary';
+import { getDay, MY_STATUS } from '@/utils/diary';
+import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { ThemeDiary } from '@/types';
 
 interface Props {
-  item: any;
+  themeDiary?: ThemeDiary;
+  item: ThemeSubcategoryInfo;
   title: string;
   text: string;
   source: ImageSourcePropType;
-  onPress: (item: any) => void;
+  onPress: (item: ThemeSubcategoryInfo) => void;
 }
 
 const styles = StyleSheet.create({
@@ -71,7 +76,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const ImageListItem: React.FC<Props> = ({
+const SelectThemeSubcategoryListItem: React.FC<Props> = ({
+  themeDiary,
   item,
   source,
   title,
@@ -92,13 +98,17 @@ const ImageListItem: React.FC<Props> = ({
       <View style={styles.textContainer}>
         <View style={styles.textHeader}>
           <Text style={styles.title}>{title}</Text>
-          <View style={styles.textRight}>
-            <Text style={styles.postDayText}>111</Text>
-            <DiaryStatus
-              color={MY_STATUS.posted.color}
-              text={MY_STATUS.posted.text}
-            />
-          </View>
+          {themeDiary ? (
+            <View style={styles.textRight}>
+              <Text style={styles.postDayText}>
+                {getDay(themeDiary.updatedAt)}
+              </Text>
+              <DiaryStatus
+                color={MY_STATUS.posted.color}
+                text={MY_STATUS.posted.text}
+              />
+            </View>
+          ) : null}
         </View>
         <Text style={styles.text}>{text}</Text>
       </View>
@@ -106,4 +116,4 @@ const ImageListItem: React.FC<Props> = ({
   );
 };
 
-export default React.memo(ImageListItem);
+export default React.memo(SelectThemeSubcategoryListItem);
