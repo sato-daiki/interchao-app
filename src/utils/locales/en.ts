@@ -21,6 +21,7 @@ const common = {
   copy: 'Copy',
   slow: 'Slow',
   back: 'Back',
+  begin: 'Begin',
 };
 
 // web
@@ -584,6 +585,7 @@ const postDiaryComponent = {
   points: 'Your Points',
   textPlaceholder: 'Entry',
   draft: 'Save as Draft',
+  hint: 'ヒント',
 };
 
 const sns = {
@@ -632,6 +634,7 @@ const myDiaryStatus = {
   done: 'Corrected',
   correcting: 'Being Corrected',
   unread: 'Unread',
+  posted: 'Posted',
 };
 
 const userDiaryStatus = {
@@ -645,6 +648,77 @@ const language = {
   en: 'English',
   zh: 'Simplified Chinese',
   ko: 'Korean',
+};
+
+const selectDiaryType = {
+  headerTitle: 'Type Selection',
+  recommend: 'おすすめ',
+  titleFree: '自由英作文',
+  titleTheme: 'テーマ作文',
+  textFree: '日記や今日話せなかったこと、好き映画。自由テーマで書きましょう。',
+  textTheme:
+    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
+};
+
+const selfIntroduction = {
+  title: '自己紹介',
+  text: '自己紹介について書きましょう',
+};
+
+const hobby = {
+  title: '趣味',
+  text: '趣味について書きましょう',
+};
+
+const job = {
+  title: '仕事の紹介',
+  text: '仕事の紹介について書きましょう',
+};
+
+const study = {
+  title: '英語を勉強する理由',
+  text: '仕事の紹介について書きましょう',
+};
+
+const dream = {
+  title: '将来の夢',
+  text: 'test',
+};
+
+const trip = {
+  title: '旅行',
+  text: 'test',
+};
+
+const reborn = {
+  title: 'もし生まれ変わるなら',
+  text: 'もし生まれ変わるならについて書きましょう',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
+};
+
+const selectThemeSubcategory = {
+  headerTitle: 'Theme Selection',
+  first,
+};
+
+const themeGuide = {
+  swipeStart: 'スワイプして\nスライドを移動しよう',
+  swipeEnd: 'スライドを復習したいときは\nスワイプして戻ろう',
+  introduction: 'はじめに',
+  guideTipTitle: 'よく使う表現',
+  expression: '表現',
+  example: '例文',
+  word: '単語',
+  guideEndText: 'ここでスライドは終わりです。\n実際に文章を書いてみましょう！',
 };
 
 const en = {
@@ -677,6 +751,9 @@ const en = {
   review,
   reviewList,
   selectLanguage,
+  selectDiaryType,
+  selectThemeSubcategory,
+  themeGuide,
   setting,
   signIn,
   signUp,
