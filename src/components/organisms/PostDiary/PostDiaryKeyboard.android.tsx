@@ -8,11 +8,16 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { TextInputText, Hoverable, TextInputTitle } from '@/components/atoms';
+import {
+  TextInputText,
+  Hoverable,
+  TextInputTitle,
+  TextButtun,
+} from '@/components/atoms';
 
-import { mainColor } from '@/styles/Common';
+import I18n from '@/utils/I18n';
 import { getMaxPostText } from '@/utils/diary';
-import Footer from './Footer';
+import { mainColor, offWhite } from '@/styles/Common';
 import { PostDiaryKeyboardProps } from './interface';
 
 const styles = StyleSheet.create({
@@ -31,9 +36,14 @@ const styles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
   },
+  footer: {
+    justifyContent: 'flex-end',
+    width: '100%',
+    backgroundColor: offWhite,
+  },
 });
 
-const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
+const PostDiaryKeyboard: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
@@ -92,12 +102,21 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
       </KeyboardAvoidingView>
       <SafeAreaView>
         {isKeyboard ? null : (
-          <Footer
-            themeCategory={themeCategory}
-            themeSubcategory={themeSubcategory}
-            onPressThemeGuide={onPressThemeGuide}
-            onPressDraft={onPressDraft}
-          />
+          <View style={styles.footer}>
+            {!themeCategory || !themeSubcategory ? null : (
+              <TextButtun
+                isBorrderTop
+                title={I18n.t('postDiaryComponent.hint')}
+                onPress={onPressThemeGuide}
+              />
+            )}
+            <TextButtun
+              isBorrderTop
+              isBorrderBottom
+              title={I18n.t('postDiaryComponent.draft')}
+              onPress={onPressDraft}
+            />
+          </View>
         )}
       </SafeAreaView>
       {isKeyboard ? (
@@ -113,4 +132,4 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
   );
 };
 
-export default PostDiaryKeybordAndroid;
+export default PostDiaryKeyboard;

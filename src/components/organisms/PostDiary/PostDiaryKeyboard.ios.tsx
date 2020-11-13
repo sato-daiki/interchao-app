@@ -1,11 +1,24 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, Keyboard, Animated } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Keyboard,
+  Animated,
+  View,
+} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
+import {
+  TextInputText,
+  Hoverable,
+  TextInputTitle,
+  TextButtun,
+} from '@/components/atoms';
+
 import { getMaxPostText } from '@/utils/diary';
 import { offWhite, mainColor } from '@/styles/Common';
-import { TextInputText, Hoverable, TextInputTitle } from '@/components/atoms';
-import Footer from './Footer';
+import I18n from '@/utils/I18n';
 import { PostDiaryKeyboardProps } from './interface';
 
 const styles = StyleSheet.create({
@@ -24,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryKeyboardIOS: React.FC<PostDiaryKeyboardProps> = ({
+const PostDiaryKeyboard: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
@@ -72,15 +85,24 @@ const PostDiaryKeyboardIOS: React.FC<PostDiaryKeyboardProps> = ({
       <KeyboardSpacer />
       {/* 画面下部がiOSX以上の時隠れてしまうのを対応 */}
       <SafeAreaView>
-        <Footer
-          themeCategory={themeCategory}
-          themeSubcategory={themeSubcategory}
-          onPressThemeGuide={onPressThemeGuide}
-          onPressDraft={onPressDraft}
-        />
+        <View style={styles.footer}>
+          {!themeCategory || !themeSubcategory ? null : (
+            <TextButtun
+              isBorrderTop
+              title={I18n.t('postDiaryComponent.hint')}
+              onPress={onPressThemeGuide}
+            />
+          )}
+          <TextButtun
+            isBorrderTop
+            isBorrderBottom
+            title={I18n.t('postDiaryComponent.draft')}
+            onPress={onPressDraft}
+          />
+        </View>
       </SafeAreaView>
     </>
   );
 };
 
-export default PostDiaryKeyboardIOS;
+export default PostDiaryKeyboard;
