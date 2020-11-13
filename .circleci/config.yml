@@ -26,7 +26,7 @@ commands:
       - run: yarn install
       - save_module_cache: { module_path: ./ }
       - run: yarn test # jestを実施する
-      - run: yarn type-check # type-checkを実施する
+      - run: yarn typecheck # type-checkを実施する
       - run: yarn lint # lintを実施する
 jobs:
   test:
