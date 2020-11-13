@@ -9,10 +9,12 @@ import {
   DisplayProfile,
   Diary,
   CountryCode,
+  ThemeDiary,
 } from '@/types';
 import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
 
 import { MarkedDates } from '@/components/organisms/MyDiaryList';
+import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -244,6 +246,48 @@ export const getUsePoints = (
 ): number => {
   const basePoints = getBasePoints(learnLanguage);
   return Math.ceil(length / basePoints) * 10;
+};
+
+export const getThemeDiaries = (
+  themeDiaries: ThemeDiary[] | undefined | null,
+  objectID: string,
+  themeSubcategoryInfo: ThemeSubcategoryInfo
+): ThemeDiary[] => {
+  const findThemeDiary = themeDiaries?.find(
+    themeDiary =>
+      themeDiary.themeCategory === themeSubcategoryInfo.themeCategory &&
+      themeDiary.themeSubcategory === themeSubcategoryInfo.themeSubcategory
+  );
+
+  if (findThemeDiary && themeDiaries) {
+    // 同一テーマを投稿した場合
+    const newThemeDiaries = themeDiaries.map(themeDiary => {
+      if (
+        themeDiary.themeCategory === themeSubcategoryInfo.themeCategory &&
+        themeDiary.themeSubcategory === themeSubcategoryInfo.themeSubcategory
+      ) {
+        return {
+          ...findThemeDiary,
+          objectID,
+          updatedAt: firebase.firestore.Timestamp.now(),
+        };
+      }
+      return themeDiary;
+    });
+    return newThemeDiaries;
+  }
+
+  // 初回の場合
+  return [
+    ...(themeDiaries || []),
+    {
+      themeCategory: themeSubcategoryInfo.themeCategory,
+      themeSubcategory: themeSubcategoryInfo.themeSubcategory,
+      objectID,
+      updatedAt: firebase.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
+    },
+  ];
 };
 
 export const getRunningDays = (

@@ -172,7 +172,7 @@ const PostDiaryWeb = ({
         <View style={styles.mainContainer}>
           <View style={styles.leftContainer}>
             <TextInputTitle
-              // editable={!subcatergoryInfo}
+              // editable={!themeSubcategoryInfo}
               editable
               style={styles.titleInput}
               value={title}

@@ -11,6 +11,7 @@ import {
   getRunningDays,
   getRunningWeeks,
   getPublishMessage,
+  getThemeDiaries,
 } from '@/utils/diary';
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
@@ -18,9 +19,11 @@ import {
   PostDraftDiaryNavigationProp,
   PostDraftDiaryRouteProp,
 } from './interfaces';
+import { ThemeSubcategoryInfo } from '../SelectThemeSubcategoryScreen/interface';
 
 interface UsePostDiary {
   user: User;
+  themeSubcategoryInfo: ThemeSubcategoryInfo;
   profile: Profile;
   setUser: (user: User) => void;
   editDiary: (objectID: string, diary: Diary) => void;
@@ -30,6 +33,7 @@ interface UsePostDiary {
 
 export const usePostDraftDiary = ({
   navigation,
+  themeSubcategoryInfo,
   route,
   user,
   profile,
@@ -93,6 +97,9 @@ export const usePostDraftDiary = ({
     (diaryStatus: DiaryStatus) => {
       const displayProfile = getDisplayProfile(profile);
       return {
+        firstDiary:
+          diaryStatus === 'publish' &&
+          (user.diaryPosted === undefined || user.diaryPosted === false),
         title,
         text,
         profile: displayProfile,
@@ -100,7 +107,7 @@ export const usePostDraftDiary = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, text, title]
+    [profile, text, title, user.diaryPosted]
   );
 
   const onPressDraft = useCallback(async (): Promise<void> => {
@@ -198,6 +205,15 @@ export const usePostDraftDiary = ({
       runningWeeks
     );
 
+    let { themeDiaries } = user;
+    if (themeSubcategoryInfo) {
+      themeDiaries = getThemeDiaries(
+        user.themeDiaries,
+        item.objectID,
+        themeSubcategoryInfo
+      );
+    }
+
     await firebase
       .firestore()
       .runTransaction(async transaction => {
@@ -207,14 +223,16 @@ export const usePostDraftDiary = ({
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
         // 初回の場合はdiaryPostedを更新する
         const updateUser = {
-          points: newPoints,
+          themeDiaries,
           runningDays,
           runningWeeks,
+          points: newPoints,
           lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         } as Pick<
           User,
           | 'points'
+          | 'themeDiaries'
           | 'runningDays'
           | 'runningWeeks'
           | 'lastDiaryPostedAt'
@@ -247,6 +265,7 @@ export const usePostDraftDiary = ({
 
     setUser({
       ...user,
+      themeDiaries,
       runningDays,
       runningWeeks,
       lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
@@ -265,6 +284,7 @@ export const usePostDraftDiary = ({
     route.params,
     setUser,
     text,
+    themeSubcategoryInfo,
     title,
     user,
   ]);
