@@ -15,7 +15,7 @@ import {
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
 import { SubcatergoryInfo } from '../SelectSubcategoryScreen/interface';
-import { NavigationProp } from './interfaces';
+import { PostDiaryNavigationProp } from './interfaces';
 
 interface UsePostDiary {
   user: User;
@@ -23,7 +23,7 @@ interface UsePostDiary {
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
-  navigation: NavigationProp;
+  navigation: PostDiaryNavigationProp;
 }
 
 export const usePostDiary = ({
@@ -50,6 +50,7 @@ export const usePostDiary = ({
   );
   const [text, setText] = useState('');
   const [publishMessage, setPublishMessage] = useState<string | null>(null);
+
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
       const displayProfile = getDisplayProfile(profile);
@@ -79,6 +80,7 @@ export const usePostDiary = ({
     },
     [profile, subcatergoryInfo, text, title, user.diaryPosted]
   );
+
   const onPressDraft = useCallback(async (): Promise<void> => {
     Keyboard.dismiss();
     if (isLoadingDraft || isLoadingPublish || isModalLack) return;
@@ -113,6 +115,7 @@ export const usePostDiary = ({
     isModalLack,
     navigation,
   ]);
+
   const onPressClose = useCallback((): void => {
     Keyboard.dismiss();
     if (title.length > 0 || text.length > 0) {
@@ -124,6 +127,7 @@ export const usePostDiary = ({
       });
     }
   }, [navigation, text.length, title.length]);
+
   const onPressPublic = useCallback((): void => {
     Keyboard.dismiss();
     const checked = checkBeforePost(
@@ -139,6 +143,7 @@ export const usePostDiary = ({
     }
     setIsModalAlert(true);
   }, [profile.learnLanguage, text, title, user.points]);
+
   useEffect(() => {
     // keybordでの戻るを制御する Androidのみ
     const backAction = (): boolean => {
@@ -167,6 +172,7 @@ export const usePostDiary = ({
     return (): void =>
       BackHandler.removeEventListener('hardwareBackPress', backAction);
   }, [navigation]);
+
   const onPressSubmit = useCallback(async (): Promise<void> => {
     if (isLoadingDraft || isLoadingPublish) return;
     setIsLoadingPublish(true);
@@ -255,6 +261,7 @@ export const usePostDiary = ({
     text.length,
     user,
   ]);
+
   const onClosePostDiary = useCallback(() => {
     navigation.navigate('Home', {
       screen: 'MyDiaryTab',
@@ -263,6 +270,7 @@ export const usePostDiary = ({
     setIsModalAlert(false);
     setIsPublish(false);
   }, [navigation]);
+
   const onPressNotSave = useCallback(() => {
     setIsModalCancel(false);
     navigation.navigate('Home', {
@@ -270,6 +278,7 @@ export const usePostDiary = ({
       params: { screen: 'MyDiaryList' },
     });
   }, [navigation]);
+
   const onPressTutorial = useCallback(async (): Promise<void> => {
     setIsTutorialLoading(true);
     await firebase
@@ -285,10 +294,12 @@ export const usePostDiary = ({
     });
     setIsTutorialLoading(false);
   }, [setUser, user]);
+
   const onPressCloseError = useCallback(() => {
     setErrorMessage('');
     setIsModalError(false);
   }, []);
+
   const onChangeTextTitle = useCallback(
     txt => {
       if (!isFirstEdit) setIsFirstEdit(true);
@@ -296,6 +307,7 @@ export const usePostDiary = ({
     },
     [isFirstEdit]
   );
+
   const onChangeTextText = useCallback(
     txt => {
       if (!isFirstEdit) setIsFirstEdit(true);
@@ -303,28 +315,26 @@ export const usePostDiary = ({
     },
     [isFirstEdit]
   );
+
   const onPressSubmitModalLack = useCallback(() => {
     setIsModalLack(false);
   }, []);
+
   const onPressCloseModalLack = useCallback(() => {
     navigation.navigate('Home', {
       screen: 'TeachDiaryTab',
       params: { screen: 'TeachDiaryList' },
     });
   }, [navigation]);
+
   const onPressCloseModalPublish = useCallback(() => {
     setIsModalAlert(false);
   }, []);
+
   const onPressCloseModalCancel = useCallback(() => {
     setIsModalCancel(false);
   }, []);
-  const onPressThemeGuide = useCallback(() => {
-    if (!subcatergoryInfo) return;
-    navigation.push('ModalThemeGuide', {
-      screen: 'ThemeGuide',
-      params: { subcatergoryInfo, caller: 'PostDiary' },
-    });
-  }, [navigation, subcatergoryInfo]);
+
   return {
     isLoadingDraft,
     isLoadingPublish,
@@ -353,6 +363,5 @@ export const usePostDiary = ({
     onPressCloseError,
     onPressClose,
     onPressPublic,
-    onPressThemeGuide,
   };
 };

@@ -74,6 +74,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiary
+      navigation={navigation}
       isLoading={isLoading}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -83,10 +84,10 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      subcatergoryInfo={route?.params?.subcatergoryInfo}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
-      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
       onClosePostDiary={onClosePostDiary}

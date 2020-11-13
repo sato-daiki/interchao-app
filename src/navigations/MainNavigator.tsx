@@ -74,7 +74,11 @@ export type MainStackParamList = {
   ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
   ModalPostDraftDiary: {
     screen: keyof ModalPostDraftDiaryStackParamList;
-    params: { item: Diary; objectID: string };
+    params: {
+      item: Diary;
+      objectID: string;
+      subcatergoryInfo?: SubcatergoryInfo;
+    };
   };
   ModalPostDraftDiaryWeb: {
     screen: keyof ModalPostDraftDiaryWebStackParamList;

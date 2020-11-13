@@ -44,7 +44,6 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressCloseError,
     onPressPublic,
     onPressClose,
-    onPressThemeGuide,
   } = usePostDiary({
     navigation,
     subcatergoryInfo: route?.params?.subcatergoryInfo,
@@ -78,6 +77,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiary
+      navigation={navigation}
       isLoading={isLoadingDraft || isLoadingPublish}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -105,7 +105,6 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       onPressNotSave={onPressNotSave}
       onPressTutorial={onPressTutorial}
       onPressCloseError={onPressCloseError}
-      onPressThemeGuide={onPressThemeGuide}
     />
   );
 };

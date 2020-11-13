@@ -12,7 +12,7 @@ import { SelecttionBox } from '@/components/molecules';
 import { HeaderText } from '@/components/atoms';
 
 type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalSelectPostTypeStackParamList, 'SelectType'>,
+  StackNavigationProp<ModalSelectPostTypeStackParamList, 'SelectDiaryType'>,
   ModalSelectPostTypeStackNavigationProp
 >;
 
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SelectTypeScreen: React.FC<ScreenType> = ({ navigation }) => {
+const SelectDiaryTypeScreen: React.FC<ScreenType> = ({ navigation }) => {
   const onPressClose = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
@@ -71,16 +71,16 @@ const SelectTypeScreen: React.FC<ScreenType> = ({ navigation }) => {
       <View style={styles.row}>
         <SelecttionBox
           containerStyle={styles.marginRight}
-          title={I18n.t('selectType.titleFree')}
-          text={I18n.t('selectType.textFree')}
+          title={I18n.t('selectDiaryType.titleFree')}
+          text={I18n.t('selectDiaryType.textFree')}
           image={<Image source={PaperAndPen} style={styles.image} />}
           onPress={onPressFree}
         />
         <SelecttionBox
-          recommendText={I18n.t('selectType.recommend')}
+          recommendText={I18n.t('selectDiaryType.recommend')}
           containerStyle={styles.marginLeft}
-          title={I18n.t('selectType.titleTheme')}
-          text={I18n.t('selectType.textTheme')}
+          title={I18n.t('selectDiaryType.titleTheme')}
+          text={I18n.t('selectDiaryType.textTheme')}
           image={<Image source={StudentHat} style={styles.image} />}
           onPress={onPressTheme}
         />
@@ -89,4 +89,4 @@ const SelectTypeScreen: React.FC<ScreenType> = ({ navigation }) => {
   );
 };
 
-export default SelectTypeScreen;
+export default SelectDiaryTypeScreen;
