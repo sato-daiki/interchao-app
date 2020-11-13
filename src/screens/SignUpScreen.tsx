@@ -5,32 +5,33 @@ import React, {
   useLayoutEffect,
 } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackScreenProps } from '@react-navigation/stack';
-import {
-  emailInputError,
-  emailValidate,
-  emaillExistCheck,
-} from '../utils/common';
-import firebase from '../constants/firebase';
-import { AppReviewState, Profile, User } from '../types';
-import { CheckTextInput } from '../components/molecules';
+
+import { CheckTextInput } from '@/components/molecules';
 import {
   Space,
   SubmitButton,
   LoadingModal,
   HeaderText,
-} from '../components/atoms';
+} from '@/components/atoms';
+
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
+import firebase from '@/constants/firebase';
+import { AppReviewState, Profile, User } from '@/types';
 import {
   primaryColor,
   fontSizeM,
   subTextColor,
   fontSizeL,
-} from '../styles/Common';
-import { track, events } from '../utils/Analytics';
-import I18n from '../utils/I18n';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
+} from '@/styles/Common';
+import { track, events } from '@/utils/Analytics';
+import {
+  emailInputError,
+  emailValidate,
+  emaillExistCheck,
+} from '@/utils/common';
+import I18n from '@/utils/I18n';
 
 export interface Props {
   profile: Profile;
@@ -109,84 +110,82 @@ const SignUpScreen: React.FC<ScreenType> = ({
   }, []);
 
   const createUser = useCallback(
-    (credentUser: firebase.User, loginMethod: LoginMethod): void => {
+    async (
+      credentUser: firebase.User,
+      loginMethod: LoginMethod
+    ): Promise<void> => {
       const appReviewState: AppReviewState = 'yet';
 
-      const f = async (): Promise<void> => {
-        const userInfo = {
-          diaryPosted: false,
-          tutorialPostDiary: false,
-          tutorialTeachDiaryList: false,
-          tutorialCorrectiong: false,
-          points: 100,
-          expoPushToken: null,
-          correctingObjectID: null,
-          correctingCorrectedNum: null,
-          notificationCorrection: true,
-          notificationReview: true,
-          // notificationReminderNextDay: false,
-          // notificationReminderThreeDays: false,
-          // notificationReminderOneWeek: false,
-          // notificationReminderOneMonth: false,
-          // notificationReminderThreeMonths: false,
-          mailCorrection: true,
-          mailOperation: true,
-          // mailReminderNextDay: true,
-          // mailReminderThreeDays: false,
-          // mailReminderOneWeek: true,
-          // mailReminderOneMonth: true,
-          // mailReminderThreeMonths: false,
-          appReviewState,
-          runningDays: 0,
-          runningWeeks: 0,
-          lastDiaryPostedAt: null,
-          lastModalAppSuggestionAt: null,
-          lastModalNotficationSettingAt: null,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        };
-
-        const profileInfo = {
-          name: null,
-          userName: profile.userName,
-          photoUrl: null,
-          learnLanguage: profile.learnLanguage,
-          nativeLanguage: profile.nativeLanguage,
-          spokenLanguages: profile.spokenLanguages || null,
-          nationalityCode: profile.nationalityCode,
-          introduction: null,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        };
-
-        const userReviewInfo = {
-          ratingSum: 0,
-          reviewNum: 0,
-          score: 0.0,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        };
-
-        const batch = firebase.firestore().batch();
-        batch.set(
-          firebase.firestore().doc(`users/${credentUser.uid}`),
-          userInfo
-        );
-        batch.set(
-          firebase.firestore().doc(`profiles/${credentUser.uid}`),
-          profileInfo
-        );
-        batch.set(
-          firebase.firestore().doc(`userReviews/${credentUser.uid}`),
-          userReviewInfo
-        );
-        await batch.commit();
-        signIn(credentUser.uid);
-        setUser({ ...userInfo, uid: credentUser.uid });
-        setProfile({ ...profileInfo, uid: credentUser.uid });
-        track(events.CREATED_USER, { loginMethod });
+      const userInfo = {
+        diaryPosted: false,
+        tutorialPostDiary: false,
+        tutorialTeachDiaryList: false,
+        tutorialCorrectiong: false,
+        points: 100,
+        expoPushToken: null,
+        correctingObjectID: null,
+        correctingCorrectedNum: null,
+        notificationCorrection: true,
+        notificationReview: true,
+        // notificationReminderNextDay: false,
+        // notificationReminderThreeDays: false,
+        // notificationReminderOneWeek: false,
+        // notificationReminderOneMonth: false,
+        // notificationReminderThreeMonths: false,
+        mailCorrection: true,
+        mailOperation: true,
+        // mailReminderNextDay: true,
+        // mailReminderThreeDays: false,
+        // mailReminderOneWeek: true,
+        // mailReminderOneMonth: true,
+        // mailReminderThreeMonths: false,
+        themeDiaries: null,
+        appReviewState,
+        runningDays: 0,
+        runningWeeks: 0,
+        lastDiaryPostedAt: null,
+        lastModalAppSuggestionAt: null,
+        lastModalNotficationSettingAt: null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
-      f();
+
+      const profileInfo = {
+        name: null,
+        userName: profile.userName,
+        photoUrl: null,
+        learnLanguage: profile.learnLanguage,
+        nativeLanguage: profile.nativeLanguage,
+        spokenLanguages: profile.spokenLanguages || null,
+        nationalityCode: profile.nationalityCode,
+        introduction: null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+
+      const userReviewInfo = {
+        ratingSum: 0,
+        reviewNum: 0,
+        score: 0.0,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      };
+
+      const batch = firebase.firestore().batch();
+      batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
+      batch.set(
+        firebase.firestore().doc(`profiles/${credentUser.uid}`),
+        profileInfo
+      );
+      batch.set(
+        firebase.firestore().doc(`userReviews/${credentUser.uid}`),
+        userReviewInfo
+      );
+      await batch.commit();
+      signIn(credentUser.uid);
+      setUser({ ...userInfo, uid: credentUser.uid });
+      setProfile({ ...profileInfo, uid: credentUser.uid });
+      track(events.CREATED_USER, { loginMethod });
     },
     [
       profile.learnLanguage,
@@ -200,26 +199,18 @@ const SignUpScreen: React.FC<ScreenType> = ({
     ]
   );
 
-  const onPressSkip = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setIsLoading(true);
-      clearErrorMessage();
-      try {
-        const credent = await firebase.auth().signInAnonymously();
-        if (credent.user) {
-          createUser(credent.user, 'anonymously');
-        }
-      } catch (err) {
-        emailInputError(
-          err,
-          setErrorPassword,
-          setErrorEmail,
-          clearErrorMessage
-        );
-        setIsLoading(false);
+  const onPressSkip = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
+    clearErrorMessage();
+    try {
+      const credent = await firebase.auth().signInAnonymously();
+      if (credent.user) {
+        createUser(credent.user, 'anonymously');
       }
-    };
-    f();
+    } catch (err) {
+      emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
+      setIsLoading(false);
+    }
   }, [clearErrorMessage, createUser]);
 
   useLayoutEffect(() => {
@@ -228,59 +219,49 @@ const SignUpScreen: React.FC<ScreenType> = ({
         <HeaderText text={I18n.t('common.skip')} onPress={onPressSkip} />
       ),
     });
-  }, [navigation, onPressSkip]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const onPressSubmit = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setIsLoading(true);
-      clearErrorMessage();
-      try {
-        const credent = await firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password);
-        if (credent.user) {
-          createUser(credent.user, 'email');
-        }
-      } catch (err) {
-        emailInputError(
-          err,
-          setErrorPassword,
-          setErrorEmail,
-          clearErrorMessage
-        );
-        setIsLoading(false);
+  const onPressSubmit = useCallback(async (): Promise<void> => {
+    setIsLoading(true);
+    clearErrorMessage();
+    try {
+      const credent = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password);
+      if (credent.user) {
+        createUser(credent.user, 'email');
       }
-    };
-    f();
+    } catch (err) {
+      emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
+      setIsLoading(false);
+    }
   }, [clearErrorMessage, createUser, email, password]);
 
-  const onBlurEmail = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (email.length === 0) {
-        setIsEmailCheckOk(false);
-        setErrorEmail('');
-        return;
-      }
+  const onBlurEmail = useCallback(async (): Promise<void> => {
+    if (email.length === 0) {
+      setIsEmailCheckOk(false);
+      setErrorEmail('');
+      return;
+    }
 
-      if (emailValidate(email)) {
-        setIsEmailCheckOk(false);
-        setErrorEmail(I18n.t('errorMessage.invalidEmail'));
-        return;
-      }
+    if (emailValidate(email)) {
+      setIsEmailCheckOk(false);
+      setErrorEmail(I18n.t('errorMessage.invalidEmail'));
+      return;
+    }
 
-      setIsEmailLoading(true);
-      const res = await emaillExistCheck(email);
+    setIsEmailLoading(true);
+    const res = await emaillExistCheck(email);
 
-      if (res) {
-        setIsEmailCheckOk(false);
-        setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
-      } else {
-        setIsEmailCheckOk(true);
-        setErrorEmail('');
-      }
-      setIsEmailLoading(false);
-    };
-    f();
+    if (res) {
+      setIsEmailCheckOk(false);
+      setErrorEmail(I18n.t('errorMessage.emailAlreadyInUse'));
+    } else {
+      setIsEmailCheckOk(true);
+      setErrorEmail('');
+    }
+    setIsEmailLoading(false);
   }, [email, setIsEmailCheckOk, setErrorEmail, setIsEmailLoading]);
 
   const onBlurPassword = useCallback(() => {
