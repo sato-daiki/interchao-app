@@ -15,18 +15,16 @@ import {
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
 import {
-  NavigationProp,
+  PostDraftDiaryNavigationProp,
   PostDraftDiaryRouteProp,
-  // @ts-ignore
-  // eslint-disable-next-line import/extensions
-} from './PostDraftDiaryScreen';
+} from './interfaces';
 
 interface UsePostDiary {
   user: User;
   profile: Profile;
   setUser: (user: User) => void;
   editDiary: (objectID: string, diary: Diary) => void;
-  navigation: NavigationProp;
+  navigation: PostDraftDiaryNavigationProp;
   route: PostDraftDiaryRouteProp;
 }
 
@@ -75,7 +73,10 @@ export const usePostDraftDiary = ({
           {
             text: 'OK',
             onPress: (): void => {
-              navigation.goBack();
+              navigation.navigate('Home', {
+                screen: 'MyDiaryTab',
+                params: { screen: 'MyDiaryList' },
+              });
             },
           },
         ]
@@ -102,41 +103,38 @@ export const usePostDraftDiary = ({
     [profile, text, title]
   );
 
-  const onPressDraft = useCallback(() => {
-    const f = async (): Promise<void> => {
-      Keyboard.dismiss();
-      if (isLoadingDraft || isModalLack) return;
-      try {
-        const { item } = route.params;
-        if (!item || !item.objectID) return;
+  const onPressDraft = useCallback(async (): Promise<void> => {
+    Keyboard.dismiss();
+    if (isLoadingDraft || isModalLack) return;
+    try {
+      const { item } = route.params;
+      if (!item || !item.objectID) return;
 
-        setIsLoadingDraft(true);
-        const diary = getDiary('draft');
-        const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
-        await refDiary.update(diary);
-        track(events.CREATED_DIARY, {
-          characters: text.length,
-          diaryStatus: 'draft',
-        });
+      setIsLoadingDraft(true);
+      const diary = getDiary('draft');
+      const refDiary = firebase.firestore().doc(`diaries/${item.objectID}`);
+      await refDiary.update(diary);
+      track(events.CREATED_DIARY, {
+        characters: text.length,
+        diaryStatus: 'draft',
+      });
 
-        // reduxを更新
-        editDiary(item.objectID, {
-          ...item,
-          ...diary,
-        });
-        setIsLoadingDraft(false);
-        setIsModalAlert(false);
+      // reduxを更新
+      editDiary(item.objectID, {
+        ...item,
+        ...diary,
+      });
+      setIsLoadingDraft(false);
+      setIsModalAlert(false);
 
-        navigation.navigate('Home', {
-          screen: 'MyDiaryTab',
-          params: { screen: 'MyDiaryList' },
-        });
-      } catch (err) {
-        setIsLoadingDraft(false);
-        alert({ err });
-      }
-    };
-    f();
+      navigation.navigate('Home', {
+        screen: 'MyDiaryTab',
+        params: { screen: 'MyDiaryList' },
+      });
+    } catch (err) {
+      setIsLoadingDraft(false);
+      alert({ err });
+    }
   }, [
     editDiary,
     getDiary,
@@ -152,7 +150,10 @@ export const usePostDraftDiary = ({
     if (title.length > 0 || text.length > 0) {
       setIsModalCancel(true);
     } else {
-      navigation.goBack();
+      navigation.navigate('Home', {
+        screen: 'MyDiaryTab',
+        params: { screen: 'MyDiaryList' },
+      });
     }
   }, [navigation, text.length, title.length]);
 
@@ -279,7 +280,10 @@ export const usePostDraftDiary = ({
 
   const onPressNotSave = useCallback((): void => {
     setIsModalCancel(false);
-    navigation.goBack();
+    navigation.navigate('Home', {
+      screen: 'MyDiaryTab',
+      params: { screen: 'MyDiaryList' },
+    });
   }, [navigation]);
 
   const onPressCloseError = useCallback((): void => {

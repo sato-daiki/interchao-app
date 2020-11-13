@@ -154,7 +154,7 @@ const HomeBottomTabNavigator = (): JSX.Element => {
             // Prevent default action
             e.preventDefault();
             navigation.navigate('ModalSelectPostType', {
-              screen: 'SelectType',
+              screen: 'SelectDiaryType',
             });
           },
         })}

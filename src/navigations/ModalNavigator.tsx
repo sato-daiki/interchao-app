@@ -18,7 +18,7 @@ import EditMyProfileScreenContainer from '@/containers/EditMyProfileScreenContai
 import EditUserNameScreenContainer from '@/containers/EditUserNameScreenContainer';
 import PostDraftDiaryScreenContainer from '@/containers/PostDraftDiaryScreenContainer';
 import CorrectingScreenContainer from '@/containers/CorrectingScreenContainer';
-import SelectTypeScreen from '@/screens/SelectTypeScreen';
+import SelectDiaryTypeScreen from '@/screens/SelectDiaryTypeScreen';
 import AboutScreen from '@/screens/About';
 import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
@@ -38,7 +38,7 @@ export type ModalThemeGuideStackParamList = {
   ThemeGuide: { subcatergoryInfo: SubcatergoryInfo; caller: CallerThemeGuide };
 };
 export type ModalSelectPostTypeStackParamList = {
-  SelectType: undefined;
+  SelectDiaryType: undefined;
   // SelectCategory: undefined; // 大カテゴリー
   SelectSubcategory: undefined; // 小カテゴリー
 };
@@ -49,7 +49,11 @@ export type ModalPostDiaryWebStackParamList = {
   PostDiaryWeb: undefined;
 };
 export type ModalPostDraftDiaryStackParamList = {
-  PostDraftDiary: { item: Diary; objectID: string };
+  PostDraftDiary: {
+    item: Diary;
+    objectID: string;
+    subcatergoryInfo?: SubcatergoryInfo;
+  };
 };
 export type ModalPostDraftDiaryWebStackParamList = {
   PostDraftDiaryWeb: { item: Diary; objectID: string };
@@ -176,14 +180,14 @@ export const ModalEditMyDiaryListNavigator = (): JSX.Element => {
 };
 export const ModalSelectPostTypeNavigator = (): JSX.Element => {
   return (
-    <ModalSelectPostTypeStack.Navigator initialRouteName="SelectType">
+    <ModalSelectPostTypeStack.Navigator initialRouteName="SelectDiaryType">
       <ModalSelectPostTypeStack.Screen
-        name="SelectType"
-        component={SelectTypeScreen}
+        name="SelectDiaryType"
+        component={SelectDiaryTypeScreen}
         options={{
           ...DefaultNavigationOptions,
           ...DefaultModalLayoutOptions,
-          title: I18n.t('selectType.headerTitle'),
+          title: I18n.t('selectDiaryType.headerTitle'),
         }}
       />
       <ModalSelectPostTypeStack.Screen
