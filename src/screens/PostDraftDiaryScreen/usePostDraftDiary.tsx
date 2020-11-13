@@ -19,11 +19,9 @@ import {
   PostDraftDiaryNavigationProp,
   PostDraftDiaryRouteProp,
 } from './interfaces';
-import { ThemeSubcategoryInfo } from '../SelectThemeSubcategoryScreen/interface';
 
 interface UsePostDiary {
   user: User;
-  themeSubcategoryInfo: ThemeSubcategoryInfo;
   profile: Profile;
   setUser: (user: User) => void;
   editDiary: (objectID: string, diary: Diary) => void;
@@ -33,7 +31,6 @@ interface UsePostDiary {
 
 export const usePostDraftDiary = ({
   navigation,
-  themeSubcategoryInfo,
   route,
   user,
   profile,
@@ -206,11 +203,12 @@ export const usePostDraftDiary = ({
     );
 
     let { themeDiaries } = user;
-    if (themeSubcategoryInfo) {
+    if (item.themeCategory && item.themeSubcategory) {
       themeDiaries = getThemeDiaries(
         user.themeDiaries,
         item.objectID,
-        themeSubcategoryInfo
+        item.themeCategory,
+        item.themeSubcategory
       );
     }
 
@@ -284,7 +282,6 @@ export const usePostDraftDiary = ({
     route.params,
     setUser,
     text,
-    themeSubcategoryInfo,
     title,
     user,
   ]);

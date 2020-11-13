@@ -3,10 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import { offWhite } from '@/styles/Common';
 import { TextButtun } from '@/components/atoms';
 import I18n from '@/utils/I18n';
-import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { ThemeCategory, ThemeSubcategory } from '@/types';
 
 interface Props {
-  themeSubcategoryInfo?: ThemeSubcategoryInfo;
+  themeCategory?: ThemeCategory;
+  themeSubcategory?: ThemeSubcategory;
   onPressThemeGuide: () => void;
   onPressDraft: () => void;
 }
@@ -20,13 +21,14 @@ const styles = StyleSheet.create({
 });
 
 const Footer: React.FC<Props> = ({
-  themeSubcategoryInfo,
+  themeCategory,
+  themeSubcategory,
   onPressThemeGuide,
   onPressDraft,
 }) => {
   return (
     <View style={styles.container}>
-      {!themeSubcategoryInfo ? null : (
+      {!themeCategory || !themeSubcategory ? null : (
         <TextButtun
           isBorrderTop
           title={I18n.t('postDiaryComponent.hint')}

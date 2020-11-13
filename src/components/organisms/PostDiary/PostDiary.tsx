@@ -17,7 +17,7 @@ import {
 } from '@/styles/Common';
 import { Points } from '@/images';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
-import { Language } from '@/types';
+import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
 import I18n from '@/utils/I18n';
 import { LoadingModal } from '@/components/atoms';
 import { ModalPublish } from '@/components/organisms/ModalPublish';
@@ -25,7 +25,6 @@ import ModalLackPoint from '@/components/organisms/ModalLackPoint';
 import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
 import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
-import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
 import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
 
@@ -46,7 +45,8 @@ interface Props {
   errorMessage: string;
   title: string;
   text: string;
-  themeSubcategoryInfo?: ThemeSubcategoryInfo;
+  themeCategory?: ThemeCategory | null;
+  themeSubcategory?: ThemeSubcategory | null;
   publishMessage: string | null;
   points: number;
   learnLanguage: Language;
@@ -118,7 +118,8 @@ const PostDiary = ({
   errorMessage,
   title,
   text,
-  themeSubcategoryInfo,
+  themeCategory,
+  themeSubcategory,
   publishMessage,
   points,
   learnLanguage,
@@ -157,12 +158,12 @@ const PostDiary = ({
   const onBlurText = useCallback((): void => setIsForce(false), []);
 
   const onPressThemeGuide = useCallback(() => {
-    if (!themeSubcategoryInfo) return;
+    if (!themeCategory || !themeSubcategory) return;
     navigation.push('ModalThemeGuide', {
       screen: 'ThemeGuide',
-      params: { themeSubcategoryInfo, caller: 'PostDiary' },
+      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
     });
-  }, [navigation, themeSubcategoryInfo]);
+  }, [navigation, themeCategory, themeSubcategory]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -234,7 +235,8 @@ const PostDiary = ({
         title={title}
         text={text}
         learnLanguage={learnLanguage}
-        themeSubcategoryInfo={themeSubcategoryInfo}
+        themeCategory={themeCategory}
+        themeSubcategory={themeSubcategory}
         isForce={isForce}
         fadeAnim={fadeAnim}
         onPressThemeGuide={onPressThemeGuide}

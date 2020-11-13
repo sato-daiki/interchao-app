@@ -1,3 +1,4 @@
+import { Baseball } from '@/images';
 import { Entry } from '../interface';
 
 export const selfIntroduction: Entry[] = [
@@ -5,6 +6,7 @@ export const selfIntroduction: Entry[] = [
     key: 'introduction',
     params: {
       text: 'introduction introduction introduction introduction',
+      source: Baseball,
     },
   },
   {

@@ -10,11 +10,12 @@ import {
   Diary,
   CountryCode,
   ThemeDiary,
+  ThemeCategory,
+  ThemeSubcategory,
 } from '@/types';
 import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
 
 import { MarkedDates } from '@/components/organisms/MyDiaryList';
-import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
@@ -251,20 +252,21 @@ export const getUsePoints = (
 export const getThemeDiaries = (
   themeDiaries: ThemeDiary[] | undefined | null,
   objectID: string,
-  themeSubcategoryInfo: ThemeSubcategoryInfo
+  themeCategory: ThemeCategory,
+  themeSubcategory: ThemeSubcategory
 ): ThemeDiary[] => {
   const findThemeDiary = themeDiaries?.find(
     themeDiary =>
-      themeDiary.themeCategory === themeSubcategoryInfo.themeCategory &&
-      themeDiary.themeSubcategory === themeSubcategoryInfo.themeSubcategory
+      themeDiary.themeCategory === themeCategory &&
+      themeDiary.themeSubcategory === themeSubcategory
   );
 
   if (findThemeDiary && themeDiaries) {
     // 同一テーマを投稿した場合
     const newThemeDiaries = themeDiaries.map(themeDiary => {
       if (
-        themeDiary.themeCategory === themeSubcategoryInfo.themeCategory &&
-        themeDiary.themeSubcategory === themeSubcategoryInfo.themeSubcategory
+        themeDiary.themeCategory === themeCategory &&
+        themeDiary.themeSubcategory === themeSubcategory
       ) {
         return {
           ...findThemeDiary,
@@ -281,8 +283,8 @@ export const getThemeDiaries = (
   return [
     ...(themeDiaries || []),
     {
-      themeCategory: themeSubcategoryInfo.themeCategory,
-      themeSubcategory: themeSubcategoryInfo.themeSubcategory,
+      themeCategory,
+      themeSubcategory,
       objectID,
       updatedAt: firebase.firestore.Timestamp.now(),
       createdAt: firebase.firestore.Timestamp.now(),

@@ -3,15 +3,12 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import {
-  CallerThemeGuide,
-  ThemeSubcategoryInfo,
-} from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { CallerThemeGuide } from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { Diary, ThemeCategory, ThemeSubcategory } from '@/types';
 import HomeBottomTabNavigator, {
   HomeBottomParamList,
 } from './HomeBottomTabNavigator';
 
-import { Diary } from '../types';
 import {
   ModalEditMyDiaryListNavigator,
   ModalPostDiaryNavigator,
@@ -66,13 +63,17 @@ export type MainStackParamList = {
   ModalThemeGuide: {
     screen: keyof ModalThemeGuideStackParamList;
     params: {
-      themeSubcategoryInfo: ThemeSubcategoryInfo;
+      themeCategory: ThemeCategory;
+      themeSubcategory: ThemeSubcategory;
       caller: CallerThemeGuide;
     };
   };
   ModalPostDiary: {
     screen: keyof ModalPostDiaryStackParamList;
-    params?: { themeSubcategoryInfo?: ThemeSubcategoryInfo };
+    params?: {
+      themeCategory?: ThemeCategory;
+      themeSubcategory?: ThemeSubcategory;
+    };
   };
   ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
   ModalPostDraftDiary: {
@@ -80,7 +81,8 @@ export type MainStackParamList = {
     params: {
       item: Diary;
       objectID: string;
-      themeSubcategoryInfo?: ThemeSubcategoryInfo;
+      themeCategory?: ThemeCategory;
+      themeSubcategory?: ThemeSubcategory;
     };
   };
   ModalPostDraftDiaryWeb: {
