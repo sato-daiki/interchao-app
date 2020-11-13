@@ -9,7 +9,7 @@ import {
   DefaultModalLayoutOptions,
 } from '@/constants/NavigationOptions';
 import I18n from '@/utils/I18n';
-import { CountryCode, Diary } from '@/types';
+import { CountryCode, Diary, ThemeCategory, ThemeSubcategory } from '@/types';
 
 /* screens */
 import ReviewScreenContainer from '@/containers/ReviewScreenContainer';
@@ -24,10 +24,7 @@ import RecordScreenContainer from '@/containers/RecordScreenContainer';
 import EditCountryScreen from '@/screens/EditCountryScreen';
 import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
 import SelectThemeSubcategoryScreenContainer from '@/containers/SelectThemeSubcategoryScreenContainer';
-import {
-  CallerThemeGuide,
-  ThemeSubcategoryInfo,
-} from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { CallerThemeGuide } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import ThemeGuideScreen from '@/screens/ThemeGuideScreen';
 import { MainStackParamList } from './MainNavigator';
 
@@ -36,7 +33,8 @@ export type ModalEditMyDiaryListStackParamList = {
 };
 export type ModalThemeGuideStackParamList = {
   ThemeGuide: {
-    themeSubcategoryInfo: ThemeSubcategoryInfo;
+    themeCategory: ThemeCategory;
+    themeSubcategory: ThemeSubcategory;
     caller: CallerThemeGuide;
   };
 };
@@ -46,7 +44,10 @@ export type ModalSelectPostTypeStackParamList = {
   SelectThemeSubcategory: undefined; // 小カテゴリー
 };
 export type ModalPostDiaryStackParamList = {
-  PostDiary: { themeSubcategoryInfo?: ThemeSubcategoryInfo };
+  PostDiary: {
+    themeCategory?: ThemeCategory;
+    themeSubcategory?: ThemeSubcategory;
+  };
 };
 export type ModalPostDiaryWebStackParamList = {
   PostDiaryWeb: undefined;
@@ -55,7 +56,8 @@ export type ModalPostDraftDiaryStackParamList = {
   PostDraftDiary: {
     item: Diary;
     objectID: string;
-    themeSubcategoryInfo?: ThemeSubcategoryInfo;
+    themeCategory?: ThemeCategory;
+    themeSubcategory?: ThemeSubcategory;
   };
 };
 export type ModalPostDraftDiaryWebStackParamList = {

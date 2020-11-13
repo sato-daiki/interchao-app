@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ImageSourcePropType,
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { fontSizeM, primaryColor } from '@/styles/Common';
 import { SwipeGuid } from '@/components/atoms';
 import I18n from '@/utils/I18n';
@@ -13,7 +7,6 @@ import { IntroductionParams } from './interface';
 import Header from './Header';
 
 interface Props {
-  source: ImageSourcePropType;
   params: IntroductionParams;
 }
 
@@ -37,11 +30,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ThemeGuideIntroduction = ({ source, params }: Props): JSX.Element => {
+const ThemeGuideIntroduction = ({ params }: Props): JSX.Element => {
   return (
     <View style={styles.container}>
       <Header title={I18n.t('themeGuide.introduction')} />
-      <Image source={source} style={styles.image} />
+      <Image source={params.source} style={styles.image} />
       <Text style={styles.text}>{params.text}</Text>
       <SwipeGuid type="start" />
     </View>

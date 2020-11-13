@@ -1,9 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Keyboard, BackHandler, Alert } from 'react-native';
-import { track, events } from '@/utils/Analytics';
+
 import firebase from '@/constants/firebase';
-import { ThemeDiary, User } from '@/types/user';
-import { DiaryStatus, Profile, Diary } from '@/types';
+import {
+  User,
+  DiaryStatus,
+  Profile,
+  Diary,
+  ThemeCategory,
+  ThemeSubcategory,
+} from '@/types';
 import {
   checkBeforePost,
   getUsePoints,
@@ -13,14 +19,15 @@ import {
   getPublishMessage,
   getThemeDiaries,
 } from '@/utils/diary';
+import { track, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
-import { ThemeSubcategoryInfo } from '../SelectThemeSubcategoryScreen/interface';
 import { PostDiaryNavigationProp } from './interfaces';
 
 interface UsePostDiary {
   user: User;
-  themeSubcategoryInfo?: ThemeSubcategoryInfo;
+  themeCategory?: ThemeCategory;
+  themeSubcategory?: ThemeSubcategory;
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
@@ -29,7 +36,8 @@ interface UsePostDiary {
 
 export const usePostDiary = ({
   navigation,
-  themeSubcategoryInfo,
+  themeCategory,
+  themeSubcategory,
   user,
   profile,
   setUser,
@@ -46,9 +54,7 @@ export const usePostDiary = ({
   const [isModalAlert, setIsModalAlert] = useState(false);
   const [isModalCancel, setIsModalCancel] = useState(false);
   const [isPublish, setIsPublish] = useState(false);
-  const [title, setTitle] = useState(
-    themeSubcategoryInfo ? themeSubcategoryInfo.title : ''
-  );
+  const [title, setTitle] = useState(themeSubcategory || '');
   const [text, setText] = useState('');
   const [publishMessage, setPublishMessage] = useState<string | null>(null);
 
@@ -63,12 +69,8 @@ export const usePostDiary = ({
         hidden: false,
         title,
         text,
-        themeCategory: themeSubcategoryInfo
-          ? themeSubcategoryInfo.themeCategory
-          : null,
-        themeSubcategory: themeSubcategoryInfo
-          ? themeSubcategoryInfo.themeSubcategory
-          : null,
+        themeCategory: themeCategory || null,
+        themeSubcategory: themeSubcategory || null,
         profile: displayProfile,
         diaryStatus,
         correction: null,
@@ -84,7 +86,7 @@ export const usePostDiary = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, themeSubcategoryInfo, text, title, user.diaryPosted]
+    [profile, user.diaryPosted, title, text, themeCategory, themeSubcategory]
   );
 
   const onPressDraft = useCallback(async (): Promise<void> => {
@@ -200,7 +202,7 @@ export const usePostDiary = ({
       runningWeeks
     );
     let diaryId = '';
-    let { themeDiaries } = user;
+    let themeDiaries = user.themeDiaries || null;
 
     // 日記の更新とpointsの整合性をとるためtransactionを使う
     await firebase
@@ -215,17 +217,18 @@ export const usePostDiary = ({
         transaction.set(refDiary, diary);
 
         // Usersの更新
-        if (themeSubcategoryInfo) {
+        if (themeCategory && themeSubcategory) {
           themeDiaries = getThemeDiaries(
             user.themeDiaries,
             diaryId,
-            themeSubcategoryInfo
+            themeCategory,
+            themeSubcategory
           );
         }
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
         // 初回の場合はdiaryPostedを更新する
         const updateUser = {
-          themeDiaries,
+          themeDiaries: themeDiaries || null,
           runningDays,
           runningWeeks,
           points: newPoints,
@@ -280,7 +283,8 @@ export const usePostDiary = ({
     profile.learnLanguage,
     setUser,
     text.length,
-    themeSubcategoryInfo,
+    themeCategory,
+    themeSubcategory,
     user,
   ]);
 

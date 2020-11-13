@@ -1,3 +1,4 @@
+import { President } from '@/images';
 import { Entry } from '../interface';
 
 export const hobby: Entry[] = [
@@ -6,6 +7,7 @@ export const hobby: Entry[] = [
     params: {
       text:
         '今日は趣味について書いていきます。趣味は〇〇ですよね。頑張っていきましょう',
+      source: President,
     },
   },
   {

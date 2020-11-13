@@ -7,8 +7,10 @@ import {
   Keyboard,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { mainColor } from '@/styles/Common';
+
 import { TextInputText, Hoverable, TextInputTitle } from '@/components/atoms';
+
+import { mainColor } from '@/styles/Common';
 import { getMaxPostText } from '@/utils/diary';
 import Footer from './Footer';
 import { PostDiaryKeyboardProps } from './interface';
@@ -35,7 +37,8 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
-  themeSubcategoryInfo,
+  themeCategory,
+  themeSubcategory,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
@@ -72,7 +75,7 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
       >
         <View style={styles.inner}>
           <TextInputTitle
-            editable={!themeSubcategoryInfo}
+            editable={!themeCategory || !themeSubcategory}
             value={title}
             onFocus={onFocusText}
             onChangeText={onChangeTextTitle}
@@ -90,7 +93,8 @@ const PostDiaryKeybordAndroid: React.FC<PostDiaryKeyboardProps> = ({
       <SafeAreaView>
         {isKeyboard ? null : (
           <Footer
-            themeSubcategoryInfo={themeSubcategoryInfo}
+            themeCategory={themeCategory}
+            themeSubcategory={themeSubcategory}
             onPressThemeGuide={onPressThemeGuide}
             onPressDraft={onPressDraft}
           />

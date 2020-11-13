@@ -38,7 +38,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
   onPressSubmit,
   onPressClose,
 }) => {
-  const [value, setValue] = useState<Language>(defaultLanguage || languages[0]);
+  const [value, setValue] = useState<Language | null>(defaultLanguage || null);
 
   const onValueChange = useCallback((itemValue: React.ReactText) => {
     setValue(itemValue as Language);
@@ -46,6 +46,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
 
   const onPress = useCallback(() => {
     onPressSubmit(value || languages[0]);
+    setValue(null);
   }, [languages, onPressSubmit, value]);
 
   return (
@@ -53,7 +54,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
       <View style={styles.container}>
         <Picker
           style={styles.picker}
-          selectedValue={value}
+          selectedValue={value || languages[0]}
           onValueChange={onValueChange}
         >
           {languages.map(item => (

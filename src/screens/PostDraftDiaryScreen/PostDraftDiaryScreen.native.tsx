@@ -72,6 +72,8 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
 
+  const { item } = route.params;
+
   return (
     <PostDiary
       navigation={navigation}
@@ -84,7 +86,8 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
-      themeSubcategoryInfo={route?.params?.themeSubcategoryInfo}
+      themeCategory={item.themeCategory}
+      themeSubcategory={item.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}

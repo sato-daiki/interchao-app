@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
 
 const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
   const window = useWindowDimensions();
-  const { themeSubcategoryInfo, caller } = route.params;
-  const entries = getEntries(themeSubcategoryInfo.themeSubcategory) || [];
+  const { themeCategory, themeSubcategory, caller } = route.params;
+  const entries = getEntries(themeSubcategory) || [];
   const [activeSlide, setActiveSlide] = useState(
     caller === 'PostDiary' ? entries.length - 1 : 0
   );
@@ -58,12 +58,12 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
     if (caller === 'SelectThemeSubcategory') {
       navigation.navigate('ModalPostDiary', {
         screen: 'PostDiary',
-        params: { themeSubcategoryInfo },
+        params: { themeCategory, themeSubcategory },
       });
     } else {
       navigation.goBack();
     }
-  }, [caller, navigation, themeSubcategoryInfo]);
+  }, [caller, navigation, themeCategory, themeSubcategory]);
 
   const onSnapToItem = useCallback((index: number) => {
     setActiveSlide(index);
@@ -73,12 +73,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
     ({ item }) => {
       switch (item.key) {
         case 'introduction':
-          return (
-            <ThemeGuideIntroduction
-              source={themeSubcategoryInfo.source}
-              params={item.params}
-            />
-          );
+          return <ThemeGuideIntroduction params={item.params} />;
         case 'tip':
           return <ThemeGuideTip params={item.params} />;
         case 'word':
@@ -89,7 +84,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           return null;
       }
     },
-    [onPressEnd, themeSubcategoryInfo.source]
+    [onPressEnd]
   );
 
   return (

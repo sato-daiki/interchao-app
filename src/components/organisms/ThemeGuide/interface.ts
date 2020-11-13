@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from 'react-native';
+
 export type Entry =
   | {
       key: 'introduction';
@@ -16,6 +18,7 @@ export type Entry =
     };
 
 export interface IntroductionParams {
+  source: ImageSourcePropType;
   text: string;
 }
 

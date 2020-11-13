@@ -46,7 +46,8 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressClose,
   } = usePostDiary({
     navigation,
-    themeSubcategoryInfo: route?.params?.themeSubcategoryInfo,
+    themeCategory: route?.params?.themeCategory,
+    themeSubcategory: route?.params?.themeSubcategory,
     user,
     profile,
     setUser,
@@ -89,7 +90,8 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
-      themeSubcategoryInfo={route?.params?.themeSubcategoryInfo}
+      themeCategory={route?.params?.themeCategory}
+      themeSubcategory={route?.params?.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
