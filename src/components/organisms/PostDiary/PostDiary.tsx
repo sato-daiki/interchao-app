@@ -17,7 +17,6 @@ import {
 } from '@/styles/Common';
 import { Points } from '@/images';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
-import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
 import I18n from '@/utils/I18n';
 
 import { LoadingModal } from '@/components/atoms';
@@ -26,43 +25,10 @@ import ModalLackPoint from '@/components/organisms/ModalLackPoint';
 import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
 import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
-import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
-import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
 // @ts-ignore
 // eslint-disable-next-line import/extensions
 import PostDiaryKeyboard from './PostDiaryKeyboard';
-
-interface Props {
-  navigation: PostDiaryNavigationProp | PostDraftDiaryNavigationProp;
-  isLoading: boolean;
-  isModalLack: boolean;
-  isModalAlert: boolean;
-  isModalCancel: boolean;
-  isModalError: boolean;
-  isPublish: boolean;
-  isTutorialLoading?: boolean;
-  tutorialPostDiary?: boolean;
-  errorMessage: string;
-  title: string;
-  text: string;
-  themeCategory?: ThemeCategory | null;
-  themeSubcategory?: ThemeSubcategory | null;
-  publishMessage: string | null;
-  points: number;
-  learnLanguage: Language;
-  onPressSubmitModalLack: () => void;
-  onPressCloseModalLack: () => void;
-  onPressCloseModalPublish: () => void;
-  onPressCloseModalCancel: () => void;
-  onClosePostDiary: () => void;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressSubmit: () => void;
-  onPressDraft: () => void;
-  onPressNotSave: () => void;
-  onPressTutorial?: () => void;
-  onPressCloseError: () => void;
-}
+import { PostDiaryProps } from './interface';
 
 const styles = StyleSheet.create({
   container: {
@@ -105,8 +71,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiary = ({
-  navigation,
+const PostDiary: React.FC<PostDiaryProps> = ({
   isLoading,
   isModalLack,
   isModalAlert,
@@ -135,7 +100,8 @@ const PostDiary = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
-}: Props): JSX.Element => {
+  onPressThemeGuide,
+}) => {
   const [isForce, setIsForce] = useState(false);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
   useEffect(() => {
@@ -156,14 +122,6 @@ const PostDiary = ({
   const maxPostText = getMaxPostText(learnLanguage);
 
   const onBlurText = useCallback((): void => setIsForce(false), []);
-
-  const onPressThemeGuide = useCallback(() => {
-    if (!themeCategory || !themeSubcategory) return;
-    navigation.push('ModalThemeGuide', {
-      screen: 'ThemeGuide',
-      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
-    });
-  }, [navigation, themeCategory, themeSubcategory]);
 
   return (
     <SafeAreaView style={styles.container}>
