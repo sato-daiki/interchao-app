@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
 
 import I18n from '@/utils/I18n';
@@ -13,52 +13,18 @@ import {
   linkBlue,
 } from '@/styles/Common';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
-import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
 import {
   Hoverable,
   LoadingModal,
   Space,
   TextInputTitle,
 } from '@/components/atoms';
-import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
-import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
 import { ModalPublish } from '../ModalPublish';
 import ModalLackPoint from '../ModalLackPoint';
 import ModalDiaryCancel from '../ModalDiaryCancel';
 import TutorialPostDiary from '../TutorialPostDiary';
 import ModalConfirm from '../ModalConfirm';
-
-interface Props {
-  navigation: PostDiaryNavigationProp | PostDraftDiaryNavigationProp;
-  isLoading: boolean;
-  isModalLack: boolean;
-  isModalAlert: boolean;
-  isModalCancel: boolean;
-  isModalError: boolean;
-  isPublish: boolean;
-  isTutorialLoading?: boolean;
-  tutorialPostDiary?: boolean;
-  errorMessage: string;
-  title: string;
-  text: string;
-  themeCategory?: ThemeCategory | null;
-  themeSubcategory?: ThemeSubcategory | null;
-  publishMessage: string | null;
-  points: number;
-  learnLanguage: Language;
-  onPressSubmitModalLack: () => void;
-  onPressCloseModalLack: () => void;
-  onPressCloseModalPublish: () => void;
-  onPressCloseModalCancel: () => void;
-  onClosePostDiary: () => void;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressSubmit: () => void;
-  onPressDraft: () => void;
-  onPressNotSave: () => void;
-  onPressTutorial?: () => void;
-  onPressCloseError: () => void;
-}
+import { PostDiaryProps } from '../PostDiary/interface';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -111,8 +77,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryWeb = ({
-  navigation,
+const PostDiaryWeb: React.FC<PostDiaryProps> = ({
   isLoading,
   isModalLack,
   isModalAlert,
@@ -141,17 +106,10 @@ const PostDiaryWeb = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
-}: Props): JSX.Element => {
+  onPressThemeGuide,
+}) => {
   const usePoints = getUsePoints(text.length, learnLanguage);
   const maxPostText = getMaxPostText(learnLanguage);
-
-  const onPressThemeGuide = useCallback(() => {
-    if (!themeCategory || !themeSubcategory) return;
-    navigation.push('ModalThemeGuide', {
-      screen: 'ThemeGuide',
-      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
-    });
-  }, [navigation, themeCategory, themeSubcategory]);
 
   return (
     <ScrollView style={styles.warapper}>

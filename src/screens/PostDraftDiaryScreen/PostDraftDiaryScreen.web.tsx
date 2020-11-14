@@ -42,8 +42,9 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
   editDiary,
 }) => {
   const {
+    isInitialLoading,
+    isLoadingPublish,
     isLoadingDraft,
-    isLoading,
     isModalLack,
     isModalAlert,
     isModalCancel,
@@ -66,6 +67,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     onPressCloseError,
     onPressPublic,
     onPressClose,
+    onPressThemeGuide,
   } = usePostDraftDiary({
     navigation,
     route,
@@ -118,8 +120,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiaryWeb
-      navigation={navigation}
-      isLoading={isLoading || isLoadingDraft}
+      isLoading={isInitialLoading || isLoadingDraft || isLoadingPublish}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
@@ -144,6 +145,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
       onPressCloseError={onPressCloseError}
+      onPressThemeGuide={onPressThemeGuide}
     />
   );
 };

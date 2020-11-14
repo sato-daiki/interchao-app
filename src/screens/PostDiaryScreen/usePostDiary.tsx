@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Keyboard, BackHandler, Alert } from 'react-native';
+import { useState, useCallback } from 'react';
+import { Keyboard } from 'react-native';
 
 import firebase from '@/constants/firebase';
 import {
@@ -11,7 +11,6 @@ import {
   ThemeSubcategory,
 } from '@/types';
 import {
-  checkBeforePost,
   getUsePoints,
   getDisplayProfile,
   getRunningDays,
@@ -20,9 +19,9 @@ import {
   getThemeDiaries,
 } from '@/utils/diary';
 import { track, events } from '@/utils/Analytics';
-import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
 import { PostDiaryNavigationProp } from './interfaces';
+import { useCommon } from '../PostDraftDiaryScreen/useCommont';
 
 interface UsePostDiary {
   user: User;
@@ -43,20 +42,45 @@ export const usePostDiary = ({
   setUser,
   addDiary,
 }: UsePostDiary) => {
-  const [isLoadingDraft, setIsLoadingDraft] = useState(false);
-  const [isLoadingPublish, setIsLoadingPublish] = useState(false);
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
-  const [isModalError, setIsModalError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  // ポイントが足りない時アラートをだす
-  const [isModalLack, setIsModalLack] = useState(user.points < 10);
-  const [isModalAlert, setIsModalAlert] = useState(false);
-  const [isModalCancel, setIsModalCancel] = useState(false);
-  const [isPublish, setIsPublish] = useState(false);
-  const [title, setTitle] = useState(themeSubcategory || '');
-  const [text, setText] = useState('');
-  const [publishMessage, setPublishMessage] = useState<string | null>(null);
+
+  const {
+    isModalLack,
+    isModalCancel,
+    isModalError,
+    errorMessage,
+    isLoadingPublish,
+    setIsLoadingPublish,
+    isLoadingDraft,
+    setIsLoadingDraft,
+    isModalAlert,
+    setIsModalAlert,
+    isPublish,
+    setIsPublish,
+    title,
+    setTitle,
+    text,
+    setText,
+    publishMessage,
+    setPublishMessage,
+    onPressPublic,
+    onPressClose,
+    onPressCloseError,
+    onPressCloseModalPublish,
+    onPressCloseModalCancel,
+    onPressSubmitModalLack,
+    onClosePostDiary,
+    onPressNotSave,
+    onPressCloseModalLack,
+    onPressThemeGuide,
+  } = useCommon({
+    navigation,
+    themeCategory,
+    themeSubcategory,
+    points: user.points,
+    learnLanguage: profile.learnLanguage,
+  });
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
@@ -122,64 +146,9 @@ export const usePostDiary = ({
     isLoadingPublish,
     isModalLack,
     navigation,
+    setIsLoadingDraft,
+    setIsModalAlert,
   ]);
-
-  const onPressClose = useCallback((): void => {
-    Keyboard.dismiss();
-    if (title.length > 0 || text.length > 0) {
-      setIsModalCancel(true);
-    } else {
-      navigation.navigate('Home', {
-        screen: 'MyDiaryTab',
-        params: { screen: 'MyDiaryList' },
-      });
-    }
-  }, [navigation, text.length, title.length]);
-
-  const onPressPublic = useCallback((): void => {
-    Keyboard.dismiss();
-    const checked = checkBeforePost(
-      title,
-      text,
-      user.points,
-      profile.learnLanguage
-    );
-    if (!checked.result) {
-      setErrorMessage(checked.errorMessage);
-      setIsModalError(true);
-      return;
-    }
-    setIsModalAlert(true);
-  }, [profile.learnLanguage, text, title, user.points]);
-
-  useEffect(() => {
-    // keybordでの戻るを制御する Androidのみ
-    const backAction = (): boolean => {
-      Alert.alert(
-        I18n.t('common.confirmation'),
-        I18n.t('modalDiaryCancel.message'),
-        [
-          {
-            text: I18n.t('common.cancel'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: (): void => {
-              navigation.navigate('Home', {
-                screen: 'MyDiaryTab',
-                params: { screen: 'MyDiaryList' },
-              });
-            },
-          },
-        ]
-      );
-      return true;
-    };
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-    return (): void =>
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-  }, [navigation]);
 
   const onPressSubmit = useCallback(async (): Promise<void> => {
     if (isLoadingDraft || isLoadingPublish) return;
@@ -281,29 +250,15 @@ export const usePostDiary = ({
     isLoadingDraft,
     isLoadingPublish,
     profile.learnLanguage,
+    setIsLoadingPublish,
+    setIsPublish,
+    setPublishMessage,
     setUser,
     text.length,
     themeCategory,
     themeSubcategory,
     user,
   ]);
-
-  const onClosePostDiary = useCallback(() => {
-    navigation.navigate('Home', {
-      screen: 'MyDiaryTab',
-      params: { screen: 'MyDiaryList' },
-    });
-    setIsModalAlert(false);
-    setIsPublish(false);
-  }, [navigation]);
-
-  const onPressNotSave = useCallback(() => {
-    setIsModalCancel(false);
-    navigation.navigate('Home', {
-      screen: 'MyDiaryTab',
-      params: { screen: 'MyDiaryList' },
-    });
-  }, [navigation]);
 
   const onPressTutorial = useCallback(async (): Promise<void> => {
     setIsTutorialLoading(true);
@@ -321,17 +276,12 @@ export const usePostDiary = ({
     setIsTutorialLoading(false);
   }, [setUser, user]);
 
-  const onPressCloseError = useCallback(() => {
-    setErrorMessage('');
-    setIsModalError(false);
-  }, []);
-
   const onChangeTextTitle = useCallback(
     txt => {
       if (!isFirstEdit) setIsFirstEdit(true);
       setTitle(txt);
     },
-    [isFirstEdit]
+    [isFirstEdit, setTitle]
   );
 
   const onChangeTextText = useCallback(
@@ -339,27 +289,8 @@ export const usePostDiary = ({
       if (!isFirstEdit) setIsFirstEdit(true);
       setText(txt);
     },
-    [isFirstEdit]
+    [isFirstEdit, setText]
   );
-
-  const onPressSubmitModalLack = useCallback(() => {
-    setIsModalLack(false);
-  }, []);
-
-  const onPressCloseModalLack = useCallback(() => {
-    navigation.navigate('Home', {
-      screen: 'TeachDiaryTab',
-      params: { screen: 'TeachDiaryList' },
-    });
-  }, [navigation]);
-
-  const onPressCloseModalPublish = useCallback(() => {
-    setIsModalAlert(false);
-  }, []);
-
-  const onPressCloseModalCancel = useCallback(() => {
-    setIsModalCancel(false);
-  }, []);
 
   return {
     isLoadingDraft,
@@ -389,5 +320,6 @@ export const usePostDiary = ({
     onPressCloseError,
     onPressClose,
     onPressPublic,
+    onPressThemeGuide,
   };
 };
