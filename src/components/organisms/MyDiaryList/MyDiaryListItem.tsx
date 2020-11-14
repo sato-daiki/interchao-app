@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Platform } from '@unimodules/core';
+import { Diary } from '@/types';
 
 import { fontSizeM, softRed } from '@/styles/Common';
 import I18n from '@/utils/I18n';
 import { Hoverable } from '@/components/atoms';
-import { Diary } from '@/types';
-import DiaryListItem from '../DiaryListItem';
+import DiaryListItem from '@/components/organisms/DiaryListItem';
 
 interface Props {
   index: number;
@@ -54,7 +54,7 @@ const MyDiaryListItem = ({
 
   const renderRightActions = useCallback(
     (
-      progress: Animated.AnimatedInterpolation,
+      _progress: Animated.AnimatedInterpolation,
       dragX: Animated.AnimatedInterpolation
     ): JSX.Element | null => {
       if (Platform.OS === 'web') return null;

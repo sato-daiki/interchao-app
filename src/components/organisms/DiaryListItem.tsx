@@ -14,6 +14,7 @@ import {
 } from '@/styles/Common';
 import { getAlgoliaDay } from '@/utils/diary';
 import { Diary } from '@/types';
+import I18n from '@/utils/I18n';
 
 interface Props {
   mine?: boolean;
@@ -72,7 +73,16 @@ const DiaryListItem = ({
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text, correction, correction2, correction3 } = item;
+  const {
+    createdAt,
+    title,
+    text,
+    correction,
+    correction2,
+    correction3,
+    themeCategory,
+    themeSubcategory,
+  } = item;
   const postDay = getAlgoliaDay(createdAt);
 
   const onPressRow = useCallback(() => {
@@ -91,7 +101,9 @@ const DiaryListItem = ({
         {mine ? <MyDiaryStatus diary={item} /> : null}
       </View>
       <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-        {title}
+        {themeCategory && themeSubcategory
+          ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
+          : title}
       </Text>
 
       <View style={styles.content}>
