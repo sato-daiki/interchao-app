@@ -30,8 +30,8 @@ import {
   ModalRecordStackParamList,
   ModalPostDiaryWebNavigator,
   ModalPostDraftDiaryWebNavigator,
-  ModalSelectPostTypeStackParamList,
-  ModalSelectPostTypeNavigator,
+  ModalSelectDiaryTypeStackParamList,
+  ModalSelectDiaryTypeNavigator,
   ModalThemeGuideStackParamList,
   ModalThemeGuideNavigator,
 } from './ModalNavigator';
@@ -57,8 +57,8 @@ export type MainStackParamList = {
   ModalEditMyDiaryList: {
     screen: keyof ModalEditMyDiaryListStackParamList;
   };
-  ModalSelectPostType: {
-    screen: keyof ModalSelectPostTypeStackParamList;
+  ModalSelectDiaryType: {
+    screen: keyof ModalSelectDiaryTypeStackParamList;
   };
   ModalThemeGuide: {
     screen: keyof ModalThemeGuideStackParamList;
@@ -75,7 +75,13 @@ export type MainStackParamList = {
       themeSubcategory?: ThemeSubcategory;
     };
   };
-  ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
+  ModalPostDiaryWeb: {
+    screen: keyof ModalPostDiaryWebStackParamList;
+    params?: {
+      themeCategory?: ThemeCategory;
+      themeSubcategory?: ThemeSubcategory;
+    };
+  };
   ModalPostDraftDiary: {
     screen: keyof ModalPostDraftDiaryStackParamList;
     params: {
@@ -134,8 +140,8 @@ const MainNavigator = (): JSX.Element => {
         component={ModalEditMyDiaryListNavigator}
       />
       <MainStack.Screen
-        name="ModalSelectPostType"
-        component={ModalSelectPostTypeNavigator}
+        name="ModalSelectDiaryType"
+        component={ModalSelectDiaryTypeNavigator}
       />
       <MainStack.Screen
         name="ModalThemeGuide"

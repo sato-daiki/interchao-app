@@ -39,7 +39,7 @@ export type ModalThemeGuideStackParamList = {
     caller: CallerThemeGuide;
   };
 };
-export type ModalSelectPostTypeStackParamList = {
+export type ModalSelectDiaryTypeStackParamList = {
   SelectDiaryType: undefined;
   // SelectCategory: undefined; // 大カテゴリー
   SelectThemeSubcategory: undefined; // 小カテゴリー
@@ -101,9 +101,9 @@ export type ModalEditMyDiaryListStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalEditMyDiaryList'
 >;
-export type ModalSelectPostTypeStackNavigationProp = StackNavigationProp<
+export type ModalSelectDiaryTypeStackNavigationProp = StackNavigationProp<
   MainStackParamList,
-  'ModalSelectPostType'
+  'ModalSelectDiaryType'
 >;
 export type ModalThemeGuideStackNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -149,8 +149,8 @@ export type ModalAboutStackNavigationProp = StackNavigationProp<
 const ModalEditMyDiaryListStack = createStackNavigator<
   ModalEditMyDiaryListStackParamList
 >();
-const ModalSelectPostTypeStack = createStackNavigator<
-  ModalSelectPostTypeStackParamList
+const ModalSelectDiaryTypeStack = createStackNavigator<
+  ModalSelectDiaryTypeStackParamList
 >();
 const ModalThemeGuideStack = createStackNavigator<
   ModalThemeGuideStackParamList
@@ -192,10 +192,10 @@ export const ModalEditMyDiaryListNavigator = (): JSX.Element => {
     </ModalEditMyDiaryListStack.Navigator>
   );
 };
-export const ModalSelectPostTypeNavigator = (): JSX.Element => {
+export const ModalSelectDiaryTypeNavigator = (): JSX.Element => {
   return (
-    <ModalSelectPostTypeStack.Navigator initialRouteName="SelectDiaryType">
-      <ModalSelectPostTypeStack.Screen
+    <ModalSelectDiaryTypeStack.Navigator initialRouteName="SelectDiaryType">
+      <ModalSelectDiaryTypeStack.Screen
         name="SelectDiaryType"
         component={SelectDiaryTypeScreen}
         options={{
@@ -204,7 +204,7 @@ export const ModalSelectPostTypeNavigator = (): JSX.Element => {
           title: I18n.t('selectDiaryType.headerTitle'),
         }}
       />
-      <ModalSelectPostTypeStack.Screen
+      <ModalSelectDiaryTypeStack.Screen
         name="SelectThemeSubcategory"
         component={SelectThemeSubcategoryScreenContainer}
         options={{
@@ -213,7 +213,7 @@ export const ModalSelectPostTypeNavigator = (): JSX.Element => {
           title: I18n.t('selectThemeSubcategory.headerTitle'),
         }}
       />
-    </ModalSelectPostTypeStack.Navigator>
+    </ModalSelectDiaryTypeStack.Navigator>
   );
 };
 export const ModalThemeGuideNavigator = (): JSX.Element => {

@@ -6,8 +6,8 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { SelectThemeSubcategoryListItem } from '@/components/molecules';
 
 import {
-  ModalSelectPostTypeStackNavigationProp,
-  ModalSelectPostTypeStackParamList,
+  ModalSelectDiaryTypeStackNavigationProp,
+  ModalSelectDiaryTypeStackParamList,
 } from '@/navigations/ModalNavigator';
 import { User } from '@/types';
 import { ThemeSubcategoryInfo } from './interface';
@@ -19,10 +19,10 @@ export interface Props {
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<
-    ModalSelectPostTypeStackParamList,
+    ModalSelectDiaryTypeStackParamList,
     'SelectThemeSubcategory'
   >,
-  ModalSelectPostTypeStackNavigationProp
+  ModalSelectDiaryTypeStackNavigationProp
 >;
 
 type ScreenType = {
