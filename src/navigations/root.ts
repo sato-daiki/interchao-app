@@ -129,6 +129,22 @@ export const getConfig = ():
               },
             },
           },
+          ModalSelectPostType: {
+            path: '',
+            screens: {
+              SelectPostType: {
+                path: 'entry/type',
+              },
+            },
+          },
+          ModalThemeGuide: {
+            path: '',
+            screens: {
+              SelectPostType: {
+                path: 'entry/guide',
+              },
+            },
+          },
           ModalPostDiary: {
             path: '',
             screens: {
