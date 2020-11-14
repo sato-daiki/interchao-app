@@ -129,10 +129,13 @@ export const getConfig = ():
               },
             },
           },
-          ModalSelectPostType: {
+          ModalSelectDiaryType: {
             path: '',
             screens: {
-              SelectPostType: {
+              SelectDiaryType: {
+                path: 'entry/type',
+              },
+              SelectThemeSubcategory: {
                 path: 'entry/type',
               },
             },
@@ -140,7 +143,7 @@ export const getConfig = ():
           ModalThemeGuide: {
             path: '',
             screens: {
-              SelectPostType: {
+              ThemeGuide: {
                 path: 'entry/guide',
               },
             },

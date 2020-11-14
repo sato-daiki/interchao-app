@@ -4,16 +4,16 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { PaperAndPen, StudentHat } from '@/images';
 import {
-  ModalSelectPostTypeStackNavigationProp,
-  ModalSelectPostTypeStackParamList,
+  ModalSelectDiaryTypeStackNavigationProp,
+  ModalSelectDiaryTypeStackParamList,
 } from '@/navigations/ModalNavigator';
 import I18n from '@/utils/I18n';
 import { SelecttionBox } from '@/components/molecules';
 import { HeaderText } from '@/components/atoms';
 
 type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalSelectPostTypeStackParamList, 'SelectDiaryType'>,
-  ModalSelectPostTypeStackNavigationProp
+  StackNavigationProp<ModalSelectDiaryTypeStackParamList, 'SelectDiaryType'>,
+  ModalSelectDiaryTypeStackNavigationProp
 >;
 
 type ScreenType = {
