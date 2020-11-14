@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { fontSizeM } from '@/styles/Common';
+import { fontSizeS } from '@/styles/Common';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>;
@@ -13,18 +13,17 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     paddingVertical: 4,
     borderRadius: 8,
   },
   text: {
-    fontSize: fontSizeM,
-    fontWeight: 'bold',
+    fontSize: fontSizeS,
     color: '#fff',
   },
 });
 
-const Pill: React.FC<Props> = ({
+const SmallPill: React.FC<Props> = ({
   containerStyle,
   text,
   color,
@@ -37,4 +36,4 @@ const Pill: React.FC<Props> = ({
   );
 };
 
-export default React.memo(Pill);
+export default React.memo(SmallPill);
