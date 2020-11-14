@@ -1,7 +1,14 @@
 import React, { ReactNode } from 'react';
 
 import { fontSizeM, primaryColor } from '@/styles/Common';
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  Platform,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Hoverable, Pill } from '@/components/atoms';
 
 interface Props {
@@ -27,7 +34,7 @@ const styles = StyleSheet.create({
   },
   pill: {
     position: 'absolute',
-    top: -32,
+    top: Platform.OS === 'web' ? -40 : -32,
   },
   title: {
     fontSize: fontSizeM,

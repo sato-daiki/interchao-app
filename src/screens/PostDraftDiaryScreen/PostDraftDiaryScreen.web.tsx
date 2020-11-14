@@ -106,6 +106,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: 'Interchao',
       headerLeft,
       headerRight,
       headerTitle: (): JSX.Element => <HeaderTitle />,
@@ -113,8 +114,11 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title, isLoadingDraft]);
 
+  const { item } = route.params;
+
   return (
     <PostDiaryWeb
+      navigation={navigation}
       isLoading={isLoading || isLoadingDraft}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -124,10 +128,11 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      themeCategory={item.themeCategory}
+      themeSubcategory={item.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
-      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
       onClosePostDiary={onClosePostDiary}
