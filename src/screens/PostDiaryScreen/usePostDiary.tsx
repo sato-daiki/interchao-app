@@ -26,8 +26,8 @@ import { PostDiaryNavigationProp } from './interfaces';
 
 interface UsePostDiary {
   user: User;
-  themeCategory?: ThemeCategory;
-  themeSubcategory?: ThemeSubcategory;
+  themeCategory: ThemeCategory | undefined;
+  themeSubcategory: ThemeSubcategory | undefined;
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;

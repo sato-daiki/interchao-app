@@ -1,5 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
+
+import I18n from '@/utils/I18n';
 import {
   fontSizeLL,
   fontSizeL,
@@ -8,12 +10,18 @@ import {
   primaryColor,
   subTextColor,
   softRed,
+  linkBlue,
 } from '@/styles/Common';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
-import { Language } from '@/types';
-import I18n from '@/utils/I18n';
-import { LoadingModal, Space, TextInputTitle } from '@/components/atoms';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
+import {
+  Hoverable,
+  LoadingModal,
+  Space,
+  TextInputTitle,
+} from '@/components/atoms';
+import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
+import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
 import { ModalPublish } from '../ModalPublish';
 import ModalLackPoint from '../ModalLackPoint';
 import ModalDiaryCancel from '../ModalDiaryCancel';
@@ -21,6 +29,7 @@ import TutorialPostDiary from '../TutorialPostDiary';
 import ModalConfirm from '../ModalConfirm';
 
 interface Props {
+  navigation: PostDiaryNavigationProp | PostDraftDiaryNavigationProp;
   isLoading: boolean;
   isModalLack: boolean;
   isModalAlert: boolean;
@@ -32,10 +41,11 @@ interface Props {
   errorMessage: string;
   title: string;
   text: string;
+  themeCategory?: ThemeCategory | null;
+  themeSubcategory?: ThemeSubcategory | null;
   publishMessage: string | null;
   points: number;
   learnLanguage: Language;
-  nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;
@@ -86,17 +96,23 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   rightContainer: {
-    width: 124,
+    width: 132,
     alignItems: 'flex-end',
-    paddingRight: 8,
+    paddingRight: 16,
   },
   subText: {
     fontSize: fontSizeM,
     color: subTextColor,
   },
+  linkText: {
+    marginTop: 16,
+    fontSize: fontSizeM,
+    color: linkBlue,
+  },
 });
 
 const PostDiaryWeb = ({
+  navigation,
   isLoading,
   isModalLack,
   isModalAlert,
@@ -108,10 +124,11 @@ const PostDiaryWeb = ({
   errorMessage,
   title,
   text,
+  themeCategory,
+  themeSubcategory,
   publishMessage,
   points,
   learnLanguage,
-  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
@@ -127,6 +144,14 @@ const PostDiaryWeb = ({
 }: Props): JSX.Element => {
   const usePoints = getUsePoints(text.length, learnLanguage);
   const maxPostText = getMaxPostText(learnLanguage);
+
+  const onPressThemeGuide = useCallback(() => {
+    if (!themeCategory || !themeSubcategory) return;
+    navigation.push('ModalThemeGuide', {
+      screen: 'ThemeGuide',
+      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
+    });
+  }, [navigation, themeCategory, themeSubcategory]);
 
   return (
     <ScrollView style={styles.warapper}>
@@ -172,8 +197,7 @@ const PostDiaryWeb = ({
         <View style={styles.mainContainer}>
           <View style={styles.leftContainer}>
             <TextInputTitle
-              // editable={!themeSubcategoryInfo}
-              editable
+              editable={!themeCategory || !themeSubcategory}
               style={styles.titleInput}
               value={title}
               onChangeText={onChangeTextTitle}
@@ -205,6 +229,13 @@ const PostDiaryWeb = ({
             <Text style={styles.subText}>
               {`${I18n.t('postDiaryComponent.usePoints')} ${usePoints}`}
             </Text>
+            {!themeCategory || !themeSubcategory ? null : (
+              <Hoverable onPress={onPressThemeGuide}>
+                <Text style={styles.linkText}>
+                  {`${I18n.t('postDiaryComponent.hint')}`}
+                </Text>
+              </Hoverable>
+            )}
           </View>
         </View>
       </View>

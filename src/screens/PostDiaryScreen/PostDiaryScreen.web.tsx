@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
 
 const PostDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   user,
   profile,
   setUser,
@@ -67,6 +68,8 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressClose,
   } = usePostDiary({
     navigation,
+    themeCategory: route?.params?.themeCategory,
+    themeSubcategory: route?.params?.themeSubcategory,
     user,
     profile,
     setUser,
@@ -118,6 +121,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiaryWeb
+      navigation={navigation}
       isLoading={isLoadingPublish || isLoadingDraft}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -129,10 +133,11 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      themeCategory={route?.params?.themeCategory}
+      themeSubcategory={route?.params?.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
-      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
       onPressCloseModalPublish={onPressCloseModalPublish}

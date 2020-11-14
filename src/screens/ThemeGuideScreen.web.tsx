@@ -214,7 +214,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
         />
         <Text style={styles.title}>{`${wordParams.title}`}</Text>
         {wordParams.words.map(word => (
-          <Text key={word.id} style={styles.text}>
+          <Text key={word.id} style={[styles.text, styles.marginBottom4]}>
             {`・${word.learnText}`}
             <Text style={[styles.subTextColor, styles.marginLeft16]}>
               {` - ${word.nativeText}`}

@@ -37,8 +37,8 @@ interface Props {
   isLoading: boolean;
   isModalLack: boolean;
   isModalAlert: boolean;
-  isModalError: boolean;
   isModalCancel: boolean;
+  isModalError: boolean;
   isPublish: boolean;
   isTutorialLoading?: boolean;
   tutorialPostDiary?: boolean;
