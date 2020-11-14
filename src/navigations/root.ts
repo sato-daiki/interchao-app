@@ -156,26 +156,10 @@ export const getConfig = ():
               },
             },
           },
-          ModalPostDiaryWeb: {
-            path: '',
-            screens: {
-              PostDiaryWeb: {
-                path: 'entry/new',
-              },
-            },
-          },
           ModalPostDraftDiary: {
             path: '',
             screens: {
               PostDraftDiary: {
-                path: 'entries/:objectID/edit',
-              },
-            },
-          },
-          ModalPostDraftDiaryWeb: {
-            path: '',
-            screens: {
-              PostDraftDiaryWeb: {
                 path: 'entries/:objectID/edit',
               },
             },
