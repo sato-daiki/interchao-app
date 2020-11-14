@@ -1,21 +1,13 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet, Animated } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import {
-  fontSizeS,
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  subTextColor,
-  hoverGray,
-  softRed,
-} from '@/styles/Common';
+import { Platform } from '@unimodules/core';
+
+import { fontSizeM, softRed } from '@/styles/Common';
 import I18n from '@/utils/I18n';
 import { Hoverable } from '@/components/atoms';
-import { MyDiaryStatus, ProfileIcons } from '@/components/molecules';
-import { getAlgoliaDay } from '@/utils/diary';
 import { Diary } from '@/types';
-import { Platform } from '@unimodules/core';
+import DiaryListItem from '../DiaryListItem';
 
 interface Props {
   index: number;
@@ -27,50 +19,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-  warraper: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-  },
-  main: {
-    width: '100%',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#fff',
-  },
-  hover: {
-    backgroundColor: hoverGray,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 4,
-  },
-  postDayText: {
-    color: subTextColor,
-    fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 8,
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  text: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.3,
-    textAlign: 'left',
-    flex: 1,
-  },
-  icon: {
-    paddingLeft: 6,
-  },
   rightAction: {
     backgroundColor: softRed,
     justifyContent: 'center',
@@ -96,9 +44,6 @@ const MyDiaryListItem = ({
   handlePressItem,
   handlePressDelete,
 }: Props): JSX.Element => {
-  const { createdAt, title, text, correction, correction2, correction3 } = item;
-  const postDay = getAlgoliaDay(createdAt);
-
   const onPressItem = useCallback(() => {
     handlePressItem(item);
   }, [handlePressItem, item]);
@@ -145,39 +90,14 @@ const MyDiaryListItem = ({
   );
 
   return (
-    <View style={styles.warraper}>
-      <Swipeable ref={setRef} renderRightActions={renderRightActions}>
-        <Hoverable
-          style={styles.main}
-          hoverStyle={styles.hover}
-          onPress={onPressItem}
-        >
-          <View style={styles.header}>
-            <Text style={styles.postDayText}>{postDay}</Text>
-            <MyDiaryStatus diary={item} />
-          </View>
-          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {title}
-          </Text>
-
-          <View style={styles.content}>
-            <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
-              {text}
-            </Text>
-            {correction ? (
-              <View style={styles.icon}>
-                <ProfileIcons
-                  correction={correction}
-                  correction2={correction2}
-                  correction3={correction3}
-                  onPressUser={onPressUser}
-                />
-              </View>
-            ) : null}
-          </View>
-        </Hoverable>
-      </Swipeable>
-    </View>
+    <Swipeable ref={setRef} renderRightActions={renderRightActions}>
+      <DiaryListItem
+        mine
+        item={item}
+        onPressUser={onPressUser}
+        onPressItem={onPressItem}
+      />
+    </Swipeable>
   );
 };
 

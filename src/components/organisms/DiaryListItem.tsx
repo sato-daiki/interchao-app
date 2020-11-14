@@ -1,5 +1,9 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+
+import { Hoverable } from '@/components/atoms';
+import { MyDiaryStatus, ProfileIcons } from '@/components/molecules';
+
 import {
   fontSizeS,
   fontSizeM,
@@ -7,11 +11,9 @@ import {
   borderLightColor,
   subTextColor,
   hoverGray,
-} from '../../styles/Common';
-import { getAlgoliaDay } from '../../utils/diary';
-import { Diary } from '../../types';
-import { MyDiaryStatus, ProfileIcons } from '../molecules';
-import { Hoverable } from '../atoms';
+} from '@/styles/Common';
+import { getAlgoliaDay } from '@/utils/diary';
+import { Diary } from '@/types';
 
 interface Props {
   mine?: boolean;
@@ -26,6 +28,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
+    backgroundColor: '#fff',
   },
   hover: {
     backgroundColor: hoverGray,
