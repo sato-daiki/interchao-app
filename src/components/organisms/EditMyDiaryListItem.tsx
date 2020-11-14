@@ -12,6 +12,7 @@ import { MyDiaryStatus } from '@/components/molecules';
 import { getAlgoliaDay } from '@/utils/diary';
 import { Diary } from '@/types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import I18n from '@/utils/I18n';
 
 interface Props {
   item: Diary;
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
 });
 
 const EditMyDiaryListItem = ({ item, handlePress }: Props): JSX.Element => {
-  const { createdAt, title, text } = item;
+  const { createdAt, title, text, themeCategory, themeSubcategory } = item;
   const [checked, setChecked] = useState(false);
   const postDay = getAlgoliaDay(createdAt);
 
@@ -91,7 +92,9 @@ const EditMyDiaryListItem = ({ item, handlePress }: Props): JSX.Element => {
             <MyDiaryStatus diary={item} />
           </View>
           <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {title}
+            {themeCategory && themeSubcategory
+              ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
+              : title}
           </Text>
           <View style={styles.content}>
             <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
