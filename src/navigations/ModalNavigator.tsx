@@ -50,22 +50,8 @@ export type ModalPostDiaryStackParamList = {
     themeSubcategory?: ThemeSubcategory;
   };
 };
-export type ModalPostDiaryWebStackParamList = {
-  PostDiaryWeb: {
-    themeCategory?: ThemeCategory;
-    themeSubcategory?: ThemeSubcategory;
-  };
-};
 export type ModalPostDraftDiaryStackParamList = {
   PostDraftDiary: {
-    item: Diary;
-    objectID: string;
-    themeCategory?: ThemeCategory;
-    themeSubcategory?: ThemeSubcategory;
-  };
-};
-export type ModalPostDraftDiaryWebStackParamList = {
-  PostDraftDiaryWeb: {
     item: Diary;
     objectID: string;
     themeCategory?: ThemeCategory;
@@ -113,17 +99,9 @@ export type ModalPostDiaryStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalPostDiary'
 >;
-export type ModalPostDiaryWebStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalPostDiaryWeb'
->;
 export type ModalPostDraftDiaryStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalPostDraftDiary'
->;
-export type ModalPostDraftDiaryWebStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalPostDraftDiaryWeb'
 >;
 export type ModalEditMyProfileStackNavigationProp = StackNavigationProp<
   MainStackParamList,
@@ -158,14 +136,8 @@ const ModalThemeGuideStack = createStackNavigator<
 const ModalPostDiaryStack = createStackNavigator<
   ModalPostDiaryStackParamList
 >();
-const ModalPostDiaryWebStack = createStackNavigator<
-  ModalPostDiaryWebStackParamList
->();
 const ModalPostDraftDiaryStack = createStackNavigator<
   ModalPostDraftDiaryStackParamList
->();
-const ModalPostDraftDiaryWebStack = createStackNavigator<
-  ModalPostDraftDiaryWebStackParamList
 >();
 const ModalReviewStack = createStackNavigator<ModalReviewStackParamList>();
 const ModalEditMyProfileStack = createStackNavigator<
@@ -239,25 +211,9 @@ export const ModalPostDiaryNavigator = (): JSX.Element => {
       <ModalPostDiaryStack.Screen
         name="PostDiary"
         component={PostDiaryScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('postDiary.headerTitle'),
-        }}
+        // optionはweb/nativeで違うのでscreen側で設定する
       />
     </ModalPostDiaryStack.Navigator>
-  );
-};
-
-export const ModalPostDiaryWebNavigator = (): JSX.Element => {
-  return (
-    <ModalPostDiaryWebStack.Navigator initialRouteName="PostDiaryWeb">
-      <ModalPostDiaryWebStack.Screen
-        name="PostDiaryWeb"
-        component={PostDiaryScreenContainer}
-        options={{ title: 'Interchao' }}
-      />
-    </ModalPostDiaryWebStack.Navigator>
   );
 };
 
@@ -267,25 +223,9 @@ export const ModalPostDraftDiaryNavigator = (): JSX.Element => {
       <ModalPostDraftDiaryStack.Screen
         name="PostDraftDiary"
         component={PostDraftDiaryScreenContainer}
-        options={{
-          ...DefaultNavigationOptions,
-          ...DefaultModalLayoutOptions,
-          title: I18n.t('postDraftDiary.headerTitle'),
-        }}
+        // optionはweb/nativeで違うのでscreen側で設定する
       />
     </ModalPostDraftDiaryStack.Navigator>
-  );
-};
-
-export const ModalPostDraftDiaryWebNavigator = (): JSX.Element => {
-  return (
-    <ModalPostDraftDiaryWebStack.Navigator initialRouteName="PostDraftDiaryWeb">
-      <ModalPostDraftDiaryWebStack.Screen
-        name="PostDraftDiaryWeb"
-        component={PostDraftDiaryScreenContainer}
-        options={{ title: 'Interchao' }}
-      />
-    </ModalPostDraftDiaryWebStack.Navigator>
   );
 };
 

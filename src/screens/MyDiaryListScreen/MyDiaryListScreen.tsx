@@ -169,17 +169,10 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       if (!item.objectID) return;
 
       if (item.diaryStatus === 'draft') {
-        if (Platform.OS === 'web') {
-          navigation.navigate('ModalPostDraftDiaryWeb', {
-            screen: 'PostDraftDiaryWeb',
-            params: { item, objectID: item.objectID },
-          });
-        } else {
-          navigation.navigate('ModalPostDraftDiary', {
-            screen: 'PostDraftDiary',
-            params: { item, objectID: item.objectID },
-          });
-        }
+        navigation.navigate('ModalPostDraftDiary', {
+          screen: 'PostDraftDiary',
+          params: { item, objectID: item.objectID },
+        });
         return;
       }
 

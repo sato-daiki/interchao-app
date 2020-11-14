@@ -1,14 +1,15 @@
 import React, { useCallback, useLayoutEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
+
 import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
 import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
-import I18n from '@/utils/I18n';
-
 import {
   HeaderText,
   SmallButtonSubmit,
   SmallButtonWhite,
 } from '@/components/atoms';
+
+import I18n from '@/utils/I18n';
 import { primaryColor } from '@/styles/Common';
 import { usePostDiary } from './usePostDiary';
 import { ScreenType } from './interfaces';
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryWebScreen: React.FC<ScreenType> = ({
+const PostDiaryScreen: React.FC<ScreenType> = ({
   navigation,
   user,
   profile,
@@ -107,6 +108,7 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: 'Interchao',
       headerLeft,
       headerRight,
       headerTitle: (): JSX.Element => <HeaderTitle />,
@@ -147,4 +149,4 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
   );
 };
 
-export default PostDiaryWebScreen;
+export default PostDiaryScreen;

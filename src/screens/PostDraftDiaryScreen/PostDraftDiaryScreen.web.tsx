@@ -1,16 +1,16 @@
 import React, { useCallback, useLayoutEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 
-import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
 import {
   HeaderText,
   SmallButtonSubmit,
   SmallButtonWhite,
 } from '@/components/atoms';
-import I18n from '@/utils/I18n';
+import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
 import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
-import { View } from 'react-native-animatable';
+
+import I18n from '@/utils/I18n';
 import { primaryColor } from '@/styles/Common';
-import { StyleSheet } from 'react-native';
 import { usePostDraftDiary } from './usePostDraftDiary';
 import { ScreenType } from './interfaces';
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：日記投稿画面
  */
-const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
+const PostDraftDiaryScreen: React.FC<ScreenType> = ({
   navigation,
   route,
   user,
@@ -143,4 +143,4 @@ const PostDraftDiaryWebScreen: React.FC<ScreenType> = ({
   );
 };
 
-export default PostDraftDiaryWebScreen;
+export default PostDraftDiaryScreen;
