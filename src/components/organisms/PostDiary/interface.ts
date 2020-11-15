@@ -1,5 +1,7 @@
 import { Animated } from 'react-native';
 import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
+import { PostDiaryNavigationProp } from '@/screens/PostDiaryScreen/interfaces';
+import { PostDraftDiaryNavigationProp } from '@/screens/PostDraftDiaryScreen/interfaces';
 
 export interface PostDiaryKeyboardProps {
   title: string;
@@ -18,6 +20,7 @@ export interface PostDiaryKeyboardProps {
 }
 
 export interface PostDiaryProps {
+  navigation: PostDiaryNavigationProp | PostDraftDiaryNavigationProp;
   isLoading: boolean;
   isModalLack: boolean;
   isModalAlert: boolean;
@@ -46,5 +49,4 @@ export interface PostDiaryProps {
   onPressNotSave: () => void;
   onPressTutorial?: () => void;
   onPressCloseError: () => void;
-  onPressThemeGuide: () => void;
 }

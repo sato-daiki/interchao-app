@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
 });
 
 const PostDiary: React.FC<PostDiaryProps> = ({
+  navigation,
   isLoading,
   isModalLack,
   isModalAlert,
@@ -100,7 +101,6 @@ const PostDiary: React.FC<PostDiaryProps> = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
-  onPressThemeGuide,
 }) => {
   const [isForce, setIsForce] = useState(false);
   const [fadeAnim, setFadeAnim] = useState(new Animated.Value(0));
@@ -122,6 +122,14 @@ const PostDiary: React.FC<PostDiaryProps> = ({
   const maxPostText = getMaxPostText(learnLanguage);
 
   const onBlurText = useCallback((): void => setIsForce(false), []);
+
+  const onPressThemeGuide = useCallback(() => {
+    if (!themeCategory || !themeSubcategory) return;
+    navigation.push('ModalThemeGuide', {
+      screen: 'ThemeGuide',
+      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
+    });
+  }, [navigation, themeCategory, themeSubcategory]);
 
   return (
     <SafeAreaView style={styles.container}>

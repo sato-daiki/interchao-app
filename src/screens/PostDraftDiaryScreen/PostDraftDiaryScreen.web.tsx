@@ -67,7 +67,6 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     onPressCloseError,
     onPressPublic,
     onPressClose,
-    onPressThemeGuide,
   } = usePostDraftDiary({
     navigation,
     route,
@@ -120,6 +119,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiaryWeb
+      navigation={navigation}
       isLoading={isInitialLoading || isLoadingDraft || isLoadingPublish}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -145,7 +145,6 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       onPressDraft={onPressDraft}
       onPressNotSave={onPressNotSave}
       onPressCloseError={onPressCloseError}
-      onPressThemeGuide={onPressThemeGuide}
     />
   );
 };

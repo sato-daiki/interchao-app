@@ -127,14 +127,6 @@ export const useCommon = ({
     });
   }, [navigation]);
 
-  const onPressThemeGuide = useCallback(() => {
-    if (!themeCategory || !themeSubcategory) return;
-    navigation.push('ModalThemeGuide', {
-      screen: 'ThemeGuide',
-      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
-    });
-  }, [navigation, themeCategory, themeSubcategory]);
-
   return {
     isModalLack,
     isModalCancel,
@@ -163,6 +155,5 @@ export const useCommon = ({
     onClosePostDiary,
     onPressNotSave,
     onPressCloseModalLack,
-    onPressThemeGuide,
   };
 };

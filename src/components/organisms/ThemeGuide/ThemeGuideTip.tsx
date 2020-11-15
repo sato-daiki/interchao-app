@@ -7,8 +7,9 @@ import {
   subTextColor,
 } from '@/styles/Common';
 import I18n from '@/utils/I18n';
-import { StyleType, TipParams } from './interface';
+import { TipParams } from './interface';
 import Header from './Header';
+import { getStyle } from './util';
 
 interface Props {
   params: TipParams;
@@ -48,21 +49,7 @@ const styles = StyleSheet.create({
   example: {
     marginBottom: 8,
   },
-  bold: {
-    fontWeight: 'bold',
-  },
 });
-
-const getStyle = (styleType: StyleType): TextStyle | undefined => {
-  switch (styleType) {
-    case 'bold':
-      return styles.bold;
-    case 'p':
-      return undefined;
-    default:
-      return undefined;
-  }
-};
 
 const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
   return (
