@@ -67,7 +67,6 @@ export const usePostDraftDiary = ({
     onClosePostDiary,
     onPressNotSave,
     onPressCloseModalLack,
-    onPressThemeGuide,
   } = useCommon({
     navigation,
     themeCategory: item.themeCategory,
@@ -302,6 +301,5 @@ export const usePostDraftDiary = ({
     onPressCloseError,
     onPressClose,
     onPressPublic,
-    onPressThemeGuide,
   };
 };

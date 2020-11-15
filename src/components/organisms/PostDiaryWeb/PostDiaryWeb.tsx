@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
 
 import I18n from '@/utils/I18n';
@@ -19,12 +19,14 @@ import {
   Space,
   TextInputTitle,
 } from '@/components/atoms';
+import { Modal } from '@/components/template';
 import { ModalPublish } from '../ModalPublish';
 import ModalLackPoint from '../ModalLackPoint';
 import ModalDiaryCancel from '../ModalDiaryCancel';
 import TutorialPostDiary from '../TutorialPostDiary';
 import ModalConfirm from '../ModalConfirm';
 import { PostDiaryProps } from '../PostDiary/interface';
+import ThemeGuideWeb from '../ThemeGuide/ThemeGuideWeb';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -106,10 +108,18 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
-  onPressThemeGuide,
 }) => {
+  const [isModalThemeGuide, setIsModalThemeGuide] = useState(false);
   const usePoints = getUsePoints(text.length, learnLanguage);
   const maxPostText = getMaxPostText(learnLanguage);
+
+  const onPressThemeGuide = useCallback(() => {
+    setIsModalThemeGuide(true);
+  }, []);
+
+  const onPressCloseThemeGuide = useCallback(() => {
+    setIsModalThemeGuide(false);
+  }, []);
 
   return (
     <ScrollView style={styles.warapper}>
@@ -152,6 +162,15 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
           onPressNotSave={onPressNotSave}
           onPressClose={onPressCloseModalCancel}
         />
+        {themeSubcategory ? (
+          <Modal visible={isModalThemeGuide} disablePadding>
+            <ThemeGuideWeb
+              themeSubcategory={themeSubcategory}
+              onPressClose={onPressCloseThemeGuide}
+              onPressBegin={onPressCloseThemeGuide}
+            />
+          </Modal>
+        ) : null}
         <View style={styles.mainContainer}>
           <View style={styles.leftContainer}>
             <TextInputTitle
