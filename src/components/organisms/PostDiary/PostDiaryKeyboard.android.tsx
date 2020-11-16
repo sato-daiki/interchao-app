@@ -7,27 +7,18 @@ import {
   Keyboard,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import I18n from '@/utils/I18n';
-import { Language } from '@/types';
-import { offWhite, mainColor } from '@/styles/Common';
+
 import {
-  TextButtun,
-  TextInputTitle,
   TextInputText,
   Hoverable,
+  TextInputTitle,
+  TextButtun,
 } from '@/components/atoms';
-import { getMaxPostText } from '@/utils/diary';
 
-interface Props {
-  title: string;
-  text: string;
-  learnLanguage: Language;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressDraft: () => void;
-  onFocusText: () => void;
-  onBlurText: () => void;
-}
+import I18n from '@/utils/I18n';
+import { getMaxPostText } from '@/utils/diary';
+import { mainColor, offWhite } from '@/styles/Common';
+import { PostDiaryKeyboardProps } from './interface';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,9 +26,6 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-  },
-  titleInput: {
-    paddingVertical: 8,
   },
   textInput: {
     height: 400,
@@ -55,16 +43,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryKeybordAndroid = ({
+const PostDiaryKeyboard: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
+  themeCategory,
+  themeSubcategory,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
   onFocusText,
   onBlurText,
-}: Props): JSX.Element => {
+  onPressThemeGuide,
+}) => {
   const [isKeyboard, setIsKeyboard] = useState(false);
   const onKeyboardDidShow = (): void => {
     setIsKeyboard(true);
@@ -94,8 +85,9 @@ const PostDiaryKeybordAndroid = ({
       >
         <View style={styles.inner}>
           <TextInputTitle
-            style={styles.titleInput}
+            editable={!themeCategory || !themeSubcategory}
             value={title}
+            onFocus={onFocusText}
             onChangeText={onChangeTextTitle}
           />
           <TextInputText
@@ -111,6 +103,13 @@ const PostDiaryKeybordAndroid = ({
       <SafeAreaView>
         {isKeyboard ? null : (
           <View style={styles.footer}>
+            {!themeCategory || !themeSubcategory ? null : (
+              <TextButtun
+                isBorrderTop
+                title={I18n.t('postDiaryComponent.hint')}
+                onPress={onPressThemeGuide}
+              />
+            )}
             <TextButtun
               isBorrderTop
               isBorrderBottom
@@ -133,4 +132,4 @@ const PostDiaryKeybordAndroid = ({
   );
 };
 
-export default PostDiaryKeybordAndroid;
+export default PostDiaryKeyboard;

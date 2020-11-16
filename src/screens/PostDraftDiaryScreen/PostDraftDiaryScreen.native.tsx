@@ -1,8 +1,13 @@
 import React, { useLayoutEffect } from 'react';
 
 import { HeaderText } from '@/components/atoms';
-import PostDiary from '@/components/organisms/PostDiary';
+import { PostDiary } from '@/components/organisms/PostDiary';
+
 import I18n from '@/utils/I18n';
+import {
+  DefaultModalLayoutOptions,
+  DefaultNavigationOptions,
+} from '@/constants/NavigationOptions';
 import { usePostDraftDiary } from './usePostDraftDiary';
 import { ScreenType } from './interfaces';
 
@@ -18,7 +23,9 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
   editDiary,
 }) => {
   const {
-    isLoading,
+    isInitialLoading,
+    isLoadingPublish,
+    isLoadingDraft,
     isModalLack,
     isModalAlert,
     isModalCancel,
@@ -52,6 +59,9 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      ...DefaultNavigationOptions,
+      ...DefaultModalLayoutOptions,
+      title: I18n.t('postDraftDiary.headerTitle'),
       headerLeft: (): JSX.Element => (
         <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
       ),
@@ -72,9 +82,12 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title]);
 
+  const { item } = route.params;
+
   return (
     <PostDiary
-      isLoading={isLoading}
+      navigation={navigation}
+      isLoading={isInitialLoading || isLoadingDraft || isLoadingPublish}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
       isModalCancel={isModalCancel}
@@ -83,10 +96,11 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      themeCategory={item.themeCategory}
+      themeSubcategory={item.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
-      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
       onClosePostDiary={onClosePostDiary}

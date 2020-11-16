@@ -4,14 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import {
-  borderLightColor,
-  primaryColor,
-  fontSizeM,
-  subTextColor,
-} from '../styles/Common';
-import { openCameraRoll, uploadImageAsync } from '../utils/CameraRoll';
-import firebase from '../constants/firebase';
+
 import {
   LoadingModal,
   Avatar,
@@ -20,24 +13,33 @@ import {
   HeaderText,
   CountryNameWithFlag,
   SmallButtonWhite,
-} from '../components/atoms';
-import { Profile, Language, CountryCode } from '../types';
-import I18n from '../utils/I18n';
-import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
+} from '@/components/atoms';
+import { KeyboardHideButton } from '@/components/molecules';
+import ModalSpokenLanguages from '@/components/organisms/ModalSpokenLanguages';
+import { ModalConfirm } from '@/components/organisms';
+
+import {
+  borderLightColor,
+  primaryColor,
+  fontSizeM,
+  subTextColor,
+} from '@/styles/Common';
+import { openCameraRoll, uploadImageAsync } from '@/utils/CameraRoll';
+import firebase from '@/constants/firebase';
+import { Profile, Language, CountryCode } from '@/types';
+import I18n from '@/utils/I18n';
 import {
   allLanguage,
   getLanguage,
   getTargetLanguages,
   getLanguageNum,
   checkSelectLanguage,
-} from '../utils/diary';
-import { ModalConfirm } from '../components/organisms';
-import { MyPageTabNavigationProp } from '../navigations/MyPageTabNavigator';
+} from '@/utils/diary';
+import { MyPageTabNavigationProp } from '@/navigations/MyPageTabNavigator';
 import {
   ModalEditMyProfileStackNavigationProp,
   ModalEditMyProfileStackParamList,
-} from '../navigations/ModalNavigator';
-import { KeyboardHideButton } from '../components/molecules';
+} from '@/navigations/ModalNavigator';
 
 export interface Props {
   profile: Profile;
@@ -164,9 +166,6 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isKeyboard, setIsKeyboard] = useState(false);
-  const targetLanguages = useRef(
-    getTargetLanguages(learnLanguage, nativeLanguage, spokenLanguages)
-  );
 
   const onPressSubmit = useCallback(async (): Promise<void> => {
     if (isLoading) return;
@@ -364,7 +363,6 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
         onPressSubmit={onPressSubmitLanguagesLearn}
         onPressClose={onPressCloseLanguagesLearn}
       />
-
       <ModalSpokenLanguages
         visible={isNative}
         defaultLanguage={nativeLanguage}
@@ -374,7 +372,11 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       />
       <ModalSpokenLanguages
         visible={isSpoken}
-        languages={targetLanguages.current}
+        languages={getTargetLanguages(
+          learnLanguage,
+          nativeLanguage,
+          spokenLanguages
+        )}
         onPressSubmit={onPressSubmitLanguagesSpoken}
         onPressClose={onPressCloseLanguagesSpoken}
       />

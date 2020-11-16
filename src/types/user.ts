@@ -1,5 +1,23 @@
 import { firestore } from 'firebase';
 
+export type ThemeCategory = 'first';
+export type ThemeSubcategory =
+  | 'selfIntroduction'
+  | 'hobby'
+  | 'job'
+  | 'study'
+  | 'dream'
+  | 'trip'
+  | 'reborn';
+
+export interface ThemeDiary {
+  themeCategory: ThemeCategory;
+  themeSubcategory: ThemeSubcategory;
+  objectID: string;
+  updatedAt: firebase.firestore.FieldValue;
+  createdAt: firebase.firestore.FieldValue;
+}
+
 export type AppReviewState = 'yet' | 'never' | 'done';
 
 export interface User {
@@ -26,6 +44,7 @@ export interface User {
   // mailReminderOneWeek?: boolean;
   // mailReminderOneMonth?: boolean;
   // mailReminderThreeMonths?: boolean;
+  themeDiaries?: ThemeDiary[] | null;
   appReviewState?: AppReviewState;
   runningDays?: number;
   runningWeeks?: number;

@@ -63,6 +63,7 @@ const FairCopyEdit: React.FC<Props> = ({
         extraScrollHeight={32}
       >
         <TextInputTitle
+          editable
           style={styles.textInput}
           value={title}
           onChangeText={onChangeTextTitle}

@@ -1,5 +1,9 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+
+import { ProfileIcon, Hoverable } from '@/components/atoms';
+import { UserDiaryStatus } from '@/components/molecules';
+
 import {
   fontSizeS,
   fontSizeM,
@@ -7,12 +11,10 @@ import {
   borderLightColor,
   subTextColor,
   hoverGray,
-} from '../../styles/Common';
-import { getAlgoliaDay } from '../../utils/diary';
-import { Diary } from '../../types';
-import { UserDiaryStatus } from '../molecules';
-import { ProfileIcon, Hoverable } from '../atoms';
-import I18n from '../../utils/I18n';
+} from '@/styles/Common';
+import { getAlgoliaDay } from '@/utils/diary';
+import I18n from '@/utils/I18n';
+import { Diary } from '@/types';
 
 interface Props {
   item: Diary;
@@ -83,7 +85,14 @@ const TeachDiaryListItem = ({
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text, profile } = item;
+  const {
+    createdAt,
+    title,
+    text,
+    profile,
+    themeCategory,
+    themeSubcategory,
+  } = item;
   const { photoUrl, nativeLanguage, uid, userName } = profile;
   const postDay = getAlgoliaDay(createdAt);
 
@@ -113,7 +122,9 @@ const TeachDiaryListItem = ({
         </View>
         <View style={styles.content}>
           <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {title}
+            {themeCategory && themeSubcategory
+              ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
+              : title}
           </Text>
           <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
             {text}

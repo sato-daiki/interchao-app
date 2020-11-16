@@ -2,34 +2,36 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Localization from 'expo-localization';
 import { StackScreenProps } from '@react-navigation/stack';
-import SubmitButton from '../components/atoms/SubmitButton';
+
+import {
+  Space,
+  SubmitButton,
+  Hoverable,
+  AddButton,
+  HoverableIcon,
+  CountryNameWithFlag,
+} from '@/components/atoms';
+import { LanguageRadioBox } from '@/components/molecules';
+import ModalSpokenLanguages from '@/components/organisms/ModalSpokenLanguages';
+import { ModalConfirm } from '@/components/organisms';
+
 import {
   primaryColor,
   fontSizeL,
   fontSizeM,
   subTextColor,
-} from '../styles/Common';
-import { Profile, Language, CountryCode } from '../types';
-import Space from '../components/atoms/Space';
-import LanguageRadioBox from '../components/molecules/LanguageRadioBox';
+} from '@/styles/Common';
+import { Profile, Language, CountryCode } from '@/types';
+import { track, events } from '@/utils/Analytics';
+import I18n from '@/utils/I18n';
 
-import { track, events } from '../utils/Analytics';
-import I18n from '../utils/I18n';
-import ModalSpokenLanguages from '../components/organisms/ModalSpokenLanguages';
 import {
   getLanguage,
   getTargetLanguages,
   getLanguageNum,
   checkSelectLanguage,
-} from '../utils/diary';
-import { ModalConfirm } from '../components/organisms';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
-import {
-  Hoverable,
-  AddButton,
-  HoverableIcon,
-  CountryNameWithFlag,
-} from '../components/atoms';
+} from '@/utils/diary';
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
 
 export interface Props {
   profile: Profile;
@@ -146,16 +148,16 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const onPressCloseError = (): void => {
+  const onPressCloseError = useCallback((): void => {
     setErrorMessage('');
     setIsModalError(false);
-  };
+  }, []);
 
   useEffect((): void => {
     track(events.OPENED_SELECT_LANGUAGE);
   }, []);
 
-  const onPressNext = (): void => {
+  const onPressNext = useCallback((): void => {
     const checked = checkSelectLanguage(
       nationalityCode,
       learnLanguage,
@@ -176,14 +178,25 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
       nationalityCode,
     });
     navigation.navigate('InputUserName');
-  };
+  }, [
+    learnLanguage,
+    nationalityCode,
+    nativeLanguage,
+    navigation,
+    profile,
+    setProfile,
+    spokenLanguages,
+  ]);
 
-  const onPressSpokenLanguages = (value: Language | undefined): void => {
-    if (value) {
-      setSpokenLanguages([...spokenLanguages, value]);
-    }
-    setSpokenVisible(false);
-  };
+  const onPressSpokenLanguages = useCallback(
+    (value: Language | undefined): void => {
+      if (value) {
+        setSpokenLanguages([...spokenLanguages, value]);
+      }
+      setSpokenVisible(false);
+    },
+    [spokenLanguages]
+  );
 
   const onOpenCountry = useCallback((): void => {
     navigation.navigate('EditCountry', {
@@ -191,6 +204,29 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
       setNationalityCode: (c: CountryCode): void => setNationalityCode(c),
     });
   }, [nationalityCode, navigation]);
+
+  const onPressCloseSpoken = useCallback((): void => {
+    setSpokenVisible(false);
+  }, []);
+
+  const onPressLearnLanguage = useCallback((value: Language): void => {
+    setLearnLanguage(value);
+  }, []);
+
+  const onPressNativeLanguage = useCallback((value: Language): void => {
+    setNativeLanguage(value);
+  }, []);
+
+  const onPressDeleteSpokenLanguages = useCallback(
+    (item: Language): void => {
+      setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+    },
+    [spokenLanguages]
+  );
+
+  const onPressAdd = useCallback((): void => {
+    setSpokenVisible(true);
+  }, []);
 
   return (
     <View style={styles.contaner}>
@@ -209,19 +245,19 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
           spokenLanguages
         )}
         onPressSubmit={onPressSpokenLanguages}
-        onPressClose={(): void => setSpokenVisible(false)}
+        onPressClose={onPressCloseSpoken}
       />
       <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
       <LanguageRadioBox
         label={I18n.t('selectLanguage.learn')}
         value={learnLanguage}
-        onPress={(value: Language): void => setLearnLanguage(value)}
+        onPress={onPressLearnLanguage}
       />
       <Space size={16} />
       <LanguageRadioBox
         label={I18n.t('selectLanguage.native')}
         value={nativeLanguage}
-        onPress={(value: Language): void => setNativeLanguage(value)}
+        onPress={onPressNativeLanguage}
       />
       <Space size={16} />
       <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
@@ -235,14 +271,12 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
             color={primaryColor}
             name="trash-can-outline"
             style={styles.trash}
-            onPress={(): void => {
-              setSpokenLanguages(spokenLanguages.filter(s => s !== item));
-            }}
+            onPress={(): void => onPressDeleteSpokenLanguages(item)}
           />
         </View>
       ))}
       {spokenLanguages.length < getLanguageNum() - 2 ? (
-        <AddButton onPress={(): void => setSpokenVisible(true)} />
+        <AddButton onPress={onPressAdd} />
       ) : null}
 
       <Space size={24} />

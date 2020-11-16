@@ -5,6 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  ListRenderItem,
 } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
@@ -403,9 +404,8 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       </>
     ) : null;
 
-  type RenderItemProps = { item: Diary };
-  const renderDiary = useCallback(
-    ({ item }: RenderItemProps): JSX.Element => {
+  const renderDiary: ListRenderItem<Diary> = useCallback(
+    ({ item }): JSX.Element => {
       return (
         <DiaryListItem
           item={item}

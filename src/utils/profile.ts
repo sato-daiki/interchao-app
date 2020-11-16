@@ -1,7 +1,7 @@
 import { ImageSourcePropType } from 'react-native';
-import { Profile, Language } from '../types';
-import firebase from '../constants/firebase';
-import { Zebbu, Zenny } from '../images';
+import { Language, Profile } from '@/types';
+import firebase from '@/constants/firebase';
+import { Zebbu, Zenny } from '@/images';
 
 export const getPhotoUrl = (
   photoUrl: string | null,
@@ -43,32 +43,10 @@ export const getProfile = async (uid: string): Promise<Profile | null> => {
       .get();
     const data = doc.data();
     if (data) {
-      const {
-        name,
-        userName,
-        photoUrl,
-        learnLanguage,
-        nativeLanguage,
-        spokenLanguages,
-        nationalityCode,
-        introduction,
-        createdAt,
-        updatedAt,
-      } = data;
-
       return {
         uid,
-        name,
-        userName,
-        photoUrl,
-        learnLanguage,
-        nativeLanguage,
-        spokenLanguages,
-        nationalityCode,
-        introduction,
-        createdAt,
-        updatedAt,
-      };
+        ...data,
+      } as Profile;
     }
   } catch (e) {
     return null;
