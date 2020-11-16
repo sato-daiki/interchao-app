@@ -693,12 +693,12 @@ const selfIntroduction = {
 
 const firstDetail = {
   selfIntroduction,
-  hobby,
-  job,
-  study,
-  dream,
-  trip,
-  reborn,
+  // hobby,
+  // job,
+  // study,
+  // dream,
+  // trip,
+  // reborn,
 };
 
 const en = {
