@@ -71,7 +71,6 @@ const SelectThemeSubcategoryScreen: React.FC<ScreenType> = ({
           item={item}
           source={item.source}
           title={item.title}
-          text={item.text}
           onPress={onPressItem}
         />
       );

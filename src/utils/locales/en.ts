@@ -652,62 +652,28 @@ const language = {
 
 const selectDiaryType = {
   headerTitle: 'Type Selection',
-  recommend: 'おすすめ',
+  recommend: 'おススメ',
   titleFree: '自由英作文',
   titleTheme: 'テーマ作文',
-  textFree: '日記や今日話せなかったこと、好き映画。自由テーマで書きましょう。',
+  textFree:
+    '日記、今日話せなかったこと、好きな映画などなど。自由テーマで書きましょう。',
   textTheme:
-    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
+    'お題に沿って文章を書きましょう。書く内容が思いつかない場合はおすすめ。',
 };
 
-const selfIntroduction = {
-  title: '自己紹介',
-  text: '自己紹介について書きましょう',
-};
-
-const hobby = {
-  title: '趣味',
-  text: '趣味について書きましょう',
-};
-
-const job = {
-  title: '仕事の紹介',
-  text: '仕事の紹介について書きましょう',
-};
-
-const study = {
-  title: '英語を勉強する理由',
-  text: '仕事の紹介について書きましょう',
-};
-
-const dream = {
-  title: '将来の夢',
-  text: 'test',
-};
-
-const trip = {
-  title: '旅行',
-  text: 'test',
-};
-
-const reborn = {
-  title: 'もし生まれ変わるなら',
-  text: 'もし生まれ変わるならについて書きましょう',
-};
-
-const first = {
-  selfIntroduction,
-  hobby,
-  job,
-  study,
-  dream,
-  trip,
-  reborn,
+const firstList = {
+  selfIntroduction: '自己紹介',
+  hobby: '趣味',
+  job: '仕事の紹介',
+  study: '英語を勉強する理由',
+  dream: '将来の夢',
+  trip: '旅行の思い出',
+  reborn: 'もし生まれ変わるなら',
 };
 
 const selectThemeSubcategory = {
   headerTitle: 'Theme Selection',
-  first,
+  firstList,
 };
 
 const themeGuide = {
@@ -719,6 +685,20 @@ const themeGuide = {
   example: '例文',
   word: '単語',
   guideEndText: 'ここでスライドは終わりです。\n実際に文章を書いてみましょう！',
+};
+
+const selfIntroduction = {
+  introductionTitle: '',
+};
+
+const firstDetail = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
 };
 
 const en = {
@@ -801,6 +781,7 @@ const en = {
   userDiaryStatus,
   language,
   inquiry,
+  firstDetail,
 };
 
 export default en;

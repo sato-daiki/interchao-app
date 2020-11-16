@@ -7,16 +7,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 interface UseCommon {
   navigation: StackNavigationProp<any>;
-  themeCategory: ThemeCategory | undefined | null;
-  themeSubcategory: ThemeSubcategory | undefined | null;
+  themeTitle?: string;
   points: number;
   learnLanguage: Language;
 }
 
 export const useCommon = ({
   navigation,
-  themeCategory,
-  themeSubcategory,
+  themeTitle,
   points,
   learnLanguage,
 }: UseCommon) => {
@@ -30,7 +28,7 @@ export const useCommon = ({
   const [isPublish, setIsPublish] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [title, setTitle] = useState(themeSubcategory || '');
+  const [title, setTitle] = useState(themeTitle || '');
   const [text, setText] = useState('');
   const [publishMessage, setPublishMessage] = useState<string | null>(null);
 

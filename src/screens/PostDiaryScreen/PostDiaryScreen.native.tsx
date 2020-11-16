@@ -22,9 +22,6 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
   setUser,
   addDiary,
 }) => {
-  const themeCategory = route?.params?.themeCategory;
-  const themeSubcategory = route?.params?.themeSubcategory;
-
   const {
     isLoadingPublish,
     isLoadingDraft,
@@ -54,8 +51,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressClose,
   } = usePostDiary({
     navigation,
-    themeCategory,
-    themeSubcategory,
+    route,
     user,
     profile,
     setUser,

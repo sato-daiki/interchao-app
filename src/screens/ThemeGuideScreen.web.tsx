@@ -24,7 +24,7 @@ type ScreenType = {
 };
 
 const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
-  const { themeCategory, themeSubcategory, caller } = route.params;
+  const { themeTitle, themeCategory, themeSubcategory, caller } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
@@ -41,12 +41,12 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
     if (caller === 'SelectThemeSubcategory') {
       navigation.navigate('ModalPostDiary', {
         screen: 'PostDiary',
-        params: { themeCategory, themeSubcategory },
+        params: { themeTitle, themeCategory, themeSubcategory },
       });
     } else {
       navigation.goBack();
     }
-  }, [caller, navigation, themeCategory, themeSubcategory]);
+  }, [caller, navigation, themeTitle, themeCategory, themeSubcategory]);
 
   return (
     <ThemeGuideWeb
