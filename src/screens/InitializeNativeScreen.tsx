@@ -1,13 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import SubmitButton from '../components/atoms/SubmitButton';
-import { fontSizeM, linkBlue, primaryColor } from '../styles/Common';
-import { LogoVercitacl } from '../images';
-import { track, events } from '../utils/Analytics';
-import I18n from '../utils/I18n';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
-import { Hoverable } from '../components/atoms';
+
+import { Hoverable, SubmitButton } from '@/components/atoms';
+
+import { fontSizeM, linkBlue, primaryColor } from '@/styles/Common';
+import { LogoVercitacl } from '@/images';
+import { track, events } from '@/utils/Analytics';
+import I18n from '@/utils/I18n';
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
 
 type ScreenType = StackScreenProps<AuthStackParamList, 'Initialize'>;
 

@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import I18n from '@/utils/I18n';
 import {
   subTextColor,
   fontSizeS,
@@ -8,7 +9,7 @@ import {
   fontSizeM,
 } from '../../styles/Common';
 import { getAlgoliaDay } from '../../utils/diary';
-import { MyDiaryStatus, UserDiaryStatus } from '../molecules';
+import { UserDiaryStatus } from '../molecules';
 import { Diary } from '../../types';
 import Highlight from './Highlight';
 import { Space, Hoverable } from '../atoms';
@@ -35,6 +36,10 @@ const styles = StyleSheet.create({
     color: subTextColor,
     fontSize: fontSizeS,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   title: {
     color: primaryColor,
     fontWeight: 'bold',
@@ -58,7 +63,7 @@ const SearchDiaryList: React.FC<Props> = ({
   item,
   onPressItem,
 }): JSX.Element => {
-  const { createdAt } = item;
+  const { createdAt, themeCategory, themeSubcategory } = item;
   const postDay = getAlgoliaDay(createdAt);
 
   const onPress = useCallback(() => {
@@ -71,12 +76,19 @@ const SearchDiaryList: React.FC<Props> = ({
         <Text style={styles.postDayText}>{postDay}</Text>
         <UserDiaryStatus diary={item} />
       </View>
-      <Highlight
-        textStyle={styles.title}
-        attribute="title"
-        numberOfLines={1}
-        hit={item}
-      />
+      <View style={styles.row}>
+        <Text style={styles.title}>
+          {themeCategory && themeSubcategory
+            ? `${I18n.t('selectDiaryType.titleTheme')} - `
+            : null}
+        </Text>
+        <Highlight
+          textStyle={styles.title}
+          attribute="title"
+          numberOfLines={1}
+          hit={item}
+        />
+      </View>
       <Space size={8} />
       <View style={styles.content}>
         <Highlight

@@ -9,10 +9,10 @@ import {
   Platform,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { primaryColor, fontSizeM, fontSizeS } from '../../styles/Common';
-import { Modal } from '../template';
-import { WhiteButton, Space, HoverableIcon } from '../atoms';
-import I18n from '../../utils/I18n';
+import { primaryColor, fontSizeM, fontSizeS } from '@/styles/Common';
+import { Modal } from '@/components/template';
+import { WhiteButton, Space, HoverableIcon } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 
 const { height } = Dimensions.get('window');
 

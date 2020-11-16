@@ -19,6 +19,7 @@ const common = {
   copy: '복사',
   slow: '느림',
   back: 'Back',
+  begin: '시작하기',
 };
 
 // web
@@ -298,6 +299,10 @@ const selectLanguage = {
   sameSpokenAlert:
     '"기타 원어민 수준의 언어"와 "배우고 싶은 언어"와 "원어민 언어"는 다른 언어를 선택하십시오',
   add: '추가하기',
+};
+
+const selectDiaryType = {
+  headerTitle: '유형 선택',
 };
 
 const setting = {
@@ -613,6 +618,7 @@ const myDiaryStatus = {
   done: '첨삭 완료',
   correcting: '첨삭중',
   unread: '안읽음',
+  posted: '게시일시',
 };
 
 const userDiaryStatus = {
@@ -658,6 +664,7 @@ const ko = {
   review,
   reviewList,
   selectLanguage,
+  selectDiaryType,
   setting,
   signIn,
   signUp,

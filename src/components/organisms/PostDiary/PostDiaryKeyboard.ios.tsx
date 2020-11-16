@@ -2,35 +2,24 @@ import React from 'react';
 import {
   StyleSheet,
   SafeAreaView,
-  View,
   Keyboard,
   Animated,
+  View,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { Language } from '@/types';
+
+import {
+  TextInputText,
+  Hoverable,
+  TextInputTitle,
+  TextButtun,
+} from '@/components/atoms';
+
 import { getMaxPostText } from '@/utils/diary';
 import { offWhite, mainColor } from '@/styles/Common';
 import I18n from '@/utils/I18n';
-import {
-  TextButtun,
-  TextInputTitle,
-  TextInputText,
-  Hoverable,
-} from '@/components/atoms';
-
-interface Props {
-  title: string;
-  text: string;
-  learnLanguage: Language;
-  isForce: boolean;
-  fadeAnim: Animated.Value;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressDraft: () => void;
-  onFocusText: () => void;
-  onBlurText: () => void;
-}
+import { PostDiaryKeyboardProps } from './interface';
 
 const styles = StyleSheet.create({
   icon: {
@@ -48,21 +37,25 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryKeyboardIOS = ({
+const PostDiaryKeyboard: React.FC<PostDiaryKeyboardProps> = ({
   title,
   text,
   learnLanguage,
   isForce,
+  themeCategory,
+  themeSubcategory,
   fadeAnim,
+  onPressThemeGuide,
   onChangeTextTitle,
   onChangeTextText,
   onPressDraft,
   onFocusText,
   onBlurText,
-}: Props): JSX.Element => {
+}) => {
   return (
     <>
       <TextInputTitle
+        editable={!themeCategory || !themeSubcategory}
         value={title}
         onFocus={onFocusText}
         onChangeText={onChangeTextTitle}
@@ -93,6 +86,13 @@ const PostDiaryKeyboardIOS = ({
       {/* 画面下部がiOSX以上の時隠れてしまうのを対応 */}
       <SafeAreaView>
         <View style={styles.footer}>
+          {!themeCategory || !themeSubcategory ? null : (
+            <TextButtun
+              isBorrderTop
+              title={I18n.t('postDiaryComponent.hint')}
+              onPress={onPressThemeGuide}
+            />
+          )}
           <TextButtun
             isBorrderTop
             isBorrderBottom
@@ -105,4 +105,4 @@ const PostDiaryKeyboardIOS = ({
   );
 };
 
-export default PostDiaryKeyboardIOS;
+export default PostDiaryKeyboard;

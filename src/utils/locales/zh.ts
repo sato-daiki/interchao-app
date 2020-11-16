@@ -19,6 +19,7 @@ const common = {
   copy: '复制',
   slow: '放慢语速',
   back: '返回',
+  begin: '开始',
 };
 
 // web
@@ -286,6 +287,10 @@ const selectLanguage = {
   sameSpokenAlert:
     '请为 "您会说的其他语言" 和 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
   add: '添加',
+};
+
+const selectDiaryType = {
+  headerTitle: '类型选择',
 };
 
 const setting = {
@@ -595,6 +600,7 @@ const myDiaryStatus = {
   done: '批改结束',
   correcting: '正在批改',
   unread: '未读',
+  posted: '发表于',
 };
 
 const userDiaryStatus = {
@@ -640,6 +646,7 @@ const zh = {
   review,
   reviewList,
   selectLanguage,
+  selectDiaryType,
   setting,
   signIn,
   signUp,

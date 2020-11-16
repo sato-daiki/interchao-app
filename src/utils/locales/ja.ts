@@ -19,6 +19,7 @@ const common = {
   copy: 'コピー',
   slow: '遅く',
   back: '戻る',
+  begin: 'はじめる',
 };
 
 // web
@@ -301,6 +302,15 @@ const selectLanguage = {
   sameSpokenAlert:
     '"学びたい言語"と"話せる言語"と"その他の話せる言語"は別の言語を選択してください',
   add: '追加する',
+};
+
+const selectDiaryType = {
+  headerTitle: 'タイプの選択',
+  titleFree: '自由英作文',
+  titleTheme: 'テーマ作文',
+  textFree: '日記や今日話せなかったこと、好き映画。自由テーマで書きましょう。',
+  textTheme:
+    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
 };
 
 const setting = {
@@ -619,6 +629,7 @@ const myDiaryStatus = {
   done: '添削完了',
   correcting: '添削中',
   unread: '未読',
+  posted: '投稿済',
 };
 
 const userDiaryStatus = {
@@ -664,6 +675,7 @@ const ja = {
   review,
   reviewList,
   selectLanguage,
+  selectDiaryType,
   setting,
   signIn,
   signUp,

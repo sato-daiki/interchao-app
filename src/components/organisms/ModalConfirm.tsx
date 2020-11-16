@@ -1,32 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
-import { Modal } from '../template';
-import { SubmitButton, WhiteButton, Space } from '../atoms';
-import I18n from '../../utils/I18n';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import { Modal } from '@/components/template';
+import { SubmitButton, WhiteButton, Space, Heading } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-  },
-  title: {
-    fontSize: fontSizeL,
-    color: primaryColor,
-    fontWeight: 'bold',
-    marginVertical: 6,
-    paddingBottom: 16,
-    textAlign: 'center',
-  },
-  line: {
-    width: '100%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-    marginBottom: 24,
   },
   text: {
     textAlign: Platform.OS === 'web' ? 'center' : 'left',
@@ -60,8 +41,8 @@ const ModalConfirm: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.line} />
+        <Heading title={title} />
+        <Space size={24} />
         <Text style={styles.text}>{message}</Text>
         <Space size={32} />
         {onPressMain ? (

@@ -1,66 +1,94 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Keyboard, BackHandler, Alert } from 'react-native';
-import { track, events } from '@/utils/Analytics';
+import { useState, useCallback } from 'react';
+import { Keyboard } from 'react-native';
+
 import firebase from '@/constants/firebase';
-import { User } from '@/types/user';
-import { DiaryStatus, Profile, Diary } from '@/types';
+import { User, DiaryStatus, Profile, Diary } from '@/types';
 import {
-  checkBeforePost,
   getUsePoints,
   getDisplayProfile,
   getRunningDays,
   getRunningWeeks,
   getPublishMessage,
+  getThemeDiaries,
 } from '@/utils/diary';
-import I18n from '@/utils/I18n';
+import { track, events } from '@/utils/Analytics';
 import { alert } from '@/utils/ErrorAlert';
-// @ts-ignore
-// eslint-disable-next-line import/extensions
-import { NavigationProp } from './PostDiaryScreen';
+import { ModalPostDiaryStackParamList } from '@/navigations/ModalNavigator';
+import { RouteProp } from '@react-navigation/native';
+import { PostDiaryNavigationProp } from './interfaces';
+import { useCommon } from './useCommont';
 
 interface UsePostDiary {
+  navigation: PostDiaryNavigationProp;
+  route?: RouteProp<ModalPostDiaryStackParamList, 'PostDiary'>;
   user: User;
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
-  navigation: NavigationProp;
 }
 
 export const usePostDiary = ({
   navigation,
+  route,
   user,
   profile,
   setUser,
   addDiary,
 }: UsePostDiary) => {
-  const [isLoadingDraft, setIsLoadingDraft] = useState(false);
-  const [isLoadingPublish, setIsLoadingPublish] = useState(false);
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
-  const [isModalError, setIsModalError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
-  // ポイントが足りない時アラートをだす
-  const [isModalLack, setIsModalLack] = useState(user.points < 10);
-  const [isModalAlert, setIsModalAlert] = useState(false);
-  const [isModalCancel, setIsModalCancel] = useState(false);
-  const [isPublish, setIsPublish] = useState(false);
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-  const [publishMessage, setPublishMessage] = useState<string | null>(null);
+  const themeTitle = route?.params?.themeTitle;
+  const themeCategory = route?.params?.themeCategory;
+  const themeSubcategory = route?.params?.themeSubcategory;
+  const {
+    isModalLack,
+    isModalCancel,
+    isModalError,
+    errorMessage,
+    isLoadingPublish,
+    setIsLoadingPublish,
+    isLoadingDraft,
+    setIsLoadingDraft,
+    isModalAlert,
+    setIsModalAlert,
+    isPublish,
+    setIsPublish,
+    title,
+    setTitle,
+    text,
+    setText,
+    publishMessage,
+    setPublishMessage,
+    onPressPublic,
+    onPressClose,
+    onPressCloseError,
+    onPressCloseModalPublish,
+    onPressCloseModalCancel,
+    onPressSubmitModalLack,
+    onClosePostDiary,
+    onPressNotSave,
+    onPressCloseModalLack,
+  } = useCommon({
+    navigation,
+    themeTitle,
+    points: user.points,
+    learnLanguage: profile.learnLanguage,
+  });
 
   const getDiary = useCallback(
     (diaryStatus: DiaryStatus): Diary => {
       const displayProfile = getDisplayProfile(profile);
-
       return {
         // 最初の日記かチェック
-        firstDiary: !(
-          user.diaryPosted === undefined || user.diaryPosted === true
-        ),
+        firstDiary:
+          diaryStatus === 'publish' &&
+          (user.diaryPosted === undefined || user.diaryPosted === false),
         hidden: false,
         title,
         text,
+        themeCategory: themeCategory || null,
+        themeSubcategory: themeSubcategory || null,
         profile: displayProfile,
         diaryStatus,
         correction: null,
@@ -76,7 +104,7 @@ export const usePostDiary = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, text, title, user.diaryPosted]
+    [profile, user.diaryPosted, title, text, themeCategory, themeSubcategory]
   );
 
   const onPressDraft = useCallback(async (): Promise<void> => {
@@ -85,12 +113,10 @@ export const usePostDiary = ({
     try {
       setIsLoadingDraft(true);
       const diary = getDiary('draft');
-
       const diaryRef = await firebase
         .firestore()
         .collection('diaries')
         .add(diary);
-
       // reduxに追加
       addDiary({
         objectID: diaryRef.id,
@@ -98,7 +124,6 @@ export const usePostDiary = ({
       });
       setIsLoadingDraft(false);
       setIsModalAlert(false);
-
       track(events.CREATED_DIARY, { diaryStatus: 'draft' });
       navigation.navigate('Home', {
         screen: 'MyDiaryTab',
@@ -115,59 +140,9 @@ export const usePostDiary = ({
     isLoadingPublish,
     isModalLack,
     navigation,
+    setIsLoadingDraft,
+    setIsModalAlert,
   ]);
-
-  const onPressClose = useCallback((): void => {
-    Keyboard.dismiss();
-    if (title.length > 0 || text.length > 0) {
-      setIsModalCancel(true);
-    } else {
-      navigation.goBack();
-    }
-  }, [navigation, text.length, title.length]);
-
-  const onPressPublic = useCallback((): void => {
-    Keyboard.dismiss();
-    const checked = checkBeforePost(
-      title,
-      text,
-      user.points,
-      profile.learnLanguage
-    );
-    if (!checked.result) {
-      setErrorMessage(checked.errorMessage);
-      setIsModalError(true);
-      return;
-    }
-    setIsModalAlert(true);
-  }, [profile.learnLanguage, text, title, user.points]);
-
-  useEffect(() => {
-    // keybordでの戻るを制御する Androidのみ
-    const backAction = (): boolean => {
-      Alert.alert(
-        I18n.t('common.confirmation'),
-        I18n.t('modalDiaryCancel.message'),
-        [
-          {
-            text: I18n.t('common.cancel'),
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: (): void => {
-              navigation.goBack();
-            },
-          },
-        ]
-      );
-      return true;
-    };
-
-    BackHandler.addEventListener('hardwareBackPress', backAction);
-    return (): void =>
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-  }, [navigation]);
 
   const onPressSubmit = useCallback(async (): Promise<void> => {
     if (isLoadingDraft || isLoadingPublish) return;
@@ -183,37 +158,49 @@ export const usePostDiary = ({
       user.runningWeeks,
       user.lastDiaryPostedAt
     );
-
     const message = getPublishMessage(
       user.runningDays,
       user.runningWeeks,
       runningDays,
       runningWeeks
     );
-
     let diaryId = '';
+    let themeDiaries = user.themeDiaries || null;
+
     // 日記の更新とpointsの整合性をとるためtransactionを使う
     await firebase
       .firestore()
       .runTransaction(async transaction => {
-        const diaryRef = firebase
+        // diariesの更新
+        const refDiary = firebase
           .firestore()
           .collection('diaries')
           .doc();
-        diaryId = diaryRef.id;
-        transaction.set(diaryRef, diary);
+        diaryId = refDiary.id;
+        transaction.set(refDiary, diary);
 
+        // Usersの更新
+        if (themeCategory && themeSubcategory) {
+          themeDiaries = getThemeDiaries(
+            user.themeDiaries,
+            diaryId,
+            themeCategory,
+            themeSubcategory
+          );
+        }
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
         // 初回の場合はdiaryPostedを更新する
         const updateUser = {
-          points: newPoints,
+          themeDiaries: themeDiaries || null,
           runningDays,
           runningWeeks,
+          points: newPoints,
           lastDiaryPostedAt: firebase.firestore.FieldValue.serverTimestamp(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         } as Pick<
           User,
           | 'points'
+          | 'themeDiaries'
           | 'runningDays'
           | 'runningWeeks'
           | 'lastDiaryPostedAt'
@@ -229,13 +216,11 @@ export const usePostDiary = ({
         setIsLoadingPublish(false);
         alert({ err });
       });
-
     track(events.CREATED_DIARY, {
       usePoints,
       characters: text.length,
       diaryStatus: 'publish',
     });
-
     // reduxに追加
     addDiary({
       objectID: diaryId,
@@ -243,6 +228,7 @@ export const usePostDiary = ({
     });
     setUser({
       ...user,
+      themeDiaries,
       runningDays,
       runningWeeks,
       lastDiaryPostedAt: firebase.firestore.Timestamp.now(),
@@ -258,24 +244,15 @@ export const usePostDiary = ({
     isLoadingDraft,
     isLoadingPublish,
     profile.learnLanguage,
+    setIsLoadingPublish,
+    setIsPublish,
+    setPublishMessage,
     setUser,
     text.length,
+    themeCategory,
+    themeSubcategory,
     user,
   ]);
-
-  const onClosePostDiary = useCallback((): void => {
-    navigation.navigate('Home', {
-      screen: 'MyDiaryTab',
-      params: { screen: 'MyDiaryList' },
-    });
-    setIsModalAlert(false);
-    setIsPublish(false);
-  }, [navigation]);
-
-  const onPressNotSave = useCallback((): void => {
-    setIsModalCancel(false);
-    navigation.goBack();
-  }, [navigation]);
 
   const onPressTutorial = useCallback(async (): Promise<void> => {
     setIsTutorialLoading(true);
@@ -293,17 +270,12 @@ export const usePostDiary = ({
     setIsTutorialLoading(false);
   }, [setUser, user]);
 
-  const onPressCloseError = useCallback((): void => {
-    setErrorMessage('');
-    setIsModalError(false);
-  }, []);
-
   const onChangeTextTitle = useCallback(
     txt => {
       if (!isFirstEdit) setIsFirstEdit(true);
       setTitle(txt);
     },
-    [isFirstEdit]
+    [isFirstEdit, setTitle]
   );
 
   const onChangeTextText = useCallback(
@@ -311,27 +283,8 @@ export const usePostDiary = ({
       if (!isFirstEdit) setIsFirstEdit(true);
       setText(txt);
     },
-    [isFirstEdit]
+    [isFirstEdit, setText]
   );
-
-  const onPressSubmitModalLack = useCallback(() => {
-    setIsModalLack(false);
-  }, []);
-
-  const onPressCloseModalLack = useCallback(() => {
-    navigation.navigate('Home', {
-      screen: 'TeachDiaryTab',
-      params: { screen: 'TeachDiaryList' },
-    });
-  }, [navigation]);
-
-  const onPressCloseModalPublish = useCallback(() => {
-    setIsModalAlert(false);
-  }, []);
-
-  const onPressCloseModalCancel = useCallback(() => {
-    setIsModalCancel(false);
-  }, []);
 
   return {
     isLoadingDraft,

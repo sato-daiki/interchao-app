@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 8,
     marginHorizontal: 8,
-    paddingVertical: 32,
     backgroundColor: '#fff',
   },
   modal: {
@@ -23,10 +22,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#fff',
   },
+  padding0: {
+    paddingVertical: 8,
+  },
+  padding32: {
+    paddingVertical: 32,
+  },
 });
 
 interface Props {
   visible: boolean;
+  disablePadding?: boolean;
   animationIn?: Animation | CustomAnimation;
   animationOut?: Animation | CustomAnimation;
   children: React.ReactNode;
@@ -34,6 +40,7 @@ interface Props {
 
 const Modal1: React.FC<Props> = ({
   visible,
+  disablePadding,
   animationIn = 'zoomIn',
   animationOut = 'zoomOut',
   children,
@@ -46,7 +53,14 @@ const Modal1: React.FC<Props> = ({
           animationIn={animationIn}
           animationOut={animationOut}
         >
-          <View style={styles.modalWeb}>{children}</View>
+          <View
+            style={[
+              styles.modalWeb,
+              disablePadding ? styles.padding0 : styles.padding32,
+            ]}
+          >
+            {children}
+          </View>
         </ModalWeb>
       </View>
     );

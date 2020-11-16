@@ -2,7 +2,7 @@ import {
   ModalPostDiaryStackNavigationProp,
   ModalPostDiaryStackParamList,
 } from '@/navigations/ModalNavigator';
-import { CompositeNavigationProp } from '@react-navigation/native';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Diary, Profile, User } from '@/types';
 
@@ -16,12 +16,13 @@ interface DispatchProps {
   addDiary: (diary: Diary) => void;
 }
 
-export type NavigationProp = CompositeNavigationProp<
+export type PostDiaryNavigationProp = CompositeNavigationProp<
   StackNavigationProp<ModalPostDiaryStackParamList, 'PostDiary'>,
   ModalPostDiaryStackNavigationProp
 >;
 
 export type ScreenType = {
-  navigation: NavigationProp;
+  navigation: PostDiaryNavigationProp;
+  route?: RouteProp<ModalPostDiaryStackParamList, 'PostDiary'>;
 } & Props &
   DispatchProps;

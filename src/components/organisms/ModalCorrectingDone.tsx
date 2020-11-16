@@ -1,34 +1,22 @@
 import React, { createRef, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Platform } from 'react-native';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
-import { GetPoints, FlashLeft, FlashRight } from '../../images';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import { GetPoints, FlashLeft, FlashRight } from '@/images';
 
-import { Modal } from '../template';
-import { Space, UserPointsBig, SubmitButton, Lottie } from '../atoms';
-import I18n from '../../utils/I18n';
+import I18n from '@/utils/I18n';
+import { Modal } from '@/components/template';
+import {
+  Space,
+  UserPointsBig,
+  SubmitButton,
+  Lottie,
+  Heading,
+} from '@/components/atoms';
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
     alignItems: 'center',
-  },
-  title: {
-    fontSize: fontSizeL,
-    color: primaryColor,
-    fontWeight: 'bold',
-    marginVertical: 6,
-    paddingBottom: 16,
-    textAlign: 'center',
-  },
-  line: {
-    width: '100%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
   },
   text: {
     textAlign: 'center',
@@ -97,8 +85,7 @@ const ModalCorrectingDone: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>{I18n.t('modalCorrectingDone.title')}</Text>
-        <View style={styles.line} />
+        <Heading title={I18n.t('modalCorrectingDone.title')} />
         {Platform.OS === 'android' ? (
           <>
             <Image style={styles.getPoints} source={GetPoints} />
