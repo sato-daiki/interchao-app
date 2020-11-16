@@ -7,6 +7,5 @@ export interface ThemeSubcategoryInfo {
   themeCategory: ThemeCategory;
   themeSubcategory: ThemeSubcategory;
   title: string;
-  text: string;
   source: ImageSourcePropType;
 }

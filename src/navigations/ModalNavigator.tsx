@@ -34,6 +34,7 @@ export type ModalEditMyDiaryListStackParamList = {
 };
 export type ModalThemeGuideStackParamList = {
   ThemeGuide: {
+    themeTitle: string;
     themeCategory: ThemeCategory;
     themeSubcategory: ThemeSubcategory;
     caller: CallerThemeGuide;
@@ -46,6 +47,7 @@ export type ModalSelectDiaryTypeStackParamList = {
 };
 export type ModalPostDiaryStackParamList = {
   PostDiary: {
+    themeTitle?: string;
     themeCategory?: ThemeCategory;
     themeSubcategory?: ThemeSubcategory;
   };
@@ -54,8 +56,6 @@ export type ModalPostDraftDiaryStackParamList = {
   PostDraftDiary: {
     item: Diary;
     objectID: string;
-    themeCategory?: ThemeCategory;
-    themeSubcategory?: ThemeSubcategory;
   };
 };
 export type ModalEditMyProfileStackParamList = {

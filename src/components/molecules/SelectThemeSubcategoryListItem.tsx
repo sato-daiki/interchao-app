@@ -25,7 +25,6 @@ interface Props {
   themeDiary?: ThemeDiary;
   item: ThemeSubcategoryInfo;
   title: string;
-  text: string;
   source: ImageSourcePropType;
   onPress: (item: ThemeSubcategoryInfo) => void;
 }
@@ -42,11 +41,8 @@ const styles = StyleSheet.create({
     backgroundColor: hoverGray,
   },
   textContainer: {
-    flex: 1,
-  },
-  textHeader: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   textRight: {
@@ -59,20 +55,13 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   image: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     marginRight: 16,
   },
   title: {
     color: primaryColor,
-    fontWeight: 'bold',
     fontSize: fontSizeM,
-    paddingBottom: 8,
-  },
-  text: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.3,
   },
 });
 
@@ -81,7 +70,6 @@ const SelectThemeSubcategoryListItem: React.FC<Props> = ({
   item,
   source,
   title,
-  text,
   onPress,
 }) => {
   const onPressItem = useCallback(() => {
@@ -96,21 +84,18 @@ const SelectThemeSubcategoryListItem: React.FC<Props> = ({
     >
       <Image style={styles.image} source={source} />
       <View style={styles.textContainer}>
-        <View style={styles.textHeader}>
-          <Text style={styles.title}>{title}</Text>
-          {themeDiary ? (
-            <View style={styles.textRight}>
-              <Text style={styles.postDayText}>
-                {getDay(themeDiary.updatedAt)}
-              </Text>
-              <DiaryStatus
-                color={MY_STATUS.posted.color}
-                text={MY_STATUS.posted.text}
-              />
-            </View>
-          ) : null}
-        </View>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.title}>{title}</Text>
+        {themeDiary ? (
+          <View style={styles.textRight}>
+            <Text style={styles.postDayText}>
+              {getDay(themeDiary.updatedAt)}
+            </Text>
+            <DiaryStatus
+              color={MY_STATUS.posted.color}
+              text={MY_STATUS.posted.text}
+            />
+          </View>
+        ) : null}
       </View>
     </Hoverable>
   );

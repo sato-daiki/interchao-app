@@ -17,7 +17,7 @@ import {
   PostDraftDiaryNavigationProp,
   PostDraftDiaryRouteProp,
 } from './interfaces';
-import { useCommon } from './useCommont';
+import { useCommon } from '../PostDiaryScreen/useCommont';
 
 interface UsePostDraftDiary {
   user: User;
@@ -69,8 +69,6 @@ export const usePostDraftDiary = ({
     onPressCloseModalLack,
   } = useCommon({
     navigation,
-    themeCategory: item.themeCategory,
-    themeSubcategory: item.themeSubcategory,
     points: user.points,
     learnLanguage: profile.learnLanguage,
   });

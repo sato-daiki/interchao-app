@@ -1,3 +1,4 @@
+import I18n from '@/utils/I18n';
 import { Baseball } from '@/images';
 import { Entry } from '../interface';
 
@@ -5,7 +6,7 @@ export const selfIntroduction: Entry[] = [
   {
     key: 'introduction',
     params: {
-      text: 'introduction introduction introduction introduction',
+      text: I18n.t('firstDetail.selfIntroduction.introductionTitle'),
       source: Baseball,
     },
   },

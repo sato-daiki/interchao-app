@@ -68,8 +68,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressClose,
   } = usePostDiary({
     navigation,
-    themeCategory: route?.params?.themeCategory,
-    themeSubcategory: route?.params?.themeSubcategory,
+    route,
     user,
     profile,
     setUser,

@@ -2,14 +2,7 @@ import { useState, useCallback } from 'react';
 import { Keyboard } from 'react-native';
 
 import firebase from '@/constants/firebase';
-import {
-  User,
-  DiaryStatus,
-  Profile,
-  Diary,
-  ThemeCategory,
-  ThemeSubcategory,
-} from '@/types';
+import { User, DiaryStatus, Profile, Diary } from '@/types';
 import {
   getUsePoints,
   getDisplayProfile,
@@ -20,23 +13,23 @@ import {
 } from '@/utils/diary';
 import { track, events } from '@/utils/Analytics';
 import { alert } from '@/utils/ErrorAlert';
+import { ModalPostDiaryStackParamList } from '@/navigations/ModalNavigator';
+import { RouteProp } from '@react-navigation/native';
 import { PostDiaryNavigationProp } from './interfaces';
-import { useCommon } from '../PostDraftDiaryScreen/useCommont';
+import { useCommon } from './useCommont';
 
 interface UsePostDiary {
+  navigation: PostDiaryNavigationProp;
+  route?: RouteProp<ModalPostDiaryStackParamList, 'PostDiary'>;
   user: User;
-  themeCategory: ThemeCategory | undefined;
-  themeSubcategory: ThemeSubcategory | undefined;
   profile: Profile;
   setUser: (user: User) => void;
   addDiary: (diary: Diary) => void;
-  navigation: PostDiaryNavigationProp;
 }
 
 export const usePostDiary = ({
   navigation,
-  themeCategory,
-  themeSubcategory,
+  route,
   user,
   profile,
   setUser,
@@ -45,6 +38,9 @@ export const usePostDiary = ({
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isTutorialLoading, setIsTutorialLoading] = useState(false);
 
+  const themeTitle = route?.params?.themeTitle;
+  const themeCategory = route?.params?.themeCategory;
+  const themeSubcategory = route?.params?.themeSubcategory;
   const {
     isModalLack,
     isModalCancel,
@@ -75,8 +71,7 @@ export const usePostDiary = ({
     onPressCloseModalLack,
   } = useCommon({
     navigation,
-    themeCategory,
-    themeSubcategory,
+    themeTitle,
     points: user.points,
     learnLanguage: profile.learnLanguage,
   });

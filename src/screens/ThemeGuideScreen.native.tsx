@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 const { width } = Dimensions.get('window');
 
 const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
-  const { themeCategory, themeSubcategory, caller } = route.params;
+  const { themeTitle, themeCategory, themeSubcategory, caller } = route.params;
   const entries = getEntries(themeSubcategory) || [];
   const [activeSlide, setActiveSlide] = useState(
     caller === 'PostDiary' ? entries.length - 1 : 0
@@ -61,12 +61,12 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
     if (caller === 'SelectThemeSubcategory') {
       navigation.navigate('ModalPostDiary', {
         screen: 'PostDiary',
-        params: { themeCategory, themeSubcategory },
+        params: { themeTitle, themeCategory, themeSubcategory },
       });
     } else {
       navigation.goBack();
     }
-  }, [caller, navigation, themeCategory, themeSubcategory]);
+  }, [caller, navigation, themeCategory, themeSubcategory, themeTitle]);
 
   const onSnapToItem = useCallback((index: number) => {
     setActiveSlide(index);

@@ -67,6 +67,7 @@ export type MainStackParamList = {
   ModalPostDiary: {
     screen: keyof ModalPostDiaryStackParamList;
     params?: {
+      themeTitle?: string;
       themeCategory?: ThemeCategory;
       themeSubcategory?: ThemeSubcategory;
     };
@@ -76,8 +77,6 @@ export type MainStackParamList = {
     params: {
       item: Diary;
       objectID: string;
-      themeCategory?: ThemeCategory;
-      themeSubcategory?: ThemeSubcategory;
     };
   };
   ModalEditMyProfile: { screen: keyof ModalEditMyProfileStackParamList };
