@@ -2,13 +2,13 @@ import React, { useEffect, useCallback } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 
-import { Hoverable, SubmitButton } from '@/components/atoms';
+import { LinkText, SubmitButton } from '@/components/atoms';
 
-import { fontSizeM, linkBlue, primaryColor } from '@/styles/Common';
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
+import { fontSizeM, primaryColor } from '@/styles/Common';
 import { LogoVercitacl } from '@/images';
 import { track, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
-import { AuthStackParamList } from '@/navigations/AuthNavigator';
 
 type ScreenType = StackScreenProps<AuthStackParamList, 'Initialize'>;
 
@@ -46,10 +46,6 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
   },
-  linkText: {
-    color: linkBlue,
-    fontSize: fontSizeM,
-  },
 });
 
 /**
@@ -81,9 +77,10 @@ const InitializeNativeScreen: React.FC<ScreenType> = ({ navigation }) => {
           />
           <View style={styles.row}>
             <Text style={styles.text}>{I18n.t('initialize.acount')}</Text>
-            <Hoverable onPress={onPressSignIn}>
-              <Text style={styles.linkText}>{I18n.t('initialize.link')}</Text>
-            </Hoverable>
+            <LinkText
+              onPress={onPressSignIn}
+              text={I18n.t('initialize.link')}
+            />
           </View>
         </View>
       </View>

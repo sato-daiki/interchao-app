@@ -7,11 +7,11 @@ import {
   LoadingModal,
   Space,
   SubmitButton,
-  Hoverable,
+  LinkText,
 } from '@/components/atoms';
 import { CheckTextInput } from '@/components/molecules';
 
-import { primaryColor, fontSizeM, linkBlue } from '@/styles/Common';
+import { primaryColor, fontSizeM } from '@/styles/Common';
 import firebase from '@/constants/firebase';
 import { emailInputError, emailValidate } from '@/utils/common';
 import { track, events } from '@/utils/Analytics';
@@ -39,16 +39,9 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
   },
-  linkText: {
-    color: linkBlue,
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  hoverLink: {
-    borderBottomColor: linkBlue,
-    borderBottomWidth: 1,
   },
 });
 
@@ -164,9 +157,7 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
         <Space size={16} />
         <View style={styles.row}>
           <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
-          <Hoverable onPress={onPressForget} hoverStyle={styles.hoverLink}>
-            <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
-          </Hoverable>
+          <LinkText onPress={onPressForget} text={`${I18n.t('signIn.link')}`} />
         </View>
       </View>
     </KeyboardAwareScrollView>
