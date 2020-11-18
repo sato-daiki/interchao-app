@@ -1,6 +1,21 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
 
+import {
+  LinkText,
+  LoadingModal,
+  Space,
+  TextInputTitle,
+} from '@/components/atoms';
+import { Modal } from '@/components/template';
+import { ModalPublish } from '@/components/organisms/ModalPublish';
+import ModalLackPoint from '@/components/organisms/ModalLackPoint';
+import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
+import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
+import ModalConfirm from '@/components/organisms/ModalConfirm';
+import { PostDiaryProps } from '@/components/organisms/PostDiary/interface';
+import ThemeGuideWeb from '@/components/organisms/ThemeGuide/ThemeGuideWeb';
+
 import I18n from '@/utils/I18n';
 import {
   fontSizeLL,
@@ -10,23 +25,8 @@ import {
   primaryColor,
   subTextColor,
   softRed,
-  linkBlue,
 } from '@/styles/Common';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
-import {
-  Hoverable,
-  LoadingModal,
-  Space,
-  TextInputTitle,
-} from '@/components/atoms';
-import { Modal } from '@/components/template';
-import { ModalPublish } from '../ModalPublish';
-import ModalLackPoint from '../ModalLackPoint';
-import ModalDiaryCancel from '../ModalDiaryCancel';
-import TutorialPostDiary from '../TutorialPostDiary';
-import ModalConfirm from '../ModalConfirm';
-import { PostDiaryProps } from '../PostDiary/interface';
-import ThemeGuideWeb from '../ThemeGuide/ThemeGuideWeb';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -74,8 +74,6 @@ const styles = StyleSheet.create({
   },
   linkText: {
     marginTop: 16,
-    fontSize: fontSizeM,
-    color: linkBlue,
   },
 });
 
@@ -207,11 +205,11 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
               {`${I18n.t('postDiaryComponent.usePoints')} ${usePoints}`}
             </Text>
             {!themeCategory || !themeSubcategory ? null : (
-              <Hoverable onPress={onPressThemeGuide}>
-                <Text style={styles.linkText}>
-                  {`${I18n.t('postDiaryComponent.hint')}`}
-                </Text>
-              </Hoverable>
+              <LinkText
+                containerStyle={styles.linkText}
+                onPress={onPressThemeGuide}
+                text={I18n.t('postDiaryComponent.hint')}
+              />
             )}
           </View>
         </View>

@@ -17,6 +17,7 @@ export { default as Hoverable } from './Hoverable';
 export { default as HoverableIcon } from './HoverableIcon';
 export { default as HoverableView } from './HoverableView';
 export { default as Icon } from './Icon';
+export { default as LinkText } from './LinkText';
 export { default as LoadingModal } from './LoadingModal';
 // @ts-ignore
 // eslint-disable-next-line import/extensions
