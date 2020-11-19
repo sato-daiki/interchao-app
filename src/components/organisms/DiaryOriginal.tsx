@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { fontSizeS, subTextColor } from '../../styles/Common';
-import { getAlgoliaDate } from '../../utils/diary';
+import { getAlgoliaDate } from '../../utils/time';
 import { Diary, Profile } from '../../types';
 import I18n from '../../utils/I18n';
 import { DiaryTitleAndText, MyDiaryStatus } from '../molecules';
