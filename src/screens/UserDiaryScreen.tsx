@@ -12,7 +12,7 @@ import Algolia from '../utils/Algolia';
 import { Profile, Correction, Diary } from '../types';
 import { UserDiaryStatus } from '../components/molecules';
 import { ProfileIconHorizontal, Space } from '../components/atoms';
-import { getAlgoliaDate } from '../utils/diary';
+import { getAlgoliaDate } from '../utils/time';
 import {
   subTextColor,
   fontSizeS,

@@ -13,7 +13,8 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
-import { getAlgoliaDay, getMarkedDates, MY_STATUS } from '@/utils/diary';
+import { getAlgoliaDay } from '@/utils/time';
+import { getMarkedDates, MY_STATUS } from '@/utils/diary';
 import { ScrollView } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 

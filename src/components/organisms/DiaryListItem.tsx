@@ -12,7 +12,7 @@ import {
   subTextColor,
   hoverGray,
 } from '@/styles/Common';
-import { getAlgoliaDay } from '@/utils/diary';
+import { getAlgoliaDay } from '@/utils/time';
 import { Diary } from '@/types';
 import I18n from '@/utils/I18n';
 

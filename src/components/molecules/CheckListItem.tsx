@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
-import { Checkbox, Hoverable } from '../atoms';
+import { Checkbox } from '../atoms';
 
 interface Props {
   checked: boolean;
@@ -31,21 +31,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const CheckItem = ({
+const CheckListItem = ({
   title,
   checked,
   disable,
   onPress,
 }: Props): JSX.Element => {
   return (
-    <Hoverable
-      onPress={onPress}
-      style={[styles.container, disable ? styles.opacity : undefined]}
-    >
+    <View style={[styles.container, disable ? styles.opacity : undefined]}>
       <Text style={styles.title}>{title}</Text>
-      <Checkbox checked={checked} disable={disable} />
-    </Hoverable>
+      <Checkbox checked={checked} onPress={onPress} disable={disable} />
+    </View>
   );
 };
 
-export default CheckItem;
+export default React.memo(CheckListItem);

@@ -9,7 +9,7 @@ import {
   green,
 } from '@/styles/Common';
 import { MyDiaryStatus } from '@/components/molecules';
-import { getAlgoliaDay } from '@/utils/diary';
+import { getAlgoliaDay } from '@/utils/time';
 import { Diary } from '@/types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import I18n from '@/utils/I18n';

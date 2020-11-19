@@ -8,7 +8,7 @@ import {
   borderLightColor,
   subTextColor,
 } from '../../styles/Common';
-import { getDay } from '../../utils/diary';
+import { getDay } from '../../utils/time';
 import { Review, Language } from '../../types';
 import { ProfileIconHorizontal, Space } from '../atoms';
 import RichText from './RichText';

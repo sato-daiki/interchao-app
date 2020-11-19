@@ -17,7 +17,8 @@ import {
   primaryColor,
   subTextColor,
 } from '@/styles/Common';
-import { getDay, MY_STATUS } from '@/utils/diary';
+import { MY_STATUS } from '@/utils/diary';
+import { getDay } from '@/utils/time';
 import { ThemeSubcategoryInfo } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import { ThemeDiary } from '@/types';
 

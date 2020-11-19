@@ -1,5 +1,3 @@
-import moment from 'moment';
-import 'moment/locale/ja';
 import { firestore } from 'firebase';
 import firebase from '@/constants/firebase';
 import {
@@ -19,46 +17,12 @@ import { MarkedDates } from '@/components/organisms/MyDiaryList';
 import I18n from './I18n';
 import { DataCorrectionStatus } from './correcting';
 import { getDateToStrDay, getLastMonday, getThisMonday } from './common';
+import { getAlgoliaDay } from './time';
 
 interface Status {
   text: string;
   color: string;
 }
-
-/** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
-export const getAlgoliaDay = (timestamp: any, format = 'Y-M-D'): string => {
-  // eslint-disable-next-line no-underscore-dangle
-  if (!timestamp) {
-    return '';
-  }
-
-  // eslint-disable-next-line no-underscore-dangle
-  if (!timestamp._seconds) {
-    // reduxに登録された状態（日記投稿直後だとこちらに入る）
-    return moment(timestamp).format(format);
-  }
-  // eslint-disable-next-line no-underscore-dangle
-  return moment.unix(timestamp._seconds).format(format);
-};
-
-export const getDay = (timestamp: any): string => {
-  if (!timestamp) {
-    return '';
-  }
-  return moment(timestamp.toDate()).format('Y-M-D');
-};
-
-export const getAlgoliaDate = (timestamp: any): string => {
-  if (!timestamp) {
-    return '';
-  }
-  // eslint-disable-next-line no-underscore-dangle
-  if (!timestamp._seconds) {
-    return moment.unix(timestamp.seconds).format('Y-M-D HH:mm');
-  }
-  // eslint-disable-next-line no-underscore-dangle
-  return moment.unix(timestamp._seconds).format('Y-M-D H:m');
-};
 
 // 日記一覧に出力するステータスの取得
 export const getUserDiaryStatus = (
