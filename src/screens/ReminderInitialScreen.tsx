@@ -6,20 +6,20 @@ import { LinkText, Space, SubmitButton } from '@/components/atoms';
 
 import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 import I18n from '@/utils/I18n';
-import { fontSizeM, primaryColor } from '@/styles/Common';
-import { StudyTime } from '@/images';
+import { fontSizeL, fontSizeM, primaryColor } from '@/styles/Common';
+import { Time } from '@/images';
 
 type ScreenType = StackScreenProps<OnboardingStackParamList, 'ReminderInitial'>;
 
 const styles = StyleSheet.create({
   safeAreaView: {
+    backgroundColor: '#FFF',
     flex: 1,
   },
   container: {
     flex: 1,
-    backgroundColor: '#FFF',
     paddingHorizontal: 16,
-    paddingTop: 32,
+    paddingTop: 64,
   },
   main: {
     flex: 1,
@@ -29,11 +29,19 @@ const styles = StyleSheet.create({
   },
   imgContainer: {
     flex: 2,
+    paddingTop: 16,
   },
   img: {
     alignSelf: 'center',
     width: 120,
     height: 120,
+  },
+  title: {
+    color: primaryColor,
+    fontSize: fontSizeL,
+    fontWeight: 'bold',
+    paddingBottom: 16,
+    textAlign: 'center',
   },
   text: {
     color: primaryColor,
@@ -59,10 +67,13 @@ const ReminderInitialScreen: React.FC<ScreenType> = ({ navigation }) => {
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <View style={styles.main}>
+          <Text style={styles.title}>
+            {I18n.t('onboarding.reminderInitial')}
+          </Text>
           <Text style={styles.text}>{I18n.t('reminderInitial.text')}</Text>
         </View>
         <View style={styles.imgContainer}>
-          <Image source={StudyTime} style={styles.img} />
+          <Image source={Time} style={styles.img} />
         </View>
         <View style={styles.linkContainer}>
           <SubmitButton

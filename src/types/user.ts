@@ -20,6 +20,18 @@ export interface ThemeDiary {
 
 export type AppReviewState = 'yet' | 'never' | 'done';
 
+export interface RemindeDay {
+  day: number; // Sunday - Saturday : 0 - 6
+  startTime: Date;
+  endTime: Date;
+}
+
+export interface Reminder {
+  notificationStart: boolean;
+  notificationEnd: boolean;
+  remindeDays: RemindeDay[] | null;
+}
+
 export interface User {
   uid: string;
   diaryPosted: boolean;
@@ -46,6 +58,7 @@ export interface User {
   // mailReminderThreeMonths?: boolean;
   themeDiaries?: ThemeDiary[] | null;
   appReviewState?: AppReviewState;
+  reminder?: Reminder;
   runningDays?: number;
   runningWeeks?: number;
   lastDiaryPostedAt?: firestore.Timestamp | null;
