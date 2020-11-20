@@ -9,9 +9,11 @@ import { Profile, User, LocalStatus } from '@/types';
 import LoadingScreen from '@/screens/LoadingScreen';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
+import OnboardingNavigator from './OnboardingNavigator';
 
 export type RootStackParamList = {
   Loading: undefined;
+  Onboarding: undefined;
   Main: undefined;
   Auth: undefined;
   Public: undefined;
@@ -69,7 +71,10 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       return <Stack.Screen name="Loading" component={LoadingScreen} />;
     }
     if (localStatus.uid !== null) {
-      return <Stack.Screen name="Main" component={MainNavigator} />;
+      // if (localStatus.onboarding) {
+      return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;
+      // }
+      // return <Stack.Screen name="Main" component={MainNavigator} />;
     }
     return <Stack.Screen name="Auth" component={AuthNavigator} />;
   }, [localStatus.isLoading, localStatus.uid]);

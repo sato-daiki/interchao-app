@@ -22,6 +22,28 @@ const common = {
   slow: 'Slow',
   back: 'Back',
   begin: 'Begin',
+  allClear: '全てクリア',
+  allChecked: '全てチェック',
+};
+
+const day = {
+  sunday: 'Sunday',
+  monday: 'Monday',
+  tuesday: 'Tuesday',
+  wednesday: 'Wednesday',
+  thursday: 'Thursday',
+  friday: 'Friday',
+  saturday: 'Saturday',
+};
+
+const shortDay = {
+  sunday: 'S',
+  monday: 'M',
+  tuesday: 'T',
+  wednesday: 'W',
+  thursday: 'T',
+  friday: 'F',
+  saturday: 'S',
 };
 
 // web
@@ -261,6 +283,37 @@ const notice = {
   operation: 'Notice from the management',
   noMail:
     '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
+};
+
+const onboarding = {
+  reminderInitial: '勉強時間の登録',
+  reminderSelectDay: '勉強する日',
+  reminderSelectTime: '勉強する時間',
+  reminderFixCustomTime: '',
+  reminderFreeCustom: '',
+  pushSetting: '',
+};
+
+const reminderInitial = {
+  text:
+    '勉強は習慣化することが大切です。勉強する時間を固定しましょう。リマインダーを登録すると、勉強開始時間に通知を飛ばすことができます。',
+  submit: '登録する',
+};
+
+const reminderSelectDay = {
+  title: '勉強する頻度を入力してください',
+  everday: '毎日',
+  weekdend: '土日のみ',
+  weekday: '平日',
+  custom: 'カスタム',
+};
+
+const reminderSelectTime = {
+  fix: '固定',
+  custom: 'カスタム',
+  studyDay: '勉強する日',
+  start: '開始時間',
+  end: '終了時間',
 };
 
 const editMyDiaryList = {
@@ -703,6 +756,8 @@ const firstDetail = {
 
 const en = {
   common,
+  day,
+  shortDay,
   web,
   helmet,
   modalAppSuggestion,
@@ -724,6 +779,10 @@ const en = {
   myDiarySerch,
   myPage,
   notice,
+  onboarding,
+  reminderInitial,
+  reminderSelectDay,
+  reminderSelectTime,
   editMyDiaryList,
   postDiary,
   postDraftDiary,
