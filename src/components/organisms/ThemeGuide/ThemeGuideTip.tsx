@@ -78,7 +78,10 @@ const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
           <Text style={styles.text}>
             ・
             {example.learnText.map(t => (
-              <Text key={t.id} style={[getStyle(t.styleType)]}>
+              <Text
+                key={`${example.id}-${t.key}`}
+                style={[getStyle(t.styleType)]}
+              >
                 {`${t.text} `}
               </Text>
             ))}

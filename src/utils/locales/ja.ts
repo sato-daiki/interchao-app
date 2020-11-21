@@ -304,15 +304,6 @@ const selectLanguage = {
   add: '追加する',
 };
 
-const selectDiaryType = {
-  headerTitle: 'タイプの選択',
-  titleFree: '自由英作文',
-  titleTheme: 'テーマ作文',
-  textFree: '日記や今日話せなかったこと、好き映画。自由テーマで書きましょう。',
-  textTheme:
-    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
-};
-
 const setting = {
   headerTitle: '設定',
   title: '基本設定',
@@ -645,6 +636,172 @@ const language = {
   ko: '韓国語',
 };
 
+const selectDiaryType = {
+  headerTitle: '型の選択',
+  recommend: 'おススメ',
+  titleFree: '自由作文',
+  titleTheme: 'テーマ作文',
+  textFree:
+    '日記、今日話せなかったこと、好きな映画。自由テーマで書きましょう。',
+  textTheme:
+    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
+};
+
+const firstList = {
+  selfIntroduction: '自己紹介',
+  hobby: '趣味',
+  job: '仕事の紹介',
+  study: '外国語を勉強する理由',
+  dream: '将来の夢',
+  trip: '旅行の思い出',
+  reborn: 'もし生まれ変わるなら',
+};
+
+const selectThemeSubcategory = {
+  headerTitle: 'テーマの選択',
+  firstList,
+};
+
+const themeGuide = {
+  swipeStart: 'スワイプして\nスライドを移動しよう',
+  swipeEnd: 'スライドを復習したいときは\nスワイプして戻ろう',
+  introduction: 'はじめに',
+  guideTipTitle: 'よく使う表現',
+  expression: '表現',
+  example: '例文',
+  word: '単語',
+  guideEndText: 'ここでスライドは終わりです。\n実際に文章を書いてみましょう！',
+};
+
+const selfIntroduction = {
+  introduction:
+    '初回は自己紹介について書いてみましょう。自己紹介は新しい人と会ったときは必ずしますよね。\n\n{{learnLanguage}}で一度文章を作成しておくと、実際に話す時、スラスラ話すことができます。',
+  en: {
+    expression1: '挨拶',
+    expression2: '導入',
+    expression3: '名前、呼び名',
+    expression4: '日時',
+    expression5: '出身地',
+    expression6: '会社名、職業',
+    expression7: '趣味',
+    expression8: '結び',
+    example1: 'こんにちは。',
+    example2: 'はじめまして。よろしくお願いします。',
+    example3: '田中はなといいます。はなと呼んでください。',
+    example4: '神奈川で生まれて東京で育ちました。',
+    example5: '去年結婚したばかりです。',
+    example6: 'インターチャオでマーケティングディレクターとして働いています。',
+    example7: 'ギターを弾くのが好きです。',
+    example8: 'ありがとうございました。',
+  },
+  word1: 'お会いできて嬉しいです。',
+  word2: 'XXと呼んでください。',
+  word3: '生まれも育ちもXXです。',
+  word4: '日本から来ました。',
+  word5: '弟がいます。',
+  word6: '妻と結婚して３年になります。',
+  word7: '大学で心理学を専攻しています。',
+  word8: 'XXの業界で働いています。',
+  word9: '旅行をするのがとても好きです。',
+  word10: 'お会いできてよかったです。',
+};
+
+const hobby = {
+  introduction:
+    '新しい友達ができた時、同僚とお酒を飲む時、趣味について話すことは多くないですか？{{learnLanguage}}も同じです。趣味は定番の話題です。\n\n今日は"あなたの趣味"について話すことができるようしましょう。',
+  word1: '買い物',
+  word2: '映画鑑賞',
+  word3: '野球',
+  word4: '英語学習',
+  word5: '生け花',
+  word6: 'ウェブサイト運営',
+  word7: '旅行',
+  word8: '温泉巡り',
+  word9: '写真',
+};
+
+const job = {
+  introduction:
+    '３回目のテーマは仕事です。文章を書くことにだいぶ慣れてきたのではないでしょうか?\n\n今日は"あなたが何の仕事をしているのか？"を書けるようにしましょう',
+  word1: '弁護士',
+  word2: '会計士',
+  word3: 'エンジニア',
+  word4: '受付',
+  word5: '秘書',
+  word6: '会社員',
+  word7: '製造業者',
+  word8: '販売業者',
+  word9: '銀行員',
+  word10: 'コック・調理師',
+  word11: '公務員',
+  word12: '先生',
+  word13: '医者',
+  word14: '薬剤師',
+  word15: '看護師',
+  word16: '起業家',
+  word17: '研究員',
+  word18: '作家',
+};
+
+const study = {
+  introduction:
+    'あなたはなぜ{{learnLanguage}}の勉強を始めたのですか?\n\n語学学校や、留学へ行くと必ず聞かれる質問です。理由を{{learnLanguage}}で話せるようにしましょう。',
+  word1: '趣味や余暇',
+  word2: '他の国の人々と出会う',
+  word3: '旅行のために英語を学ぶ',
+  word4: '外国人と話せるようになる',
+  word5: '仕事で昇進する',
+  word6: '転職',
+  word7: '英語力を生かした仕事に就く',
+};
+
+const dream = {
+  introduction:
+    'あなたは将来何になりたいですか？\n\n今日は将来の夢や目標を書いてみましょう。',
+  word1: '小学校の先生になる',
+  word2: 'イラストレーターになる',
+  word3: 'プロサッカー選手になる',
+  word4: '国際的なボランティアに携わる',
+  word5: 'サッカー雑誌を制作する人になる',
+  word6: 'アフリカで働く',
+  word7: '将来グアムに住んで働く',
+  word8: '日本一周',
+  word9: 'まだ将来の夢がない',
+};
+
+const trip = {
+  introduction:
+    '今回のテーマは旅行です。友人から旅行の話を聞くのは楽しいですよね\n\nあなたも{{learnLanguage}}で旅行のトークを１つ用意しておきましょう。',
+  word1: 'ハイキングをしに中国を訪れました。',
+  word2: 'ハワイのビーチに行きました。',
+  word3: '韓国で買い物をしました。',
+  word4: '地元の料理は本当においしいです。',
+  word5: '地元の人がとても親切でした。',
+  word6: 'お店でとてもおもしろいグッズを見つけました。',
+  word7: 'グレートバリアリーフで有名なケアンズへ行きました。',
+  word8: '旅の恥はかき捨て。',
+  word9: 'また行けるといいなと思います。',
+};
+
+const reborn = {
+  introduction:
+    'この章の最後のテーマです。"もしXXだったら..."は会話でよく使う表現ですよね。\n\n今日は"もし生まれ変わったら"について書いていきましょう。',
+  word1: 'もしも私が生まれ変わるなら、鳥になりたい。',
+  word2: '自分に生まれ変わりたい。',
+  word3: 'もし生まれ変わったら、医者になりたい。',
+  word4: 'もし生まれ変わったら、世界一周旅行に挑戦する。',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
+};
+
 const ja = {
   common,
   web,
@@ -723,6 +880,9 @@ const ja = {
   userDiaryStatus,
   language,
   inquiry,
+  selectThemeSubcategory,
+  themeGuide,
+  first,
 };
 
 export default ja;

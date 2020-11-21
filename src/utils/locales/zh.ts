@@ -289,10 +289,6 @@ const selectLanguage = {
   add: '添加',
 };
 
-const selectDiaryType = {
-  headerTitle: '类型选择',
-};
-
 const setting = {
   headerTitle: '设置',
   title: '基本的',
@@ -616,6 +612,85 @@ const language = {
   ko: '韩语',
 };
 
+const selectDiaryType = {
+  headerTitle: '类型选择',
+  recommend: '推荐的',
+  titleFree: '您选择的主题',
+  titleTheme: '从主题中选择',
+  textFree: '日记，您今天无法谈论的内容，喜欢的电影等。写下您选择的主题。',
+  textTheme: '根据主题写句子。 如果您不认为该写些什么，推荐使用。',
+};
+
+const firstList = {
+  selfIntroduction: '自我介绍',
+  hobby: '爱好',
+  job: '工作',
+  study: '学习外语的原因',
+  dream: '梦想未来',
+  trip: '旅行回忆',
+  reborn: '如果重生',
+};
+
+const selectThemeSubcategory = {
+  headerTitle: '主题选择',
+  firstList,
+};
+
+const themeGuide = {
+  swipeStart: '',
+  swipeEnd: '',
+  introduction: '',
+  guideTipTitle: '',
+  expression: '',
+  example: '',
+  word: '',
+  guideEndText: '',
+};
+
+const selfIntroduction = {
+  introduction:
+    '第一次试着写一下自我介绍吧。遇见新认识的人一定会做自我介绍吧。\n\n如果用{{learnLanguage}}将文章写好，实际对话的时候，就可以说得很流利了',
+};
+
+const hobby = {
+  introduction:
+    '交了新朋友的时候，和同事一起喝酒的时候，关于爱好的谈话是不是很多？{{learnLanguage}}也是一样\n\n爱好是永恒的话题。今天就让自己可以说出“你的爱好”吧',
+};
+
+const job = {
+  introduction:
+    '第三回的主题是工作。是不是已经在很大程度上习惯了写文章了呢？\n\n今天让自己可以写出"你在做什么工作？"吧',
+};
+
+const study = {
+  introduction:
+    '你为什么开始学习{{learnLanguage}}了呢？\n\n语言学校，或者去留学的话一定会被问到。用{{learnLanguage}}将理由说出来吧。',
+};
+
+const dream = {
+  introduction: '你将来想要做什么？\n\n今天把将来的梦想和目标写出来吧。',
+};
+
+const trip = {
+  introduction:
+    '这次的主题是旅行。\n\n听朋友说到旅行的事情很开心吧，你也用{{learnLanguage}}准备一个关于旅行的谈话吧。',
+};
+
+const reborn = {
+  introduction:
+    '这一章最后的主题。"如果是ＸＸ的话。。。"\n\n这个句型在对话中很常见吧。今天就写关于"如果重新活一次的话。。。"吧。',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
+};
+
 const zh = {
   common,
   web,
@@ -694,6 +769,9 @@ const zh = {
   userDiaryStatus,
   language,
   inquiry,
+  selectThemeSubcategory,
+  themeGuide,
+  first,
 };
 
 export default zh;
