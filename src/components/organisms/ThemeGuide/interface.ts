@@ -47,7 +47,7 @@ interface StyleSentence {
   nativeText: string;
 }
 
-interface Sentence {
+export interface Sentence {
   id: number;
   learnText: string;
   nativeText: string;
