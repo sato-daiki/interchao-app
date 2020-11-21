@@ -301,10 +301,6 @@ const selectLanguage = {
   add: '추가하기',
 };
 
-const selectDiaryType = {
-  headerTitle: '유형 선택',
-};
-
 const setting = {
   headerTitle: '설정',
   title: '기본 설정',
@@ -634,6 +630,153 @@ const language = {
   ko: '한국어',
 };
 
+const selectDiaryType = {
+  headerTitle: '유형 선택',
+  recommend: '추천',
+  titleFree: '자유 작문',
+  titleTheme: '주제에서 선택',
+  textFree:
+    '일기, 오늘은 말할 수 없었던 것, 좋아하는 영화 등 원하는 주제에 대해 적어보세요.',
+  textTheme: '표제에 따라 문장을 씁시다. 쓸 내용이 생각 나지 않는 경우 추천.',
+};
+
+const firstList = {
+  selfIntroduction: '자기 소개',
+  hobby: '취미',
+  job: '일',
+  study: '외국어를 공부해야하는 이유',
+  dream: '미래를위한 꿈',
+  trip: '여행 추억',
+  reborn: '다시 태어난다면',
+};
+
+const selectThemeSubcategory = {
+  headerTitle: '테마 선택',
+  firstList,
+};
+
+const themeGuide = {
+  swipeStart: '',
+  swipeEnd: '',
+  introduction: '',
+  guideTipTitle: '',
+  expression: '',
+  example: '',
+  word: '',
+  guideEndText: '',
+};
+
+const selfIntroduction = {
+  introduction:
+    '첫번 째는 자기소개를 써보겠습니다. 자기소개는 새로운 사람과 만나면 꼭 하게 되죠.\n\n{{learnLanguage}}로 한 번 문장을 작성해 두면 실제로 말할 때 막힘없이 말할 수 있습니다.',
+  word1: '만나서 반갑습니다.',
+  word2: 'XX(이)라고 불러 주세요.',
+  word3: 'XX에서 태어나고 자랐습니다.',
+  word4: '일본에서 왔습니다.',
+  word5: '동생이 있습니다.',
+  word6: '아내와 결혼한 지 3년째입니다.',
+  word7: '대학에서 심리학을 전공하고 있습니다.',
+  word8: 'XX 업계에서 일하고 있습니다.',
+  word9: '여행하는 것을 정말 좋아합니다.',
+  word10: '만나서 반가웠습니다.',
+};
+
+const hobby = {
+  introduction:
+    '새로운 친구가 생겼을 때, 동료와 술자리를 할 때, 취미에 대해서 말하는 경우가 많죠? {{learnLanguage}}도 마찬가지입니다.\n\n취미는 단골 화제입니다. 오늘은 "당신의 취미"에 대해서 이야기 해보도록 하겠습니다.',
+  word1: '쇼핑',
+  word2: '영화감상',
+  word3: '야구',
+  word4: '영어 공부',
+  word5: '꽃꽂이',
+  word6: '웹사이트 운영',
+  word7: '여행',
+  word8: '온천 탐방',
+  word9: '사진',
+};
+
+const job = {
+  introduction:
+    '3번째 테마는 직장입니다. 글을 쓰는 게 이제는 익숙해지셨나요?\n\n오늘은 "당신이 어떤 일을 하고 있는가"를 쓸 수 있도록 해봅시다.',
+  word1: '변호사',
+  word2: '회계사',
+  word3: '엔지니어',
+  word4: '접수원',
+  word5: '비서',
+  word6: '회사원',
+  word7: '제조업자',
+  word8: '판매업자',
+  word9: '은행원',
+  word10: '요리사',
+  word11: '공무원',
+  word12: '교사',
+  word13: '의사',
+  word14: '약사',
+  word15: '간호사',
+  word16: '사업가',
+  word17: '연구원',
+  word18: '작가',
+};
+
+const study = {
+  introduction:
+    '당신은 왜 {{learnLanguage}}를 공부하기 시작했습니까?\n\n어학원이나 유학을 하러 가면 꼭 받는 질문입니다. 이유를 {{learnLanguage}}로 말할 수 있도록 합시다.',
+  word1: '취미나 여가',
+  word2: '다른 나라 사람들과의 만남',
+  word3: '여행을 위해 영어 배우기',
+  word4: '외국인과 말할 수 있게 되기',
+  word5: '직장에서 승진하기',
+  word6: '이직',
+  word7: '영어 능력이 필요한 직업 갖기',
+};
+
+const dream = {
+  introduction:
+    '당신은 장래에 무엇이 되고 싶나요?\n\n오늘은 장래 희망과 목표를 써보겠습니다.',
+  word1: '초등학교 선생님이 되기',
+  word2: '일러스트레이터가 되기',
+  word3: '프로 축구 선수가 되기',
+  word4: '국제적 봉사활동에 참여하기',
+  word5: '축구 잡지를 제작하는 사람이 되기',
+  word6: '아프리카에서 일하기',
+  word7: '장래 괌에서 살며 일하기',
+  word8: '일본 일주',
+  word9: '아직 장래의 꿈이 없다',
+};
+
+const trip = {
+  introduction:
+    '이번 테마는 여행입니다. 친구에게 여행 이야기를 듣는 것은 즐거운 일입니다.\n\n당신도 {{learnLanguage}}로 여행 토크를 하나 준비해 둡시다.',
+  word1: '하이킹으로 중국을 방문했습니다.',
+  word2: '하와이 해변에 갔습니다.',
+  word3: '한국에서 쇼핑을 했습니다.',
+  word4: '현지 요리는 정말로 맛있어요.',
+  word5: '현지 사람들이 정말로 친절했습니다.',
+  word6: '가게에서 정말 재미있는 상품을 발견했습니다.',
+  word7: '그레이트배리어리프로 유명한 케언스에 갔습니다.',
+  word8: '여행지에선 무엇이든 해보는 게 이득.',
+  word9: '또 가보고 싶다고 생각합니다.',
+};
+
+const reborn = {
+  introduction:
+    '이번 장의 마지막 테마입니다. "혹시 XX였다면・・・."\n\n은 대화할 때 많이 쓰는 표현이죠. 오늘은 "만약 다시 태어난다면"에 대해서 써보겠습니다.',
+  word1: '혹시 내가 다시 태어난다면, 새가 되고 싶다.',
+  word2: '나 자신으로 다시 태어나고 싶다.',
+  word3: '혹시 다시 태어난다면, 의사가 되고 싶다.',
+  word4: '혹시 다시 태어난다면, 세계 일주 여행에 도전할 것이다.',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
+};
+
 const ko = {
   common,
   web,
@@ -712,6 +855,9 @@ const ko = {
   userDiaryStatus,
   language,
   inquiry,
+  selectThemeSubcategory,
+  themeGuide,
+  first,
 };
 
 export default ko;

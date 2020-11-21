@@ -56,7 +56,8 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({
   const { themeTitle, themeCategory, themeSubcategory, caller } = route.params;
   const entries =
     getEntries({
-      key: themeSubcategory,
+      themeCategory,
+      themeSubcategory,
       nativeLanguage: profile.nativeLanguage,
       learnLanguage: profile.learnLanguage,
     }) || [];

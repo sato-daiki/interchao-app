@@ -652,23 +652,23 @@ const language = {
 
 const selectDiaryType = {
   headerTitle: 'Type Selection',
-  recommend: 'おススメ',
-  titleFree: '自由英作文',
-  titleTheme: 'テーマ作文',
+  recommend: 'Recommend',
+  titleFree: 'Topic of your choice',
+  titleTheme: 'Choose from topics',
   textFree:
-    '日記、今日話せなかったこと、好きな映画などなど。自由テーマで書きましょう。',
+    "Diary, things you couldn't talk about today, favorite movies, etc. Write about the topic of your choice.",
   textTheme:
-    'お題に沿って文章を書きましょう。書く内容が思いつかない場合はおすすめ。',
+    "Write sentences according to topics. Recommended if you can't think of what to write.",
 };
 
 const firstList = {
-  selfIntroduction: '自己紹介',
-  hobby: '趣味',
-  job: '仕事の紹介',
-  study: '英語を勉強する理由',
-  dream: '将来の夢',
-  trip: '旅行の思い出',
-  reborn: 'もし生まれ変わるなら',
+  selfIntroduction: 'Self-Introduction',
+  hobby: 'Hobby',
+  job: 'Job',
+  study: 'Reasons to study a foreign language',
+  dream: 'Dream for the future',
+  trip: 'Travel memories',
+  reborn: 'If you were born again',
 };
 
 const selectThemeSubcategory = {
@@ -677,28 +677,125 @@ const selectThemeSubcategory = {
 };
 
 const themeGuide = {
-  swipeStart: 'スワイプして\nスライドを移動しよう',
-  swipeEnd: 'スライドを復習したいときは\nスワイプして戻ろう',
-  introduction: 'はじめに',
-  guideTipTitle: 'よく使う表現',
-  expression: '表現',
-  example: '例文',
-  word: '単語',
-  guideEndText: 'ここでスライドは終わりです。\n実際に文章を書いてみましょう！',
+  swipeStart: 'Swipe to move slides',
+  swipeEnd: 'Swipe back\nwhen you want to review the slides',
+  introduction: 'Introduction',
+  guideTipTitle: 'Useful Expressions',
+  expression: 'Expressions',
+  example: 'Example sentences',
+  word: 'Words',
+  guideEndText: "This is the end of the slide.\nLet's write a sentence!",
 };
 
 const selfIntroduction = {
-  introductionTitle: '',
+  introduction:
+    "First, let's start by writing a self introduction. Don't forget to introduce yourself when meeting someone new.\n\nOnce you write a sentence with {{learnLanguage}}, you'll be able to talk smoothly when you're talking in practice.",
+  wordTitle: '職業リスト',
+  word1: 'It’s a pleasure to meet you.',
+  word2: 'You can call me XX.',
+  word3: 'I was born and raised in XX.',
+  word4: 'I come from Japan.',
+  word5: 'I have a younger brother.',
+  word6: 'My wife and I have been married for ５years.',
+  word7: 'I am a university student studying psychology.',
+  word8: 'I work in the XX industry.',
+  word9: 'I love to travel.',
+  word10: 'It was nice meeting you.',
 };
 
-const firstDetail = {
+const hobby = {
+  introduction:
+    "When you made a new friend, when drinking with your colleagues, you often talk about your hobbies, don't you? {{learnLanguage}} is the same.\n\nHobbies are staple discussion topic. Today, let's learn how to talk about your hobbies.",
+  word1: 'shopping',
+  word2: 'watching movies',
+  word3: 'baseball',
+  word4: 'studying English',
+  word5: 'flower arrangement',
+  word6: 'run my own website',
+  word7: 'traveling',
+  word8: 'visiting hot springs',
+  word9: 'taking pictures',
+};
+
+const job = {
+  introduction:
+    "The third day's theme is work. You've gotten used to writing sentences, haven't you?\n\nToday, let's write about what you do for work.",
+  word1: 'lawyer',
+  word2: 'accountant',
+  word3: 'engineer',
+  word4: 'receptionist',
+  word5: 'secretary',
+  word6: 'office worker',
+  word7: 'manufacturer',
+  word8: 'seller/supplier/dealer',
+  word9: 'bank clerk',
+  word10: 'chef',
+  word11: 'public worker',
+  word12: 'teacher',
+  word13: 'doctor',
+  word14: 'pharmacist',
+  word15: 'nurse',
+  word16: 'entrepreneur',
+  word17: 'researcher',
+  word18: 'author/writer',
+};
+
+const study = {
+  introduction:
+    "Why did you begin studying {{learnLanguage}}?\n\nThis is a question that will definitely be asked in language schools or when you go studying abroad. Let's learn to explain the reason in {{learnLanguage}}.",
+  word1: 'a hobby or pastime',
+  word2: 'to meet people from other countries',
+  word3: 'to learn English for travel',
+  word4: 'to be able to speak to foreigners',
+  word5: 'to get promoted at work',
+  word6: 'to  change jobs',
+  word7: 'to find a job where I can use my English skills',
+};
+
+const dream = {
+  introduction:
+    "What do you want to be in the future?\n\nToday, let's talk about your future dreams and goals.",
+  word1: 'to be an elementary school teacher',
+  word2: 'to be an illustrator',
+  word3: 'to be a professional soccer player',
+  word4: 'to work in a job related to international volunteering',
+  word5: 'to become someone who produces soccer magazines',
+  word6: 'to work in Africa',
+  word7: 'to live and work in Guam in the future',
+  word8: 'to go all over Japan',
+  word9: "I still don't have any dreams for the future.",
+};
+
+const trip = {
+  introduction:
+    "Today's theme is travel. It's fun listening to travel stories from a friend, isn't it?\n\nLet's prepare a talk about travel in {{learnLanguage}} for you, too.",
+  word1: 'I visited China to go hiking.',
+  word2: 'I went to the beach in Hawaii.',
+  word3: 'I went shopping in Korea.',
+  word4: 'Local food is really good.',
+  word5: 'The locals were very nice.',
+  word6: 'We found very interesting goods in a shop.',
+  word7: 'I went to Cairns which is famous for the Great Barrier Reef.',
+  word8: 'Once over the border, one may do anything.',
+  word9: 'I hope I can visit there again.',
+};
+
+const reborn = {
+  introduction: `This is the last theme of this chapter. "If I were XX..." is an expression that's often used in conversations.\n\nLet's write about what you want to be if you were reborn.`,
+  word1: 'If I were to be reborn, I would like to be a bird.',
+  word2: 'I would want to be reborn as myself.',
+  word3: 'If I were to be born again, I would like to be a doctor.',
+  word4: 'If I were reborn, I would challenge a trip around the world.',
+};
+
+const first = {
   selfIntroduction,
-  // hobby,
-  // job,
-  // study,
-  // dream,
-  // trip,
-  // reborn,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
 };
 
 const en = {
@@ -781,7 +878,7 @@ const en = {
   userDiaryStatus,
   language,
   inquiry,
-  firstDetail,
+  first,
 };
 
 export default en;
