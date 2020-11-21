@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { State } from '@/types/state';
-import TeachDiarySearchScreen, {
-  Props,
-} from '@/screens/TeachDiarySearchScreen';
+// @ts-ignore
+import ThemeGuideScreen, { Props } from '@/screens/ThemeGuideScreen';
 
 const mapStateToProps = (state: State): Props => {
   const { profile } = state.rootReducer;
@@ -11,4 +10,4 @@ const mapStateToProps = (state: State): Props => {
   };
 };
 
-export default connect(mapStateToProps)(TeachDiarySearchScreen);
+export default connect(mapStateToProps)(ThemeGuideScreen);

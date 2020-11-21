@@ -18,6 +18,11 @@ import {
 
 import ThemeGuideWord from '@/components/organisms/ThemeGuide/ThemeGuideWord';
 import { mainColor, primaryColor } from '@/styles/Common';
+import { Profile } from '@/types';
+
+export interface Props {
+  profile: Profile;
+}
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<ModalThemeGuideStackParamList, 'ThemeGuide'>,
@@ -32,7 +37,8 @@ type ThemeGuideRouteProp = RouteProp<
 type ScreenType = {
   navigation: NavigationProp;
   route: ThemeGuideRouteProp;
-};
+} & Props;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -42,9 +48,18 @@ const styles = StyleSheet.create({
 
 const { width } = Dimensions.get('window');
 
-const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
+const ThemeGuideScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  profile,
+}) => {
   const { themeTitle, themeCategory, themeSubcategory, caller } = route.params;
-  const entries = getEntries(themeSubcategory) || [];
+  const entries =
+    getEntries({
+      key: themeSubcategory,
+      nativeLanguage: profile.nativeLanguage,
+      learnLanguage: profile.learnLanguage,
+    }) || [];
   const [activeSlide, setActiveSlide] = useState(
     caller === 'PostDiary' ? entries.length - 1 : 0
   );

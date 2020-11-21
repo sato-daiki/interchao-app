@@ -24,10 +24,12 @@ import {
   subTextColor,
 } from '@/styles/Common';
 import I18n from '@/utils/I18n';
-import { ThemeSubcategory } from '@/types';
+import { Language, ThemeSubcategory } from '@/types';
 
 interface Props {
   themeSubcategory: ThemeSubcategory;
+  nativeLanguage: Language;
+  learnLanguage: Language;
   onPressClose: () => void;
   onPressBegin: () => void;
 }
@@ -101,8 +103,11 @@ const ThemeGuideWeb: React.FC<Props> = ({
   themeSubcategory,
   onPressClose,
   onPressBegin,
+  learnLanguage,
+  nativeLanguage,
 }) => {
-  const entries = getEntries(themeSubcategory) || [];
+  const entries =
+    getEntries({ key: themeSubcategory, nativeLanguage, learnLanguage }) || [];
 
   const introductionParams = entries[0].params as IntroductionParams;
   const tipParams = entries[1].params as TipParams;

@@ -7,6 +7,11 @@ import {
   ModalThemeGuideStackParamList,
 } from '@/navigations/ModalNavigator';
 import ThemeGuideWeb from '@/components/organisms/ThemeGuide/ThemeGuideWeb';
+import { Profile } from '@/types';
+
+export interface Props {
+  profile: Profile;
+}
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<ModalThemeGuideStackParamList, 'ThemeGuide'>,
@@ -21,9 +26,13 @@ type ThemeGuideRouteProp = RouteProp<
 type ScreenType = {
   navigation: NavigationProp;
   route: ThemeGuideRouteProp;
-};
+} & Props;
 
-const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
+const ThemeGuideScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  profile,
+}) => {
   const { themeTitle, themeCategory, themeSubcategory, caller } = route.params;
 
   useEffect(() => {
@@ -50,6 +59,8 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
 
   return (
     <ThemeGuideWeb
+      learnLanguage={profile.learnLanguage}
+      nativeLanguage={profile.nativeLanguage}
       themeSubcategory={themeSubcategory}
       onPressClose={onPressClose}
       onPressBegin={onPressBegin}
