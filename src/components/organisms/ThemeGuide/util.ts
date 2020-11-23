@@ -1,23 +1,24 @@
 import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
-import { ImageSourcePropType, TextStyle } from 'react-native';
+import { TextStyle } from 'react-native';
 import I18n from '@/utils/I18n';
 import {
-  enHobbyExpressions,
-  enSelfIntroductionExamples,
-  enHobbyExamples,
-  enSelfIntroductionExpressions,
-  enJobExamples,
-  enStudyExamples,
-  enDreamExamples,
-  enTripExamples,
-  enRebornExamples,
-  enJobExpressions,
-  enStudyExpressions,
-  enDreamExpressions,
-  enTripExpressions,
-  enRebornExpressions,
-} from '@/utils/locales/themeGuide/en';
-
+  dreamExamples,
+  dreamExpressions,
+  Examples,
+  Expressions,
+  hobbyExamples,
+  hobbyExpressions,
+  jobExamples,
+  jobExpressions,
+  rebornExamples,
+  rebornExpressions,
+  selfIntroductionExamples,
+  selfIntroductionExpressions,
+  studyExamples,
+  studyExpressions,
+  tripExamples,
+  tripExpressions,
+} from '@/utils/locales/themeGuide';
 import {
   hobby,
   selfIntroduction,
@@ -27,7 +28,13 @@ import {
   trip,
   reborn,
 } from './config';
-import { Entry, Sentence, StyleSentence, StyleType } from './interface';
+import {
+  Entry,
+  Sentence,
+  StyleSentence,
+  StyleText,
+  StyleType,
+} from './interface';
 
 export interface GetParams {
   expressions: Sentence[];
@@ -59,23 +66,44 @@ interface GetWordsParams {
 }
 
 interface GetSentencesParams {
-  expressions: string[];
+  learnLanguage: Language;
+  expressions: Expressions;
   nativeOption: object;
   i18nTextHeader: string;
 }
 
 interface GetStyleSentencesParams {
-  examples: any;
+  learnLanguage: Language;
+  examples: Examples;
   nativeOption: object;
   i18nTextHeader: string;
 }
 
 const getSentences = ({
+  learnLanguage,
   expressions,
   nativeOption,
   i18nTextHeader,
-}: GetSentencesParams): Sentence[] => {
-  return expressions.map((item, index) => {
+}: GetSentencesParams): Sentence[] | null => {
+  let newExpressions: string[];
+  switch (learnLanguage) {
+    case 'en':
+      newExpressions = expressions.en;
+      break;
+    case 'ja':
+      newExpressions = expressions.ja;
+      break;
+    case 'ko':
+      newExpressions = expressions.ko;
+      break;
+    case 'zh':
+      newExpressions = expressions.zh;
+      break;
+    default:
+      return null;
+  }
+
+  return newExpressions.map((item, index) => {
     const i18nText = `${i18nTextHeader}${index + 1}`;
     return {
       id: index + 1,
@@ -97,63 +125,81 @@ export const getExpressions = ({
     },
     i18nTextHeader: `${themeCategory}.${themeSubcategory}.${learnLanguage}.expression`,
   };
-  switch (learnLanguage) {
-    case 'en': {
-      switch (themeSubcategory) {
-        case 'selfIntroduction':
-          return getSentences({
-            expressions: enSelfIntroductionExpressions,
-            ...params,
-          });
-        case 'hobby':
-          return getSentences({
-            expressions: enHobbyExpressions,
-            ...params,
-          });
-        case 'job':
-          return getSentences({
-            expressions: enJobExpressions,
-            ...params,
-          });
-        case 'study':
-          return getSentences({
-            expressions: enStudyExpressions,
-            ...params,
-          });
-        case 'dream':
-          return getSentences({
-            expressions: enDreamExpressions,
-            ...params,
-          });
-        case 'trip':
-          return getSentences({
-            expressions: enTripExpressions,
-            ...params,
-          });
-        case 'reborn':
-          return getSentences({
-            expressions: enRebornExpressions,
-            ...params,
-          });
-        default:
-          return null;
-      }
-      return null;
-    }
-    case 'ja': {
-      return null;
-    }
+
+  switch (themeSubcategory) {
+    case 'selfIntroduction':
+      return getSentences({
+        learnLanguage,
+        expressions: selfIntroductionExpressions,
+        ...params,
+      });
+    case 'hobby':
+      return getSentences({
+        learnLanguage,
+        expressions: hobbyExpressions,
+        ...params,
+      });
+    case 'job':
+      return getSentences({
+        learnLanguage,
+        expressions: jobExpressions,
+        ...params,
+      });
+    case 'study':
+      return getSentences({
+        learnLanguage,
+        expressions: studyExpressions,
+        ...params,
+      });
+    case 'dream':
+      return getSentences({
+        learnLanguage,
+        expressions: dreamExpressions,
+        ...params,
+      });
+    case 'trip':
+      return getSentences({
+        learnLanguage,
+        expressions: tripExpressions,
+        ...params,
+      });
+    case 'reborn':
+      return getSentences({
+        learnLanguage,
+        expressions: rebornExpressions,
+        ...params,
+      });
     default:
       return null;
   }
 };
 
 const getStyleSentences = ({
+  learnLanguage,
   examples,
   nativeOption,
   i18nTextHeader,
-}: GetStyleSentencesParams): StyleSentence[] => {
-  return examples.map((item, index) => {
+}: GetStyleSentencesParams): StyleSentence[] | null => {
+  let newExamples: StyleText[][];
+
+  switch (learnLanguage) {
+    case 'en':
+      newExamples = examples.en;
+      break;
+    case 'ja':
+      newExamples = examples.ja;
+      break;
+    case 'ko':
+      newExamples = examples.ko;
+      break;
+    case 'zh':
+      newExamples = examples.zh;
+      break;
+    default:
+      return null;
+  }
+
+  return newExamples.map((item, index) => {
     const i18nText = `${i18nTextHeader}${index + 1}`;
     return {
       id: index + 1,
@@ -176,52 +222,50 @@ export const getExamples = ({
     i18nTextHeader: `${themeCategory}.${themeSubcategory}.${learnLanguage}.example`,
   };
 
-  switch (learnLanguage) {
-    case 'en': {
-      switch (themeSubcategory) {
-        case 'selfIntroduction':
-          return getStyleSentences({
-            examples: enSelfIntroductionExamples,
-            ...params,
-          });
-        case 'hobby':
-          return getStyleSentences({
-            examples: enHobbyExamples,
-            ...params,
-          });
-        case 'job':
-          return getStyleSentences({
-            examples: enJobExamples,
-            ...params,
-          });
-        case 'study':
-          return getStyleSentences({
-            examples: enStudyExamples,
-            ...params,
-          });
-        case 'dream':
-          return getStyleSentences({
-            examples: enDreamExamples,
-            ...params,
-          });
-        case 'trip':
-          return getStyleSentences({
-            examples: enTripExamples,
-            ...params,
-          });
-        case 'reborn':
-          return getStyleSentences({
-            examples: enRebornExamples,
-            ...params,
-          });
+  switch (themeSubcategory) {
+    case 'selfIntroduction':
+      return getStyleSentences({
+        learnLanguage,
+        examples: selfIntroductionExamples,
+        ...params,
+      });
+    case 'hobby':
+      return getStyleSentences({
+        learnLanguage,
+        examples: hobbyExamples,
+        ...params,
+      });
+    case 'job':
+      return getStyleSentences({
+        learnLanguage,
+        examples: jobExamples,
+        ...params,
+      });
+    case 'study':
+      return getStyleSentences({
+        learnLanguage,
+        examples: studyExamples,
+        ...params,
+      });
+    case 'dream':
+      return getStyleSentences({
+        learnLanguage,
+        examples: dreamExamples,
+        ...params,
+      });
+    case 'trip':
+      return getStyleSentences({
+        learnLanguage,
+        examples: tripExamples,
+        ...params,
+      });
+    case 'reborn':
+      return getStyleSentences({
+        learnLanguage,
+        examples: rebornExamples,
+        ...params,
+      });
 
-        default:
-          return null;
-      }
-    }
-    case 'ja': {
-      return null;
-    }
     default:
       return null;
   }
