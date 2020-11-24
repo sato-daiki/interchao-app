@@ -82,7 +82,7 @@ const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
                 key={`${example.id}-${t.key}`}
                 style={[getStyle(t.styleType)]}
               >
-                {`${t.text} `}
+                {`${t.text}`}
               </Text>
             ))}
           </Text>

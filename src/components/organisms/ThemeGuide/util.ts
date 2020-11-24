@@ -123,7 +123,7 @@ export const getExpressions = ({
     nativeOption: {
       locale: nativeLanguage,
     },
-    i18nTextHeader: `${themeCategory}.${themeSubcategory}.${learnLanguage}.expression`,
+    i18nTextHeader: `${themeCategory}.${themeSubcategory}.expression`,
   };
 
   switch (themeSubcategory) {
@@ -219,7 +219,7 @@ export const getExamples = ({
     nativeOption: {
       locale: nativeLanguage,
     },
-    i18nTextHeader: `${themeCategory}.${themeSubcategory}.${learnLanguage}.example`,
+    i18nTextHeader: `${themeCategory}.${themeSubcategory}.example`,
   };
 
   switch (themeSubcategory) {

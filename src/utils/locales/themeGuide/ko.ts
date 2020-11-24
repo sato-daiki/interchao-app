@@ -2,21 +2,22 @@ import { StyleType } from '@/components/organisms/ThemeGuide';
 
 export const koSelfIntroductionExpressions = [
   '안녕하세요.',
-  '만나서 반갑습니다.',
-  '제 이름은 _입니다. ',
-  '저는 _에서 _ 일을 하고 있습니다.',
-  '제 취미는 _입니다.',
-  '저는 _에 살고 있습니다.',
-  '올해로 결혼한 지 _년째입니다.',
+  '처음 뵙겠습니다. 잘 부탁드립니다.',
+  '다나카 하나입니다. 하나라고 불러 주세요.',
+  '가나가와에서 태어나 도쿄에서 자랐습니다.',
+  '인터차오에서 마케팅 디렉터로 일하고 있습니다.',
   '감사합니다.',
 ];
 
 export const koSelfIntroductionExamples = [
+  [{ key: 'a', text: '안녕하세요.', styleType: StyleType.bold }],
   [
-    { key: 'a', text: '안녕하세요. ', styleType: StyleType.bold },
-    { key: 'b', text: '처음 뵙겠습니다.', styleType: StyleType.p },
+    {
+      key: 'a',
+      text: '처음 뵙겠습니다. 잘 부탁드립니다.',
+      styleType: StyleType.bold,
+    },
   ],
-  [{ key: 'a', text: '만나서 반갑습니다.', styleType: StyleType.bold }],
   [
     { key: 'a', text: '제 이름은 ', styleType: StyleType.bold },
     { key: 'b', text: '김철수', styleType: StyleType.p },
@@ -48,12 +49,9 @@ export const koSelfIntroductionExamples = [
 ];
 
 export const koHobbyExpressions = [
-  '제 취미는 _입니다.',
-  '저는 _.',
-  '제가 이 취미를 갖게 된 계기는 _.',
-  '올해로 _(을)를 시작한 지 _년째입니다.',
-  '비용은 _.',
-  '앞으로 _ 싶습니다.',
+  '제 취미는 달리기입니다.',
+  '저는 풀 마라톤에 참가했던 것을 계기로 달리기를 시작하게 되었습니다.',
+  '저는 앞으로도 운동을 계속해 나가고 싶습니다.',
 ];
 
 export const koHobbyExamples = [
@@ -110,14 +108,9 @@ export const koHobbyExamples = [
 ];
 
 export const koJobExpressions = [
-  '저는 _입니다.',
-  '저는 _에서 일하고 있습니다.',
-  '하는 일은 _입니다.',
-  '제 직업의 특징은 _.',
-  '하루에 보통 _시간 일합니다.',
-  '제 직업에서 가장 마음에 드는 점은 _입니다.',
-  '제 직업에서 가장 힘든 점은 _입니다.',
-  '_(이)가 되려면 _(이)가 필요합니다.',
+  '저는 Interchao Center에서 일하고 있습니다.',
+  '저의 직업은 영어 선생님입니다.',
+  '당사는 1:1 레슨을 전문으로 하고 있습니다.',
 ];
 
 export const koJobExamples = [
@@ -162,14 +155,7 @@ export const koJobExamples = [
   ],
 ];
 
-export const koStudyExpressions = [
-  '_에서 _하기 위해 __ 실력이 필요합니다.',
-  '__를 통해 _고 싶습니다.',
-  '__는 _입니다.',
-  '제가 __를 공부하는 이유는 _ 때문입니다.',
-  '_(을)를 위해서는 __가 필수입니다.',
-  '_ 때문에 __ 시험 점수가 필요합니다.',
-];
+export const koStudyExpressions = [];
 
 export const koStudyExamples = [
   [
@@ -214,13 +200,9 @@ export const koStudyExamples = [
 ];
 
 export const koDreamExpressions = [
-  '제 미래의 꿈은 _입니다.',
-  '저는 _에 소질이 있습니다.',
-  '예전부터 _(을)를 좋아했습니다.',
-  '_ 사람이 되고 싶습니다.',
-  '_ 것이 꿈입니다.',
-  '_(을)를 갖고 싶습니다.',
-  '아직 ＿.',
+  '저의 꿈은 내 가게를 갖는 것입니다.',
+  '저는 어릴 적부터 요리를 좋아했습니다.',
+  '많은 사람이 제가 만든 음식을 먹고 기뻐했으면 좋겠습니다.',
 ];
 
 export const koDreamExamples = [
@@ -262,12 +244,9 @@ export const koDreamExamples = [
 ];
 
 export const koTripExpressions = [
-  '저는 이제까지 _(을)를 여행해 보았습니다.',
-  '가장 좋았던 나라는 _입니다.',
-  '가장 _ 여행한 기간은 _동안입니다.',
-  '저는 _여행하는 것을 즐깁니다.',
-  '그곳은 _.',
-  '_ 여행이었습니다.',
+  '저는 가족과 함께 이탈리아에 갔습니다.',
+  '우리는 10일간 로마와 베네치아, 나폴리를 방문했습니다.',
+  '가장 기억에 남는 건 보트를 타고 푸른 동굴에 갔던 것입니다.',
 ];
 
 export const koTripExamples = [
@@ -304,11 +283,8 @@ export const koTripExamples = [
 ];
 
 export const koRebornExpressions = [
-  '다시 태어난다면, 저는 _.',
-  '왜냐하면, _ 때문입니다.',
-  '가능하다면 _로 태어나고 싶습니다.',
-  '_에서 태어나고 싶습니다.',
-  '다시 태어나더라도, 저는_.',
+  '다시 태어난다면 1945년쯤에 태어나고 싶습니다.',
+  '왜냐하면 1960년대 살았던 심리학자에게 배우고 싶기 때문입니다.',
 ];
 
 export const koRebornExamples = [
