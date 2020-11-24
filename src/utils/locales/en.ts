@@ -684,7 +684,8 @@ const themeGuide = {
   expression: 'Expressions',
   example: 'Example sentences',
   word: 'Words',
-  guideEndText: "This is the end of the slide.\nLet's write a sentence!",
+  guideEndText:
+    "This is the end of the slide.\nLet's actually write a sentence!",
 };
 
 const selfIntroduction = {

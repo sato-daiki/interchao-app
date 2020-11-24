@@ -637,14 +637,14 @@ const selectThemeSubcategory = {
 };
 
 const themeGuide = {
-  swipeStart: '',
-  swipeEnd: '',
-  introduction: '',
-  guideTipTitle: '',
-  expression: '',
-  example: '',
-  word: '',
-  guideEndText: '',
+  swipeStart: '滑动来移动简报吧',
+  swipeEnd: '想复习简报的时候就用滑动来返回',
+  introduction: '介绍',
+  guideTipTitle: '常用表达',
+  expression: '表达',
+  example: '例句',
+  word: '词汇表',
+  guideEndText: '简报在这里结束。实际动手写文章看看吧！',
 };
 
 const selfIntroduction = {

@@ -656,14 +656,16 @@ const selectThemeSubcategory = {
 };
 
 const themeGuide = {
-  swipeStart: '',
-  swipeEnd: '',
-  introduction: '',
-  guideTipTitle: '',
-  expression: '',
-  example: '',
-  word: '',
-  guideEndText: '',
+  swipeStart: '화면을 넘겨\n슬라이드를 이동합시다.',
+  swipeEnd:
+    '슬라이드를 복습하고 싶을 때는\n스와이프로 화면을 되돌릴 수 있습니다.',
+  introduction: '시작하기',
+  guideTipTitle: '자주 사용하는 표현',
+  expression: '표현',
+  example: '예문',
+  word: '단어 목록',
+  guideEndText:
+    '이것으로 슬라이드는 끝입니다.\n자, 그럼 이제 실제로 글을 써보실까요?',
 };
 
 const selfIntroduction = {
