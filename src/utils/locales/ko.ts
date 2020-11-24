@@ -669,6 +669,34 @@ const themeGuide = {
 const selfIntroduction = {
   introduction:
     '첫번 째는 자기소개를 써보겠습니다. 자기소개는 새로운 사람과 만나면 꼭 하게 되죠.\n\n{{learnLanguage}}로 한 번 문장을 작성해 두면 실제로 말할 때 막힘없이 말할 수 있습니다.',
+  en: {
+    expression1: '취미 이름',
+    expression2: '취미 설명',
+    expression3: '취미를 시작한 계기',
+    expression4: '취미 이름, 햇수',
+    expression5: '소요되거나 소요되지 않은 혹은 구체적인 금액',
+    expression6: '앞으로에 대해',
+  },
+  ja: {
+    expression1: '인사',
+    expression2: '도입',
+    expression3: '이름, 호칭',
+    expression4: '출신지',
+    expression5: '회사명, 직업',
+    expression6: '취미',
+    expression7: '맺음',
+  },
+  zh: {
+    expression1: '인사',
+    expression2: '도입',
+    expression3: '이름, 호칭',
+    expression4: '결혼한 날짜와 시간',
+    expression5: '출신지, 직업',
+    expression6: '회사명, 거주지',
+    expression7: '취미',
+    expression8: '맺음',
+  },
+  wordTitle: '자기소개에서 사용할 수 있는 표현 일람',
   word1: '만나서 반갑습니다.',
   word2: 'XX(이)라고 불러 주세요.',
   word3: 'XX에서 태어나고 자랐습니다.',
@@ -684,6 +712,27 @@ const selfIntroduction = {
 const hobby = {
   introduction:
     '새로운 친구가 생겼을 때, 동료와 술자리를 할 때, 취미에 대해서 말하는 경우가 많죠? {{learnLanguage}}도 마찬가지입니다.\n\n취미는 단골 화제입니다. 오늘은 "당신의 취미"에 대해서 이야기 해보도록 하겠습니다.',
+  en: {
+    expression1: 'hobby name',
+    expression2: 'description of hobbies',
+    expression3: 'how did you start your hobby?',
+    expression4: 'hobby name, years',
+    expression5: 'it does not cost, or a specific amount',
+    expression6: 'about the future',
+  },
+  ja: {
+    expression1: '취미 이름',
+    expression2: '취미를 시작한 계기',
+    expression3: '앞으로에 대해',
+  },
+  zh: {
+    expression1: '취미 이름',
+    expression2: '취미 설명',
+    expression3: '취미를 시작한 계기',
+    expression4: '취미의 효과',
+    expression5: '앞으로에 대해',
+  },
+  wordTitle: '취미 일람',
   word1: '쇼핑',
   word2: '영화감상',
   word3: '야구',
@@ -698,6 +747,28 @@ const hobby = {
 const job = {
   introduction:
     '3번째 테마는 직장입니다. 글을 쓰는 게 이제는 익숙해지셨나요?\n\n오늘은 "당신이 어떤 일을 하고 있는가"를 쓸 수 있도록 해봅시다.',
+  en: {
+    expression1: '직종',
+    expression2: '근무처 이름',
+    expression3: '근무 내용',
+    expression4: '다른 직업과의 차이점',
+    expression5: '근무 시간',
+    expression6: '장점 등',
+    expression7: '단점 등',
+    expression8: '직종, 자격·학위·능력 등',
+  },
+  ja: {
+    expression1: '근무처 이름',
+    expression2: '업종·업태',
+    expression3: '전문 분야',
+  },
+  zh: {
+    expression1: '근무처 이름',
+    expression2: '업종·업태',
+    expression3: '업무내용 설명',
+    expression4: '전문 분야',
+  },
+  wordTitle: '직업 일람',
   word1: '변호사',
   word2: '회계사',
   word3: '엔지니어',
@@ -721,6 +792,25 @@ const job = {
 const study = {
   introduction:
     '당신은 왜 {{learnLanguage}}를 공부하기 시작했습니까?\n\n어학원이나 유학을 하러 가면 꼭 받는 질문입니다. 이유를 {{learnLanguage}}로 말할 수 있도록 합시다.',
+  en: {
+    expression1: '장소·상황, 목적',
+    expression2: '희망',
+    expression3: '용도·사용법',
+    expression4: '대상·이유',
+    expression5: '목적',
+    expression6: '목적',
+  },
+  ja: {
+    expression1: '언어, 이유',
+    expression2: '언어, 이유',
+    expression3: '언어, 이유',
+  },
+  zh: {
+    expression1: '언어, 이유',
+    expression2: '언어, 이유',
+    expression3: '언어, 이유',
+  },
+  wordTitle: '이유 일람',
   word1: '취미나 여가',
   word2: '다른 나라 사람들과의 만남',
   word3: '여행을 위해 영어 배우기',
@@ -733,6 +823,26 @@ const study = {
 const dream = {
   introduction:
     '당신은 장래에 무엇이 되고 싶나요?\n\n오늘은 장래 희망과 목표를 써보겠습니다.',
+  en: {
+    expression1: '장래 꿈',
+    expression2: '잘하는 것',
+    expression3: '좋아하는 것',
+    expression4: '~같은 사람',
+    expression5: '~하는 것이',
+    expression6: '목표하는 것',
+    expression7: '생각하지 않는 부분·미숙한 부분 등',
+  },
+  ja: {
+    expression1: '장래 꿈',
+    expression2: '과거의 경험',
+    expression3: '꿈을 통해서 실현하고 싶은 일',
+  },
+  zh: {
+    expression1: '장래 꿈',
+    expression2: '꿈을 갖게된 이유',
+    expression3: '꿈을 통해서 실현하고 싶은 일',
+  },
+  wordTitle: '장래희망 예시 일람',
   word1: '초등학교 선생님이 되기',
   word2: '일러스트레이터가 되기',
   word3: '프로 축구 선수가 되기',
@@ -747,6 +857,26 @@ const dream = {
 const trip = {
   introduction:
     '이번 테마는 여행입니다. 친구에게 여행 이야기를 듣는 것은 즐거운 일입니다.\n\n당신도 {{learnLanguage}}로 여행 토크를 하나 준비해 둡시다.',
+  en: {
+    expression1: '몇 개국, 여러 나라, 나라이름',
+    expression2: '나라이름',
+    expression3: '길게, 짧게, 일수, 몇 개월, 년수',
+    expression4: '혼자, 친구들과, 가족들과',
+    expression5: '감상',
+    expression6: '추억의 상세 내용',
+  },
+  ja: {
+    expression1: '가 본 나라 이름(도시 이름)·함께 간 사람',
+    expression2: '방문한 장소, 기간',
+    expression3: '가장 기억에 남는 추억',
+  },
+  zh: {
+    expression1: '가 본 나라 이름(도시 이름)·함께 간 사람',
+    expression2: '방문한 장소, 기간',
+    expression3: '가장 기억에 남는 추억',
+    expression4: '감상',
+  },
+  wordTitle: '여행 추억관련 표현 일람',
   word1: '하이킹으로 중국을 방문했습니다.',
   word2: '하와이 해변에 갔습니다.',
   word3: '한국에서 쇼핑을 했습니다.',
@@ -761,6 +891,23 @@ const trip = {
 const reborn = {
   introduction:
     '이번 장의 마지막 테마입니다. "혹시 XX였다면・・・."\n\n은 대화할 때 많이 쓰는 표현이죠. 오늘은 "만약 다시 태어난다면"에 대해서 써보겠습니다.',
+  en: {
+    expression1: '되고 싶은 것',
+    expression2: '이유',
+    expression3: '성별·지위 등',
+    expression4: '국가·장소',
+    expression5: '변하고 싶지 않은 것',
+  },
+  ja: {
+    expression1: '다시 태어난다면 하고 싶은 일',
+    expression2: '이유',
+  },
+  zh: {
+    expression1: '다시 태어난다면 하고 싶은 일',
+    expression2: '이유',
+    expression3: '맺음',
+  },
+  wordTitle: '표현 일람',
   word1: '혹시 내가 다시 태어난다면, 새가 되고 싶다.',
   word2: '나 자신으로 다시 태어나고 싶다.',
   word3: '혹시 다시 태어난다면, 의사가 되고 싶다.',

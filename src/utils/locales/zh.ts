@@ -650,6 +650,21 @@ const themeGuide = {
 const selfIntroduction = {
   introduction:
     '第一次试着写一下自我介绍吧。遇见新认识的人一定会做自我介绍吧。\n\n如果用{{learnLanguage}}将文章写好，实际对话的时候，就可以说得很流利了',
+  expression1: '打招呼',
+  expression2: '导入',
+  expression3: '姓名、通称',
+  expression4: '出身地、我长大的城镇',
+  expression5: '公司名称、职业',
+  expression6: '兴趣',
+  expression7: '结缘',
+  example1: '你好。',
+  example2: '初次见面，请多指教。',
+  example3: '我的名字是田中华。可以叫我阿华。',
+  example4: '我出生于神奈川，在东京长大。',
+  example5: '我在Interchao，从事程序员的工作。',
+  example6: '我喜欢弹吉他。',
+  example7: '谢谢你。',
+  wordTitle: '可用于自我介绍的呈现方式一览',
   word1: '久仰大名，今天幸会了。',
   word2: '请叫我XX。',
   word3: '我在XX出生与成长。',
@@ -665,6 +680,14 @@ const selfIntroduction = {
 const hobby = {
   introduction:
     '交了新朋友的时候，和同事一起喝酒的时候，关于爱好的谈话是不是很多？{{learnLanguage}}也是一样\n\n爱好是永恒的话题。今天就让自己可以说出“你的爱好”吧',
+
+  expression1: '兴趣的名字',
+  expression2: '兴趣的名字、开始兴趣的契机',
+  expression3: '关于今后',
+  example1: '我的兴趣是跑步。',
+  example2: '我开始跑步的契机是参加了全程马拉松。',
+  example3: '我今后也想继续这个运动。',
+  wordTitle: '兴趣一览',
   word1: '购物',
   word2: '看电影',
   word3: '棒球',
@@ -679,6 +702,13 @@ const hobby = {
 const job = {
   introduction:
     '第三回的主题是工作。是不是已经在很大程度上习惯了写文章了呢？\n\n今天让自己可以写出"你在做什么工作？"吧',
+  expression1: '工作地点的名字',
+  expression2: '职业',
+  expression3: '专门领域',
+  example1: '我在Interchao Center工作。',
+  example2: '我的专业是英语老师。',
+  example3: '我司专门开设一对一教学课程。',
+  wordTitle: '职业一览',
   word1: '律师',
   word2: '会计师',
   word3: '工程师',
@@ -702,6 +732,11 @@ const job = {
 const study = {
   introduction:
     '你为什么开始学习{{learnLanguage}}了呢？\n\n语言学校，或者去留学的话一定会被问到。用{{learnLanguage}}将理由说出来吧。',
+  expression1: '语言、理由',
+  expression2: '语言、理由',
+  expression3: '语言、理由',
+  example1: '我是因为新的工作需要与顾客用英语沟通而开始学习英语的。',
+  wordTitle: '理由一览',
   word1: '兴趣和闲暇时间',
   word2: '认识其他国家的人',
   word3: '为了旅行学习英语',
@@ -713,6 +748,13 @@ const study = {
 
 const dream = {
   introduction: '你将来想要做什么？\n\n今天把将来的梦想和目标写出来吧。',
+  expression1: '将来的梦想',
+  expression2: '过去的经历',
+  expression3: '想藉由梦想实践的事',
+  example1: '我将来的梦想是拥有自己的店。',
+  example2: '从小我就喜欢做菜。',
+  example3: '我希望让很多人因为我做的菜而感到快乐。',
+  wordTitle: '将来的梦想例子一览',
   word1: '成为小学教师',
   word2: '成为绘师',
   word3: '成为职业足球选手',
@@ -727,6 +769,13 @@ const dream = {
 const trip = {
   introduction:
     '这次的主题是旅行。\n\n听朋友说到旅行的事情很开心吧，你也用{{learnLanguage}}准备一个关于旅行的谈话吧。',
+  expression1: '去过的国名(都市名)、一起去的人',
+  expression2: '访问过的地点、期间',
+  expression3: '最深刻的回忆',
+  example1: '我和家人一起去了意大利。',
+  example2: '我们花了10天造访了罗马、威尼斯和那不勒斯。',
+  example3: '最深刻的回忆是坐著小船去卡布里島的蓝洞。',
+  wordTitle: '旅行的回忆呈现方式一览',
   word1: '我去了中国远足。',
   word2: '我去了夏威夷的海滩。',
   word3: '我去了韩国购物。',
@@ -741,6 +790,11 @@ const trip = {
 const reborn = {
   introduction:
     '这一章最后的主题。"如果是ＸＸ的话。。。"\n\n这个句型在对话中很常见吧。今天就写关于"如果重新活一次的话。。。"吧。',
+  expression1: '重生的话想做的事',
+  expression2: '理由',
+  example1: '有机会重生的话，我想出生在1945年左右。',
+  example2: '因为我想跟著1960年代的心理专家学习。',
+  wordTitle: '呈现方式一览',
   word1: '如果我重生的话，我想当只鸟。',
   word2: '我想重新活过一回。',
   word3: '如果有机会重生的话，我想当医生。',
