@@ -4,8 +4,8 @@ export const jaSelfIntroductionExpressions = [
   'こんにちは。',
   'はじめまして。',
   '私の名前は__です。__とよんでください。',
-  '私は_で生まれました。',
-  '私は___で___として働いています。',
+  '私は__で生まれまして、__で育ちました。',
+  '私は__で__として働いています。',
   '私は__が好きです。',
   'ありがとうございました。',
 ];
@@ -23,7 +23,9 @@ export const jaSelfIntroductionExamples = [
   [
     { key: 'a', text: '私は', styleType: StyleType.bold },
     { key: 'b', text: '神奈川', styleType: StyleType.p },
-    { key: 'c', text: 'で生まれました。', styleType: StyleType.bold },
+    { key: 'c', text: 'で生まれて。', styleType: StyleType.bold },
+    { key: 'd', text: '東京', styleType: StyleType.p },
+    { key: 'e', text: 'で育ちました', styleType: StyleType.bold },
   ],
   [
     { key: 'a', text: '私は', styleType: StyleType.bold },
@@ -93,21 +95,25 @@ export const jaJobExamples = [
 ];
 
 export const jaStudyExpressions = [
-  '私が__の勉強を始めた理由は',
-  'なぜ__の勉強を始めたかというと',
-  '__の勉強を始めたきっかけは',
+  '私が__の勉強を始めた理由は__',
+  'なぜ__の勉強を始めたかというと__',
+  '__の勉強を始めたきっかけは__',
 ];
 
 export const jaStudyExamples = [
   [
     {
       key: 'a',
-      text: '私が日本語の勉強を始めた理由は、',
+      text: '私が',
       styleType: StyleType.bold,
     },
-    { key: 'b', text: '日本語', styleType: StyleType.p },
+    { key: 'b', text: '英語', styleType: StyleType.p },
     { key: 'c', text: 'の勉強を始めた理由は、', styleType: StyleType.bold },
-    { key: 'd', text: '仕事で使うからです。', styleType: StyleType.p },
+    {
+      key: 'd',
+      text: '新しい仕事で顧客と基本的に英語を使わなければならないからです。',
+      styleType: StyleType.p,
+    },
   ],
 ];
 
