@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
     flexWrap: 'wrap',
+    marginBottom: 2,
   },
   subText: {
     color: subTextColor,
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: 'wrap',
   },
   marginBottom4: {
     marginBottom: 4,

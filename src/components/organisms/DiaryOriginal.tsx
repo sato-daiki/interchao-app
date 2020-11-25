@@ -45,6 +45,8 @@ const DiaryOriginal: React.FC<Props> = ({ diary, profile, title, text }) => {
         <MyDiaryStatus diary={diary} />
       </View>
       <DiaryTitleAndText
+        themeCategory={diary.themeCategory}
+        themeSubcategory={diary.themeSubcategory}
         nativeLanguage={profile.nativeLanguage}
         textLanguage={profile.learnLanguage}
         title={title}

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { Hoverable } from '@/components/atoms';
+import { DiaryTitle, Hoverable } from '@/components/atoms';
 import { MyDiaryStatus, ProfileIcons } from '@/components/molecules';
 
 import {
@@ -14,7 +14,6 @@ import {
 } from '@/styles/Common';
 import { getAlgoliaDay } from '@/utils/diary';
 import { Diary } from '@/types';
-import I18n from '@/utils/I18n';
 
 interface Props {
   mine?: boolean;
@@ -43,12 +42,6 @@ const styles = StyleSheet.create({
   postDayText: {
     color: subTextColor,
     fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 8,
   },
   content: {
     flexDirection: 'row',
@@ -100,12 +93,11 @@ const DiaryListItem = ({
         {/* プロフィール画面からはステータスは表示しないようにする */}
         {mine ? <MyDiaryStatus diary={item} /> : null}
       </View>
-      <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-        {themeCategory && themeSubcategory
-          ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
-          : title}
-      </Text>
-
+      <DiaryTitle
+        themeCategory={themeCategory}
+        themeSubcategory={themeSubcategory}
+        title={title}
+      />
       <View style={styles.content}>
         <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
           {text}
