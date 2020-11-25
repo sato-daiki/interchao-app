@@ -59,7 +59,7 @@ export type MainStackParamList = {
   ModalThemeGuide: {
     screen: keyof ModalThemeGuideStackParamList;
     params: {
-      themeTitle: string;
+      themeTitle?: string;
       themeCategory: ThemeCategory;
       themeSubcategory: ThemeSubcategory;
       caller: CallerThemeGuide;

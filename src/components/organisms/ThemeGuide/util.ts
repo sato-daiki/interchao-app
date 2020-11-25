@@ -28,13 +28,7 @@ import {
   trip,
   reborn,
 } from './config';
-import {
-  Entry,
-  Sentence,
-  StyleSentence,
-  StyleText,
-  StyleType,
-} from './interface';
+import { Entry, Sentence, StyleSentence, StyleText } from './interface';
 
 export interface GetParams {
   expressions: Sentence[];
@@ -359,7 +353,7 @@ export const getEntries = ({
   return entries.concat({ key: 'end', params: null });
 };
 
-export const getStyle = (styleType: StyleType): TextStyle | undefined => {
+export const getStyle = (styleType: 'bold' | 'p'): TextStyle | undefined => {
   switch (styleType) {
     case 'bold':
       return {

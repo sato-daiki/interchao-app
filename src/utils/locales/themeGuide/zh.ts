@@ -1,4 +1,4 @@
-import { StyleType } from '@/components/organisms/ThemeGuide';
+import { StyleText } from '@/components/organisms/ThemeGuide';
 
 export const zhSelfIntroductionExpressions = [
   '我的名字是__。可以叫我__',
@@ -32,7 +32,7 @@ export const zhSelfIntroductionExamples = [
     { key: 'a', text: '我喜欢', styleType: 'bold' },
     { key: 'b', text: '弹吉他。', styleType: 'p' },
   ],
-];
+] as StyleText[][];
 
 export const zhHobbyExpressions = [
   '我的兴趣是__',
@@ -55,7 +55,7 @@ export const zhHobbyExamples = [
     { key: 'a', text: '我今后', styleType: 'bold' },
     { key: 'b', text: '也想继续这个运动。', styleType: 'p' },
   ],
-];
+] as StyleText[][];
 
 export const zhJobExpressions = ['我在__工作。', '我的专业是__', '我司专门__'];
 
@@ -73,7 +73,7 @@ export const zhJobExamples = [
     { key: 'a', text: '我司专门', styleType: 'bold' },
     { key: 'b', text: '开设一对一教学课程。', styleType: 'p' },
   ],
-];
+] as StyleText[][];
 
 export const zhStudyExpressions = [
   '我是因为__而开始学习__的。',
@@ -89,7 +89,7 @@ export const zhStudyExamples = [
     { key: 'd', text: '英语', styleType: 'p' },
     { key: 'e', text: '的。', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const zhDreamExpressions = ['我将来的梦想是__', '从小__', '我希望__'];
 
@@ -110,7 +110,7 @@ export const zhDreamExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const zhTripExpressions = [
   '我和__一起去了__',
@@ -135,7 +135,7 @@ export const zhTripExamples = [
     { key: 'a', text: '最深刻的回忆是', styleType: 'bold' },
     { key: 'b', text: '坐著小船去卡布里島的蓝洞。', styleType: 'p' },
   ],
-];
+] as StyleText[][];
 
 export const zhRebornExpressions = ['如果我重生，我想__', '因为我__'];
 export const zhRebornExamples = [
@@ -151,4 +151,4 @@ export const zhRebornExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
