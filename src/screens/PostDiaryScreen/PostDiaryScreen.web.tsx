@@ -1,14 +1,15 @@
 import React, { useCallback, useLayoutEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
+
 import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
 import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
-import I18n from '@/utils/I18n';
-
 import {
   HeaderText,
   SmallButtonSubmit,
   SmallButtonWhite,
 } from '@/components/atoms';
+
+import I18n from '@/utils/I18n';
 import { primaryColor } from '@/styles/Common';
 import { usePostDiary } from './usePostDiary';
 import { ScreenType } from './interfaces';
@@ -29,8 +30,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostDiaryWebScreen: React.FC<ScreenType> = ({
+const PostDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   user,
   profile,
   setUser,
@@ -66,6 +68,7 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
     onPressClose,
   } = usePostDiary({
     navigation,
+    route,
     user,
     profile,
     setUser,
@@ -107,6 +110,7 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: 'Interchao',
       headerLeft,
       headerRight,
       headerTitle: (): JSX.Element => <HeaderTitle />,
@@ -116,6 +120,7 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiaryWeb
+      navigation={navigation}
       isLoading={isLoadingPublish || isLoadingDraft}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -127,6 +132,8 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      themeCategory={route?.params?.themeCategory}
+      themeSubcategory={route?.params?.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
@@ -147,4 +154,4 @@ const PostDiaryWebScreen: React.FC<ScreenType> = ({
   );
 };
 
-export default PostDiaryWebScreen;
+export default PostDiaryScreen;

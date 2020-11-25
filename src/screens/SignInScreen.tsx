@@ -2,19 +2,21 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackScreenProps } from '@react-navigation/stack';
+
 import {
   LoadingModal,
   Space,
   SubmitButton,
   Hoverable,
-} from '../components/atoms';
-import { CheckTextInput } from '../components/molecules';
-import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
-import firebase from '../constants/firebase';
-import { emailInputError, emailValidate } from '../utils/common';
-import { track, events } from '../utils/Analytics';
-import I18n from '../utils/I18n';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
+} from '@/components/atoms';
+import { CheckTextInput } from '@/components/molecules';
+
+import { primaryColor, fontSizeM, linkBlue } from '@/styles/Common';
+import firebase from '@/constants/firebase';
+import { emailInputError, emailValidate } from '@/utils/common';
+import { track, events } from '@/utils/Analytics';
+import I18n from '@/utils/I18n';
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
 
 type ScreenType = StackScreenProps<AuthStackParamList, 'SignIn'>;
 
@@ -78,11 +80,6 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
         .signInWithEmailAndPassword(email, password);
       if (credent.user) {
         track(events.SIGN_IN);
-        // const user = await getUser(credent.user.uid);
-        // const profile = await getProfile(credent.user.uid);
-        // setUser(user);
-        // setProfile(profile);
-        // navigation.navigate('MainTab');
       }
     } catch (err) {
       emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
@@ -110,6 +107,14 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
     setErrorPassword('');
   }, [setErrorPassword]);
 
+  const onChangeTextEmail = useCallback((text: string) => {
+    setEmail(text);
+  }, []);
+
+  const onChangeTextPassword = useCallback((text: string) => {
+    setPassword(text);
+  }, []);
+
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.main}>
@@ -119,7 +124,7 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
         <CheckTextInput
           autoFocus
           value={email}
-          onChangeText={(text: string): void => setEmail(text)}
+          onChangeText={onChangeTextEmail}
           onBlur={onBlurEmail}
           maxLength={50}
           placeholder="Email"
@@ -134,7 +139,7 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
         <Text style={styles.label}>{I18n.t('signIn.password')}</Text>
         <CheckTextInput
           value={password}
-          onChangeText={(text: string): void => setPassword(text)}
+          onChangeText={onChangeTextPassword}
           onBlur={onBlurPassword}
           maxLength={20}
           placeholder="Password"

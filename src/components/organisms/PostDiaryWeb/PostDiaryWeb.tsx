@@ -1,5 +1,7 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
+
+import I18n from '@/utils/I18n';
 import {
   fontSizeLL,
   fontSizeL,
@@ -8,47 +10,23 @@ import {
   primaryColor,
   subTextColor,
   softRed,
+  linkBlue,
 } from '@/styles/Common';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
-import { Language } from '@/types';
-import I18n from '@/utils/I18n';
-import { LoadingModal, Space, TextInputTitle } from '@/components/atoms';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+  Hoverable,
+  LoadingModal,
+  Space,
+  TextInputTitle,
+} from '@/components/atoms';
+import { Modal } from '@/components/template';
 import { ModalPublish } from '../ModalPublish';
 import ModalLackPoint from '../ModalLackPoint';
 import ModalDiaryCancel from '../ModalDiaryCancel';
 import TutorialPostDiary from '../TutorialPostDiary';
 import ModalConfirm from '../ModalConfirm';
-
-interface Props {
-  isLoading: boolean;
-  isModalLack: boolean;
-  isModalAlert: boolean;
-  isModalCancel: boolean;
-  isModalError: boolean;
-  isPublish: boolean;
-  isTutorialLoading?: boolean;
-  tutorialPostDiary?: boolean;
-  errorMessage: string;
-  title: string;
-  text: string;
-  publishMessage: string | null;
-  points: number;
-  learnLanguage: Language;
-  nativeLanguage: Language;
-  onPressSubmitModalLack: () => void;
-  onPressCloseModalLack: () => void;
-  onPressCloseModalPublish: () => void;
-  onPressCloseModalCancel: () => void;
-  onClosePostDiary: () => void;
-  onChangeTextTitle: (txt: string) => void;
-  onChangeTextText: (txt: string) => void;
-  onPressSubmit: () => void;
-  onPressDraft: () => void;
-  onPressNotSave: () => void;
-  onPressTutorial?: () => void;
-  onPressCloseError: () => void;
-}
+import { PostDiaryProps } from '../PostDiary/interface';
+import ThemeGuideWeb from '../ThemeGuide/ThemeGuideWeb';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -86,17 +64,22 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   rightContainer: {
-    width: 124,
+    width: 132,
     alignItems: 'flex-end',
-    paddingRight: 8,
+    paddingRight: 16,
   },
   subText: {
     fontSize: fontSizeM,
     color: subTextColor,
   },
+  linkText: {
+    marginTop: 16,
+    fontSize: fontSizeM,
+    color: linkBlue,
+  },
 });
 
-const PostDiaryWeb = ({
+const PostDiaryWeb: React.FC<PostDiaryProps> = ({
   isLoading,
   isModalLack,
   isModalAlert,
@@ -108,6 +91,8 @@ const PostDiaryWeb = ({
   errorMessage,
   title,
   text,
+  themeCategory,
+  themeSubcategory,
   publishMessage,
   points,
   learnLanguage,
@@ -124,9 +109,18 @@ const PostDiaryWeb = ({
   onPressNotSave,
   onPressTutorial,
   onPressCloseError,
-}: Props): JSX.Element => {
+}) => {
+  const [isModalThemeGuide, setIsModalThemeGuide] = useState(false);
   const usePoints = getUsePoints(text.length, learnLanguage);
   const maxPostText = getMaxPostText(learnLanguage);
+
+  const onPressThemeGuide = useCallback(() => {
+    setIsModalThemeGuide(true);
+  }, []);
+
+  const onPressCloseThemeGuide = useCallback(() => {
+    setIsModalThemeGuide(false);
+  }, []);
 
   return (
     <ScrollView style={styles.warapper}>
@@ -169,9 +163,22 @@ const PostDiaryWeb = ({
           onPressNotSave={onPressNotSave}
           onPressClose={onPressCloseModalCancel}
         />
+        {themeCategory && themeSubcategory ? (
+          <Modal visible={isModalThemeGuide} disablePadding>
+            <ThemeGuideWeb
+              themeCategory={themeCategory}
+              themeSubcategory={themeSubcategory}
+              learnLanguage={learnLanguage}
+              nativeLanguage={nativeLanguage}
+              onPressClose={onPressCloseThemeGuide}
+              onPressBegin={onPressCloseThemeGuide}
+            />
+          </Modal>
+        ) : null}
         <View style={styles.mainContainer}>
           <View style={styles.leftContainer}>
             <TextInputTitle
+              editable={!themeCategory || !themeSubcategory}
               style={styles.titleInput}
               value={title}
               onChangeText={onChangeTextTitle}
@@ -203,6 +210,13 @@ const PostDiaryWeb = ({
             <Text style={styles.subText}>
               {`${I18n.t('postDiaryComponent.usePoints')} ${usePoints}`}
             </Text>
+            {!themeCategory || !themeSubcategory ? null : (
+              <Hoverable onPress={onPressThemeGuide}>
+                <Text style={styles.linkText}>
+                  {`${I18n.t('postDiaryComponent.hint')}`}
+                </Text>
+              </Hoverable>
+            )}
           </View>
         </View>
       </View>

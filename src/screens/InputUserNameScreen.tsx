@@ -1,24 +1,25 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import SubmitButton from '../components/atoms/SubmitButton';
+
+import { Space, SubmitButton } from '@/components/atoms';
+import { CheckTextInput } from '@/components/molecules';
+
 import {
   fontSizeM,
   primaryColor,
   fontSizeL,
   subTextColor,
-} from '../styles/Common';
-import Space from '../components/atoms/Space';
-import { CheckTextInput } from '../components/molecules';
-import { Profile } from '../types';
+} from '@/styles/Common';
+import { Profile } from '@/types';
 import {
   checkDuplicatedUserName,
   checkTypeUserName,
   checkInitialUserName,
-} from '../utils/profile';
-import { track, events } from '../utils/Analytics';
-import I18n from '../utils/I18n';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
+} from '@/utils/profile';
+import { track, events } from '@/utils/Analytics';
+import I18n from '@/utils/I18n';
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
 
 export interface Props {
   profile: Profile;
@@ -66,52 +67,46 @@ const InputUserNameScreen: React.FC<ScreenType> = ({
     track(events.OPENED_INPUT_USER_NAME);
   }, []);
 
-  const onChangeText = useCallback(
-    text => {
-      const f = async (): Promise<void> => {
-        setUserName(text);
-        if (text === '') {
-          setIsUserNameLoading(false);
-          setIsUserNameCheckOk(false);
-          setErrorMessage('');
-          return;
-        }
+  const onChangeText = useCallback(async (text: string): Promise<void> => {
+    setUserName(text);
+    if (text === '') {
+      setIsUserNameLoading(false);
+      setIsUserNameCheckOk(false);
+      setErrorMessage('');
+      return;
+    }
 
-        const typeChecked = checkTypeUserName(text);
-        if (!typeChecked) {
-          setIsUserNameLoading(false);
-          setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage.invalidUserName'));
-          return;
-        }
+    const typeChecked = checkTypeUserName(text);
+    if (!typeChecked) {
+      setIsUserNameLoading(false);
+      setIsUserNameCheckOk(false);
+      setErrorMessage(I18n.t('errorMessage.invalidUserName'));
+      return;
+    }
 
-        const initialChecked = checkInitialUserName(text);
-        if (!initialChecked) {
-          setIsUserNameLoading(false);
-          setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage.initialUserName'));
-          return;
-        }
+    const initialChecked = checkInitialUserName(text);
+    if (!initialChecked) {
+      setIsUserNameLoading(false);
+      setIsUserNameCheckOk(false);
+      setErrorMessage(I18n.t('errorMessage.initialUserName'));
+      return;
+    }
 
-        setIsUserNameLoading(true);
-        const resDuplicated = await checkDuplicatedUserName(text);
-        if (!resDuplicated) {
-          setIsUserNameLoading(false);
-          setIsUserNameCheckOk(false);
-          setErrorMessage(I18n.t('errorMessage.userNameAlreadyInUse'));
-          return;
-        }
+    setIsUserNameLoading(true);
+    const resDuplicated = await checkDuplicatedUserName(text);
+    if (!resDuplicated) {
+      setIsUserNameLoading(false);
+      setIsUserNameCheckOk(false);
+      setErrorMessage(I18n.t('errorMessage.userNameAlreadyInUse'));
+      return;
+    }
 
-        setIsUserNameCheckOk(true);
-        setErrorMessage('');
-        setIsUserNameLoading(false);
-      };
-      f();
-    },
-    [setUserName]
-  );
+    setIsUserNameCheckOk(true);
+    setErrorMessage('');
+    setIsUserNameLoading(false);
+  }, []);
 
-  const onPressNext = async (): Promise<void> => {
+  const onPressNext = useCallback(async (): Promise<void> => {
     const typeChecked = checkTypeUserName(userName);
     const initialChecked = checkInitialUserName(userName);
     const resDuplicated = await checkDuplicatedUserName(userName);
@@ -124,7 +119,7 @@ const InputUserNameScreen: React.FC<ScreenType> = ({
       userName,
     });
     navigation.navigate('SignUp');
-  };
+  }, [navigation, profile, setProfile, userName]);
 
   return (
     <View style={styles.container}>

@@ -1,15 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
-import { Modal } from '../template';
-import { WhiteButton, Space, SubmitButton } from '../atoms';
-import { CheckTextInput } from '../molecules';
-import I18n from '../../utils/I18n';
+import I18n from '@/utils/I18n';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import { Modal } from '@/components/template';
+import { WhiteButton, Space, SubmitButton, Heading } from '@/components/atoms';
+import { CheckTextInput } from '@/components/molecules';
 
 interface Props {
   visible: boolean;
@@ -28,26 +23,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  title: {
-    fontSize: fontSizeL,
-    color: primaryColor,
-    fontWeight: 'bold',
-    marginVertical: 6,
-    paddingBottom: 16,
-    textAlign: 'center',
-  },
-  line: {
-    width: '100%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-    marginBottom: 24,
-    textAlign: Platform.OS === 'web' ? 'center' : 'left',
-  },
   text: {
-    textAlign: 'center',
     fontSize: fontSizeM,
     color: primaryColor,
     paddingBottom: 16,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   button: {
     paddingHorizontal: 16,
@@ -71,8 +51,8 @@ const ModalDeleteAcount: React.FC<Props> = ({
     return (
       <Modal visible={visible}>
         <View style={styles.container}>
-          <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
-          <View style={styles.line} />
+          <Heading title={I18n.t('common.confirmation')} />
+          <Space size={24} />
           <Text style={styles.text}>{I18n.t('deleteAcount.confirmation')}</Text>
           <Space size={32} />
           <View style={styles.button}>
@@ -94,8 +74,8 @@ const ModalDeleteAcount: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>{I18n.t('modalDeleteAcount.title')}</Text>
-        <View style={styles.line} />
+        <Heading title={I18n.t('modalDeleteAcount.title')} />
+        <Space size={24} />
         <Text style={styles.text}>{I18n.t('modalDeleteAcount.text')}</Text>
         <CheckTextInput
           value={password}

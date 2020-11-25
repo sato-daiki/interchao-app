@@ -16,7 +16,7 @@ interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
 }
 
-export type NavigationProp = CompositeNavigationProp<
+export type PostDraftDiaryNavigationProp = CompositeNavigationProp<
   StackNavigationProp<ModalPostDraftDiaryStackParamList, 'PostDraftDiary'>,
   ModalPostDraftDiaryStackNavigationProp
 >;
@@ -27,7 +27,7 @@ export type PostDraftDiaryRouteProp = RouteProp<
 >;
 
 export type ScreenType = {
-  navigation: NavigationProp;
+  navigation: PostDraftDiaryNavigationProp;
   route: PostDraftDiaryRouteProp;
 } & Props &
   DispatchProps;

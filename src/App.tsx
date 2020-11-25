@@ -15,13 +15,15 @@ import {
   NavigationContainerRef,
 } from '@react-navigation/native';
 import * as Analytics from 'expo-firebase-analytics';
-import { initAnalytics } from './utils/Analytics';
-import { configureStore } from './stores/Store';
-import { firebaseConfig } from './constants/firebase';
-import Loading from './screens/LoadingScreen';
-import Sentry from './constants/Sentry';
-import RootNavigatorContainer from './containers/RootNavigatorContainer';
-import { getConfig } from './navigations/root';
+
+import Loading from '@/screens/LoadingScreen';
+
+import { initAnalytics } from '@/utils/Analytics';
+import { configureStore } from '@/stores/Store';
+import { firebaseConfig } from '@/constants/firebase';
+import Sentry from '@/constants/Sentry';
+import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
+import { getConfig } from '@/navigations/root';
 
 // Ignore warnings of firebase
 YellowBox.ignoreWarnings(['Setting a timer']);
@@ -33,7 +35,7 @@ const { store, persistor } = configureStore();
 Sentry.init({
   dsn:
     'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
-  enableInExpoDevelopment: true,
+  enableInExpoDevelopment: false,
   debug: false,
 });
 
@@ -52,9 +54,9 @@ const App = (): JSX.Element => {
   const navigationRef = React.useRef<NavigationContainerRef | null>(null);
 
   if (__DEV__) {
-    whyDidYouRender(React, {
-      trackAllPureComponents: true,
-    });
+    // whyDidYouRender(React, {
+    //   trackAllPureComponents: true,
+    // });
   }
 
   const checkUpdate = async (): Promise<void> => {

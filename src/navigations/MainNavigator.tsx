@@ -3,11 +3,12 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
+import { CallerThemeGuide } from '@/screens/SelectThemeSubcategoryScreen/interface';
+import { Diary, ThemeCategory, ThemeSubcategory } from '@/types';
 import HomeBottomTabNavigator, {
   HomeBottomParamList,
 } from './HomeBottomTabNavigator';
 
-import { Diary } from '../types';
 import {
   ModalEditMyDiaryListNavigator,
   ModalPostDiaryNavigator,
@@ -17,9 +18,7 @@ import {
   ModalCorrectingNavigator,
   ModalEditMyDiaryListStackParamList,
   ModalPostDiaryStackParamList,
-  ModalPostDiaryWebStackParamList,
   ModalPostDraftDiaryStackParamList,
-  ModalPostDraftDiaryWebStackParamList,
   ModalEditMyProfileStackParamList,
   ModalCorrectingStackParamList,
   ModalReviewStackParamList,
@@ -27,8 +26,10 @@ import {
   ModalAboutStackParamList,
   ModalRecordNavigator,
   ModalRecordStackParamList,
-  ModalPostDiaryWebNavigator,
-  ModalPostDraftDiaryWebNavigator,
+  ModalSelectDiaryTypeStackParamList,
+  ModalSelectDiaryTypeNavigator,
+  ModalThemeGuideStackParamList,
+  ModalThemeGuideNavigator,
 } from './ModalNavigator';
 import { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
 import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
@@ -52,15 +53,32 @@ export type MainStackParamList = {
   ModalEditMyDiaryList: {
     screen: keyof ModalEditMyDiaryListStackParamList;
   };
-  ModalPostDiary: { screen: keyof ModalPostDiaryStackParamList };
-  ModalPostDiaryWeb: { screen: keyof ModalPostDiaryWebStackParamList };
+  ModalSelectDiaryType: {
+    screen: keyof ModalSelectDiaryTypeStackParamList;
+  };
+  ModalThemeGuide: {
+    screen: keyof ModalThemeGuideStackParamList;
+    params: {
+      themeTitle?: string;
+      themeCategory: ThemeCategory;
+      themeSubcategory: ThemeSubcategory;
+      caller: CallerThemeGuide;
+    };
+  };
+  ModalPostDiary: {
+    screen: keyof ModalPostDiaryStackParamList;
+    params?: {
+      themeTitle?: string;
+      themeCategory?: ThemeCategory;
+      themeSubcategory?: ThemeSubcategory;
+    };
+  };
   ModalPostDraftDiary: {
     screen: keyof ModalPostDraftDiaryStackParamList;
-    params: { item: Diary; objectID: string };
-  };
-  ModalPostDraftDiaryWeb: {
-    screen: keyof ModalPostDraftDiaryWebStackParamList;
-    params: { item: Diary; objectID: string };
+    params: {
+      item: Diary;
+      objectID: string;
+    };
   };
   ModalEditMyProfile: { screen: keyof ModalEditMyProfileStackParamList };
   ModalCorrecting: {
@@ -107,20 +125,20 @@ const MainNavigator = (): JSX.Element => {
         component={ModalEditMyDiaryListNavigator}
       />
       <MainStack.Screen
+        name="ModalSelectDiaryType"
+        component={ModalSelectDiaryTypeNavigator}
+      />
+      <MainStack.Screen
+        name="ModalThemeGuide"
+        component={ModalThemeGuideNavigator}
+      />
+      <MainStack.Screen
         name="ModalPostDiary"
         component={ModalPostDiaryNavigator}
       />
       <MainStack.Screen
-        name="ModalPostDiaryWeb"
-        component={ModalPostDiaryWebNavigator}
-      />
-      <MainStack.Screen
         name="ModalPostDraftDiary"
         component={ModalPostDraftDiaryNavigator}
-      />
-      <MainStack.Screen
-        name="ModalPostDraftDiaryWeb"
-        component={ModalPostDraftDiaryWebNavigator}
       />
       <MainStack.Screen name="ModalReview" component={ModalReviewNavigator} />
       <MainStack.Screen

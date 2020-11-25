@@ -1,5 +1,9 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+
+import { Hoverable } from '@/components/atoms';
+import { MyDiaryStatus, ProfileIcons } from '@/components/molecules';
+
 import {
   fontSizeS,
   fontSizeM,
@@ -7,11 +11,10 @@ import {
   borderLightColor,
   subTextColor,
   hoverGray,
-} from '../../styles/Common';
-import { getAlgoliaDay } from '../../utils/diary';
-import { Diary } from '../../types';
-import { MyDiaryStatus, ProfileIcons } from '../molecules';
-import { Hoverable } from '../atoms';
+} from '@/styles/Common';
+import { getAlgoliaDay } from '@/utils/diary';
+import { Diary } from '@/types';
+import I18n from '@/utils/I18n';
 
 interface Props {
   mine?: boolean;
@@ -26,6 +29,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: borderLightColor,
+    backgroundColor: '#fff',
   },
   hover: {
     backgroundColor: hoverGray,
@@ -69,7 +73,16 @@ const DiaryListItem = ({
   onPressUser,
   onPressItem,
 }: Props): JSX.Element => {
-  const { createdAt, title, text, correction, correction2, correction3 } = item;
+  const {
+    createdAt,
+    title,
+    text,
+    correction,
+    correction2,
+    correction3,
+    themeCategory,
+    themeSubcategory,
+  } = item;
   const postDay = getAlgoliaDay(createdAt);
 
   const onPressRow = useCallback(() => {
@@ -88,7 +101,9 @@ const DiaryListItem = ({
         {mine ? <MyDiaryStatus diary={item} /> : null}
       </View>
       <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-        {title}
+        {themeCategory && themeSubcategory
+          ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
+          : title}
       </Text>
 
       <View style={styles.content}>

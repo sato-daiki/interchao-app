@@ -1,34 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
-import { Modal } from '../template';
-import { SubmitButton, Space } from '../atoms';
-import I18n from '../../utils/I18n';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import { Modal } from '@/components/template';
+import { SubmitButton, Space, Heading } from '@/components/atoms';
+import I18n from '@/utils/I18n';
 
 const styles = StyleSheet.create({
   container: {
     padding: 16,
     alignItems: 'center',
-  },
-  title: {
-    fontSize: fontSizeL,
-    color: primaryColor,
-    fontWeight: 'bold',
-    marginVertical: 6,
-    paddingBottom: 16,
-    textAlign: 'center',
-  },
-  line: {
-    width: '100%',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: borderLightColor,
-    marginBottom: 24,
   },
   text: {
     textAlign: 'center',
@@ -51,8 +32,8 @@ const ModalStillCorrecting: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Text style={styles.title}>{I18n.t('common.error')}</Text>
-        <View style={styles.line} />
+        <Heading title={I18n.t('common.error')} />
+        <Space size={24} />
         <MaterialIcons name="error" size={64} color={primaryColor} />
         <Space size={16} />
         <Text style={styles.text}>{I18n.t('modalStillCorrecting.text')}</Text>

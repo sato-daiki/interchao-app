@@ -129,6 +129,25 @@ export const getConfig = ():
               },
             },
           },
+          ModalSelectDiaryType: {
+            path: '',
+            screens: {
+              SelectDiaryType: {
+                path: 'entry/type',
+              },
+              SelectThemeSubcategory: {
+                path: 'entry/type',
+              },
+            },
+          },
+          ModalThemeGuide: {
+            path: '',
+            screens: {
+              ThemeGuide: {
+                path: 'entry/guide',
+              },
+            },
+          },
           ModalPostDiary: {
             path: '',
             screens: {
@@ -137,26 +156,10 @@ export const getConfig = ():
               },
             },
           },
-          ModalPostDiaryWeb: {
-            path: '',
-            screens: {
-              PostDiaryWeb: {
-                path: 'entry/new',
-              },
-            },
-          },
           ModalPostDraftDiary: {
             path: '',
             screens: {
               PostDraftDiary: {
-                path: 'entries/:objectID/edit',
-              },
-            },
-          },
-          ModalPostDraftDiaryWeb: {
-            path: '',
-            screens: {
-              PostDraftDiaryWeb: {
                 path: 'entries/:objectID/edit',
               },
             },
