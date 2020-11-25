@@ -25,8 +25,7 @@ import EditCountryScreen from '@/screens/EditCountryScreen';
 import EditMyDiaryListScreenContainer from '@/containers/EditMyDiaryListScreenContainer';
 import SelectThemeSubcategoryScreenContainer from '@/containers/SelectThemeSubcategoryScreenContainer';
 import { CallerThemeGuide } from '@/screens/SelectThemeSubcategoryScreen/interface';
-// @ts-ignore
-import ThemeGuideScreen from '@/screens/ThemeGuideScreen';
+import ThemeGuideScreenContainer from '@/containers/ThemeGuideScreenContainer';
 import { MainStackParamList } from './MainNavigator';
 
 export type ModalEditMyDiaryListStackParamList = {
@@ -196,7 +195,7 @@ export const ModalThemeGuideNavigator = (): JSX.Element => {
     >
       <ModalThemeGuideStack.Screen
         name="ThemeGuide"
-        component={ThemeGuideScreen}
+        component={ThemeGuideScreenContainer}
         options={{
           ...DefaultNavigationOptions,
           ...DefaultModalLayoutOptions,

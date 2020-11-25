@@ -1,12 +1,12 @@
 import I18n from '@/utils/I18n';
-import { Baseball } from '@/images';
+import { Airplane } from '@/images';
 import { getLanguage } from '@/utils/diary';
 import { Entry } from '../interface';
 import { GetParams, getWords } from '../util';
 
 const WORD_NUM = 9;
 
-export const hobby = ({
+export const trip = ({
   expressions,
   examples,
   nativeLanguage,
@@ -19,17 +19,17 @@ export const hobby = ({
     learnLanguage,
     num: WORD_NUM,
     themeCategory: 'first',
-    themeSubcategory: 'hobby',
+    themeSubcategory: 'trip',
   });
 
   return [
     {
       key: 'introduction',
       params: {
-        text: I18n.t('first.hobby.introduction', {
+        text: I18n.t('first.trip.introduction', {
           learnLanguage: strLearnLanguage,
         }),
-        source: Baseball,
+        source: Airplane,
       },
     },
     {
@@ -42,7 +42,7 @@ export const hobby = ({
     {
       key: 'word',
       params: {
-        title: I18n.t('first.hobby.wordTitle'),
+        title: I18n.t('first.trip.wordTitle'),
         words,
       },
     },

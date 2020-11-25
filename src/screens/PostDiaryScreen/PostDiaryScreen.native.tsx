@@ -102,6 +102,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
+      nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
       onPressCloseModalPublish={onPressCloseModalPublish}

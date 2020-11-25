@@ -100,6 +100,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       themeSubcategory={item.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
+      nativeLanguage={profile.nativeLanguage}
       learnLanguage={profile.learnLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
