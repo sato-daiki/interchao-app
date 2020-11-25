@@ -47,6 +47,7 @@ const SelectThemeSubcategoryScreen: React.FC<ScreenType> = ({
       navigation.navigate('ModalThemeGuide', {
         screen: 'ThemeGuide',
         params: {
+          themeTitle: item.title,
           themeCategory: item.themeCategory,
           themeSubcategory: item.themeSubcategory,
           caller: 'SelectThemeSubcategory',
