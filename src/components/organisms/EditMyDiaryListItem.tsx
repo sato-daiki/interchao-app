@@ -12,7 +12,7 @@ import { MyDiaryStatus } from '@/components/molecules';
 import { getAlgoliaDay } from '@/utils/diary';
 import { Diary } from '@/types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import I18n from '@/utils/I18n';
+import { DiaryTitle } from '../atoms';
 
 interface Props {
   item: Diary;
@@ -44,12 +44,6 @@ const styles = StyleSheet.create({
   postDayText: {
     color: subTextColor,
     fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 8,
   },
   content: {
     flexDirection: 'row',
@@ -91,11 +85,11 @@ const EditMyDiaryListItem = ({ item, handlePress }: Props): JSX.Element => {
             <Text style={styles.postDayText}>{postDay}</Text>
             <MyDiaryStatus diary={item} />
           </View>
-          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {themeCategory && themeSubcategory
-              ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
-              : title}
-          </Text>
+          <DiaryTitle
+            themeCategory={themeCategory}
+            themeSubcategory={themeSubcategory}
+            title={title}
+          />
           <View style={styles.content}>
             <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
               {text}
