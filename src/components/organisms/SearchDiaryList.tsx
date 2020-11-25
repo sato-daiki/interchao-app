@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import I18n from '@/utils/I18n';
 import {
   subTextColor,
   fontSizeS,
@@ -12,7 +11,7 @@ import { getAlgoliaDay } from '../../utils/diary';
 import { UserDiaryStatus } from '../molecules';
 import { Diary } from '../../types';
 import Highlight from './Highlight';
-import { Space, Hoverable } from '../atoms';
+import { Space, Hoverable, DiaryTitle } from '../atoms';
 
 interface Props {
   item: Diary;
@@ -77,11 +76,11 @@ const SearchDiaryList: React.FC<Props> = ({
         <UserDiaryStatus diary={item} />
       </View>
       <View style={styles.row}>
-        <Text style={styles.title}>
-          {themeCategory && themeSubcategory
-            ? `${I18n.t('selectDiaryType.titleTheme')} - `
-            : null}
-        </Text>
+        <DiaryTitle
+          themeCategory={themeCategory}
+          themeSubcategory={themeSubcategory}
+          title={item.title}
+        />
         <Highlight
           textStyle={styles.title}
           attribute="title"
