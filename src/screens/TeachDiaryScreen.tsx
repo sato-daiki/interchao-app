@@ -24,7 +24,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
-import { UserDiaryStatus } from '../components/molecules';
+import { DiaryTitleAndText, UserDiaryStatus } from '../components/molecules';
 import { ModalAlertCorrection, ModalConfirm } from '../components/organisms';
 import {
   LoadingModal,
@@ -111,16 +111,6 @@ const styles = StyleSheet.create({
   postDayText: {
     color: subTextColor,
     fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-  },
-  text: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.3,
   },
   textLength: {
     color: subTextColor,
@@ -501,20 +491,14 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
               <Text style={styles.postDayText}>{postDate}</Text>
               <UserDiaryStatus diary={teachDiary} />
             </View>
-            <RichText
-              style={styles.title}
-              text={teachDiary.title}
+            <DiaryTitleAndText
+              themeCategory={teachDiary.themeCategory}
+              themeSubcategory={teachDiary.themeSubcategory}
               nativeLanguage={profile.nativeLanguage}
-              textLanguage={teachDiary.profile.learnLanguage}
-            />
-            <Space size={16} />
-            <RichText
-              style={styles.text}
+              textLanguage={profile.learnLanguage}
+              title={teachDiary.title}
               text={teachDiary.text}
-              nativeLanguage={profile.nativeLanguage}
-              textLanguage={teachDiary.profile.learnLanguage}
             />
-            <Space size={16} />
             <Text style={styles.textLength}>
               {I18n.t('postDiaryComponent.textLength')}
               {` ${teachDiary.text.length}`}

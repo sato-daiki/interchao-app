@@ -24,8 +24,6 @@ import { ThemeDiary } from '@/types';
 interface Props {
   themeDiary?: ThemeDiary;
   item: ThemeSubcategoryInfo;
-  title: string;
-  source: ImageSourcePropType;
   onPress: (item: ThemeSubcategoryInfo) => void;
 }
 
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flex: 1,
   },
   textRight: {
@@ -61,18 +59,27 @@ const styles = StyleSheet.create({
     height: 36,
     marginRight: 16,
   },
-  title: {
+  column: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  learnTitle: {
     color: primaryColor,
     fontSize: fontSizeM,
-    flex: 1,
+    lineHeight: fontSizeM * 1.3,
+    marginBottom: 2,
+  },
+  nativeTitle: {
+    color: subTextColor,
+    fontSize: fontSizeS,
+    lineHeight: fontSizeS * 1.1,
   },
 });
 
 const SelectThemeSubcategoryListItem: React.FC<Props> = ({
   themeDiary,
   item,
-  source,
-  title,
   onPress,
 }) => {
   const onPressItem = useCallback(() => {
@@ -85,9 +92,12 @@ const SelectThemeSubcategoryListItem: React.FC<Props> = ({
       hoverStyle={styles.hover}
       onPress={onPressItem}
     >
-      <Image style={styles.image} source={source} />
+      <Image style={styles.image} source={item.source} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.column}>
+          <Text style={styles.learnTitle}>{item.learnTitle}</Text>
+          <Text style={styles.nativeTitle}>{item.nativeTitle}</Text>
+        </View>
         {themeDiary ? (
           <View style={styles.textRight}>
             <Text style={styles.postDayText}>

@@ -10,20 +10,14 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
 import { Profile, Correction, Diary } from '../types';
-import { UserDiaryStatus } from '../components/molecules';
+import { DiaryTitleAndText, UserDiaryStatus } from '../components/molecules';
 import { ProfileIconHorizontal, Space } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/diary';
-import {
-  subTextColor,
-  fontSizeS,
-  primaryColor,
-  fontSizeM,
-} from '../styles/Common';
+import { subTextColor, fontSizeS, fontSizeM } from '../styles/Common';
 import { getCorrection } from '../utils/corrections';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
 import Corrections from '../components/organisms/Corrections';
-import RichText from '../components/organisms/RichText';
 import {
   CommonStackParamList,
   CommonNavigationProp,
@@ -74,16 +68,6 @@ const styles = StyleSheet.create({
   postDayText: {
     color: subTextColor,
     fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-  },
-  text: {
-    color: primaryColor,
-    fontSize: fontSizeM,
-    lineHeight: fontSizeM * 1.3,
   },
 });
 
@@ -209,20 +193,15 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
                 </Text>
                 <UserDiaryStatus diary={teachDiary} />
               </View>
-              <RichText
-                style={styles.title}
-                text={teachDiary.title}
+              <DiaryTitleAndText
+                themeCategory={teachDiary.themeCategory}
+                themeSubcategory={teachDiary.themeSubcategory}
                 nativeLanguage={profile.nativeLanguage}
-                textLanguage={targetProfile.learnLanguage}
+                textLanguage={profile.learnLanguage}
+                title={teachDiary.title}
+                text={teachDiary.text}
               />
               <Space size={16} />
-              <RichText
-                style={styles.text}
-                text={teachDiary.text}
-                nativeLanguage={profile.nativeLanguage}
-                textLanguage={targetProfile.learnLanguage}
-              />
-              <Space size={32} />
             </>
           ) : (
             <ActivityIndicator />
