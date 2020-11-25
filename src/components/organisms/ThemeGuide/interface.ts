@@ -35,16 +35,17 @@ export interface WordParams {
 
 export type WordKey = 'example' | 'expression';
 
+export type StyleType = 'bold' | 'p';
+
 export const StyleType = {
   bold: 'bold',
   p: 'p',
-} as const;
-export type StyleType = typeof StyleType[keyof typeof StyleType];
+};
 
 export interface StyleText {
   key: string;
   text: string;
-  styleType: StyleType;
+  styleType: 'bold' | 'p';
 }
 
 export interface StyleSentence {

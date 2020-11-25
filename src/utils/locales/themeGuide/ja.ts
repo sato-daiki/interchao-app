@@ -1,3 +1,5 @@
+import { StyleText } from '@/components/organisms/ThemeGuide';
+
 export const jaSelfIntroductionExpressions = [
   '私の名前は__です。__とよんでください。',
   '私は__で生まれて、__で育ちました。',
@@ -32,7 +34,7 @@ export const jaSelfIntroductionExamples = [
     { key: 'b', text: 'ギターを弾くの', styleType: 'p' },
     { key: 'c', text: 'が好きです。', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const jaHobbyExpressions = [
   '私の趣味は__',
@@ -60,7 +62,7 @@ export const jaHobbyExamples = [
     { key: 'b', text: '今後もこの運動を続けて', styleType: 'p' },
     { key: 'c', text: 'いきたいです。', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const jaJobExpressions = [
   '私は__で仕事をしています。',
@@ -84,7 +86,7 @@ export const jaJobExamples = [
     { key: 'b', text: 'マンツーマンレッスン', styleType: 'p' },
     { key: 'c', text: 'を専門にしています。', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const jaStudyExpressions = [
   '私が__の勉強を始めた理由は__',
@@ -107,7 +109,7 @@ export const jaStudyExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const jaDreamExpressions = [
   '私の夢は__',
@@ -132,7 +134,7 @@ export const jaDreamExamples = [
     },
     { key: 'b', text: 'もらいたいです。', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const jaTripExpressions = [
   '私は__へ__と一緒に行きました。',
@@ -163,7 +165,7 @@ export const jaTripExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const jaRebornExpressions = [
   '生まれ変われるなら、__したいです。',
@@ -185,4 +187,4 @@ export const jaRebornExamples = [
     },
     { key: 'c', text: 'たいからです。', styleType: 'bold' },
   ],
-];
+] as StyleText[][];

@@ -1,4 +1,4 @@
-import { StyleType } from '@/components/organisms/ThemeGuide';
+import { StyleText } from '@/components/organisms/ThemeGuide';
 
 export const koSelfIntroductionExpressions = [
   '제 이름은 __입니다. __라고 불러 주세요.',
@@ -31,7 +31,7 @@ export const koSelfIntroductionExamples = [
     { key: 'a', text: '기타 치는 것', styleType: 'p' },
     { key: 'b', text: '을 좋아합니다. ', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const koHobbyExpressions = [
   '제 취미는 __입니다.',
@@ -57,7 +57,7 @@ export const koHobbyExamples = [
     { key: 'b', text: '운동', styleType: 'p' },
     { key: 'c', text: '을 계속해 나가고 싶습니다.', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const koJobExpressions = [
   '저는 __에서 일하고 있습니다.',
@@ -81,7 +81,7 @@ export const koJobExamples = [
     { key: 'b', text: '1:1 레슨', styleType: 'p' },
     { key: 'c', text: '을 전문으로 하고 있습니다.', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const koStudyExpressions = [
   '제가 __를 공부하는 이유는 __ 때문입니다.',
@@ -104,7 +104,7 @@ export const koStudyExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const koDreamExpressions = [
   '저의 꿈은 __입니다.',
@@ -130,7 +130,7 @@ export const koDreamExamples = [
     },
     { key: 'b', text: '으면 좋겠습니다.', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const koTripExpressions = [
   '저는 __(와)과 함께 _에 갔습니다.',
@@ -158,7 +158,7 @@ export const koTripExamples = [
     { key: 'b', text: '보트를 타고 푸른 동굴에 갔던 것', styleType: 'p' },
     { key: 'c', text: '입니다.', styleType: 'bold' },
   ],
-];
+] as StyleText[][];
 
 export const koRebornExpressions = [
   '다시 태어난다면 __고 싶습니다.',
@@ -180,4 +180,4 @@ export const koRebornExamples = [
     },
     { key: 'c', text: '기 때문입니다.', styleType: 'bold' },
   ],
-];
+] as StyleText[][];

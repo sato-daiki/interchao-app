@@ -1,3 +1,5 @@
+import { StyleText } from '@/components/organisms/ThemeGuide';
+
 export const enSelfIntroductionExpressions = [
   'My name is __. Please call me __.',
   'I was born in __ but grew up in __.',
@@ -40,7 +42,7 @@ export const enSelfIntroductionExamples = [
     { key: 'a', text: 'I like ', styleType: 'bold' },
     { key: 'b', text: 'playing the guitar.', styleType: 'p' },
   ],
-];
+] as StyleText[][];
 
 export const enHobbyExpressions = [
   'My hobby is __.',
@@ -71,7 +73,7 @@ export const enHobbyExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const enJobExpressions = [
   'I work for __.',
@@ -96,7 +98,7 @@ export const enJobExamples = [
     },
     { key: 'b', text: 'private lessons.', styleType: 'p' },
   ],
-];
+] as StyleText[][];
 
 export const enStudyExpressions = [
   'I started learning __ because __.',
@@ -115,7 +117,7 @@ export const enStudyExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const enDreamExpressions = [
   'My dream for the future is __.',
@@ -148,7 +150,7 @@ export const enDreamExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const enTripExpressions = [
   'I went to __ with __.',
@@ -177,7 +179,7 @@ export const enTripExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
 
 export const enRebornExpressions = [
   "If I were born again, I'd like to __.",
@@ -205,4 +207,4 @@ export const enRebornExamples = [
       styleType: 'p',
     },
   ],
-];
+] as StyleText[][];
