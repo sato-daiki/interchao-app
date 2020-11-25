@@ -593,6 +593,8 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
               textLanguage={profile.learnLanguage}
               title={diary.fairCopyTitle || diary.title}
               text={diary.fairCopyText || diary.text}
+              themeCategory={diary.themeCategory}
+              themeSubcategory={diary.themeSubcategory}
             />
           </ScrollView>
           {this.sound ? (
