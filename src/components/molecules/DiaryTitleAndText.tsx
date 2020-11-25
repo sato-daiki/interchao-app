@@ -1,18 +1,27 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { fontSizeM, primaryColor } from '../../styles/Common';
-import { Language } from '../../types';
-import { Space } from '../atoms';
-import RichText from '../organisms/RichText';
+import { StyleSheet, View } from 'react-native';
+import I18n from '@/utils/I18n';
+import { fontSizeM, primaryColor, subTextColor } from '@/styles/Common';
+import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
+import RichText from '@/components/organisms/RichText';
+import { SmallPill, Space } from '@/components/atoms';
 
 interface Props {
   nativeLanguage: Language;
   textLanguage: Language;
   title: string;
   text: string;
+  themeCategory?: ThemeCategory | null;
+  themeSubcategory?: ThemeSubcategory | null;
 }
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    paddingBottom: 8,
+  },
   title: {
     color: primaryColor,
     fontWeight: 'bold',
@@ -23,6 +32,9 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     color: primaryColor,
   },
+  smallPill: {
+    marginRight: 8,
+  },
 });
 
 const DiaryTitleAndText: React.FC<Props> = ({
@@ -30,15 +42,27 @@ const DiaryTitleAndText: React.FC<Props> = ({
   textLanguage,
   title,
   text,
+  themeCategory,
+  themeSubcategory,
 }) => {
   return (
     <>
-      <RichText
-        style={styles.title}
-        text={title}
-        nativeLanguage={nativeLanguage}
-        textLanguage={textLanguage}
-      />
+      <View style={styles.titleContainer}>
+        {themeCategory && themeSubcategory && (
+          <SmallPill
+            containerStyle={styles.smallPill}
+            text={I18n.t('myDiaryList.theme')}
+            color="#fff"
+            backgroundColor={subTextColor}
+          />
+        )}
+        <RichText
+          style={styles.title}
+          text={title}
+          nativeLanguage={nativeLanguage}
+          textLanguage={textLanguage}
+        />
+      </View>
       <Space size={16} />
       <RichText
         style={styles.text}

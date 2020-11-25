@@ -4,6 +4,7 @@ export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as CountryNameWithFlag } from './CountryNameWithFlag';
 export { default as DefaultHeaderBack } from './DefaultHeaderBack';
+export { default as DiaryTitle } from './DiaryTitle';
 export { default as DiaryStatus } from './DiaryStatus';
 export { default as FirstDiary } from './FirstDiary';
 export { default as FixText } from './FixText';
