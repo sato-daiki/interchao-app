@@ -2,13 +2,13 @@ import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Platform } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 
-import { Modal } from '../template';
-import { Language } from '../../types';
-import { getLanguage } from '../../utils/diary';
-import { SubmitButton, WhiteButton, Space } from '../atoms';
-import I18n from '../../utils/I18n';
-import { fontSizeL, fontSizeM, maxPartL } from '../../styles/Common';
-import { getEachOS } from '../../utils/common';
+import { Language } from '@/types';
+import I18n from '@/utils/I18n';
+import { fontSizeL, fontSizeM, maxPartL } from '@/styles/Common';
+import { getEachOS } from '@/utils/common';
+import { getLanguage } from '@/utils/diary';
+import { SubmitButton, WhiteButton, Space } from '@/components/atoms';
+import { Modal } from '@/components/template';
 
 export interface Props {
   visible: boolean;
@@ -38,7 +38,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
   onPressSubmit,
   onPressClose,
 }) => {
-  const [value, setValue] = useState<Language>(defaultLanguage || languages[0]);
+  const [value, setValue] = useState<Language | null>(defaultLanguage || null);
 
   const onValueChange = useCallback((itemValue: React.ReactText) => {
     setValue(itemValue as Language);
@@ -46,6 +46,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
 
   const onPress = useCallback(() => {
     onPressSubmit(value || languages[0]);
+    setValue(null);
   }, [languages, onPressSubmit, value]);
 
   return (
@@ -53,7 +54,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
       <View style={styles.container}>
         <Picker
           style={styles.picker}
-          selectedValue={value}
+          selectedValue={value || languages[0]}
           onValueChange={onValueChange}
         >
           {languages.map(item => (

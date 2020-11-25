@@ -9,6 +9,9 @@ import {
   DisplayProfile,
   Diary,
   CountryCode,
+  ThemeDiary,
+  ThemeCategory,
+  ThemeSubcategory,
 } from '@/types';
 import { softRed, subTextColor, mainColor, green } from '@/styles/Common';
 
@@ -104,6 +107,7 @@ export const MY_STATUS = {
   draft: { text: I18n.t('draftListItem.draft'), color: subTextColor },
   yet: { text: I18n.t('myDiaryStatus.yet'), color: mainColor },
   done: { text: I18n.t('myDiaryStatus.done'), color: green },
+  posted: { text: I18n.t('myDiaryStatus.posted'), color: green },
 };
 
 export const getMyDiaryStatus = (diary: Diary): Status | null => {
@@ -243,6 +247,49 @@ export const getUsePoints = (
 ): number => {
   const basePoints = getBasePoints(learnLanguage);
   return Math.ceil(length / basePoints) * 10;
+};
+
+export const getThemeDiaries = (
+  themeDiaries: ThemeDiary[] | undefined | null,
+  objectID: string,
+  themeCategory: ThemeCategory,
+  themeSubcategory: ThemeSubcategory
+): ThemeDiary[] => {
+  const findThemeDiary = themeDiaries?.find(
+    themeDiary =>
+      themeDiary.themeCategory === themeCategory &&
+      themeDiary.themeSubcategory === themeSubcategory
+  );
+
+  if (findThemeDiary && themeDiaries) {
+    // 同一テーマを投稿した場合
+    const newThemeDiaries = themeDiaries.map(themeDiary => {
+      if (
+        themeDiary.themeCategory === themeCategory &&
+        themeDiary.themeSubcategory === themeSubcategory
+      ) {
+        return {
+          ...findThemeDiary,
+          objectID,
+          updatedAt: firebase.firestore.Timestamp.now(),
+        };
+      }
+      return themeDiary;
+    });
+    return newThemeDiaries;
+  }
+
+  // 初回の場合
+  return [
+    ...(themeDiaries || []),
+    {
+      themeCategory,
+      themeSubcategory,
+      objectID,
+      updatedAt: firebase.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
+    },
+  ];
 };
 
 export const getRunningDays = (

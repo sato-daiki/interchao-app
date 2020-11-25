@@ -19,6 +19,7 @@ const common = {
   copy: 'コピー',
   slow: '遅く',
   back: '戻る',
+  begin: 'はじめる',
 };
 
 // web
@@ -572,6 +573,7 @@ const postDiaryComponent = {
   points: '所持ポイント',
   textPlaceholder: '本文',
   draft: '下書き保存',
+  hint: 'スライドをみる',
 };
 
 const sns = {
@@ -619,6 +621,7 @@ const myDiaryStatus = {
   done: '添削完了',
   correcting: '添削中',
   unread: '未読',
+  posted: '投稿済',
 };
 
 const userDiaryStatus = {
@@ -632,6 +635,203 @@ const language = {
   en: '英語',
   zh: '中国語（簡体字）',
   ko: '韓国語',
+};
+
+const selectDiaryType = {
+  headerTitle: '型の選択',
+  recommend: 'おススメ',
+  titleFree: '自由作文',
+  titleTheme: 'テーマ作文',
+  textFree:
+    '日記、今日話せなかったこと、好きな映画。自由テーマで書きましょう。',
+  textTheme:
+    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
+};
+
+const firstList = {
+  selfIntroduction: '自己紹介',
+  hobby: '趣味',
+  job: '仕事の紹介',
+  study: '外国語を勉強する理由',
+  dream: '将来の夢',
+  trip: '旅行の思い出',
+  reborn: 'もし生まれ変わるなら',
+};
+
+const selectThemeSubcategory = {
+  headerTitle: 'テーマの選択',
+  firstList,
+};
+
+const themeGuide = {
+  swipeStart: 'スワイプして\nスライドを移動しよう',
+  swipeEnd: 'スライドを復習したいときは\nスワイプして戻ろう',
+  introduction: 'はじめに',
+  guideTipTitle: 'よく使う表現',
+  expression: '表現',
+  example: '例文',
+  word: '単語',
+  guideEndText: 'ここでスライドは終わりです。\n実際に文章を書いてみましょう！',
+};
+
+const selfIntroduction = {
+  introduction:
+    '初回は自己紹介について書いてみましょう。自己紹介は新しい人と会ったときは必ずしますよね。\n\n{{learnLanguage}}で一度文章を作成しておくと、実際に話す時、スラスラ話すことができます。',
+  expression1: '名前、呼び名',
+  expression2: '出身地、育った町',
+  expression3: '会社名、職業',
+  expression4: '趣味',
+  example1: '田中はなといいます。はなと呼んでください。',
+  example2: '私は神奈川で生まれて東京で育ちました。',
+  example3:
+    '私はインターチャオでマーケティングディレクターとして働いています。',
+  example4: '私はギターを弾くのが好きです。',
+  wordTitle: '自己紹介で使える表現一覧',
+  word1: 'お会いできて嬉しいです。',
+  word2: 'XXと呼んでください。',
+  word3: '生まれも育ちもXXです。',
+  word4: '日本から来ました。',
+  word5: '弟がいます。',
+  word6: '妻と結婚して5年になります。',
+  word7: '大学で心理学を専攻しています。',
+  word8: 'XXの業界で働いています。',
+  word9: '旅行をするのがとても好きです。',
+  word10: 'お会いできてよかったです。',
+};
+
+const hobby = {
+  introduction:
+    '新しい友達ができた時、同僚とお酒を飲む時、趣味について話すことは多くないですか？{{learnLanguage}}も同じです。趣味は定番の話題です。\n\n今日は"あなたの趣味"について話すことができるようしましょう。',
+  expression1: '趣味の名前',
+  expression2: '趣味の名前、趣味を始めたきっかけ',
+  expression3: '今後について',
+  example1: '私の趣味はランニングです。',
+  example2: '私がランニングを始めたきっかけはフルマラソンに参加したことです。',
+  example3: '私は今後もこの運動を続けていきたいです。',
+  wordTitle: '趣味一覧',
+  word1: '買い物',
+  word2: '映画鑑賞',
+  word3: '野球',
+  word4: '英語学習',
+  word5: '生け花',
+  word6: 'ウェブサイト運営',
+  word7: '旅行',
+  word8: '温泉巡り',
+  word9: '写真',
+};
+
+const job = {
+  introduction:
+    '３回目のテーマは仕事です。文章を書くことにだいぶ慣れてきたのではないでしょうか?\n\n今日は"あなたが何の仕事をしているのか？"を書けるようにしましょう',
+  expression1: '勤務先の名前',
+  expression2: '職業',
+  expression3: '専門分野',
+  example1: '私はInterchao Centerで仕事をしています。',
+  example2: '私の職業は英語の先生です',
+  example3: '弊社はマンツーマンレッスンを専門にしています。',
+  wordTitle: '職業一覧',
+  word1: '弁護士',
+  word2: '会計士',
+  word3: 'エンジニア',
+  word4: '受付',
+  word5: '秘書',
+  word6: '会社員',
+  word7: '製造業者',
+  word8: '販売業者',
+  word9: '銀行員',
+  word10: 'コック・調理師',
+  word11: '公務員',
+  word12: '先生',
+  word13: '医者',
+  word14: '薬剤師',
+  word15: '看護師',
+  word16: '起業家',
+  word17: '研究員',
+  word18: '作家',
+};
+
+const study = {
+  introduction:
+    'あなたはなぜ{{learnLanguage}}の勉強を始めたのですか?\n\n語学学校や、留学へ行くと必ず聞かれる質問です。理由を{{learnLanguage}}で話せるようにしましょう。',
+  expression1: '言語、理由',
+  expression2: '言語、理由',
+  expression3: '言語、理由',
+  example1:
+    '英語の勉強を始めた理由は、新しい仕事で顧客と基本的に英語を使わなければならないからです。',
+  wordTitle: '理由一覧',
+  word1: '趣味や余暇',
+  word2: '他の国の人々と出会う',
+  word3: '旅行のために英語を学ぶ',
+  word4: '外国人と話せるようになる',
+  word5: '仕事で昇進する',
+  word6: '転職',
+  word7: '英語力を生かした仕事に就く',
+};
+
+const dream = {
+  introduction:
+    'あなたは将来何になりたいですか？\n\n今日は将来の夢や目標を書いてみましょう。',
+  expression1: '将来の夢',
+  expression2: '過去の体験',
+  expression3: '夢を通じて実現したい事',
+  example1: '私の夢は自分のお店を持つことです。',
+  example2: '私は小さいころから料理をすることが好きでした。',
+  example3: '多くの人に私の料理を食べて喜んでもらいたいです。',
+  wordTitle: '将来の夢の例一覧',
+  word1: '小学校の先生になる',
+  word2: 'イラストレーターになる',
+  word3: 'プロサッカー選手になる',
+  word4: '国際的なボランティアに携わる',
+  word5: 'サッカー雑誌を制作する人になる',
+  word6: 'アフリカで働く',
+  word7: '将来グアムに住んで働く',
+  word8: '日本一周',
+  word9: 'まだ将来の夢がない',
+};
+
+const trip = {
+  introduction:
+    '今回のテーマは旅行です。友人から旅行の話を聞くのは楽しいですよね。\n\nあなたも{{learnLanguage}}で旅行のトークを１つ用意しておきましょう。',
+  expression1: '行った国名(都市名)、一緒に行った人',
+  expression2: '期間、訪れた場所',
+  expression3: '一番の思い出',
+  example1: '私はイタリアへ家族と一緒に行きました。',
+  example2: '私たちは１０日間でローマとベネチアとナポリを訪れました。',
+  example3: '一番の思い出は、青の洞窟へボートで行ったことです。',
+  wordTitle: '旅の思い出の表現一覧',
+  word1: 'ハイキングをしに中国を訪れました。',
+  word2: 'ハワイのビーチに行きました。',
+  word3: '韓国で買い物をしました。',
+  word4: '地元の料理は本当においしいです。',
+  word5: '地元の人がとても親切でした。',
+  word6: 'お店でとてもおもしろいグッズを見つけました。',
+  word7: 'グレートバリアリーフで有名なケアンズへ行きました。',
+  word8: '旅の恥はかき捨て。',
+  word9: 'また行けるといいなと思います。',
+};
+
+const reborn = {
+  introduction:
+    'この章の最後のテーマです。"もしXXだったら..."は会話でよく使う表現ですよね。\n\n今日は"もし生まれ変わったら"について書いていきましょう。',
+  expression1: '生まれ変わったらやりたいこと',
+  expression2: '理由',
+  example1: '生まれ変われるなら1945年頃に生まれたいです。',
+  example2: 'なぜなら、1960年代の生きた心理学者に学びたいからです。',
+  wordTitle: '表現一覧',
+  word1: 'もしも私が生まれ変わるなら、鳥になりたい。',
+  word2: '自分に生まれ変わりたい。',
+  word3: 'もし生まれ変わったら、医者になりたい。',
+  word4: 'もし生まれ変わったら、世界一周旅行に挑戦する。',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
 };
 
 const ja = {
@@ -664,6 +864,7 @@ const ja = {
   review,
   reviewList,
   selectLanguage,
+  selectDiaryType,
   setting,
   signIn,
   signUp,
@@ -711,6 +912,9 @@ const ja = {
   userDiaryStatus,
   language,
   inquiry,
+  selectThemeSubcategory,
+  themeGuide,
+  first,
 };
 
 export default ja;

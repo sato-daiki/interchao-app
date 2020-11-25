@@ -21,6 +21,7 @@ const common = {
   copy: 'Copy',
   slow: 'Slow',
   back: 'Back',
+  begin: 'Begin',
 };
 
 // web
@@ -584,6 +585,7 @@ const postDiaryComponent = {
   points: 'Your Points',
   textPlaceholder: 'Entry',
   draft: 'Save as Draft',
+  hint: 'Review the slides',
 };
 
 const sns = {
@@ -632,6 +634,7 @@ const myDiaryStatus = {
   done: 'Corrected',
   correcting: 'Being Corrected',
   unread: 'Unread',
+  posted: 'Posted',
 };
 
 const userDiaryStatus = {
@@ -645,6 +648,205 @@ const language = {
   en: 'English',
   zh: 'Simplified Chinese',
   ko: 'Korean',
+};
+
+const selectDiaryType = {
+  headerTitle: 'Type Selection',
+  recommend: 'Recommend',
+  titleFree: 'Topic of your choice',
+  titleTheme: 'Choose from topics',
+  textFree:
+    "Diary, things you couldn't talk about today, favorite movies, etc. Write about the topic of your choice.",
+  textTheme:
+    "Write sentences according to topics. Recommended if you can't think of what to write.",
+};
+
+const firstList = {
+  selfIntroduction: 'Self-Introduction',
+  hobby: 'Hobby',
+  job: 'Job',
+  study: 'Reasons to study a foreign language',
+  dream: 'Dream for the future',
+  trip: 'Travel memories',
+  reborn: 'If you were born again',
+};
+
+const selectThemeSubcategory = {
+  headerTitle: 'Theme Selection',
+  firstList,
+};
+
+const themeGuide = {
+  swipeStart: 'Swipe to move slides',
+  swipeEnd: 'Swipe back \nwhen you want to\nreview the slides',
+  introduction: 'Introduction',
+  guideTipTitle: 'Useful Expressions',
+  expression: 'Expressions',
+  example: 'Example sentences',
+  word: 'Words',
+  guideEndText:
+    "This is the end of the slide.\nLet's actually write a sentence!",
+};
+
+const selfIntroduction = {
+  introduction:
+    "First, let's start by writing a self introduction. Don't forget to introduce yourself when meeting someone new.\n\nOnce you write a sentence with {{learnLanguage}}, you'll be able to talk smoothly when you're talking in practice.",
+  expression1: 'name, nickname',
+  expression2: 'birthplace, the town where you grew up',
+  expression3: 'company name, occupation',
+  expression4: 'hobby',
+  example1: 'My name is Hana Tanaka. Please call me Hana.',
+  example2: 'I was born in Kanagawa but grew up in Tokyo.',
+  example3: 'I work for Interchao as a marketing director.',
+  example4: 'I like playing the guitar.',
+  wordTitle: 'List of expressions',
+  word1: 'It’s a pleasure to meet you.',
+  word2: 'You can call me XX.',
+  word3: 'I was born and raised in XX.',
+  word4: 'I come from Japan.',
+  word5: 'I have a younger brother.',
+  word6: 'My wife and I have been married for 5 years.',
+  word7: 'I am a university student studying psychology.',
+  word8: 'I work in the XX industry.',
+  word9: 'I love to travel.',
+  word10: 'It was nice meeting you.',
+};
+
+const hobby = {
+  introduction:
+    "When you made a new friend, when drinking with your colleagues, you often talk about your hobbies, don't you? {{learnLanguage}} is the same.\n\nHobbies are staple discussion topic. Today, let's learn how to talk about your hobbies.",
+  expression1: 'hobby name',
+  expression2: 'hobby name, How did you start your hobby?',
+  expression3: 'about the future',
+  example1: 'My hobby is running.',
+  example2:
+    'The reason I started running was that I participated in a full Marathon.',
+  example3: 'I want to continue with this kind of exercise.',
+  wordTitle: 'Hobby list',
+  word1: 'shopping',
+  word2: 'watching movies',
+  word3: 'baseball',
+  word4: 'studying English',
+  word5: 'flower arrangement',
+  word6: 'run my own website',
+  word7: 'traveling',
+  word8: 'visiting hot springs',
+  word9: 'taking pictures',
+};
+
+const job = {
+  introduction:
+    "The third day's theme is work. You've gotten used to writing sentences, haven't you?\n\nToday, let's write about what you do for work.",
+  expression1: 'name of the business',
+  expression2: 'profession',
+  expression3: 'specialized field',
+  example1: 'I work for Interchao Center.',
+  example2: 'My profession is an English teacher.',
+  example3: 'Our company specializes in private lessons.',
+  wordTitle: 'Occupation list',
+  word1: 'lawyer',
+  word2: 'accountant',
+  word3: 'engineer',
+  word4: 'receptionist',
+  word5: 'secretary',
+  word6: 'office worker',
+  word7: 'manufacturer',
+  word8: 'seller/supplier/dealer',
+  word9: 'bank clerk',
+  word10: 'chef',
+  word11: 'public worker',
+  word12: 'teacher',
+  word13: 'doctor',
+  word14: 'pharmacist',
+  word15: 'nurse',
+  word16: 'entrepreneur',
+  word17: 'researcher',
+  word18: 'author/writer',
+};
+
+const study = {
+  introduction:
+    "Why did you begin studying {{learnLanguage}}?\n\nThis is a question that will definitely be asked in language schools or when you go studying abroad. Let's learn to explain the reason in {{learnLanguage}}.",
+  expression1: 'language, reason',
+  expression2: 'language, reason',
+  expression3: 'language, reason',
+  example1:
+    'My reason for studying English is that in my new job, I have to use English regularly with clients.',
+
+  wordTitle: 'List of reasons',
+  word1: 'a hobby or pastime',
+  word2: 'to meet people from other countries',
+  word3: 'to learn English for travel',
+  word4: 'to be able to speak to foreigners',
+  word5: 'to get promoted at work',
+  word6: 'to  change jobs',
+  word7: 'to find a job where I can use my English skills',
+};
+
+const dream = {
+  introduction:
+    "What do you want to be in the future?\n\nToday, let's talk about your future dreams and goals.",
+  expression1: 'dream for the future',
+  expression2: 'past experience',
+  expression3: 'what you want to achieve through your dreams',
+  example1: 'My dream for the future is to have my own shop.',
+  example2: 'I loved to cook dishes since I was a child.',
+  example3: "I'd like many people to eat my cooking and feel happy.",
+  wordTitle: 'List of examples of future dreams',
+  word1: 'to be an elementary school teacher',
+  word2: 'to be an illustrator',
+  word3: 'to be a professional soccer player',
+  word4: 'to work in a job related to international volunteering',
+  word5: 'to become someone who produces soccer magazines',
+  word6: 'to work in Africa',
+  word7: 'to live and work in Guam in the future',
+  word8: 'to go all over Japan',
+  word9: "I still don't have any dreams for the future.",
+};
+
+const trip = {
+  introduction:
+    "Today's theme is travel. It's fun listening to travel stories from a friend, isn't it?\n\nLet's prepare a talk about travel in {{learnLanguage}} for you, too.",
+  expression1: 'country name (city name) / person who went with',
+  expression2: 'place and period of visit',
+  expression3: 'the best memory',
+  example1: 'I went to Italy with my family.',
+  example2: 'We visited Roma, Venice, and Naples in 10days.',
+  example3: 'My favorite memory is that we went to the Blue Grotto by boat.',
+
+  wordTitle: 'List of expressions of memories of the trip',
+  word1: 'I visited China to go hiking.',
+  word2: 'I went to the beach in Hawaii.',
+  word3: 'I went shopping in Korea.',
+  word4: 'Local food is really good.',
+  word5: 'The locals were very nice.',
+  word6: 'We found very interesting goods in a shop.',
+  word7: 'I went to Cairns which is famous for the Great Barrier Reef.',
+  word8: 'Once over the border, one may do anything.',
+  word9: 'I hope I can visit there again.',
+};
+
+const reborn = {
+  introduction: `This is the last theme of this chapter. "If I were XX..." is an expression that's often used in conversations.\n\nLet's write about what you want to be if you were reborn.`,
+  expression1: 'what you want to do when you are reborn',
+  expression2: 'reason',
+  example1: "If I were born, I'd like to be born around 1945.",
+  example2: "Because I'd like to learn real physiotherapy in the 1960s.",
+  wordTitle: 'List of expressions',
+  word1: 'If I were to be reborn, I would like to be a bird.',
+  word2: 'I would want to be reborn as myself.',
+  word3: 'If I were to be born again, I would like to be a doctor.',
+  word4: 'If I were reborn, I would challenge a trip around the world.',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
 };
 
 const en = {
@@ -677,6 +879,9 @@ const en = {
   review,
   reviewList,
   selectLanguage,
+  selectDiaryType,
+  selectThemeSubcategory,
+  themeGuide,
   setting,
   signIn,
   signUp,
@@ -724,6 +929,7 @@ const en = {
   userDiaryStatus,
   language,
   inquiry,
+  first,
 };
 
 export default en;

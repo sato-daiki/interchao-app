@@ -1,8 +1,13 @@
 import React, { useLayoutEffect } from 'react';
-import PostDiary from '@/components/organisms/PostDiary';
-import { HeaderText } from '@/components/atoms';
-import I18n from '@/utils/I18n';
 
+import { PostDiary } from '@/components/organisms/PostDiary';
+import { HeaderText } from '@/components/atoms';
+
+import I18n from '@/utils/I18n';
+import {
+  DefaultModalLayoutOptions,
+  DefaultNavigationOptions,
+} from '@/constants/NavigationOptions';
 import { usePostDiary } from './usePostDiary';
 import { ScreenType } from './interfaces';
 
@@ -11,6 +16,7 @@ import { ScreenType } from './interfaces';
  */
 const PostDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   user,
   profile,
   setUser,
@@ -45,6 +51,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     onPressClose,
   } = usePostDiary({
     navigation,
+    route,
     user,
     profile,
     setUser,
@@ -53,6 +60,9 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      ...DefaultNavigationOptions,
+      ...DefaultModalLayoutOptions,
+      title: I18n.t('postDiary.headerTitle'),
       headerLeft: (): JSX.Element => (
         <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
       ),
@@ -75,6 +85,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
 
   return (
     <PostDiary
+      navigation={navigation}
       isLoading={isLoadingDraft || isLoadingPublish}
       isModalLack={isModalLack}
       isModalAlert={isModalAlert}
@@ -86,6 +97,8 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       errorMessage={errorMessage}
       title={title}
       text={text}
+      themeCategory={route?.params?.themeCategory}
+      themeSubcategory={route?.params?.themeSubcategory}
       publishMessage={publishMessage}
       points={user.points}
       learnLanguage={profile.learnLanguage}
