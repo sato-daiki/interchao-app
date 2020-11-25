@@ -84,7 +84,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({
           return null;
       }
     },
-    [onPressEnd]
+    [onPressEnd, profile.learnLanguage, profile.nativeLanguage]
   );
 
   return (

@@ -7,12 +7,16 @@ import {
   subTextColor,
 } from '@/styles/Common';
 import I18n from '@/utils/I18n';
+import { Language } from '@/types';
 import { TipParams } from './interface';
 import Header from './Header';
 import { getStyle } from './util';
+import RichText from '../RichText';
 
 interface Props {
   params: TipParams;
+  textLanguage: Language;
+  nativeLanguage: Language;
 }
 
 const styles = StyleSheet.create({
@@ -43,6 +47,10 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   marginBottom4: {
     marginBottom: 4,
   },
@@ -51,7 +59,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ThemeGuideTip: React.FC<Props> = ({ params }) => {
+const ThemeGuideTip: React.FC<Props> = ({
+  params,
+  textLanguage,
+  nativeLanguage,
+}) => {
   return (
     <ScrollView
       style={styles.scrollView}
@@ -63,10 +75,15 @@ const ThemeGuideTip: React.FC<Props> = ({ params }) => {
           {`⭐️ ${I18n.t('themeGuide.expression')}`}
         </Text>
         {params.expressions.map(expression => (
-          <Text key={expression.id} style={styles.marginBottom12}>
-            <Text style={styles.text}>{`${expression.learnText}`}</Text>
+          <View key={expression.id} style={[styles.marginBottom12, styles.row]}>
+            <RichText
+              style={styles.text}
+              textLanguage={textLanguage}
+              nativeLanguage={nativeLanguage}
+              text={`${expression.learnText}`}
+            />
             <Text style={styles.subText}>{`  (${expression.nativeText})`}</Text>
-          </Text>
+          </View>
         ))}
       </View>
 
