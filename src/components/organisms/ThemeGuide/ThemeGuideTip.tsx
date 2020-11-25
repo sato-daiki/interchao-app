@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Text, StyleSheet, TextStyle } from 'react-native';
+import { View, ScrollView, Text, StyleSheet } from 'react-native';
 import {
   fontSizeL,
   fontSizeM,
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   section: {
-    marginBottom: 32,
+    marginBottom: 16,
   },
   title: {
     color: primaryColor,
@@ -36,22 +36,22 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
-    marginBottom: 4,
     flexWrap: 'wrap',
   },
   subText: {
     color: subTextColor,
+    fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
   },
-  subTextAndMarginLeft: {
-    color: subTextColor,
-    marginLeft: 16,
+  marginBottom4: {
+    marginBottom: 4,
   },
-  example: {
-    marginBottom: 8,
+  marginBottom12: {
+    marginBottom: 12,
   },
 });
 
-const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
+const ThemeGuideTip: React.FC<Props> = ({ params }) => {
   return (
     <ScrollView
       style={styles.scrollView}
@@ -63,20 +63,17 @@ const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
           {`⭐️ ${I18n.t('themeGuide.expression')}`}
         </Text>
         {params.expressions.map(expression => (
-          <Text key={expression.id} style={styles.text}>
-            {`・${expression.learnText}`}
-            <Text style={styles.subTextAndMarginLeft}>
-              {`（${expression.nativeText}）`}
-            </Text>
+          <Text key={expression.id} style={styles.marginBottom12}>
+            <Text style={styles.text}>{`${expression.learnText}`}</Text>
+            <Text style={styles.subText}>{`  (${expression.nativeText})`}</Text>
           </Text>
         ))}
       </View>
 
       <Text style={styles.title}>{`✍️ ${I18n.t('themeGuide.example')}`}</Text>
       {params.examples.map(example => (
-        <View key={example.id} style={styles.example}>
-          <Text style={styles.text}>
-            ・
+        <View key={example.id} style={styles.marginBottom12}>
+          <Text style={[styles.text, styles.marginBottom4]}>
             {example.learnText.map(t => (
               <Text
                 key={`${example.id}-${t.key}`}
@@ -86,11 +83,11 @@ const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
               </Text>
             ))}
           </Text>
-          <Text style={styles.subText}>{`（${example.nativeText}）`}</Text>
+          <Text style={styles.subText}>{`${example.nativeText}`}</Text>
         </View>
       ))}
     </ScrollView>
   );
 };
 
-export default ThemeGuideIntroduction;
+export default ThemeGuideTip;

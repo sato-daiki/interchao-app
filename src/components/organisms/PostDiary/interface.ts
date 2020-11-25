@@ -37,6 +37,7 @@ export interface PostDiaryProps {
   publishMessage: string | null;
   points: number;
   learnLanguage: Language;
+  nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
   onPressCloseModalPublish: () => void;

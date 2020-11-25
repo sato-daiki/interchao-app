@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, ListRenderItem, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import {
   ThemeGuideIntroduction,
@@ -11,33 +9,10 @@ import {
   Entry,
   ThemeGuideEnd,
 } from '@/components/organisms/ThemeGuide';
-import {
-  ModalThemeGuideStackNavigationProp,
-  ModalThemeGuideStackParamList,
-} from '@/navigations/ModalNavigator';
 
 import ThemeGuideWord from '@/components/organisms/ThemeGuide/ThemeGuideWord';
 import { mainColor, primaryColor } from '@/styles/Common';
-import { Profile } from '@/types';
-
-export interface Props {
-  profile: Profile;
-}
-
-type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalThemeGuideStackParamList, 'ThemeGuide'>,
-  ModalThemeGuideStackNavigationProp
->;
-
-type ThemeGuideRouteProp = RouteProp<
-  ModalThemeGuideStackParamList,
-  'ThemeGuide'
->;
-
-type ScreenType = {
-  navigation: NavigationProp;
-  route: ThemeGuideRouteProp;
-} & Props;
+import { ScreenType } from './interfaces';
 
 const styles = StyleSheet.create({
   container: {
@@ -94,7 +69,13 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({
         case 'introduction':
           return <ThemeGuideIntroduction params={item.params} />;
         case 'tip':
-          return <ThemeGuideTip params={item.params} />;
+          return (
+            <ThemeGuideTip
+              params={item.params}
+              nativeLanguage={profile.nativeLanguage}
+              textLanguage={profile.learnLanguage}
+            />
+          );
         case 'word':
           return <ThemeGuideWord params={item.params} />;
         case 'end':

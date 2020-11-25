@@ -1,72 +1,64 @@
-import { StyleType } from '@/components/organisms/ThemeGuide';
-
 export const jaSelfIntroductionExpressions = [
-  'こんにちは。',
-  'はじめまして。',
   '私の名前は__です。__とよんでください。',
   '私は__で生まれて、__で育ちました。',
   '私は__で__として働いています。',
   '私は__が好きです。',
-  'ありがとうございました。',
 ];
 
 export const jaSelfIntroductionExamples = [
-  [{ key: 'a', text: 'こんにちは。', styleType: StyleType.bold }],
-  [{ key: 'a', text: 'はじめまして。', styleType: StyleType.bold }],
   [
-    { key: 'a', text: '私の名前は', styleType: StyleType.bold },
-    { key: 'b', text: '田中はな', styleType: StyleType.p },
-    { key: 'c', text: 'です。', styleType: StyleType.bold },
-    { key: 'd', text: 'はな', styleType: StyleType.p },
-    { key: 'e', text: 'とよんでください。', styleType: StyleType.bold },
+    { key: 'a', text: '私の名前は', styleType: 'bold' },
+    { key: 'b', text: '田中はな', styleType: 'p' },
+    { key: 'c', text: 'です。', styleType: 'bold' },
+    { key: 'd', text: 'はな', styleType: 'p' },
+    { key: 'e', text: 'とよんでください。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '私は', styleType: StyleType.bold },
-    { key: 'b', text: '神奈川', styleType: StyleType.p },
-    { key: 'c', text: 'で生まれて。', styleType: StyleType.bold },
-    { key: 'd', text: '東京', styleType: StyleType.p },
-    { key: 'e', text: 'で育ちました', styleType: StyleType.bold },
+    { key: 'a', text: '私は', styleType: 'bold' },
+    { key: 'b', text: '神奈川', styleType: 'p' },
+    { key: 'c', text: 'で生まれて', styleType: 'bold' },
+    { key: 'd', text: '東京', styleType: 'p' },
+    { key: 'e', text: 'で育ちました。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '私は', styleType: StyleType.bold },
-    { key: 'b', text: 'インターチャオ', styleType: StyleType.p },
-    { key: 'c', text: 'で', styleType: StyleType.bold },
-    { key: 'd', text: 'マーケティングディレクター', styleType: StyleType.p },
-    { key: 'e', text: 'として働いています。', styleType: StyleType.bold },
+    { key: 'a', text: '私は', styleType: 'bold' },
+    { key: 'b', text: 'インターチャオ', styleType: 'p' },
+    { key: 'c', text: 'で', styleType: 'bold' },
+    { key: 'd', text: 'マーケティングディレクター', styleType: 'p' },
+    { key: 'e', text: 'として働いています。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '私は', styleType: StyleType.bold },
-    { key: 'b', text: 'ギターを弾くの', styleType: StyleType.p },
-    { key: 'c', text: 'が好きです。', styleType: StyleType.bold },
+    { key: 'a', text: '私は', styleType: 'bold' },
+    { key: 'b', text: 'ギターを弾くの', styleType: 'p' },
+    { key: 'c', text: 'が好きです。', styleType: 'bold' },
   ],
-  [{ key: 'a', text: 'ありがとうございました。', styleType: StyleType.bold }],
 ];
 
 export const jaHobbyExpressions = [
   '私の趣味は__',
   '私が__を始めたきっかけは__',
-  '私は__したいです',
+  '私は__したいです。',
 ];
 
 export const jaHobbyExamples = [
   [
-    { key: 'a', text: '私の趣味は', styleType: StyleType.bold },
-    { key: 'b', text: 'ランニングです。', styleType: StyleType.p },
+    { key: 'a', text: '私の趣味は', styleType: 'bold' },
+    { key: 'b', text: 'ランニングです。', styleType: 'p' },
   ],
   [
-    { key: 'a', text: '私が', styleType: StyleType.bold },
-    { key: 'b', text: 'ランニング', styleType: StyleType.p },
-    { key: 'c', text: 'を始めたきっかけは', styleType: StyleType.bold },
+    { key: 'a', text: '私が', styleType: 'bold' },
+    { key: 'b', text: 'ランニング', styleType: 'p' },
+    { key: 'c', text: 'を始めたきっかけは', styleType: 'bold' },
     {
       key: 'd',
       text: 'フルマラソンに参加したことです。',
-      styleType: StyleType.p,
+      styleType: 'p',
     },
   ],
   [
-    { key: 'a', text: '私は', styleType: StyleType.bold },
-    { key: 'b', text: '今後もこの運動を続けて', styleType: StyleType.p },
-    { key: 'c', text: 'いきたいです。', styleType: StyleType.bold },
+    { key: 'a', text: '私は', styleType: 'bold' },
+    { key: 'b', text: '今後もこの運動を続けて', styleType: 'p' },
+    { key: 'c', text: 'いきたいです。', styleType: 'bold' },
   ],
 ];
 
@@ -78,19 +70,19 @@ export const jaJobExpressions = [
 
 export const jaJobExamples = [
   [
-    { key: 'a', text: '私は', styleType: StyleType.bold },
-    { key: 'b', text: 'Interchao Center', styleType: StyleType.p },
-    { key: 'c', text: 'で仕事をしています。', styleType: StyleType.bold },
+    { key: 'a', text: '私は', styleType: 'bold' },
+    { key: 'b', text: 'Interchao Center', styleType: 'p' },
+    { key: 'c', text: 'で仕事をしています。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '私の職業は', styleType: StyleType.bold },
-    { key: 'b', text: '英語の先生', styleType: StyleType.p },
-    { key: 'c', text: 'です。', styleType: StyleType.bold },
+    { key: 'a', text: '私の職業は', styleType: 'bold' },
+    { key: 'b', text: '英語の先生', styleType: 'p' },
+    { key: 'c', text: 'です。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '弊社は', styleType: StyleType.bold },
-    { key: 'b', text: 'マンツーマンレッスン', styleType: StyleType.p },
-    { key: 'c', text: 'を専門にしています。', styleType: StyleType.bold },
+    { key: 'a', text: '弊社は', styleType: 'bold' },
+    { key: 'b', text: 'マンツーマンレッスン', styleType: 'p' },
+    { key: 'c', text: 'を専門にしています。', styleType: 'bold' },
   ],
 ];
 
@@ -105,14 +97,14 @@ export const jaStudyExamples = [
     {
       key: 'a',
       text: '私が',
-      styleType: StyleType.bold,
+      styleType: 'bold',
     },
-    { key: 'b', text: '英語', styleType: StyleType.p },
-    { key: 'c', text: 'の勉強を始めた理由は、', styleType: StyleType.bold },
+    { key: 'b', text: '英語', styleType: 'p' },
+    { key: 'c', text: 'の勉強を始めた理由は、', styleType: 'bold' },
     {
       key: 'd',
       text: '新しい仕事で顧客と基本的に英語を使わなければならないからです。',
-      styleType: StyleType.p,
+      styleType: 'p',
     },
   ],
 ];
@@ -125,20 +117,20 @@ export const jaDreamExpressions = [
 
 export const jaDreamExamples = [
   [
-    { key: 'a', text: '私の夢は', styleType: StyleType.bold },
-    { key: 'b', text: '自分のお店を持つことです。', styleType: StyleType.p },
+    { key: 'a', text: '私の夢は', styleType: 'bold' },
+    { key: 'b', text: '自分のお店を持つことです。', styleType: 'p' },
   ],
   [
-    { key: 'a', text: '私は小さいころから', styleType: StyleType.bold },
-    { key: 'b', text: '料理をすることが好きでした。', styleType: StyleType.p },
+    { key: 'a', text: '私は小さいころから', styleType: 'bold' },
+    { key: 'b', text: '料理をすることが好きでした。', styleType: 'p' },
   ],
   [
     {
       key: 'a',
       text: '多くの人に私の料理を食べて喜んで',
-      styleType: StyleType.p,
+      styleType: 'p',
     },
-    { key: 'b', text: 'もらいたいです。', styleType: StyleType.bold },
+    { key: 'b', text: 'もらいたいです。', styleType: 'bold' },
   ],
 ];
 
@@ -150,25 +142,25 @@ export const jaTripExpressions = [
 
 export const jaTripExamples = [
   [
-    { key: 'a', text: '私は', styleType: StyleType.bold },
-    { key: 'b', text: 'イタリア', styleType: StyleType.p },
-    { key: 'c', text: 'へ', styleType: StyleType.bold },
-    { key: 'd', text: '家族', styleType: StyleType.p },
-    { key: 'e', text: 'と一緒に行きました', styleType: StyleType.bold },
+    { key: 'a', text: '私は', styleType: 'bold' },
+    { key: 'b', text: 'イタリア', styleType: 'p' },
+    { key: 'c', text: 'へ', styleType: 'bold' },
+    { key: 'd', text: '家族', styleType: 'p' },
+    { key: 'e', text: 'と一緒に行きました', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '私たちは', styleType: StyleType.bold },
-    { key: 'b', text: '１０', styleType: StyleType.p },
-    { key: 'c', text: '日間で', styleType: StyleType.bold },
-    { key: 'd', text: 'ローマとベネチアとナポリ', styleType: StyleType.p },
-    { key: 'e', text: 'を訪れました。', styleType: StyleType.bold },
+    { key: 'a', text: '私たちは', styleType: 'bold' },
+    { key: 'b', text: '１０', styleType: 'p' },
+    { key: 'c', text: '日間で', styleType: 'bold' },
+    { key: 'd', text: 'ローマとベネチアとナポリ', styleType: 'p' },
+    { key: 'e', text: 'を訪れました。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '一番の思い出は、', styleType: StyleType.bold },
+    { key: 'a', text: '一番の思い出は、', styleType: 'bold' },
     {
       key: 'b',
       text: '青の洞窟へボートで行ったことです。',
-      styleType: StyleType.p,
+      styleType: 'p',
     },
   ],
 ];
@@ -180,17 +172,17 @@ export const jaRebornExpressions = [
 
 export const jaRebornExamples = [
   [
-    { key: 'a', text: '生まれ変われるなら', styleType: StyleType.bold },
-    { key: 'b', text: '1945年頃に生まれ', styleType: StyleType.p },
-    { key: 'c', text: 'たいです。', styleType: StyleType.bold },
+    { key: 'a', text: '生まれ変われるなら', styleType: 'bold' },
+    { key: 'b', text: '1945年頃に生まれ', styleType: 'p' },
+    { key: 'c', text: 'たいです。', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: 'なぜなら、', styleType: StyleType.bold },
+    { key: 'a', text: 'なぜなら、', styleType: 'bold' },
     {
       key: 'b',
       text: '1960年代の生きた心理学者に学び',
-      styleType: StyleType.p,
+      styleType: 'p',
     },
-    { key: 'c', text: 'たいからです。', styleType: StyleType.bold },
+    { key: 'c', text: 'たいからです。', styleType: 'bold' },
   ],
 ];

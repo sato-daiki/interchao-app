@@ -1,54 +1,42 @@
 import { StyleType } from '@/components/organisms/ThemeGuide';
 
 export const koSelfIntroductionExpressions = [
-  '안녕하세요.',
-  '처음 뵙겠습니다.',
   '제 이름은 __입니다. __라고 불러 주세요.',
   '__에서 태어나 __에서 자랐습니다.',
   '__에서 __(으)로 일하고 있습니다.',
   '__(을)를 좋아합니다.',
-  '감사합니다.',
 ];
 
 export const koSelfIntroductionExamples = [
-  [{ key: 'a', text: '안녕하세요.', styleType: StyleType.bold }],
   [
-    {
-      key: 'a',
-      text: '처음 뵙겠습니다.',
-      styleType: StyleType.bold,
-    },
+    { key: 'a', text: '제 이름은 ', styleType: 'bold' },
+    { key: 'b', text: '타나카하나', styleType: 'p' },
+    { key: 'c', text: '입니다. ', styleType: 'bold' },
+    { key: 'd', text: '하나', styleType: 'p' },
+    { key: 'e', text: '라고 불러 주세요.', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '제 이름은 ', styleType: StyleType.bold },
-    { key: 'b', text: '타나카하나', styleType: StyleType.p },
-    { key: 'c', text: '입니다. ', styleType: StyleType.bold },
-    { key: 'd', text: '하나', styleType: StyleType.p },
-    { key: 'e', text: '라고 불러 주세요.', styleType: StyleType.bold },
+    { key: 'a', text: '가나가와', styleType: 'p' },
+    { key: 'b', text: '에서 태어나 ', styleType: 'bold' },
+    { key: 'c', text: '도쿄', styleType: 'p' },
+    { key: 'd', text: '에서 자랐습니다.', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '가나가와', styleType: StyleType.p },
-    { key: 'b', text: '에서 태어나 ', styleType: StyleType.bold },
-    { key: 'c', text: '도쿄', styleType: StyleType.p },
-    { key: 'd', text: '에서 자랐습니다.', styleType: StyleType.bold },
+    { key: 'a', text: '인터차오', styleType: 'p' },
+    { key: 'b', text: '에서 ', styleType: 'bold' },
+    { key: 'c', text: '마케팅 디렉터', styleType: 'p' },
+    { key: 'd', text: '로 일하고 있습니다.', styleType: 'bold' },
   ],
   [
-    { key: 'a', text: '인터차오', styleType: StyleType.p },
-    { key: 'b', text: '에서 ', styleType: StyleType.bold },
-    { key: 'c', text: '마케팅 디렉터', styleType: StyleType.p },
-    { key: 'd', text: '(으)로 일하고 있습니다.', styleType: StyleType.bold },
+    { key: 'a', text: '기타 치는 것', styleType: 'p' },
+    { key: 'b', text: '을 좋아합니다. ', styleType: 'bold' },
   ],
-  [
-    { key: 'a', text: '__', styleType: StyleType.p },
-    { key: 'b', text: '(을)를 좋아합니다. ', styleType: StyleType.bold },
-  ],
-  [{ key: 'a', text: '감사합니다.', styleType: StyleType.bold }],
 ];
 
 export const koHobbyExpressions = [
   '제 취미는 __입니다.',
-  '저는 _(을)를 계기로 _(을)를 시작하게 되었습니다.',
-  '저는 앞으로도 _(을)를 계속해 나가고 싶습니다.',
+  '저는 __(을)를 계기로 __(을)를 시작하게 되었습니다.',
+  '저는 앞으로도 __(을)를 계속해 나가고 싶습니다.',
 ];
 
 export const koHobbyExamples = [
@@ -106,14 +94,14 @@ export const koStudyExamples = [
     {
       key: 'a',
       text: '제가 ',
-      styleType: StyleType.bold,
+      styleType: 'bold',
     },
-    { key: 'b', text: '영어 ', styleType: StyleType.p },
-    { key: 'c', text: '를 공부하는 이유는 ', styleType: StyleType.bold },
+    { key: 'b', text: '영어 ', styleType: 'p' },
+    { key: 'c', text: '를 공부하는 이유는 ', styleType: 'bold' },
     {
       key: 'd',
       text: '새 직장에서 고객과 기본적으로 영어를 써야하기 때문입니다.',
-      styleType: StyleType.p,
+      styleType: 'p',
     },
   ],
 ];

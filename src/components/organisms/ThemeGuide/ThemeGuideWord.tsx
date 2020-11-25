@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, ScrollView } from 'react-native';
+import { Text, StyleSheet, ScrollView, View } from 'react-native';
 import {
   fontSizeL,
   fontSizeM,
@@ -32,12 +32,14 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
-    marginBottom: 6,
     flexWrap: 'wrap',
+    marginBottom: 2,
   },
-  subTextAndMarginLeft: {
+  marginBottom: {
+    marginBottom: 12,
+  },
+  subText: {
     color: subTextColor,
-    marginLeft: 16,
   },
 });
 
@@ -50,12 +52,10 @@ const ThemeGuideWord: React.FC<Props> = ({ params }) => {
       <Header title={I18n.t('themeGuide.word')} />
       <Text style={styles.title}>{`📖 ${params.title}`}</Text>
       {params.words.map(word => (
-        <Text key={word.id} style={styles.text}>
-          {`・${word.learnText}`}
-          <Text style={styles.subTextAndMarginLeft}>
-            {` - ${word.nativeText}`}
-          </Text>
-        </Text>
+        <View key={word.id} style={styles.marginBottom}>
+          <Text style={styles.text}>{`${word.learnText}`}</Text>
+          <Text style={styles.subText}>{`${word.nativeText}`}</Text>
+        </View>
       ))}
     </ScrollView>
   );

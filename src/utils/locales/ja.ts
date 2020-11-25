@@ -573,6 +573,7 @@ const postDiaryComponent = {
   points: '所持ポイント',
   textPlaceholder: '本文',
   draft: '下書き保存',
+  hint: 'スライドをみる',
 };
 
 const sns = {
@@ -676,28 +677,22 @@ const themeGuide = {
 const selfIntroduction = {
   introduction:
     '初回は自己紹介について書いてみましょう。自己紹介は新しい人と会ったときは必ずしますよね。\n\n{{learnLanguage}}で一度文章を作成しておくと、実際に話す時、スラスラ話すことができます。',
-  expression1: '挨拶',
-  expression2: '導入',
-  expression3: '名前、呼び名',
-  expression4: '出身地、育った町',
-  expression5: '会社名、職業',
-  expression6: '趣味',
-  expression7: '結び',
-  example1: 'こんにちは。',
-  example2: 'はじめまして。',
-  example3: '田中はなといいます。はなと呼んでください。',
-  example4: '私は神奈川で生まれて東京で育ちました。',
-  example5:
+  expression1: '名前、呼び名',
+  expression2: '出身地、育った町',
+  expression3: '会社名、職業',
+  expression4: '趣味',
+  example1: '田中はなといいます。はなと呼んでください。',
+  example2: '私は神奈川で生まれて東京で育ちました。',
+  example3:
     '私はインターチャオでマーケティングディレクターとして働いています。',
-  example6: '私はギターを弾くのが好きです。',
-  example7: 'ありがとうございました。',
+  example4: '私はギターを弾くのが好きです。',
   wordTitle: '自己紹介で使える表現一覧',
   word1: 'お会いできて嬉しいです。',
   word2: 'XXと呼んでください。',
   word3: '生まれも育ちもXXです。',
   word4: '日本から来ました。',
   word5: '弟がいます。',
-  word6: '妻と結婚して３年になります。',
+  word6: '妻と結婚して5年になります。',
   word7: '大学で心理学を専攻しています。',
   word8: 'XXの業界で働いています。',
   word9: '旅行をするのがとても好きです。',
@@ -796,7 +791,7 @@ const dream = {
 
 const trip = {
   introduction:
-    '今回のテーマは旅行です。友人から旅行の話を聞くのは楽しいですよね\n\nあなたも{{learnLanguage}}で旅行のトークを１つ用意しておきましょう。',
+    '今回のテーマは旅行です。友人から旅行の話を聞くのは楽しいですよね。\n\nあなたも{{learnLanguage}}で旅行のトークを１つ用意しておきましょう。',
   expression1: '行った国名(都市名)、一緒に行った人',
   expression2: '期間、訪れた場所',
   expression3: '一番の思い出',
