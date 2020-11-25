@@ -89,6 +89,7 @@ const PostDiary: React.FC<PostDiaryProps> = ({
   publishMessage,
   points,
   learnLanguage,
+  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,

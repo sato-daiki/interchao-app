@@ -19,7 +19,7 @@ export const hobby = ({
     learnLanguage,
     num: WORD_NUM,
     themeCategory: 'first',
-    themeSubcategory: 'selfIntroduction',
+    themeSubcategory: 'hobby',
   });
 
   return [

@@ -96,6 +96,7 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
   publishMessage,
   points,
   learnLanguage,
+  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
@@ -162,10 +163,13 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
           onPressNotSave={onPressNotSave}
           onPressClose={onPressCloseModalCancel}
         />
-        {themeSubcategory ? (
+        {themeCategory && themeSubcategory ? (
           <Modal visible={isModalThemeGuide} disablePadding>
             <ThemeGuideWeb
+              themeCategory={themeCategory}
               themeSubcategory={themeSubcategory}
+              learnLanguage={learnLanguage}
+              nativeLanguage={nativeLanguage}
               onPressClose={onPressCloseThemeGuide}
               onPressBegin={onPressCloseThemeGuide}
             />

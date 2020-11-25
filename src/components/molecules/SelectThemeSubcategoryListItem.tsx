@@ -43,11 +43,13 @@ const styles = StyleSheet.create({
   textContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    flex: 1,
   },
   textRight: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginLeft: 8,
   },
   postDayText: {
     color: subTextColor,
@@ -62,6 +64,7 @@ const styles = StyleSheet.create({
   title: {
     color: primaryColor,
     fontSize: fontSizeM,
+    flex: 1,
   },
 });
 
