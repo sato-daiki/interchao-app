@@ -17,7 +17,7 @@
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 30000
+      "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -83,8 +83,8 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 8,　
-      "webRevision": 8
+      "revision": 11,　
+      "webRevision": 11
     },
     "hooks": {
       "postPublish": [

@@ -1,16 +1,22 @@
 import React from 'react';
-import { StyleSheet, TextInput, StyleProp, TextStyle } from 'react-native';
-import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
-import I18n from '../../utils/I18n';
+import {
+  StyleSheet,
+  TextInput,
+  StyleProp,
+  TextStyle,
+  TextInputProps,
+} from 'react-native';
+import { fontSizeM, primaryColor, borderLightColor } from '@/styles/Common';
+import I18n from '@/utils/I18n';
 
-interface Props {
+type Props = {
   style?: StyleProp<TextStyle>;
   value: string;
   onChangeText: (txt: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
   maxLength?: number;
-}
+} & TextInputProps;
 
 const styles = StyleSheet.create({
   textInput: {
@@ -35,6 +41,7 @@ const TextInputText: React.FC<Props> = ({
   onBlur,
   style,
   maxLength,
+  ...props
 }: Props): JSX.Element => {
   return (
     <TextInput
@@ -50,6 +57,7 @@ const TextInputText: React.FC<Props> = ({
       onFocus={onFocus}
       onBlur={onBlur}
       maxLength={maxLength}
+      {...props}
     />
   );
 };
