@@ -256,17 +256,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       headerLeft,
       headerRight,
     });
-  }, [
-    diary,
-    headerLeft,
-    headerRight,
-    index,
-    isEditing,
-    isFirstEdit,
-    navigation,
-    onPressBack,
-    onPressClose,
-  ]);
+  }, [diary, headerLeft, headerRight, navigation]);
 
   const onPressUser = useCallback(
     (uid: string, userName: string): void => {
