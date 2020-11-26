@@ -1,15 +1,21 @@
 import React from 'react';
-import { StyleSheet, TextInput, StyleProp, TextStyle } from 'react-native';
-import { fontSizeM, primaryColor, borderLightColor } from '../../styles/Common';
+import {
+  StyleSheet,
+  TextInput,
+  StyleProp,
+  TextStyle,
+  TextInputProps,
+} from 'react-native';
+import { fontSizeM, primaryColor, borderLightColor } from '@/styles/Common';
 
-interface Props {
+type Props = {
   editable: boolean;
   style?: StyleProp<TextStyle>;
   value: string;
   onChangeText: (txt: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
-}
+} & TextInputProps;
 
 const styles = StyleSheet.create({
   titleInput: {
@@ -31,6 +37,7 @@ const TextInputTitle: React.FC<Props> = ({
   onFocus,
   onBlur,
   style,
+  ...props
 }: Props): JSX.Element => {
   return (
     <TextInput
@@ -49,6 +56,7 @@ const TextInputTitle: React.FC<Props> = ({
       multiline
       onChangeText={onChangeText}
       onBlur={onBlur}
+      {...props}
     />
   );
 };
