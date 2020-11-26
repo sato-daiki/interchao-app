@@ -193,7 +193,7 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
               keyboardType="default"
               spellCheck
               onChangeText={onChangeTextText}
-              numberOfLines={100}
+              numberOfLines={32}
               maxLength={maxPostText}
             />
           </View>

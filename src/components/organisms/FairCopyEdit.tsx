@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
+import { KeyboardHideButton } from '@/components/molecules';
+import { Space, TextInputText, TextInputTitle } from '@/components/atoms';
+
 import {
   borderLightColor,
   fontSizeM,
   offWhite,
   primaryColor,
-} from '../../styles/Common';
-import { KeyboardHideButton } from '../molecules';
-import { Space, TextInputText, TextInputTitle } from '../atoms';
+} from '@/styles/Common';
 
 export interface Props {
   title: string;
@@ -51,10 +53,12 @@ const FairCopyEdit: React.FC<Props> = ({
 }) => {
   // keyboardはshowはKeyboardのaddListenerで管理し、HideはTextInputのendeditingで管理
   const [isKeyboard, setIsKeyboard] = useState(false);
+
   /* キーボード閉じる */
-  const onHideKeyboard = (): void => {
+  const onHideKeyboard = useCallback((): void => {
     setIsKeyboard(false);
-  };
+  }, []);
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -76,6 +80,7 @@ const FairCopyEdit: React.FC<Props> = ({
           onChangeText={onChangeTextText}
           onFocus={onFocus}
           onBlur={onHideKeyboard}
+          numberOfLines={Platform.OS === 'web' ? 32 : undefined}
         />
         <Space size={32} />
       </KeyboardAwareScrollView>
