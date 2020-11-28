@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Localization from 'expo-localization';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import {
   Space,
@@ -31,7 +31,11 @@ import {
   getLanguageNum,
   checkSelectLanguage,
 } from '@/utils/diary';
-import { AuthStackParamList } from '@/navigations/AuthNavigator';
+import {
+  AuthNavigationProp,
+  CreateAccountStackParamList,
+} from '@/navigations/AuthNavigator';
+import { CompositeNavigationProp } from '@react-navigation/native';
 
 export interface Props {
   profile: Profile;
@@ -41,8 +45,14 @@ interface DispatchProps {
   setProfile: (profile: Profile) => void;
 }
 
-type ScreenType = StackScreenProps<AuthStackParamList, 'SelectLanguage'> &
-  Props &
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CreateAccountStackParamList, 'SelectLanguage'>,
+  AuthNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({

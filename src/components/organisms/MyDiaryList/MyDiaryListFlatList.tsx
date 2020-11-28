@@ -97,4 +97,4 @@ const MyDiaryListFlatList: React.FC<Props> = ({
   );
 };
 
-export default React.memo(MyDiaryListFlatList);
+export default MyDiaryListFlatList;

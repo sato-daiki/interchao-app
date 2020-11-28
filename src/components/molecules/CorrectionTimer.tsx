@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useFonts } from '@use-expo/font';
 import { Text, View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AppLoading } from 'expo';
-import { fontSizeM, primaryColor, softRed } from '../../styles/Common';
+import { fontSizeM, primaryColor, softRed } from '@/styles/Common';
+import { LoadingModal } from '../atoms';
 
 interface Props {
   onTimeUp: () => void;
@@ -70,7 +70,7 @@ const CorrectionTimer: React.FC<Props> = ({ onTimeUp }): JSX.Element => {
   }, [remainingSecs]);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <LoadingModal visible={fontsLoaded} />;
   }
   return (
     <View style={styles.contaienr}>
