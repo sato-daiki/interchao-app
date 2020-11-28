@@ -139,14 +139,13 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       headerLeft,
       headerRight,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localStatus.myDiaryListView, diaryTotalNum]);
+  }, [headerLeft, headerRight, navigation]);
 
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
       await getNewDiary();
-      resetBuage();
+      await resetBuage();
     };
     f();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,7 +218,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       }
       navigation.navigate('MyDiary', {
         objectID: item.objectID,
-        userName: profile.userName,
       });
     },
     [
@@ -227,7 +225,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       isLoading,
       localStatus,
       navigation,
-      profile.userName,
       setIsLoading,
       setLocalStatus,
     ]

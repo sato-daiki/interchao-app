@@ -5,10 +5,10 @@ const common = {
     path: ':userName',
   },
   ReviewList: {
-    path: 'reviews/:userName',
+    path: ':userName/reviews',
   },
   UserDiary: {
-    path: ':userName/:objectID',
+    path: ':userName/entries/:objectID',
   },
 };
 
@@ -21,53 +21,52 @@ export const getConfig = ():
   return {
     screens: {
       Auth: {
-        path: '',
         initialRouteName: 'Initialize',
         screens: {
           Initialize: {
             path: '',
           },
-          SelectLanguage: {
-            path: 'create',
-            exact: true,
+          notfound: '*',
+          CreateAccount: {
+            screens: {
+              SelectLanguage: {
+                path: 'language',
+                exact: true,
+              },
+              InputUserName: {
+                path: 'username',
+              },
+              SignIn: {
+                path: 'login',
+              },
+              SignUp: {
+                path: 'email',
+              },
+              ForegetPassword: {
+                path: 'foreget',
+              },
+            },
           },
-          InputUserName: {
-            path: 'create',
-          },
-          SignIn: {
-            path: 'login',
-          },
-          SignUp: {
-            path: 'create',
-          },
-          ForegetPassword: {
-            path: 'foreget',
-          },
-          // notfound: '*',
         },
       },
       Main: {
-        path: '/',
         initialRouteName: 'Home',
         screens: {
           Home: {
-            path: '',
             screens: {
               MyDiaryTab: {
-                path: '',
                 initialRouteName: 'MyDiaryList',
                 screens: {
                   MyDiaryList: {
                     path: 'home',
                   },
                   MyDiary: {
-                    path: 'my/:userName/:objectID',
+                    path: 'mydiaries/:objectID',
                   },
                   ...common,
                 },
               },
               TeachDiaryTab: {
-                path: '',
                 initialRouteName: 'TeachDiaryList',
                 screens: {
                   TeachDiaryList: {
@@ -77,20 +76,19 @@ export const getConfig = ():
                     path: 'search',
                   },
                   TeachDiary: {
-                    path: ':userName/:objectID',
+                    path: 'entries/:userName/:objectID',
                   },
-                  ...common,
+                  // ...common,
                 },
               },
               MyPageTab: {
-                path: '',
                 initialRouteName: 'MyPage',
                 screens: {
                   MyPage: {
                     path: 'mypage',
                   },
                   Setting: {
-                    path: 'setting',
+                    path: 'settings',
                   },
                   TutorialList: {
                     path: 'tutorials',
@@ -102,27 +100,26 @@ export const getConfig = ():
                     path: 'inquiry',
                   },
                   EditEmail: {
-                    path: 'setting/mail',
+                    path: 'settings/mail',
                   },
                   EditPassword: {
-                    path: 'setting/password',
+                    path: 'settings/password',
                   },
                   RegisterEmailPassword: {
-                    path: 'setting/register',
+                    path: 'settings/register',
                   },
                   DeleteAcount: {
-                    path: 'setting/delete',
+                    path: 'settings/delete',
                   },
                   ForegetPassword: {
-                    path: 'setting/foreget',
+                    path: 'settings/foreget',
                   },
-                  ...common,
+                  // ...common,
                 },
               },
             },
           },
           ModalEditMyDiaryList: {
-            path: '',
             screens: {
               EditMyDiaryList: {
                 path: 'home/edit',
@@ -130,18 +127,16 @@ export const getConfig = ():
             },
           },
           ModalSelectDiaryType: {
-            path: '',
             screens: {
               SelectDiaryType: {
                 path: 'entry/type',
               },
               SelectThemeSubcategory: {
-                path: 'entry/type',
+                path: 'entry/subcategory',
               },
             },
           },
           ModalThemeGuide: {
-            path: '',
             screens: {
               ThemeGuide: {
                 path: 'entry/guide',
@@ -149,7 +144,6 @@ export const getConfig = ():
             },
           },
           ModalPostDiary: {
-            path: '',
             screens: {
               PostDiary: {
                 path: 'entry/new',
@@ -157,35 +151,31 @@ export const getConfig = ():
             },
           },
           ModalPostDraftDiary: {
-            path: '',
             screens: {
               PostDraftDiary: {
-                path: 'entries/:objectID/edit',
+                path: 'mydiaries/:objectID/edit',
               },
             },
           },
           ModalEditMyProfile: {
-            path: '',
             initialRouteName: 'EditMyProfile',
             screens: {
               EditMyProfile: {
                 path: 'mypage/edit',
               },
               EditUserName: {
-                path: 'mypage/edit',
+                path: 'mypage/edit/username',
               },
             },
           },
           ModalCorrecting: {
-            path: '',
             screens: {
               Correcting: {
-                path: ':userName/:objectID/correcting',
+                path: 'entries/:userName/:objectID/correcting',
               },
             },
           },
           ModalReview: {
-            path: '',
             screens: {
               Review: {
                 path: ':userName/:objectID/:correctedNum/review',
@@ -193,7 +183,6 @@ export const getConfig = ():
             },
           },
           ModalAbout: {
-            path: '',
             screens: {
               About: {
                 path: 'about',
@@ -202,23 +191,14 @@ export const getConfig = ():
           },
         },
       },
-      // Loading: {
-      //   path: '/',
-      //   initialRouteName: '',
-      //   screens: {
-      //     Loading: {
-      //       path: '',
-      //     },
-      //   },
-      // },
-      // Public: {
-      //   path: '',
-      //   // screens: {
-      //   //   UserDiary: {
-      //   //     path: ':userName/:objectID',
-      //   //   },
-      //   // },
-      // },
+      Loading: {
+        initialRouteName: '',
+        screens: {
+          Loading: {
+            path: 'loading',
+          },
+        },
+      },
     },
   };
 };

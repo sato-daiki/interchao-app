@@ -30,6 +30,13 @@
     "android": {
       "package": "app.interchao",
       "versionCode": 1050400,
+      "permissions": [
+        "CAMERA",
+        "NOTIFICATIONS",
+        "CAMERA",
+        "CAMERA_ROLL",
+        "AUDIO_RECORDING"
+      ],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",

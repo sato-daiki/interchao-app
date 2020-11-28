@@ -1,4 +1,10 @@
-import React, { useState, useEffect, ReactNode, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  ReactNode,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -87,7 +93,7 @@ const Posted: React.FC<Props> = ({
     f();
   }, [diary]);
 
-  const onPressShare = async (): Promise<void> => {
+  const onPressShare = useCallback(async (): Promise<void> => {
     if (viewShotRef?.current?.capture) {
       const imageUrl = await viewShotRef.current.capture();
       diaryShare(profile.nativeLanguage, imageUrl);
@@ -95,7 +101,7 @@ const Posted: React.FC<Props> = ({
     }
 
     appShare(profile.nativeLanguage);
-  };
+  }, [profile.nativeLanguage]);
 
   const { isReview, isReview2, isReview3 } = diary;
 

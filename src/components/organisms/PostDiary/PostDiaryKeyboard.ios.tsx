@@ -7,9 +7,9 @@ import {
   View,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import {
+  KeyboardSpacer,
   TextInputText,
   Hoverable,
   TextInputTitle,
