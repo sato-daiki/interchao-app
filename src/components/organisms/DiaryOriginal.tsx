@@ -60,4 +60,4 @@ const DiaryOriginal: React.FC<Props> = ({ diary, profile, title, text }) => {
   );
 };
 
-export default DiaryOriginal;
+export default React.memo(DiaryOriginal);

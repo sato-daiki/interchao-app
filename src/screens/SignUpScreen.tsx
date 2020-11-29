@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { CheckTextInput } from '@/components/molecules';
 import {
@@ -16,7 +16,10 @@ import {
   HeaderText,
 } from '@/components/atoms';
 
-import { AuthStackParamList } from '@/navigations/AuthNavigator';
+import {
+  AuthNavigationProp,
+  CreateAccountStackParamList,
+} from '@/navigations/AuthNavigator';
 import firebase from '@/constants/firebase';
 import { AppReviewState, Profile, User } from '@/types';
 import {
@@ -32,6 +35,7 @@ import {
   emaillExistCheck,
 } from '@/utils/common';
 import I18n from '@/utils/I18n';
+import { CompositeNavigationProp } from '@react-navigation/native';
 
 export interface Props {
   profile: Profile;
@@ -45,8 +49,14 @@ interface DispatchProps {
   setProfile: (profile: Profile) => void;
 }
 
-type ScreenType = StackScreenProps<AuthStackParamList, 'SignUp'> &
-  Props &
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CreateAccountStackParamList, 'SignUp'>,
+  AuthNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({

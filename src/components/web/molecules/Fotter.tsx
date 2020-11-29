@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import * as Linking from 'expo-linking';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -41,12 +41,17 @@ const styles = StyleSheet.create({
 });
 
 const Fotter = (): JSX.Element => {
-  const onPressBlog = (): void => {
+  const onPressEnglishBlog = useCallback((): void => {
+    Linking.openURL('https://interchao.medium.com/');
+  }, []);
+
+  const onPressJapaneseBlog = useCallback((): void => {
     Linking.openURL('https://note.com/interchao');
-  };
-  const onPressTwitter = (): void => {
+  }, []);
+
+  const onPressTwitter = useCallback((): void => {
     Linking.openURL('https://twitter.com/interchao');
-  };
+  }, []);
 
   return (
     <View style={styles.warapper}>
@@ -54,8 +59,12 @@ const Fotter = (): JSX.Element => {
         <View style={styles.row}>
           <Text style={styles.textSmall}>©2020 Interchao</Text>
           <View style={styles.right}>
-            <Hoverable onPress={onPressBlog}>
-              <Text style={styles.textMiddle}>Blog</Text>
+            <Hoverable onPress={onPressEnglishBlog}>
+              <Text style={styles.textMiddle}>English Blog</Text>
+            </Hoverable>
+
+            <Hoverable onPress={onPressJapaneseBlog}>
+              <Text style={styles.textMiddle}>Japanese Blog</Text>
             </Hoverable>
 
             <Hoverable onPress={onPressTwitter}>

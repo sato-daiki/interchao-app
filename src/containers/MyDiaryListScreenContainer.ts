@@ -2,13 +2,18 @@ import { connect } from 'react-redux';
 import MyDiaryListScreen, {
   Props,
 } from '@/screens/MyDiaryListScreen/MyDiaryListScreen';
-import { setLocalStatus } from '@/stores/actions/localStatus';
+import {
+  setUnreadCorrectionNum,
+  setMyDiaryListView,
+} from '@/stores/actions/localStatus';
 import { setUser } from '@/stores/actions/user';
 import { State } from '@/types/state';
 import {
   setDiaries,
+  addDiaries,
   setDiaryTotalNum,
   editDiary,
+  deleteDiary,
   setFetchInfo,
 } from '@/stores/actions/diaryList';
 
@@ -17,7 +22,6 @@ const mapStateToProps = (state: State): Props => {
   return {
     localStatus: state.rootReducer.localStatus,
     user: state.rootReducer.user,
-    profile: state.rootReducer.profile,
     diaries,
     diaryTotalNum,
     fetchInfo,
@@ -25,10 +29,13 @@ const mapStateToProps = (state: State): Props => {
 };
 
 const mapDispatchToProps = {
-  setLocalStatus,
+  setUnreadCorrectionNum,
+  setMyDiaryListView,
   setUser,
   editDiary,
+  deleteDiary,
   setDiaries,
+  addDiaries,
   setDiaryTotalNum,
   setFetchInfo,
 };

@@ -83,4 +83,4 @@ const CorrectionItem = ({
   );
 };
 
-export default CorrectionItem;
+export default React.memo(CorrectionItem);

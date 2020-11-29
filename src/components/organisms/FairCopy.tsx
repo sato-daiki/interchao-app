@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, View, Text } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -78,44 +78,50 @@ const FairCopy: React.FC<Props> = ({
   const [soundPosition, setSoundPosition] = useState<number | null>(null);
   const [soundDuration, setSoundDuration] = useState<number | null>(null);
 
-  const updateScreenForSoundStatus = (status: AVPlaybackStatus): void => {
-    if (status.isLoaded) {
-      setSoundDuration(status.durationMillis ?? null);
-      setSoundPosition(status.positionMillis);
-      setShouldPlay(status.shouldPlay);
-      setIsPlaying(status.isPlaying);
-      setIsPlaybackAllowed(true);
-    } else {
-      setSoundDuration(null);
-      setSoundPosition(null);
-      setIsPlaybackAllowed(false);
-      if (status.error) {
-        console.log(`FATAL PLAYER ERROR: ${status.error}`);
+  const updateScreenForSoundStatus = useCallback(
+    (status: AVPlaybackStatus): void => {
+      if (status.isLoaded) {
+        setSoundDuration(status.durationMillis ?? null);
+        setSoundPosition(status.positionMillis);
+        setShouldPlay(status.shouldPlay);
+        setIsPlaying(status.isPlaying);
+        setIsPlaybackAllowed(true);
+      } else {
+        setSoundDuration(null);
+        setSoundPosition(null);
+        setIsPlaybackAllowed(false);
+        if (status.error) {
+          console.log(`FATAL PLAYER ERROR: ${status.error}`);
+        }
       }
-    }
-  };
+    },
+    []
+  );
 
-  const onSeekSliderValueChange = (): void => {
+  const onSeekSliderValueChange = useCallback((): void => {
     if (sound != null && !isSeeking) {
       setIsSeeking(true);
       setShouldPlayAtEndOfSeek(shouldPlay);
       sound.pauseAsync();
     }
-  };
+  }, [isSeeking, shouldPlay, sound]);
 
-  const onSeekSliderSlidingComplete = async (value: number): Promise<void> => {
-    if (sound != null) {
-      setIsSeeking(false);
-      const seekPosition = value * (soundDuration || 0);
-      if (shouldPlayAtEndOfSeek) {
-        sound.playFromPositionAsync(seekPosition);
-      } else {
-        sound.setPositionAsync(seekPosition);
+  const onSeekSliderSlidingComplete = useCallback(
+    async (value: number): Promise<void> => {
+      if (sound != null) {
+        setIsSeeking(false);
+        const seekPosition = value * (soundDuration || 0);
+        if (shouldPlayAtEndOfSeek) {
+          sound.playFromPositionAsync(seekPosition);
+        } else {
+          sound.setPositionAsync(seekPosition);
+        }
       }
-    }
-  };
+    },
+    [shouldPlayAtEndOfSeek, sound, soundDuration]
+  );
 
-  const getMMSSFromMillis = (millis: number): string => {
+  const getMMSSFromMillis = useCallback((millis: number): string => {
     const totalSeconds = millis / 1000;
     const seconds = Math.floor(totalSeconds % 60);
     const minutes = Math.floor(totalSeconds / 60);
@@ -128,25 +134,25 @@ const FairCopy: React.FC<Props> = ({
       return string;
     };
     return `${padWithZero(minutes)}:${padWithZero(seconds)}`;
-  };
+  }, []);
 
-  const getSeekSliderPosition = (): number => {
+  const getSeekSliderPosition = useCallback((): number => {
     if (sound != null && soundPosition != null && soundDuration != null) {
       return soundPosition / soundDuration;
     }
     return 0;
-  };
+  }, [sound, soundDuration, soundPosition]);
 
-  const getPlaybackTimestamp = (): string => {
+  const getPlaybackTimestamp = useCallback((): string => {
     if (sound != null && soundPosition != null && soundDuration != null) {
       return `${getMMSSFromMillis(soundPosition)} / ${getMMSSFromMillis(
         soundDuration
       )}`;
     }
     return '';
-  };
+  }, [getMMSSFromMillis, sound, soundDuration, soundPosition]);
 
-  const onPlayPausePressed = async (): Promise<void> => {
+  const onPlayPausePressed = useCallback(async (): Promise<void> => {
     if (sound !== null) {
       if (isPlaying) {
         sound.pauseAsync();
@@ -157,18 +163,18 @@ const FairCopy: React.FC<Props> = ({
         sound.playAsync();
       }
     }
-  };
+  }, [getSeekSliderPosition, isPlaying, sound]);
 
-  const onPressClose = async (): Promise<void> => {
+  const onPressClose = useCallback(async (): Promise<void> => {
     if (sound !== null) {
       sound.setOnPlaybackStatusUpdate(null);
       await sound.unloadAsync();
       // setSound(null);
     }
     setVisibleVoice(false);
-  };
+  }, [sound]);
 
-  const onPressMyVoice = async (): Promise<void> => {
+  const onPressMyVoice = useCallback(async (): Promise<void> => {
     if (!diary.voiceUrl) return;
     const res = await checkPermissions();
     if (!res) return;
@@ -179,9 +185,9 @@ const FairCopy: React.FC<Props> = ({
     await newSound.loadAsync({ uri: diary.voiceUrl });
     setSound(newSound);
     setIsInitialLoading(false);
-  };
+  }, [checkPermissions, diary.voiceUrl, updateScreenForSoundStatus]);
 
-  const onPressShare = async (): Promise<void> => {
+  const onPressShare = useCallback(async (): Promise<void> => {
     if (viewShotRef?.current?.capture) {
       const imageUrl = await viewShotRef.current.capture();
       diaryShare(profile.nativeLanguage, imageUrl);
@@ -189,22 +195,32 @@ const FairCopy: React.FC<Props> = ({
     }
 
     appShare(profile.nativeLanguage);
-  };
+  }, [profile.nativeLanguage]);
 
-  const iconHeader = (
-    <MaterialCommunityIcons size={22} color={primaryColor} name="voice" />
+  const iconHeader = useMemo(
+    () => (
+      <MaterialCommunityIcons size={22} color={primaryColor} name="voice" />
+    ),
+    []
   );
 
-  const iconMachine = (
-    <MaterialCommunityIcons size={20} color={mainColor} name="robot" />
+  const iconMachine = useMemo(
+    () => <MaterialCommunityIcons size={20} color={mainColor} name="robot" />,
+    []
   );
 
-  const iconRecord = (
-    <MaterialCommunityIcons size={24} color={mainColor} name="microphone" />
+  const iconRecord = useMemo(
+    () => (
+      <MaterialCommunityIcons size={24} color={mainColor} name="microphone" />
+    ),
+    []
   );
 
-  const iconHeadphones = (
-    <MaterialCommunityIcons size={22} color={mainColor} name="headphones" />
+  const iconHeadphones = useMemo(
+    () => (
+      <MaterialCommunityIcons size={22} color={mainColor} name="headphones" />
+    ),
+    []
   );
 
   return (
@@ -289,4 +305,4 @@ const FairCopy: React.FC<Props> = ({
   );
 };
 
-export default FairCopy;
+export default React.memo(FairCopy);

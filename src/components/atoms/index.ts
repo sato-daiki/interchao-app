@@ -9,6 +9,7 @@ export { default as DiaryStatus } from './DiaryStatus';
 export { default as FirstDiary } from './FirstDiary';
 export { default as FixText } from './FixText';
 export { default as GrayHeader } from './GrayHeader';
+export { default as KeyboardSpacer } from './KeyboardSpacer';
 export { default as HeaderButton } from './HeaderButton';
 export { default as HeaderText } from './HeaderText';
 export { default as HeaderIcon } from './HeaderIcon';
