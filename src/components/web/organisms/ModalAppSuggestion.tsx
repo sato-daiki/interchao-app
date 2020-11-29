@@ -80,4 +80,4 @@ const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
   return null;
 };
 
-export default ModalAppSuggestion;
+export default React.memo(ModalAppSuggestion);

@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
   NavigationState,
@@ -33,15 +33,18 @@ const styles = StyleSheet.create({
 });
 
 const MyDiaryTabBar: React.FC<Props> = props => {
-  const renderLabel = ({ route, color }): ReactNode => (
-    <View style={styles.labelContainer}>
-      <MaterialCommunityIcons
-        name={route.key === 'posted' ? 'file-document-outline' : 'auto-fix'}
-        color={color}
-        size={24}
-      />
-      <Text style={[styles.labelText, { color }]}>{route.title}</Text>
-    </View>
+  const renderLabel = useCallback(
+    ({ route, color }): ReactNode => (
+      <View style={styles.labelContainer}>
+        <MaterialCommunityIcons
+          name={route.key === 'posted' ? 'file-document-outline' : 'auto-fix'}
+          color={color}
+          size={24}
+        />
+        <Text style={[styles.labelText, { color }]}>{route.title}</Text>
+      </View>
+    ),
+    []
   );
 
   return (

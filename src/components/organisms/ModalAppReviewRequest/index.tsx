@@ -44,18 +44,15 @@ const ModalAppReviewRequest: React.FC<Props> = ({
   }, [onClose]);
 
   const updateUserAppReviewState = useCallback(
-    (appReviewState: AppReviewState) => {
-      const f = async (): Promise<void> => {
-        await firebase
-          .firestore()
-          .doc(`users/${profile.uid}`)
-          .update({
-            appReviewState,
-            updated: firebase.firestore.FieldValue.serverTimestamp(),
-          });
-        updateAppReviewState(appReviewState);
-      };
-      f();
+    async (appReviewState: AppReviewState) => {
+      await firebase
+        .firestore()
+        .doc(`users/${profile.uid}`)
+        .update({
+          appReviewState,
+          updated: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+      updateAppReviewState(appReviewState);
     },
     [profile.uid, updateAppReviewState]
   );
@@ -85,48 +82,42 @@ const ModalAppReviewRequest: React.FC<Props> = ({
     setComment(text);
   }, []);
 
-  const onPressCloseNever = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      if (isLoading) return;
-      try {
-        await updateUserAppReviewState('never');
-        setIsLoading(false);
-      } catch (err) {
-        alert({ err });
-        setIsLoading(false);
-      }
-      close();
-    };
-    f();
+  const onPressCloseNever = useCallback(async (): Promise<void> => {
+    if (isLoading) return;
+    try {
+      await updateUserAppReviewState('never');
+      setIsLoading(false);
+    } catch (err) {
+      alert({ err });
+      setIsLoading(false);
+    }
+    close();
   }, [close, isLoading, updateUserAppReviewState]);
 
-  const onPressPublish = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isLoading) return;
-      setIsLoading(true);
-      try {
-        await firebase
-          .firestore()
-          .collection(`inquiries`)
-          .add({
-            uid: profile.uid,
-            userName: profile.userName,
-            nativeLanguage: profile.nativeLanguage,
-            email: '',
-            message: `rating: ${rating}\ncomment: ${comment}`,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          } as Inquiry);
+  const onPressPublish = useCallback(async (): Promise<void> => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      await firebase
+        .firestore()
+        .collection(`inquiries`)
+        .add({
+          uid: profile.uid,
+          userName: profile.userName,
+          nativeLanguage: profile.nativeLanguage,
+          email: '',
+          message: `rating: ${rating}\ncomment: ${comment}`,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        } as Inquiry);
 
-        await updateUserAppReviewState('done');
+      await updateUserAppReviewState('done');
 
-        setIsLoading(false);
-        setIsPublishEnd(true);
-      } catch (err) {
-        alert({ err });
-        setIsLoading(false);
-      }
-    };
-    f();
+      setIsLoading(false);
+      setIsPublishEnd(true);
+    } catch (err) {
+      alert({ err });
+      setIsLoading(false);
+    }
   }, [
     comment,
     isLoading,

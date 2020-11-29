@@ -1,4 +1,10 @@
-import React, { useState, useEffect, ReactNode, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  ReactNode,
+  useRef,
+  useCallback,
+} from 'react';
 import {
   StyleSheet,
   View,
@@ -85,9 +91,9 @@ const Posted: React.FC<Props> = ({
       setIsCorrectionLoading(false);
     };
     f();
-  }, [diary]);
+  }, [diary.correction, diary.correction2, diary.correction3]);
 
-  const onPressShare = async (): Promise<void> => {
+  const onPressShare = useCallback(async (): Promise<void> => {
     if (viewShotRef?.current?.capture) {
       const imageUrl = await viewShotRef.current.capture();
       diaryShare(profile.nativeLanguage, imageUrl);
@@ -95,27 +101,36 @@ const Posted: React.FC<Props> = ({
     }
 
     appShare(profile.nativeLanguage);
-  };
+  }, [profile.nativeLanguage]);
 
   const { isReview, isReview2, isReview3 } = diary;
 
-  const renderMyDiaryCorrection = (
-    correctedNum: number,
-    prmCorrection: Correction,
-    prmIsReview: boolean | undefined
-  ): ReactNode => {
-    return (
-      <MyDiaryCorrection
-        isReview={prmIsReview}
-        isEditing={isEditing}
-        nativeLanguage={profile.nativeLanguage}
-        textLanguage={profile.learnLanguage}
-        correction={prmCorrection}
-        onPressUser={onPressUser}
-        onPressReview={(): void => onPressReview(correctedNum)}
-      />
-    );
-  };
+  const renderMyDiaryCorrection = useCallback(
+    (
+      correctedNum: number,
+      prmCorrection: Correction,
+      prmIsReview: boolean | undefined
+    ): ReactNode => {
+      return (
+        <MyDiaryCorrection
+          isReview={prmIsReview}
+          isEditing={isEditing}
+          nativeLanguage={profile.nativeLanguage}
+          textLanguage={profile.learnLanguage}
+          correction={prmCorrection}
+          onPressUser={onPressUser}
+          onPressReview={(): void => onPressReview(correctedNum)}
+        />
+      );
+    },
+    [
+      isEditing,
+      onPressReview,
+      onPressUser,
+      profile.learnLanguage,
+      profile.nativeLanguage,
+    ]
+  );
 
   return (
     <View style={styles.container}>

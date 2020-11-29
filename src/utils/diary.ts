@@ -54,7 +54,7 @@ export const getAlgoliaDate = (timestamp: any): string => {
   }
   // eslint-disable-next-line no-underscore-dangle
   if (!timestamp._seconds) {
-    return moment.unix(timestamp.seconds).format('Y-M-D HH:mm');
+    return moment(timestamp).format('Y-M-D');
   }
   // eslint-disable-next-line no-underscore-dangle
   return moment.unix(timestamp._seconds).format('Y-M-D H:m');

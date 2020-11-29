@@ -41,4 +41,4 @@ const Hoverable: React.FC<Props> = ({
   );
 };
 
-export default Hoverable;
+export default React.memo(Hoverable);
