@@ -55,17 +55,17 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const InitializeNativeScreen: React.FC<ScreenType> = ({ navigation }) => {
+const InitializeScreen: React.FC<ScreenType> = ({ navigation }) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);
 
   const onPressSignIn = useCallback((): void => {
-    navigation.navigate('SignIn');
+    navigation.navigate('CreateAccount', { screen: 'SignIn' });
   }, [navigation]);
 
   const onPressSignUp = useCallback((): void => {
-    navigation.navigate('SelectLanguage');
+    navigation.navigate('CreateAccount', { screen: 'SelectLanguage' });
   }, [navigation]);
 
   return (
@@ -91,4 +91,4 @@ const InitializeNativeScreen: React.FC<ScreenType> = ({ navigation }) => {
   );
 };
 
-export default InitializeNativeScreen;
+export default InitializeScreen;

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Space, SubmitButton } from '@/components/atoms';
 import { CheckTextInput } from '@/components/molecules';
@@ -19,7 +19,11 @@ import {
 } from '@/utils/profile';
 import { track, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
-import { AuthStackParamList } from '@/navigations/AuthNavigator';
+import {
+  AuthNavigationProp,
+  CreateAccountStackParamList,
+} from '@/navigations/AuthNavigator';
+import { CompositeNavigationProp } from '@react-navigation/native';
 
 export interface Props {
   profile: Profile;
@@ -29,8 +33,14 @@ interface DispatchProps {
   setProfile: (profile: Profile) => void;
 }
 
-type ScreenType = StackScreenProps<AuthStackParamList, 'InputUserName'> &
-  Props &
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CreateAccountStackParamList, 'InputUserName'>,
+  AuthNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NavigationProp;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({

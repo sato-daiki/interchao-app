@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { LocalStatus } from '../../types/localStatus';
+import { LocalStatus, MyDiaryListView } from '../../types/localStatus';
 import { Types } from '../types';
 
 export interface SetLocalStatusAction extends Action {
@@ -12,6 +12,30 @@ export const setLocalStatus = (
 ): SetLocalStatusAction => ({
   type: Types.SET_LOCAL_STATUS,
   localStatus,
+});
+
+export interface SetUnreadCorrectionNumAction extends Action {
+  type: Types.SET_UNREAD_CORRECTION_NUM;
+  unreadCorrectionNum: number;
+}
+
+export const setUnreadCorrectionNum = (
+  unreadCorrectionNum: number
+): SetUnreadCorrectionNumAction => ({
+  type: Types.SET_UNREAD_CORRECTION_NUM,
+  unreadCorrectionNum,
+});
+
+export interface SetMyDiaryListViewAction extends Action {
+  type: Types.SET_MY_DIARY_LIST_VIEW;
+  myDiaryListView: MyDiaryListView;
+}
+
+export const setMyDiaryListView = (
+  myDiaryListView: MyDiaryListView
+): SetMyDiaryListViewAction => ({
+  type: Types.SET_MY_DIARY_LIST_VIEW,
+  myDiaryListView,
 });
 
 export interface RestoreUidAction extends Action {

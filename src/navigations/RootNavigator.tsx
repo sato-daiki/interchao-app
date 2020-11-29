@@ -78,9 +78,6 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
-        cardStyle: {
-          backgroundColor: '#FFFFFF',
-        },
       }}
     >
       {renderScreen()}

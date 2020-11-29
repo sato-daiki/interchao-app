@@ -1,23 +1,20 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import Lp from '../components/organisms/Lp';
-import HtmlHeader from '../components/web/organisms/HtmlHeader';
-import { AuthStackParamList } from '../navigations/AuthNavigator';
+import Lp from '@/components/organisms/Lp';
+import HtmlHeader from '@/components/web/organisms/HtmlHeader';
+import { AuthStackParamList } from '@/navigations/AuthNavigator';
 
-type InitializeWebNavigationProp = StackNavigationProp<
-  AuthStackParamList,
-  'Initialize'
->;
+type NavigationProp = StackNavigationProp<AuthStackParamList, 'Initialize'>;
 
 type InitializeWebRouteProp = RouteProp<AuthStackParamList, 'Initialize'>;
 
 type ScreenType = {
-  navigation: InitializeWebNavigationProp;
+  navigation: NavigationProp;
   route: InitializeWebRouteProp;
 };
 
-const InitializeWebScreen: React.FC<ScreenType> = ({ navigation, route }) => {
+const InitializeScreen: React.FC<ScreenType> = ({ navigation, route }) => {
   const options =
     !route.params || !route.params.lang
       ? undefined
@@ -33,14 +30,14 @@ const InitializeWebScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           navigation.navigate('Initialize');
         }}
         onPressStart={(): void => {
-          navigation.navigate('SelectLanguage');
+          navigation.navigate('CreateAccount', { screen: 'SelectLanguage' });
         }}
         onPressLogin={(): void => {
-          navigation.navigate('SignIn');
+          navigation.navigate('CreateAccount', { screen: 'SignIn' });
         }}
       />
     </>
   );
 };
 
-export default InitializeWebScreen;
+export default InitializeScreen;

@@ -27,7 +27,7 @@ export type MyDiaryTabNavigationProp = CompositeNavigationProp<
 
 export type MyDiaryTabStackParamList = {
   MyDiaryList: undefined;
-  MyDiary: { objectID: string; userName: string };
+  MyDiary: { objectID: string };
   RecommendedMethod: { url: string };
 } & CommonStackParamList;
 

@@ -24,4 +24,4 @@ const MyDiaryMenu = ({ onPressDeleteMenu }: Props): JSX.Element => {
   );
 };
 
-export default MyDiaryMenu;
+export default React.memo(MyDiaryMenu);
