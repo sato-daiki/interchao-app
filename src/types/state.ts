@@ -11,6 +11,7 @@ import { SetUserAction } from '../stores/actions/user';
 import { SetProfileAction } from '../stores/actions/profile';
 import {
   SetDiariesAction,
+  AddDiariesAction,
   SetDiaryTotalNumAction,
   SetFetchInfoAction,
   AddDiaryAction,
@@ -23,6 +24,8 @@ import {
 } from '../stores/actions/teachDiaryList';
 import {
   SetLocalStatusAction,
+  SetUnreadCorrectionNumAction,
+  SetMyDiaryListViewAction,
   RestoreUidAction,
   SignInAction,
   SignOutAction,
@@ -40,6 +43,8 @@ export interface State {
 
 export type Actions =
   | SetLocalStatusAction
+  | SetUnreadCorrectionNumAction
+  | SetMyDiaryListViewAction
   | RestoreUidAction
   | SignInAction
   | SignOutAction
@@ -47,6 +52,7 @@ export type Actions =
   | SetProfileAction
   | SetFetchInfoAction
   | SetDiariesAction
+  | AddDiariesAction
   | SetDiaryTotalNumAction
   | AddDiaryAction
   | EditDiaryAction

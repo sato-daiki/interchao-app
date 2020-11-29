@@ -57,7 +57,7 @@
     "@types/rn-swipeable-panel": "^1.2.1",
     "@unimodules/core": "~5.5.1",
     "@use-expo/font": "^2.0.0",
-    "@welldone-software/why-did-you-render": "^5.0.0-rc.1",
+    "@welldone-software/why-did-you-render": "^6.0.3",
     "add": "^2.0.6",
     "algoliasearch": "^4.0.3",
     "axios": "^0.19.2",

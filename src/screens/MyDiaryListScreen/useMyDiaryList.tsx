@@ -12,23 +12,23 @@ const HIT_PER_PAGE_CALENDAR = 20;
 interface Props {
   uid: string;
   fetchInfo: FetchInfoState;
-  diaries: Diary[];
   localStatus: LocalStatus;
   setDiaries: (diaries: Diary[]) => void;
+  addDiaries: (diaries: Diary[]) => void;
   setFetchInfo: (fetchInfo: FetchInfoState) => void;
   setDiaryTotalNum: (diaryTotalNum: number) => void;
-  setLocalStatus: (localStatus: LocalStatus) => void;
+  setUnreadCorrectionNum: (unreadCorrectionNum: number) => void;
 }
 
 export const useMyDiaryList = ({
   uid,
   fetchInfo,
-  diaries,
   localStatus,
   setFetchInfo,
   setDiaries,
+  addDiaries,
   setDiaryTotalNum,
-  setLocalStatus,
+  setUnreadCorrectionNum,
 }: Props) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -38,12 +38,9 @@ export const useMyDiaryList = ({
     const newUnreadCorrectionNum = await getUnreadCorrectionNum(uid);
     if (newUnreadCorrectionNum !== null) {
       Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
-      setLocalStatus({
-        ...localStatus,
-        unreadCorrectionNum: newUnreadCorrectionNum,
-      });
+      setUnreadCorrectionNum(newUnreadCorrectionNum);
     }
-  }, [localStatus, setLocalStatus, uid]);
+  }, [setUnreadCorrectionNum, uid]);
 
   const loadNextPage = useCallback(async (): Promise<void> => {
     console.log('loadNextPage');
@@ -77,7 +74,7 @@ export const useMyDiaryList = ({
           });
         } else {
           const newDiaries = hits as Diary[];
-          setDiaries([...diaries, ...newDiaries]);
+          addDiaries(newDiaries);
           setFetchInfo({
             ...fetchInfo,
             page: nextPage,
@@ -92,14 +89,7 @@ export const useMyDiaryList = ({
         alert({ err });
       }
     }
-  }, [
-    diaries,
-    fetchInfo,
-    localStatus.myDiaryListView,
-    setDiaries,
-    setFetchInfo,
-    uid,
-  ]);
+  }, [addDiaries, fetchInfo, localStatus.myDiaryListView, setFetchInfo, uid]);
 
   const getNewDiary = useCallback(async (): Promise<void> => {
     console.log('getNewDiary');
@@ -137,7 +127,13 @@ export const useMyDiaryList = ({
       setRefreshing(false);
       alert({ err });
     }
-  }, [localStatus, setDiaries, setDiaryTotalNum, setFetchInfo, uid]);
+  }, [
+    localStatus.myDiaryListView,
+    setDiaries,
+    setDiaryTotalNum,
+    setFetchInfo,
+    uid,
+  ]);
 
   useEffect(() => {
     console.log('useEffect');

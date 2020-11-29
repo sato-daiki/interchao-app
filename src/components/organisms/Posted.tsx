@@ -91,7 +91,7 @@ const Posted: React.FC<Props> = ({
       setIsCorrectionLoading(false);
     };
     f();
-  }, [diary]);
+  }, [diary.correction, diary.correction2, diary.correction3]);
 
   const onPressShare = useCallback(async (): Promise<void> => {
     if (viewShotRef?.current?.capture) {
@@ -105,23 +105,32 @@ const Posted: React.FC<Props> = ({
 
   const { isReview, isReview2, isReview3 } = diary;
 
-  const renderMyDiaryCorrection = (
-    correctedNum: number,
-    prmCorrection: Correction,
-    prmIsReview: boolean | undefined
-  ): ReactNode => {
-    return (
-      <MyDiaryCorrection
-        isReview={prmIsReview}
-        isEditing={isEditing}
-        nativeLanguage={profile.nativeLanguage}
-        textLanguage={profile.learnLanguage}
-        correction={prmCorrection}
-        onPressUser={onPressUser}
-        onPressReview={(): void => onPressReview(correctedNum)}
-      />
-    );
-  };
+  const renderMyDiaryCorrection = useCallback(
+    (
+      correctedNum: number,
+      prmCorrection: Correction,
+      prmIsReview: boolean | undefined
+    ): ReactNode => {
+      return (
+        <MyDiaryCorrection
+          isReview={prmIsReview}
+          isEditing={isEditing}
+          nativeLanguage={profile.nativeLanguage}
+          textLanguage={profile.learnLanguage}
+          correction={prmCorrection}
+          onPressUser={onPressUser}
+          onPressReview={(): void => onPressReview(correctedNum)}
+        />
+      );
+    },
+    [
+      isEditing,
+      onPressReview,
+      onPressUser,
+      profile.learnLanguage,
+      profile.nativeLanguage,
+    ]
+  );
 
   return (
     <View style={styles.container}>

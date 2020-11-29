@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -9,7 +9,7 @@ import MyDiaryListFlatList from '@/components/organisms/MyDiaryList/MyDiaryListF
 import { HeaderIcon, HeaderText, LoadingModal } from '@/components/atoms';
 import FirstPageComponents from '@/components/organisms/FirstPageComponents';
 import { updateUnread } from '@/utils/diary';
-import { LocalStatus } from '@/types/localStatus';
+import { LocalStatus, MyDiaryListView } from '@/types/localStatus';
 import I18n from '@/utils/I18n';
 import firebase from '@/constants/firebase';
 import {
@@ -18,14 +18,13 @@ import {
 } from '@/navigations/MyDiaryTabNavigator';
 import { commonAlert } from '@/utils/locales/alert';
 import MyDiaryListCalendar from '@/components/organisms/MyDiaryList/MyDiaryListCalendar';
-import { User, Diary, Profile } from '@/types';
+import { User, Diary } from '@/types';
 import { FetchInfoState } from '@/stores/reducers/diaryList';
 import { useFirstScreen } from './useFirstScreen';
 import { useMyDiaryList } from './useMyDiaryList';
 
 export interface Props {
   user: User;
-  profile: Profile;
   diaries: Diary[];
   fetchInfo: FetchInfoState;
   diaryTotalNum: number;
@@ -34,9 +33,12 @@ export interface Props {
 
 interface DispatchProps {
   editDiary: (objectID: string, diary: Diary) => void;
+  deleteDiary: (objectID: string) => void;
   setUser: (user: User) => void;
   setDiaries: (diaries: Diary[]) => void;
-  setLocalStatus: (localStatus: LocalStatus) => void;
+  addDiaries: (diaries: Diary[]) => void;
+  setUnreadCorrectionNum: (unreadCorrectionNum: number) => void;
+  setMyDiaryListView: (myDiaryListView: MyDiaryListView) => void;
   setFetchInfo: (fetchInfo: FetchInfoState) => void;
   setDiaryTotalNum: (diaryTotalNum: number) => void;
 }
@@ -63,17 +65,19 @@ const styles = StyleSheet.create({
  */
 const MyDiaryListScreen: React.FC<ScreenType> = ({
   user,
-  profile,
   diaries,
   fetchInfo,
   diaryTotalNum,
   localStatus,
+  deleteDiary,
   editDiary,
   setUser,
   setDiaries,
+  addDiaries,
   setDiaryTotalNum,
   setFetchInfo,
-  setLocalStatus,
+  setUnreadCorrectionNum,
+  setMyDiaryListView,
   navigation,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -89,12 +93,12 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   } = useMyDiaryList({
     uid: user.uid,
     fetchInfo,
-    diaries,
     localStatus,
     setFetchInfo,
     setDiaries,
+    addDiaries,
     setDiaryTotalNum,
-    setLocalStatus,
+    setUnreadCorrectionNum,
   });
 
   const onPressEdit = useCallback(() => {
@@ -102,14 +106,12 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
   }, [navigation]);
 
   const onPressRight = useCallback(() => {
-    setLocalStatus({
-      ...localStatus,
-      myDiaryListView:
-        !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
-          ? 'calendar'
-          : 'list',
-    });
-  }, [localStatus, setLocalStatus]);
+    setMyDiaryListView(
+      !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
+        ? 'calendar'
+        : 'list'
+    );
+  }, [localStatus.myDiaryListView, setMyDiaryListView]);
 
   const headerLeft = useCallback(() => {
     if (diaryTotalNum > 0) {
@@ -133,7 +135,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     [localStatus.myDiaryListView, onPressRight]
   );
 
-  // // 第二引数をなしにするのがポイント
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft,
@@ -155,7 +156,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     setRefreshing(true);
     await getNewDiary();
     setRefreshing(false);
-    resetBuage();
+    await resetBuage();
   }, [getNewDiary, resetBuage, setRefreshing]);
 
   useFirstScreen({
@@ -188,10 +189,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
           const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
           // アプリの通知数を設定
           Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
-          setLocalStatus({
-            ...localStatus,
-            unreadCorrectionNum: newUnreadCorrectionNum,
-          });
+          setUnreadCorrectionNum(newUnreadCorrectionNum);
         }
 
         const data = {
@@ -223,10 +221,9 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     [
       editDiary,
       isLoading,
-      localStatus,
+      localStatus.unreadCorrectionNum,
       navigation,
-      setIsLoading,
-      setLocalStatus,
+      setUnreadCorrectionNum,
     ]
   );
 
@@ -248,7 +245,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         .doc(item.objectID)
         .delete();
 
-      setDiaries(diaries.filter(c => c.objectID !== item.objectID));
+      deleteDiary(item.objectID);
       setDiaryTotalNum(diaryTotalNum - 1);
 
       if (elRefs.current[index]) {
@@ -256,7 +253,7 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
       }
       setIsLoading(false);
     },
-    [diaries, diaryTotalNum, setDiaries, setDiaryTotalNum, setIsLoading]
+    [deleteDiary, diaryTotalNum, setDiaryTotalNum]
   );
 
   const handlePressDelete = useCallback(
