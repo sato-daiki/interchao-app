@@ -25,9 +25,11 @@ import Sentry from '@/constants/Sentry';
 import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
 import { getConfig } from '@/navigations/root';
 
-// Ignore warnings of firebase
-LogBox.ignoreLogs(['Setting a timer']);
-LogBox.ignoreLogs(['Remote debugger']);
+if (Platform.OS !== 'web') {
+  // Ignore warnings of firebase
+  LogBox.ignoreLogs(['Setting a timer']);
+  LogBox.ignoreLogs(['Remote debugger']);
+}
 
 const { store, persistor } = configureStore();
 
