@@ -177,15 +177,39 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     return <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
   }, [onRefresh, refreshing]);
 
+  const renderTargetDayDiaries = useMemo(() => {
+    return targetDayDiaries.map((item, index) => (
+      <MyDiaryListItem
+        key={item.objectID}
+        index={index}
+        item={item}
+        elRefs={elRefs}
+        onPressUser={onPressUser}
+        handlePressItem={handlePressItem}
+        handlePressDelete={handlePressDelete}
+      />
+    ));
+  }, [
+    elRefs,
+    handlePressDelete,
+    handlePressItem,
+    onPressUser,
+    targetDayDiaries,
+  ]);
+
   return (
     <ScrollView style={styles.container} refreshControl={refreshControl}>
       <View style={styles.statusContainer}>
-        {status.map(s => (
-          <View key={s.id} style={styles.row}>
-            <View style={[styles.dot, { backgroundColor: s.color }]} />
-            <Text style={styles.statusText}>{s.text}</Text>
-          </View>
-        ))}
+        {useMemo(
+          () =>
+            status.map(s => (
+              <View key={s.id} style={styles.row}>
+                <View style={[styles.dot, { backgroundColor: s.color }]} />
+                <Text style={styles.statusText}>{s.text}</Text>
+              </View>
+            )),
+          []
+        )}
       </View>
       <Calendar
         markedDates={markedDates}
@@ -196,17 +220,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         theme={custumTheme}
       />
       {targetDayDiaries.length > 0 ? (
-        targetDayDiaries.map((item, index) => (
-          <MyDiaryListItem
-            key={item.objectID}
-            index={index}
-            item={item}
-            elRefs={elRefs}
-            onPressUser={onPressUser}
-            handlePressItem={handlePressItem}
-            handlePressDelete={handlePressDelete}
-          />
-        ))
+        renderTargetDayDiaries
       ) : (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>
@@ -218,4 +232,4 @@ const MyDiaryListCalendar: React.FC<Props> = ({
   );
 };
 
-export default MyDiaryListCalendar;
+export default React.memo(MyDiaryListCalendar);

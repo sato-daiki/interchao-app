@@ -92,4 +92,4 @@ const FairCopyEdit: React.FC<Props> = ({
   );
 };
 
-export default FairCopyEdit;
+export default React.memo(FairCopyEdit);

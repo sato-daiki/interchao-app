@@ -48,4 +48,4 @@ const ModalStillCorrecting: React.FC<Props> = ({
   );
 };
 
-export default ModalStillCorrecting;
+export default React.memo(ModalStillCorrecting);

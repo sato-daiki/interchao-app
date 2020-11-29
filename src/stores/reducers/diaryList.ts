@@ -72,6 +72,11 @@ const diaryList = (state = initialState, action: Actions): DiaryListState => {
         ...state,
         diaries: action.diaries,
       };
+    case Types.ADD_DIARIES:
+      return {
+        ...state,
+        diaries: [...state.diaries, ...action.diaries],
+      };
     case Types.SET_DIARY_TOTAL_NUM:
       return {
         ...state,

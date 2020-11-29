@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import whyDidYouRender from '@welldone-software/why-did-you-render';
 
-import { YellowBox, StatusBar, Platform } from 'react-native';
+import { LogBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
 import { Provider } from 'react-redux';
@@ -26,8 +26,8 @@ import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
 import { getConfig } from '@/navigations/root';
 
 // Ignore warnings of firebase
-YellowBox.ignoreWarnings(['Setting a timer']);
-YellowBox.ignoreWarnings(['Remote debugger']);
+LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreLogs(['Remote debugger']);
 
 const { store, persistor } = configureStore();
 
@@ -54,9 +54,9 @@ const App = (): JSX.Element => {
   const navigationRef = React.useRef<NavigationContainerRef | null>(null);
 
   if (__DEV__) {
-    // whyDidYouRender(React, {
-    //   trackAllPureComponents: true,
-    // });
+    whyDidYouRender(React, {
+      trackAllPureComponents: true,
+    });
   }
 
   const checkUpdate = async (): Promise<void> => {

@@ -3,32 +3,45 @@ import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
-import { Platform } from 'react-native';
+
 /* screens */
-import InitializeWebScreen from '../screens/InitializeWebScreen';
-import InitializeNativeScreen from '../screens/InitializeNativeScreen';
-import SignUpScreenContainer from '../containers/SignUpScreenContainer';
-import SignInScreen from '../screens/SignInScreen';
-import SelectLanguageScreenContainer from '../containers/SelectLanguageScreenContainer';
-import InputUserNameScreenContainer from '../containers/InputUserNameScreenContainer';
-import ForegetPasswordScreen from '../screens/ForegetPasswordScreen';
+import SelectLanguageScreenContainer from '@/containers/SelectLanguageScreenContainer';
+import InputUserNameScreenContainer from '@/containers/InputUserNameScreenContainer';
+import SignUpScreenContainer from '@/containers/SignUpScreenContainer';
+// @ts-ignore
+import InitializeScreen from '@/screens/InitializeScreen/InitializeScreen';
+import SignInScreen from '@/screens/SignInScreen';
+import ForegetPasswordScreen from '@/screens/ForegetPasswordScreen';
+import NotFoundScreen from '@/screens/NotFoundScreen';
+import EditCountryScreen from '@/screens/EditCountryScreen';
+
 import {
   DefaultNavigationOptions,
   DefaultAuthLayoutOptions,
-} from '../constants/NavigationOptions';
-import I18n from '../utils/I18n';
-import NotFoundScreen from '../screens/NotFoundScreen';
+} from '@/constants/NavigationOptions';
+import I18n from '@/utils/I18n';
+import { CountryCode } from '@/types';
+import { maxMain } from '@/styles/Common';
+import { CompositeNavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from './RootNavigator';
-import EditCountryScreen from '../screens/EditCountryScreen';
-import { CountryCode } from '../types';
 
 export type AuthNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Auth'
 >;
 
+export type CreateAccountStackNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<RootStackParamList, 'Auth'>,
+  AuthNavigationProp
+>;
+
 export type AuthStackParamList = {
   Initialize: { lang?: string } | undefined;
+  CreateAccount: { screen: keyof CreateAccountStackParamList };
+  notfound: undefined;
+};
+
+export type CreateAccountStackParamList = {
   SelectLanguage: undefined;
   EditCountry: {
     nationalityCode: CountryCode | undefined;
@@ -38,7 +51,67 @@ export type AuthStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ForegetPassword: undefined;
-  notfound: undefined;
+};
+
+const CreateAccountStack = createStackNavigator<CreateAccountStackParamList>();
+export const CreateAccountNavigator = (): JSX.Element => {
+  return (
+    <CreateAccountStack.Navigator
+      initialRouteName="SelectLanguage"
+      screenOptions={{
+        ...DefaultNavigationOptions,
+      }}
+    >
+      <CreateAccountStack.Screen
+        name="SelectLanguage"
+        component={SelectLanguageScreenContainer}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('selectLanguage.headerTitle'),
+        }}
+      />
+      <CreateAccountStack.Screen
+        name="EditCountry"
+        component={EditCountryScreen}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('profileNationality.nationality'),
+        }}
+      />
+      <CreateAccountStack.Screen
+        name="InputUserName"
+        component={InputUserNameScreenContainer}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('inputUserName.headerTitle'),
+        }}
+      />
+      <CreateAccountStack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('signIn.headerTitle'),
+        }}
+      />
+      <CreateAccountStack.Screen
+        name="SignUp"
+        component={SignUpScreenContainer}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('signUp.headerTitle'),
+        }}
+      />
+      <CreateAccountStack.Screen
+        name="ForegetPassword"
+        component={ForegetPasswordScreen}
+        options={{
+          ...DefaultAuthLayoutOptions,
+          title: I18n.t('foregetPassword.headerTitle'),
+        }}
+      />
+    </CreateAccountStack.Navigator>
+  );
 };
 
 const Stack = createStackNavigator<AuthStackParamList>();
@@ -47,65 +120,24 @@ export const AuthNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator
       initialRouteName="Initialize"
+      headerMode="none"
+      mode="modal"
       screenOptions={{
-        ...DefaultNavigationOptions,
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+          marginHorizontal: 'auto',
+          flex: 1,
+          width: '100%',
+          maxWidth: maxMain,
+        },
       }}
     >
       <Stack.Screen
         name="Initialize"
-        component={
-          Platform.OS === 'web' ? InitializeWebScreen : InitializeNativeScreen
-        }
+        component={InitializeScreen}
         options={{ headerShown: false, title: 'Interchao' }}
       />
-      <Stack.Screen
-        name="SelectLanguage"
-        component={SelectLanguageScreenContainer}
-        options={{
-          ...DefaultAuthLayoutOptions,
-          title: I18n.t('selectLanguage.headerTitle'),
-        }}
-      />
-      <Stack.Screen
-        name="EditCountry"
-        component={EditCountryScreen}
-        options={{
-          ...DefaultAuthLayoutOptions,
-          title: I18n.t('profileNationality.nationality'),
-        }}
-      />
-      <Stack.Screen
-        name="InputUserName"
-        component={InputUserNameScreenContainer}
-        options={{
-          ...DefaultAuthLayoutOptions,
-          title: I18n.t('inputUserName.headerTitle'),
-        }}
-      />
-      <Stack.Screen
-        name="SignIn"
-        component={SignInScreen}
-        options={{
-          ...DefaultAuthLayoutOptions,
-          title: I18n.t('signIn.headerTitle'),
-        }}
-      />
-      <Stack.Screen
-        name="SignUp"
-        component={SignUpScreenContainer}
-        options={{
-          ...DefaultAuthLayoutOptions,
-          title: I18n.t('signUp.headerTitle'),
-        }}
-      />
-      <Stack.Screen
-        name="ForegetPassword"
-        component={ForegetPasswordScreen}
-        options={{
-          ...DefaultAuthLayoutOptions,
-          title: I18n.t('foregetPassword.headerTitle'),
-        }}
-      />
+      <Stack.Screen name="CreateAccount" component={CreateAccountNavigator} />
       <Stack.Screen
         name="notfound"
         component={NotFoundScreen}

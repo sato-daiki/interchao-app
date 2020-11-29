@@ -53,4 +53,4 @@ const FirstPageComponents = ({ user, setUser }: Props): JSX.Element => {
   );
 };
 
-export default FirstPageComponents;
+export default React.memo(FirstPageComponents);
