@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useEffect, ReactNode } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo,
+} from 'react';
 import { StyleSheet, View, Dimensions, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
@@ -35,6 +41,7 @@ import {
 import I18n from '@/utils/I18n';
 
 export interface Props {
+  error: boolean;
   diary?: Diary;
   profile: Profile;
   user: User;
@@ -72,6 +79,7 @@ const initialLayout = { width: Dimensions.get('window').width };
  */
 const MyDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  error,
   profile,
   diary,
   user,
@@ -82,7 +90,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   setLocalStatus,
 }) => {
   const initFairCopyTitle = useCallback((): string => {
-    if (!diary) return '';
+    if (diary === undefined) return '';
     return diary.fairCopyTitle || diary.title;
   }, [diary]);
 
@@ -113,6 +121,15 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     minDeviceWidth: 1224,
   });
 
+  const showModalDelete = useCallback((i: number) => {
+    switch (i) {
+      case 0:
+        setIsModalDelete(true);
+        break;
+      default:
+    }
+  }, []);
+
   const onPressMore = useCallback(() => {
     const options = [I18n.t('myDiary.menuDelete'), I18n.t('common.cancel')];
     showActionSheetWithOptions(
@@ -121,16 +138,9 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         destructiveButtonIndex: 0,
         cancelButtonIndex: 1,
       },
-      i => {
-        switch (i) {
-          case 0:
-            setIsModalDelete(true);
-            break;
-          default:
-        }
-      }
+      showModalDelete
     );
-  }, [showActionSheetWithOptions]);
+  }, [showActionSheetWithOptions, showModalDelete]);
 
   const onPressSubmit = useCallback(async (): Promise<void> => {
     if (!diary || !diary.objectID || isLoading) return;
@@ -259,7 +269,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   }, [diary, headerLeft, headerRight, navigation]);
 
   const onPressUser = useCallback(
-    (uid: string, userName: string): void => {
+    (_uid: string, userName: string): void => {
       navigation.navigate('UserProfile', {
         userName,
       });
@@ -401,6 +411,10 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     ]
   );
 
+  const renderTabBar = useCallback(props => {
+    return <MyDiaryTabBar {...props} />;
+  }, []);
+
   if (!diary) {
     return null;
   }
@@ -440,7 +454,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         onPressClose={onPressCloseModalAlertAudio}
       />
       <TabView
-        renderTabBar={(props): ReactNode => <MyDiaryTabBar {...props} />}
+        renderTabBar={renderTabBar}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={onIndexChange}

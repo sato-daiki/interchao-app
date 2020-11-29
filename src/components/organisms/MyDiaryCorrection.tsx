@@ -102,4 +102,4 @@ const MyDiaryCorrection: React.FC<Props> = ({
   );
 };
 
-export default MyDiaryCorrection;
+export default React.memo(MyDiaryCorrection);

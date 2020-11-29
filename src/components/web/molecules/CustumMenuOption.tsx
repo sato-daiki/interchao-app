@@ -54,4 +54,4 @@ const CustumMenuOption = ({
   );
 };
 
-export default CustumMenuOption;
+export default React.memo(CustumMenuOption);
