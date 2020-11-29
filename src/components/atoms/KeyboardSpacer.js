@@ -1,3 +1,10 @@
+/* eslint-disable react/static-property-placement */
+// https://github.com/Andr3wHur5t/react-native-keyboard-spacer/* eslint-disable react/static-property-placement */
+// このソースを丸々コピーしてきた
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unused-state */
 /**
  * Created by andrewhurst on 10/5/15.
  */
