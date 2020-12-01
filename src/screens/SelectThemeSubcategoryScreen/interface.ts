@@ -6,6 +6,7 @@ export type CallerThemeGuide = 'PostDiary' | 'SelectThemeSubcategory';
 export interface ThemeSubcategoryInfo {
   themeCategory: ThemeCategory;
   themeSubcategory: ThemeSubcategory;
-  title: string;
+  nativeTitle: string;
+  learnTitle: string;
   source: ImageSourcePropType;
 }

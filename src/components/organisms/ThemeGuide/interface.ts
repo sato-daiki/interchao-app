@@ -33,21 +33,28 @@ export interface WordParams {
   words: Sentence[];
 }
 
+export type WordKey = 'example' | 'expression';
+
 export type StyleType = 'bold' | 'p';
 
-interface StyleText {
-  id: number;
+export const StyleType = {
+  bold: 'bold',
+  p: 'p',
+};
+
+export interface StyleText {
+  key: string;
   text: string;
-  styleType: StyleType;
+  styleType: 'bold' | 'p';
 }
 
-interface StyleSentence {
+export interface StyleSentence {
   id: number;
   learnText: StyleText[];
   nativeText: string;
 }
 
-interface Sentence {
+export interface Sentence {
   id: number;
   learnText: string;
   nativeText: string;

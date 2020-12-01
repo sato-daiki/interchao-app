@@ -24,10 +24,13 @@ import {
   subTextColor,
 } from '@/styles/Common';
 import I18n from '@/utils/I18n';
-import { ThemeSubcategory } from '@/types';
+import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
 
 interface Props {
+  themeCategory: ThemeCategory;
   themeSubcategory: ThemeSubcategory;
+  nativeLanguage: Language;
+  learnLanguage: Language;
   onPressClose: () => void;
   onPressBegin: () => void;
 }
@@ -80,17 +83,11 @@ const styles = StyleSheet.create({
   textAlignCenter: {
     textAlign: 'center',
   },
-  marginBottom4: {
-    marginBottom: 4,
-  },
-  marginBottom8: {
-    marginBottom: 8,
+  marginBottom12: {
+    marginBottom: 12,
   },
   marginLeft16: {
     marginLeft: 16,
-  },
-  subText: {
-    color: subTextColor,
   },
   subTextColor: {
     color: subTextColor,
@@ -98,11 +95,21 @@ const styles = StyleSheet.create({
 });
 
 const ThemeGuideWeb: React.FC<Props> = ({
+  themeCategory,
   themeSubcategory,
   onPressClose,
   onPressBegin,
+  learnLanguage,
+  nativeLanguage,
 }) => {
-  const entries = getEntries(themeSubcategory) || [];
+  const entries =
+    getEntries({
+      themeCategory,
+      themeSubcategory,
+      nativeLanguage,
+      learnLanguage,
+    }) || [];
+  if (!entries) return <View />;
 
   const introductionParams = entries[0].params as IntroductionParams;
   const tipParams = entries[1].params as TipParams;
@@ -144,7 +151,7 @@ const ThemeGuideWeb: React.FC<Props> = ({
           {tipParams.expressions.map(expression => (
             <Text
               key={expression.id}
-              style={[styles.text, styles.marginBottom4]}
+              style={[styles.text, styles.marginBottom12]}
             >
               {`・${expression.learnText}`}
               <Text style={[styles.subTextColor, styles.marginLeft16]}>
@@ -157,17 +164,20 @@ const ThemeGuideWeb: React.FC<Props> = ({
         <View style={styles.section}>
           <Text style={styles.title}>{I18n.t('themeGuide.example')}</Text>
           {tipParams.examples.map(example => (
-            <View key={example.id} style={styles.marginBottom8}>
-              <Text style={styles.text}>
-                ・
-                {example.learnText.map(t => (
-                  <Text key={t.id} style={[getStyle(t.styleType)]}>
-                    {`${t.text} `}
-                  </Text>
-                ))}
+            <Text key={example.id} style={[styles.text, styles.marginBottom12]}>
+              ・
+              {example.learnText.map(t => (
+                <Text
+                  key={`${example.id}-${t.key}`}
+                  style={[getStyle(t.styleType)]}
+                >
+                  {`${t.text}`}
+                </Text>
+              ))}
+              <Text style={[styles.subTextColor, styles.marginLeft16]}>
+                {` - ${example.nativeText}`}
               </Text>
-              <Text style={styles.subText}>{`（${example.nativeText}）`}</Text>
-            </View>
+            </Text>
           ))}
         </View>
 
@@ -178,7 +188,7 @@ const ThemeGuideWeb: React.FC<Props> = ({
           />
           <Text style={styles.title}>{`${wordParams.title}`}</Text>
           {wordParams.words.map(word => (
-            <Text key={word.id} style={[styles.text, styles.marginBottom4]}>
+            <Text key={word.id} style={[styles.text, styles.marginBottom12]}>
               {`・${word.learnText}`}
               <Text style={[styles.subTextColor, styles.marginLeft16]}>
                 {` - ${word.nativeText}`}

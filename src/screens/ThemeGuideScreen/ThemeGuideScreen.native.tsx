@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, StyleSheet, ListRenderItem, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import {
   ThemeGuideIntroduction,
@@ -11,28 +9,11 @@ import {
   Entry,
   ThemeGuideEnd,
 } from '@/components/organisms/ThemeGuide';
-import {
-  ModalThemeGuideStackNavigationProp,
-  ModalThemeGuideStackParamList,
-} from '@/navigations/ModalNavigator';
 
 import ThemeGuideWord from '@/components/organisms/ThemeGuide/ThemeGuideWord';
 import { mainColor, primaryColor } from '@/styles/Common';
+import { ScreenType } from './interfaces';
 
-type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ModalThemeGuideStackParamList, 'ThemeGuide'>,
-  ModalThemeGuideStackNavigationProp
->;
-
-type ThemeGuideRouteProp = RouteProp<
-  ModalThemeGuideStackParamList,
-  'ThemeGuide'
->;
-
-type ScreenType = {
-  navigation: NavigationProp;
-  route: ThemeGuideRouteProp;
-};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -42,9 +23,19 @@ const styles = StyleSheet.create({
 
 const { width } = Dimensions.get('window');
 
-const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
+const ThemeGuideScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  profile,
+}) => {
   const { themeTitle, themeCategory, themeSubcategory, caller } = route.params;
-  const entries = getEntries(themeSubcategory) || [];
+  const entries =
+    getEntries({
+      themeCategory,
+      themeSubcategory,
+      nativeLanguage: profile.nativeLanguage,
+      learnLanguage: profile.learnLanguage,
+    }) || [];
   const [activeSlide, setActiveSlide] = useState(
     caller === 'PostDiary' ? entries.length - 1 : 0
   );
@@ -78,7 +69,13 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
         case 'introduction':
           return <ThemeGuideIntroduction params={item.params} />;
         case 'tip':
-          return <ThemeGuideTip params={item.params} />;
+          return (
+            <ThemeGuideTip
+              params={item.params}
+              nativeLanguage={profile.nativeLanguage}
+              textLanguage={profile.learnLanguage}
+            />
+          );
         case 'word':
           return <ThemeGuideWord params={item.params} />;
         case 'end':
@@ -87,7 +84,7 @@ const ThemeGuideScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           return null;
       }
     },
-    [onPressEnd]
+    [onPressEnd, profile.learnLanguage, profile.nativeLanguage]
   );
 
   return (

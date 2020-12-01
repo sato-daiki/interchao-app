@@ -9,12 +9,13 @@ import {
   ModalSelectDiaryTypeStackNavigationProp,
   ModalSelectDiaryTypeStackParamList,
 } from '@/navigations/ModalNavigator';
-import { User } from '@/types';
+import { Profile, User } from '@/types';
 import { ThemeSubcategoryInfo } from './interface';
 import { first } from './config/first';
 
 export interface Props {
   user: User;
+  profile: Profile;
 }
 
 type NavigationProp = CompositeNavigationProp<
@@ -41,12 +42,14 @@ const keyExtractor = (item: ThemeSubcategoryInfo, index: number): string =>
 const SelectThemeSubcategoryScreen: React.FC<ScreenType> = ({
   navigation,
   user,
+  profile,
 }) => {
   const onPressItem = useCallback(
     (item: ThemeSubcategoryInfo) => {
       navigation.navigate('ModalThemeGuide', {
         screen: 'ThemeGuide',
         params: {
+          themeTitle: item.learnTitle,
           themeCategory: item.themeCategory,
           themeSubcategory: item.themeSubcategory,
           caller: 'SelectThemeSubcategory',
@@ -69,8 +72,6 @@ const SelectThemeSubcategoryScreen: React.FC<ScreenType> = ({
           key={item.themeSubcategory}
           themeDiary={newThemeDiary}
           item={item}
-          source={item.source}
-          title={item.title}
           onPress={onPressItem}
         />
       );
@@ -81,7 +82,10 @@ const SelectThemeSubcategoryScreen: React.FC<ScreenType> = ({
   return (
     <View style={styles.contaner}>
       <FlatList
-        data={first}
+        data={first({
+          nativeLanguage: profile.nativeLanguage,
+          learnLanguage: profile.learnLanguage,
+        })}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
       />

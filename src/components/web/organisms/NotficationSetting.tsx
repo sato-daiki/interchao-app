@@ -65,4 +65,4 @@ const NotficationSetting = ({ user, setUser }: Props): JSX.Element | null => {
   );
 };
 
-export default NotficationSetting;
+export default React.memo(NotficationSetting);

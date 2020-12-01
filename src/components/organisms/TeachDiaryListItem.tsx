@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { ProfileIcon, Hoverable } from '@/components/atoms';
+import { ProfileIcon, Hoverable, DiaryTitle } from '@/components/atoms';
 import { UserDiaryStatus } from '@/components/molecules';
 
 import {
@@ -47,12 +47,6 @@ const styles = StyleSheet.create({
   userName: {
     color: subTextColor,
     fontSize: fontSizeS,
-  },
-  title: {
-    color: primaryColor,
-    fontWeight: 'bold',
-    fontSize: fontSizeM,
-    paddingBottom: 8,
   },
   text: {
     color: primaryColor,
@@ -121,19 +115,18 @@ const TeachDiaryListItem = ({
           <UserDiaryStatus diary={item} />
         </View>
         <View style={styles.content}>
-          <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-            {themeCategory && themeSubcategory
-              ? `${I18n.t('selectDiaryType.titleTheme')} - ${title}`
-              : title}
-          </Text>
+          <DiaryTitle
+            themeCategory={themeCategory}
+            themeSubcategory={themeSubcategory}
+            title={title}
+          />
           <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
             {text}
           </Text>
           <View style={styles.footer}>
             <Text style={styles.postDay}>{postDay}</Text>
             <Text style={styles.textLength}>
-              {I18n.t('postDiaryComponent.textLength')}
-              {` ${text.length}`}
+              {`${I18n.t('postDiaryComponent.textLength')} ${text.length}`}
             </Text>
           </View>
         </View>

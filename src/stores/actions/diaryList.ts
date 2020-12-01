@@ -13,6 +13,16 @@ export const setDiaries = (diaries: Diary[]): SetDiariesAction => ({
   diaries,
 });
 
+export interface AddDiariesAction extends Action {
+  type: Types.ADD_DIARIES;
+  diaries: Diary[];
+}
+
+export const addDiaries = (diaries: Diary[]): AddDiariesAction => ({
+  type: Types.ADD_DIARIES,
+  diaries,
+});
+
 export interface SetFetchInfoAction extends Action {
   type: Types.SET_FETCH_INFO;
   fetchInfo: FetchInfoState;

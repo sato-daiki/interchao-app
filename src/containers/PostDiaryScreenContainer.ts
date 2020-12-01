@@ -3,10 +3,9 @@ import { State } from '@/types/state';
 import { setUser } from '@/stores/actions/user';
 import { addDiary } from '@/stores/actions/diaryList';
 
-import PostDiaryScreen, {
-  Props,
-  // @ts-ignore
-} from '@/screens/PostDiaryScreen/PostDiaryScreen';
+// @ts-ignore
+import PostDiaryScreen from '@/screens/PostDiaryScreen/PostDiaryScreen';
+import { Props } from '@/screens/PostDiaryScreen/interfaces';
 
 const mapStateToProps = (state: State): Props => {
   return {

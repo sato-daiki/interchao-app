@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Keyboard, View, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { mainColor } from '../../styles/Common';
-import { Hoverable } from '../atoms';
+import { Hoverable, KeyboardSpacer } from '../atoms';
 
 interface Props {
   isKeyboard: boolean;
