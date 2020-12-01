@@ -1,24 +1,35 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+import { CheckTextInput } from '@/components/molecules';
 import {
   LoadingModal,
   Space,
   SubmitButton,
   LinkText,
 } from '@/components/atoms';
-import { CheckTextInput } from '@/components/molecules';
 
 import { primaryColor, fontSizeM } from '@/styles/Common';
 import firebase from '@/constants/firebase';
 import { emailInputError, emailValidate } from '@/utils/common';
 import { track, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
-import { AuthStackParamList } from '@/navigations/AuthNavigator';
+import {
+  AuthNavigationProp,
+  CreateAccountStackParamList,
+} from '@/navigations/AuthNavigator';
+import { CompositeNavigationProp } from '@react-navigation/native';
 
-type ScreenType = StackScreenProps<AuthStackParamList, 'SignIn'>;
+type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<CreateAccountStackParamList, 'SignIn'>,
+  AuthNavigationProp
+>;
+
+type ScreenType = {
+  navigation: NavigationProp;
+};
 
 const styles = StyleSheet.create({
   container: {

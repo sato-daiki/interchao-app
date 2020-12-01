@@ -94,6 +94,7 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
   publishMessage,
   points,
   learnLanguage,
+  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
@@ -160,10 +161,13 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
           onPressNotSave={onPressNotSave}
           onPressClose={onPressCloseModalCancel}
         />
-        {themeSubcategory ? (
+        {themeCategory && themeSubcategory ? (
           <Modal visible={isModalThemeGuide} disablePadding>
             <ThemeGuideWeb
+              themeCategory={themeCategory}
               themeSubcategory={themeSubcategory}
+              learnLanguage={learnLanguage}
+              nativeLanguage={nativeLanguage}
               onPressClose={onPressCloseThemeGuide}
               onPressBegin={onPressCloseThemeGuide}
             />
@@ -187,7 +191,7 @@ const PostDiaryWeb: React.FC<PostDiaryProps> = ({
               keyboardType="default"
               spellCheck
               onChangeText={onChangeTextText}
-              numberOfLines={100}
+              numberOfLines={32}
               maxLength={maxPostText}
             />
           </View>

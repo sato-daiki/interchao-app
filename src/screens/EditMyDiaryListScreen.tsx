@@ -35,7 +35,7 @@ export interface Props {
 }
 
 interface DispatchProps {
-  setDiaries: (diaries: Diary[]) => void;
+  addDiaries: (diaries: Diary[]) => void;
   deleteDiary: (objectId: string) => void;
   setFetchInfo: (fetchInfo: FetchInfoState) => void;
 }
@@ -77,7 +77,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
   user,
   diaries,
   fetchInfo,
-  setDiaries,
+  addDiaries,
   deleteDiary,
   setFetchInfo,
   navigation,
@@ -114,7 +114,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
           });
         } else {
           const newDiaries = hits as Diary[];
-          setDiaries([...diaries, ...newDiaries]);
+          addDiaries(newDiaries);
           setFetchInfo({
             ...fetchInfo,
             page: nextPage,
@@ -129,7 +129,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
         alert({ err });
       }
     }
-  }, [diaries, fetchInfo, setDiaries, setFetchInfo, user.uid]);
+  }, [diaries, fetchInfo, setFetchInfo, user.uid]);
 
   const onPressClose = useCallback(() => {
     navigation.goBack();

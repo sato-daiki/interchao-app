@@ -10,8 +10,12 @@ interface Props {
 const styles = StyleSheet.create({
   close: {
     position: 'absolute',
-    top: 24,
+    top: 20,
     zIndex: 100,
+  },
+  heading: {
+    marginVertical: 0,
+    paddingBottom: 12,
   },
 });
 
@@ -31,8 +35,8 @@ const Header: React.FC<Props> = ({ title }) => {
         onPress={onPressClose}
       />
       <Space size={24} />
-      <Heading title={title} />
-      <Space size={24} />
+      <Heading title={title} titleStyle={styles.heading} />
+      <Space size={16} />
     </View>
   );
 };

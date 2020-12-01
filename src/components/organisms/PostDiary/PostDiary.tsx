@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -89,6 +89,7 @@ const PostDiary: React.FC<PostDiaryProps> = ({
   publishMessage,
   points,
   learnLanguage,
+  nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
   onPressCloseModalPublish,
@@ -127,7 +128,11 @@ const PostDiary: React.FC<PostDiaryProps> = ({
     if (!themeCategory || !themeSubcategory) return;
     navigation.push('ModalThemeGuide', {
       screen: 'ThemeGuide',
-      params: { themeCategory, themeSubcategory, caller: 'PostDiary' },
+      params: {
+        themeCategory,
+        themeSubcategory,
+        caller: 'PostDiary',
+      },
     });
   }, [navigation, themeCategory, themeSubcategory]);
 

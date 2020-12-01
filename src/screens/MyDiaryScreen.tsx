@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useEffect, ReactNode } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo,
+} from 'react';
 import { StyleSheet, View, Dimensions, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
@@ -11,28 +17,31 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import * as Permissions from 'expo-permissions';
 import * as Linking from 'expo-linking';
-import firebase from '../constants/firebase';
-import { AppReviewState, Diary, LocalStatus, Profile, User } from '../types';
-import { ModalConfirm } from '../components/organisms';
+
+import { ModalConfirm } from '@/components/organisms';
 import {
   LoadingModal,
   HeaderIcon,
   HeaderText,
   DefaultHeaderBack,
-} from '../components/atoms';
-import I18n from '../utils/I18n';
-import MyDiaryMenu from '../components/web/organisms/MyDiaryMenu';
+} from '@/components/atoms';
+import MyDiaryMenu from '@/components/web/organisms/MyDiaryMenu';
+import Posted from '@/components/organisms/Posted';
+import FairCopy from '@/components/organisms/FairCopy';
+import FairCopyEdit from '@/components/organisms/FairCopyEdit';
+import { MyDiaryTabBar } from '@/components/molecules';
+import ModalAppReviewRequest from '@/components/organisms/ModalAppReviewRequest';
+
+import firebase from '@/constants/firebase';
+import { AppReviewState, Diary, LocalStatus, Profile, User } from '@/types';
 import {
   MyDiaryTabNavigationProp,
   MyDiaryTabStackParamList,
-} from '../navigations/MyDiaryTabNavigator';
-import Posted from '../components/organisms/Posted';
-import FairCopy from '../components/organisms/FairCopy';
-import FairCopyEdit from '../components/organisms/FairCopyEdit';
-import { MyDiaryTabBar } from '../components/molecules';
-import ModalAppReviewRequest from '../components/organisms/ModalAppReviewRequest';
+} from '@/navigations/MyDiaryTabNavigator';
+import I18n from '@/utils/I18n';
 
 export interface Props {
+  error: boolean;
   diary?: Diary;
   profile: Profile;
   user: User;
@@ -70,6 +79,7 @@ const initialLayout = { width: Dimensions.get('window').width };
  */
 const MyDiaryScreen: React.FC<ScreenType> = ({
   navigation,
+  error,
   profile,
   diary,
   user,
@@ -79,14 +89,15 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   setUser,
   setLocalStatus,
 }) => {
-  const initFairCopyTitle = (): string => {
-    if (!diary) return '';
+  const initFairCopyTitle = useCallback((): string => {
+    if (diary === undefined) return '';
     return diary.fairCopyTitle || diary.title;
-  };
-  const initFairCopyText = (): string => {
+  }, [diary]);
+
+  const initFairCopyText = useCallback((): string => {
     if (!diary) return '';
     return diary.fairCopyText || diary.text;
-  };
+  }, [diary]);
 
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
@@ -110,6 +121,15 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     minDeviceWidth: 1224,
   });
 
+  const showModalDelete = useCallback((i: number) => {
+    switch (i) {
+      case 0:
+        setIsModalDelete(true);
+        break;
+      default:
+    }
+  }, []);
+
   const onPressMore = useCallback(() => {
     const options = [I18n.t('myDiary.menuDelete'), I18n.t('common.cancel')];
     showActionSheetWithOptions(
@@ -118,21 +138,15 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         destructiveButtonIndex: 0,
         cancelButtonIndex: 1,
       },
-      i => {
-        switch (i) {
-          case 0:
-            setIsModalDelete(true);
-            break;
-          default:
-        }
-      }
+      showModalDelete
     );
-  }, [showActionSheetWithOptions]);
+  }, [showActionSheetWithOptions, showModalDelete]);
 
-  const onPressSubmit = async (): Promise<void> => {
+  const onPressSubmit = useCallback(async (): Promise<void> => {
     if (!diary || !diary.objectID || isLoading) return;
 
     setIsLoading(true);
+
     await firebase
       .firestore()
       .doc(`diaries/${diary.objectID}`)
@@ -145,7 +159,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     editDiary(diary.objectID, { ...diary, fairCopyTitle, fairCopyText });
     setIsLoading(false);
     setIsEditing(false);
-  };
+  }, [diary, editDiary, fairCopyText, fairCopyTitle, isLoading]);
 
   const onPressDelete = useCallback(() => {
     if (!diary || !diary.objectID) return;
@@ -162,20 +176,20 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     setIsLoading(false);
   }, [deleteDiary, diary, navigation]);
 
-  const onClose = (): void => {
+  const onClose = useCallback((): void => {
     setIsEditing(false);
     setFairCopyTitle(initFairCopyTitle());
     setFairCopyText(initFairCopyText());
     setIsModalConfirmation(false);
-  };
+  }, [initFairCopyText, initFairCopyTitle]);
 
-  const onPressClose = (): void => {
+  const onPressClose = useCallback((): void => {
     if (isFirstEdit) {
       setIsModalConfirmation(true);
     } else {
       onClose();
     }
-  };
+  }, [isFirstEdit, onClose]);
 
   const updateAppReviewState = useCallback(
     (appReviewState: AppReviewState) => {
@@ -188,15 +202,23 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     setLocalStatus({ ...localStatus, isModalAppReviewRequest: false });
   }, [localStatus, setLocalStatus]);
 
-  const headerRight = (): ReactNode => {
+  const onPressBack = useCallback((): void => {
+    navigation.goBack();
+  }, [navigation]);
+
+  const onPressDeleteMenu = useCallback(() => {
+    setIsModalDelete(true);
+  }, []);
+
+  const onPressEdit = useCallback(() => {
+    setIsEditing(true);
+  }, []);
+
+  const headerRight = useCallback((): ReactNode => {
     if (!isEditing) {
       if (index === 0) {
         if (isDesktopOrLaptopDevice) {
-          return (
-            <MyDiaryMenu
-              onPressDeleteMenu={(): void => setIsModalDelete(true)}
-            />
-          );
+          return <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />;
         }
         return (
           <HeaderIcon
@@ -208,10 +230,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       }
       if (index === 1) {
         return (
-          <HeaderText
-            text={I18n.t('common.edit')}
-            onPress={(): void => setIsEditing(true)}
-          />
+          <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
         );
       }
       return <View />;
@@ -220,44 +239,63 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       return null;
     }
     return <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />;
-  };
+  }, [
+    index,
+    isDesktopOrLaptopDevice,
+    isEditing,
+    isFirstEdit,
+    onPressDeleteMenu,
+    onPressEdit,
+    onPressMore,
+    onPressSubmit,
+  ]);
+
+  const headerLeft = useCallback(
+    () =>
+      !isEditing ? (
+        <DefaultHeaderBack onPress={onPressBack} />
+      ) : (
+        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
+      ),
+    [isEditing, onPressBack, onPressClose]
+  );
 
   useEffect(() => {
     navigation.setOptions({
       title: diary ? diary.title : '',
-      headerLeft: () =>
-        !isEditing ? (
-          <DefaultHeaderBack onPress={(): void => navigation.goBack()} />
-        ) : (
-          <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
-        ),
+      headerLeft,
       headerRight,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [diary, index, isEditing, isFirstEdit]);
+  }, [diary, headerLeft, headerRight, navigation]);
 
-  const onPressUser = (uid: string, userName: string): void => {
-    navigation.navigate('UserProfile', {
-      userName,
-    });
-  };
+  const onPressUser = useCallback(
+    (_uid: string, userName: string): void => {
+      navigation.navigate('UserProfile', {
+        userName,
+      });
+    },
+    [navigation]
+  );
 
-  const onPressReview = async (correctedNum: number): Promise<void> => {
-    if (!diary || !diary.objectID) return;
-    if (isLoading) return;
-    setIsLoading(true);
-    navigation.navigate('ModalReview', {
-      screen: 'Review',
-      params: {
-        objectID: diary.objectID,
-        correctedNum,
-        userName: diary.profile.userName,
-      },
-    });
-    setIsLoading(false);
-  };
+  const onPressReview = useCallback(
+    async (correctedNum: number): Promise<void> => {
+      if (!diary || !diary.objectID) return;
+      if (isLoading) return;
+      setIsLoading(true);
+      navigation.navigate('ModalReview', {
+        screen: 'Review',
+        params: {
+          objectID: diary.objectID,
+          correctedNum,
+          userName: diary.profile.userName,
+        },
+      });
+      setIsLoading(false);
+    },
+    [diary, isLoading, navigation]
+  );
 
-  const checkPermissions = async (): Promise<boolean> => {
+  const checkPermissions = useCallback(async (): Promise<boolean> => {
     const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     if (response.status !== 'granted') {
       setIsModalAlertAudio(true);
@@ -265,9 +303,9 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       return false;
     }
     return true;
-  };
+  }, []);
 
-  const goToRecord = async (): Promise<void> => {
+  const goToRecord = useCallback(async (): Promise<void> => {
     if (!diary || !diary.objectID) return;
 
     const res = await checkPermissions();
@@ -277,9 +315,9 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       screen: 'Record',
       params: { objectID: diary.objectID },
     });
-  };
+  }, [checkPermissions, diary, navigation]);
 
-  const goToRecommend = (): void => {
+  const goToRecommend = useCallback((): void => {
     const url =
       profile.nativeLanguage === 'ja'
         ? 'https://note.com/interchao/n/nd0a563f2edd4'
@@ -290,47 +328,96 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     } else {
       navigation.navigate('RecommendedMethod', { url });
     }
-  };
+  }, [navigation, profile.nativeLanguage]);
+
+  const onPressCloseModalDelete = useCallback(() => {
+    setIsModalDelete(false);
+  }, []);
+
+  const onPressCloseModalConfirmation = useCallback(() => {
+    setIsModalConfirmation(false);
+  }, []);
+
+  const onPressCloseModalAlertAudio = useCallback(() => {
+    setIsModalAlertAudio(false);
+  }, []);
+
+  const onIndexChange = useCallback((i: number) => {
+    setIndex(i);
+  }, []);
+
+  const onChangeTextTitle = useCallback((title: string) => {
+    setFairCopyTitle(title);
+  }, []);
+
+  const onChangeTextText = useCallback((text: string) => {
+    setFairCopyText(text);
+  }, []);
+
+  const onFocusFairCopyEdit = useCallback(() => {
+    setIsFirstEdit(true);
+  }, []);
+
+  const renderScene = useCallback(
+    ({ route }): JSX.Element | null => {
+      if (!diary) return null;
+      switch (route.key) {
+        case 'posted':
+          return (
+            <Posted
+              profile={profile}
+              diary={diary}
+              isEditing={isEditing}
+              onPressUser={onPressUser}
+              onPressReview={onPressReview}
+            />
+          );
+        case 'fairCopy':
+          return !isEditing ? (
+            <FairCopy
+              diary={diary}
+              profile={profile}
+              goToRecord={goToRecord}
+              goToRecommend={goToRecommend}
+              checkPermissions={checkPermissions}
+            />
+          ) : (
+            <FairCopyEdit
+              title={fairCopyTitle}
+              text={fairCopyText}
+              onChangeTextTitle={onChangeTextTitle}
+              onChangeTextText={onChangeTextText}
+              onFocus={onFocusFairCopyEdit}
+            />
+          );
+        default:
+          return null;
+      }
+    },
+    [
+      checkPermissions,
+      diary,
+      fairCopyText,
+      fairCopyTitle,
+      goToRecommend,
+      goToRecord,
+      isEditing,
+      onChangeTextText,
+      onChangeTextTitle,
+      onFocusFairCopyEdit,
+      onPressReview,
+      onPressUser,
+      profile,
+    ]
+  );
+
+  const renderTabBar = useCallback(props => {
+    return <MyDiaryTabBar {...props} />;
+  }, []);
 
   if (!diary) {
     return null;
   }
-
-  const renderScene = ({ route }): JSX.Element | null => {
-    if (!diary) return null;
-    switch (route.key) {
-      case 'posted':
-        return (
-          <Posted
-            profile={profile}
-            diary={diary}
-            isEditing={isEditing}
-            onPressUser={onPressUser}
-            onPressReview={onPressReview}
-          />
-        );
-      case 'fairCopy':
-        return !isEditing ? (
-          <FairCopy
-            diary={diary}
-            profile={profile}
-            goToRecord={goToRecord}
-            goToRecommend={goToRecommend}
-            checkPermissions={checkPermissions}
-          />
-        ) : (
-          <FairCopyEdit
-            title={fairCopyTitle}
-            text={fairCopyText}
-            onChangeTextTitle={(title: string): void => setFairCopyTitle(title)}
-            onChangeTextText={(text: string): void => setFairCopyText(text)}
-            onFocus={(): void => setIsFirstEdit(true)}
-          />
-        );
-      default:
-        return null;
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -348,7 +435,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         message={I18n.t('myDiary.confirmMessage')}
         mainButtonText={I18n.t('myDiary.menuDelete')}
         onPressMain={onPressDelete}
-        onPressClose={(): void => setIsModalDelete(false)}
+        onPressClose={onPressCloseModalDelete}
       />
       <ModalConfirm
         visible={isModalConfirmation}
@@ -356,21 +443,21 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         message={I18n.t('myDiary.closeAlert')}
         mainButtonText="OK"
         onPressMain={onClose}
-        onPressClose={(): void => setIsModalConfirmation(false)}
+        onPressClose={onPressCloseModalConfirmation}
       />
       <ModalConfirm
         visible={isModalAlertAudio}
         title={I18n.t('common.confirmation')}
         message={I18n.t('myDiary.permissionAudio')}
         mainButtonText="OK"
-        onPressMain={(): void => setIsModalAlertAudio(false)}
-        onPressClose={(): void => setIsModalAlertAudio(false)}
+        onPressMain={onPressCloseModalAlertAudio}
+        onPressClose={onPressCloseModalAlertAudio}
       />
       <TabView
-        renderTabBar={(props): ReactNode => <MyDiaryTabBar {...props} />}
+        renderTabBar={renderTabBar}
         navigationState={{ index, routes }}
         renderScene={renderScene}
-        onIndexChange={(i: number): void => setIndex(i)}
+        onIndexChange={onIndexChange}
         initialLayout={initialLayout}
       />
     </View>

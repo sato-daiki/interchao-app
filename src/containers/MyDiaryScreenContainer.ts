@@ -18,7 +18,9 @@ const mapStateToProps = (state: State, ownProps: OwnProps): Props => {
 
   const objectID = ownProps.route.params?.objectID;
   const diary = diaries.find(d => d.objectID === objectID);
+  const error = !!diary;
   return {
+    error,
     diary,
     profile,
     user,

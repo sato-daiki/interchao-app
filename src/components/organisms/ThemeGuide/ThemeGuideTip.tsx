@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, Text, StyleSheet, TextStyle } from 'react-native';
+import { View, ScrollView, Text, StyleSheet } from 'react-native';
 import {
   fontSizeL,
   fontSizeM,
@@ -7,12 +7,16 @@ import {
   subTextColor,
 } from '@/styles/Common';
 import I18n from '@/utils/I18n';
+import { Language } from '@/types';
 import { TipParams } from './interface';
 import Header from './Header';
 import { getStyle } from './util';
+import RichText from '../RichText';
 
 interface Props {
   params: TipParams;
+  textLanguage: Language;
+  nativeLanguage: Language;
 }
 
 const styles = StyleSheet.create({
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
   section: {
-    marginBottom: 32,
+    marginBottom: 16,
   },
   title: {
     color: primaryColor,
@@ -36,22 +40,32 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     lineHeight: fontSizeM * 1.3,
-    marginBottom: 4,
     flexWrap: 'wrap',
+    marginBottom: 2,
   },
   subText: {
     color: subTextColor,
+    fontSize: fontSizeM,
+    lineHeight: fontSizeM * 1.3,
   },
-  subTextAndMarginLeft: {
-    color: subTextColor,
-    marginLeft: 16,
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
-  example: {
-    marginBottom: 8,
+  marginBottom4: {
+    marginBottom: 4,
+  },
+  marginBottom12: {
+    marginBottom: 12,
   },
 });
 
-const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
+const ThemeGuideTip: React.FC<Props> = ({
+  params,
+  textLanguage,
+  nativeLanguage,
+}) => {
   return (
     <ScrollView
       style={styles.scrollView}
@@ -63,31 +77,36 @@ const ThemeGuideIntroduction: React.FC<Props> = ({ params }) => {
           {`⭐️ ${I18n.t('themeGuide.expression')}`}
         </Text>
         {params.expressions.map(expression => (
-          <Text key={expression.id} style={styles.text}>
-            {`・${expression.learnText}`}
-            <Text style={styles.subTextAndMarginLeft}>
-              {`（${expression.nativeText}）`}
-            </Text>
-          </Text>
+          <View key={expression.id} style={[styles.marginBottom12, styles.row]}>
+            <RichText
+              style={styles.text}
+              textLanguage={textLanguage}
+              nativeLanguage={nativeLanguage}
+              text={`${expression.learnText}`}
+            />
+            <Text style={styles.subText}>{`  (${expression.nativeText})`}</Text>
+          </View>
         ))}
       </View>
 
       <Text style={styles.title}>{`✍️ ${I18n.t('themeGuide.example')}`}</Text>
       {params.examples.map(example => (
-        <View key={example.id} style={styles.example}>
-          <Text style={styles.text}>
-            ・
+        <View key={example.id} style={styles.marginBottom12}>
+          <Text style={[styles.text, styles.marginBottom4]}>
             {example.learnText.map(t => (
-              <Text key={t.id} style={[getStyle(t.styleType)]}>
-                {`${t.text} `}
+              <Text
+                key={`${example.id}-${t.key}`}
+                style={[getStyle(t.styleType)]}
+              >
+                {`${t.text}`}
               </Text>
             ))}
           </Text>
-          <Text style={styles.subText}>{`（${example.nativeText}）`}</Text>
+          <Text style={styles.subText}>{`${example.nativeText}`}</Text>
         </View>
       ))}
     </ScrollView>
   );
 };
 
-export default ThemeGuideIntroduction;
+export default ThemeGuideTip;

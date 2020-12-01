@@ -220,6 +220,7 @@ const myDiaryList = {
   notficationSetting:
     'Interchao应用程序通知已关闭。让我们从“设置”中打开“通知”，以便您可以检查日记的更正时间',
   emptyDiary: '没有日记',
+  theme: '主题',
 };
 
 const myDiarySerch = {
@@ -287,10 +288,6 @@ const selectLanguage = {
   sameSpokenAlert:
     '请为 "您会说的其他语言" 和 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
   add: '添加',
-};
-
-const selectDiaryType = {
-  headerTitle: '类型选择',
 };
 
 const setting = {
@@ -554,6 +551,7 @@ const postDiaryComponent = {
   points: '持有积分',
   textPlaceholder: '正文',
   draft: '保存草稿',
+  hint: '复习简报',
 };
 
 const sns = {
@@ -614,6 +612,199 @@ const language = {
   en: '英语',
   zh: '简体中文',
   ko: '韩语',
+};
+
+const selectDiaryType = {
+  headerTitle: '类型选择',
+  recommend: '推荐的',
+  titleFree: '您选择的主题',
+  titleTheme: '从主题中选择',
+  textFree: '日记，您今天无法谈论的内容，喜欢的电影等。写下您选择的主题。',
+  textTheme: '根据主题写句子。 如果您不认为该写些什么，推荐使用。',
+};
+
+const firstList = {
+  selfIntroduction: '自我介绍',
+  hobby: '爱好',
+  job: '工作',
+  study: '学习外语的原因',
+  dream: '梦想未来',
+  trip: '旅行回忆',
+  reborn: '如果重生',
+};
+
+const selectThemeSubcategory = {
+  headerTitle: '主题选择',
+  firstList,
+};
+
+const themeGuide = {
+  swipeStart: '滑动来移动简报吧',
+  swipeEnd: '想复习简报的时候就用滑动来返回',
+  introduction: '介绍',
+  guideTipTitle: '常用表达',
+  expression: '表达',
+  example: '例句',
+  word: '词汇表',
+  guideEndText: '简报在这里结束。实际动手写文章看看吧！',
+};
+
+const selfIntroduction = {
+  introduction:
+    '第一次试着写一下自我介绍吧。遇见新认识的人一定会做自我介绍吧。\n\n如果用{{learnLanguage}}将文章写好，实际对话的时候，就可以说得很流利了',
+  expression1: '姓名、通称',
+  expression2: '出身地、我长大的城镇',
+  expression3: '公司名称、职业',
+  expression4: '兴趣',
+  example1: '我的名字是田中华。可以叫我阿华。',
+  example2: '我出生于神奈川，在东京长大。',
+  example3: '我在Interchao，从事程序员的工作。',
+  example4: '我喜欢弹吉他。',
+  wordTitle: '可用于自我介绍的呈现方式一览',
+  word1: '久仰大名，今天幸会了。',
+  word2: '请叫我XX。',
+  word3: '我在XX出生与成长。',
+  word4: '我来自日本。',
+  word5: '我有个弟弟。',
+  word6: '我和我太太已经结婚５年了。',
+  word7: '我大学专攻的是心理学。',
+  word8: '我从事XX方面的工作。',
+  word9: '我很喜欢旅游。',
+  word10: '能认识你，倍感荣幸。',
+};
+
+const hobby = {
+  introduction:
+    '交了新朋友的时候，和同事一起喝酒的时候，关于爱好的谈话是不是很多？{{learnLanguage}}也是一样\n\n爱好是永恒的话题。今天就让自己可以说出“你的爱好”吧',
+
+  expression1: '兴趣的名字',
+  expression2: '兴趣的名字、开始兴趣的契机',
+  expression3: '关于今后',
+  example1: '我的兴趣是跑步。',
+  example2: '我开始跑步的契机是参加了全程马拉松。',
+  example3: '我今后也想继续这个运动。',
+  wordTitle: '兴趣一览',
+  word1: '购物',
+  word2: '看电影',
+  word3: '棒球',
+  word4: '学习英文',
+  word5: '插花',
+  word6: '网站经营',
+  word7: '旅行',
+  word8: '温泉巡游',
+  word9: '拍照',
+};
+
+const job = {
+  introduction:
+    '第三回的主题是工作。是不是已经在很大程度上习惯了写文章了呢？\n\n今天让自己可以写出"你在做什么工作？"吧',
+  expression1: '工作地点的名字',
+  expression2: '职业',
+  expression3: '专门领域',
+  example1: '我在Interchao Center工作。',
+  example2: '我的专业是英语老师。',
+  example3: '我司专门开设一对一教学课程。',
+  wordTitle: '职业一览',
+  word1: '律师',
+  word2: '会计师',
+  word3: '工程师',
+  word4: '接待',
+  word5: '秘书',
+  word6: '上班族',
+  word7: '制造商',
+  word8: '销售商',
+  word9: '银行职员',
+  word10: '厨师',
+  word11: '公务员',
+  word12: '教师',
+  word13: '医生',
+  word14: '药剂师',
+  word15: '护理师',
+  word16: '创业者',
+  word17: '研究员',
+  word18: '作家',
+};
+
+const study = {
+  introduction:
+    '你为什么开始学习{{learnLanguage}}了呢？\n\n语言学校，或者去留学的话一定会被问到。用{{learnLanguage}}将理由说出来吧。',
+  expression1: '语言、理由',
+  expression2: '语言、理由',
+  expression3: '语言、理由',
+  example1: '我是因为新的工作需要与顾客用英语沟通而开始学习英语的。',
+  wordTitle: '理由一览',
+  word1: '兴趣和闲暇时间',
+  word2: '认识其他国家的人',
+  word3: '为了旅行学习英语',
+  word4: '学会和外国人对话',
+  word5: '工作升职',
+  word6: '改行',
+  word7: '从事活用英文的工作',
+};
+
+const dream = {
+  introduction: '你将来想要做什么？\n\n今天把将来的梦想和目标写出来吧。',
+  expression1: '将来的梦想',
+  expression2: '过去的经历',
+  expression3: '想藉由梦想实践的事',
+  example1: '我将来的梦想是拥有自己的店。',
+  example2: '从小我就喜欢做菜。',
+  example3: '我希望让很多人因为我做的菜而感到快乐。',
+  wordTitle: '将来的梦想例子一览',
+  word1: '成为小学教师',
+  word2: '成为绘师',
+  word3: '成为职业足球选手',
+  word4: '从事国际性的志愿者工作',
+  word5: '成为足球杂志的制作者',
+  word6: '到非洲工作',
+  word7: '将来住在关岛工作',
+  word8: '环游日本',
+  word9: '还没有将来的梦想',
+};
+
+const trip = {
+  introduction:
+    '这次的主题是旅行。\n\n听朋友说到旅行的事情很开心吧，你也用{{learnLanguage}}准备一个关于旅行的谈话吧。',
+  expression1: '去过的国名(都市名)、一起去的人',
+  expression2: '访问过的地点、期间',
+  expression3: '最深刻的回忆',
+  example1: '我和家人一起去了意大利。',
+  example2: '我们花了10天造访了罗马、威尼斯和那不勒斯。',
+  example3: '最深刻的回忆是坐著小船去卡布里島的蓝洞。',
+  wordTitle: '旅行的回忆呈现方式一览',
+  word1: '我去了中国远足。',
+  word2: '我去了夏威夷的海滩。',
+  word3: '我去了韩国购物。',
+  word4: '当地的料理真好吃。',
+  word5: '当地的人非常亲切。',
+  word6: '我在店里找到了很有趣的东西。',
+  word7: '我去了以大堡礁闻名的凯恩斯。',
+  word8: '出门见丑无人知。',
+  word9: '我希望还能再去那里。',
+};
+
+const reborn = {
+  introduction:
+    '这一章最后的主题。"如果是ＸＸ的话。。。"\n\n这个句型在对话中很常见吧。今天就写关于"如果重新活一次的话。。。"吧。',
+  expression1: '重生的话想做的事',
+  expression2: '理由',
+  example1: '有机会重生的话，我想出生在1945年左右。',
+  example2: '因为我想跟著1960年代的心理专家学习。',
+  wordTitle: '呈现方式一览',
+  word1: '如果我重生的话，我想当只鸟。',
+  word2: '我想重新活过一回。',
+  word3: '如果有机会重生的话，我想当医生。',
+  word4: '如果重生的话，我想挑战环游世界。',
+};
+
+const first = {
+  selfIntroduction,
+  hobby,
+  job,
+  study,
+  dream,
+  trip,
+  reborn,
 };
 
 const zh = {
@@ -694,6 +885,9 @@ const zh = {
   userDiaryStatus,
   language,
   inquiry,
+  selectThemeSubcategory,
+  themeGuide,
+  first,
 };
 
 export default zh;
