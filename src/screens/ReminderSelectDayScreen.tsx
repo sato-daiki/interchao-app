@@ -1,33 +1,23 @@
 import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 import I18n from '@/utils/I18n';
 import { fontSizeL, primaryColor } from '@/styles/Common';
-import { CheckItem } from '@/components/molecules';
-import { RemindeDay, Reminder, User } from '@/types';
+import { CheckItemDay } from '@/components/molecules';
 import { SubmitButton } from '@/components/atoms';
 import { getDayName } from '@/utils/time';
+import { RouteProp } from '@react-navigation/native';
 
-export interface Props {
-  user: User;
-}
-
-interface DispatchProps {
-  setUser: (user: User) => void;
-}
-
-type ScreenType = StackScreenProps<
+type NavigationProp = StackNavigationProp<
   OnboardingStackParamList,
   'ReminderSelectDay'
-> &
-  Props &
-  DispatchProps;
+>;
 
-interface CheckedDay {
-  day: number;
-  checked: boolean;
-}
+type ScreenType = {
+  navigation: NavigationProp;
+  route: RouteProp<OnboardingStackParamList, 'ReminderSelectDay'>;
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -48,78 +38,96 @@ const styles = StyleSheet.create({
   },
 });
 
-const initialCheckedDays: CheckedDay[] = [
-  { day: 0, checked: true },
-  { day: 1, checked: true },
-  { day: 2, checked: true },
-  { day: 3, checked: true },
-  { day: 4, checked: true },
-  { day: 5, checked: true },
-  { day: 6, checked: true },
-];
-
 const ReminderSelectDayScreen: React.FC<ScreenType> = ({
   navigation,
-  setUser,
-  user,
+  route,
 }) => {
-  const [checkedDays, setCheckedDays] = useState<CheckedDay[]>(
-    initialCheckedDays
+  const [checkeds, setCheckeds] = useState(
+    route.params.checkedDays.map(item => item.checked)
   );
 
-  const onPressNext = useCallback(() => {
-    const remindeDays: RemindeDay[] = checkedDays
-      .filter(item => item.checked === true)
-      .map(item => {
-        return {
-          day: item.day,
-          startTime: new Date(),
-          endTime: new Date(),
-        };
-      });
-
-    const reminder: Reminder = {
-      notificationStart: true,
-      notificationEnd: true,
-      remindeDays,
-    };
-
-    setUser({
-      ...user,
-      reminder,
+  const onPressDone = useCallback(() => {
+    const newDays = route.params.checkedDays.map((item, i) => {
+      return {
+        ...item,
+        checked: checkeds[i],
+      };
     });
-    navigation.navigate('ReminderSelectTime');
-  }, [checkedDays, navigation, setUser, user]);
+    route.params.onChangeCheckedDays(newDays);
+    navigation.goBack();
+  }, [checkeds, navigation, route.params]);
 
-  const onPressDay = useCallback(
-    day => {
-      const newDays = checkedDays.map(item => {
-        if (item.day !== day) {
-          return item;
+  const onPressOneDay = useCallback(
+    (day: number) => {
+      const newCheckeds = checkeds.map((checked, i) => {
+        if (i !== day) {
+          return checked;
         }
-        return {
-          ...item,
-          checked: !checkedDays[day].checked,
-        };
+        return !checked;
       });
-      setCheckedDays(newDays);
+      // reduxは更新が思いからstatでも管理する
+      setCheckeds(newCheckeds);
     },
-    [checkedDays]
+    [checkeds]
   );
+
+  const checkItemDayPills = [
+    {
+      day: 0,
+      title: getDayName(0),
+      checked: checkeds[0],
+      onPress: () => onPressOneDay(0),
+    },
+    {
+      day: 1,
+      title: getDayName(1),
+      checked: checkeds[1],
+      onPress: () => onPressOneDay(1),
+    },
+    {
+      day: 2,
+      title: getDayName(2),
+      checked: checkeds[2],
+      onPress: () => onPressOneDay(2),
+    },
+    {
+      day: 3,
+      title: getDayName(3),
+      checked: checkeds[3],
+      onPress: () => onPressOneDay(3),
+    },
+    {
+      day: 4,
+      title: getDayName(4),
+      checked: checkeds[4],
+      onPress: () => onPressOneDay(4),
+    },
+    {
+      day: 5,
+      title: getDayName(5),
+      checked: checkeds[5],
+      onPress: () => onPressOneDay(5),
+    },
+    {
+      day: 6,
+      title: getDayName(6),
+      checked: checkeds[6],
+      onPress: () => onPressOneDay(6),
+    },
+    {
+      day: 7,
+      title: getDayName(7),
+      checked: checkeds[7],
+      onPress: () => onPressOneDay(7),
+    },
+  ];
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{I18n.t('reminderSelectDay.title')}</Text>
-      {checkedDays.map(item => (
-        <CheckItem
-          key={item.day}
-          checked={item.checked}
-          title={getDayName(item.day)}
-          onPress={(): void => onPressDay(item.day)}
-        />
-      ))}
+      <CheckItemDay {...checkItemDayPills[0]} />
       <View style={styles.button}>
-        <SubmitButton title={I18n.t('common.next')} onPress={onPressNext} />
+        <SubmitButton title={I18n.t('common.done')} onPress={onPressDone} />
       </View>
     </View>
   );

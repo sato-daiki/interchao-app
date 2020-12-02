@@ -22,8 +22,8 @@ export type AppReviewState = 'yet' | 'never' | 'done';
 
 export interface RemindeDay {
   day: number; // Sunday - Saturday : 0 - 6
-  startTime: Date;
-  endTime: Date;
+  timeStart: Date;
+  timeEnd: Date;
 }
 
 export interface Reminder {

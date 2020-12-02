@@ -1,4 +1,10 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+} from 'react';
 import {
   View,
   StyleSheet,
@@ -15,10 +21,17 @@ import {
 } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
+
+import UserProfileHeader from '@/components/organisms/UserProfileHeader';
+import { ModalBlock, ModalConfirm } from '@/components/organisms';
+import DiaryListItem from '@/components/organisms/DiaryListItem';
 import TopReviewList from '@/components/organisms/TopReviewList';
-import firebase from '../constants/firebase';
-import { EmptyDiary } from '../components/molecules';
-import { Space, GrayHeader, HeaderIcon } from '../components/atoms';
+import UserProfileMenu from '@/components/web/organisms/UserProfileMenu';
+import ModalReport from '@/components/web/organisms/ModalReport';
+import { EmptyDiary } from '@/components/molecules';
+import { Space, GrayHeader, HeaderIcon } from '@/components/atoms';
+
+import firebase from '@/constants/firebase';
 import {
   Diary,
   Profile,
@@ -27,22 +40,17 @@ import {
   BlockUser,
   Report,
   User,
-} from '../types';
-import { getProfile, getUid } from '../utils/profile';
-import Algolia from '../utils/Algolia';
-import DiaryListItem from '../components/organisms/DiaryListItem';
-import { ModalBlock, ModalConfirm } from '../components/organisms';
-import { checkBlockee, checkBlocker } from '../utils/blockUser';
-import { getUserReview } from '../utils/userReview';
-import UserProfileHeader from '../components/organisms/UserProfileHeader';
-import I18n from '../utils/I18n';
-import { alert } from '../utils/ErrorAlert';
-import UserProfileMenu from '../components/web/organisms/UserProfileMenu';
-import ModalReport from '../components/web/organisms/ModalReport';
+} from '@/types';
+import { getProfile, getUid } from '@/utils/profile';
+import Algolia from '@/utils/Algolia';
+import { checkBlockee, checkBlocker } from '@/utils/blockUser';
+import { getUserReview } from '@/utils/userReview';
+import I18n from '@/utils/I18n';
+import { alert } from '@/utils/ErrorAlert';
 import {
   CommonStackParamList,
   CommonNavigationProp,
-} from '../navigations/CommonNavigator';
+} from '@/navigations/CommonNavigator';
 
 export interface Props {
   user: User;
@@ -115,27 +123,24 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     f();
   }, []);
 
-  const getNewDiary = useCallback((targetUid: string) => {
-    const f = async (): Promise<void> => {
-      try {
-        const index = await Algolia.getDiaryIndex();
-        await Algolia.setSettings(index);
-        const res = await index.search('', {
-          filters: `profile.uid: ${targetUid} AND diaryStatus: publish`,
-          page: 0,
-          hitsPerPage: HIT_PER_PAGE,
-        });
+  const getNewDiary = useCallback(async (targetUid: string): Promise<void> => {
+    try {
+      const index = await Algolia.getDiaryIndex();
+      await Algolia.setSettings(index);
+      const res = await index.search('', {
+        filters: `profile.uid: ${targetUid} AND diaryStatus: publish`,
+        page: 0,
+        hitsPerPage: HIT_PER_PAGE,
+      });
 
-        setDiaries(res.hits as Diary[]);
-        setDiaryTotalNum(res.nbHits);
-      } catch (err) {
-        setLoadingDiary(false);
-        setRefreshing(false);
-        alert({ err });
-      }
+      setDiaries(res.hits as Diary[]);
+      setDiaryTotalNum(res.nbHits);
+    } catch (err) {
       setLoadingDiary(false);
-    };
-    f();
+      setRefreshing(false);
+      alert({ err });
+    }
+    setLoadingDiary(false);
   }, []);
 
   // 初期データの取得
@@ -166,52 +171,46 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       await Promise.all([getNewProfile(targetUid), getNewDiary(targetUid)]);
     };
     f();
-  }, [getNewDiary, getNewProfile, route, user.uid]);
+  }, [getNewDiary, getNewProfile, route.params.userName, user.uid]);
 
-  const onRefresh = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setRefreshing(true);
-      if (!profile) {
-        setRefreshing(false);
-        return;
-      }
-      await getNewDiary(profile.uid);
+  const onRefresh = useCallback(async (): Promise<void> => {
+    setRefreshing(true);
+    if (!profile) {
       setRefreshing(false);
-    };
-    f();
+      return;
+    }
+    await getNewDiary(profile.uid);
+    setRefreshing(false);
   }, [getNewDiary, profile]);
 
-  const loadNextPage = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!readingNext.current && !readAllResults.current && profile) {
-        try {
-          const nextPage = page.current + 1;
-          readingNext.current = true;
+  const loadNextPage = useCallback(async (): Promise<void> => {
+    if (!readingNext.current && !readAllResults.current && profile) {
+      try {
+        const nextPage = page.current + 1;
+        readingNext.current = true;
 
-          const index = await Algolia.getDiaryIndex();
-          const res = await index.search('', {
-            filters: `profile.uid: ${profile.uid} AND diaryStatus: publish`,
-            page: nextPage,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+        const index = await Algolia.getDiaryIndex();
+        const res = await index.search('', {
+          filters: `profile.uid: ${profile.uid} AND diaryStatus: publish`,
+          page: nextPage,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          if (res.hits.length === 0) {
-            readAllResults.current = true;
-            readingNext.current = false;
-          } else {
-            if (diaries) {
-              setDiaries([...diaries, ...(res.hits as Diary[])]);
-            }
-            page.current = nextPage;
-            readingNext.current = false;
-          }
-        } catch (err) {
+        if (res.hits.length === 0) {
+          readAllResults.current = true;
           readingNext.current = false;
-          alert({ err });
+        } else {
+          if (diaries) {
+            setDiaries([...diaries, ...(res.hits as Diary[])]);
+          }
+          page.current = nextPage;
+          readingNext.current = false;
         }
+      } catch (err) {
+        readingNext.current = false;
+        alert({ err });
       }
-    };
-    f();
+    }
   }, [profile, diaries]);
 
   const onPressBlock = useCallback(() => {
@@ -278,26 +277,23 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     });
   }, [navigation, profile]);
 
-  const onPressBlockSubmit = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      if (!profile) {
-        return;
-      }
-      setIsLoading(true);
-      const newBlockUser = {
-        blockerUid: user.uid,
-        blockeeUid: profile.uid,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      } as BlockUser;
-      await firebase
-        .firestore()
-        .collection(`blockUsers`)
-        .add(newBlockUser);
-      setIsBlockSuccess(true);
-      setIsLoading(false);
-      setIsBlocked(true);
-    };
-    f();
+  const onPressBlockSubmit = useCallback(async (): Promise<void> => {
+    if (!profile) {
+      return;
+    }
+    setIsLoading(true);
+    const newBlockUser = {
+      blockerUid: user.uid,
+      blockeeUid: profile.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    } as BlockUser;
+    await firebase
+      .firestore()
+      .collection(`blockUsers`)
+      .add(newBlockUser);
+    setIsBlockSuccess(true);
+    setIsLoading(false);
+    setIsBlocked(true);
   }, [profile, user.uid]);
 
   const onPressUnblockSubmit = useCallback(async (): Promise<void> => {
@@ -367,42 +363,70 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     [navigation]
   );
 
+  const onPressCloseReport = useCallback(() => {
+    setIsReport(false);
+  }, []);
+
+  const onPressCloseModalBlock = useCallback(() => {
+    setIsModalBlock(false);
+  }, []);
+
   const listEmptyDiaryComponent =
     loadingDiary || refreshing ? null : <EmptyDiary />;
 
-  const listHeaderDiaryComponent = (
-    <>
-      <Space size={32} />
-      {profile && !loadingProfile ? (
-        <UserProfileHeader profile={profile} userReview={userReview} />
-      ) : (
+  const listHeaderDiaryComponent = useMemo(
+    () => (
+      <>
+        <Space size={32} />
+        {profile && !loadingProfile ? (
+          <UserProfileHeader profile={profile} userReview={userReview} />
+        ) : (
+          <>
+            <Space size={16} />
+            <ActivityIndicator />
+            <Space size={16} />
+          </>
+        )}
+        <TopReviewList
+          profile={profile}
+          userName={route.params.userName}
+          refreshing={refreshing}
+          handlePressUser={handlePressUser}
+          onPressMoreReview={onPressMoreReview}
+        />
+        <GrayHeader
+          title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
+        />
+      </>
+    ),
+    [
+      diaryTotalNum,
+      handlePressUser,
+      loadingProfile,
+      onPressMoreReview,
+      profile,
+      refreshing,
+      route.params.userName,
+      userReview,
+    ]
+  );
+
+  const listFooterDiaryComponent = useMemo(
+    () =>
+      loadingDiary && !refreshing ? (
         <>
           <Space size={16} />
           <ActivityIndicator />
           <Space size={16} />
         </>
-      )}
-      <TopReviewList
-        profile={profile}
-        userName={route.params.userName}
-        refreshing={refreshing}
-        handlePressUser={handlePressUser}
-        onPressMoreReview={onPressMoreReview}
-      />
-      <GrayHeader
-        title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
-      />
-    </>
+      ) : null,
+    [loadingDiary, refreshing]
   );
 
-  const listFooterDiaryComponent =
-    loadingDiary && !refreshing ? (
-      <>
-        <Space size={16} />
-        <ActivityIndicator />
-        <Space size={16} />
-      </>
-    ) : null;
+  const refreshControl = useMemo(
+    () => <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />,
+    [onRefresh, refreshing]
+  );
 
   const renderDiary: ListRenderItem<Diary> = useCallback(
     ({ item }): JSX.Element => {
@@ -433,14 +457,14 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         isLoading={isLoading}
         userName={profile ? profile.userName : ''}
         onPressSubmit={!isBlocked ? onPressBlockSubmit : onPressUnblockSubmit}
-        onPressClose={(): void => setIsModalBlock(false)}
+        onPressClose={onPressCloseModalBlock}
       />
       <ModalReport
         visible={isReport}
         isSuccess={isReportSuccess}
         isLoading={isLoading}
         onReportSubmit={onReportSubmit}
-        onReportClose={(): void => setIsReport(false)}
+        onReportClose={onPressCloseReport}
       />
       <FlatList
         data={diaries}
@@ -450,9 +474,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         ListEmptyComponent={listEmptyDiaryComponent}
         ListFooterComponent={listFooterDiaryComponent}
         onEndReached={loadNextPage}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={refreshControl}
       />
     </View>
   );

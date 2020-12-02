@@ -4,10 +4,11 @@ import { DateTimePickerModal, TimeBox } from '../atoms';
 
 type Props = {
   date: Date;
+  isError: boolean;
   onChange: (date: Date) => void;
 };
 
-const TimePicker: React.FC<Props> = ({ date, onChange, ...props }) => {
+const TimePicker: React.FC<Props> = ({ date, isError, onChange, ...props }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   // handlers
@@ -33,7 +34,7 @@ const TimePicker: React.FC<Props> = ({ date, onChange, ...props }) => {
 
   return (
     <View>
-      <TimeBox onPress={onPress} date={date} />
+      <TimeBox isError={isError} onPress={onPress} date={date} />
       <DateTimePickerModal
         isVisible={isVisible}
         date={date ?? undefined} // initial select date
