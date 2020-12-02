@@ -315,6 +315,7 @@ const reminderSelectTime = {
   studyDay: '勉強する日',
   start: '開始時間',
   end: '終了時間',
+  time: '時間',
 };
 
 const editMyDiaryList = {

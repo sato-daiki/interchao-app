@@ -3,19 +3,14 @@ import { View, StyleSheet, Text } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { RadioBox, Space } from '@/components/atoms';
-import { OptionItem, SelectTimeItem } from '@/components/molecules';
 
 import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 import I18n from '@/utils/I18n';
-import {
-  fontSizeL,
-  fontSizeM,
-  mainColor,
-  primaryColor,
-  subTextColor,
-} from '@/styles/Common';
+import { fontSizeL, mainColor, primaryColor } from '@/styles/Common';
 import { User } from '@/types';
-import { getShortDayName, getShortDaysName } from '@/utils/time';
+import { addDay } from '@/utils/time';
+import ReminderSelectTimeFix from '@/components/organisms/ReminderSelectTime/ReminderSelectTimeFix';
+import ReminderSelectTimeCustom from '@/components/organisms/ReminderSelectTime/ReminderSelectTimeCustom';
 
 export interface Props {
   user: User;
@@ -45,149 +40,208 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 32,
   },
-  subText: {
-    fontSize: fontSizeM,
-    color: subTextColor,
-    marginRight: 8,
+  fixContainer: {
+    paddingBottom: 48,
+  },
+  radioBox: {
+    marginHorizontal: 8,
+    paddingBottom: 8,
   },
 });
 
-interface Time {
-  startTime: Date;
-  endTime: Date;
+export interface CheckedDay {
+  day: number;
+  checked: boolean;
+  timeStart?: Date;
+  timeEnd?: Date;
+  isFocus?: boolean;
+  isErrorStart?: boolean;
+  isErrorEnd?: boolean;
 }
+
+export interface FixTimeInfo {
+  timeStart: Date;
+  timeEnd: Date;
+  isFocus: boolean;
+  isErrorStart: boolean;
+  isErrorEnd: boolean;
+}
+
+export interface CustomTimeInfo {
+  day: number;
+  checked: boolean;
+  timeStart: Date;
+  timeEnd: Date;
+  isFocus: boolean;
+  isErrorStart: boolean;
+  isErrorEnd: boolean;
+}
+
+const initFixDays: CheckedDay[] = [...Array(7)].map((_, i) => {
+  return {
+    day: i,
+    checked: true,
+  };
+});
+
+const initFixTimeInfo: FixTimeInfo = {
+  timeStart: new Date(2000, 1, 1, 20, 0, 0),
+  timeEnd: new Date(2000, 1, 1, 21, 0, 0),
+  isFocus: false,
+  isErrorStart: false,
+  isErrorEnd: false,
+};
+
+const initCuctomTimeInfos: CustomTimeInfo[] = [...Array(7)].map((_, i) => {
+  return {
+    day: i,
+    checked: true,
+    timeStart: new Date(2000, 1, 1, 20, 0, 0),
+    timeEnd: new Date(2000, 1, 1, 21, 0, 0),
+    isFocus: false,
+    isErrorStart: false,
+    isErrorEnd: false,
+  };
+});
 
 const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
   navigation,
   user,
 }) => {
-  const [fixTime, setFixTime] = useState<Time>({
-    startTime: new Date(),
-    endTime: new Date(),
-  });
-  const [customTimes, setCustomTimes] = useState<Time[]>();
   const [isFix, setIsFix] = useState(true);
+
+  const [fixDays, setFixDays] = useState(initFixDays);
+  const [fixTimeInfo, setFixTimeInfo] = useState(initFixTimeInfo);
+  const [customTimeInfos, setCustomTimeInfos] = useState(initCuctomTimeInfos);
 
   const onPressFix = useCallback(() => {
     setIsFix(true);
   }, []);
 
   const onPressCustom = useCallback(() => {
-    setIsFix(true);
+    setIsFix(false);
   }, []);
 
-  const onPressBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+  const onPressFixStudyDay = useCallback(() => {
+    navigation.navigate('ReminderSelectDay', {
+      checkedDays: fixDays,
+      onChangeCheckedDays: setFixDays,
+    });
+  }, [fixDays, navigation]);
 
-  const handleStartTime = useCallback(
-    ({ day, time }: { day: number; time: Date }) => {
-      setFixTime({ ...fixTime, startTime: time });
+  const handleFixTimeStart = useCallback(
+    (_day: number | undefined, time: Date) => {
+      setFixTimeInfo({
+        ...fixTimeInfo,
+        timeStart: time,
+        timeEnd: !fixTimeInfo.isFocus
+          ? addDay(time, 1, 'h')
+          : fixTimeInfo.timeEnd,
+        isFocus: true,
+        isErrorStart: false,
+        isErrorEnd: time > fixTimeInfo.timeEnd,
+      });
     },
-    [fixTime]
+    [fixTimeInfo]
   );
 
-  const handleEndTime = useCallback(
-    ({ day, time }: { day: number; time: Date }) => {
-      setFixTime({ ...fixTime, endTime: time });
+  const handleFixTimeEnd = useCallback(
+    (_day: number | undefined, time: Date) => {
+      setFixTimeInfo({
+        ...fixTimeInfo,
+        timeEnd: time,
+        isFocus: true,
+        isErrorStart: time < fixTimeInfo.timeStart,
+        isErrorEnd: false,
+      });
     },
-    [fixTime]
+    [fixTimeInfo]
   );
 
-  const handleStartTimeCustom = useCallback(
-    ({ day, time }: { day: number; time: Date }) => {
-      const newCustomTimes = user.reminder?.remindeDays?.map(item => {
+  const onPressCustomStudyDay = useCallback(() => {
+    navigation.navigate('ReminderSelectDay', {
+      checkedDays: customTimeInfos,
+      onChangeCheckedDays: setCustomTimeInfos,
+    });
+  }, [customTimeInfos, navigation]);
+
+  const handleCumtomTimeStart = useCallback(
+    (day: number | undefined, time: Date) => {
+      const newCustomTimeInfos = customTimeInfos.map(item => {
         if (item.day !== day) {
           return item;
         }
         return {
           ...item,
           startTime: time,
+          timeEnd: !item.isFocus ? addDay(time, 1, 'h') : item.timeEnd,
+          isFocus: true,
+          isErrorStart: false,
+          isErrorEnd: time > item.timeEnd,
         };
       });
-      setCustomTimes(newCustomTimes);
+      setCustomTimeInfos(newCustomTimeInfos);
     },
-    [user.reminder]
+    [customTimeInfos]
   );
 
-  const handleEndTimeCustom = useCallback(
-    ({ day, time }: { day: number; time: Date }) => {
-      const newCustomTimes = user.reminder?.remindeDays?.map(item => {
+  const handleCumtomTimeEnd = useCallback(
+    (day: number | undefined, time: Date) => {
+      const newCustomTimes = customTimeInfos.map(item => {
         if (item.day !== day) {
           return item;
         }
         return {
           ...item,
-          endTime: time,
+          timeEnd: time,
+          isFocus: true,
+          isErrorStart: time < item.timeStart,
+          isErrorEnd: false,
         };
       });
-      setCustomTimes(newCustomTimes);
+      setCustomTimeInfos(newCustomTimes);
     },
-    [user.reminder]
+    [customTimeInfos]
   );
-
-  const righComponent = (
-    <Text style={styles.subText}>
-      {getShortDaysName(user.reminder?.remindeDays)}
-    </Text>
-  );
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{I18n.t('reminderSelectDay.title')}</Text>
 
       <View style={styles.fixContainer}>
-        <RadioBox
-          checked={isFix}
-          color={mainColor}
-          text={I18n.t('reminderSelectTime.fix')}
-          onPress={onPressFix}
-        />
-        <Space size={16} />
-        <SelectTimeItem
-          heading="時間"
-          startTime={fixTime.startTime}
-          handleStartTime={handleStartTime}
-          endTime={fixTime.endTime}
-          handleEndTime={handleEndTime}
-        />
-        <OptionItem
-          title={I18n.t('reminderSelectTime.studyDay')}
-          onPress={onPressBack}
-          righComponent={righComponent}
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={isFix}
+            color={mainColor}
+            text={I18n.t('reminderSelectTime.fix')}
+            onPress={onPressFix}
+          />
+        </View>
+        <ReminderSelectTimeFix
+          disable={!isFix}
+          fixDays={fixDays}
+          fixTimeInfo={fixTimeInfo}
+          handleTimeStart={handleFixTimeStart}
+          handleTimeEnd={handleFixTimeEnd}
+          onPressStudyDay={onPressFixStudyDay}
         />
       </View>
-      <Space size={32} />
-
-      <RadioBox
-        checked={!isFix}
-        color={mainColor}
-        text={I18n.t('reminderSelectTime.custom')}
-        onPress={onPressCustom}
-      />
-      <Space size={16} />
-      {user.reminder && user.reminder.remindeDays
-        ? user.reminder.remindeDays.map(remindeDay => {
-            if (!user.reminder || !user.reminder.remindeDays) return <View />;
-            return (
-              <SelectTimeItem
-                key={remindeDay.day}
-                heading={getShortDayName(remindeDay.day)}
-                startTime={user.reminder.remindeDays[remindeDay.day].startTime}
-                handleStartTime={handleStartTimeCustom}
-                endTime={user.reminder.remindeDays[remindeDay.day].endTime}
-                handleEndTime={handleEndTimeCustom}
-                disable
-              />
-            );
-          })
-        : null}
-
-      <OptionItem
-        title={I18n.t('reminderSelectTime.studyDay')}
-        onPress={onPressBack}
-        righComponent={righComponent}
-      />
+      <View style={styles.fixContainer}>
+        <View style={styles.radioBox}>
+          <RadioBox
+            checked={!isFix}
+            color={mainColor}
+            text={I18n.t('reminderSelectTime.custom')}
+            onPress={onPressCustom}
+          />
+        </View>
+        <ReminderSelectTimeCustom
+          disable={isFix}
+          customTimeInfos={customTimeInfos}
+          handleTimeStart={handleCumtomTimeStart}
+          handleTimeEnd={handleCumtomTimeEnd}
+          onPressStudyDay={onPressCustomStudyDay}
+        />
+      </View>
     </View>
   );
 };

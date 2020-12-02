@@ -1,5 +1,6 @@
 export { Calendar } from './Calendar';
 export { default as CheckItem } from './CheckItem';
+export { default as CheckItemDay } from './CheckItemDay';
 export { default as CheckListItem } from './CheckItem';
 export { default as CheckTextInput } from './CheckTextInput';
 export { default as CorrectingHeader } from './CorrectingHeader';

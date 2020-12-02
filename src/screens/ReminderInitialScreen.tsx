@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
 const ReminderInitialScreen: React.FC<ScreenType> = ({ navigation }) => {
   const onPressSubmit = useCallback(() => {
-    navigation.navigate('ReminderSelectDay');
+    navigation.navigate('ReminderSelectTime');
   }, [navigation]);
 
   const onPressSkip = useCallback(() => {

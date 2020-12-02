@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, { DurationInputArg1, DurationInputArg2 } from 'moment';
 import 'moment/locale/ja';
 import I18n from '@/utils/I18n';
 import { RemindeDay } from '@/types';
@@ -54,7 +54,7 @@ export const getDayName = (day: number): string => {
   }
 };
 
-export const getShortDayName = (day: number): string => {
+export const getShortDayName = (day: number | undefined): string => {
   switch (day) {
     case 0:
       return I18n.t('shortDay.sunday');
@@ -87,13 +87,20 @@ export const getAlgoliaDate = (timestamp: any): string => {
   return moment.unix(timestamp._seconds).format('Y-M-D H:m');
 };
 
-export const getShortDaysName = (
-  remindeDays: RemindeDay[] | undefined | null
-): string => {
-  if (!remindeDays) return '';
+export const getShortDaysName = (days: (number | undefined)[]): string => {
   let text = '';
-  remindeDays.forEach(remindeDay => {
-    text += `${getShortDayName(remindeDay.day)}、`;
+  days.forEach(day => {
+    text += `${getShortDayName(day)}、`;
   });
   return text.slice(0, -1);
+};
+
+export const addDay = (
+  day: Date,
+  num: DurationInputArg1,
+  unit: DurationInputArg2
+): Date => {
+  return moment(day)
+    .add(num, unit)
+    .toDate();
 };

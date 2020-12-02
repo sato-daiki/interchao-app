@@ -10,10 +10,12 @@ interface Props {
   disable?: boolean;
   heading: string;
   isBorrderTop?: boolean;
-  startTime: Date;
-  handleStartTime: ({ day, time }: { day: number; time: Date }) => void;
-  endTime: Date;
-  handleEndTime: ({ day, time }: { day: number; time: Date }) => void;
+  isErrorStart: boolean;
+  isErrorEnd: boolean;
+  timeStart: Date;
+  timeEnd: Date;
+  handleTimeStart: (day: number | undefined, time: Date) => void;
+  handleTimeEnd: (day: number | undefined, time: Date) => void;
 }
 
 const styles = StyleSheet.create({
@@ -57,27 +59,27 @@ const SelectTimeItem = ({
   disable,
   heading,
   isBorrderTop = false,
-  startTime,
-  handleStartTime,
-  endTime,
-  handleEndTime,
+  isErrorStart,
+  isErrorEnd,
+  timeStart,
+  timeEnd,
+  handleTimeStart,
+  handleTimeEnd,
 }: Props): JSX.Element => {
   const borderTopWidth = isBorrderTop ? 0.5 : undefined;
 
-  const onChangeStartTime = useCallback(
+  const onChangeTimeStart = useCallback(
     (time: Date) => {
-      if (!day) return;
-      handleStartTime({ day, time });
+      handleTimeStart(day, time);
     },
-    [day, handleStartTime]
+    [day, handleTimeStart]
   );
 
-  const onChangeEndTime = useCallback(
+  const onChangeTimeEnd = useCallback(
     (time: Date) => {
-      if (!day) return;
-      handleEndTime({ day, time });
+      handleTimeEnd(day, time);
     },
-    [day, handleEndTime]
+    [day, handleTimeEnd]
   );
 
   return (
@@ -90,14 +92,22 @@ const SelectTimeItem = ({
           <Text style={[styles.text, styles.marginRight8]}>
             {I18n.t('reminderSelectTime.start')}
           </Text>
-          <TimePicker date={startTime} onChange={onChangeStartTime} />
+          <TimePicker
+            date={timeStart}
+            onChange={onChangeTimeStart}
+            isError={isErrorStart}
+          />
         </View>
         <Text style={[styles.text, styles.marginRight12]}>〜</Text>
         <View style={styles.row}>
           <Text style={[styles.text, styles.marginRight8]}>
             {I18n.t('reminderSelectTime.end')}
           </Text>
-          <TimePicker date={endTime} onChange={onChangeEndTime} />
+          <TimePicker
+            date={timeEnd}
+            onChange={onChangeTimeEnd}
+            isError={isErrorEnd}
+          />
         </View>
       </View>
     </View>
