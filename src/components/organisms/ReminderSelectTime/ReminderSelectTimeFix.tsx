@@ -37,6 +37,7 @@ const ReminderSelectTimeFix: React.FC<Props> = ({
   handleTimeEnd,
   onPressStudyDay,
 }) => {
+  console.log('fixDays', fixDays);
   const righComponent = useMemo(
     () => (
       <Text style={styles.subText}>
@@ -50,6 +51,11 @@ const ReminderSelectTimeFix: React.FC<Props> = ({
 
   return (
     <View style={[styles.container, { opacity: disable ? 0.4 : 1 }]}>
+      <OptionItem
+        title={I18n.t('reminderSelectTime.studyDay')}
+        onPress={onPressStudyDay}
+        righComponent={righComponent}
+      />
       <SelectTimeItem
         heading={I18n.t('reminderSelectTime.time')}
         timeStart={fixTimeInfo.timeStart}
@@ -58,11 +64,6 @@ const ReminderSelectTimeFix: React.FC<Props> = ({
         handleTimeEnd={handleTimeEnd}
         isErrorStart={fixTimeInfo.isErrorStart}
         isErrorEnd={fixTimeInfo.isErrorEnd}
-      />
-      <OptionItem
-        title={I18n.t('reminderSelectTime.studyDay')}
-        onPress={onPressStudyDay}
-        righComponent={righComponent}
       />
     </View>
   );

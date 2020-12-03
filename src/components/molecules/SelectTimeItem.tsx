@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: fontSizeM,
     color: primaryColor,
-    fontWeight: 'bold',
     marginRight: 16,
   },
   opacity: {
