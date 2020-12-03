@@ -28,44 +28,13 @@ interface Props {
   onPressStudyDay: () => void;
 }
 
-const ReminderSelectTimeCustom: React.FC<Props> = ({
+const CheckBoxs: React.FC<Props> = ({
   disable,
   customTimeInfos,
   handleTimeStart,
   handleTimeEnd,
   onPressStudyDay,
 }) => {
-  const righComponent = useMemo(
-    () => (
-      <Text style={styles.subText}>
-        {getShortDaysName(
-          customTimeInfos.filter(item => item.checked).map(item => item.day)
-        )}
-      </Text>
-    ),
-    [customTimeInfos]
-  );
-
-  const renderRemindeDays = useMemo(
-    () =>
-      customTimeInfos
-        .filter(item => item.checked)
-        .map(item => (
-          <SelectTimeItem
-            day={item.day}
-            key={item.day}
-            heading={getShortDayName(item.day)}
-            timeStart={item.timeStart}
-            handleTimeStart={handleTimeStart}
-            timeEnd={item.timeEnd}
-            handleTimeEnd={handleTimeEnd}
-            isErrorStart={item.isErrorStart}
-            isErrorEnd={item.isErrorEnd}
-          />
-        )),
-    [customTimeInfos, handleTimeEnd, handleTimeStart]
-  );
-
   return (
     <View style={[styles.container, { opacity: disable ? 0.4 : 1 }]}>
       <OptionItem
@@ -78,4 +47,4 @@ const ReminderSelectTimeCustom: React.FC<Props> = ({
   );
 };
 
-export default React.memo(ReminderSelectTimeCustom);
+export default React.memo(CheckBoxs);

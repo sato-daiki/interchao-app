@@ -70,12 +70,12 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
     if (localStatus.isLoading) {
       return <Stack.Screen name="Loading" component={LoadingScreen} />;
     }
-    if (localStatus.uid !== null) {
-      // if (localStatus.onboarding) {
-      return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;
-      // }
-      // return <Stack.Screen name="Main" component={MainNavigator} />;
-    }
+    // if (localStatus.uid !== null) {
+    // if (localStatus.onboarding) {
+    return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;
+    // }
+    // return <Stack.Screen name="Main" component={MainNavigator} />;
+    // }
     return <Stack.Screen name="Auth" component={AuthNavigator} />;
   }, [localStatus.isLoading, localStatus.uid]);
 

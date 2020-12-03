@@ -48,4 +48,4 @@ const CheckItem = ({
   );
 };
 
-export default CheckItem;
+export default React.memo(CheckItem);

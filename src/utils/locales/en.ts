@@ -290,8 +290,6 @@ const onboarding = {
   reminderInitial: '勉強時間の登録',
   reminderSelectDay: '勉強する日',
   reminderSelectTime: '勉強する時間',
-  reminderFixCustomTime: '',
-  reminderFreeCustom: '',
   pushSetting: '',
 };
 
@@ -310,12 +308,14 @@ const reminderSelectDay = {
 };
 
 const reminderSelectTime = {
-  fix: '固定',
+  fix: '時間を固定',
   custom: 'カスタム',
   studyDay: '勉強する日',
   start: '開始時間',
   end: '終了時間',
   time: '時間',
+  checkStart: '開始時間に通知する',
+  checkEnd: '終了時間に日記が投稿されていなかったら通知する',
 };
 
 const editMyDiaryList = {
