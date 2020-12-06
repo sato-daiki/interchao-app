@@ -28,13 +28,42 @@ export interface RemindeDay {
 
 export type ReminderType = 'custom' | 'fix';
 
+export interface CustomTimeInfo {
+  day: number;
+  checked: boolean;
+  timeStart: Date;
+  timeEnd: Date;
+  isFocus: boolean;
+}
+
+export interface FixDay {
+  day: number;
+  checked: boolean;
+}
+
+export interface FixTimeInfo {
+  timeStart: Date;
+  timeEnd: Date;
+  isFocus: boolean;
+}
+
+interface Fix {
+  reminderType: 'fix';
+  fixDays: FixDay[];
+  fixTimeInfo: FixTimeInfo;
+}
+
+interface Custom {
+  reminderType: 'custom';
+  customTimeInfos: CustomTimeInfo[];
+}
+
+export type TimeInfo = Fix | Custom;
+
 export interface Reminder {
-  reminderType: ReminderType;
   notificationStart: boolean;
   notificationEnd: boolean;
-  customTimeInfos: CustomTimeInfo[] | null;
-  fixDays: RemindeDay[] | null;
-  fixTimeInfo: FixTimeInfo;
+  timeInfo: TimeInfo;
 }
 
 export interface User {

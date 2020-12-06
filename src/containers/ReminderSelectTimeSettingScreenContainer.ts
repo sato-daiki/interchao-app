@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import ReminderSelectTimeScreen, {
-  Props,
-} from '@/screens/ReminderSelectTimeScreen';
+import ReminderSelectTimeSettingScreen from '@/screens/ReminderSelectTimeScreen/ReminderSelectTimeSettingScreen';
+import { Props } from '@/screens/ReminderSelectTimeScreen/interface';
+
 import { State } from '@/types/state';
 import { setUser } from '@/stores/actions/user';
 
@@ -19,4 +19,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ReminderSelectTimeScreen);
+)(ReminderSelectTimeSettingScreen);
