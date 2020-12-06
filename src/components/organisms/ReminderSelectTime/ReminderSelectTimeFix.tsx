@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useMemo, useRef } from 'react';
+import { StyleSheet, Text, Animated, Easing } from 'react-native';
 
 import { OptionItem, SelectTimeItem } from '@/components/molecules';
 
@@ -9,10 +9,6 @@ import { fontSizeM, subTextColor } from '@/styles/Common';
 import { CheckedDay, FixTimeInfo } from '@/screens/ReminderSelectTimeScreen';
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    backgroundColor: '#FFF',
-  },
   subText: {
     fontSize: fontSizeM,
     color: subTextColor,
@@ -37,7 +33,40 @@ const ReminderSelectTimeFix: React.FC<Props> = ({
   handleTimeEnd,
   onPressStudyDay,
 }) => {
-  console.log('fixDays', fixDays);
+  const animationHeight = useRef(new Animated.Value(1)).current;
+  const animationOpacity = useRef(new Animated.Value(1)).current;
+
+  React.useEffect(() => {
+    if (disable) {
+      Animated.timing(animationHeight, {
+        duration: 300,
+        toValue: 0,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }).start();
+      Animated.timing(animationOpacity, {
+        toValue: 0,
+        duration: 200,
+        easing: Easing.linear,
+        useNativeDriver: false, // <-- neccessary
+      }).start();
+    } else {
+      Animated.timing(animationHeight, {
+        duration: 500,
+        toValue: 1,
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }).start();
+
+      Animated.timing(animationOpacity, {
+        toValue: 1,
+        duration: 200,
+        easing: Easing.linear,
+        useNativeDriver: false, // <-- neccessary
+      }).start();
+    }
+  }, [animationHeight, animationOpacity, disable]);
+
   const righComponent = useMemo(
     () => (
       <Text style={styles.subText}>
@@ -49,8 +78,20 @@ const ReminderSelectTimeFix: React.FC<Props> = ({
     [fixDays]
   );
 
+  const maxHeight = animationHeight.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 300],
+  });
+
   return (
-    <View style={[styles.container, { opacity: disable ? 0.4 : 1 }]}>
+    <Animated.View
+      style={[
+        {
+          opacity: animationOpacity,
+          maxHeight,
+        },
+      ]}
+    >
       <OptionItem
         title={I18n.t('reminderSelectTime.studyDay')}
         onPress={onPressStudyDay}
@@ -62,10 +103,8 @@ const ReminderSelectTimeFix: React.FC<Props> = ({
         timeEnd={fixTimeInfo.timeEnd}
         handleTimeStart={handleTimeStart}
         handleTimeEnd={handleTimeEnd}
-        isErrorStart={fixTimeInfo.isErrorStart}
-        isErrorEnd={fixTimeInfo.isErrorEnd}
       />
-    </View>
+    </Animated.View>
   );
 };
 

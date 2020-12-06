@@ -1,13 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 import I18n from '@/utils/I18n';
 import { fontSizeL, primaryColor } from '@/styles/Common';
 import { CheckItemDay } from '@/components/molecules';
-import { LoadingModal, SubmitButton } from '@/components/atoms';
+import { HeaderText, LoadingModal } from '@/components/atoms';
 import { getDayName } from '@/utils/time';
 import { RouteProp } from '@react-navigation/native';
+import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 
 type NavigationProp = StackNavigationProp<
   OnboardingStackParamList,
@@ -32,10 +32,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 32,
   },
-  button: {
-    marginTop: 32,
-    marginHorizontal: 16,
-  },
 });
 
 const ReminderSelectDayScreen: React.FC<ScreenType> = ({
@@ -54,28 +50,6 @@ const ReminderSelectDayScreen: React.FC<ScreenType> = ({
   const [thu, setThu] = useState(checkedDays[4].checked);
   const [fri, setFri] = useState(checkedDays[5].checked);
   const [sat, setSat] = useState(checkedDays[6].checked);
-
-  const onChangedSun = useCallback(() => {
-    setSun(!sun);
-  }, [sun]);
-  const onChangedMon = useCallback(() => {
-    setMon(!mon);
-  }, [mon]);
-  const onChangedTue = useCallback(() => {
-    setTue(!tue);
-  }, [tue]);
-  const onChangedWes = useCallback(() => {
-    setWes(!wes);
-  }, [wes]);
-  const onChangedThu = useCallback(() => {
-    setThu(!thu);
-  }, [thu]);
-  const onChangedFri = useCallback(() => {
-    setFri(!fri);
-  }, [fri]);
-  const onChangedSat = useCallback(() => {
-    setSat(!sat);
-  }, [sat]);
 
   const onPressDone = useCallback(() => {
     if (loading) return;
@@ -105,6 +79,28 @@ const ReminderSelectDayScreen: React.FC<ScreenType> = ({
     tue,
     wes,
   ]);
+
+  const onChangedSun = useCallback(() => {
+    setSun(!sun);
+  }, [sun]);
+  const onChangedMon = useCallback(() => {
+    setMon(!mon);
+  }, [mon]);
+  const onChangedTue = useCallback(() => {
+    setTue(!tue);
+  }, [tue]);
+  const onChangedWes = useCallback(() => {
+    setWes(!wes);
+  }, [wes]);
+  const onChangedThu = useCallback(() => {
+    setThu(!thu);
+  }, [thu]);
+  const onChangedFri = useCallback(() => {
+    setFri(!fri);
+  }, [fri]);
+  const onChangedSat = useCallback(() => {
+    setSat(!sat);
+  }, [sat]);
 
   const checkItemDayPills = useMemo(() => {
     return {
@@ -152,21 +148,29 @@ const ReminderSelectDayScreen: React.FC<ScreenType> = ({
       },
     };
   }, [
-    fri,
-    mon,
-    onChangedFri,
-    onChangedMon,
-    onChangedSat,
-    onChangedSun,
-    onChangedThu,
-    onChangedTue,
-    onChangedWes,
-    sat,
     sun,
-    thu,
+    mon,
     tue,
     wes,
+    thu,
+    fri,
+    sat,
+    onChangedSun,
+    onChangedMon,
+    onChangedTue,
+    onChangedWes,
+    onChangedThu,
+    onChangedFri,
+    onChangedSat,
   ]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: (): JSX.Element | null => (
+        <HeaderText text={I18n.t('common.done')} onPress={onPressDone} />
+      ),
+    });
+  }, [navigation, onPressDone]);
 
   return (
     <View style={styles.container}>
@@ -179,13 +183,6 @@ const ReminderSelectDayScreen: React.FC<ScreenType> = ({
       <CheckItemDay {...checkItemDayPills.thu} />
       <CheckItemDay {...checkItemDayPills.fri} />
       <CheckItemDay {...checkItemDayPills.sat} />
-      <View style={styles.button}>
-        <SubmitButton
-          title={I18n.t('common.done')}
-          onPress={onPressDone}
-          disable={loading}
-        />
-      </View>
     </View>
   );
 };

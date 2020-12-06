@@ -2,17 +2,23 @@ import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 
-import { HeaderText, LoadingModal, RadioBox } from '@/components/atoms';
+import { HeaderButton, LoadingModal, RadioBox } from '@/components/atoms';
 
-import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 import I18n from '@/utils/I18n';
 import { fontSizeL, mainColor, primaryColor } from '@/styles/Common';
-import { RemindeDay, Reminder, User } from '@/types';
+import { RemindeDay, Reminder, ReminderType, User } from '@/types';
 import { addDay } from '@/utils/time';
 import ReminderSelectTimeFix from '@/components/organisms/ReminderSelectTime/ReminderSelectTimeFix';
 import ReminderSelectTimeCustom from '@/components/organisms/ReminderSelectTime/ReminderSelectTimeCustom';
 import { CheckItem } from '@/components/molecules';
 import firebase from '@/constants/firebase';
+import { ScrollView } from 'react-native-gesture-handler';
+import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
+import { RouteProp } from '@react-navigation/native';
+import {
+  MyPageTabNavigationProp,
+  MyPageTabStackParamList,
+} from '@/navigations/MyPageTabNavigator';
 
 export interface Props {
   user: User;
@@ -22,11 +28,18 @@ interface DispatchProps {
   setUser: (user: User) => void;
 }
 
-type ScreenType = StackScreenProps<
-  OnboardingStackParamList,
+type NavigationProp = StackScreenProps<
+  OnboardingStackParamList | MyPageTabStackParamList,
   'ReminderSelectTime'
-> &
-  Props &
+>;
+
+type ScreenType = {
+  navigation: NavigationProp;
+  route: RouteProp<
+    OnboardingStackParamList | MyPageTabStackParamList,
+    'ReminderSelectTime'
+  >;
+} & Props &
   DispatchProps;
 
 const styles = StyleSheet.create({
@@ -42,12 +55,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 32,
   },
-  fixContainer: {
-    paddingBottom: 48,
+  radioContainer: {
+    paddingBottom: 16,
   },
-  checkContainer: {},
+  checkContainer: {
+    paddingTop: 16,
+    paddingBottom: 32,
+  },
   radioBox: {
     marginHorizontal: 8,
+    paddingBottom: 8,
+  },
+  label: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    paddingHorizontal: 16,
     paddingBottom: 8,
   },
   bold: {
@@ -61,16 +83,12 @@ export interface CheckedDay {
   timeStart?: Date;
   timeEnd?: Date;
   isFocus?: boolean;
-  isErrorStart?: boolean;
-  isErrorEnd?: boolean;
 }
 
 export interface FixTimeInfo {
   timeStart: Date;
   timeEnd: Date;
   isFocus: boolean;
-  isErrorStart: boolean;
-  isErrorEnd: boolean;
 }
 
 export interface CustomTimeInfo {
@@ -79,8 +97,6 @@ export interface CustomTimeInfo {
   timeStart: Date;
   timeEnd: Date;
   isFocus: boolean;
-  isErrorStart: boolean;
-  isErrorEnd: boolean;
 }
 
 const initFixDays: CheckedDay[] = [...Array(7)].map((_, i) => {
@@ -94,8 +110,6 @@ const initFixTimeInfo: FixTimeInfo = {
   timeStart: new Date(2000, 1, 1, 20, 0, 0),
   timeEnd: new Date(2000, 1, 1, 21, 0, 0),
   isFocus: false,
-  isErrorStart: false,
-  isErrorEnd: false,
 };
 
 const initCuctomTimeInfos: CustomTimeInfo[] = [...Array(7)].map((_, i) => {
@@ -105,17 +119,18 @@ const initCuctomTimeInfos: CustomTimeInfo[] = [...Array(7)].map((_, i) => {
     timeStart: new Date(2000, 1, 1, 20, 0, 0),
     timeEnd: new Date(2000, 1, 1, 21, 0, 0),
     isFocus: false,
-    isErrorStart: false,
-    isErrorEnd: false,
   };
 });
 
 const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
   navigation,
+  route,
   user,
+  setUser,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isFix, setIsFix] = useState(true);
+
+  const [reminderType, setrRminderType] = useState<ReminderType>('fix');
   const [notificationStart, setNotificationStart] = useState(true);
   const [notificationEnd, setNotificationEnd] = useState(true);
 
@@ -123,11 +138,29 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
   const [fixTimeInfo, setFixTimeInfo] = useState(initFixTimeInfo);
   const [customTimeInfos, setCustomTimeInfos] = useState(initCuctomTimeInfos);
 
+  // useLayoutEffect(() => {
+  //   // 初回 or まだ未登録の場合
+  //   if (!user.reminder) return;
+
+  //   // 登録済みの場合
+  //   setrRminderType(user.reminder.reminderType);
+  //   setNotificationStart(user.reminder.notificationStart);
+  //   setNotificationEnd(user.reminder.notificationEnd);
+  //   if (user.reminder.reminderType === 'fix') {
+  //     initFixDays
+
+  //     setFixDays();
+  //     setFixTimeInfo;
+  //   } else {
+  //     setCustomTimeInfos();
+  //   }
+  // }, [user.reminder]);
+
   const onPressDone = useCallback(async () => {
     if (isLoading) return;
     setIsLoading(true);
     let remindeDays: RemindeDay[];
-    if (isFix) {
+    if (reminderType === 'fix') {
       remindeDays = fixDays
         .filter(item => item.checked)
         .map(item => {
@@ -137,7 +170,7 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
             timeEnd: fixTimeInfo.timeEnd,
           };
         });
-    } else {
+    } else if (reminderType === 'custom') {
       remindeDays = customTimeInfos
         .filter(item => item.checked)
         .map(item => {
@@ -147,9 +180,13 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
             timeEnd: item.timeEnd,
           };
         });
+    } else {
+      // ここには入らない
+      return;
     }
 
     const reminder: Reminder = {
+      reminderType,
       remindeDays,
       notificationStart,
       notificationEnd,
@@ -162,6 +199,11 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
+    setUser({
+      ...user,
+      reminder,
+    });
+
     setIsLoading(false);
     navigation.navigate('PushSetting');
   }, [
@@ -169,28 +211,33 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
     fixDays,
     fixTimeInfo.timeEnd,
     fixTimeInfo.timeStart,
-    isFix,
     isLoading,
     navigation,
     notificationEnd,
     notificationStart,
-    user.uid,
+    reminderType,
+    setUser,
+    user,
   ]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: (): JSX.Element | null => (
-        <HeaderText text={I18n.t('common.done')} onPress={onPressDone} />
+        <HeaderButton
+          title={I18n.t('common.save')}
+          color={mainColor}
+          onPress={onPressDone}
+        />
       ),
     });
   }, [navigation, onPressDone]);
 
   const onPressFix = useCallback(() => {
-    setIsFix(true);
+    setrRminderType('fix');
   }, []);
 
   const onPressCustom = useCallback(() => {
-    setIsFix(false);
+    setrRminderType('custom');
   }, []);
 
   const onPressFixStudyDay = useCallback(() => {
@@ -209,8 +256,6 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
           ? addDay(time, 1, 'h')
           : fixTimeInfo.timeEnd,
         isFocus: true,
-        isErrorStart: false,
-        isErrorEnd: time > fixTimeInfo.timeEnd,
       });
     },
     [fixTimeInfo]
@@ -222,8 +267,6 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
         ...fixTimeInfo,
         timeEnd: time,
         isFocus: true,
-        isErrorStart: time < fixTimeInfo.timeStart,
-        isErrorEnd: false,
       });
     },
     [fixTimeInfo]
@@ -248,8 +291,6 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
           timeStart: time,
           timeEnd,
           isFocus: true,
-          isErrorStart: false,
-          isErrorEnd: time > timeEnd,
         };
       });
       setCustomTimeInfos(newCustomTimeInfos);
@@ -267,8 +308,6 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
           ...item,
           timeEnd: time,
           isFocus: true,
-          isErrorStart: time < item.timeStart,
-          isErrorEnd: false,
         };
       });
       setCustomTimeInfos(newCustomTimes);
@@ -284,22 +323,22 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
   }, [notificationEnd]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <LoadingModal visible={isLoading} />
-      <Text style={styles.title}>{I18n.t('reminderSelectDay.title')}</Text>
+      <Text style={styles.title}>{I18n.t('reminderSelectTime.title')}</Text>
 
-      <View style={styles.fixContainer}>
+      <View style={styles.radioContainer}>
         <View style={styles.radioBox}>
           <RadioBox
             textStyle={styles.bold}
-            checked={isFix}
+            checked={reminderType === 'fix'}
             color={mainColor}
             text={I18n.t('reminderSelectTime.fix')}
             onPress={onPressFix}
           />
         </View>
         <ReminderSelectTimeFix
-          disable={!isFix}
+          disable={reminderType !== 'fix'}
           fixDays={fixDays}
           fixTimeInfo={fixTimeInfo}
           handleTimeStart={handleFixTimeStart}
@@ -307,18 +346,18 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
           onPressStudyDay={onPressFixStudyDay}
         />
       </View>
-      <View style={styles.fixContainer}>
+      <View style={styles.radioContainer}>
         <View style={styles.radioBox}>
           <RadioBox
             textStyle={styles.bold}
-            checked={!isFix}
+            checked={reminderType === 'custom'}
             color={mainColor}
             text={I18n.t('reminderSelectTime.custom')}
             onPress={onPressCustom}
           />
         </View>
         <ReminderSelectTimeCustom
-          disable={isFix}
+          disable={reminderType !== 'custom'}
           customTimeInfos={customTimeInfos}
           handleTimeStart={handleCumtomTimeStart}
           handleTimeEnd={handleCumtomTimeEnd}
@@ -326,6 +365,9 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
         />
       </View>
       <View style={styles.checkContainer}>
+        <Text style={styles.label}>
+          {I18n.t('reminderSelectTime.notificationLable')}
+        </Text>
         <CheckItem
           title={I18n.t('reminderSelectTime.notificationStart')}
           checked={notificationStart}
@@ -337,7 +379,7 @@ const ReminderSelectTimeScreen: React.FC<ScreenType> = ({
           onPress={onPressNotificationEnd}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

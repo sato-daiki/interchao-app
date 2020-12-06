@@ -57,11 +57,11 @@ const InitializeScreen: React.FC<ScreenType> = ({ navigation }) => {
   }, []);
 
   const onPressSignIn = useCallback((): void => {
-    navigation.navigate('CreateAccount', { screen: 'SignIn' });
+    navigation.navigate('SignIn');
   }, [navigation]);
 
   const onPressSignUp = useCallback((): void => {
-    navigation.navigate('CreateAccount', { screen: 'SelectLanguage' });
+    navigation.navigate('SelectLanguage');
   }, [navigation]);
 
   return (
