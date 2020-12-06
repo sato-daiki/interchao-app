@@ -6,7 +6,7 @@ import { OptionItem, SelectTimeItem } from '@/components/molecules';
 import I18n from '@/utils/I18n';
 import { getShortDaysName } from '@/utils/time';
 import { fontSizeM, subTextColor } from '@/styles/Common';
-import { CheckedDay, FixTimeInfo } from '@/screens/ReminderSelectTimeScreen';
+import { FixDay, FixTimeInfo } from '@/types';
 
 const styles = StyleSheet.create({
   subText: {
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   disable: boolean;
-  fixDays: CheckedDay[];
+  fixDays: FixDay[];
   fixTimeInfo: FixTimeInfo;
   handleTimeStart: (day: number | undefined, timeStart: Date) => void;
   handleTimeEnd: (day: number | undefined, timeEnd: Date) => void;

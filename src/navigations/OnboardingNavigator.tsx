@@ -3,16 +3,16 @@ import {
   DefaultAuthLayoutOptions,
   DefaultNavigationOptions,
 } from '@/constants/NavigationOptions';
-import ReminderSelectTimeScreenContainer from '@/containers/ReminderSelectTimeScreenContainer';
+import ReminderInitialOnboardingScreen from '@/screens/ReminderInitialScreen/ReminderInitialOnboardingScreen';
+import ReminderSelectTimeOwnbordingScreenContainer from '@/containers/ReminderSelectTimeOwnbordingScreenContainer';
 import PushSettingScreenContainer from '@/containers/PushSettingScreenContainer';
-import ReminderInitialScreen from '@/screens/ReminderInitialScreen';
 import ReminderSelectDayScreen from '@/screens/ReminderSelectDayScreen';
-import { CheckedDay } from '@/screens/ReminderSelectTimeScreen';
 import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack';
 import I18n from '@/utils/I18n';
+import { CustomTimeInfo, FixDay } from '@/types';
 import { RootStackParamList } from './RootNavigator';
 
 export type OnboardingNavigationProp = StackNavigationProp<
@@ -21,11 +21,11 @@ export type OnboardingNavigationProp = StackNavigationProp<
 >;
 
 export type OnboardingStackParamList = {
-  ReminderInitial: undefined;
-  ReminderSelectTime: { caller: 'Onboarding' };
+  ReminderInitialOnboarding: undefined;
+  ReminderSelectTimeOnboarding: undefined;
   ReminderSelectDay: {
-    checkedDays: CheckedDay[];
-    onChangeCheckedDays: (checkedDays: any) => void;
+    checkedDays: FixDay[] | CustomTimeInfo[];
+    onChangeCheckedDays: (checkedDays: FixDay[] | CustomTimeInfo[]) => void;
   };
   PushSetting: undefined;
 };
@@ -35,22 +35,22 @@ const Stack = createStackNavigator<OnboardingStackParamList>();
 export const OnboardingNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator
-      initialRouteName="ReminderInitial"
+      initialRouteName="ReminderInitialOnboarding"
       screenOptions={{
         ...DefaultNavigationOptions,
       }}
     >
       <Stack.Screen
-        name="ReminderInitial"
-        component={ReminderInitialScreen}
+        name="ReminderInitialOnboarding"
+        component={ReminderInitialOnboardingScreen}
         options={{
           title: I18n.t('onboarding.reminderInitial'),
           headerShown: false,
         }}
       />
       <Stack.Screen
-        name="ReminderSelectTime"
-        component={ReminderSelectTimeScreenContainer}
+        name="ReminderSelectTimeOnboarding"
+        component={ReminderSelectTimeOwnbordingScreenContainer}
         options={{
           ...DefaultAuthLayoutOptions,
           title: I18n.t('onboarding.reminderSelectTime'),

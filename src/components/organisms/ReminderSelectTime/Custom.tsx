@@ -6,7 +6,7 @@ import { OptionItem, SelectTimeItem } from '@/components/molecules';
 import I18n from '@/utils/I18n';
 import { getShortDayName, getShortDaysName } from '@/utils/time';
 import { fontSizeM, subTextColor } from '@/styles/Common';
-import { CustomTimeInfo } from '@/screens/ReminderSelectTimeScreen';
+import { CustomTimeInfo } from '@/types';
 
 const styles = StyleSheet.create({
   subText: {
