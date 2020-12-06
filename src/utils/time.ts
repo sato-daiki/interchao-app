@@ -1,7 +1,6 @@
 import moment, { DurationInputArg1, DurationInputArg2 } from 'moment';
 import 'moment/locale/ja';
 import I18n from '@/utils/I18n';
-import { RemindeDay } from '@/types';
 
 /** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
 export const getAlgoliaDay = (timestamp: any, format = 'Y-M-D'): string => {

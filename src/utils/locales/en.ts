@@ -14,6 +14,7 @@ const common = {
   publish: 'Publish',
   draft: 'Save',
   skip: 'Skip',
+  save: 'Save',
   add: 'Add',
   delete: 'Delete',
   translation: 'Translation',
@@ -299,23 +300,25 @@ const reminderInitial = {
   submit: '登録する',
 };
 
-const reminderSelectDay = {
-  title: '勉強する頻度を入力してください',
-  everday: '毎日',
-  weekdend: '土日のみ',
-  weekday: '平日',
-  custom: 'カスタム',
-};
-
 const reminderSelectTime = {
+  title: '勉強する日と時間を入力してください',
   fix: '時間を固定',
   custom: 'カスタム',
   studyDay: '勉強する日',
   start: '開始時間',
   end: '終了時間',
   time: '時間',
-  checkStart: '開始時間に通知する',
-  checkEnd: '終了時間に日記が投稿されていなかったら通知する',
+  standardTime: '標準時間',
+  notificationLable: '通知タイミング',
+  notificationStart: '開始時間に通知する',
+  notificationEnd: '終了時間に日記が投稿されていなかったら通知する',
+};
+
+const pushSetting = {
+  title: 'お知らせをオンにする',
+  description:
+    '日記の添削が届いた時、設定した勉強時間になったときにお知らせを受け取れます。',
+  submit: 'オンにする',
 };
 
 const editMyDiaryList = {
@@ -371,6 +374,7 @@ const selectLanguage = {
 const setting = {
   headerTitle: 'Settings',
   title: 'Basic',
+  reminder: 'Reminder',
   notice: 'Notifications',
   editEmail: 'Edit Email Address',
   editPassword: 'Edit Password',
@@ -931,8 +935,8 @@ const en = {
   notice,
   onboarding,
   reminderInitial,
-  reminderSelectDay,
   reminderSelectTime,
+  pushSetting,
   editMyDiaryList,
   postDiary,
   postDraftDiary,

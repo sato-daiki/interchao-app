@@ -1,19 +1,28 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import I18n from '@/utils/I18n';
-import ReminderInitialScreen from '@/screens/ReminderInitialScreen';
-import PushSettingScreen from '@/screens/PushSettingScreen';
-import ReminderSelectDayScreen from '@/screens/ReminderSelectDayScreen';
-import ReminderSelectTimeScreenContainer from '@/containers/ReminderSelectTimeScreenContainer';
 import {
   DefaultAuthLayoutOptions,
   DefaultNavigationOptions,
 } from '@/constants/NavigationOptions';
+import ReminderSelectTimeScreenContainer from '@/containers/ReminderSelectTimeScreenContainer';
+import PushSettingScreenContainer from '@/containers/PushSettingScreenContainer';
+import ReminderInitialScreen from '@/screens/ReminderInitialScreen';
+import ReminderSelectDayScreen from '@/screens/ReminderSelectDayScreen';
 import { CheckedDay } from '@/screens/ReminderSelectTimeScreen';
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from '@react-navigation/stack';
+import I18n from '@/utils/I18n';
+import { RootStackParamList } from './RootNavigator';
+
+export type OnboardingNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'Onboarding'
+>;
 
 export type OnboardingStackParamList = {
   ReminderInitial: undefined;
-  ReminderSelectTime: undefined;
+  ReminderSelectTime: { caller: 'Onboarding' };
   ReminderSelectDay: {
     checkedDays: CheckedDay[];
     onChangeCheckedDays: (checkedDays: any) => void;
@@ -23,7 +32,7 @@ export type OnboardingStackParamList = {
 
 const Stack = createStackNavigator<OnboardingStackParamList>();
 
-const OnboardingNavigator = (): JSX.Element => {
+export const OnboardingNavigator = (): JSX.Element => {
   return (
     <Stack.Navigator
       initialRouteName="ReminderInitial"
@@ -57,8 +66,11 @@ const OnboardingNavigator = (): JSX.Element => {
       />
       <Stack.Screen
         name="PushSetting"
-        component={PushSettingScreen}
-        options={{ title: I18n.t('onboarding.pushSetting') }}
+        component={PushSettingScreenContainer}
+        options={{
+          title: I18n.t('onboarding.pushSetting'),
+          headerShown: false,
+        }}
       />
     </Stack.Navigator>
   );

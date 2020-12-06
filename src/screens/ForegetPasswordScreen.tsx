@@ -17,10 +17,6 @@ import {
 import I18n from '@/utils/I18n';
 import { emailInputError, emailValidate } from '@/utils/common';
 import {
-  AuthNavigationProp,
-  CreateAccountStackParamList,
-} from '@/navigations/AuthNavigator';
-import {
   MyPageTabStackParamList,
   MyPageTabNavigationProp,
 } from '@/navigations/MyPageTabNavigator';
@@ -30,13 +26,8 @@ type NavigationProp = CompositeNavigationProp<
   MyPageTabNavigationProp
 >;
 
-type NavigationProp2 = CompositeNavigationProp<
-  StackNavigationProp<CreateAccountStackParamList, 'ForegetPassword'>,
-  AuthNavigationProp
->;
-
 type ScreenType = {
-  navigation: NavigationProp | NavigationProp2;
+  navigation: NavigationProp;
 };
 
 const styles = StyleSheet.create({

@@ -11,6 +11,7 @@ module.exports = {
   Loading: require('./loading.gif'),
   LogoVercitacl: require('./logo_vertical.png'),
   Note: require('./note.png'),
+  Notification: require('./notification.png'),
   Office: require('./office.png'),
   Pen: require('./pen.png'),
   People: require('./people.png'),

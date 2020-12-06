@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import firebase from 'firebase';
 import { createStackNavigator } from '@react-navigation/stack';
 import { getUser } from '@/utils/user';
@@ -26,7 +26,7 @@ export interface Props {
 interface DispatchProps {
   setUser: (user: User) => void;
   setProfile: (profile: Profile) => void;
-  restoreUid: (uid: string | null) => void;
+  restoreUid: (uid: string | null, onboarding?: boolean) => void;
 }
 
 const RootNavigator: React.FC<Props & DispatchProps> = ({
@@ -39,19 +39,20 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
 
   const initNavigation = useCallback(
     async (authUser: firebase.User | null): Promise<void> => {
+      console.log('initNavigation');
       if (authUser) {
         const newUser = await getUser(authUser.uid);
         const newProfile = await getProfile(authUser.uid);
         if (newUser && newProfile) {
           setUser(newUser);
           setProfile(newProfile);
-          restoreUid(authUser.uid);
+          restoreUid(authUser.uid, newUser.onboarding);
 
           // Amplitudeに登録
           setAnalyticsUser(newUser, newProfile);
         }
       } else {
-        restoreUid(null);
+        restoreUid(null, false);
       }
       if (isLoading) setIsLoading(false);
     },
@@ -67,17 +68,22 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
   const Stack = createStackNavigator<RootStackParamList>();
 
   const renderScreen = useCallback(() => {
+    console.log(
+      `[renderScreen] isLoading:${localStatus.isLoading}, onboarding:${localStatus.onboarding}, uid:${localStatus.uid}`
+    );
     if (localStatus.isLoading) {
       return <Stack.Screen name="Loading" component={LoadingScreen} />;
     }
-    // if (localStatus.uid !== null) {
-    // if (localStatus.onboarding) {
-    return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;
-    // }
-    // return <Stack.Screen name="Main" component={MainNavigator} />;
-    // }
+    if (localStatus.uid !== null) {
+      if (localStatus.onboarding === false) {
+        return (
+          <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
+        );
+      }
+      return <Stack.Screen name="Main" component={MainNavigator} />;
+    }
     return <Stack.Screen name="Auth" component={AuthNavigator} />;
-  }, [localStatus.isLoading, localStatus.uid]);
+  }, [localStatus.isLoading, localStatus.onboarding, localStatus.uid]);
 
   return (
     <Stack.Navigator

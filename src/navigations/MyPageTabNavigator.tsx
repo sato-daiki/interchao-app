@@ -4,6 +4,9 @@ import {
   StackNavigationProp,
 } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
+import ReminderSelectTimeScreenContainer from '@/containers/ReminderSelectTimeScreenContainer';
+import ReminderSelectDayScreen from '@/screens/ReminderSelectDayScreen';
+import { CheckedDay } from '@/screens/ReminderSelectTimeScreen';
 import I18n from '../utils/I18n';
 
 /* screens */
@@ -40,6 +43,11 @@ export type MyPageTabStackParamList = {
   RegisterEmailPassword: undefined;
   DeleteAcount: undefined;
   ForegetPassword: undefined;
+  ReminderSelectTime: { caller: 'Setting' };
+  ReminderSelectDay: {
+    checkedDays: CheckedDay[];
+    onChangeCheckedDays: (checkedDays: any) => void;
+  };
 } & CommonStackParamList;
 
 const MyPageTabStack = createStackNavigator<MyPageTabStackParamList>();
@@ -99,6 +107,21 @@ const MyPageTabNavigator = (): JSX.Element => {
         name="ForegetPassword"
         component={ForegetPasswordScreen}
         options={{ title: I18n.t('foregetPassword.headerTitle') }}
+      />
+      {/* OnboardingNavigatorとは別で定義する */}
+      <MyPageTabStack.Screen
+        name="ReminderSelectTime"
+        component={ReminderSelectTimeScreenContainer}
+        options={{
+          title: I18n.t('onboarding.reminderSelectTime'),
+        }}
+      />
+      <MyPageTabStack.Screen
+        name="ReminderSelectDay"
+        component={ReminderSelectDayScreen}
+        options={{
+          title: I18n.t('onboarding.reminderSelectDay'),
+        }}
       />
       {createCommonNavigator()}
     </MyPageTabStack.Navigator>

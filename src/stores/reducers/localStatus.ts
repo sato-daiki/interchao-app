@@ -5,9 +5,10 @@ import { LocalStatus } from '../../types';
 const initialState: LocalStatus = {
   unreadCorrectionNum: 0,
   isLoading: true,
-  isSignout: false,
   isModalAppReviewRequest: false,
   uid: null,
+  onboarding: null,
+  firstLogin: false,
   myDiaryListView: 'list',
 };
 
@@ -28,22 +29,24 @@ const localStatus = (state = initialState, action: Actions): LocalStatus => {
     case Types.RESTORE_UID:
       return {
         ...state,
-        uid: action.uid,
+        uid: action.payload.uid,
+        onboarding: action.payload.onboarding,
         isLoading: false,
+        firstLogin: false,
+      };
+    case Types.COMPLETED_ONBOARDING:
+      return {
+        ...state,
+        onboarding: true,
+        firstLogin: true,
       };
     case Types.SIGN_IN:
       return {
         ...state,
-        isSignout: false,
         uid: action.uid,
       };
     case Types.SIGN_OUT:
-      return {
-        ...state,
-        isSignout: true,
-        uid: null,
-        isLoading: false,
-      };
+      return { ...initialState, isLoading: false };
     default:
       return state;
   }

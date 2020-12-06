@@ -4,10 +4,10 @@ import { StackScreenProps } from '@react-navigation/stack';
 
 import { LinkText, Space, SubmitButton } from '@/components/atoms';
 
-import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 import I18n from '@/utils/I18n';
 import { fontSizeL, fontSizeM, primaryColor } from '@/styles/Common';
 import { Time } from '@/images';
+import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 
 type ScreenType = StackScreenProps<OnboardingStackParamList, 'ReminderInitial'>;
 
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
 const ReminderInitialScreen: React.FC<ScreenType> = ({ navigation }) => {
   const onPressSubmit = useCallback(() => {
-    navigation.navigate('ReminderSelectTime');
+    navigation.navigate('ReminderSelectTime', { caller: 'Onboarding' });
   }, [navigation]);
 
   const onPressSkip = useCallback(() => {

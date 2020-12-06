@@ -1,11 +1,8 @@
 import { useEffect, useRef } from 'react';
-import {
-  getExpoPushToken,
-  registerForPushNotificationsAsync,
-} from '@/utils/Notification';
 import { Subscription } from '@unimodules/core';
 import * as Notifications from 'expo-notifications';
 import { LocalStatus } from '@/types';
+import { setPushotifications } from '@/utils/Notification';
 
 interface Props {
   localStatus: LocalStatus;
@@ -25,11 +22,10 @@ export const useFirstScreen = ({
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
-      // expoへの登録
-      const expoPushToken = await getExpoPushToken();
-      if (expoPushToken && localStatus.uid) {
-        // localStatusの方を使わないと初回登録時落ちる
-        await registerForPushNotificationsAsync(localStatus.uid, expoPushToken);
+      console.log('useFirstScreen', localStatus.firstLogin, localStatus.uid);
+      // 初回登録でskipした場合は入らないようにする
+      if (!localStatus.firstLogin && localStatus.uid) {
+        setPushotifications(localStatus.uid);
       }
     };
     f();

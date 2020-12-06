@@ -27,6 +27,7 @@ import {
   SetUnreadCorrectionNumAction,
   SetMyDiaryListViewAction,
   RestoreUidAction,
+  CompletedOnboardingAction,
   SignInAction,
   SignOutAction,
 } from '../stores/actions/localStatus';
@@ -46,6 +47,7 @@ export type Actions =
   | SetUnreadCorrectionNumAction
   | SetMyDiaryListViewAction
   | RestoreUidAction
+  | CompletedOnboardingAction
   | SignInAction
   | SignOutAction
   | SetUserAction

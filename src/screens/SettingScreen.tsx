@@ -114,6 +114,12 @@ const SettingScreen: React.FC<ScreenType> = ({
       />
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
       <OptionItem
+        title={I18n.t('setting.reminder')}
+        onPress={(): void => {
+          navigation.navigate('ReminderSelectTime');
+        }}
+      />
+      <OptionItem
         title={I18n.t('setting.notice')}
         onPress={(): void => {
           navigation.navigate('Notice');

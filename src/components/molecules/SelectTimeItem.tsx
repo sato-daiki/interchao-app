@@ -10,8 +10,6 @@ interface Props {
   disable?: boolean;
   heading: string;
   isBorrderTop?: boolean;
-  isErrorStart: boolean;
-  isErrorEnd: boolean;
   timeStart: Date;
   timeEnd: Date;
   handleTimeStart: (day: number | undefined, time: Date) => void;
@@ -58,8 +56,6 @@ const SelectTimeItem = ({
   disable,
   heading,
   isBorrderTop = false,
-  isErrorStart,
-  isErrorEnd,
   timeStart,
   timeEnd,
   handleTimeStart,
@@ -91,22 +87,14 @@ const SelectTimeItem = ({
           <Text style={[styles.text, styles.marginRight8]}>
             {I18n.t('reminderSelectTime.start')}
           </Text>
-          <TimePicker
-            date={timeStart}
-            onChange={onChangeTimeStart}
-            isError={isErrorStart}
-          />
+          <TimePicker date={timeStart} onChange={onChangeTimeStart} />
         </View>
         <Text style={[styles.text, styles.marginRight12]}>〜</Text>
         <View style={styles.row}>
           <Text style={[styles.text, styles.marginRight8]}>
             {I18n.t('reminderSelectTime.end')}
           </Text>
-          <TimePicker
-            date={timeEnd}
-            onChange={onChangeTimeEnd}
-            isError={isErrorEnd}
-          />
+          <TimePicker date={timeEnd} onChange={onChangeTimeEnd} />
         </View>
       </View>
     </View>

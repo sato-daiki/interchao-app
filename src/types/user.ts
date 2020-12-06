@@ -26,15 +26,21 @@ export interface RemindeDay {
   timeEnd: Date;
 }
 
+export type ReminderType = 'custom' | 'fix';
+
 export interface Reminder {
+  reminderType: ReminderType;
   notificationStart: boolean;
   notificationEnd: boolean;
-  remindeDays: RemindeDay[] | null;
+  customTimeInfos: CustomTimeInfo[] | null;
+  fixDays: RemindeDay[] | null;
+  fixTimeInfo: FixTimeInfo;
 }
 
 export interface User {
   uid: string;
   diaryPosted: boolean;
+  onboarding?: boolean;
   tutorialPostDiary: boolean;
   tutorialTeachDiaryList: boolean;
   tutorialCorrectiong: boolean;
