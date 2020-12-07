@@ -288,37 +288,40 @@ const notice = {
 };
 
 const onboarding = {
-  reminderInitial: '勉強時間の登録',
-  reminderSelectDay: '勉強する日',
-  reminderSelectTime: '勉強する時間',
-  pushSetting: '',
+  reminderInitial: 'Set study time',
+  reminderSelectTime: 'Set study time',
+  reminderSelectDay: 'Select days of the week',
+  pushSetting: 'Turn on notifications',
 };
 
 const reminderInitial = {
   text:
-    '勉強は習慣化することが大切です。勉強する時間を固定しましょう。リマインダーを登録すると、勉強開始時間に通知を飛ばすことができます。',
-  submit: '登録する',
+    "It is important to make studying part of your daily routine. Let's fix the time to study. If you register a reminder, you will be notified at a set time.",
+  submit: 'Set Reminder',
 };
 
 const reminderSelectTime = {
-  title: '勉強する日と時間を入力してください',
-  fix: '時間を固定',
-  custom: 'カスタム',
-  studyDay: '勉強する日',
-  start: '開始時間',
-  end: '終了時間',
-  time: '時間',
-  standardTime: '標準時間',
-  notificationLable: '通知タイミング',
-  notificationStart: '開始時間に通知する',
-  notificationEnd: '終了時間に日記が投稿されていなかったら通知する',
+  title: 'Please set a study schedule',
+  fix: 'Same time every day',
+  custom: 'Custom',
+  studyDay: 'Days of the week',
+  time: 'Time',
+  start: 'Starting time',
+  end: 'Ending time',
+  notificationLable: 'Timing of notification',
+  notificationStart: 'Notify at the starting time',
+  notificationEnd: 'Notify if an entry is not posted at the ending time',
+};
+
+const reminderSelectDay = {
+  title: 'Please select days of the week to study',
 };
 
 const pushSetting = {
-  title: 'お知らせをオンにする',
+  title: 'Turn On Notifications',
   description:
-    '日記の添削が届いた時、設定した勉強時間になったときにお知らせを受け取れます。',
-  submit: 'オンにする',
+    'You will be notified when your entry is corrected or when the reminder time is reached.',
+  submit: 'Turn On',
 };
 
 const editMyDiaryList = {
@@ -936,6 +939,7 @@ const en = {
   onboarding,
   reminderInitial,
   reminderSelectTime,
+  reminderSelectDay,
   pushSetting,
   editMyDiaryList,
   postDiary,
