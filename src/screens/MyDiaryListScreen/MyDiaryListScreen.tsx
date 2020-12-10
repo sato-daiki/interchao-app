@@ -101,47 +101,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     setUnreadCorrectionNum,
   });
 
-  const onPressEdit = useCallback(() => {
-    navigation.navigate('ModalEditMyDiaryList', { screen: 'EditMyDiaryList' });
-  }, [navigation]);
-
-  const onPressRight = useCallback(() => {
-    setMyDiaryListView(
-      !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
-        ? 'calendar'
-        : 'list'
-    );
-  }, [localStatus.myDiaryListView, setMyDiaryListView]);
-
-  const headerLeft = useCallback(() => {
-    if (diaryTotalNum > 0) {
-      return <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />;
-    }
-    return null;
-  }, [diaryTotalNum, onPressEdit]);
-
-  const headerRight = useCallback(
-    () => (
-      <HeaderIcon
-        icon="community"
-        name={
-          !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
-            ? 'calendar'
-            : 'format-list-bulleted'
-        }
-        onPress={onPressRight}
-      />
-    ),
-    [localStatus.myDiaryListView, onPressRight]
-  );
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft,
-      headerRight,
-    });
-  }, [headerLeft, headerRight, navigation]);
-
   // 初期データの取得
   useEffect(() => {
     const f = async (): Promise<void> => {
@@ -277,6 +236,47 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
     },
     [onDeleteDiary]
   );
+
+  const onPressEdit = useCallback(() => {
+    navigation.navigate('ModalEditMyDiaryList', { screen: 'EditMyDiaryList' });
+  }, [navigation]);
+
+  const onPressRight = useCallback(() => {
+    setMyDiaryListView(
+      !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
+        ? 'calendar'
+        : 'list'
+    );
+  }, [localStatus.myDiaryListView, setMyDiaryListView]);
+
+  const headerLeft = useCallback(() => {
+    if (diaryTotalNum > 0) {
+      return <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />;
+    }
+    return null;
+  }, [diaryTotalNum, onPressEdit]);
+
+  const headerRight = useCallback(
+    () => (
+      <HeaderIcon
+        icon="community"
+        name={
+          !localStatus.myDiaryListView || localStatus.myDiaryListView === 'list'
+            ? 'calendar'
+            : 'format-list-bulleted'
+        }
+        onPress={onPressRight}
+      />
+    ),
+    [localStatus.myDiaryListView, onPressRight]
+  );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft,
+      headerRight,
+    });
+  }, [headerLeft, headerRight, navigation]);
 
   return (
     <View style={styles.container}>

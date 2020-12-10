@@ -20,9 +20,56 @@ export interface ThemeDiary {
 
 export type AppReviewState = 'yet' | 'never' | 'done';
 
+export interface RemindeDay {
+  day: number; // Sunday - Saturday : 0 - 6
+  timeStart: Date;
+  timeEnd: Date;
+}
+
+export type ReminderType = 'custom' | 'fix';
+
+export interface CustomTimeInfo {
+  day: number;
+  checked: boolean;
+  timeStart: Date;
+  timeEnd: Date;
+  isFocus: boolean;
+}
+
+export interface FixDay {
+  day: number;
+  checked: boolean;
+}
+
+export interface FixTimeInfo {
+  timeStart: Date;
+  timeEnd: Date;
+  isFocus: boolean;
+}
+
+interface Fix {
+  reminderType: 'fix';
+  fixDays: FixDay[];
+  fixTimeInfo: FixTimeInfo;
+}
+
+interface Custom {
+  reminderType: 'custom';
+  customTimeInfos: CustomTimeInfo[];
+}
+
+export type TimeInfo = Fix | Custom;
+
+export interface Reminder {
+  notificationStart: boolean;
+  notificationEnd: boolean;
+  timeInfo: TimeInfo;
+}
+
 export interface User {
   uid: string;
   diaryPosted: boolean;
+  onboarding?: boolean;
   tutorialPostDiary: boolean;
   tutorialTeachDiaryList: boolean;
   tutorialCorrectiong: boolean;
@@ -46,6 +93,7 @@ export interface User {
   // mailReminderThreeMonths?: boolean;
   themeDiaries?: ThemeDiary[] | null;
   appReviewState?: AppReviewState;
+  reminder?: Reminder;
   runningDays?: number;
   runningWeeks?: number;
   lastDiaryPostedAt?: firestore.Timestamp | null;

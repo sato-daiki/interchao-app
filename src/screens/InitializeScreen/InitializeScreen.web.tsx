@@ -30,10 +30,10 @@ const InitializeScreen: React.FC<ScreenType> = ({ navigation, route }) => {
           navigation.navigate('Initialize');
         }}
         onPressStart={(): void => {
-          navigation.navigate('CreateAccount', { screen: 'SelectLanguage' });
+          navigation.navigate('SelectLanguage');
         }}
         onPressLogin={(): void => {
-          navigation.navigate('CreateAccount', { screen: 'SignIn' });
+          navigation.navigate('SignIn');
         }}
       />
     </>

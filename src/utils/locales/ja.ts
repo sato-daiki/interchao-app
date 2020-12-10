@@ -12,6 +12,7 @@ const common = {
   publish: '投稿',
   draft: '下書き保存',
   skip: 'スキップ',
+  save: '保存',
   add: '追加',
   delete: '削除',
   translation: '翻訳',
@@ -255,6 +256,43 @@ const notice = {
   operation: '運営からのお知らせ',
   noMail:
     '※メールアドレスが登録されていません。メール通知を利用する場合は、メールアドレス/パスワード登録画面から設定してください',
+};
+
+const onboarding = {
+  reminderInitial: '勉強時間を設定',
+  reminderSelectTime: '勉強する時間を設定',
+  reminderSelectDay: '勉強する日を設定',
+  pushSetting: '通知をオンにする',
+};
+
+const reminderInitial = {
+  text:
+    '勉強は習慣化することが大切です。勉強する時間を固定しましょう。リマインダーを設定すると、勉強開始時間に通知を受け取ることができます。',
+  submit: '設定する',
+};
+
+const reminderSelectTime = {
+  title: '勉強のスケジュールを設定してください',
+  fix: '毎日同じ時間',
+  custom: 'カスタム',
+  studyDay: '曜日',
+  time: '時間',
+  start: '開始時間',
+  end: '終了時間',
+  notificationLable: '通知するタイミング',
+  notificationStart: '開始時間に通知する',
+  notificationEnd: '終了時間に日記が投稿されていなかったら通知する',
+};
+
+const reminderSelectDay = {
+  title: '勉強する曜日を選択してください',
+};
+
+const pushSetting = {
+  title: 'お知らせをオンにする',
+  description:
+    '日記の添削が届いた時、リマインダーを設定した時間になったときなどにお知らせを受け取れます。',
+  submit: 'オンにする',
 };
 
 const editMyDiaryList = {
@@ -858,6 +896,11 @@ const ja = {
   myDiarySerch,
   myPage,
   notice,
+  onboarding,
+  reminderInitial,
+  reminderSelectTime,
+  reminderSelectDay,
+  pushSetting,
   editMyDiaryList,
   postDiary,
   postDraftDiary,
