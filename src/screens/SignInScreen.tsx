@@ -8,22 +8,22 @@ import {
   LoadingModal,
   Space,
   SubmitButton,
-  Hoverable,
+  LinkText,
 } from '@/components/atoms';
 
-import { primaryColor, fontSizeM, linkBlue } from '@/styles/Common';
+import { primaryColor, fontSizeM } from '@/styles/Common';
 import firebase from '@/constants/firebase';
 import { emailInputError, emailValidate } from '@/utils/common';
 import { track, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
 import {
   AuthNavigationProp,
-  CreateAccountStackParamList,
+  AuthStackParamList,
 } from '@/navigations/AuthNavigator';
 import { CompositeNavigationProp } from '@react-navigation/native';
 
-type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<CreateAccountStackParamList, 'SignIn'>,
+export type NavigationProp = CompositeNavigationProp<
+  StackNavigationProp<AuthStackParamList, 'SignIn'>,
   AuthNavigationProp
 >;
 
@@ -50,16 +50,9 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
   },
-  linkText: {
-    color: linkBlue,
-  },
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  hoverLink: {
-    borderBottomColor: linkBlue,
-    borderBottomWidth: 1,
   },
 });
 
@@ -175,9 +168,7 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
         <Space size={16} />
         <View style={styles.row}>
           <Text style={styles.forgetText}>{I18n.t('signIn.forgetText')}</Text>
-          <Hoverable onPress={onPressForget} hoverStyle={styles.hoverLink}>
-            <Text style={styles.linkText}>{I18n.t('signIn.link')}</Text>
-          </Hoverable>
+          <LinkText onPress={onPressForget} text={`${I18n.t('signIn.link')}`} />
         </View>
       </View>
     </KeyboardAwareScrollView>

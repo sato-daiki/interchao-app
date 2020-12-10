@@ -14,6 +14,7 @@ const common = {
   publish: 'Publish',
   draft: 'Save',
   skip: 'Skip',
+  save: 'Save',
   add: 'Add',
   delete: 'Delete',
   translation: 'Translation',
@@ -22,6 +23,28 @@ const common = {
   slow: 'Slow',
   back: 'Back',
   begin: 'Begin',
+  allClear: '全てクリア',
+  allChecked: '全てチェック',
+};
+
+const day = {
+  sunday: 'Sunday',
+  monday: 'Monday',
+  tuesday: 'Tuesday',
+  wednesday: 'Wednesday',
+  thursday: 'Thursday',
+  friday: 'Friday',
+  saturday: 'Saturday',
+};
+
+const shortDay = {
+  sunday: 'S',
+  monday: 'M',
+  tuesday: 'T',
+  wednesday: 'W',
+  thursday: 'T',
+  friday: 'F',
+  saturday: 'S',
 };
 
 // web
@@ -264,6 +287,43 @@ const notice = {
     '※The email address is not registered. If you want to use email notification, please set from the "Register Email and Password" screen.',
 };
 
+const onboarding = {
+  reminderInitial: 'Set study time',
+  reminderSelectTime: 'Set study time',
+  reminderSelectDay: 'Select days of the week',
+  pushSetting: 'Turn on notifications',
+};
+
+const reminderInitial = {
+  text:
+    "It is important to make studying part of your daily routine. Let's fix the time to study. If you register a reminder, you will be notified at a set time.",
+  submit: 'Set Reminder',
+};
+
+const reminderSelectTime = {
+  title: 'Please set a study schedule',
+  fix: 'Same time every day',
+  custom: 'Custom',
+  studyDay: 'Days of the week',
+  time: 'Time',
+  start: 'Starting time',
+  end: 'Ending time',
+  notificationLable: 'Timing of notification',
+  notificationStart: 'Notify at the starting time',
+  notificationEnd: 'Notify if an entry is not posted at the ending time',
+};
+
+const reminderSelectDay = {
+  title: 'Please select days of the week to study',
+};
+
+const pushSetting = {
+  title: 'Turn On Notifications',
+  description:
+    'You will be notified when your entry is corrected or when the reminder time is reached.',
+  submit: 'Turn On',
+};
+
 const editMyDiaryList = {
   headerTitle: 'Edit Journal Entries',
 };
@@ -317,6 +377,7 @@ const selectLanguage = {
 const setting = {
   headerTitle: 'Settings',
   title: 'Basic',
+  reminder: 'Reminder',
   notice: 'Notifications',
   editEmail: 'Edit Email Address',
   editPassword: 'Edit Password',
@@ -852,6 +913,8 @@ const first = {
 
 const en = {
   common,
+  day,
+  shortDay,
   web,
   helmet,
   modalAppSuggestion,
@@ -873,6 +936,11 @@ const en = {
   myDiarySerch,
   myPage,
   notice,
+  onboarding,
+  reminderInitial,
+  reminderSelectTime,
+  reminderSelectDay,
+  pushSetting,
   editMyDiaryList,
   postDiary,
   postDraftDiary,

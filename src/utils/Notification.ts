@@ -14,7 +14,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const getExpoPushToken = async (): Promise<null | string> => {
+const getExpoPushToken = async (): Promise<null | string> => {
   let expoPushToken;
   if (Platform.OS === 'web') return null;
 
@@ -48,7 +48,7 @@ export const getExpoPushToken = async (): Promise<null | string> => {
   return expoPushToken;
 };
 
-export const registerForPushNotificationsAsync = async (
+const registerForPushNotificationsAsync = async (
   uid: string,
   expoPushToken: string
 ): Promise<void> => {
@@ -59,4 +59,16 @@ export const registerForPushNotificationsAsync = async (
       expoPushToken,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
+};
+
+export const setPushotifications = async (
+  uid: string
+): Promise<string | null> => {
+  // expoへの登録
+  const expoPushToken = await getExpoPushToken();
+  if (expoPushToken) {
+    // localStatusの方を使わないと初回登録時落ちる
+    await registerForPushNotificationsAsync(uid, expoPushToken);
+  }
+  return expoPushToken;
 };

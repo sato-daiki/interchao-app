@@ -4,7 +4,7 @@ import { Space, HideButton } from '../atoms';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Language } from '../../types';
-import { getAlgoliaDate } from '../../utils/diary';
+import { getAlgoliaDate } from '../../utils/time';
 import { MyDiaryCorrectionFooter, CorrectionItem, Summary } from '../molecules';
 
 interface Props {

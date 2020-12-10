@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { fontSizeM, subTextColor, borderLightColor } from '../../styles/Common';
 import ProfileIconHorizontal from '../atoms/ProfileIconHorizontal';
 import { Correction, Language } from '../../types';
-import { getAlgoliaDate } from '../../utils/diary';
+import { getAlgoliaDate } from '../../utils/time';
 import { CorrectionItem, Summary } from '../molecules';
 import { HideButton } from '../atoms';
 

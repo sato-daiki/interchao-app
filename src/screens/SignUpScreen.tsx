@@ -18,7 +18,7 @@ import {
 
 import {
   AuthNavigationProp,
-  CreateAccountStackParamList,
+  AuthStackParamList,
 } from '@/navigations/AuthNavigator';
 import firebase from '@/constants/firebase';
 import { AppReviewState, Profile, User } from '@/types';
@@ -48,9 +48,8 @@ interface DispatchProps {
   setUser: (user: User) => void;
   setProfile: (profile: Profile) => void;
 }
-
 type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<CreateAccountStackParamList, 'SignUp'>,
+  StackNavigationProp<AuthStackParamList, 'SignUp'>,
   AuthNavigationProp
 >;
 
@@ -131,6 +130,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
         tutorialPostDiary: false,
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
+        onboarding: false,
         points: 100,
         expoPushToken: null,
         correctingObjectID: null,
