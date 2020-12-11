@@ -282,6 +282,8 @@ const reminderSelectTime = {
   notificationLable: '通知するタイミング',
   notificationStart: '開始時間に通知する',
   notificationEnd: '終了時間に日記が投稿されていなかったら通知する',
+  notficationAlert:
+    '通知設定がoffになっているためリマインダー機能が動作しません。デバイスの設定からInterchaoの通知をonにしてください。',
 };
 
 const reminderSelectDay = {
@@ -347,6 +349,7 @@ const setting = {
   headerTitle: '設定',
   title: '基本設定',
   notice: '通知',
+  reminder: 'リマインダー',
   editEmail: 'メールアドレスの変更',
   editPassword: 'パスワードの変更',
   registerEmailPassword: 'メールアドレス/パスワードの登録',

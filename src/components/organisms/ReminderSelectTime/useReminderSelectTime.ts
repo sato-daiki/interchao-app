@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import * as Notifications from 'expo-notifications';
 
 import { Reminder, ReminderType, TimeInfo } from '@/types';
 import { addDay } from '@/utils/time';
@@ -80,6 +81,33 @@ export const useReminderSelectTime = ({
         reminder,
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+
+    const aa = await Notifications.getAllScheduledNotificationsAsync();
+
+    console.log(aa);
+    console.log('start');
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Time's up!",
+        body: 'Change sides!',
+      },
+      trigger: {
+        seconds: 60,
+      },
+    });
+
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Remember to drink water',
+      },
+      trigger: {
+        seconds: 60,
+        repeats: true,
+      },
+    });
+
+    console.log('set');
 
     setUser({
       ...user,

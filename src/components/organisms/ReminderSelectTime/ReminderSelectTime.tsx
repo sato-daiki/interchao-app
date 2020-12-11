@@ -16,11 +16,10 @@ import ReminderSelectTimeFix from '@/components/organisms/ReminderSelectTime/Fix
 import ReminderSelectTimeCustom from '@/components/organisms/ReminderSelectTime/Custom';
 import { CheckItem } from '@/components/molecules';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-  ReminderSelectTimeOnboardingNavigationProp,
-  ReminderSelectTimeSettingNavigationProp,
-} from '@/screens/ReminderSelectTimeScreen/interface';
+import { ReminderSelectTimeOnboardingNavigationProp } from '@/screens/ReminderSelectTimeScreen/ReminderSelectTimeOnboardingScreen';
+import { ReminderSelectTimeSettingNavigationProp } from '@/screens/ReminderSelectTimeScreen/ReminderSelectTimeSettingScreen';
 import { useReminderSelectTime } from './useReminderSelectTime';
+import NotficationReminder from '../NotficationReminder';
 
 export interface ReminderSelectTimeProps {
   navigation:
@@ -131,6 +130,7 @@ const ReminderSelectTime: React.FC<ReminderSelectTimeProps> = ({
 
   return (
     <ScrollView style={styles.container}>
+      <NotficationReminder />
       <LoadingModal visible={isLoading} />
       <Text style={styles.title}>{I18n.t('reminderSelectTime.title')}</Text>
 

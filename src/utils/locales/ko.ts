@@ -278,6 +278,8 @@ const reminderSelectTime = {
   notificationLable: '통지시기',
   notificationStart: '시작 시간에 알림',
   notificationEnd: '종료 시간에 항목이 게시되지 않은 경우 알림',
+  notficationAlert:
+    '알림 설정이 off로되어 있기 때문에 미리 알림 기능이 작동하지 않습니다. 장치 설정에서 Interchao의 통지를 on으로합니다.',
 };
 
 const reminderSelectDay = {
@@ -343,6 +345,7 @@ const selectLanguage = {
 const setting = {
   headerTitle: '설정',
   title: '기본 설정',
+  reminder: '알림',
   notice: '알림',
   editEmail: '이메일 주소 변경',
   editPassword: '비밀번호 변경',

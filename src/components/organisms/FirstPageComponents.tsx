@@ -4,7 +4,7 @@ import { updateYet } from '@/utils/diary';
 import { User } from '@/types';
 import ModalStillCorrecting from '@/components/organisms/ModalStillCorrecting';
 import ModalAppSuggestion from '@/components/web/organisms/ModalAppSuggestion';
-import NotficationSetting from '../web/organisms/NotficationSetting';
+import NotficationSetting from './NotficationSetting';
 
 interface Props {
   user: User;

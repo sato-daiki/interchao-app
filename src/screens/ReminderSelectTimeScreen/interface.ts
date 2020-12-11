@@ -1,36 +1,5 @@
 import { ReminderSelectTimeProps } from '@/components/organisms/ReminderSelectTime/ReminderSelectTime';
-import { MyPageTabStackParamList } from '@/navigations/MyPageTabNavigator';
-import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
-import { CustomTimeInfo, FixDay, FixTimeInfo, User } from '@/types';
-import { StackNavigationProp } from '@react-navigation/stack';
-
-export interface Props {
-  user: User;
-}
-
-interface DispatchProps {
-  setUser: (user: User) => void;
-}
-
-export type ReminderSelectTimeOnboardingNavigationProp = StackNavigationProp<
-  OnboardingStackParamList,
-  'ReminderSelectTimeOnboarding'
->;
-
-export type ReminderSelectTimeOnboardingScreenType = {
-  navigation: ReminderSelectTimeOnboardingNavigationProp;
-} & Props &
-  DispatchProps;
-
-export type ReminderSelectTimeSettingNavigationProp = StackNavigationProp<
-  MyPageTabStackParamList,
-  'ReminderSelectTimeSetting'
->;
-
-export type ReminderSelectTimeSettingScreenType = {
-  navigation: ReminderSelectTimeSettingNavigationProp;
-} & Props &
-  DispatchProps;
+import { CustomTimeInfo, FixDay, FixTimeInfo } from '@/types';
 
 export type DefaultInfo = Pick<
   ReminderSelectTimeProps,
