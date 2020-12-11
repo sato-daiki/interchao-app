@@ -7,7 +7,7 @@ import { LinkText, Space, SubmitButton } from '@/components/atoms';
 
 import { Notification } from '@/images';
 import { setPushotifications } from '@/utils/Notification';
-import { User } from '@/types';
+import { LocalStatus, User } from '@/types';
 import I18n from '@/utils/I18n';
 import {
   OnboardingNavigationProp,
@@ -17,6 +17,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 
 export interface Props {
   user: User;
+  localStatus: LocalStatus;
 }
 
 interface DispatchProps {
@@ -80,18 +81,22 @@ const styles = StyleSheet.create({
 const PushSettingScreen: React.FC<ScreenType> = ({
   navigation,
   user,
+  localStatus,
   setUser,
 }) => {
   const onPressSubmit = useCallback(async () => {
-    const expoPushToken = await setPushotifications(user.uid);
-    if (expoPushToken) {
-      setUser({
-        ...user,
-        expoPushToken,
-      });
+    if (localStatus.uid) {
+      const expoPushToken = await setPushotifications(localStatus.uid);
+      console.log('expoPushToken', expoPushToken);
+      if (expoPushToken) {
+        setUser({
+          ...user,
+          expoPushToken,
+        });
+      }
     }
     navigation.navigate('ReminderInitialOnboarding');
-  }, [navigation, setUser, user]);
+  }, [localStatus, navigation, setUser, user]);
 
   const onPressSkip = useCallback(async () => {
     navigation.navigate('ReminderInitialOnboarding');

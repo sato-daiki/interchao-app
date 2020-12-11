@@ -2,6 +2,7 @@ import React from 'react';
 import RNDateTimePickerModal, {
   ReactNativeModalDateTimePickerProps,
 } from 'react-native-modal-datetime-picker';
+import I18n from '@/utils/I18n';
 
 type Props = {
   mode: 'time' | 'date';
@@ -28,10 +29,9 @@ const DateTimePickerModal: React.FC<Props> = ({
     is24Hour
     onConfirm={onConfirm}
     onCancel={onCancel}
-    headerTextIOS="時刻を選択して下さい"
-    cancelTextIOS="キャンセル"
-    confirmTextIOS="設定"
-    locale="ja"
+    headerTextIOS={I18n.t('common.time')}
+    cancelTextIOS={I18n.t('common.cancel')}
+    confirmTextIOS="OK"
     {...props}
   />
 );

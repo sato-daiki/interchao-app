@@ -4,6 +4,7 @@ import * as Notifications from 'expo-notifications';
 import { Reminder, ReminderType, TimeInfo } from '@/types';
 import { addDay } from '@/utils/time';
 import firebase from '@/constants/firebase';
+import I18n from '@/utils/I18n';
 import { ReminderSelectTimeProps } from './ReminderSelectTime';
 
 type Props = Pick<
@@ -50,6 +51,119 @@ export const useReminderSelectTime = ({
     defaultCuctomTimeInfos
   );
 
+  const scheduleNotificationAsync = useCallback(
+    async (
+      which: 'start' | 'end',
+      weekday: number,
+      hour: number,
+      minute: number
+    ) => {
+      let title;
+      let body;
+
+      if (which === 'start') {
+        title = I18n.t('reminderSelectTime.notificationStartTitle');
+        body = I18n.t('reminderSelectTime.notificationStartBody');
+      } else {
+        title = I18n.t('reminderSelectTime.notificationEndTitle');
+        body = I18n.t('reminderSelectTime.notificationEndBody');
+      }
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title,
+          body,
+        },
+        trigger: {
+          weekday,
+          hour,
+          minute,
+          repeats: true,
+          channelId: 'new-emails',
+        },
+      });
+    },
+    []
+  );
+
+  const setNotification = useCallback(async () => {
+    // 過去のスケジュールを全て削除する
+    await Notifications.cancelAllScheduledNotificationsAsync();
+
+    // 通知設定しない場合はreturn
+    if (!notificationStart && !notificationEnd) return;
+
+    if (reminderType === 'fix') {
+      const hourStart = fixTimeInfo.timeStart.getHours();
+      const minuteStart = fixTimeInfo.timeStart.getMinutes();
+
+      const hourEnd = fixTimeInfo.timeEnd.getHours();
+      const minuteEnd = fixTimeInfo.timeEnd.getMinutes();
+
+      await Promise.all(
+        fixDays
+          .filter(item => item.checked)
+          .map(async item => {
+            if (notificationStart) {
+              await scheduleNotificationAsync(
+                'start',
+                item.day,
+                hourStart,
+                minuteStart
+              );
+            }
+
+            if (notificationEnd) {
+              await scheduleNotificationAsync(
+                'end',
+                item.day,
+                hourEnd,
+                minuteEnd
+              );
+            }
+          })
+      );
+    } else {
+      await Promise.all(
+        customTimeInfos
+          .filter(item => item.checked)
+          .map(async item => {
+            const hourStart = item.timeStart.getHours();
+            const minuteStart = item.timeStart.getMinutes();
+
+            const hourEnd = item.timeEnd.getHours();
+            const minuteEnd = item.timeEnd.getMinutes();
+
+            if (notificationStart) {
+              await scheduleNotificationAsync(
+                'start',
+                item.day,
+                hourStart,
+                minuteStart
+              );
+            }
+            if (notificationEnd) {
+              await scheduleNotificationAsync(
+                'end',
+                item.day,
+                hourEnd,
+                minuteEnd
+              );
+            }
+          })
+      );
+    }
+  }, [
+    customTimeInfos,
+    fixDays,
+    fixTimeInfo.timeEnd,
+    fixTimeInfo.timeStart,
+    notificationEnd,
+    notificationStart,
+    reminderType,
+    scheduleNotificationAsync,
+  ]);
+
   const onPressDone = useCallback(async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -74,6 +188,8 @@ export const useReminderSelectTime = ({
       notificationEnd,
       timeInfo,
     };
+
+    console.log('reminder', timeInfo);
     await firebase
       .firestore()
       .doc(`users/${user.uid}`)
@@ -82,32 +198,8 @@ export const useReminderSelectTime = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
-    const aa = await Notifications.getAllScheduledNotificationsAsync();
-
-    console.log(aa);
-    console.log('start');
-
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Time's up!",
-        body: 'Change sides!',
-      },
-      trigger: {
-        seconds: 60,
-      },
-    });
-
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: 'Remember to drink water',
-      },
-      trigger: {
-        seconds: 60,
-        repeats: true,
-      },
-    });
-
-    console.log('set');
+    // スケジュールの登録
+    await setNotification();
 
     setUser({
       ...user,
@@ -125,6 +217,7 @@ export const useReminderSelectTime = ({
     notificationEnd,
     notificationStart,
     reminderType,
+    setNotification,
     setUser,
     user,
   ]);

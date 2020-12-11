@@ -21,6 +21,7 @@ const common = {
   slow: '遅く',
   back: '戻る',
   begin: 'はじめる',
+  time: '時刻を選択して下さい',
 };
 
 // web
@@ -280,8 +281,13 @@ const reminderSelectTime = {
   start: '開始時間',
   end: '終了時間',
   notificationLable: '通知するタイミング',
-  notificationStart: '開始時間に通知する',
-  notificationEnd: '終了時間に日記が投稿されていなかったら通知する',
+  notificationStart: '開始時間に通知',
+  notificationEnd: '終了時間に日記が投稿されていなかったら通知',
+  notificationStartTitle: '勉強開始時間',
+  notificationStartBody: '今日もがんばりましょう！',
+  notificationEndTitle: '勉強終了時間',
+  notificationEndBody:
+    '本日分の日記の投稿がされていません。少ない文章でも投稿してみましょう！',
   notficationAlert:
     '通知設定がoffになっているためリマインダー機能が動作しません。デバイスの設定からInterchaoの通知をonにしてください。',
 };
