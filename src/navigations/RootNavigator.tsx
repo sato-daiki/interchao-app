@@ -42,6 +42,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       console.log('initNavigation');
       if (authUser) {
         const newUser = await getUser(authUser.uid);
+        console.log('newUser', newUser);
         const newProfile = await getProfile(authUser.uid);
         if (newUser && newProfile) {
           setUser(newUser);

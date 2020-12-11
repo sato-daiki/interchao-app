@@ -38,15 +38,8 @@ const TimePicker: React.FC<Props> = ({ date, onChange, ...props }) => {
         isVisible={isVisible}
         date={date ?? undefined} // initial select date
         mode="time"
-        display="spinner"
-        minuteInterval={5}
-        is24Hour
         onConfirm={onConfirm}
         onCancel={onCancel}
-        headerTextIOS="時刻を選択して下さい"
-        cancelTextIOS="キャンセル"
-        confirmTextIOS="設定"
-        locale="ja"
         {...props}
       />
     </View>

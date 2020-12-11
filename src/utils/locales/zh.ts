@@ -21,6 +21,7 @@ const common = {
   slow: '放慢语速',
   back: '返回',
   begin: '开始',
+  time: '请选择时间',
 };
 
 // web
@@ -268,6 +269,11 @@ const reminderSelectTime = {
   notificationLable: '通知时间',
   notificationStart: '在开始时间通知',
   notificationEnd: '通知条目在结束时间是否未发布',
+  notificationStartTitle: '时间',
+  notificationStartBody: '오늘도 화이팅 !!',
+  notificationEndTitle: '结束时间',
+  notificationEndBody:
+    '오늘 분의 일기 게시물이되지 않습니다. 적은 글도 게시하자!',
   notficationAlert:
     '提醒功能不起作用，因为通知设置已关闭。从您的设备设置中打开Interchao通知。',
 };

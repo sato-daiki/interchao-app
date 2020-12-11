@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   title: {
     color: primaryColor,
     fontSize: fontSizeM,
+    flex: 1,
   },
   opacity: {
     opacity: 0.4,

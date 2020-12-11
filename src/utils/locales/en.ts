@@ -23,8 +23,7 @@ const common = {
   slow: 'Slow',
   back: 'Back',
   begin: 'Begin',
-  allClear: '全てクリア',
-  allChecked: '全てチェック',
+  time: 'Please select a time',
 };
 
 const day = {
@@ -311,6 +310,11 @@ const reminderSelectTime = {
   notificationLable: 'Timing of notification',
   notificationStart: 'Notify at the starting time',
   notificationEnd: 'Notify if an entry is not posted at the ending time',
+  notificationStartTitle: 'Study Start Time',
+  notificationStartBody: 'Break a leg',
+  notificationEndTitle: 'Study End Time',
+  notificationEndBody:
+    "Today's diary has not been posted. Let's post even a few sentences!",
   notficationAlert:
     'The reminder function does not work because the notification setting is off. Turn on Interchao notifications from your device settings.',
 };
