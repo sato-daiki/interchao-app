@@ -14,7 +14,6 @@ import {
   OnboardingStackParamList,
 } from '@/navigations/OnboardingNavigator';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import firebase from '@/constants/firebase';
 
 export interface Props {
   user: User;
@@ -22,7 +21,6 @@ export interface Props {
 
 interface DispatchProps {
   setUser: (user: User) => void;
-  completedOnboarding: () => void;
 }
 
 type NavigationProp = CompositeNavigationProp<
@@ -80,20 +78,10 @@ const styles = StyleSheet.create({
 });
 
 const PushSettingScreen: React.FC<ScreenType> = ({
+  navigation,
   user,
   setUser,
-  completedOnboarding,
 }) => {
-  const updateOnboarding = useCallback(async () => {
-    await firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        onboarding: true,
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-  }, [user.uid]);
-
   const onPressSubmit = useCallback(async () => {
     const expoPushToken = await setPushotifications(user.uid);
     if (expoPushToken) {
@@ -102,14 +90,12 @@ const PushSettingScreen: React.FC<ScreenType> = ({
         expoPushToken,
       });
     }
-    await updateOnboarding();
-    completedOnboarding();
-  }, [completedOnboarding, setUser, updateOnboarding, user]);
+    navigation.navigate('ReminderInitialOnboarding');
+  }, [navigation, setUser, user]);
 
   const onPressSkip = useCallback(async () => {
-    await updateOnboarding();
-    completedOnboarding();
-  }, [completedOnboarding, updateOnboarding]);
+    navigation.navigate('ReminderInitialOnboarding');
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>

@@ -311,6 +311,8 @@ const reminderSelectTime = {
   notificationLable: 'Timing of notification',
   notificationStart: 'Notify at the starting time',
   notificationEnd: 'Notify if an entry is not posted at the ending time',
+  notficationAlert:
+    'The reminder function does not work because the notification setting is off. Turn on Interchao notifications from your device settings.',
 };
 
 const reminderSelectDay = {

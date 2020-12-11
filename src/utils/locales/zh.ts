@@ -268,6 +268,8 @@ const reminderSelectTime = {
   notificationLable: '通知时间',
   notificationStart: '在开始时间通知',
   notificationEnd: '通知条目在结束时间是否未发布',
+  notficationAlert:
+    '提醒功能不起作用，因为通知设置已关闭。从您的设备设置中打开Interchao通知。',
 };
 
 const reminderSelectDay = {
@@ -330,6 +332,7 @@ const selectLanguage = {
 const setting = {
   headerTitle: '设置',
   title: '基本的',
+  reminder: '提醒',
   notice: '通知',
   editEmail: '修改邮箱地址',
   editPassword: '修改密码',

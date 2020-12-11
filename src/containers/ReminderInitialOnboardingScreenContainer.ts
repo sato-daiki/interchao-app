@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
-import ReminderSelectTimeOwnbordingScreen from '@/screens/ReminderSelectTimeScreen/ReminderSelectTimeOwnbordingScreen';
-import { Props } from '@/screens/ReminderSelectTimeScreen/interface';
+import ReminderInitialOnboardingScreen, {
+  Props,
+} from '@/screens/ReminderInitialScreen/ReminderInitialOnboardingScreen';
 
 import { State } from '@/types/state';
-import { setUser } from '@/stores/actions/user';
+import { completedOnboarding } from '@/stores/actions/localStatus';
 
 const mapStateToProps = (state: State): Props => {
   const { user } = state.rootReducer;
@@ -13,10 +14,10 @@ const mapStateToProps = (state: State): Props => {
 };
 
 const mapDispatchToProps = {
-  setUser,
+  completedOnboarding,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ReminderSelectTimeOwnbordingScreen);
+)(ReminderInitialOnboardingScreen);

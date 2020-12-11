@@ -1,13 +1,32 @@
 import React, { useCallback } from 'react';
 import ReminderSelectTime from '@/components/organisms/ReminderSelectTime/ReminderSelectTime';
-import { Reminder } from '@/types';
+import { Reminder, User } from '@/types';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { MyPageTabStackParamList } from '@/navigations/MyPageTabNavigator';
 import {
   DefaultInfo,
   initCuctomTimeInfos,
   initFixDays,
   initFixTimeInfo,
-  ReminderSelectTimeSettingScreenType,
 } from './interface';
+
+export interface Props {
+  user: User;
+}
+
+interface DispatchProps {
+  setUser: (user: User) => void;
+}
+
+export type ReminderSelectTimeSettingNavigationProp = StackNavigationProp<
+  MyPageTabStackParamList,
+  'ReminderSelectTimeSetting'
+>;
+
+export type ScreenType = {
+  navigation: ReminderSelectTimeSettingNavigationProp;
+} & Props &
+  DispatchProps;
 
 const getDefault = (reminder?: Reminder): DefaultInfo => {
   const defaultInfo: DefaultInfo = {
@@ -48,7 +67,7 @@ const getDefault = (reminder?: Reminder): DefaultInfo => {
   return defaultInfo;
 };
 
-const ReminderSelectTimeSettingScreen: React.FC<ReminderSelectTimeSettingScreenType> = ({
+const ReminderSelectTimeSettingScreen: React.FC<ScreenType> = ({
   navigation,
   user,
   setUser,

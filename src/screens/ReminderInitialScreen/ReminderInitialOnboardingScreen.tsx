@@ -1,17 +1,32 @@
 import React, { useCallback } from 'react';
 import { View, SafeAreaView, StyleSheet } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-
 import ReminderInitial from '@/components/organisms/ReminderInitial';
 import { LinkText, Space, SubmitButton } from '@/components/atoms';
 
 import I18n from '@/utils/I18n';
+import firebase from '@/constants/firebase';
+import { User } from '@/types';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { OnboardingStackParamList } from '@/navigations/OnboardingNavigator';
 
-type ScreenType = StackScreenProps<
+export interface Props {
+  user: User;
+}
+
+interface DispatchProps {
+  setUser: (user: User) => void;
+  completedOnboarding: () => void;
+}
+
+export type NavigationProp = StackNavigationProp<
   OnboardingStackParamList,
-  'ReminderInitialOnboarding'
+  'ReminderSelectTimeOnboarding'
 >;
+
+export type ScreenType = {
+  navigation: NavigationProp;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -33,14 +48,23 @@ const styles = StyleSheet.create({
 
 const ReminderInitialOnboardingScreen: React.FC<ScreenType> = ({
   navigation,
+  user,
+  completedOnboarding,
 }) => {
   const onPressSubmit = useCallback(() => {
     navigation.navigate('ReminderSelectTimeOnboarding');
   }, [navigation]);
 
-  const onPressSkip = useCallback(() => {
-    navigation.navigate('PushSetting');
-  }, [navigation]);
+  const onPressSkip = useCallback(async () => {
+    await firebase
+      .firestore()
+      .doc(`users/${user.uid}`)
+      .update({
+        onboarding: true,
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    completedOnboarding();
+  }, [completedOnboarding, user.uid]);
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
