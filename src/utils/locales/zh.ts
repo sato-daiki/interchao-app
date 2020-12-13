@@ -268,12 +268,11 @@ const reminderSelectTime = {
   end: '结束时间',
   notificationLable: '通知时间',
   notificationStart: '在开始时间通知',
-  notificationEnd: '通知条目在结束时间是否未发布',
+  notificationEnd: '在结束时间通知',
   notificationStartTitle: '时间',
-  notificationStartBody: '오늘도 화이팅 !!',
+  notificationStartBody: '让我们今天努力吧！',
   notificationEndTitle: '结束时间',
-  notificationEndBody:
-    '오늘 분의 일기 게시물이되지 않습니다. 적은 글도 게시하자!',
+  notificationEndBody: '做得好！',
   notficationAlert:
     '提醒功能不起作用，因为通知设置已关闭。从您的设备设置中打开Interchao通知。',
 };

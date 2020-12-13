@@ -1,9 +1,14 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, StyleSheet, Text, Image, SafeAreaView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { fontSizeL, fontSizeM, primaryColor } from '@/styles/Common';
-import { LinkText, Space, SubmitButton } from '@/components/atoms';
+import {
+  LinkText,
+  LoadingModal,
+  Space,
+  SubmitButton,
+} from '@/components/atoms';
 
 import { Notification } from '@/images';
 import { setPushotifications } from '@/utils/Notification';
@@ -84,7 +89,11 @@ const PushSettingScreen: React.FC<ScreenType> = ({
   localStatus,
   setUser,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const onPressSubmit = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
     if (localStatus.uid) {
       const expoPushToken = await setPushotifications(localStatus.uid);
       console.log('expoPushToken', expoPushToken);
@@ -96,7 +105,8 @@ const PushSettingScreen: React.FC<ScreenType> = ({
       }
     }
     navigation.navigate('ReminderInitialOnboarding');
-  }, [localStatus, navigation, setUser, user]);
+    setIsLoading(false);
+  }, [isLoading, localStatus.uid, navigation, setUser, user]);
 
   const onPressSkip = useCallback(async () => {
     navigation.navigate('ReminderInitialOnboarding');
@@ -105,6 +115,7 @@ const PushSettingScreen: React.FC<ScreenType> = ({
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
+        <LoadingModal visible={isLoading} />
         <View style={styles.main}>
           <Text style={styles.title}>{I18n.t('pushSetting.title')}</Text>
           <Text style={styles.description}>

@@ -1,7 +1,8 @@
 import firebase from '@/constants/firebase';
-import { TimeInfo, User } from '@/types';
+import { User } from '@/types';
 
 const getTimeInfo = (timeInfo: any) => {
+  console.log('getTimeInfo');
   if (timeInfo.reminderType === 'fix') {
     return {
       ...timeInfo,
@@ -34,7 +35,7 @@ export const getUser = async (uid: string): Promise<User | null> => {
       .get();
 
     const data = doc.data();
-    const timeInfo = getTimeInfo(data?.reminder?.timeInfo);
+    console.log('data', data);
     if (data) {
       return {
         ...data,
@@ -42,13 +43,16 @@ export const getUser = async (uid: string): Promise<User | null> => {
         reminder: data.reminder
           ? {
               ...data.reminder,
-              timeInfo,
+              timeInfo: getTimeInfo(data.reminder.timeInfo),
             }
           : undefined,
       } as User;
     }
+    console.log('test3');
   } catch (e) {
+    console.warn(e);
     return null;
   }
+  console.log('nothing');
   return null;
 };

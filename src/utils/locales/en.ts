@@ -309,12 +309,11 @@ const reminderSelectTime = {
   end: 'Ending time',
   notificationLable: 'Timing of notification',
   notificationStart: 'Notify at the starting time',
-  notificationEnd: 'Notify if an entry is not posted at the ending time',
+  notificationEnd: 'Notify at the ending time',
   notificationStartTitle: 'Study Start Time',
-  notificationStartBody: 'Break a leg',
+  notificationStartBody: "Let's study hard today as well",
   notificationEndTitle: 'Study End Time',
-  notificationEndBody:
-    "Today's diary has not been posted. Let's post even a few sentences!",
+  notificationEndBody: 'Great work!',
   notficationAlert:
     'The reminder function does not work because the notification setting is off. Turn on Interchao notifications from your device settings.',
 };
