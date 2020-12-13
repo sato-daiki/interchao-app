@@ -6,7 +6,7 @@
     "slug": "white-zebra",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.6.1",
+    "version": "1.6.2",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
@@ -25,11 +25,11 @@
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
       "appStoreUrl": "https://itunes.apple.com/jp/app/id1510150748",
-      "buildNumber": "1060100"
+      "buildNumber": "1060200"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1060100,
+      "versionCode": 1060200,
       "permissions": [
         "CAMERA",
         "NOTIFICATIONS",
