@@ -2,18 +2,20 @@ import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackScreenProps } from '@react-navigation/stack';
-import { passwordInputError } from '../utils/common';
-import firebase from '../constants/firebase';
-import { CheckTextInput } from '../components/molecules';
+
+import { CheckTextInput } from '@/components/molecules';
 import {
   Space,
   SubmitButton,
   LoadingModal,
-  Hoverable,
-} from '../components/atoms';
-import { primaryColor, fontSizeM, linkBlue } from '../styles/Common';
-import I18n from '../utils/I18n';
-import { MyPageTabStackParamList } from '../navigations/MyPageTabNavigator';
+  LinkText,
+} from '@/components/atoms';
+
+import I18n from '@/utils/I18n';
+import { passwordInputError } from '@/utils/common';
+import { primaryColor, fontSizeM } from '@/styles/Common';
+import firebase from '@/constants/firebase';
+import { MyPageTabStackParamList } from '@/navigations/MyPageTabNavigator';
 
 type ScreenType = StackScreenProps<MyPageTabStackParamList, 'EditPassword'>;
 
@@ -37,13 +39,6 @@ const styles = StyleSheet.create({
     fontSize: fontSizeM,
     textAlign: 'center',
   },
-  linkText: {
-    color: linkBlue,
-  },
-  hoverLink: {
-    borderBottomColor: linkBlue,
-    borderBottomWidth: 1,
-  },
 });
 
 const EditPasswordScreen: React.FC<ScreenType> = ({
@@ -60,32 +55,29 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
     setErrorNewPassword('');
   };
 
-  const onPressSubmit = useCallback(() => {
-    const f = async (): Promise<void> => {
-      clearErrorMessage();
-      try {
-        const { currentUser } = firebase.auth();
-        if (!currentUser || !currentUser.email) return;
-        const credential = firebase.auth.EmailAuthProvider.credential(
-          currentUser.email,
-          currentPassword
-        );
-        setIsLoading(true);
-        await currentUser.reauthenticateWithCredential(credential);
-        await currentUser.updatePassword(newPassword);
-        navigation.goBack();
-      } catch (err) {
-        passwordInputError(
-          err,
-          setErrorCurrentPassword,
-          setErrorNewPassword,
-          clearErrorMessage
-        );
-        setIsLoading(false);
-      }
+  const onPressSubmit = useCallback(async (): Promise<void> => {
+    clearErrorMessage();
+    try {
+      const { currentUser } = firebase.auth();
+      if (!currentUser || !currentUser.email) return;
+      const credential = firebase.auth.EmailAuthProvider.credential(
+        currentUser.email,
+        currentPassword
+      );
+      setIsLoading(true);
+      await currentUser.reauthenticateWithCredential(credential);
+      await currentUser.updatePassword(newPassword);
+      navigation.goBack();
+    } catch (err) {
+      passwordInputError(
+        err,
+        setErrorCurrentPassword,
+        setErrorNewPassword,
+        clearErrorMessage
+      );
       setIsLoading(false);
-    };
-    f();
+    }
+    setIsLoading(false);
   }, [currentPassword, newPassword, navigation]);
 
   const onEndEditinCurrentPassword = useCallback(() => {
@@ -95,6 +87,10 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
   const onBlurNewPassword = useCallback(() => {
     setErrorNewPassword('');
   }, [setErrorNewPassword]);
+
+  const onPressForegetPassword = useCallback(() => {
+    navigation.navigate('ForegetPassword');
+  }, [navigation]);
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -145,14 +141,10 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
         <Space size={16} />
         <Text style={styles.forgetText}>
           {I18n.t('editPassword.forgetText')}
-          <Hoverable
-            onPress={(): void => {
-              navigation.navigate('ForegetPassword');
-            }}
-            hoverStyle={styles.hoverLink}
-          >
-            <Text style={styles.linkText}>{I18n.t('editPassword.link')}</Text>
-          </Hoverable>
+          <LinkText
+            onPress={onPressForegetPassword}
+            text={I18n.t('editPassword.link')}
+          />
         </Text>
       </View>
     </KeyboardAwareScrollView>

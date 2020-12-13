@@ -8,20 +8,22 @@ import {
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
-import Algolia from '../utils/Algolia';
-import { Profile, Correction, Diary } from '../types';
-import { DiaryTitleAndText, UserDiaryStatus } from '../components/molecules';
-import { ProfileIconHorizontal, Space } from '../components/atoms';
-import { getAlgoliaDate } from '../utils/diary';
-import { subTextColor, fontSizeS, fontSizeM } from '../styles/Common';
-import { getCorrection } from '../utils/corrections';
-import I18n from '../utils/I18n';
-import { getProfile } from '../utils/profile';
-import Corrections from '../components/organisms/Corrections';
+
+import Corrections from '@/components/organisms/Corrections';
+import { DiaryTitleAndText, UserDiaryStatus } from '@/components/molecules';
+import { ProfileIconHorizontal, Space } from '@/components/atoms';
+
+import Algolia from '@/utils/Algolia';
+import { Profile, Correction, Diary } from '@/types';
+import { getAlgoliaDate } from '@/utils/time';
+import { subTextColor, fontSizeS, fontSizeM } from '@/styles/Common';
+import { getCorrection } from '@/utils/corrections';
+import I18n from '@/utils/I18n';
+import { getProfile } from '@/utils/profile';
 import {
   CommonStackParamList,
   CommonNavigationProp,
-} from '../navigations/CommonNavigator';
+} from '@/navigations/CommonNavigator';
 
 export interface Props {
   profile: Profile;
@@ -88,43 +90,37 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
   const [correction2, setCorrection2] = useState<Correction>();
   const [correction3, setCorrection3] = useState<Correction>();
 
-  const getNewProfile = useCallback((diary: Diary) => {
-    const f = async (): Promise<void> => {
-      if (!diary) return;
-      const newProfile = await getProfile(diary.profile.uid);
-      if (newProfile) {
-        setTargetProfile(newProfile);
-      }
-      setIsProfileLoading(false);
-    };
-    f();
+  const getNewProfile = useCallback(async (diary: Diary): Promise<void> => {
+    if (!diary) return;
+    const newProfile = await getProfile(diary.profile.uid);
+    if (newProfile) {
+      setTargetProfile(newProfile);
+    }
+    setIsProfileLoading(false);
   }, []);
 
-  const getNewCorrection = useCallback((diary: Diary) => {
-    const f = async (): Promise<void> => {
-      if (!diary) return;
-      if (diary.correction) {
-        const newCorrection = await getCorrection(diary.correction.id);
-        if (newCorrection) {
-          setCorrection(newCorrection);
-        }
+  const getNewCorrection = useCallback(async (diary: Diary): Promise<void> => {
+    if (!diary) return;
+    if (diary.correction) {
+      const newCorrection = await getCorrection(diary.correction.id);
+      if (newCorrection) {
+        setCorrection(newCorrection);
       }
+    }
 
-      if (diary.correction2) {
-        const newCorrection = await getCorrection(diary.correction2.id);
-        if (newCorrection) {
-          setCorrection2(newCorrection);
-        }
+    if (diary.correction2) {
+      const newCorrection = await getCorrection(diary.correction2.id);
+      if (newCorrection) {
+        setCorrection2(newCorrection);
       }
-      if (diary.correction3) {
-        const newCorrection = await getCorrection(diary.correction3.id);
-        if (newCorrection) {
-          setCorrection3(newCorrection);
-        }
+    }
+    if (diary.correction3) {
+      const newCorrection = await getCorrection(diary.correction3.id);
+      if (newCorrection) {
+        setCorrection3(newCorrection);
       }
-      setIsCorrectionLoading(false);
-    };
-    f();
+    }
+    setIsCorrectionLoading(false);
   }, []);
 
   useEffect(() => {
@@ -152,7 +148,12 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
     f();
   }, [getNewCorrection, getNewProfile, route.params]);
 
-  const onPressUser = useCallback(
+  const onPressUserProfile = useCallback((): void => {
+    if (!targetProfile) return;
+    navigation.push('UserProfile', { userName: targetProfile.userName });
+  }, [navigation, targetProfile]);
+
+  const onPressUserProfileCorrections = useCallback(
     (uid: string, userName: string): void => {
       navigation.push('UserProfile', { userName });
     },
@@ -177,9 +178,7 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
               photoUrl={targetProfile.photoUrl}
               nativeLanguage={targetProfile.nativeLanguage}
               nationalityCode={targetProfile.nationalityCode}
-              onPress={(): void => {
-                onPressUser(targetProfile.uid, targetProfile.userName);
-              }}
+              onPress={onPressUserProfile}
             />
           ) : (
             <ActivityIndicator />
@@ -216,9 +215,7 @@ const UserDiaryScreen: React.FC<ScreenType> = ({
             correction3={correction3}
             nativeLanguage={profile.nativeLanguage}
             textLanguage={targetProfile.learnLanguage}
-            onPressUser={(uid: string, userName: string): void => {
-              navigation.navigate('UserProfile', { userName });
-            }}
+            onPressUser={onPressUserProfileCorrections}
           />
         ) : (
           <ActivityIndicator />

@@ -1,5 +1,6 @@
 import { Alert, Platform } from 'react-native';
-import Sentry from '../constants/Sentry';
+import { captureException } from '@/utils/sentry';
+
 import I18n from './I18n';
 
 interface ErrorAlert {
@@ -40,5 +41,5 @@ export const alert = ({ err, onPressOk }: ErrorAlert): void => {
     ]);
   }
 
-  Sentry.captureException(err);
+  captureException(err);
 };

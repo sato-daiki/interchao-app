@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Platform, Clipboard } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
+import Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   Menu,

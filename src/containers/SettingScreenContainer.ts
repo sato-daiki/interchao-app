@@ -5,6 +5,7 @@ import { State } from '../types/state';
 
 const mapStateToProps = (state: State): Props => ({
   profile: state.rootReducer.profile,
+  user: state.rootReducer.user,
 });
 
 const mapDispatchToProps = {

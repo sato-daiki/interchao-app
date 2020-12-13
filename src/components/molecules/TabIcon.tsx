@@ -6,7 +6,7 @@ import { Badge } from 'react-native-elements';
 import { State } from '../../types/state';
 
 interface Props {
-  name: string;
+  name: any;
   size: number;
   color: string;
   badgeMode: string;

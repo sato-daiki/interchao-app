@@ -23,9 +23,10 @@ import {
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
 
-import { Profile } from '../types';
+import { Profile, User } from '../types';
 
 export interface Props {
+  user: User;
   profile: Profile;
 }
 
@@ -79,29 +80,35 @@ const styles = StyleSheet.create({
  */
 const SettingScreen: React.FC<ScreenType> = ({
   navigation,
+  user,
   profile,
   signOut,
 }) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
-  const onPressLogout = useCallback(() => {
-    const f = async (): Promise<void> => {
-      try {
-        if (currentUser && currentUser.email) {
-          await firebase.auth().signOut();
-        } else {
-          setIsModalError(true);
-          return;
-        }
-        track(events.SIGN_OUT);
-        signOut();
-      } catch (err) {
-        alert({ err });
+  const onPressLogout = useCallback(async (): Promise<void> => {
+    try {
+      if (currentUser && currentUser.email) {
+        await firebase.auth().signOut();
+      } else {
+        setIsModalError(true);
+        return;
       }
-    };
-    f();
+      track(events.SIGN_OUT);
+      signOut();
+    } catch (err) {
+      alert({ err });
+    }
   }, [currentUser, signOut]);
+
+  const onPressReminder = useCallback(() => {
+    if (user.reminder) {
+      navigation.navigate('ReminderSelectTimeSetting');
+    } else {
+      navigation.navigate('ReminderInitialSetting');
+    }
+  }, [navigation, user.reminder]);
 
   return (
     <View style={styles.container}>
@@ -113,6 +120,12 @@ const SettingScreen: React.FC<ScreenType> = ({
         onPressMain={(): void => setIsModalError(false)}
       />
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
+      {Platform.OS !== 'web' && (
+        <OptionItem
+          title={I18n.t('setting.reminder')}
+          onPress={onPressReminder}
+        />
+      )}
       <OptionItem
         title={I18n.t('setting.notice')}
         onPress={(): void => {

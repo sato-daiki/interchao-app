@@ -7,7 +7,7 @@ import {
   primaryColor,
   fontSizeM,
 } from '../../styles/Common';
-import { getAlgoliaDay } from '../../utils/diary';
+import { getAlgoliaDay } from '../../utils/time';
 import { UserDiaryStatus } from '../molecules';
 import { Diary } from '../../types';
 import Highlight from './Highlight';

@@ -3,7 +3,8 @@ export type MyDiaryListView = 'list' | 'calendar';
 export interface LocalStatus {
   unreadCorrectionNum?: number;
   isLoading: boolean;
-  isSignout: boolean;
+  onboarding?: boolean | null;
+  firstLogin: boolean;
   isModalAppReviewRequest?: boolean;
   // localだけで持っている
   myDiaryListView: MyDiaryListView;

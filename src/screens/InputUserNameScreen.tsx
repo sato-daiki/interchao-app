@@ -21,7 +21,7 @@ import { track, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
 import {
   AuthNavigationProp,
-  CreateAccountStackParamList,
+  AuthStackParamList,
 } from '@/navigations/AuthNavigator';
 import { CompositeNavigationProp } from '@react-navigation/native';
 
@@ -34,7 +34,7 @@ interface DispatchProps {
 }
 
 type NavigationProp = CompositeNavigationProp<
-  StackNavigationProp<CreateAccountStackParamList, 'InputUserName'>,
+  StackNavigationProp<AuthStackParamList, 'InputUserName'>,
   AuthNavigationProp
 >;
 
