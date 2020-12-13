@@ -144,13 +144,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         if (isLoading) return;
         setIsLoading(true);
 
-        if (localStatus.unreadCorrectionNum) {
-          const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
-          // アプリの通知数を設定
-          Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
-          setUnreadCorrectionNum(newUnreadCorrectionNum);
-        }
-
         const data = {
           correctionStatus:
             item.correctionStatus === 'unread' ? 'done' : item.correctionStatus,
@@ -163,8 +156,6 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
               ? 'done'
               : item.correctionStatus3,
         };
-        // DBを更新
-        await updateUnread(item.objectID, data);
         // reduxを更新
         editDiary(item.objectID, {
           ...item,
@@ -172,10 +163,22 @@ const MyDiaryListScreen: React.FC<ScreenType> = ({
         });
 
         setIsLoading(false);
+        navigation.navigate('MyDiary', {
+          objectID: item.objectID,
+        });
+        if (localStatus.unreadCorrectionNum) {
+          const newUnreadCorrectionNum = localStatus.unreadCorrectionNum - 1;
+          // アプリの通知数を設定
+          Notifications.setBadgeCountAsync(newUnreadCorrectionNum);
+          setUnreadCorrectionNum(newUnreadCorrectionNum);
+        }
+        // DBを更新
+        updateUnread(item.objectID, data);
+      } else {
+        navigation.navigate('MyDiary', {
+          objectID: item.objectID,
+        });
       }
-      navigation.navigate('MyDiary', {
-        objectID: item.objectID,
-      });
     },
     [
       editDiary,

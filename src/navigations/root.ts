@@ -26,27 +26,23 @@ export const getConfig = ():
           Initialize: {
             path: '',
           },
-          notfound: '*',
-          CreateAccount: {
-            screens: {
-              SelectLanguage: {
-                path: 'language',
-                exact: true,
-              },
-              InputUserName: {
-                path: 'username',
-              },
-              SignIn: {
-                path: 'login',
-              },
-              SignUp: {
-                path: 'email',
-              },
-              ForegetPassword: {
-                path: 'foreget',
-              },
-            },
+          SelectLanguage: {
+            path: 'language',
+            exact: true,
           },
+          InputUserName: {
+            path: 'username',
+          },
+          SignIn: {
+            path: 'login',
+          },
+          SignUp: {
+            path: 'email',
+          },
+          ForegetPassword: {
+            path: 'foreget',
+          },
+          notfound: '*',
         },
       },
       Main: {
