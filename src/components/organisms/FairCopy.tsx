@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Platform, ScrollView, StyleSheet, View, Text } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio, AVPlaybackStatus } from 'expo-av';
@@ -8,13 +8,13 @@ import {
   ShareButton,
   Space,
   WhiteButton,
-  Hoverable,
+  LinkText,
 } from '../atoms';
 import DiaryOriginal from './DiaryOriginal';
 import { appShare, diaryShare } from '../../utils/common';
 
 import { Diary, Profile } from '../../types';
-import { mainColor, primaryColor, linkBlue } from '../../styles/Common';
+import { mainColor, primaryColor } from '../../styles/Common';
 import ModalSpeech from './ModalSpeech';
 import ModalVoice from './ModalVoice';
 import I18n from '../../utils/I18n';
@@ -48,9 +48,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   linkText: {
-    color: linkBlue,
-    marginHorizontal: 16,
     textAlign: 'center',
+    marginHorizontal: 16,
   },
 });
 
@@ -199,7 +198,11 @@ const FairCopy: React.FC<Props> = ({
 
   const iconHeader = useMemo(
     () => (
-      <MaterialCommunityIcons size={22} color={primaryColor} name="voice" />
+      <MaterialCommunityIcons
+        size={22}
+        color={primaryColor}
+        name="account-voice"
+      />
     ),
     []
   );
@@ -296,9 +299,11 @@ const FairCopy: React.FC<Props> = ({
           ) : null}
         </View>
         <Space size={48} />
-        <Hoverable onPress={goToRecommend}>
-          <Text style={styles.linkText}>{I18n.t('myDiary.recommend')}</Text>
-        </Hoverable>
+        <LinkText
+          containerStyle={styles.linkText}
+          onPress={goToRecommend}
+          text={I18n.t('myDiary.recommend')}
+        />
         <Space size={32} />
       </ScrollView>
     </View>

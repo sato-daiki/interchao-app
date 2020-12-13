@@ -1,9 +1,17 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
 import { mainColor, fontSizeM, primaryColor } from '../../styles/Common';
 
 interface Props {
+  textStyle?: StyleProp<TextStyle>;
   checked: boolean;
   color: string;
   text: string;
@@ -27,6 +35,7 @@ const RadioBox: React.FC<Props> = ({
   color = mainColor,
   text,
   onPress,
+  textStyle,
 }: Props): JSX.Element => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
@@ -36,7 +45,7 @@ const RadioBox: React.FC<Props> = ({
           color={color}
           name={checked ? 'radiobox-marked' : 'radiobox-blank'}
         />
-        <Text style={styles.radioBoxText}>{text}</Text>
+        <Text style={[styles.radioBoxText, textStyle]}>{text}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

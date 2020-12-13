@@ -7,8 +7,8 @@ import {
   PRODUCTION_AMPLITUDE_API_KEY,
   // @ts-ignore
 } from '@env';
-import Sentry from '../constants/Sentry';
-import { User, Profile, Language } from '../types';
+import { captureException } from '@/utils/sentry';
+import { User, Profile, Language } from '@/types';
 
 interface Property {
   nativeLanguage: Language;
@@ -29,29 +29,29 @@ const createPropertiesUser = (user: User, profile: Profile): Property => {
   };
 };
 
-export const initAnalytics = (): void => {
+export const initAnalytics = async (): Promise<void> => {
   // Amplitude webは対応していない
   if (Platform.OS === 'web') return;
-  Amplitude.initialize(apiKey);
+  await Amplitude.initializeAsync(apiKey);
 };
 
 export const setAnalyticsUser = (user: User, profile: Profile): void => {
   if (Platform.OS === 'web') return;
-  Amplitude.setUserId(user.uid);
+  Amplitude.setUserIdAsync(user.uid);
   const userProperties = createPropertiesUser(user, profile);
-  Amplitude.setUserProperties(userProperties);
+  Amplitude.setUserPropertiesAsync(userProperties);
 };
 
 export const track = (eventName: string, properties?: any): void => {
+  if (Platform.OS === 'web') return;
   try {
-    if (Platform.OS === 'web') return;
     if (properties) {
-      Amplitude.logEventWithProperties(eventName, properties);
+      Amplitude.logEventWithPropertiesAsync(eventName, properties);
     } else {
-      Amplitude.logEvent(eventName);
+      Amplitude.logEventAsync(eventName);
     }
   } catch (err) {
-    Sentry.captureException(err);
+    captureException(err);
   }
 };
 

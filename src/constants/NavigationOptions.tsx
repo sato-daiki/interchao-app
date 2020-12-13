@@ -3,9 +3,9 @@ import React from 'react';
 import {
   primaryColor,
   fontSizeL,
-  maxAuth,
   borderLightColor,
   maxModalScreen,
+  maxMain,
 } from '../styles/Common';
 import { getEachOS } from '../utils/common';
 import { DefaultHeaderBack } from '../components/atoms';
@@ -65,7 +65,7 @@ export const DefaultModalLayoutOptions: StackNavigationOptions = {
 export const DefaultAuthLayoutOptions: StackNavigationOptions = {
   cardStyle: {
     width: '100%',
-    maxWidth: maxAuth,
+    maxWidth: maxMain,
     marginHorizontal: 'auto',
     backgroundColor: '#fff',
     flex: 1,

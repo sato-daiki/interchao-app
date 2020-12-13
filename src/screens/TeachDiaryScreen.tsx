@@ -33,7 +33,7 @@ import {
   Space,
   HeaderIcon,
 } from '../components/atoms';
-import { getAlgoliaDate } from '../utils/diary';
+import { getAlgoliaDate } from '../utils/time';
 import {
   subTextColor,
   fontSizeS,

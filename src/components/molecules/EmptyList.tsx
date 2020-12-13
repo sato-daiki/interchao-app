@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import { subTextColor, fontSizeS } from '../../styles/Common';
 import { Space } from '../atoms';
 
-interface Props {
+type Props = {
   message: string;
-  iconName: string;
+  iconName: any;
   paddingTop?: number;
-}
+};
 
 const styles = StyleSheet.create({
   container: {

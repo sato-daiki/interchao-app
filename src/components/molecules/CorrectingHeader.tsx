@@ -8,7 +8,7 @@ import {
 } from '../../styles/Common';
 import { ProfileIconHorizontal } from '../atoms';
 import CorrectionTimer from './CorrectionTimer';
-import { getAlgoliaDate } from '../../utils/diary';
+import { getAlgoliaDate } from '../../utils/time';
 import { Diary, Profile } from '../../types';
 
 interface Props {

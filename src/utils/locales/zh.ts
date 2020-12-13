@@ -12,6 +12,7 @@ const common = {
   publish: '发布',
   draft: '保存草稿',
   skip: '跳过',
+  save: '保存',
   add: '添加',
   delete: '删除',
   translation: '翻译',
@@ -20,6 +21,7 @@ const common = {
   slow: '放慢语速',
   back: '返回',
   begin: '开始',
+  time: '请选择时间',
 };
 
 // web
@@ -243,6 +245,48 @@ const notice = {
     '※电子邮件地址未注册。如果要使用电子邮件通知，请在"电子邮件地址/密码注册"注册屏幕上进行设置',
 };
 
+const onboarding = {
+  reminderInitial: '设定学习时间',
+  reminderSelectTime: '设定学习时间',
+  reminderSelectDay: '安排一天学习',
+  pushSetting: '开启通知',
+};
+
+const reminderInitial = {
+  text:
+    '重要的是要养成学习习惯。让我们固定时间来学习。您可以设置一个提醒，以便在您开始学习时得到通知。',
+  submit: '组',
+};
+
+const reminderSelectTime = {
+  title: '请设定学习时间表',
+  fix: '每天同一时间',
+  custom: '习俗',
+  studyDay: '天',
+  time: '时间',
+  start: '起始时间',
+  end: '结束时间',
+  notificationLable: '通知时间',
+  notificationStart: '在开始时间通知',
+  notificationEnd: '在结束时间通知',
+  notificationStartTitle: '时间',
+  notificationStartBody: '让我们今天努力吧！',
+  notificationEndTitle: '结束时间',
+  notificationEndBody: '做得好！',
+  notficationAlert:
+    '提醒功能不起作用，因为通知设置已关闭。从您的设备设置中打开Interchao通知。',
+};
+
+const reminderSelectDay = {
+  title: '请选择星期几学习',
+};
+
+const pushSetting = {
+  title: '开启通知',
+  description: '日记更正或达到提醒时间时，您会收到通知。',
+  submit: '打开',
+};
+
 const editMyDiaryList = {
   headerTitle: '编辑日记清单',
 };
@@ -293,6 +337,7 @@ const selectLanguage = {
 const setting = {
   headerTitle: '设置',
   title: '基本的',
+  reminder: '提醒',
   notice: '通知',
   editEmail: '修改邮箱地址',
   editPassword: '修改密码',
@@ -830,6 +875,11 @@ const zh = {
   myDiarySerch,
   myPage,
   notice,
+  onboarding,
+  reminderInitial,
+  reminderSelectTime,
+  reminderSelectDay,
+  pushSetting,
   editMyDiaryList,
   postDiary,
   postDraftDiary,

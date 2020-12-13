@@ -40,12 +40,29 @@ export const setMyDiaryListView = (
 
 export interface RestoreUidAction extends Action {
   type: Types.RESTORE_UID;
-  uid: string | null;
+  payload: {
+    uid: string | null;
+    onboarding?: boolean;
+  };
 }
 
-export const restoreUid = (uid: string | null): RestoreUidAction => ({
+export const restoreUid = (
+  uid: string | null,
+  onboarding?: boolean
+): RestoreUidAction => ({
   type: Types.RESTORE_UID,
-  uid,
+  payload: {
+    uid,
+    onboarding,
+  },
+});
+
+export interface CompletedOnboardingAction extends Action {
+  type: Types.COMPLETED_ONBOARDING;
+}
+
+export const completedOnboarding = (): CompletedOnboardingAction => ({
+  type: Types.COMPLETED_ONBOARDING,
 });
 
 export interface SignInAction extends Action {

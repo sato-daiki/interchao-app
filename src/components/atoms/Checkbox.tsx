@@ -3,10 +3,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { mainColor } from '../../styles/Common';
 
 interface Props {
-  checked: boolean;
+  checked?: boolean;
   disable?: boolean;
   color?: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const Checkbox: React.FC<Props> = ({

@@ -12,6 +12,7 @@ const common = {
   publish: '업로드',
   draft: '임시 보관함',
   skip: '건너뛰기',
+  save: '저장',
   add: '추가',
   delete: '삭제',
   translation: '번역',
@@ -20,6 +21,7 @@ const common = {
   slow: '느림',
   back: 'Back',
   begin: '시작하기',
+  time: '시간을 선택하세요',
 };
 
 // web
@@ -253,6 +255,49 @@ const notice = {
     '※이메일 주소가 등록되어 있지 않습니다. 메일 통지를 이용하는 경우는 "이메일 주소/비밀번호 등록" 화면에서 설정하십시오',
 };
 
+const onboarding = {
+  reminderInitial: '공부 시간 설정',
+  reminderSelectTime: '공부 시간 설정',
+  reminderSelectDay: '요일 선택',
+  pushSetting: '알림 켜기',
+};
+
+const reminderInitial = {
+  text:
+    '공부는 습관화하는 것이 중요합니다. 공부하는 시간을 고정합시다. 알림을 설정하면 공부 시작 시간에 알림을받을 수 있습니다.',
+  submit: '설정',
+};
+
+const reminderSelectTime = {
+  title: '공부를 예약하십시오',
+  fix: '매일 같은 시간',
+  custom: '사용자 정의',
+  studyDay: '요일',
+  time: '시간',
+  start: '시작 시간',
+  end: '종료 시간',
+  notificationLable: '통지시기',
+  notificationStart: '시작 시간에 알림',
+  notificationEnd: '종료 시간 알림',
+  notificationStartTitle: '시작 시간',
+  notificationStartBody: '오늘도 화이팅 !!',
+  notificationEndTitle: '종료 시간',
+  notificationEndBody: '훌륭한 일!',
+  notficationAlert:
+    '알림 설정이 off로되어 있기 때문에 미리 알림 기능이 작동하지 않습니다. 장치 설정에서 Interchao의 통지를 on으로합니다.',
+};
+
+const reminderSelectDay = {
+  title: '공부할 요일을 선택하세요',
+};
+
+const pushSetting = {
+  title: '알림 켜기',
+  description:
+    '일기 첨삭이 도착했을 때 알림을 설정 한 시간이되었을 때 등에 소식을받을 수 있습니다.',
+  submit: '켜다',
+};
+
 const editMyDiaryList = {
   headerTitle: '일기 목록 편집',
 };
@@ -305,6 +350,7 @@ const selectLanguage = {
 const setting = {
   headerTitle: '설정',
   title: '기본 설정',
+  reminder: '알림',
   notice: '알림',
   editEmail: '이메일 주소 변경',
   editPassword: '비밀번호 변경',
@@ -853,6 +899,11 @@ const ko = {
   myDiarySerch,
   myPage,
   notice,
+  onboarding,
+  reminderInitial,
+  reminderSelectTime,
+  reminderSelectDay,
+  pushSetting,
   editMyDiaryList,
   postDiary,
   postDraftDiary,
