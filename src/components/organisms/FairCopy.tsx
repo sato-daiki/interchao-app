@@ -198,7 +198,11 @@ const FairCopy: React.FC<Props> = ({
 
   const iconHeader = useMemo(
     () => (
-      <MaterialCommunityIcons size={22} color={primaryColor} name="voice" />
+      <MaterialCommunityIcons
+        size={22}
+        color={primaryColor}
+        name="account-voice"
+      />
     ),
     []
   );

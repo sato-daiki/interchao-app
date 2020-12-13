@@ -7,8 +7,8 @@ import {
   PRODUCTION_AMPLITUDE_API_KEY,
   // @ts-ignore
 } from '@env';
-import Sentry from '../constants/Sentry';
-import { User, Profile, Language } from '../types';
+import { captureException } from '@/utils/sentry';
+import { User, Profile, Language } from '@/types';
 
 interface Property {
   nativeLanguage: Language;
@@ -43,15 +43,15 @@ export const setAnalyticsUser = (user: User, profile: Profile): void => {
 };
 
 export const track = (eventName: string, properties?: any): void => {
+  if (Platform.OS === 'web') return;
   try {
-    if (Platform.OS === 'web') return;
     if (properties) {
       Amplitude.logEventWithPropertiesAsync(eventName, properties);
     } else {
       Amplitude.logEventAsync(eventName);
     }
   } catch (err) {
-    Sentry.captureException(err);
+    captureException(err);
   }
 };
 

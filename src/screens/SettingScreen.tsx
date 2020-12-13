@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, View, Text, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import { User } from 'sentry-expo';
 import firebase from '../constants/firebase';
 import {
   subTextColor,
@@ -24,7 +23,7 @@ import {
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
 
-import { Profile } from '../types';
+import { Profile, User } from '../types';
 
 export interface Props {
   user: User;
