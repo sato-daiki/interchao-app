@@ -50,6 +50,9 @@ export const AuthNavigator = (): JSX.Element => {
       initialRouteName="Initialize"
       screenOptions={{
         ...DefaultNavigationOptions,
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+        },
       }}
     >
       <Stack.Screen

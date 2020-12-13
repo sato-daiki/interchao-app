@@ -77,7 +77,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
     navigation.setOptions({
       headerRight: (): JSX.Element => (
         <HeaderIcon
-          icon="community"
+          icon="material"
           name="settings"
           onPress={(): void => navigation.navigate('Setting')}
         />

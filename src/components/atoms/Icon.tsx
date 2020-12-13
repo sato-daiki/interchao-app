@@ -4,6 +4,7 @@ import {
   MaterialCommunityIcons,
   Feather,
 } from '@expo/vector-icons';
+
 import { mainColor, primaryColor } from '../../styles/Common';
 
 export type IconType = 'material' | 'community' | 'feather';
@@ -11,8 +12,8 @@ export type IconType = 'material' | 'community' | 'feather';
 type Props = {
   isHover?: boolean;
   icon: IconType;
-  name: string;
   size: number;
+  name: any;
   color?: string;
   hoverColor?: string;
 };

@@ -58,6 +58,11 @@ export const useReminderSelectTime = ({
       hour: number,
       minute: number
     ) => {
+      console.log('which:', which);
+      console.log('weekday:', weekday);
+      console.log('hour:', hour);
+      console.log('minute:', minute);
+
       let title;
       let body;
 
@@ -75,7 +80,8 @@ export const useReminderSelectTime = ({
           body,
         },
         trigger: {
-          weekday,
+          // javascriptのweekdayは0-6 , expoは1-7のためplusする
+          weekday: weekday + 1,
           hour,
           minute,
           repeats: true,

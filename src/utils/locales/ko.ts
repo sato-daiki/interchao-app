@@ -278,12 +278,11 @@ const reminderSelectTime = {
   end: '종료 시간',
   notificationLable: '통지시기',
   notificationStart: '시작 시간에 알림',
-  notificationEnd: '종료 시간에 항목이 게시되지 않은 경우 알림',
+  notificationEnd: '종료 시간 알림',
   notificationStartTitle: '시작 시간',
   notificationStartBody: '오늘도 화이팅 !!',
   notificationEndTitle: '종료 시간',
-  notificationEndBody:
-    '오늘 분의 일기 게시물이되지 않습니다. 적은 글도 게시하자!',
+  notificationEndBody: '훌륭한 일!',
   notficationAlert:
     '알림 설정이 off로되어 있기 때문에 미리 알림 기능이 작동하지 않습니다. 장치 설정에서 Interchao의 통지를 on으로합니다.',
 };

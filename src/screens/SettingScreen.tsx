@@ -121,10 +121,12 @@ const SettingScreen: React.FC<ScreenType> = ({
         onPressMain={(): void => setIsModalError(false)}
       />
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
-      <OptionItem
-        title={I18n.t('setting.reminder')}
-        onPress={onPressReminder}
-      />
+      {Platform.OS !== 'web' && (
+        <OptionItem
+          title={I18n.t('setting.reminder')}
+          onPress={onPressReminder}
+        />
+      )}
       <OptionItem
         title={I18n.t('setting.notice')}
         onPress={(): void => {

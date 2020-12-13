@@ -24,7 +24,7 @@ import { firebaseConfig } from '@/constants/firebase';
 import Sentry from '@/constants/Sentry';
 import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
 import { getConfig } from '@/navigations/root';
-import AppLoading from 'expo/build/launch/AppLoading';
+import AppLoading from 'expo-app-loading';
 
 if (Platform.OS !== 'web') {
   // Ignore warnings of firebase

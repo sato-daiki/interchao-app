@@ -7,6 +7,7 @@ import { setAnalyticsUser } from '@/utils/Analytics';
 import { Profile, User, LocalStatus } from '@/types';
 
 import LoadingScreen from '@/screens/LoadingScreen';
+import { Platform } from 'react-native';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import OnboardingNavigator from './OnboardingNavigator';
@@ -76,7 +77,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       return <Stack.Screen name="Loading" component={LoadingScreen} />;
     }
     if (localStatus.uid !== null) {
-      if (localStatus.onboarding === false) {
+      if (localStatus.onboarding === false && Platform.OS !== 'web') {
         return (
           <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
         );
@@ -90,6 +91,9 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        cardStyle: {
+          backgroundColor: '#FFFFFF',
+        },
       }}
     >
       {renderScreen()}
