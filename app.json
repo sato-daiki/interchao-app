@@ -1,12 +1,12 @@
 {
   "expo": {
     "name": "Interchao",
-    "description": "Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう",
-    "scheme": "interchao",
     "slug": "white-zebra",
+    "description": "Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!",
+    "scheme": "interchao",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "1.6.2",
+    "version": "1.6.3",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./assets/icon.png",
@@ -25,11 +25,11 @@
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
       "appStoreUrl": "https://itunes.apple.com/jp/app/id1510150748",
-      "buildNumber": "1060200"
+      "buildNumber": "1060300"
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 1060200,
+      "versionCode": 1060300,
       "permissions": [
         "CAMERA",
         "NOTIFICATIONS",
