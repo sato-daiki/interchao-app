@@ -68,7 +68,7 @@ expo upload:android
 
 ### 1.version を書く
 
-webVesion を上げる。（基本はアプリと合わせたいが、web のみリリースする場合はずれる）
+webRevision を上げる。（基本はアプリと合わせたいが、web のみリリースする場合はずれる）
 
 ## 2.ビルド
 

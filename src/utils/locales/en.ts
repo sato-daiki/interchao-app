@@ -99,6 +99,7 @@ const web = {
   startTitle: 'Start by writing a journal entry for free',
   startText:
     'By registering for a free account, you can receive 100 pts (10 journal entry’s worth). Hurry and write a journal entry so you can have it corrected!',
+  operator: 'Operator',
 };
 
 const modalAppSuggestion = {

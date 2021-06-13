@@ -74,6 +74,7 @@ const web = {
   startTitle: '먼저 무료로 일기를 써 보세요',
   startText:
     '앱 설치시 100pt(일기 10일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
+  operator: 'Operator',
 };
 
 const modalAppSuggestion = {
