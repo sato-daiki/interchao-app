@@ -91,7 +91,7 @@
         }
       },
       "revision": 0,
-      "webRevision": 0
+      "webRevision": 1
     },
     "hooks": {
       "postPublish": [
