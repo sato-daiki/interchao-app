@@ -4,6 +4,7 @@ import * as Linking from 'expo-linking';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { maxLayoutChange, offBlack, offWhite } from '../../../styles/Common';
 import { Hoverable } from '../../atoms';
+import I18n from '../../../utils/I18n';
 
 const styles = StyleSheet.create({
   warapper: {
@@ -53,6 +54,10 @@ const Fotter = (): JSX.Element => {
     Linking.openURL('https://twitter.com/interchao');
   }, []);
 
+  const onPressOperator = useCallback((): void => {
+    Linking.openURL('https://daiki-portfolio.com');
+  }, []);
+
   return (
     <View style={styles.warapper}>
       <View style={[styles.container]}>
@@ -62,11 +67,12 @@ const Fotter = (): JSX.Element => {
             <Hoverable onPress={onPressEnglishBlog}>
               <Text style={styles.textMiddle}>English Blog</Text>
             </Hoverable>
-
             <Hoverable onPress={onPressJapaneseBlog}>
               <Text style={styles.textMiddle}>Japanese Blog</Text>
             </Hoverable>
-
+            <Hoverable onPress={onPressOperator}>
+              <Text style={styles.textMiddle}>{I18n.t('web.operator')}</Text>
+            </Hoverable>
             <Hoverable onPress={onPressTwitter}>
               <MaterialCommunityIcons
                 size={28}

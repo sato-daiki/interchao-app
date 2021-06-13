@@ -69,6 +69,7 @@ const web = {
   startTitle: '先来免费写日记吧​',
   startText:
     '安装应用程式可以获得100pt（10篇日记）. 赶快来写日记让人帮你批改吧！',
+  operator: 'Operator',
 };
 
 const modalAppSuggestion = {
