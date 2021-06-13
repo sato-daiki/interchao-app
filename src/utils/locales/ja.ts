@@ -74,6 +74,7 @@ const web = {
   startTitle: 'さっそく始めてみよう',
   startText:
     'アプリインストールで100pt（10日記分）が貰えます。早速日記を書いて添削してもらおう！',
+  operator: '運営者',
 };
 
 const modalAppSuggestion = {
