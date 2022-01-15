@@ -1,11 +1,5 @@
 import React, { useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ImageSourcePropType,
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 import { DiaryStatus, Hoverable } from '@/components/atoms';
 
