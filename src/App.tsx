@@ -24,6 +24,7 @@ import * as Sentry from 'sentry-expo';
 
 import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
 import { getConfig } from '@/navigations/root';
+import BottomBanner from './components/molecules/BottomBanner';
 
 if (Platform.OS !== 'web') {
   // Ignore warnings of firebase
@@ -114,6 +115,7 @@ const App = (): JSX.Element => {
             </NavigationContainer>
           </MenuProvider>
         </ActionSheetProvider>
+        <BottomBanner />
       </PersistGate>
     </Provider>
   );
