@@ -33,7 +33,8 @@ export async function openCameraRoll(
   options = {}
 ): Promise<ImagePicker.ImagePickerResult> {
   if (Platform.OS !== 'web') {
-    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (status !== 'granted') {
       openAlert();
       return { cancelled: true };
