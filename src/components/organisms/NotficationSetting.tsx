@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 import '@expo/match-media';
 import I18n from '@/utils/I18n';
 import firebase from '@/constants/firebase';
@@ -20,7 +20,7 @@ const NotficationSetting = ({ user, setUser }: Props): JSX.Element | null => {
 
   useEffect(() => {
     const f = async (): Promise<void> => {
-      const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      const { status } = await Notifications.getPermissionsAsync();
       if (status !== 'granted') {
         setIsPermission(false);
       } else {

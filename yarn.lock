@@ -6778,11 +6778,6 @@ expo-notifications@~0.14.0:
     unimodules-task-manager-interface "~7.1.0"
     uuid "^3.4.0"
 
-expo-permissions@~13.1.0:
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-13.1.0.tgz#1be8fe01476950d642ea83d383fd8912492434b9"
-  integrity sha512-f3ngERaoeAw8236xyvw4gS89Fxd4fU2soKXQn0JPXwiDGmIXO+lIJNH3psNvAebj4DfmyQtGW4AS1itG83GHaQ==
-
 expo-pwa@0.0.110:
   version "0.0.110"
   resolved "https://registry.yarnpkg.com/expo-pwa/-/expo-pwa-0.0.110.tgz#bcfd25f3bfeadd8387f3e931f278fe114b742eb8"

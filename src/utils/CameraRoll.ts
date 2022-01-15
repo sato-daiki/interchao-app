@@ -1,15 +1,10 @@
+import { Alert, Platform } from 'react-native';
+
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
-import * as Permissions from 'expo-permissions';
-import { Alert, Platform } from 'react-native';
 import { SERVICE_NAME } from '../constants';
 import I18n from './I18n';
 import { uploadStorageAsync } from './storage';
-
-export const askPermissionsAsync = async (): Promise<Permissions.PermissionStatus> => {
-  const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-  return status;
-};
 
 const openAlert = (): void => {
   Alert.alert(
@@ -38,7 +33,7 @@ export async function openCameraRoll(
   options = {}
 ): Promise<ImagePicker.ImagePickerResult> {
   if (Platform.OS !== 'web') {
-    const status = await askPermissionsAsync();
+    const { status } = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       openAlert();
       return { cancelled: true };
