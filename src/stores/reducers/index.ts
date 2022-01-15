@@ -1,6 +1,6 @@
 import { CombinedState, combineReducers } from 'redux';
-import AsyncStorage from '@react-native-community/async-storage';
 import { persistReducer, createTransform } from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import JSOG from 'jsog';
 import localStatus from './localStatus';

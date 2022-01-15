@@ -5,7 +5,11 @@
     "scheme": "interchao",
     "slug": "white-zebra",
     "privacy": "public",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.6.2",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -19,7 +23,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "app.interchao",
@@ -104,6 +110,9 @@
           }
         }
       ]
-    }
+    },
+    "plugins": [
+      "sentry-expo"
+    ]
   }
 }
