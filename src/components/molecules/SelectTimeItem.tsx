@@ -89,7 +89,6 @@ const SelectTimeItem = ({
           </Text>
           <TimePicker date={timeStart} onChange={onChangeTimeStart} />
         </View>
-        <Text style={[styles.text, styles.marginRight12]}>〜</Text>
         <View style={styles.row}>
           <Text style={[styles.text, styles.marginRight8]}>
             {I18n.t('reminderSelectTime.end')}
