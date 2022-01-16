@@ -10,7 +10,8 @@
     "eject": "expo eject",
     "test": "node_modules/.bin/jest",
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest.js --runInBand",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "rm -rf node_modules/expo/node_modules/react-native-safe-area-context"
   },
   "husky": {
     "hooks": {
