@@ -8,7 +8,7 @@
     "platforms": ["ios", "android", "web"],
     "version": "1.6.2",
     "orientation": "portrait",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "primaryColor": "#2a2a2a",
     "splash": {
@@ -25,7 +25,10 @@
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
       "appStoreUrl": "https://itunes.apple.com/jp/app/id1510150748",
-      "buildNumber": "1060200"
+      "buildNumber": "1060200",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-0770181536572634~7787198288"
+      }
     },
     "android": {
       "package": "app.interchao",
@@ -43,7 +46,10 @@
         "backgroundColor": "#fff"
       },
       "playStoreUrl": "https://play.google.com/store/apps/details?id=app.interchao",
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-0770181536572634~9333866636"
+      }
     },
     "web": {
       "name": "Interchao - Language Learning",
@@ -104,6 +110,21 @@
           }
         }
       ]
-    }
+    },
+    "plugins": [
+      "sentry-expo",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos"
+        }
+      ],
+      [
+        "expo-ads-admob",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ]
   }
 }

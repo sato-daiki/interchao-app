@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { BackHandler, Alert, Keyboard } from 'react-native';
 import I18n from '@/utils/I18n';
 import { checkBeforePost } from '@/utils/diary';
-import { Language, ThemeCategory, ThemeSubcategory } from '@/types';
+import { Language } from '@/types';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 interface UseCommon {

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   picker: {
     maxWidth: maxPartL,
     width: '100%',
-    height: getEachOS({ ios: undefined, android: 30, web: 40 }),
+    height: getEachOS({ ios: undefined, android: undefined, web: 40 }),
     fontSize: Platform.OS === 'web' ? fontSizeL : fontSizeM,
   },
 });
@@ -61,7 +61,7 @@ const ModalSpokenLanguages: React.FC<Props> = ({
             <Picker.Item key={item} label={getLanguage(item)} value={item} />
           ))}
         </Picker>
-        {Platform.OS === 'ios' ? null : <Space size={32} />}
+        {Platform.OS === 'ios' ? null : <Space size={16} />}
         <SubmitButton title="OK" onPress={onPress} />
         <Space size={16} />
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
