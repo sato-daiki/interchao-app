@@ -1,5 +1,4 @@
 import React from 'react';
-import { MenuOption } from 'react-native-popup-menu';
 import I18n from '../../../utils/I18n';
 import MenuTemplate from '../template/MenuTemplate';
 import { CustumMenuOption } from '../molecules';
