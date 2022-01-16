@@ -129,7 +129,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
         alert({ err });
       }
     }
-  }, [diaries, fetchInfo, setFetchInfo, user.uid]);
+  }, [addDiaries, fetchInfo, setFetchInfo, user.uid]);
 
   const onPressClose = useCallback(() => {
     navigation.goBack();

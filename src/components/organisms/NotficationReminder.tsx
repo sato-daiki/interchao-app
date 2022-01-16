@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 import I18n from '@/utils/I18n';
 import { mainColor } from '@/styles/Common';
 import { Note } from '@/components/atoms';
@@ -10,7 +10,7 @@ const NotficationReminder = (): JSX.Element => {
 
   useEffect(() => {
     const f = async (): Promise<void> => {
-      const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      const { status } = await Notifications.getPermissionsAsync();
       if (status !== 'granted') {
         setIsPermission(false);
       } else {
