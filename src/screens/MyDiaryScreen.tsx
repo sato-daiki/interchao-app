@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  ReactNode,
-  useMemo,
-} from 'react';
+import React, { useCallback, useState, useEffect, ReactNode } from 'react';
 import { StyleSheet, View, Dimensions, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
@@ -15,7 +9,7 @@ import {
 } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import * as Permissions from 'expo-permissions';
+import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 
 import { ModalConfirm } from '@/components/organisms';
@@ -79,7 +73,6 @@ const initialLayout = { width: Dimensions.get('window').width };
  */
 const MyDiaryScreen: React.FC<ScreenType> = ({
   navigation,
-  error,
   profile,
   diary,
   user,
@@ -296,8 +289,9 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   );
 
   const checkPermissions = useCallback(async (): Promise<boolean> => {
-    const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-    if (response.status !== 'granted') {
+    const { status } = await Audio.requestPermissionsAsync();
+
+    if (status !== 'granted') {
       setIsModalAlertAudio(true);
       setIsLoading(false);
       return false;
