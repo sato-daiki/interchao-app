@@ -1,5 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Dimensions,
+  ImageSourcePropType,
+  ViewStyle,
+  StyleProp,
+  TextStyle,
+} from 'react-native';
 import { primaryColor, fontSizeL } from '../../styles/Common';
 import { Loading } from '../../images';
 
@@ -35,21 +45,33 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Props {
+export interface Props {
+  containerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
   visible?: boolean;
   transparent?: boolean;
   text?: string;
+  source?: ImageSourcePropType;
+  size?: number;
 }
+
 const LoadingModal: React.FC<Props> = ({
+  source = Loading,
   visible,
   transparent,
   text,
+  containerStyle,
 }: Props): JSX.Element | null =>
   visible ? (
     <View
-      style={[styles.overlay, { height }, transparent && styles.transparent]}
+      style={[
+        styles.overlay,
+        { height },
+        transparent && styles.transparent,
+        containerStyle,
+      ]}
     >
-      <Image source={Loading} style={styles.loadingImage} />
+      <Image source={source} style={styles.loadingImage} />
       {text ? <Text style={styles.text}>{text}</Text> : null}
     </View>
   ) : null;

@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import firebase from 'firebase';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Platform } from 'react-native';
 import { getUser } from '@/utils/user';
 import { getProfile } from '@/utils/profile';
 import { setAnalyticsUser } from '@/utils/Analytics';
 import { Profile, User, LocalStatus } from '@/types';
 
 import LoadingScreen from '@/screens/LoadingScreen';
-import { Platform } from 'react-native';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import OnboardingNavigator from './OnboardingNavigator';

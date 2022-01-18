@@ -17,6 +17,7 @@ import MyDiaryTabNavigator, {
 import TeachDiaryTabNavigator, {
   TeachDiaryTabStackParamList,
 } from './TeachDiaryTabNavigator';
+import PointTabNavigator from './PointTabNavigator';
 import MyPageTabNavigator from './MyPageTabNavigator';
 import { MainStackParamList, MainNavigationProp } from './MainNavigator';
 import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
@@ -31,6 +32,7 @@ export type HomeBottomParamList = {
   MyDiaryTab: { screen: keyof MyDiaryTabStackParamList };
   PostDiaryTab: undefined;
   TeachDiaryTab: { screen: keyof TeachDiaryTabStackParamList };
+  PointTab: undefined;
   MyPageTab: undefined;
 };
 
@@ -168,6 +170,16 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           ),
           tabBarIcon: ({ color }: { color: string }): JSX.Element => (
             <MaterialCommunityIcons name="spellcheck" size={25} color={color} />
+          ),
+        }}
+      />
+      <HomeBottom.Screen
+        name="PointTab"
+        component={PointTabNavigator}
+        options={{
+          tabBarLabel: I18n.t('mainTab.myPage'),
+          tabBarIcon: ({ color }: { color: string }): JSX.Element => (
+            <MaterialIcons name="person" size={25} color={color} />
           ),
         }}
       />
