@@ -16,10 +16,11 @@ module.exports = {
   env: {
     browser: true,
     'react-native/react-native': true,
-    'jest': true,
+    jest: true,
   },
   rules: {
     // @envのimportは許可する
+    'import/internal-regex': '^@',
     'import/no-unresolved': [0, { ignore: ['@env', './images'] }],
     'import/prefer-default-export': [0],
     'import/extensions': [
