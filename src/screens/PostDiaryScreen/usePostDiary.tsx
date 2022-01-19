@@ -69,6 +69,7 @@ export const usePostDiary = ({
     onClosePostDiary,
     onPressNotSave,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
   } = useCommon({
     navigation,
     themeTitle,
@@ -302,6 +303,7 @@ export const usePostDiary = ({
     publishMessage,
     onPressSubmitModalLack,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
     onClosePostDiary,
