@@ -67,6 +67,7 @@ export const usePostDraftDiary = ({
     onClosePostDiary,
     onPressNotSave,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
   } = useCommon({
     navigation,
     points: user.points,
@@ -288,6 +289,7 @@ export const usePostDraftDiary = ({
     publishMessage,
     onPressSubmitModalLack,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
     onClosePostDiary,

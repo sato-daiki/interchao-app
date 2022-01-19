@@ -40,6 +40,7 @@ export interface PostDiaryProps {
   nativeLanguage: Language;
   onPressSubmitModalLack: () => void;
   onPressCloseModalLack: () => void;
+  onPressWatchAdModalLack?: () => void;
   onPressCloseModalPublish: () => void;
   onPressCloseModalCancel: () => void;
   onClosePostDiary: () => void;
