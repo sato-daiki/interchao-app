@@ -58,7 +58,7 @@ interface Props {
   onPressClose: () => void;
 }
 
-const ModalAdPointGet: React.FC<Props> = ({
+const ModalAdPointsGet: React.FC<Props> = ({
   visible,
   points,
   getPoints,
@@ -85,7 +85,7 @@ const ModalAdPointGet: React.FC<Props> = ({
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
-        <Heading title={I18n.t('modalCorrectingDone.title')} />
+        <Heading title={I18n.t('modalAdPointsGet.title')} />
         {Platform.OS === 'android' ? (
           <>
             <Image style={styles.getPoints} source={GetPoints} />
@@ -110,7 +110,7 @@ const ModalAdPointGet: React.FC<Props> = ({
               />
             </View>
             <Text style={styles.text}>
-              {I18n.t('modalCorrectingDone.text', { getPoints })}
+              {I18n.t('modalAdPointsGet.text', { getPoints })}
             </Text>
           </>
         )}
@@ -123,4 +123,4 @@ const ModalAdPointGet: React.FC<Props> = ({
   );
 };
 
-export default ModalAdPointGet;
+export default ModalAdPointsGet;

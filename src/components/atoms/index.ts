@@ -3,7 +3,6 @@ export { default as AutoHeightTextInput } from './AutoHeightTextInput';
 export { default as Avatar } from './Avatar';
 export { default as Checkbox } from './Checkbox';
 export { default as CountryNameWithFlag } from './CountryNameWithFlag';
-export { default as DarkLoadingModal } from './CountryNameWithFlag';
 export { default as DefaultHeaderBack } from './DefaultHeaderBack';
 export { default as DiaryTitle } from './DiaryTitle';
 export { default as DiaryStatus } from './DiaryStatus';
