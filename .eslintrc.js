@@ -19,8 +19,8 @@ module.exports = {
     jest: true,
   },
   rules: {
+    // 'import/internal-regex': '^@',
     // @envのimportは許可する
-    'import/internal-regex': '^@',
     'import/no-unresolved': [0, { ignore: ['@env', './images'] }],
     'import/prefer-default-export': [0],
     'import/extensions': [

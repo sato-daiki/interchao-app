@@ -126,14 +126,14 @@ const MyPageScreen: React.FC<ScreenType> = ({
       lastWatchAdAt: firebase.firestore.Timestamp.now(),
     });
     setIsModalAdPointsGet(true);
-  }, []);
+  }, [setUser, user]);
 
   const { isLoading, showAdReward } = useAdMobRewarded({
     handleDidEarnReward,
   });
   const onPressAdPointGet = useCallback(() => {
     showAdReward();
-  }, []);
+  }, [showAdReward]);
 
   useEffect(() => {
     navigation.setOptions({
