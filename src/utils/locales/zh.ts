@@ -235,7 +235,7 @@ const myPage = {
   headerTitle: '我的页面',
   editButton: '编辑',
   adGetPoints: '通过观看视频广告赚取 {{points}} 积分',
-  timeOut: '{{hour}} 小时后，您将看到下一个视频广告',
+  timeOut: '是时候看下一个视频广告了 {{activeHour}}',
 };
 
 const notice = {
@@ -557,9 +557,10 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: '积分不足',
   text:
-    '积分不足。发布日记每{{learnCharacters}}个字符需要10个积分。\n\n批改日记，将获取10个积分。\n\n保存草稿可以不消耗积分。',
+    '积分不足。发布日记每{{learnCharacters}}个字符需要10个积分。\n\n批改日记，将获取10个积分。保存草稿可以不消耗积分\n\n或者您可以通过观看视频广告获得 10 积分',
   submit: '继续',
   close: '查找要批改的日记',
+  watchAd: '观看视频广告',
 };
 
 const modalSendEmail = {

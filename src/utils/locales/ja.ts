@@ -249,7 +249,7 @@ const myPage = {
   headerTitle: 'マイページ',
   editButton: '編集する',
   adGetPoints: '動画広告を見て{{points}}ポイント獲得',
-  timeOut: '{{hour}}時間後、次の動画広告が見れます',
+  timeOut: '次の動画広告を見れる時刻 {{activeHour}}',
 };
 
 const notice = {
@@ -579,7 +579,7 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
-    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を添削すると10ポイントが貰えます。下書き保存はポイントの消費なしでできます。\n\nまた、動画広告を見るとでも10ポイントが獲得できます。',
+    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を添削する、または、動画広告を見ると10ポイントが貰えます。下書き保存はポイントの消費なしでできます。',
   submit: '続ける',
   close: '添削する日記を探す',
   watchAd: '動画広告を見る',

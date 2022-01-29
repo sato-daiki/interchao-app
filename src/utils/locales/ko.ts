@@ -245,7 +245,7 @@ const myPage = {
   headerTitle: '마이 페이지',
   editButton: '편집하기',
   adGetPoints: '동영상 광고를 보고 {{points}}점 획득',
-  timeOut: '{{hour}}시간 후 다음 동영상 광고를 볼 수 있습니다',
+  timeOut: '다음 동영상 광고를 볼 수 있는 시간 {{activeHour}}',
 };
 
 const notice = {
@@ -573,9 +573,10 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: '포인트 부족',
   text:
-    '포인트가 부족합니다. 일기를 업로드하려면 {{learnCharacters}}글자마다 10포인트가 필요합니다.\n\n임시보관함에서는 포인트 사용없이 저장할 수 있습니다.',
+    '포인트가 부족합니다. 일기를 업로드하려면 {{learnCharacters}}글자마다 10포인트가 필요합니다. 임시보관함에서는 포인트 사용없이 저장할 수 있습니다.\n\n또는 동영상 광고를 보면 10점이 적립됩니다.',
   submit: '계속하기',
   close: '첨삭이 필요한 일기 찾기',
+  watchAd: '동영상 광고 보기',
 };
 
 const modalSendEmail = {

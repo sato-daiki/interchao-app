@@ -276,7 +276,7 @@ const myPage = {
   headerTitle: 'My Page',
   editButton: 'Edit',
   adGetPoints: 'Earn {{points}} points by watching video ads',
-  timeOut: 'After {{hour}} hours, you will see the next video ads',
+  timeOut: 'Time to see the next video ad {{activeHour}}',
 };
 
 const notice = {
@@ -611,9 +611,10 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'Not Enough Points',
   text:
-    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry.\n\nDrafts can be saved without needing to use points.',
+    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry or watching video ads.\n\nDrafts can be saved without needing to use points.',
   submit: 'Continue',
   close: 'Look for Entries to Correct',
+  watchAd: 'Watch video ads',
 };
 
 const modalSendEmail = {
