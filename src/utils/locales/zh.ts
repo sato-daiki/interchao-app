@@ -68,7 +68,7 @@ const web = {
   exampleDetailText3: '最后获得总评',
   startTitle: '先来免费写日记吧​',
   startText:
-    '安装应用程式可以获得100pt（10篇日记）. 赶快来写日记让人帮你批改吧！',
+    '安装应用程式可以获得30pt（3篇日记）. 赶快来写日记让人帮你批改吧！',
   operator: 'Operator',
 };
 
@@ -114,6 +114,7 @@ const errorMessage = {
   lackPointsText:
     '您需要{{usePoint}}个积分才能发布{{textLength}}个字符的日记。可以通过批改日记来累积积分',
   exceedingCharacter: '超过最大字符数。最大字符数:{{textLength}}',
+  video: '视频播放过程中出现错误',
 };
 const app = {
   updateTitle: '最新版本已经发布',
@@ -233,6 +234,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: '我的页面',
   editButton: '编辑',
+  adGetPoints: '通过观看视频广告赚取 {{points}} 积分',
+  timeOut: '{{hour}} 小时后，您将看到下一个视频广告',
 };
 
 const notice = {
@@ -528,6 +531,11 @@ const modalBlock = {
   unblockedButton: '取消拉黑',
   blockedEndMessage: '你可以随时前往用户的个人主页取消拉黑对方。',
   unblockedEndMessage: '你可以随时前往用户的个人主页拉黑他们。',
+};
+
+const modalAdPointsGet = {
+  title: '赚取积分',
+  text: '感谢您观看视频。获得 10 积分',
 };
 
 const modalCorrectingDone = {
@@ -915,6 +923,7 @@ const zh = {
   modalAlertPublish,
   modalAppReviewRequest,
   modalBlock,
+  modalAdPointsGet,
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,
