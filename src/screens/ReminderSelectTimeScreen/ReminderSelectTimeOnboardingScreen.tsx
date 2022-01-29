@@ -41,7 +41,7 @@ const ReminderSelectTimeOnboardingScreen: React.FC<ScreenType> = ({
       .doc(`users/${user.uid}`)
       .update({
         onboarding: true,
-        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
     completedOnboarding();
     setIsLoading(false);
