@@ -113,11 +113,18 @@ export const checkHourDiff = (date: any | null, hour: number): boolean => {
 
   if (date) {
     const diffTime = dateTo.diff(dateFrom, 'hours');
-    console.log('diffTime', diffTime);
     if (diffTime > hour) {
       return true;
     }
     return false;
   }
   return true;
+};
+
+export const getActiveHour = (date: any, hour: number): string | null => {
+  const timestamp = getAlgoliaDate(date);
+  if (!timestamp) return null;
+  return moment(timestamp)
+    .add(hour, 'hour')
+    .format('HH:mm');
 };

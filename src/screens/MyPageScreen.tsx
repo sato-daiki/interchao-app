@@ -32,7 +32,7 @@ import {
 } from '../navigations/MyPageTabNavigator';
 import ModalAdPointsGet from '@/components/organisms/ModalAdPointsGet';
 import { useAdMobRewarded } from './hooks/useAdMobRewarded';
-import { checkHourDiff } from '@/utils/time';
+import { checkHourDiff, getActiveHour } from '@/utils/time';
 
 export interface Props {
   profile: Profile;
@@ -108,6 +108,10 @@ const MyPageScreen: React.FC<ScreenType> = ({
 
   const isActiveAdPointsGet = useMemo(() => {
     return checkHourDiff(user.lastWatchAdAt, CHECK_HOUR);
+  }, [user.lastWatchAdAt]);
+
+  const activeHour = useMemo(() => {
+    return getActiveHour(user.lastWatchAdAt, CHECK_HOUR);
   }, [user.lastWatchAdAt]);
 
   const handleDidEarnReward = useCallback(async () => {
@@ -227,7 +231,7 @@ const MyPageScreen: React.FC<ScreenType> = ({
             />
           ) : (
             <Text style={styles.timeOut}>
-              {I18n.t('myPage.timeOut', { hour: CHECK_HOUR })}
+              {I18n.t('myPage.timeOut', { activeHour })}
             </Text>
           )}
         </View>
