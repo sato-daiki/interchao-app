@@ -50,7 +50,7 @@ const ModalAppReviewRequest: React.FC<Props> = ({
         .doc(`users/${profile.uid}`)
         .update({
           appReviewState,
-          updated: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
       updateAppReviewState(appReviewState);
     },

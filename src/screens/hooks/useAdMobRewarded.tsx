@@ -34,6 +34,7 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
   }, []);
 
   const rewardedVideoUserDidEarnReward = useCallback(async () => {
+    console.log('rewardedVideoUserDidEarnReward');
     // 広告をみた人が実行できる処理
     handleDidEarnReward();
   }, []);
