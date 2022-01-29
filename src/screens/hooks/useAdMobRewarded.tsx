@@ -27,7 +27,7 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
     };
 
     f();
-    return () => {
+    return (): void => {
       AdMobRewarded.removeAllListeners();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,7 +37,7 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
     console.log('rewardedVideoUserDidEarnReward');
     // 広告をみた人が実行できる処理
     handleDidEarnReward();
-  }, []);
+  }, [handleDidEarnReward]);
 
   const rewardedVideoDidFailToLoad = useCallback(() => {
     commonAlert({
@@ -61,7 +61,7 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
       rewardedVideoDidFailToLoad();
     }
     setIsLoading(false);
-  }, []);
+  }, [rewardedVideoDidFailToLoad]);
 
   return {
     isLoading,

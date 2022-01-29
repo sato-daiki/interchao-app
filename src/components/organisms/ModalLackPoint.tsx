@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { primaryColor, fontSizeM } from '@/styles/Common';
 import { Language } from '@/types';
 import { SavePoints } from '@/images';
