@@ -328,7 +328,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   }, []);
 
   const renderScene = useCallback(
-    ({ route }): JSX.Element | null => {
+    ({ route }) => {
       if (!diary) return null;
       switch (route.key) {
         case 'posted':

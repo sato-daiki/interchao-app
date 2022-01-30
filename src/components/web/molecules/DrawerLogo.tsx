@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DrawerLogo = ({ isMaxLayoutChange }: Props): JSX.Element => {
+const DrawerLogo = ({ isMaxLayoutChange }: Props) => {
   return isMaxLayoutChange ? (
     <HoverableView style={styles.row} hoverStyle={styles.hoverRow}>
       <Image source={IconSmall} style={styles.icon} />

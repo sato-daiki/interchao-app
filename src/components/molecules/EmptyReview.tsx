@@ -17,10 +17,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyReview = (): JSX.Element => {
+const EmptyReview = () => {
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons name="star" size={36} color={subTextColor} />
+      <MaterialCommunityIcons name='star' size={36} color={subTextColor} />
       <Space size={8} />
       <Text style={styles.text}>{I18n.t('emptyReview.empty')}</Text>
     </View>

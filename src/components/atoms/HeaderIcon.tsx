@@ -16,20 +16,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderIcon: React.FC<Props> = ({
-  icon,
-  name,
-  size = 28,
-  onPress,
-}: Props): JSX.Element => {
+const HeaderIcon: React.FC<Props> = ({ icon, name, size = 28, onPress }: Props) => {
   return (
-    <HoverableIcon
-      style={styles.container}
-      icon={icon}
-      name={name}
-      size={size}
-      onPress={onPress}
-    />
+    <HoverableIcon style={styles.container} icon={icon} name={name} size={size} onPress={onPress} />
   );
 };
 

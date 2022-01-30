@@ -30,14 +30,14 @@ interface Props {
   pickImage: () => void;
 }
 
-const Avatar = ({ photoUrl = '', pickImage }: Props): JSX.Element => (
+const Avatar = ({ photoUrl = '', pickImage }: Props) => (
   <Hoverable onPress={pickImage} style={styles.container}>
     {photoUrl ? (
       <Image style={styles.icon} source={{ uri: photoUrl }} />
     ) : (
       <View style={styles.avatarContainer}>
         <MaterialIcons
-          name="person"
+          name='person'
           size={80}
           style={styles.dummyAvatarIcon}
           color={subTextColor}

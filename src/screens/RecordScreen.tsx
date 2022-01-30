@@ -156,6 +156,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       rate: 1.0,
     };
 
+    //@ts-ignore
     this.recordingSettings = {
       android: {
         extension: '.m4a',
@@ -199,7 +200,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     })();
     // this.askForPermissions();
     navigation.setOptions({
-      headerLeft: (): JSX.Element => (
+      headerLeft: () => (
         <HeaderText
           text={I18n.t('common.close')}
           onPress={(): void => {
@@ -507,7 +508,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     });
   };
 
-  render(): JSX.Element | null {
+  render() {
     const {
       isPlaybackAllowed,
       isLoading,
@@ -522,7 +523,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     const { profile, diary } = this.props;
     if (!diary) return null;
 
-    const SaveButton = (): JSX.Element => {
+    const SaveButton = () => {
       if (saved) {
         return (
           <SmallButtonWhite

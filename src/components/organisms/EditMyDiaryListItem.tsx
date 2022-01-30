@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditMyDiaryListItem = ({ item, handlePress }: Props): JSX.Element => {
+const EditMyDiaryListItem = ({ item, handlePress }: Props) => {
   const { createdAt, title, text, themeCategory, themeSubcategory } = item;
   const [checked, setChecked] = useState(false);
   const postDay = getAlgoliaDay(createdAt);
@@ -91,7 +91,7 @@ const EditMyDiaryListItem = ({ item, handlePress }: Props): JSX.Element => {
             title={title}
           />
           <View style={styles.content}>
-            <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
+            <Text style={styles.text} ellipsizeMode='tail' numberOfLines={3}>
               {text}
             </Text>
           </View>

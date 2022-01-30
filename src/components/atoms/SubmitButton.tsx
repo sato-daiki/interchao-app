@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { Text, StyleSheet, ActivityIndicator, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { mainColor, fontSizeM, maxPartL } from '../../styles/Common';
 import Hoverable from './Hoverable';
 
@@ -44,7 +37,7 @@ const SubmitButton: React.FC<Props> = ({
   onPress,
   containerStyle,
   textStyle,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <Hoverable
       style={[styles.contaner, containerStyle]}
@@ -52,7 +45,7 @@ const SubmitButton: React.FC<Props> = ({
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" color="#fff" />
+        <ActivityIndicator size='small' color='#fff' />
       ) : (
         <Text style={[styles.title, textStyle]}>{title}</Text>
       )}

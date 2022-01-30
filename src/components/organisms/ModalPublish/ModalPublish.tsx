@@ -32,7 +32,7 @@ export const ModalPublish: React.FC<Props> = ({
   onPressSubmit,
   onPressCloseCancel,
   onClosePostDiary,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
@@ -45,10 +45,7 @@ export const ModalPublish: React.FC<Props> = ({
             onPressCloseCancel={onPressCloseCancel}
           />
         ) : (
-          <AfterPublished
-            publishMessage={publishMessage}
-            onPressClose={onClosePostDiary}
-          />
+          <AfterPublished publishMessage={publishMessage} onPressClose={onClosePostDiary} />
         )}
       </View>
     </Modal>

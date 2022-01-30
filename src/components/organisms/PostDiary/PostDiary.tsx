@@ -1,20 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import {
-  StyleSheet,
-  SafeAreaView,
-  View,
-  Text,
-  Image,
-  Animated,
-  Easing,
-} from 'react-native';
-import {
-  primaryColor,
-  borderLightColor,
-  offWhite,
-  fontSizeSS,
-  softRed,
-} from '@/styles/Common';
+import { StyleSheet, SafeAreaView, View, Text, Image, Animated, Easing } from 'react-native';
+import { primaryColor, borderLightColor, offWhite, fontSizeSS, softRed } from '@/styles/Common';
 import { Points } from '@/images';
 import { getMaxPostText, getUsePoints } from '@/utils/diary';
 import I18n from '@/utils/I18n';
@@ -26,7 +12,6 @@ import ModalDiaryCancel from '@/components/organisms/ModalDiaryCancel';
 import TutorialPostDiary from '@/components/organisms/TutorialPostDiary';
 import ModalConfirm from '@/components/organisms/ModalConfirm';
 // @ts-ignore
-// eslint-disable-next-line import/extensions
 import PostDiaryKeyboard from './PostDiaryKeyboard';
 import { PostDiaryProps } from './interface';
 
@@ -180,13 +165,9 @@ const PostDiary: React.FC<PostDiaryProps> = ({
       />
       <View style={styles.header}>
         <View style={styles.left}>
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.usePoints')}
-          </Text>
+          <Text style={styles.headerLabel}>{I18n.t('postDiaryComponent.usePoints')}</Text>
           <Text style={styles.headerValue}>{usePoints}</Text>
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.textLength')}
-          </Text>
+          <Text style={styles.headerLabel}>{I18n.t('postDiaryComponent.textLength')}</Text>
           <Text
             style={[
               styles.headerValue,
@@ -198,9 +179,7 @@ const PostDiary: React.FC<PostDiaryProps> = ({
         </View>
         <View style={styles.right}>
           <Image style={styles.points} source={Points} />
-          <Text style={styles.headerLabel}>
-            {I18n.t('postDiaryComponent.points')}
-          </Text>
+          <Text style={styles.headerLabel}>{I18n.t('postDiaryComponent.points')}</Text>
           <Text style={styles.headerValue}>{points}</Text>
         </View>
       </View>

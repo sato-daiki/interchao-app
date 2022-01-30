@@ -41,21 +41,16 @@ const ProfileIconHorizontal: React.FC<Props> = ({
   nativeLanguage,
   nationalityCode,
   onPress,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <Hoverable
       style={styles.container}
       onPress={onPress || undefined}
       activeOpacity={onPress ? 0.2 : 1}
     >
-      <Image
-        style={styles.icon}
-        source={getPhotoUrl(photoUrl, nativeLanguage)}
-      />
+      <Image style={styles.icon} source={getPhotoUrl(photoUrl, nativeLanguage)} />
       <Text style={styles.userName}>{userName}</Text>
-      {nationalityCode ? (
-        <Flag style={styles.flag} code={nationalityCode} size={16} />
-      ) : null}
+      {nationalityCode ? <Flag style={styles.flag} code={nationalityCode} size={16} /> : null}
     </Hoverable>
   );
 };

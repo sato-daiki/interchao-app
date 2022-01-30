@@ -2,11 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp, CompositeNavigationProp } from '@react-navigation/native';
-import {
-  checkDuplicatedUserName,
-  checkTypeUserName,
-  checkInitialUserName,
-} from '../utils/profile';
+import { checkDuplicatedUserName, checkTypeUserName, checkInitialUserName } from '../utils/profile';
 import { CheckTextInput } from '../components/molecules';
 import { HeaderText } from '../components/atoms';
 import { primaryColor, fontSizeM } from '../styles/Common';
@@ -45,11 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditUserNameScreen: React.FC<ScreenType> = ({
-  navigation,
-  route,
-  profile,
-}): JSX.Element => {
+const EditUserNameScreen: React.FC<ScreenType> = ({ navigation, route, profile }) => {
   const [userName, setUserName] = useState(route.params.userName);
   const [isUserNameLoading, setIsUserNameLoading] = useState(false);
   const [isUserNameCheckOk, setIsUserNameCheckOk] = useState(false);
@@ -78,15 +70,13 @@ const EditUserNameScreen: React.FC<ScreenType> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: (): JSX.Element => (
-        <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />
-      ),
+      headerRight: () => <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userName]);
 
   const onChangeText = useCallback(
-    text => {
+    (text) => {
       const f = async (): Promise<void> => {
         setUserName(text);
         if (text === '') {
@@ -126,7 +116,7 @@ const EditUserNameScreen: React.FC<ScreenType> = ({
       };
       f();
     },
-    [profile.userName]
+    [profile.userName],
   );
   return (
     <View style={styles.container}>
@@ -136,11 +126,11 @@ const EditUserNameScreen: React.FC<ScreenType> = ({
         value={userName}
         onChangeText={onChangeText}
         maxLength={20}
-        placeholder="username"
-        autoCapitalize="none"
+        placeholder='username'
+        autoCapitalize='none'
         autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
+        underlineColorAndroid='transparent'
+        returnKeyType='done'
         isLoading={isUserNameLoading}
         isCheckOk={isUserNameCheckOk}
         errorMessage={errorMessage}

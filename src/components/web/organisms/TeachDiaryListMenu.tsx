@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 // スマホ版もある
-const TeachDiaryListMenu = ({ nativeLanguage }: Props): JSX.Element => {
+const TeachDiaryListMenu = ({ nativeLanguage }: Props) => {
   return (
     <MenuTemplate>
       <View style={styles.container}>

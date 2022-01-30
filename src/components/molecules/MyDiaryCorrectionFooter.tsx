@@ -24,26 +24,14 @@ interface Props {
   onPress: () => void;
 }
 
-const MyDiaryCorrectionFooter: React.FC<Props> = ({
-  isReview,
-  onPress,
-}): JSX.Element => {
+const MyDiaryCorrectionFooter: React.FC<Props> = ({ isReview, onPress }) => {
   if (isReview) {
-    return (
-      <Text style={styles.finText}>
-        {I18n.t('myDiaryCorrectionFooter.finText')}
-      </Text>
-    );
+    return <Text style={styles.finText}>{I18n.t('myDiaryCorrectionFooter.finText')}</Text>;
   }
   return (
     <>
-      <SubmitButton
-        title={I18n.t('myDiaryCorrectionFooter.title')}
-        onPress={onPress}
-      />
-      <Text style={styles.promptText}>
-        {I18n.t('myDiaryCorrectionFooter.promptText')}
-      </Text>
+      <SubmitButton title={I18n.t('myDiaryCorrectionFooter.title')} onPress={onPress} />
+      <Text style={styles.promptText}>{I18n.t('myDiaryCorrectionFooter.promptText')}</Text>
     </>
   );
 };

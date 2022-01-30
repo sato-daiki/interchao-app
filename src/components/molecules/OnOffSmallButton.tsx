@@ -17,7 +17,7 @@ const OnOffSmallButton: React.FC<Props> = ({
   titleOn,
   titleOff,
   onPress,
-}: Props): JSX.Element => {
+}: Props) => {
   if (isOn) {
     return (
       <SmallButtonSubmit
@@ -30,12 +30,7 @@ const OnOffSmallButton: React.FC<Props> = ({
   }
 
   return (
-    <SmallButtonWhite
-      isLoading={isLoading}
-      disable={disable}
-      title={titleOff}
-      onPress={onPress}
-    />
+    <SmallButtonWhite isLoading={isLoading} disable={disable} title={titleOff} onPress={onPress} />
   );
 };
 

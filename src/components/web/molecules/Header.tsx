@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Header = ({ onPress }: Props): JSX.Element => {
+const Header = ({ onPress }: Props) => {
   return (
     <View style={styles.warapper}>
       <View style={styles.container}>

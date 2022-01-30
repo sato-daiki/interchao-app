@@ -14,8 +14,8 @@ export interface ThemeDiary {
   themeCategory: ThemeCategory;
   themeSubcategory: ThemeSubcategory;
   objectID: string;
-  updatedAt: firebase.firestore.FieldValue;
-  createdAt: firebase.firestore.FieldValue;
+  updatedAt: firestore.FieldValue;
+  createdAt: firestore.FieldValue;
 }
 
 export type AppReviewState = 'yet' | 'never' | 'done';

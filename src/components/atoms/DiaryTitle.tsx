@@ -28,21 +28,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiaryTitle = ({
-  themeCategory,
-  themeSubcategory,
-  title,
-}: Props): JSX.Element => (
+const DiaryTitle = ({ themeCategory, themeSubcategory, title }: Props) => (
   <View style={styles.container}>
     {themeCategory && themeSubcategory && (
       <SmallPill
         containerStyle={styles.smallPill}
         text={I18n.t('myDiaryList.theme')}
-        color="#fff"
+        color='#fff'
         backgroundColor={subTextColor}
       />
     )}
-    <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
+    <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>
       {title}
     </Text>
   </View>

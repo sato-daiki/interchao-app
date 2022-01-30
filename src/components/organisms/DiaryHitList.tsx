@@ -15,32 +15,22 @@ interface Props {
   refine?: any;
 }
 
-const DiaryHitList = ({
-  isEmpty,
-  onPressItem,
-  hits,
-  hasMore,
-  refine,
-}: Props) => {
+const DiaryHitList = ({ isEmpty, onPressItem, hits, hasMore, refine }: Props) => {
   const listEmptyComponent = useCallback(
     () =>
       isEmpty ? null : (
-        <EmptyList
-          iconName="book-open-variant"
-          message={I18n.t('diaryHitList.empty')}
-        />
+        <EmptyList iconName='book-open-variant' message={I18n.t('diaryHitList.empty')} />
       ),
-    [isEmpty]
+    [isEmpty],
   );
 
   const listHeaderComponent = useCallback(
-    () =>
-      isEmpty ? null : <GrayHeader title={I18n.t('diaryHitList.header')} />,
-    [isEmpty]
+    () => (isEmpty ? null : <GrayHeader title={I18n.t('diaryHitList.header')} />),
+    [isEmpty],
   );
 
   const renderItem: ListRenderItem<Diary> = useCallback(
-    ({ item }): JSX.Element => {
+    ({ item }) => {
       return (
         <SearchDiaryList
           item={item}
@@ -51,7 +41,7 @@ const DiaryHitList = ({
         />
       );
     },
-    [onPressItem]
+    [onPressItem],
   );
 
   const onEndReached = useCallback((): void => {

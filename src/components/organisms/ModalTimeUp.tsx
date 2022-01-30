@@ -24,24 +24,17 @@ interface Props {
   onPressClose: () => void;
 }
 
-const ModalTimeUp: React.FC<Props> = ({
-  visible,
-  onPressClose,
-}: Props): JSX.Element | null => {
+const ModalTimeUp: React.FC<Props> = ({ visible, onPressClose }: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
         <Heading title={I18n.t('modalTimeUp.title')} />
         <Space size={16} />
-        <MaterialCommunityIcons
-          size={64}
-          color={primaryColor}
-          name="timer-off"
-        />
+        <MaterialCommunityIcons size={64} color={primaryColor} name='timer-off' />
         <Space size={16} />
         <Text style={styles.text}>{I18n.t('modalTimeUp.text')}</Text>
         <Space size={32} />
-        <SubmitButton title="OK" onPress={onPressClose} />
+        <SubmitButton title='OK' onPress={onPressClose} />
       </View>
     </Modal>
   );

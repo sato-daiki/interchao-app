@@ -86,16 +86,16 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (): JSX.Element => (
+      headerTitle: () => (
         <SearchBarButton title={I18n.t('teachDiaryList.searchText')} onPress={onPressSearch} />
       ),
-      // headerRight: (): JSX.Element =>
+      // headerRight: () =>
       //   isDesktopOrLaptopDevice ? (
       //     <TeachDiaryListMenuWebPc nativeLanguage={nativeLanguage} />
       //   ) : (
       //     <HeaderRight name="dots-horizontal" onPress={() => setIsMenu(true)} />
       //   ),
-      headerRight: (): JSX.Element | null =>
+      headerRight: () =>
         Platform.OS === 'web' ? null : (
           <HeaderIcon
             icon='community'

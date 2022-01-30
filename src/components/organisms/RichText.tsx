@@ -20,12 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RichText = ({
-  style,
-  text,
-  nativeLanguage,
-  textLanguage,
-}: Props): JSX.Element => {
+const RichText = ({ style, text, nativeLanguage, textLanguage }: Props) => {
   const [displayText, setDisplayText] = useState(text);
   const [isTranslated, setIsTranslated] = useState(false);
 
@@ -37,12 +32,8 @@ const RichText = ({
       if (!text) return;
       const mentionRemovedText = text.replace(/@\w+\s/g, '');
       if (nativeLanguage) {
-        const targetLanguage =
-          nativeLanguage === textLanguage ? textLanguage : nativeLanguage;
-        const translatedText = await googleTranslate(
-          mentionRemovedText,
-          targetLanguage
-        );
+        const targetLanguage = nativeLanguage === textLanguage ? textLanguage : nativeLanguage;
+        const translatedText = await googleTranslate(mentionRemovedText, targetLanguage);
         if (translatedText && translatedText.length > 0) {
           setDisplayText(translatedText);
           setIsTranslated(true);

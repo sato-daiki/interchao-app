@@ -64,19 +64,19 @@ type Props = {
   errorMessage: string;
 } & TextInputProps;
 
-const CheckTextInput = (props: Props): JSX.Element => {
+const CheckTextInput = (props: Props) => {
   const { isCheckOk = false, isLoading = false, errorMessage } = props;
 
   const rightIcon = (): ReactNode => {
     if (isLoading) {
-      return <ActivityIndicator style={styles.rightIcon} size="small" />;
+      return <ActivityIndicator style={styles.rightIcon} size='small' />;
     }
     if (isCheckOk) {
       return (
         <MaterialCommunityIcons
           style={styles.rightIcon}
           size={24}
-          name="check-circle-outline"
+          name='check-circle-outline'
           color={green}
         />
       );
@@ -88,24 +88,17 @@ const CheckTextInput = (props: Props): JSX.Element => {
     <>
       <View style={styles.row}>
         <TextInput
-          autoCapitalize="none"
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
-          style={[
-            styles.textInput,
-            errorMessage.length > 0 ? styles.errorBorder : {},
-          ]}
+          underlineColorAndroid='transparent'
+          style={[styles.textInput, errorMessage.length > 0 ? styles.errorBorder : {}]}
           {...props}
         />
         {rightIcon()}
       </View>
       {errorMessage.length > 0 ? (
         <View style={styles.errorContainer}>
-          <FontAwesome
-            size={fontSizeM}
-            name="exclamation-circle"
-            color={softRed}
-          />
+          <FontAwesome size={fontSizeM} name='exclamation-circle' color={softRed} />
           <Text style={styles.error}>{errorMessage}</Text>
         </View>
       ) : null}

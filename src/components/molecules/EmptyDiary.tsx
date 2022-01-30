@@ -16,14 +16,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyDiary = (): JSX.Element => {
+const EmptyDiary = () => {
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons
-        name="book-open-variant"
-        size={50}
-        color={subTextColor}
-      />
+      <MaterialCommunityIcons name='book-open-variant' size={50} color={subTextColor} />
       <Text style={styles.text}>{I18n.t('emptyDiary.empty')}</Text>
     </View>
   );

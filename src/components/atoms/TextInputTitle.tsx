@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  StyleProp,
-  TextStyle,
-  TextInputProps,
-} from 'react-native';
+import { StyleSheet, TextInput, StyleProp, TextStyle, TextInputProps } from 'react-native';
 import { fontSizeM, primaryColor, borderLightColor } from '@/styles/Common';
 
 type Props = {
@@ -38,20 +32,20 @@ const TextInputTitle: React.FC<Props> = ({
   onBlur,
   style,
   ...props
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <TextInput
       editable={editable}
       style={[styles.titleInput, style]}
       value={value}
-      placeholder="Title"
+      placeholder='Title'
       maxLength={100}
       autoCorrect={false}
       blurOnSubmit
-      keyboardType="default"
+      keyboardType='default'
       spellCheck
-      returnKeyType="done"
-      underlineColorAndroid="transparent"
+      returnKeyType='done'
+      underlineColorAndroid='transparent'
       onFocus={onFocus}
       multiline
       onChangeText={onChangeText}

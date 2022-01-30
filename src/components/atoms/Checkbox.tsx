@@ -9,18 +9,13 @@ interface Props {
   onPress?: () => void;
 }
 
-const Checkbox: React.FC<Props> = ({
-  checked,
-  disable,
-  color = mainColor,
-  onPress,
-}: Props): JSX.Element => {
+const Checkbox: React.FC<Props> = ({ checked, disable, color = mainColor, onPress }: Props) => {
   if (!checked) {
     return (
       <MaterialCommunityIcons
         size={28}
         color={color}
-        name="checkbox-blank-outline"
+        name='checkbox-blank-outline'
         onPress={!disable ? onPress : undefined}
       />
     );
@@ -29,7 +24,7 @@ const Checkbox: React.FC<Props> = ({
     <MaterialCommunityIcons
       size={28}
       color={color}
-      name="checkbox-marked"
+      name='checkbox-marked'
       onPress={!disable ? onPress : undefined}
     />
   );

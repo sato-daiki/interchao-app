@@ -36,7 +36,7 @@ const getRemaining = (time: number): Time => {
   return { mins: formatNumber(mins), secs: formatNumber(secs) };
 };
 
-const CorrectionTimer: React.FC<Props> = ({ onTimeUp }): JSX.Element => {
+const CorrectionTimer: React.FC<Props> = ({ onTimeUp }) => {
   const [fontsLoaded] = useFonts({
     // eslint-disable-next-line global-require
     RobotoMono: require('../../styles/fonts/RobotoMono-Regular.ttf'),
@@ -74,12 +74,7 @@ const CorrectionTimer: React.FC<Props> = ({ onTimeUp }): JSX.Element => {
   }
   return (
     <View style={styles.contaienr}>
-      <MaterialCommunityIcons
-        style={styles.icon}
-        name="timer"
-        size={14}
-        color={primaryColor}
-      />
+      <MaterialCommunityIcons style={styles.icon} name='timer' size={14} color={primaryColor} />
       <Text
         style={[
           styles.text,

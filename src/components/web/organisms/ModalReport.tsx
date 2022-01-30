@@ -68,7 +68,7 @@ const ModalReport: React.FC<Props> = ({
   isLoading,
   onReportSubmit,
   onReportClose,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
@@ -77,9 +77,7 @@ const ModalReport: React.FC<Props> = ({
             <Text style={styles.title}>{I18n.t('report.title')}</Text>
             <View style={styles.line} />
             <Text style={styles.subTitle}>{I18n.t('report.subTitle')}</Text>
-            <Text style={styles.description}>
-              {I18n.t('report.description')}
-            </Text>
+            <Text style={styles.description}>{I18n.t('report.description')}</Text>
             <Space size={32} />
             <WhiteButton
               isLoading={isLoading}
@@ -96,17 +94,14 @@ const ModalReport: React.FC<Props> = ({
         ) : (
           <>
             <View style={styles.headerReported}>
-              <MaterialCommunityIcons size={70} color={green} name="check" />
+              <MaterialCommunityIcons size={70} color={green} name='check' />
               <Text style={styles.title}>{I18n.t('report.reportedTitle')}</Text>
             </View>
             <Text style={[styles.description, styles.center]}>
               {I18n.t('report.reportedDescription')}
             </Text>
             <Space size={32} />
-            <WhiteButton
-              title={I18n.t('common.close')}
-              onPress={onReportClose}
-            />
+            <WhiteButton title={I18n.t('common.close')} onPress={onReportClose} />
           </>
         )}
       </View>

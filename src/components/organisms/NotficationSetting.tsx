@@ -14,7 +14,7 @@ interface Props {
   setUser: (user: User) => void;
 }
 
-const NotficationSetting = ({ user, setUser }: Props): JSX.Element | null => {
+const NotficationSetting = ({ user, setUser }: Props) => {
   const [visible, setVisible] = useState(true);
   const [isPermission, setIsPermission] = useState(true);
 
@@ -33,13 +33,10 @@ const NotficationSetting = ({ user, setUser }: Props): JSX.Element | null => {
 
   const onPressClose = useCallback(async (): Promise<void> => {
     setVisible(false);
-    await firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        lastModalNotficationSettingAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    await firebase.firestore().doc(`users/${user.uid}`).update({
+      lastModalNotficationSettingAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     setUser({
       ...user,
       lastModalNotficationSettingAt: firebase.firestore.Timestamp.now(),
@@ -51,7 +48,7 @@ const NotficationSetting = ({ user, setUser }: Props): JSX.Element | null => {
     <Note
       text={I18n.t('myDiaryList.notficationSetting')}
       backgroundColor={mainColor}
-      color="#fff"
+      color='#fff'
       visible={
         Platform.OS !== 'web' &&
         !isPermission &&

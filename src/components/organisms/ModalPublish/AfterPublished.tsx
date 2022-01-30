@@ -1,12 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform, Image } from 'react-native';
 import { Note } from '@/images';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '@/styles/Common';
+import { primaryColor, fontSizeL, borderLightColor, fontSizeM } from '@/styles/Common';
 import { WhiteButton, Space, Lottie } from '@/components/atoms';
 import I18n from '@/utils/I18n';
 
@@ -68,10 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const AfterPublished: React.FC<Props> = ({
-  publishMessage,
-  onPressClose,
-}: Props): JSX.Element | null => {
+const AfterPublished: React.FC<Props> = ({ publishMessage, onPressClose }: Props) => {
   return (
     <>
       <Text style={styles.title}>{I18n.t('modalAlertPublish.publish')}</Text>
@@ -85,16 +77,10 @@ const AfterPublished: React.FC<Props> = ({
           </>
         ) : (
           <View
-            style={
-              Platform.OS === 'web'
-                ? styles.lottieViewWebWrapper
-                : styles.lottieViewWrapper
-            }
+            style={Platform.OS === 'web' ? styles.lottieViewWebWrapper : styles.lottieViewWrapper}
           >
             <Lottie
-              style={
-                Platform.OS === 'web' ? styles.lottieViewWeb : styles.lottieView
-              }
+              style={Platform.OS === 'web' ? styles.lottieViewWeb : styles.lottieView}
               // eslint-disable-next-line global-require
               source={require('../../../animations/taking-notes.json')}
               autoPlay

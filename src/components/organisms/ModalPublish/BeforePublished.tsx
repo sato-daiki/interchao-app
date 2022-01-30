@@ -1,18 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import I18n from '@/utils/I18n';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '@/styles/Common';
-import {
-  SubmitButton,
-  WhiteButton,
-  Space,
-  UserPointsBig,
-} from '@/components/atoms';
+import { primaryColor, fontSizeL, borderLightColor, fontSizeM } from '@/styles/Common';
+import { SubmitButton, WhiteButton, Space, UserPointsBig } from '@/components/atoms';
 
 interface Props {
   isLoading: boolean;
@@ -60,14 +50,12 @@ const BeforePublished: React.FC<Props> = ({
   isLoading,
   onPressSubmit,
   onPressCloseCancel,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <>
       <Text style={styles.title}>{I18n.t('common.confirmation')}</Text>
       <View style={styles.line} />
-      <Text style={styles.text}>
-        {I18n.t('modalAlertPublish.confirmation', { usePoints })}
-      </Text>
+      <Text style={styles.text}>{I18n.t('modalAlertPublish.confirmation', { usePoints })}</Text>
       <View style={styles.points}>
         <UserPointsBig points={points} />
       </View>
@@ -79,10 +67,7 @@ const BeforePublished: React.FC<Props> = ({
           onPress={onPressSubmit}
         />
         <Space size={16} />
-        <WhiteButton
-          title={I18n.t('common.cancel')}
-          onPress={onPressCloseCancel}
-        />
+        <WhiteButton title={I18n.t('common.cancel')} onPress={onPressCloseCancel} />
       </View>
     </>
   );

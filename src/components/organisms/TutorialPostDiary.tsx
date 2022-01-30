@@ -39,7 +39,7 @@ const TutorialPostDiary: React.FC<Props> = ({
   learnLanguage,
   buttonText = I18n.t('tutorialPostDiary.buttonText'),
   onPress,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Tutorial
       displayed={displayed}
@@ -49,7 +49,7 @@ const TutorialPostDiary: React.FC<Props> = ({
       onPress={onPress}
     >
       <View style={styles.container}>
-        <Image style={styles.img} source={Pen} resizeMode="contain" />
+        <Image style={styles.img} source={Pen} resizeMode='contain' />
         <Space size={24} />
         <Text style={styles.text}>
           {I18n.t('tutorialPostDiary.text', {

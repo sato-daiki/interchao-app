@@ -14,11 +14,9 @@ interface Props {
 /**
  * 初期ページにおくComponents
  */
-const FirstPageComponents = ({ user, setUser }: Props): JSX.Element => {
+const FirstPageComponents = ({ user, setUser }: Props) => {
   const [isStillLoading, setIsStillLoading] = useState(false);
-  const [correctingObjectID, setCorrectingObjectID] = useState(
-    user.correctingObjectID
-  );
+  const [correctingObjectID, setCorrectingObjectID] = useState(user.correctingObjectID);
 
   const onPressModalStill = useCallback(() => {
     const f = async (): Promise<void> => {
