@@ -61,15 +61,15 @@ const App = () => {
     // });
   }
 
-  const checkUpdate = async (): Promise<void> => {
-    if (__DEV__ || Platform.OS === 'web') return;
+  // const checkUpdate = async (): Promise<void> => {
+  //   if (__DEV__ || Platform.OS === 'web') return;
 
-    const update = await Updates.checkForUpdateAsync();
-    if (update.isAvailable) {
-      await Updates.fetchUpdateAsync();
-      Updates.reloadAsync();
-    }
-  };
+  //   const update = await Updates.checkForUpdateAsync();
+  //   if (update.isAvailable) {
+  //     await Updates.fetchUpdateAsync();
+  //     Updates.reloadAsync();
+  //   }
+  // };
 
   const onReady = (): void => {
     routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name;
@@ -95,7 +95,7 @@ const App = () => {
 
   useEffect(() => {
     initAnalytics();
-    checkUpdate();
+    // checkUpdate();
   }, []);
 
   return (
