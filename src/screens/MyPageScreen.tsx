@@ -211,7 +211,9 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser
               onPress={onPressAdPointGet}
             />
           ) : (
-            <Text style={styles.timeOut}>{I18n.t('myPage.timeOut', { activeHour })}</Text>
+            <Text style={styles.timeOut}>
+              {I18n.t('myPage.timeOut', { activeHour: activeHour })}
+            </Text>
           )}
         </View>
         <Space size={8} />

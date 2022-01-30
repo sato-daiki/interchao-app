@@ -1,6 +1,7 @@
 import moment, { DurationInputArg1, DurationInputArg2 } from 'moment';
 import 'moment/locale/ja';
 import I18n from '@/utils/I18n';
+import firebase from 'firebase';
 
 /** algoliaから取得した時とfirestoreから取得したときは方が異なるで別で関数を用意する */
 export const getAlgoliaDay = (timestamp: any, format = 'Y-M-D'): string => {
@@ -88,29 +89,20 @@ export const getAlgoliaDate = (timestamp: any): string => {
 
 export const getShortDaysName = (days: (number | undefined)[]): string => {
   let text = '';
-  days.forEach(day => {
+  days.forEach((day) => {
     text += `${getShortDayName(day)}、`;
   });
   return text.slice(0, -1);
 };
 
-export const addDay = (
-  day: Date,
-  num: DurationInputArg1,
-  unit: DurationInputArg2
-): Date => {
-  return moment(day)
-    .add(num, unit)
-    .toDate();
+export const addDay = (day: Date, num: DurationInputArg1, unit: DurationInputArg2): Date => {
+  return moment(day).add(num, unit).toDate();
 };
 
-export const checkHourDiff = (date: any | null, hour: number): boolean => {
-  const timestamp = getAlgoliaDate(date);
-  if (!timestamp) return true;
-
+export const checkHourDiff = (date: firebase.firestore.Timestamp | null, hour: number): boolean => {
+  if (!date) return true;
   const dateTo = moment(new Date());
-  const dateFrom = moment(timestamp);
-
+  const dateFrom = moment(date.toDate());
   if (date) {
     const diffTime = dateTo.diff(dateFrom, 'hours');
     if (diffTime > hour) {
@@ -121,10 +113,10 @@ export const checkHourDiff = (date: any | null, hour: number): boolean => {
   return true;
 };
 
-export const getActiveHour = (date: any, hour: number): string | null => {
-  const timestamp = getAlgoliaDate(date);
-  if (!timestamp) return null;
-  return moment(timestamp)
-    .add(hour, 'hour')
-    .format('HH:mm');
+export const getActiveHour = (
+  date: firebase.firestore.Timestamp | null,
+  hour: number,
+): string | null => {
+  if (!date) return null;
+  return moment(date.toDate()).add(hour, 'hour').format('HH:mm');
 };

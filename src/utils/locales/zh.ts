@@ -232,7 +232,7 @@ const myPage = {
   headerTitle: '我的页面',
   editButton: '编辑',
   adGetPoints: '通过观看视频广告赚取 {{points}} 积分',
-  timeOut: '是时候看下一个视频广告了 {{activeHour}}',
+  timeOut: '下一个广告视频 {{activeHour}}~',
 };
 
 const notice = {
