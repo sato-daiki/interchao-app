@@ -236,8 +236,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: 'マイページ',
   editButton: '編集する',
-  adGetPoints: '動画広告を見て{{points}}ポイント獲得',
-  timeOut: '次の広告動画 {{activeHour}}~',
+  adGetPoints: '動画広告を見て{{points}}P 獲得',
+  timeOut: '次の動画広告 {{activeHour}}~',
 };
 
 const notice = {
