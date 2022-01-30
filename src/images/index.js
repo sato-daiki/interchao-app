@@ -9,6 +9,7 @@ module.exports = {
   GraduationSpeech: require('./graduationSpeech.png'),
   Grind: require('./grind.png'),
   Loading: require('./loading.gif'),
+  LoadingWhite: require('./loading-white.gif'),
   LogoVercitacl: require('./logo_vertical.png'),
   Note: require('./note.png'),
   Notification: require('./notification.png'),

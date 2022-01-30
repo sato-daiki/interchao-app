@@ -37,6 +37,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
     publishMessage,
     onPressSubmitModalLack,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
     onClosePostDiary,
@@ -105,6 +106,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       nativeLanguage={profile.nativeLanguage}
       onPressSubmitModalLack={onPressSubmitModalLack}
       onPressCloseModalLack={onPressCloseModalLack}
+      onPressWatchAdModalLack={onPressWatchAdModalLack}
       onPressCloseModalPublish={onPressCloseModalPublish}
       onPressCloseModalCancel={onPressCloseModalCancel}
       onClosePostDiary={onClosePostDiary}

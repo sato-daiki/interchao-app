@@ -15,6 +15,7 @@ interface Props {
   learnLanguage: Language;
   onPressSubmit: () => void;
   onPressClose: () => void;
+  onPressWatchAd?: () => void;
 }
 
 const styles = StyleSheet.create({
@@ -39,6 +40,7 @@ const ModalLackPoint: React.FC<Props> = ({
   learnLanguage,
   onPressSubmit,
   onPressClose,
+  onPressWatchAd,
 }: Props): JSX.Element | null => {
   return (
     <Modal visible={visible}>
@@ -62,6 +64,15 @@ const ModalLackPoint: React.FC<Props> = ({
           title={I18n.t('modalLackPoint.close')}
           onPress={onPressClose}
         />
+        {!!onPressWatchAd && (
+          <>
+            <Space size={16} />
+            <WhiteButton
+              title={I18n.t('modalLackPoint.watchAd')}
+              onPress={onPressWatchAd}
+            />
+          </>
+        )}
       </View>
     </Modal>
   );
