@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import TopReviewList from '@/components/organisms/TopReviewList';
@@ -203,7 +203,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser
         <Text style={styles.introduction}>{profile.introduction}</Text>
         <View style={styles.row}>
           <UserPoints points={user.points} />
-          {isActiveAdPointsGet ? (
+          {Platform.OS === 'web' ? null : isActiveAdPointsGet ? (
             <SmallButtonWhite
               disable={!isActiveAdPointsGet}
               color={primaryColor}
