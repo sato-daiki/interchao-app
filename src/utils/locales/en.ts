@@ -263,8 +263,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: 'My Page',
   editButton: 'Edit',
-  adGetPoints: 'Earn {{points}} points by watching video ads',
-  timeOut: 'Next ad video {{activeHour}}~',
+  adGetPoints: 'Earn {{points}}P by watching ads',
+  timeOut: 'Next video ads {{activeHour}}~',
 };
 
 const notice = {

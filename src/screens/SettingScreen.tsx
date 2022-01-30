@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import firebase from '../constants/firebase';
@@ -48,6 +48,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: offWhite,
+  },
+  contentContainerStyle: {
     paddingTop: 32,
   },
   title: {
@@ -106,7 +108,7 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOu
   }, [navigation, user.reminder]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerStyle}>
       <ModalConfirm
         visible={isModalError}
         title={I18n.t('common.confirmation')}
@@ -184,7 +186,7 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOu
       </Hoverable>
       <Space size={16} />
       <Text style={styles.versionText}>{getVersionText()}</Text>
-    </View>
+    </ScrollView>
   );
 };
 
