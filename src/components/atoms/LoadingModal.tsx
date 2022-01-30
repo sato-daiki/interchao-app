@@ -61,16 +61,9 @@ const LoadingModal: React.FC<Props> = ({
   transparent,
   text,
   containerStyle,
-}: Props): JSX.Element | null =>
+}: Props) =>
   visible ? (
-    <View
-      style={[
-        styles.overlay,
-        { height },
-        transparent && styles.transparent,
-        containerStyle,
-      ]}
-    >
+    <View style={[styles.overlay, { height }, transparent && styles.transparent, containerStyle]}>
       <Image source={source} style={styles.loadingImage} />
       {text ? <Text style={styles.text}>{text}</Text> : null}
     </View>

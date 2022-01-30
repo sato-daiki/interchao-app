@@ -12,18 +12,9 @@ interface Props {
   onClose: () => void;
 }
 
-const TeachDiaryListMenu = ({
-  isMenu,
-  nativeLanguage,
-  onClose,
-}: Props): JSX.Element => {
+const TeachDiaryListMenu = ({ isMenu, nativeLanguage, onClose }: Props) => {
   return (
-    <SwipeablePanel
-      fullWidth
-      closeOnTouchOutside
-      isActive={isMenu}
-      onClose={onClose}
-    >
+    <SwipeablePanel fullWidth closeOnTouchOutside isActive={isMenu} onClose={onClose}>
       {Platform.OS === 'web' ? null : (
         <OptionItem
           title={I18n.t('sns.app')}

@@ -32,13 +32,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CheckItem = ({
-  title,
-  day,
-  checked,
-  disable,
-  onPress,
-}: Props): JSX.Element => {
+const CheckItem = ({ title, day, checked, disable, onPress }: Props) => {
   const onPressItem = useCallback(() => {
     onPress(day);
   }, [day, onPress]);

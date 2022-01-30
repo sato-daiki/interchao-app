@@ -1,43 +1,43 @@
-# version: 2.1
+version: 2.1
 
-# commands:
-#   restore_module_cache:
-#     parameters:
-#       module_path:
-#         type: string
-#     steps:
-#       - restore_cache:
-#           keys:
-#             - v{{ .Environment.CIRCLECI_CACHE_VERSION }}-dependencies-<< parameters.module_path >>-{{ checksum "<< parameters.module_path >>/yarn.lock" }}
-#   save_module_cache:
-#     parameters:
-#       module_path:
-#         type: string
-#     steps:
-#       - save_cache:
-#           key: v{{ .Environment.CIRCLECI_CACHE_VERSION }}-dependencies-<< parameters.module_path >>-{{ checksum "<< parameters.module_path >>/yarn.lock" }}
-#           paths:
-#             - << parameters.module_path >>/node_modules
+commands:
+  restore_module_cache:
+    parameters:
+      module_path:
+        type: string
+    steps:
+      - restore_cache:
+          keys:
+            - v{{ .Environment.CIRCLECI_CACHE_VERSION }}-dependencies-<< parameters.module_path >>-{{ checksum "<< parameters.module_path >>/yarn.lock" }}
+  save_module_cache:
+    parameters:
+      module_path:
+        type: string
+    steps:
+      - save_cache:
+          key: v{{ .Environment.CIRCLECI_CACHE_VERSION }}-dependencies-<< parameters.module_path >>-{{ checksum "<< parameters.module_path >>/yarn.lock" }}
+          paths:
+            - << parameters.module_path >>/node_modules
 
-#   setup_and_test:
-#     steps:
-#       - checkout
-#       - restore_module_cache: { module_path: ./ }
-#       - run: yarn install
-#       - save_module_cache: { module_path: ./ }
-#       - run: yarn test # jestを実施する
-#       - run: yarn typecheck # type-checkを実施する
-#       - run: yarn lint # lintを実施する
-# jobs:
-#   test:
-#     docker:
-#       - image: circleci/node:10
-#     working_directory: ~/src
-#     steps:
-#       - setup_and_test
+  setup_and_test:
+    steps:
+      - checkout
+      - restore_module_cache: { module_path: ./ }
+      - run: yarn install
+      - save_module_cache: { module_path: ./ }
+      # - run: yarn test # jestを実施する
+      - run: yarn typecheck # type-checkを実施する
+      - run: yarn lint # lintを実施する
+jobs:
+  test:
+    docker:
+      - image: circleci/node:14.17.5
+    working_directory: ~/src
+    steps:
+      - setup_and_test
 
-# workflows:
-#   version: 2.1
-#   test_workflow:
-#     jobs:
-#       - test
+workflows:
+  version: 2.1
+  test_workflow:
+    jobs:
+      - test

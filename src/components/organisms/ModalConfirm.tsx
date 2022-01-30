@@ -37,7 +37,7 @@ const ModalConfirm: React.FC<Props> = ({
   cancelButtonText = I18n.t('common.cancel'),
   onPressMain,
   onPressClose,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
@@ -47,17 +47,11 @@ const ModalConfirm: React.FC<Props> = ({
         <Space size={32} />
         {onPressMain ? (
           <>
-            <SubmitButton
-              isLoading={isLoading}
-              title={mainButtonText}
-              onPress={onPressMain}
-            />
+            <SubmitButton isLoading={isLoading} title={mainButtonText} onPress={onPressMain} />
             <Space size={16} />
           </>
         ) : null}
-        {onPressClose ? (
-          <WhiteButton title={cancelButtonText} onPress={onPressClose} />
-        ) : null}
+        {onPressClose ? <WhiteButton title={cancelButtonText} onPress={onPressClose} /> : null}
       </View>
     </Modal>
   );

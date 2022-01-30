@@ -61,45 +61,31 @@ const Review: React.FC<Props> = ({
   onPressOk,
   onPressCancel,
   onPressCloseNever,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{I18n.t('modalAppReviewRequest.title')}</Text>
       <View style={styles.line} />
       <Text style={styles.text}>{I18n.t('modalAppReviewRequest.text')}</Text>
       <Space size={32} />
-      <AirbnbRating
-        showRating={false}
-        defaultRating={0}
-        onFinishRating={onFinishRating}
-      />
+      <AirbnbRating showRating={false} defaultRating={0} onFinishRating={onFinishRating} />
       <Space size={16} />
-      <Text style={styles.supplement}>
-        {I18n.t('modalAppReviewRequest.supplement')}
-      </Text>
+      <Text style={styles.supplement}>{I18n.t('modalAppReviewRequest.supplement')}</Text>
       <Space size={16} />
       <View style={styles.buttonTopContainer}>
         {rating === 0 ? null : (
           <SubmitButton
             title={I18n.t(
-              rating >= 4
-                ? 'modalAppReviewRequest.review'
-                : 'modalAppReviewRequest.improve'
+              rating >= 4 ? 'modalAppReviewRequest.review' : 'modalAppReviewRequest.improve',
             )}
             onPress={onPressOk}
             containerStyle={styles.buttonTop}
           />
         )}
       </View>
-      <WhiteButton
-        title={I18n.t('modalAppReviewRequest.notYet')}
-        onPress={onPressCancel}
-      />
+      <WhiteButton title={I18n.t('modalAppReviewRequest.notYet')} onPress={onPressCancel} />
       <Space size={16} />
-      <WhiteButton
-        title={I18n.t('modalAppReviewRequest.never')}
-        onPress={onPressCloseNever}
-      />
+      <WhiteButton title={I18n.t('modalAppReviewRequest.never')} onPress={onPressCloseNever} />
     </View>
   );
 };

@@ -35,11 +35,9 @@ const TextButtun: React.FC<Props> = ({
   disable = false,
   title,
   onPress,
-}: Props): JSX.Element => {
+}: Props) => {
   const borderTopWidth = isBorrderTop ? StyleSheet.hairlineWidth : undefined;
-  const borderBottomWidth = isBorrderBottom
-    ? StyleSheet.hairlineWidth
-    : undefined;
+  const borderBottomWidth = isBorrderBottom ? StyleSheet.hairlineWidth : undefined;
 
   return (
     <Hoverable
@@ -47,11 +45,7 @@ const TextButtun: React.FC<Props> = ({
       activeOpacity={isLoading || disable ? 1 : 0.2}
       onPress={isLoading || disable ? undefined : onPress}
     >
-      {isLoading ? (
-        <ActivityIndicator size="small" />
-      ) : (
-        <Text style={styles.title}>{title}</Text>
-      )}
+      {isLoading ? <ActivityIndicator size='small' /> : <Text style={styles.title}>{title}</Text>}
     </Hoverable>
   );
 };

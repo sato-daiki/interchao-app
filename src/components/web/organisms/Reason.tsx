@@ -32,10 +32,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const Reason = ({ isMaxLayoutChange, options }: Props): JSX.Element => {
-  const renderLeft = (
-    <Image resizeMode="contain" style={styles.image} source={Zebra} />
-  );
+const Reason = ({ isMaxLayoutChange, options }: Props) => {
+  const renderLeft = <Image resizeMode='contain' style={styles.image} source={Zebra} />;
 
   const textContainer = [
     styles.textContainer,

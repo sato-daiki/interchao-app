@@ -1,5 +1,6 @@
 import { Language, CountryCode } from './profile';
 import { ThemeCategory, ThemeSubcategory } from './user';
+import firebase from 'firebase';
 
 // algolia経由で取得するのでtimestamp型が他と異なる
 export type Timestamp = {

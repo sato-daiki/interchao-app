@@ -36,8 +36,7 @@ const { store, persistor } = configureStore();
 
 // エラー監視
 Sentry.init({
-  dsn:
-    'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
+  dsn: 'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
   enableInExpoDevelopment: false,
   debug: false,
 });
@@ -52,7 +51,7 @@ const linking = {
   config: getConfig(),
 } as LinkingOptions;
 
-const App = (): JSX.Element => {
+const App = () => {
   const routeNameRef = React.useRef<string | undefined | null>(null);
   const navigationRef = React.useRef<NavigationContainerRef | null>(null);
 
@@ -102,7 +101,7 @@ const App = (): JSX.Element => {
   return (
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle='dark-content' />
         <ActionSheetProvider>
           <MenuProvider>
             <NavigationContainer

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BodyText = ({ text, isMobileDevice = false }: Props): JSX.Element => {
+const BodyText = ({ text, isMobileDevice = false }: Props) => {
   return (
     <Text
       style={[

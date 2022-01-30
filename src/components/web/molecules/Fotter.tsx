@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Fotter = (): JSX.Element => {
+const Fotter = () => {
   const onPressEnglishBlog = useCallback((): void => {
     Linking.openURL('https://interchao.medium.com/');
   }, []);
@@ -74,11 +74,7 @@ const Fotter = (): JSX.Element => {
               <Text style={styles.textMiddle}>{I18n.t('web.operator')}</Text>
             </Hoverable>
             <Hoverable onPress={onPressTwitter}>
-              <MaterialCommunityIcons
-                size={28}
-                color={offWhite}
-                name="twitter"
-              />
+              <MaterialCommunityIcons size={28} color={offWhite} name='twitter' />
             </Hoverable>
           </View>
         </View>

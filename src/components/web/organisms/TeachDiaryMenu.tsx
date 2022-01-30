@@ -7,14 +7,14 @@ interface Props {
   onPressAppShare: () => void;
 }
 
-const TeachDiaryMenu = ({ onPressAppShare }: Props): JSX.Element => {
+const TeachDiaryMenu = ({ onPressAppShare }: Props) => {
   return (
     <MenuTemplate>
       <CustumMenuOption
         onSelect={onPressAppShare}
-        icon="community"
+        icon='community'
         size={25}
-        name="share-variant"
+        name='share-variant'
         text={I18n.t('sns.diary')}
       />
     </MenuTemplate>

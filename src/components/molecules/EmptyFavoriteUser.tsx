@@ -18,18 +18,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyFavoriteUser = (): JSX.Element => {
+const EmptyFavoriteUser = () => {
   return (
     <View style={styles.container}>
       <MaterialCommunityIcons
         size={70}
         style={styles.icon}
         color={imageLightColor}
-        name="heart-outline"
+        name='heart-outline'
       />
-      <Text style={styles.text}>
-        お気に入りユーザがいません。ユーザを追加してみよう。
-      </Text>
+      <Text style={styles.text}>お気に入りユーザがいません。ユーザを追加してみよう。</Text>
     </View>
   );
 };

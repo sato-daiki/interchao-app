@@ -4,7 +4,7 @@ import I18n from '@/utils/I18n';
 import { mainColor } from '@/styles/Common';
 import { Note } from '@/components/atoms';
 
-const NotficationReminder = (): JSX.Element => {
+const NotficationReminder = () => {
   const [visible, setVisible] = useState(true);
   const [isPermission, setIsPermission] = useState(true);
 
@@ -30,7 +30,7 @@ const NotficationReminder = (): JSX.Element => {
     <Note
       text={I18n.t('reminderSelectTime.notficationAlert')}
       backgroundColor={mainColor}
-      color="#fff"
+      color='#fff'
       visible={!isPermission && visible}
       onPressClose={onPressClose}
     />

@@ -60,12 +60,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiaryListItem = ({
-  mine = false,
-  item,
-  onPressUser,
-  onPressItem,
-}: Props): JSX.Element => {
+const DiaryListItem = ({ mine = false, item, onPressUser, onPressItem }: Props) => {
   const {
     createdAt,
     title,
@@ -83,23 +78,15 @@ const DiaryListItem = ({
   }, [item, onPressItem]);
 
   return (
-    <Hoverable
-      hoverStyle={styles.hover}
-      style={styles.container}
-      onPress={onPressRow}
-    >
+    <Hoverable hoverStyle={styles.hover} style={styles.container} onPress={onPressRow}>
       <View style={styles.header}>
         <Text style={styles.postDayText}>{postDay}</Text>
         {/* プロフィール画面からはステータスは表示しないようにする */}
         {mine ? <MyDiaryStatus diary={item} /> : null}
       </View>
-      <DiaryTitle
-        themeCategory={themeCategory}
-        themeSubcategory={themeSubcategory}
-        title={title}
-      />
+      <DiaryTitle themeCategory={themeCategory} themeSubcategory={themeSubcategory} title={title} />
       <View style={styles.content}>
-        <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
+        <Text style={styles.text} ellipsizeMode='tail' numberOfLines={3}>
           {text}
         </Text>
         {correction ? (

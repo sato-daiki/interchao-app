@@ -23,19 +23,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ProfileNationalityCode: React.FC<Props> = ({
-  nationalityCode,
-}): JSX.Element => {
+const ProfileNationalityCode: React.FC<Props> = ({ nationalityCode }) => {
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons
-        size={14}
-        color={subTextColor}
-        name="flag-outline"
-      />
-      <Text style={styles.label}>
-        {I18n.t('profileNationality.nationality')}
-      </Text>
+      <MaterialCommunityIcons size={14} color={subTextColor} name='flag-outline' />
+      <Text style={styles.label}>{I18n.t('profileNationality.nationality')}</Text>
       <CountryNameWithFlag nationalityCode={nationalityCode} />
     </View>
   );

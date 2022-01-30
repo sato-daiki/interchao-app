@@ -35,7 +35,7 @@ const TutorialPoints: React.FC<Props> = ({
   displayed,
   buttonText = I18n.t('tutorialPoints.buttonText'),
   onPress = (): void => undefined,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Tutorial
       displayed={displayed}
@@ -45,7 +45,7 @@ const TutorialPoints: React.FC<Props> = ({
       onPress={onPress}
     >
       <View style={styles.container}>
-        <Image style={styles.img} source={BagPoints} resizeMode="contain" />
+        <Image style={styles.img} source={BagPoints} resizeMode='contain' />
         <Space size={24} />
         <Text style={styles.text}>{I18n.t('tutorialPoints.text')}</Text>
       </View>

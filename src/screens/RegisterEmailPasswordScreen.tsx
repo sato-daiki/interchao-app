@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
+const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 

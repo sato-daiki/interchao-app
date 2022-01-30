@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Title = ({ text, isMobileDevice = false }: Props): JSX.Element => {
+const Title = ({ text, isMobileDevice = false }: Props) => {
   return (
     <Text
       style={[

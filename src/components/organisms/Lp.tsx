@@ -12,6 +12,7 @@ import Reason from '../web/organisms/Reason';
 import Correct from '../web/organisms/Correct';
 import Start from '../web/organisms/Start';
 import Example from '../web/organisms/Example';
+import I18n from '../../utils/I18n';
 
 type Props = {
   isAbout: boolean;
@@ -34,13 +35,7 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const Lp: React.FC<Props> = ({
-  isAbout,
-  onPressHeader,
-  onPressStart,
-  onPressLogin,
-  options,
-}) => {
+const Lp: React.FC<Props> = ({ isAbout, onPressHeader, onPressStart, onPressLogin, options }) => {
   useEffect((): void => {
     track(events.OPENED_INITIALIZE);
   }, []);
@@ -69,9 +64,7 @@ const Lp: React.FC<Props> = ({
             isMobileDevice={isMobileDevice}
             options={options}
           />
-          {isTabletOrMobileDevice && !isAbout ? (
-            <AppDownload isWhite options={options} />
-          ) : null}
+          {isTabletOrMobileDevice && !isAbout ? <AppDownload isWhite options={options} /> : null}
           <WhatIs
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}

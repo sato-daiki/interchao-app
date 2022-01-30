@@ -9,9 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
-const PublicNavigator = (): JSX.Element => {
+const PublicNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="UserDiary">
+    <Stack.Navigator initialRouteName='UserDiary'>
       {/* <Stack.Screen
         name="UserDiary"
         component={UserDiaryScreenContainer}

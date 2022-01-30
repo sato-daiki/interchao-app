@@ -1,12 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { Star } from '../../images';
-import {
-  fontSizeS,
-  primaryColor,
-  star,
-  subTextColor,
-} from '../../styles/Common';
+import { fontSizeS, primaryColor, star, subTextColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 
 interface Props {
@@ -40,10 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ScoreStar: React.FC<Props> = ({
-  score,
-  reviewNum,
-}: Props): JSX.Element => {
+const ScoreStar: React.FC<Props> = ({ score, reviewNum }: Props) => {
   if (score === 0) {
     return <Text style={styles.zeroText}>{I18n.t('emptyReview.empty')}</Text>;
   }

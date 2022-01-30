@@ -42,7 +42,7 @@ const UserDiaryCorrection: React.FC<Props> = ({
   textLanguage,
   correction,
   onPressUser,
-}): JSX.Element => {
+}) => {
   const { profile, comments, summary, createdAt } = correction;
   const [hidden, setHidden] = useState(false);
 
@@ -67,7 +67,7 @@ const UserDiaryCorrection: React.FC<Props> = ({
             />
             <Text style={styles.daytext}>{postDate}</Text>
           </View>
-          {comments.map(item => {
+          {comments.map((item) => {
             const { original, fix, detail, diffs, rowNumber } = item;
             return (
               <CorrectionItem

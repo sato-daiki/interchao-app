@@ -36,7 +36,7 @@ const RadioBox: React.FC<Props> = ({
   text,
   onPress,
   textStyle,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>

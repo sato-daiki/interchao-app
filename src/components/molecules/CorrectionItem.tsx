@@ -1,11 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import {
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  subTextColor,
-} from '../../styles/Common';
+import { fontSizeM, primaryColor, borderLightColor, subTextColor } from '../../styles/Common';
 import I18n from '../../utils/I18n';
 import { Diff, Language } from '../../types';
 import { Space } from '../atoms';
@@ -41,14 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CorrectionItem = ({
-  original,
-  fix,
-  detail,
-  diffs,
-  nativeLanguage,
-  textLanguage,
-}: Props): JSX.Element => {
+const CorrectionItem = ({ original, fix, detail, diffs, nativeLanguage, textLanguage }: Props) => {
   return (
     <View style={styles.container}>
       <CorrectingText

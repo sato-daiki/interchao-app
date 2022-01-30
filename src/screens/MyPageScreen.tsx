@@ -128,7 +128,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: (): JSX.Element => (
+      headerRight: () => (
         <HeaderIcon
           icon='material'
           name='settings'

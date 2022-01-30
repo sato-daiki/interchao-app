@@ -11,15 +11,9 @@ import { mainColor, maxLayoutChange } from '../styles/Common';
 import I18n from '../utils/I18n';
 import { TabIcon } from '../components/molecules';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
-import MyDiaryTabNavigator, {
-  MyDiaryTabStackParamList,
-} from './MyDiaryTabNavigator';
-import TeachDiaryTabNavigator, {
-  TeachDiaryTabStackParamList,
-} from './TeachDiaryTabNavigator';
-import MyPageTabNavigator, {
-  MyPageTabStackParamList,
-} from './MyPageTabNavigator';
+import MyDiaryTabNavigator, { MyDiaryTabStackParamList } from './MyDiaryTabNavigator';
+import TeachDiaryTabNavigator, { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
+import MyPageTabNavigator, { MyPageTabStackParamList } from './MyPageTabNavigator';
 import { MainStackParamList, MainNavigationProp } from './MainNavigator';
 import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
 import { DrawerLabel } from '../components/web/molecules';
@@ -45,7 +39,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HomeBottomTabNavigator = (): JSX.Element => {
+const HomeBottomTabNavigator = () => {
   const isDesktopOrLaptopDevice = useMediaQuery({
     minDeviceWidth: 1224,
   });
@@ -58,14 +52,11 @@ const HomeBottomTabNavigator = (): JSX.Element => {
 
     return (
       <Drawer.Navigator
-        initialRouteName="MyDiaryTab"
-        drawerType="permanent"
+        initialRouteName='MyDiaryTab'
+        drawerType='permanent'
         drawerStyle={drawerStyle}
-        drawerContent={(props): JSX.Element => (
-          <CustomDrawerContent
-            isMaxLayoutChange={isMaxLayoutChange}
-            {...props}
-          />
+        drawerContent={(props) => (
+          <CustomDrawerContent isMaxLayoutChange={isMaxLayoutChange} {...props} />
         )}
         drawerContentOptions={{
           activeTintColor: mainColor,
@@ -73,13 +64,13 @@ const HomeBottomTabNavigator = (): JSX.Element => {
         }}
       >
         <Drawer.Screen
-          name="MyDiaryTab"
+          name='MyDiaryTab'
           component={MyDiaryTabNavigator}
           options={{
-            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+            drawerLabel: ({ color }: { color: string }) => (
               <DrawerLabel
                 isMaxLayoutChange={isMaxLayoutChange}
-                tabName="MyDiaryTab"
+                tabName='MyDiaryTab'
                 color={color}
                 text={isMaxLayoutChange ? I18n.t('mainTab.myDiary') : null}
               />
@@ -87,13 +78,13 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           }}
         />
         <Drawer.Screen
-          name="TeachDiaryTab"
+          name='TeachDiaryTab'
           component={TeachDiaryTabNavigator}
           options={{
-            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+            drawerLabel: ({ color }: { color: string }) => (
               <DrawerLabel
                 isMaxLayoutChange={isMaxLayoutChange}
-                tabName="TeachDiaryTab"
+                tabName='TeachDiaryTab'
                 color={color}
                 text={isMaxLayoutChange ? I18n.t('mainTab.teachDiary') : null}
               />
@@ -101,13 +92,13 @@ const HomeBottomTabNavigator = (): JSX.Element => {
           }}
         />
         <Drawer.Screen
-          name="MyPageTab"
+          name='MyPageTab'
           component={MyPageTabNavigator}
           options={{
-            drawerLabel: ({ color }: { color: string }): JSX.Element => (
+            drawerLabel: ({ color }: { color: string }) => (
               <DrawerLabel
                 isMaxLayoutChange={isMaxLayoutChange}
-                tabName="MyPageTab"
+                tabName='MyPageTab'
                 color={color}
                 text={isMaxLayoutChange ? I18n.t('mainTab.myPage') : null}
               />
@@ -120,39 +111,28 @@ const HomeBottomTabNavigator = (): JSX.Element => {
 
   const HomeBottom = createBottomTabNavigator<HomeBottomParamList>();
   return (
-    <HomeBottom.Navigator
-      tabBarOptions={{ activeTintColor: mainColor, keyboardHidesTabBar: true }}
-    >
+    <HomeBottom.Navigator tabBarOptions={{ activeTintColor: mainColor, keyboardHidesTabBar: true }}>
       <HomeBottom.Screen
-        name="MyDiaryTab"
+        name='MyDiaryTab'
         component={MyDiaryTabNavigator}
         options={{
           tabBarLabel: I18n.t('mainTab.myDiary'),
-          tabBarIcon: ({ color }: { color: string }): JSX.Element => (
-            <TabIcon
-              name="book-open"
-              size={25}
-              color={color}
-              badgeMode="myDiary"
-            />
+          tabBarIcon: ({ color }: { color: string }) => (
+            <TabIcon name='book-open' size={25} color={color} badgeMode='myDiary' />
           ),
         }}
       />
       <HomeBottom.Screen
-        name="PostDiaryTab"
+        name='PostDiaryTab'
         component={PostDiaryScreenContainer}
         options={{
           tabBarLabel: I18n.t('mainTab.postDiary'),
-          tabBarIcon: ({ color }: { color: string }): JSX.Element => (
-            <MaterialCommunityIcons name="pencil" size={25} color={color} />
+          tabBarIcon: ({ color }: { color: string }) => (
+            <MaterialCommunityIcons name='pencil' size={25} color={color} />
           ),
         }}
-        listeners={({
-          navigation,
-        }: {
-          navigation: HomeBottomNavigationProp;
-        }) => ({
-          tabPress: e => {
+        listeners={({ navigation }: { navigation: HomeBottomNavigationProp }) => ({
+          tabPress: (e) => {
             // Prevent default action
             e.preventDefault();
             navigation.navigate('ModalSelectDiaryType', {
@@ -162,22 +142,22 @@ const HomeBottomTabNavigator = (): JSX.Element => {
         })}
       />
       <HomeBottom.Screen
-        name="TeachDiaryTab"
+        name='TeachDiaryTab'
         component={TeachDiaryTabNavigator}
         options={{
           tabBarLabel: I18n.t('mainTab.teachDiary'),
-          tabBarIcon: ({ color }: { color: string }): JSX.Element => (
-            <MaterialCommunityIcons name="spellcheck" size={25} color={color} />
+          tabBarIcon: ({ color }: { color: string }) => (
+            <MaterialCommunityIcons name='spellcheck' size={25} color={color} />
           ),
         }}
       />
       <HomeBottom.Screen
-        name="MyPageTab"
+        name='MyPageTab'
         component={MyPageTabNavigator}
         options={{
           tabBarLabel: I18n.t('mainTab.myPage'),
-          tabBarIcon: ({ color }: { color: string }): JSX.Element => (
-            <MaterialIcons name="person" size={25} color={color} />
+          tabBarIcon: ({ color }: { color: string }) => (
+            <MaterialIcons name='person' size={25} color={color} />
           ),
         }}
       />

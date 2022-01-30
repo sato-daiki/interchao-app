@@ -5,7 +5,7 @@ interface Props {
   size: number;
 }
 
-const Space: React.FC<Props> = ({ size }: Props): JSX.Element => {
+const Space: React.FC<Props> = ({ size }: Props) => {
   return <View style={{ paddingBottom: size }} />;
 };
 

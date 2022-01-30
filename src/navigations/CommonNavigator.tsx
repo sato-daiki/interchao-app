@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import I18n from '../utils/I18n';
 
@@ -10,10 +7,7 @@ import I18n from '../utils/I18n';
 import UserProfileScreenContainer from '../containers/UserProfileScreenContainer';
 import ReviewListScreenContainer from '../containers/ReviewListScreenContainer';
 import UserDiaryScreenContainer from '../containers/UserDiaryScreenContainer';
-import {
-  HomeBottomNavigationProp,
-  HomeBottomParamList,
-} from './HomeBottomTabNavigator';
+import { HomeBottomNavigationProp, HomeBottomParamList } from './HomeBottomTabNavigator';
 
 export type CommonNavigationProp = CompositeNavigationProp<
   StackNavigationProp<HomeBottomParamList>,
@@ -28,21 +22,21 @@ export type CommonStackParamList = {
 
 const CommonStack = createStackNavigator<CommonStackParamList>();
 
-export const createCommonNavigator = (): JSX.Element => {
+export const createCommonNavigator = () => {
   return (
     <>
       <CommonStack.Screen
-        name="UserProfile"
+        name='UserProfile'
         component={UserProfileScreenContainer}
         options={{ title: I18n.t('userProfile.headerTitle') }}
       />
       <CommonStack.Screen
-        name="UserDiary"
+        name='UserDiary'
         component={UserDiaryScreenContainer}
         options={{ title: I18n.t('teachDiary.headerTitle') }}
       />
       <CommonStack.Screen
-        name="ReviewList"
+        name='ReviewList'
         component={ReviewListScreenContainer}
         options={{ title: I18n.t('reviewList.headerTitle') }}
       />

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DiaryStatus = ({ color, text }: Props): JSX.Element => (
+const DiaryStatus = ({ color, text }: Props) => (
   <View style={styles.container}>
     <View style={[styles.circle, { backgroundColor: color }]} />
     <Text style={[styles.text, { color }]}>{text}</Text>

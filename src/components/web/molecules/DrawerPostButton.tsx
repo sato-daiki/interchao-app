@@ -25,10 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DrawerPostButton = ({
-  isMaxLayoutChange,
-  onPress,
-}: Props): JSX.Element => {
+const DrawerPostButton = ({ isMaxLayoutChange, onPress }: Props) => {
   return isMaxLayoutChange ? (
     <SubmitButton
       containerStyle={styles.submitButton}
@@ -37,7 +34,7 @@ const DrawerPostButton = ({
     />
   ) : (
     <HoverableView style={styles.icon}>
-      <MaterialCommunityIcons name="pencil" size={25} color="#fff" />
+      <MaterialCommunityIcons name='pencil' size={25} color='#fff' />
     </HoverableView>
   );
 };

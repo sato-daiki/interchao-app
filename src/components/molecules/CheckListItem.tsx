@@ -31,12 +31,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CheckListItem = ({
-  title,
-  checked,
-  disable,
-  onPress,
-}: Props): JSX.Element => {
+const CheckListItem = ({ title, checked, disable, onPress }: Props) => {
   return (
     <View style={[styles.container, disable ? styles.opacity : undefined]}>
       <Text style={styles.title}>{title}</Text>

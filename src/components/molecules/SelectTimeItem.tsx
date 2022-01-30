@@ -60,27 +60,25 @@ const SelectTimeItem = ({
   timeEnd,
   handleTimeStart,
   handleTimeEnd,
-}: Props): JSX.Element => {
+}: Props) => {
   const borderTopWidth = isBorrderTop ? 0.5 : undefined;
 
   const onChangeTimeStart = useCallback(
     (time: Date) => {
       handleTimeStart(day, time);
     },
-    [day, handleTimeStart]
+    [day, handleTimeStart],
   );
 
   const onChangeTimeEnd = useCallback(
     (time: Date) => {
       handleTimeEnd(day, time);
     },
-    [day, handleTimeEnd]
+    [day, handleTimeEnd],
   );
 
   return (
-    <View
-      style={[styles.container, { borderTopWidth }, disable && styles.opacity]}
-    >
+    <View style={[styles.container, { borderTopWidth }, disable && styles.opacity]}>
       <Text style={[styles.heading]}>{heading}</Text>
       <View style={styles.row}>
         <View style={[styles.row, styles.marginRight12]}>
@@ -90,9 +88,7 @@ const SelectTimeItem = ({
           <TimePicker date={timeStart} onChange={onChangeTimeStart} />
         </View>
         <View style={styles.row}>
-          <Text style={[styles.text, styles.marginRight8]}>
-            {I18n.t('reminderSelectTime.end')}
-          </Text>
+          <Text style={[styles.text, styles.marginRight8]}>{I18n.t('reminderSelectTime.end')}</Text>
           <TimePicker date={timeEnd} onChange={onChangeTimeEnd} />
         </View>
       </View>
