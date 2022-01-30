@@ -6,7 +6,7 @@
     "scheme": "interchao",
     "privacy": "public",
     "platforms": ["ios", "android", "web"],
-    "version": "2.1.1",
+    "version": "2.1.2",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
@@ -32,14 +32,8 @@
     },
     "android": {
       "package": "app.interchao",
-      "versionCode": 2010100,
-      "permissions": [
-        "CAMERA",
-        "NOTIFICATIONS",
-        "CAMERA",
-        "CAMERA_ROLL",
-        "AUDIO_RECORDING"
-      ],
+      "versionCode": 2010200,
+      "permissions": ["CAMERA", "NOTIFICATIONS", "CAMERA", "CAMERA_ROLL", "AUDIO_RECORDING"],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
@@ -97,7 +91,7 @@
         }
       },
       "revision": 0,
-      "webRevision": 1
+      "webRevision": 0
     },
     "hooks": {
       "postPublish": [
