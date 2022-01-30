@@ -48,8 +48,7 @@ const shortDay = {
 
 // web
 const helmet = {
-  keyword:
-    'Japanese, Chinese, Korean, study, correct, free, diary, entry, language exchange',
+  keyword: 'Japanese, Chinese, Korean, study, correct, free, diary, entry, language exchange',
   description:
     'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
   ogTitle: 'Interchao Interactive language learning app',
@@ -70,19 +69,16 @@ const web = {
   whyText: 'Writing is the optimal language learning method',
   whyCnatText1: '「最近調子はどうですか？」',
   whyCnatText2: '「絶好調です。あなたは？」',
-  whyCnatText3:
-    '「元気です...(Oh no, I can’t keep the conversation going...)」',
+  whyCnatText3: '「元気です...(Oh no, I can’t keep the conversation going...)」',
   reasonTitle1: 'You can’t speak more than what you can write',
   reasonText11: 'You can’t talk what you cannot pen down.',
   reasonText12: 'Writing is a training for speaking.',
   reasonTitle2: 'Make your articles checked by native speakers',
-  reasonText21:
-    'Since you have written down something, you want to know if there were mistakes.',
+  reasonText21: 'Since you have written down something, you want to know if there were mistakes.',
   reasonText22:
     'Are the words and grammar correct? Are you making sense? Let’s have your articles checked by native speakers!',
   reasonTitle3: 'Write in your own words',
-  reasonText31:
-    'Textbooks and scripts from movies are sometimes not applicable in our daily life.',
+  reasonText31: 'Textbooks and scripts from movies are sometimes not applicable in our daily life.',
   reasonText32:
     'Through outputting something in your own words, you are able to learn in a practical way.',
   correctTitle: 'Correct entries to get points',
@@ -104,8 +100,7 @@ const web = {
 
 const modalAppSuggestion = {
   title: 'Interchao is better on the app',
-  text:
-    'Never miss an correction. Open this in the Interchao app to get the full experience',
+  text: 'Never miss an correction. Open this in the Interchao app to get the full experience',
 };
 
 // タブ
@@ -124,18 +119,15 @@ const errorMessage = {
   weakPassword: 'Please enter a password with at least 6 digits',
   userNotFound: 'This email address does not exist.',
   emailAlreadyInUse: 'This email address is already registered',
-  tooManyRequests:
-    'You have made too many failed attempts. Please try again later.',
+  tooManyRequests: 'You have made too many failed attempts. Please try again later.',
   network: 'There has been a network error.',
   defaultError: 'There is an error. {{message}}',
   emptyUserName: 'Please enter a username.',
-  invalidUserName:
-    'Only alphanumeric characters, _ (the underbar), and . (period) can be used.',
+  invalidUserName: 'Only alphanumeric characters, _ (the underbar), and . (period) can be used.',
   initialUserName: 'The first character must be an alphanumeric character.',
   userNameAlreadyInUse: 'This username has already been taken.',
   notFound: 'This page cannot be opened. There is an error.',
-  cantLogout:
-    'Because you have not registered an email address, you cannot logout.',
+  cantLogout: 'Because you have not registered an email address, you cannot logout.',
   invalidRaiting: 'Please rate between 1~5.',
   correctionAlready:
     'Someone else has started correcting this entry. Please search for another entry.',
@@ -163,8 +155,7 @@ const app = {
 const correcting = {
   headerTitle: 'Correct',
   header: 'List of corrections by others',
-  deleteAlert:
-    'All of your corrections will be deleted. Would you like to proceed?',
+  deleteAlert: 'All of your corrections will be deleted. Would you like to proceed?',
   titleDone: 'Publish',
   nothing: 'No fix',
   summary: 'Summary',
@@ -172,8 +163,7 @@ const correcting = {
 
 const deleteAcount = {
   headerTitle: 'About Account Deletion',
-  text:
-    'If you delete your account, all information about the journal entries you published will be deleted and cannot be retrieved. If you would still like to delete your account, please tap the button below.',
+  text: 'If you delete your account, all information about the journal entries you published will be deleted and cannot be retrieved. If you would still like to delete your account, please tap the button below.',
   withdrawal: 'Delete Account',
   confirmation: 'Are you sure you want to delete this account?',
 };
@@ -223,8 +213,7 @@ const foregetPassword = {
   headerTitle: 'Change Password',
   email: 'Email',
   title: 'Please enter your email address.',
-  subText:
-    'We will send a URL to your email address for you to change your password.',
+  subText: 'We will send a URL to your email address for you to change your password.',
 };
 
 const initialize = {
@@ -245,10 +234,8 @@ const myDiary = {
   confirmMessage: 'Are you sure you want to delete this journal entry?',
   posted: 'Posted',
   fairCopy: 'Fair Copy',
-  closeAlert:
-    'Any edits that have not been saved will be lost. Would you like to exit?',
-  permissionAudio:
-    'You must enable audio recording permissions in order to use this function',
+  closeAlert: 'Any edits that have not been saved will be lost. Would you like to exit?',
+  permissionAudio: 'You must enable audio recording permissions in order to use this function',
   voiceTitle: 'Read Out Loud',
   myVoice: 'Listen to Your Recorded Voice',
   machine: "Listen to Machine's Voice",
@@ -263,7 +250,8 @@ const myDiaryList = {
     other: 'My Journal Entries: {{count}} entries',
     zero: 'My Journal Entries',
   },
-  notficationSetting: `Interchao app notifications are turned off. Let's turn on "Notification" from "Settings" so that you can check when the journal entries correction arrives.`,
+  notficationSetting:
+    'Interchao app notifications are turned off. Let\'s turn on "Notification" from "Settings" so that you can check when the journal entries correction arrives.',
   emptyDiary: 'No Journal Entries',
   theme: 'Topic',
 };
@@ -276,7 +264,7 @@ const myPage = {
   headerTitle: 'My Page',
   editButton: 'Edit',
   adGetPoints: 'Earn {{points}} points by watching video ads',
-  timeOut: 'Time to see the next video ad {{activeHour}}',
+  timeOut: 'Next ad video {{activeHour}}~',
 };
 
 const notice = {
@@ -298,8 +286,7 @@ const onboarding = {
 };
 
 const reminderInitial = {
-  text:
-    "It is important to make studying part of your daily routine. Let's fix the time to study. If you register a reminder, you will be notified at a set time.",
+  text: "It is important to make studying part of your daily routine. Let's fix the time to study. If you register a reminder, you will be notified at a set time.",
   submit: 'Set Reminder',
 };
 
@@ -348,8 +335,7 @@ const postDraftDiary = {
 const registerEmailPassword = {
   headerTitle: 'Register Email and Password',
   title: 'Please enter your email address and password',
-  subText:
-    'You will need this data when switching devices. You can also register at a later time.',
+  subText: 'You will need this data when switching devices. You can also register at a later time.',
   email: 'Email Address',
   password: 'Password (6 or more characters)',
 };
@@ -362,8 +348,7 @@ const reviewList = {
 const review = {
   headerTitle: 'Review',
   placeholder: 'Comment (Optional)',
-  confirmation:
-    'The draft of your review will be deleted. Would you like to proceed?',
+  confirmation: 'The draft of your review will be deleted. Would you like to proceed?',
 };
 
 const selectLanguage = {
@@ -410,8 +395,7 @@ const signIn = {
 const signUp = {
   headerTitle: 'Email Registration',
   title: 'Please enter your email address and password.',
-  subText:
-    'You will need this data when switching devices. You can also register at a later time.',
+  subText: 'You will need this data when switching devices. You can also register at a later time.',
   email: 'Email Address',
   password: 'Password (6 or more characters)',
 };
@@ -515,8 +499,7 @@ const inquiry = {
   email: 'Email Address',
   message: 'Message',
   title: 'Thank you for your inquiry.',
-  thanks:
-    'We will reply to you within a few days. Please kindly wait for a moment.',
+  thanks: 'We will reply to you within a few days. Please kindly wait for a moment.',
 };
 
 // organisms
@@ -530,8 +513,7 @@ const draftListItem = {
 };
 
 const emptyMyDiaryList = {
-  text:
-    'You haven’t posted any journal entries.\nWrite an entry and have a native speaker correct it!',
+  text: 'You haven’t posted any journal entries.\nWrite an entry and have a native speaker correct it!',
   hint: 'Start here!\nYour entry will be\nproofread for free!',
 };
 
@@ -557,10 +539,8 @@ const modalAlertPublish = {
 
 const modalAppReviewRequest = {
   title: 'Thank you for your support of Interchao',
-  improveTitle:
-    'We kindly ask for your cooperation in improving the functionality of Interchao',
-  text:
-    'Thank you for using Interchao. Please let us know what you think for further improvement',
+  improveTitle: 'We kindly ask for your cooperation in improving the functionality of Interchao',
+  text: 'Thank you for using Interchao. Please let us know what you think for further improvement',
   thanks:
     'Thank you for your comment. We will use it for improvement. We look forward to your continued support of Interchao',
   improve: 'Write what you want to improve',
@@ -592,8 +572,7 @@ const modalAdPointsGet = {
 
 const modalCorrectingDone = {
   title: 'Complete Corrections',
-  text:
-    'Thank you for correcting the entry. You have received {{getPoints}} points.',
+  text: 'Thank you for correcting the entry. You have received {{getPoints}} points.',
 };
 
 const modalDeleteAcount = {
@@ -603,15 +582,13 @@ const modalDeleteAcount = {
 };
 
 const modalDiaryCancel = {
-  message:
-    'Any edits that have not been saved will be lost. Would you like to exit?',
+  message: 'Any edits that have not been saved will be lost. Would you like to exit?',
   button: 'Save as a Draft',
 };
 
 const modalLackPoint = {
   title: 'Not Enough Points',
-  text:
-    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry or watching video ads.\n\nDrafts can be saved without needing to use points.',
+  text: 'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry or watching video ads.\n\nDrafts can be saved without needing to use points.',
   submit: 'Continue',
   close: 'Look for Entries to Correct',
   watchAd: 'Watch video ads',
@@ -619,8 +596,7 @@ const modalLackPoint = {
 
 const modalSendEmail = {
   title: 'Mail Sent',
-  text:
-    'The email has been sent. Please click the link in the email to change your password.',
+  text: 'The email has been sent. Please click the link in the email to change your password.',
 };
 
 const modalStillCorrecting = {
@@ -677,15 +653,13 @@ const teachDiaryCorrection = {
 const tutorialPoints = {
   title: 'About Points',
   buttonText: 'Begin',
-  text:
-    'A minimum of 10 points is needed to publish a journal entry. You can get 10+ points by making corrections. The number of points used and received is based on the language and character count.',
+  text: 'A minimum of 10 points is needed to publish a journal entry. You can get 10+ points by making corrections. The number of points used and received is based on the language and character count.',
 };
 
 const tutorialPostDiary = {
   title: 'How to Write a Journal Entry',
   buttonText: 'Begin',
-  text:
-    'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! If you correct journal entries written in languages you can speak, you will get 10 points. Let’s teach each other languages!',
+  text: 'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by a native speaker! If you correct journal entries written in languages you can speak, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
@@ -701,8 +675,7 @@ const tutorialTeachDiaryList = {
 // util
 const cameraRoll = {
   permitTitle: 'Access permission is needed.',
-  permitMessage:
-    'You must give Interchao permission to access your photo library.',
+  permitMessage: 'You must give Interchao permission to access your photo library.',
   permitHowTo: 'How to Change Settings',
 };
 
@@ -761,8 +734,7 @@ const themeGuide = {
   expression: 'Expressions',
   example: 'Example sentences',
   word: 'Words',
-  guideEndText:
-    "This is the end of the slide.\nLet's actually write a sentence!",
+  guideEndText: "This is the end of the slide.\nLet's actually write a sentence!",
 };
 
 const selfIntroduction = {
@@ -796,8 +768,7 @@ const hobby = {
   expression2: 'hobby name, How did you start your hobby?',
   expression3: 'about the future',
   example1: 'My hobby is running.',
-  example2:
-    'The reason I started running was that I participated in a full Marathon.',
+  example2: 'The reason I started running was that I participated in a full Marathon.',
   example3: 'I want to continue with this kind of exercise.',
   wordTitle: 'Hobby list',
   word1: 'shopping',
@@ -904,7 +875,8 @@ const trip = {
 };
 
 const reborn = {
-  introduction: `This is the last theme of this chapter. "If I were XX..." is an expression that's often used in conversations.\n\nLet's write about what you want to be if you were reborn.`,
+  introduction:
+    'This is the last theme of this chapter. "If I were XX..." is an expression that\'s often used in conversations.\n\nLet\'s write about what you want to be if you were reborn.',
   expression1: 'what you want to do when you are reborn',
   expression2: 'reason',
   example1: "If I were born, I'd like to be born around 1945.",

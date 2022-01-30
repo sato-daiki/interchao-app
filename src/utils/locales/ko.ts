@@ -56,10 +56,8 @@ const web = {
   reasonText22:
     '문법/단어는 올바를까? 상대방에게 의미가 잘 전달될까? 원어민이 정확하게 체크해 줍니다.',
   reasonTitle3: '내가 원하는 글쓰기',
-  reasonText31:
-    '교과서에 나오는 표현이나 영화 대본을 공부해도 일상생활에는 적용하기 어렵습니다.',
-  reasonText32:
-    '내가 원하는 문장을 쓰면 자연스럽게 평상시에 사용하는 표현을 학습할 수 있습니다.',
+  reasonText31: '교과서에 나오는 표현이나 영화 대본을 공부해도 일상생활에는 적용하기 어렵습니다.',
+  reasonText32: '내가 원하는 문장을 쓰면 자연스럽게 평상시에 사용하는 표현을 학습할 수 있습니다.',
   correctTitle: '일기를 첨삭해서 포인트를 GET!',
   correctText1:
     '당신의 모국어로 쓰인 일기를 첨삭하면 10포인트가 쌓입니다. 이 10포인트를 사용해서 일기를 써 봅시다!',
@@ -72,8 +70,7 @@ const web = {
   exampleDetailTitle3: '일기의 총평',
   exampleDetailText3: '마지막으로 종합적인 평가를 받습니다',
   startTitle: '먼저 무료로 일기를 써 보세요',
-  startText:
-    '앱 설치시 30pt(일기 3일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
+  startText: '앱 설치시 30pt(일기 3일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
   operator: 'Operator',
 };
 
@@ -98,13 +95,11 @@ const errorMessage = {
   weakPassword: '비밀번호는 6 자리 이상으로 입력',
   userNotFound: '입력된 이메일 주소가 존재하지 않습니다',
   emailAlreadyInUse: '이 이메일 주소는 이미 등록되어 있습니다',
-  tooManyRequests:
-    '오류 횟수가 일정 횟수를 초과했습니다. 나중에 다시 시도해 주세요',
+  tooManyRequests: '오류 횟수가 일정 횟수를 초과했습니다. 나중에 다시 시도해 주세요',
   network: '통신 오류가 발생했습니다. 시간을두고 다시 시도해주십시오.',
   defaultError: '오류가 발생했습니다. {{message}}',
   emptyUserName: '사용자명을 입력해 주세요',
-  invalidUserName:
-    '사용자명에는 영숫자, _ (밑줄문자), . (마침표) 만 사용 가능합니다',
+  invalidUserName: '사용자명에는 영숫자, _ (밑줄문자), . (마침표) 만 사용 가능합니다',
   initialUserName: '첫번째 글자로는 영숫자만 사용 가능합니다',
   userNameAlreadyInUse: '이미 등록된 사용자명입니다',
   notFound: '페이지를 열 수 없습니다. 오류가 발생했습니다',
@@ -112,8 +107,7 @@ const errorMessage = {
   invalidRaiting: '별은 1〜5로 입력해주세요',
   correctionAlready:
     '해당 일기는 이미 다른 사용자가 첨삭을 시작했습니다. 다른 일기를 검색해 주세요.',
-  deleteTargetUser:
-    '계정이 삭제되었을 가능성이 있는 사용자로 정보를 찾을 수 없습니다.',
+  deleteTargetUser: '계정이 삭제되었을 가능성이 있는 사용자로 정보를 찾을 수 없습니다.',
   deleteTargetPage: '해당 페이지가 삭제되었을 가능성이 있어 찾을 수 없습니다.',
   emptyTitile: '제목이 입력되지 않았습니다.',
   emptyText: '본문이 작성되지 않았습니다.',
@@ -122,8 +116,7 @@ const errorMessage = {
   lackPointsTitle: '포인트 부족',
   lackPointsText:
     '글자수{{textLength}인 일기를 업로드하려면 {{usePoint}}포인트가 필요합니다. 포인트는 일기를 첨삭하면 얻을 수 있습니다.',
-  exceedingCharacter:
-    '최대 문자 수를 초과합니다. 최대 문자 수 : {{textLength}}',
+  exceedingCharacter: '최대 문자 수를 초과합니다. 최대 문자 수 : {{textLength}}',
   video: '동영상을 재생하는 중에 오류가 발생했습니다',
 };
 const app = {
@@ -144,8 +137,7 @@ const correcting = {
 
 const deleteAcount = {
   headerTitle: '회원 탈퇴에 대해서',
-  text:
-    '회원을 탈퇴하면 업로드된 일기 정보가 완전히 삭제되어 복원할 수 없습니다.\n\n그래도 회원 탈퇴를 원하시는 분은 하단에 있는 버튼을 눌러 탈퇴해주세요.',
+  text: '회원을 탈퇴하면 업로드된 일기 정보가 완전히 삭제되어 복원할 수 없습니다.\n\n그래도 회원 탈퇴를 원하시는 분은 하단에 있는 버튼을 눌러 탈퇴해주세요.',
   withdrawal: '탈퇴하기',
   confirmation: '정말 삭제하시겠습니까?',
 };
@@ -245,7 +237,7 @@ const myPage = {
   headerTitle: '마이 페이지',
   editButton: '편집하기',
   adGetPoints: '동영상 광고를 보고 {{points}}점 획득',
-  timeOut: '다음 동영상 광고를 볼 수 있는 시간 {{activeHour}}',
+  timeOut: '다음 광고 동영상 {{activeHour}}~',
 };
 
 const notice = {
@@ -267,8 +259,7 @@ const onboarding = {
 };
 
 const reminderInitial = {
-  text:
-    '공부는 습관화하는 것이 중요합니다. 공부하는 시간을 고정합시다. 알림을 설정하면 공부 시작 시간에 알림을받을 수 있습니다.',
+  text: '공부는 습관화하는 것이 중요합니다. 공부하는 시간을 고정합시다. 알림을 설정하면 공부 시작 시간에 알림을받을 수 있습니다.',
   submit: '설정',
 };
 
@@ -344,8 +335,7 @@ const selectLanguage = {
   placeholder: '국적을 선택해 주세요',
   change: '변경하기',
   nationalityCodeAlert: '국적을 선택해 주세요',
-  sameLanguageAlert:
-    '"배우고 싶은 언어"와 "원어민 언어"는 다른 언어를 선택하십시오',
+  sameLanguageAlert: '"배우고 싶은 언어"와 "원어민 언어"는 다른 언어를 선택하십시오',
   sameSpokenAlert:
     '"기타 원어민 수준의 언어"와 "배우고 싶은 언어"와 "원어민 언어"는 다른 언어를 선택하십시오',
   add: '추가하기',
@@ -523,10 +513,8 @@ const modalAlertPublish = {
 const modalAppReviewRequest = {
   title: 'Interchao의 응원을 부탁합니다!',
   improveTitle: 'Interchao 기능 개선에 협력 부탁합니다!',
-  text:
-    '항상 Interchao를 이용해 주셔서 감사합니다. 추가 개선을위한 의견을 들려주세요',
-  thanks:
-    '댓글 감사합니다. 개선에 큰 도움이됩니다. 앞으로도 Interchao를 잘 부탁합니다',
+  text: '항상 Interchao를 이용해 주셔서 감사합니다. 추가 개선을위한 의견을 들려주세요',
+  thanks: '댓글 감사합니다. 개선에 큰 도움이됩니다. 앞으로도 Interchao를 잘 부탁합니다',
   improve: '개선했으면 좋겠다 것을 쓴다',
   review: '리뷰하기',
   notYet: '나중에 쓰기',
@@ -572,8 +560,7 @@ const modalDiaryCancel = {
 
 const modalLackPoint = {
   title: '포인트 부족',
-  text:
-    '포인트가 부족합니다. 일기를 업로드하려면 {{learnCharacters}}글자마다 10포인트가 필요합니다. 임시보관함에서는 포인트 사용없이 저장할 수 있습니다.\n\n또는 동영상 광고를 보면 10점이 적립됩니다.',
+  text: '포인트가 부족합니다. 일기를 업로드하려면 {{learnCharacters}}글자마다 10포인트가 필요합니다. 임시보관함에서는 포인트 사용없이 저장할 수 있습니다.\n\n또는 동영상 광고를 보면 10점이 적립됩니다.',
   submit: '계속하기',
   close: '첨삭이 필요한 일기 찾기',
   watchAd: '동영상 광고 보기',
@@ -638,15 +625,13 @@ const teachDiaryCorrection = {
 const tutorialPoints = {
   title: '포인트에 대해서',
   buttonText: '시작하기',
-  text:
-    '일기를 업로드하려면 최소 10포인트〜 필요합니다.\n 리뷰를 쓰면 최소 10포인트〜 획득할 수 있습니다.\n\n 소비 및 획득하게 될 포인트는 글자수와 언어에 따라 달라집니다.',
+  text: '일기를 업로드하려면 최소 10포인트〜 필요합니다.\n 리뷰를 쓰면 최소 10포인트〜 획득할 수 있습니다.\n\n 소비 및 획득하게 될 포인트는 글자수와 언어에 따라 달라집니다.',
 };
 
 const tutorialPostDiary = {
   title: '일기 작성 방법',
   buttonText: '시작하기',
-  text:
-    '{{learnLanguage}}로 일기를 써보세요. {{learnCharacters}}글자마다 10포인트가 필요합니다. 일기를 업로드한 후에는 원어민이 첨삭을 해줍니다. 당신이 원어민 언어의 일기를 첨삭하면 10포인트를 받을 수 있습니다. 서로에게 든든한 언어 선생님이 되어주세요!',
+  text: '{{learnLanguage}}로 일기를 써보세요. {{learnCharacters}}글자마다 10포인트가 필요합니다. 일기를 업로드한 후에는 원어민이 첨삭을 해줍니다. 당신이 원어민 언어의 일기를 첨삭하면 10포인트를 받을 수 있습니다. 서로에게 든든한 언어 선생님이 되어주세요!',
 };
 
 const tutorialTeachDiaryList = {
@@ -654,16 +639,14 @@ const tutorialTeachDiaryList = {
   buttonText: '시작하기',
   text1:
     '당신이 원어민 언어의 일기 목록입니다. 일기 한개당 최대 3명까지 첨삭이 가능합니다. \n\n상태가',
-  text2:
-    '인 일기를 우선적으로 첨삭해주세요. 첨삭을 완료하면 10포인트를 받을 수 있습니다.',
+  text2: '인 일기를 우선적으로 첨삭해주세요. 첨삭을 완료하면 10포인트를 받을 수 있습니다.',
   textMainColor: ' 첨삭 안됨',
 };
 
 // util
 const cameraRoll = {
   permitTitle: '접근 허용이 필요합니다',
-  permitMessage:
-    'Interchao는 기기의 사진, 미디어, 파일에 대한 접근 허용을 필요로 합니다',
+  permitMessage: 'Interchao는 기기의 사진, 미디어, 파일에 대한 접근 허용을 필요로 합니다',
   permitHowTo: '설정 방법',
 };
 
@@ -693,8 +676,7 @@ const selectDiaryType = {
   recommend: '추천',
   titleFree: '자유 작문',
   titleTheme: '주제에서 선택',
-  textFree:
-    '일기, 오늘은 말할 수 없었던 것, 좋아하는 영화 등 원하는 주제에 대해 적어보세요.',
+  textFree: '일기, 오늘은 말할 수 없었던 것, 좋아하는 영화 등 원하는 주제에 대해 적어보세요.',
   textTheme: '표제에 따라 문장을 씁시다. 쓸 내용이 생각 나지 않는 경우 추천.',
 };
 
@@ -715,15 +697,13 @@ const selectThemeSubcategory = {
 
 const themeGuide = {
   swipeStart: '화면을 넘겨\n슬라이드를 이동합시다.',
-  swipeEnd:
-    '슬라이드를 복습하고 싶을 때는\n스와이프로 화면을 되돌릴 수 있습니다.',
+  swipeEnd: '슬라이드를 복습하고 싶을 때는\n스와이프로 화면을 되돌릴 수 있습니다.',
   introduction: '시작하기',
   guideTipTitle: '자주 사용하는 표현',
   expression: '표현',
   example: '예문',
   word: '단어 목록',
-  guideEndText:
-    '이것으로 슬라이드는 끝입니다.\n자, 그럼 이제 실제로 글을 써보실까요?',
+  guideEndText: '이것으로 슬라이드는 끝입니다.\n자, 그럼 이제 실제로 글을 써보실까요?',
 };
 
 const selfIntroduction = {
@@ -757,8 +737,7 @@ const hobby = {
   expression2: '취미 이름, 취미를 시작한 계기',
   expression3: '앞으로에 대해',
   example1: '제 취미는 달리기입니다.',
-  example2:
-    '저는 풀 마라톤에 참가했던 것을 계기로 달리기를 시작하게 되었습니다.',
+  example2: '저는 풀 마라톤에 참가했던 것을 계기로 달리기를 시작하게 되었습니다.',
   example3: '저는 앞으로도 운동을 계속해 나가고 싶습니다.',
   wordTitle: '취미 일람',
   word1: '쇼핑',
@@ -821,8 +800,7 @@ const study = {
 };
 
 const dream = {
-  introduction:
-    '당신은 장래에 무엇이 되고 싶나요?\n\n오늘은 장래 희망과 목표를 써보겠습니다.',
+  introduction: '당신은 장래에 무엇이 되고 싶나요?\n\n오늘은 장래 희망과 목표를 써보겠습니다.',
   expression1: '장래 꿈',
   expression2: '과거의 경험',
   expression3: '꿈을 통해서 실현하고 싶은 일',
