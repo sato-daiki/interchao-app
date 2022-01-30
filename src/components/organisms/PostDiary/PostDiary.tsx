@@ -92,6 +92,7 @@ const PostDiary: React.FC<PostDiaryProps> = ({
   nativeLanguage,
   onPressSubmitModalLack,
   onPressCloseModalLack,
+  onPressWatchAdModalLack,
   onPressCloseModalPublish,
   onPressCloseModalCancel,
   onClosePostDiary,
@@ -157,6 +158,7 @@ const PostDiary: React.FC<PostDiaryProps> = ({
         learnLanguage={learnLanguage}
         onPressSubmit={onPressSubmitModalLack}
         onPressClose={onPressCloseModalLack}
+        onPressWatchAd={onPressWatchAdModalLack}
       />
       <ModalPublish
         visible={isModalAlert}

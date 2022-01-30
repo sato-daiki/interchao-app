@@ -9,7 +9,6 @@ interface ErrorAlert {
 }
 
 export const alert = ({ err, onPressOk }: ErrorAlert): void => {
-  const title = 'エラー';
   let { message } = err;
 
   if (err.code) {
@@ -30,10 +29,10 @@ export const alert = ({ err, onPressOk }: ErrorAlert): void => {
   }
   if (Platform.OS === 'web') {
     // @ts-ignore
-    const res = window.confirm(`${title}\n${message}`);
+    const res = window.confirm(`${I18n.t('common.error')}\n${message}`);
     if (res && onPressOk) onPressOk();
   } else {
-    Alert.alert(title, message, [
+    Alert.alert(I18n.t('common.error'), message, [
       {
         text: 'OK',
         onPress: onPressOk,

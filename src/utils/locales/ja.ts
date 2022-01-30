@@ -73,7 +73,7 @@ const web = {
   exampleDetailText3: '最後に総評をもらいました',
   startTitle: 'さっそく始めてみよう',
   startText:
-    'アプリインストールで100pt（10日記分）が貰えます。早速日記を書いて添削してもらおう！',
+    'アプリインストールで30pt（3日記分）が貰えます。早速日記を書いて添削してもらおう！',
   operator: '運営者',
 };
 
@@ -127,6 +127,7 @@ const errorMessage = {
     '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは日記を添削することで溜めることができます',
   exceedingCharacter:
     '文字数オーバーです。{{textLength}}以下で投稿してください',
+  video: '動画再生においてエラーが発生しました',
 };
 const app = {
   updateTitle: '最新版が利用可能です',
@@ -247,6 +248,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: 'マイページ',
   editButton: '編集する',
+  adGetPoints: '動画広告を見て{{points}}ポイント獲得',
+  timeOut: '次の動画広告を見れる時刻 {{activeHour}}',
 };
 
 const notice = {
@@ -552,6 +555,11 @@ const modalBlock = {
   unblockedEndMessage: '相手のプロフィールからいつでもブロックができます。',
 };
 
+const modalAdPointsGet = {
+  title: 'ポイント獲得',
+  text: '動画視聴ありがとうございます。{{getPoints}}ポイント獲得。',
+};
+
 const modalCorrectingDone = {
   title: '添削完了',
   text: '添削ありがとうございます。{{getPoints}}ポイント獲得。',
@@ -571,9 +579,10 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'ポイント不足',
   text:
-    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を添削すると10ポイントが貰えます。\n\n下書き保存はポイントの消費なしでできます。',
+    'ポイントが足りません。日記を投稿するには{{learnCharacters}}文字ごとに10ポイントが必要です。\n\n日記を添削する、または、動画広告を見ると10ポイントが貰えます。下書き保存はポイントの消費なしでできます。',
   submit: '続ける',
   close: '添削する日記を探す',
+  watchAd: '動画広告を見る',
 };
 
 const modalSendEmail = {
@@ -944,6 +953,7 @@ const ja = {
   modalAlertPublish,
   modalAppReviewRequest,
   modalBlock,
+  modalAdPointsGet,
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,
