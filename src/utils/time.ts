@@ -83,7 +83,7 @@ export const getAlgoliaDate = (timestamp: any): string => {
     return moment.unix(timestamp.seconds).format('Y-M-D HH:mm');
   }
   // eslint-disable-next-line no-underscore-dangle
-  return moment.unix(timestamp._seconds).format('Y-M-D H:m');
+  return moment.unix(timestamp._seconds).format('Y-M-D HH:mm');
 };
 
 export const getShortDaysName = (days: (number | undefined)[]): string => {
@@ -102,4 +102,29 @@ export const addDay = (
   return moment(day)
     .add(num, unit)
     .toDate();
+};
+
+export const checkHourDiff = (date: any | null, hour: number): boolean => {
+  const timestamp = getAlgoliaDate(date);
+  if (!timestamp) return true;
+
+  const dateTo = moment(new Date());
+  const dateFrom = moment(timestamp);
+
+  if (date) {
+    const diffTime = dateTo.diff(dateFrom, 'hours');
+    if (diffTime > hour) {
+      return true;
+    }
+    return false;
+  }
+  return true;
+};
+
+export const getActiveHour = (date: any, hour: number): string | null => {
+  const timestamp = getAlgoliaDate(date);
+  if (!timestamp) return null;
+  return moment(timestamp)
+    .add(hour, 'hour')
+    .format('HH:mm');
 };

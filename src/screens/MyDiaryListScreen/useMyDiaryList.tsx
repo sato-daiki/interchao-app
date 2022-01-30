@@ -81,7 +81,7 @@ export const useMyDiaryList = ({
             readingNext: false,
           });
         }
-      } catch (err) {
+      } catch (err: any) {
         setFetchInfo({
           ...fetchInfo,
           readingNext: false,
@@ -122,18 +122,12 @@ export const useMyDiaryList = ({
       });
 
       setIsInitialLoading(false);
-    } catch (err) {
+    } catch (err: any) {
       setIsInitialLoading(false);
       setRefreshing(false);
       alert({ err });
     }
-  }, [
-    localStatus.myDiaryListView,
-    setDiaries,
-    setDiaryTotalNum,
-    setFetchInfo,
-    uid,
-  ]);
+  }, [localStatus.myDiaryListView, setDiaries, setDiaryTotalNum, setFetchInfo, uid]);
 
   useEffect(() => {
     console.log('useEffect');
@@ -151,12 +145,7 @@ export const useMyDiaryList = ({
     };
     f();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    fetchInfo.readingNext,
-    localStatus.myDiaryListView,
-    isInitialLoading,
-    refreshing,
-  ]);
+  }, [fetchInfo.readingNext, localStatus.myDiaryListView, isInitialLoading, refreshing]);
 
   return {
     isInitialLoading,

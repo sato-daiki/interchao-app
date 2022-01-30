@@ -15,7 +15,7 @@ const getTimeInfo = (timeInfo: any) => {
   }
   return {
     ...timeInfo,
-    customTimeInfos: timeInfo.customTimeInfos.map(item => {
+    customTimeInfos: timeInfo.customTimeInfos.map((item) => {
       return {
         ...item,
         timeStart: item.timeStart.toDate(),
@@ -28,11 +28,7 @@ const getTimeInfo = (timeInfo: any) => {
 // ユーザ情報取得
 export const getUser = async (uid: string): Promise<User | null> => {
   try {
-    const doc = await firebase
-      .firestore()
-      .collection('users')
-      .doc(uid)
-      .get();
+    const doc = await firebase.firestore().collection('users').doc(uid).get();
 
     const data = doc.data();
     console.log('data', data);

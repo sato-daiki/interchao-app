@@ -1,39 +1,17 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { CheckTextInput } from '@/components/molecules';
-import {
-  Space,
-  SubmitButton,
-  LoadingModal,
-  HeaderText,
-} from '@/components/atoms';
+import { Space, SubmitButton, LoadingModal, HeaderText } from '@/components/atoms';
 
-import {
-  AuthNavigationProp,
-  AuthStackParamList,
-} from '@/navigations/AuthNavigator';
+import { AuthNavigationProp, AuthStackParamList } from '@/navigations/AuthNavigator';
 import firebase from '@/constants/firebase';
 import { AppReviewState, Profile, User } from '@/types';
-import {
-  primaryColor,
-  fontSizeM,
-  subTextColor,
-  fontSizeL,
-} from '@/styles/Common';
+import { primaryColor, fontSizeM, subTextColor, fontSizeL } from '@/styles/Common';
 import { track, events } from '@/utils/Analytics';
-import {
-  emailInputError,
-  emailValidate,
-  emaillExistCheck,
-} from '@/utils/common';
+import { emailInputError, emailValidate, emaillExistCheck } from '@/utils/common';
 import I18n from '@/utils/I18n';
 import { CompositeNavigationProp } from '@react-navigation/native';
 
@@ -119,10 +97,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
   }, []);
 
   const createUser = useCallback(
-    async (
-      credentUser: firebase.User,
-      loginMethod: LoginMethod
-    ): Promise<void> => {
+    async (credentUser: firebase.User, loginMethod: LoginMethod): Promise<void> => {
       const appReviewState: AppReviewState = 'yet';
 
       const userInfo = {
@@ -131,7 +106,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
         onboarding: false,
-        points: 100,
+        points: 30,
         expoPushToken: null,
         correctingObjectID: null,
         correctingCorrectedNum: null,
@@ -156,6 +131,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
         lastDiaryPostedAt: null,
         lastModalAppSuggestionAt: null,
         lastModalNotficationSettingAt: null,
+        lastWatchAdAt: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
@@ -183,14 +159,8 @@ const SignUpScreen: React.FC<ScreenType> = ({
 
       const batch = firebase.firestore().batch();
       batch.set(firebase.firestore().doc(`users/${credentUser.uid}`), userInfo);
-      batch.set(
-        firebase.firestore().doc(`profiles/${credentUser.uid}`),
-        profileInfo
-      );
-      batch.set(
-        firebase.firestore().doc(`userReviews/${credentUser.uid}`),
-        userReviewInfo
-      );
+      batch.set(firebase.firestore().doc(`profiles/${credentUser.uid}`), profileInfo);
+      batch.set(firebase.firestore().doc(`userReviews/${credentUser.uid}`), userReviewInfo);
       await batch.commit();
       signIn(credentUser.uid);
       setUser({ ...userInfo, uid: credentUser.uid });
@@ -206,7 +176,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
       setProfile,
       setUser,
       signIn,
-    ]
+    ],
   );
 
   const onPressSkip = useCallback(async (): Promise<void> => {
@@ -217,7 +187,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
       if (credent.user) {
         createUser(credent.user, 'anonymously');
       }
-    } catch (err) {
+    } catch (err: any) {
       emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
       setIsLoading(false);
     }
@@ -225,9 +195,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <HeaderText text={I18n.t('common.skip')} onPress={onPressSkip} />
-      ),
+      headerRight: () => <HeaderText text={I18n.t('common.skip')} onPress={onPressSkip} />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -236,13 +204,11 @@ const SignUpScreen: React.FC<ScreenType> = ({
     setIsLoading(true);
     clearErrorMessage();
     try {
-      const credent = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
+      const credent = await firebase.auth().createUserWithEmailAndPassword(email, password);
       if (credent.user) {
         createUser(credent.user, 'email');
       }
-    } catch (err) {
+    } catch (err: any) {
       emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
       setIsLoading(false);
     }
@@ -304,12 +270,12 @@ const SignUpScreen: React.FC<ScreenType> = ({
           onChangeText={(text: string): void => setEmail(text)}
           onBlur={onBlurEmail}
           maxLength={50}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
+          placeholder='Email'
+          keyboardType='email-address'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
+          underlineColorAndroid='transparent'
+          returnKeyType='done'
           isLoading={isEmailLoading}
           isCheckOk={isEmailCheckOk}
           errorMessage={errorEmail}
@@ -321,12 +287,12 @@ const SignUpScreen: React.FC<ScreenType> = ({
           onChangeText={(text: string): void => setPassword(text)}
           onBlur={onBlurPassword}
           maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
+          placeholder='Password'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           secureTextEntry
-          returnKeyType="done"
+          returnKeyType='done'
           isCheckOk={isPasswordCheckOk}
           errorMessage={errorPassword}
         />

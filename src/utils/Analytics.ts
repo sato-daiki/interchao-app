@@ -17,9 +17,7 @@ interface Property {
 }
 
 const isProduction = !__DEV__;
-const apiKey = isProduction
-  ? PRODUCTION_AMPLITUDE_API_KEY
-  : DEVELOPMENT_AMPLITUDE_API_KEY;
+const apiKey = isProduction ? PRODUCTION_AMPLITUDE_API_KEY : DEVELOPMENT_AMPLITUDE_API_KEY;
 
 const createPropertiesUser = (user: User, profile: Profile): Property => {
   return {
@@ -50,7 +48,7 @@ export const track = (eventName: string, properties?: any): void => {
     } else {
       Amplitude.logEventAsync(eventName);
     }
-  } catch (err) {
+  } catch (err: any) {
     captureException(err);
   }
 };

@@ -9,7 +9,7 @@ import { StyleSheet } from 'react-native';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { mainColor, maxLayoutChange } from '../styles/Common';
 import I18n from '../utils/I18n';
-import { TabIcon, TabLabel } from '../components/molecules';
+import { TabIcon } from '../components/molecules';
 import PostDiaryScreenContainer from '../containers/PostDiaryScreenContainer';
 import MyDiaryTabNavigator, {
   MyDiaryTabStackParamList,
@@ -17,7 +17,9 @@ import MyDiaryTabNavigator, {
 import TeachDiaryTabNavigator, {
   TeachDiaryTabStackParamList,
 } from './TeachDiaryTabNavigator';
-import MyPageTabNavigator from './MyPageTabNavigator';
+import MyPageTabNavigator, {
+  MyPageTabStackParamList,
+} from './MyPageTabNavigator';
 import { MainStackParamList, MainNavigationProp } from './MainNavigator';
 import CustomDrawerContent from '../components/web/organisms/CustomDrawerContent';
 import { DrawerLabel } from '../components/web/molecules';
@@ -31,7 +33,7 @@ export type HomeBottomParamList = {
   MyDiaryTab: { screen: keyof MyDiaryTabStackParamList };
   PostDiaryTab: undefined;
   TeachDiaryTab: { screen: keyof TeachDiaryTabStackParamList };
-  MyPageTab: undefined;
+  MyPageTab: { screen: keyof MyPageTabStackParamList };
 };
 
 const styles = StyleSheet.create({
@@ -163,9 +165,7 @@ const HomeBottomTabNavigator = (): JSX.Element => {
         name="TeachDiaryTab"
         component={TeachDiaryTabNavigator}
         options={{
-          tabBarLabel: ({ color }: { color: string }): JSX.Element => (
-            <TabLabel color={color} />
-          ),
+          tabBarLabel: I18n.t('mainTab.teachDiary'),
           tabBarIcon: ({ color }: { color: string }): JSX.Element => (
             <MaterialCommunityIcons name="spellcheck" size={25} color={color} />
           ),
