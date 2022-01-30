@@ -28,7 +28,6 @@ export const alert = ({ err, onPressOk }: ErrorAlert): void => {
     message = I18n.t('errorMessage.defaultError', { message });
   }
   if (Platform.OS === 'web') {
-    // @ts-ignore
     const res = window.confirm(`${I18n.t('common.error')}\n${message}`);
     if (res && onPressOk) onPressOk();
   } else {

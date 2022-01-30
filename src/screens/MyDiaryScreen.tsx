@@ -3,22 +3,14 @@ import { StyleSheet, View, Dimensions, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { TabView } from 'react-native-tab-view';
-import {
-  connectActionSheet,
-  useActionSheet,
-} from '@expo/react-native-action-sheet';
+import { connectActionSheet, useActionSheet } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 
 import { ModalConfirm } from '@/components/organisms';
-import {
-  LoadingModal,
-  HeaderIcon,
-  HeaderText,
-  DefaultHeaderBack,
-} from '@/components/atoms';
+import { LoadingModal, HeaderIcon, HeaderText, DefaultHeaderBack } from '@/components/atoms';
 import MyDiaryMenu from '@/components/web/organisms/MyDiaryMenu';
 import Posted from '@/components/organisms/Posted';
 import FairCopy from '@/components/organisms/FairCopy';
@@ -99,9 +91,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
-  const [fairCopyTitle, setFairCopyTitle] = useState<string>(
-    initFairCopyTitle()
-  );
+  const [fairCopyTitle, setFairCopyTitle] = useState<string>(initFairCopyTitle());
   const [fairCopyText, setFairCopyText] = useState<string>(initFairCopyText());
 
   const [index, setIndex] = useState(0);
@@ -114,7 +104,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     minDeviceWidth: 1224,
   });
 
-  const showModalDelete = useCallback((i: number) => {
+  const showModalDelete = useCallback((i?: number) => {
     switch (i) {
       case 0:
         setIsModalDelete(true);
@@ -131,7 +121,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         destructiveButtonIndex: 0,
         cancelButtonIndex: 1,
       },
-      showModalDelete
+      showModalDelete,
     );
   }, [showActionSheetWithOptions, showModalDelete]);
 
@@ -140,14 +130,11 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
 
     setIsLoading(true);
 
-    await firebase
-      .firestore()
-      .doc(`diaries/${diary.objectID}`)
-      .update({
-        fairCopyTitle,
-        fairCopyText,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    await firebase.firestore().doc(`diaries/${diary.objectID}`).update({
+      fairCopyTitle,
+      fairCopyText,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 
     editDiary(diary.objectID, { ...diary, fairCopyTitle, fairCopyText });
     setIsLoading(false);
@@ -157,11 +144,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const onPressDelete = useCallback(() => {
     if (!diary || !diary.objectID) return;
     setIsLoading(true);
-    firebase
-      .firestore()
-      .collection('diaries')
-      .doc(diary.objectID)
-      .delete();
+    firebase.firestore().collection('diaries').doc(diary.objectID).delete();
     setIsModalDelete(false);
     // reduxの設定
     deleteDiary(diary.objectID);
@@ -188,7 +171,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
     (appReviewState: AppReviewState) => {
       setUser({ ...user, appReviewState });
     },
-    [setUser, user]
+    [setUser, user],
   );
 
   const onCloseModalAppReviewRequest = useCallback((): void => {
@@ -213,18 +196,10 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         if (isDesktopOrLaptopDevice) {
           return <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />;
         }
-        return (
-          <HeaderIcon
-            icon="community"
-            name="dots-horizontal"
-            onPress={onPressMore}
-          />
-        );
+        return <HeaderIcon icon='community' name='dots-horizontal' onPress={onPressMore} />;
       }
       if (index === 1) {
-        return (
-          <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
-        );
+        return <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />;
       }
       return <View />;
     }
@@ -250,7 +225,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       ) : (
         <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
       ),
-    [isEditing, onPressBack, onPressClose]
+    [isEditing, onPressBack, onPressClose],
   );
 
   useEffect(() => {
@@ -267,7 +242,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         userName,
       });
     },
-    [navigation]
+    [navigation],
   );
 
   const onPressReview = useCallback(
@@ -285,7 +260,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       });
       setIsLoading(false);
     },
-    [diary, isLoading, navigation]
+    [diary, isLoading, navigation],
   );
 
   const checkPermissions = useCallback(async (): Promise<boolean> => {
@@ -402,10 +377,10 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
       onPressReview,
       onPressUser,
       profile,
-    ]
+    ],
   );
 
-  const renderTabBar = useCallback(props => {
+  const renderTabBar = useCallback((props) => {
     return <MyDiaryTabBar {...props} />;
   }, []);
 
@@ -435,7 +410,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         visible={isModalConfirmation}
         title={I18n.t('common.confirmation')}
         message={I18n.t('myDiary.closeAlert')}
-        mainButtonText="OK"
+        mainButtonText='OK'
         onPressMain={onClose}
         onPressClose={onPressCloseModalConfirmation}
       />
@@ -443,7 +418,7 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         visible={isModalAlertAudio}
         title={I18n.t('common.confirmation')}
         message={I18n.t('myDiary.permissionAudio')}
-        mainButtonText="OK"
+        mainButtonText='OK'
         onPressMain={onPressCloseModalAlertAudio}
         onPressClose={onPressCloseModalAlertAudio}
       />

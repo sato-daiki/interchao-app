@@ -18,12 +18,9 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
     const f = async () => {
       AdMobRewarded.addEventListener(
         'rewardedVideoUserDidEarnReward',
-        rewardedVideoUserDidEarnReward
+        rewardedVideoUserDidEarnReward,
       );
-      AdMobRewarded.addEventListener(
-        'rewardedVideoDidFailToLoad',
-        rewardedVideoDidFailToLoad
-      );
+      AdMobRewarded.addEventListener('rewardedVideoDidFailToLoad', rewardedVideoDidFailToLoad);
     };
 
     f();
@@ -51,12 +48,10 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
     setIsLoading(true);
     try {
       await setTestDeviceIDAsync('EMULATOR');
-      await AdMobRewarded.setAdUnitID(
-        Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID
-      );
+      await AdMobRewarded.setAdUnitID(Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID);
       await AdMobRewarded.requestAdAsync();
       await AdMobRewarded.showAdAsync();
-    } catch (err) {
+    } catch (err: any) {
       console.warn(err);
       rewardedVideoDidFailToLoad();
     }

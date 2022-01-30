@@ -16,7 +16,8 @@ export const getUuid = async (): Promise<string> =>
 
 export const emailValidate = (email: string): boolean => {
   // eslint-disable-next-line
-  const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+  const expression =
+    /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
 
   return !expression.test(String(email).toLowerCase());
 };
@@ -25,7 +26,7 @@ export const emaillExistCheck = async (email: string): Promise<boolean> => {
   const providers = await firebase.auth().fetchSignInMethodsForEmail(email);
   if (
     providers.findIndex(
-      p => p === firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD
+      (p) => p === firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
     ) !== -1
   ) {
     return true;
@@ -37,7 +38,7 @@ export const emailInputError = (
   err: Error & { code?: string },
   setErrorPassword: (message: string) => void,
   setErrorEmail: (message: string) => void,
-  clearErrorMessage: () => void
+  clearErrorMessage: () => void,
 ): void => {
   switch (err.code) {
     case 'auth/weak-password':
@@ -65,7 +66,7 @@ export const passwordInputError = (
   err: Error & { code?: string },
   setErrorCurrentPassword: (message: string) => void,
   setErrorNewPassword: (message: string) => void,
-  clearErrorMessage: () => void
+  clearErrorMessage: () => void,
 ): void => {
   switch (err.code) {
     case 'auth/weak-password':
@@ -109,10 +110,7 @@ export const getVersionText = (): string => {
   return versionText;
 };
 
-export const diaryShare = async (
-  nativeLanguage: Language,
-  imageUrl: string
-): Promise<void> => {
+export const diaryShare = async (nativeLanguage: Language, imageUrl: string): Promise<void> => {
   const shareUrl = encodeURI(url);
   const message = `#Interchao ${shareUrl}`;
   if (Platform.OS === 'ios') {
@@ -137,14 +135,10 @@ export const appShare = async (nativeLanguage: Language): Promise<void> => {
 
 export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
   const shareMessage = encodeURI(url);
-  Linking.openURL(
-    `https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`
-  );
+  Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`);
 };
 
-export const facebookShare = async (
-  nativeLanguage: Language
-): Promise<void> => {
+export const facebookShare = async (nativeLanguage: Language): Promise<void> => {
   const shareMessage = encodeURI(url);
   Linking.canOpenURL('twitter://post')
     .then(() => {
@@ -164,12 +158,7 @@ interface EachOS {
   other?: number | string | undefined;
 }
 
-export const getEachOS = ({
-  ios,
-  android,
-  web,
-  other,
-}: EachOS): number | string | undefined => {
+export const getEachOS = ({ ios, android, web, other }: EachOS): number | string | undefined => {
   if (Platform.OS === 'ios') {
     return ios;
   }
@@ -183,22 +172,18 @@ export const getEachOS = ({
 };
 
 // 何日前かをチェックする
-export const getIsAfterDay = (
-  targetAt: firestore.Timestamp,
-  days: number
-): boolean => {
+export const getIsAfterDay = (targetAt: firestore.Timestamp, days: number): boolean => {
   try {
     const dt = new Date();
     dt.setDate(dt.getDate() - days);
     return targetAt.toDate() < dt;
-  } catch (err) {
+  } catch (err: any) {
     return false;
   }
 };
 
 export const getDateToStrDay = (targetDay: Date): string => {
-  return `${targetDay.getFullYear()}${targetDay.getMonth() +
-    1}${targetDay.getDate()}`;
+  return `${targetDay.getFullYear()}${targetDay.getMonth() + 1}${targetDay.getDate()}`;
 };
 
 export const getLastMonday = (targetDay: Date): string => {

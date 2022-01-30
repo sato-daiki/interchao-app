@@ -78,12 +78,7 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: React.FC<ScreenType> = ({
-  navigation,
-  user,
-  profile,
-  signOut,
-}) => {
+const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOut }) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -97,7 +92,7 @@ const SettingScreen: React.FC<ScreenType> = ({
       }
       track(events.SIGN_OUT);
       signOut();
-    } catch (err) {
+    } catch (err: any) {
       alert({ err });
     }
   }, [currentUser, signOut]);
@@ -121,10 +116,7 @@ const SettingScreen: React.FC<ScreenType> = ({
       />
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
       {Platform.OS !== 'web' && (
-        <OptionItem
-          title={I18n.t('setting.reminder')}
-          onPress={onPressReminder}
-        />
+        <OptionItem title={I18n.t('setting.reminder')} onPress={onPressReminder} />
       )}
       <OptionItem
         title={I18n.t('setting.notice')}

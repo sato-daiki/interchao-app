@@ -6,10 +6,7 @@ import { Language } from '../types';
 
 const endpoint = 'https://translation.googleapis.com/language/translate/v2';
 
-const googleTranslate = async (
-  text: string,
-  targetLanguage: Language
-): Promise<string> => {
+const googleTranslate = async (text: string, targetLanguage: Language): Promise<string> => {
   const options = {
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
@@ -25,7 +22,7 @@ const googleTranslate = async (
     if (data.data.translations[0]) {
       return data.data.translations[0].translatedText;
     }
-  } catch (err) {
+  } catch (err: any) {
     captureException(err);
   }
   return text;

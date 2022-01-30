@@ -3,12 +3,7 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import TopReviewList from '@/components/organisms/TopReviewList';
-import {
-  primaryColor,
-  fontSizeM,
-  subTextColor,
-  fontSizeS,
-} from '../styles/Common';
+import { primaryColor, fontSizeM, subTextColor, fontSizeS } from '../styles/Common';
 import firebase from '@/constants/firebase';
 import { Profile, UserReview, User } from '../types';
 import {
@@ -20,10 +15,7 @@ import {
   HeaderIcon,
   LoadingModal,
 } from '../components/atoms';
-import {
-  ProfileLanguage,
-  ProfileNationalityCode,
-} from '../components/molecules';
+import { ProfileLanguage, ProfileNationalityCode } from '../components/molecules';
 import { getUserReview } from '../utils/userReview';
 import I18n from '../utils/I18n';
 import {
@@ -97,12 +89,7 @@ const CHECK_HOUR = 3;
 /**
  * マイページ
  */
-const MyPageScreen: React.FC<ScreenType> = ({
-  navigation,
-  profile,
-  user,
-  setUser,
-}) => {
+const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
   const [isModalAdPointsGet, setIsModalAdPointsGet] = useState(false);
 
@@ -143,8 +130,8 @@ const MyPageScreen: React.FC<ScreenType> = ({
     navigation.setOptions({
       headerRight: (): JSX.Element => (
         <HeaderIcon
-          icon="material"
-          name="settings"
+          icon='material'
+          name='settings'
           onPress={(): void => navigation.navigate('Setting')}
         />
       ),
@@ -176,7 +163,7 @@ const MyPageScreen: React.FC<ScreenType> = ({
     (uid: string, userName: string) => {
       navigation.navigate('UserProfile', { userName });
     },
-    [navigation]
+    [navigation],
   );
 
   const onPressMoreReview = useCallback(() => {
@@ -198,7 +185,7 @@ const MyPageScreen: React.FC<ScreenType> = ({
         getPoints={10}
         onPressClose={onPressCloseAdPointsGet}
       />
-      <LoadingModal visible={isLoading} text="loading" />
+      <LoadingModal visible={isLoading} text='loading' />
       <View style={styles.main}>
         <View style={styles.header}>
           <ProfileIconHorizontal
@@ -206,17 +193,11 @@ const MyPageScreen: React.FC<ScreenType> = ({
             photoUrl={profile.photoUrl}
             nativeLanguage={profile.nativeLanguage}
           />
-          <SmallButtonWhite
-            title={I18n.t('myPage.editButton')}
-            onPress={onPressEdit}
-          />
+          <SmallButtonWhite title={I18n.t('myPage.editButton')} onPress={onPressEdit} />
         </View>
         {profile.name ? <Text style={styles.name}>{profile.name}</Text> : null}
         {userReview ? (
-          <ScoreStar
-            score={userReview.score}
-            reviewNum={userReview.reviewNum}
-          />
+          <ScoreStar score={userReview.score} reviewNum={userReview.reviewNum} />
         ) : null}
         <Space size={8} />
         <Text style={styles.introduction}>{profile.introduction}</Text>
@@ -230,9 +211,7 @@ const MyPageScreen: React.FC<ScreenType> = ({
               onPress={onPressAdPointGet}
             />
           ) : (
-            <Text style={styles.timeOut}>
-              {I18n.t('myPage.timeOut', { activeHour })}
-            </Text>
+            <Text style={styles.timeOut}>{I18n.t('myPage.timeOut', { activeHour })}</Text>
           )}
         </View>
         <Space size={8} />

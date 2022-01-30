@@ -1,19 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  ListRenderItem,
-  SafeAreaView,
-} from 'react-native';
+import { View, StyleSheet, FlatList, ListRenderItem, SafeAreaView } from 'react-native';
 import '@expo/match-media';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import {
-  HeaderText,
-  LoadingModal,
-  SmallButtonSubmit,
-} from '@/components/atoms';
+import { HeaderText, LoadingModal, SmallButtonSubmit } from '@/components/atoms';
 import I18n from '@/utils/I18n';
 import { User, Diary } from '@/types';
 import {
@@ -121,7 +111,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
             readingNext: false,
           });
         }
-      } catch (err) {
+      } catch (err: any) {
         setFetchInfo({
           ...fetchInfo,
           readingNext: false,
@@ -151,18 +141,15 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
 
     const batch = firebase.firestore().batch();
 
-    checkedIds.current.forEach(id => {
-      const ref = firebase
-        .firestore()
-        .collection('diaries')
-        .doc(id);
+    checkedIds.current.forEach((id) => {
+      const ref = firebase.firestore().collection('diaries').doc(id);
       batch.delete(ref);
     });
 
     await batch.commit();
     setIsLoading(false);
 
-    checkedIds.current.forEach(id => {
+    checkedIds.current.forEach((id) => {
       deleteDiary(id);
     });
     navigation.goBack();
@@ -171,7 +158,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
   const handlePress = useCallback((objectID: string) => {
     const res = checkedIds.current.includes(objectID);
     if (res) {
-      const newCheckedIds = checkedIds.current.filter(id => id !== objectID);
+      const newCheckedIds = checkedIds.current.filter((id) => id !== objectID);
       checkedIds.current = newCheckedIds;
     } else {
       checkedIds.current = [...checkedIds.current, objectID];
@@ -191,7 +178,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
     ({ item }): JSX.Element => {
       return <EditMyDiaryListItem item={item} handlePress={handlePress} />;
     },
-    [handlePress]
+    [handlePress],
   );
 
   return (
@@ -203,7 +190,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
           isLoading={isLoading}
           title={I18n.t('common.confirmation')}
           message={I18n.t('myDiary.confirmMessage')}
-          mainButtonText="OK"
+          mainButtonText='OK'
           onPressMain={onDeleteDiaries}
           onPressClose={handleCloseModalDelete}
         />
@@ -215,9 +202,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
         />
         <View style={styles.buttonContainer}>
           <SmallButtonSubmit
-            titleStyle={
-              checkedIdsLength === 0 ? styles.disableTitileText : undefined
-            }
+            titleStyle={checkedIdsLength === 0 ? styles.disableTitileText : undefined}
             disable={checkedIdsLength === 0}
             title={`${I18n.t('common.delete')}${
               checkedIdsLength === 0 ? '' : `(${checkedIds.current.length})`

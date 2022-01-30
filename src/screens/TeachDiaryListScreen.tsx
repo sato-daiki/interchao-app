@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  Platform,
-  ListRenderItem,
-} from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl, Platform, ListRenderItem } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -94,10 +87,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerTitle: (): JSX.Element => (
-        <SearchBarButton
-          title={I18n.t('teachDiaryList.searchText')}
-          onPress={onPressSearch}
-        />
+        <SearchBarButton title={I18n.t('teachDiaryList.searchText')} onPress={onPressSearch} />
       ),
       // headerRight: (): JSX.Element =>
       //   isDesktopOrLaptopDevice ? (
@@ -108,8 +98,8 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
       headerRight: (): JSX.Element | null =>
         Platform.OS === 'web' ? null : (
           <HeaderIcon
-            icon="community"
-            name="dots-horizontal"
+            icon='community'
+            name='dots-horizontal'
             onPress={(): void => setIsMenu(true)}
           />
         ),
@@ -131,7 +121,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
         const fillterUids = getExceptUser(uids);
         const fillterLanguages = getFillterLanguages(
           profile.nativeLanguage,
-          profile.spokenLanguages
+          profile.spokenLanguages,
         );
 
         filters.current = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
@@ -144,7 +134,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
 
         // reduxで保持
         setTeachDiaries(res.hits as Diary[]);
-      } catch (err) {
+      } catch (err: any) {
         setIsLoading(false);
         setRefreshing(false);
         alert({ err });
@@ -152,12 +142,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
       setIsLoading(false);
     };
     f();
-  }, [
-    profile.nativeLanguage,
-    profile.spokenLanguages,
-    setTeachDiaries,
-    user.uid,
-  ]);
+  }, [profile.nativeLanguage, profile.spokenLanguages, setTeachDiaries, user.uid]);
 
   // 初期データの取得
   useEffect(() => {
@@ -198,7 +183,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
             page.current = nextPage;
             readingNext.current = false;
           }
-        } catch (err) {
+        } catch (err: any) {
           readingNext.current = false;
           alert({ err });
         }
@@ -215,19 +200,16 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
         userName: item.profile.userName,
       });
     },
-    [navigation]
+    [navigation],
   );
 
   const onPressTutorial = useCallback((): void => {
     const f = async (): Promise<void> => {
       setIsTutorialLoading(true);
-      await firebase
-        .firestore()
-        .doc(`users/${user.uid}`)
-        .update({
-          tutorialTeachDiaryList: true,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+      await firebase.firestore().doc(`users/${user.uid}`).update({
+        tutorialTeachDiaryList: true,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
       setUser({
         ...user,
         tutorialTeachDiaryList: true,
@@ -241,33 +223,24 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     (uid: string, userName: string) => {
       navigation.navigate('UserProfile', { userName });
     },
-    [navigation]
+    [navigation],
   );
 
   const renderItem: ListRenderItem<Diary> = useCallback(
     ({ item }) => {
-      return (
-        <TeachDiaryListItem
-          item={item}
-          onPressUser={onPressUser}
-          onPressItem={onPressItem}
-        />
-      );
+      return <TeachDiaryListItem item={item} onPressUser={onPressUser} onPressItem={onPressItem} />;
     },
-    [onPressItem, onPressUser]
+    [onPressItem, onPressUser],
   );
 
   const listHeaderComponent = useCallback(
     () => <GrayHeader title={I18n.t('teachDiaryList.diaryList')} />,
-    []
+    [],
   );
 
   const listEmptyComponent =
     !isLoading && !refreshing && teachDiaries.length < 1 ? (
-      <EmptyList
-        message={I18n.t('teachDiaryList.empty')}
-        iconName="book-open-variant"
-      />
+      <EmptyList message={I18n.t('teachDiaryList.empty')} iconName='book-open-variant' />
     ) : null;
   return (
     <View style={styles.container}>
@@ -290,9 +263,7 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
         ListHeaderComponent={listHeaderComponent}
         ListEmptyComponent={listEmptyComponent}
         onEndReached={loadNextPage}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </View>
   );

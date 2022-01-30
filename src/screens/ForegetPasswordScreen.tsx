@@ -8,18 +8,10 @@ import { CheckTextInput } from '@/components/molecules';
 import { Space, SubmitButton, LoadingModal } from '@/components/atoms';
 
 import firebase from '@/constants/firebase';
-import {
-  primaryColor,
-  fontSizeM,
-  fontSizeL,
-  subTextColor,
-} from '@/styles/Common';
+import { primaryColor, fontSizeM, fontSizeL, subTextColor } from '@/styles/Common';
 import I18n from '@/utils/I18n';
 import { emailInputError, emailValidate } from '@/utils/common';
-import {
-  MyPageTabStackParamList,
-  MyPageTabNavigationProp,
-} from '@/navigations/MyPageTabNavigator';
+import { MyPageTabStackParamList, MyPageTabNavigationProp } from '@/navigations/MyPageTabNavigator';
 
 type NavigationProp = CompositeNavigationProp<
   StackNavigationProp<MyPageTabStackParamList, 'ForegetPassword'>,
@@ -71,7 +63,7 @@ const ForegetPasswordScreen: React.FC<ScreenType> = ({ navigation }) => {
       setIsLoading(true);
       await firebase.auth().sendPasswordResetEmail(email);
       setIsModal(true);
-    } catch (err) {
+    } catch (err: any) {
       emailInputError(err, () => undefined, setErrorEmail, clearErrorMessage);
     }
     setIsLoading(false);
@@ -108,12 +100,12 @@ const ForegetPasswordScreen: React.FC<ScreenType> = ({ navigation }) => {
         onChangeText={onChangeText}
         onBlur={onBlurEmail}
         maxLength={50}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
+        placeholder='Email'
+        keyboardType='email-address'
+        autoCapitalize='none'
         autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
+        underlineColorAndroid='transparent'
+        returnKeyType='done'
         errorMessage={errorEmail}
       />
       <Space size={32} />

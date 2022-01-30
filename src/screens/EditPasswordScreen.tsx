@@ -4,12 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { CheckTextInput } from '@/components/molecules';
-import {
-  Space,
-  SubmitButton,
-  LoadingModal,
-  LinkText,
-} from '@/components/atoms';
+import { Space, SubmitButton, LoadingModal, LinkText } from '@/components/atoms';
 
 import I18n from '@/utils/I18n';
 import { passwordInputError } from '@/utils/common';
@@ -41,9 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditPasswordScreen: React.FC<ScreenType> = ({
-  navigation,
-}): JSX.Element => {
+const EditPasswordScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [errorCurrentPassword, setErrorCurrentPassword] = useState('');
@@ -62,19 +55,14 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
       if (!currentUser || !currentUser.email) return;
       const credential = firebase.auth.EmailAuthProvider.credential(
         currentUser.email,
-        currentPassword
+        currentPassword,
       );
       setIsLoading(true);
       await currentUser.reauthenticateWithCredential(credential);
       await currentUser.updatePassword(newPassword);
       navigation.goBack();
-    } catch (err) {
-      passwordInputError(
-        err,
-        setErrorCurrentPassword,
-        setErrorNewPassword,
-        clearErrorMessage
-      );
+    } catch (err: any) {
+      passwordInputError(err, setErrorCurrentPassword, setErrorNewPassword, clearErrorMessage);
       setIsLoading(false);
     }
     setIsLoading(false);
@@ -96,20 +84,18 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.main}>
         <LoadingModal visible={isLoading} />
-        <Text style={styles.label}>
-          {I18n.t('editPassword.currentPassword')}
-        </Text>
+        <Text style={styles.label}>{I18n.t('editPassword.currentPassword')}</Text>
         <CheckTextInput
           value={currentPassword}
           onChangeText={(text: string): void => setCurrentPassword(text)}
           onBlur={onEndEditinCurrentPassword}
           maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
+          placeholder='Password'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           secureTextEntry
-          returnKeyType="done"
+          returnKeyType='done'
           errorMessage={errorCurrentPassword}
         />
         <Space size={16} />
@@ -119,12 +105,12 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
           onChangeText={(text: string): void => setNewPassword(text)}
           onBlur={onBlurNewPassword}
           maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
+          placeholder='Password'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           secureTextEntry
-          returnKeyType="done"
+          returnKeyType='done'
           errorMessage={errorNewPassword}
         />
         <Space size={32} />
@@ -141,10 +127,7 @@ const EditPasswordScreen: React.FC<ScreenType> = ({
         <Space size={16} />
         <Text style={styles.forgetText}>
           {I18n.t('editPassword.forgetText')}
-          <LinkText
-            onPress={onPressForegetPassword}
-            text={I18n.t('editPassword.link')}
-          />
+          <LinkText onPress={onPressForegetPassword} text={I18n.t('editPassword.link')} />
         </Text>
       </View>
     </KeyboardAwareScrollView>
