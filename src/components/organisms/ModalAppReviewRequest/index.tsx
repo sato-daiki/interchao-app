@@ -27,7 +27,7 @@ const ModalAppReviewRequest: React.FC<Props> = ({
   profile,
   onClose,
   updateAppReviewState,
-}: Props): JSX.Element | null => {
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const [isCommentBox, setIsCommentBox] = useState(false);

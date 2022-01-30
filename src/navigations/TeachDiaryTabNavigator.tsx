@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import I18n from '../utils/I18n';
 
@@ -10,15 +7,9 @@ import I18n from '../utils/I18n';
 import TeachDiaryListScreenContainer from '../containers/TeachDiaryListScreenContainer';
 import TeachDiaryScreenContainer from '../containers/TeachDiaryScreenContainer';
 import TeachDiarySearchScreenContainer from '../containers/TeachDiarySearchScreenContainer';
-import {
-  DefaultNavigationOptions,
-  DefaultSearchBarOptions,
-} from '../constants/NavigationOptions';
+import { DefaultNavigationOptions, DefaultSearchBarOptions } from '../constants/NavigationOptions';
 import { CommonStackParamList, createCommonNavigator } from './CommonNavigator';
-import {
-  HomeBottomParamList,
-  HomeBottomNavigationProp,
-} from './HomeBottomTabNavigator';
+import { HomeBottomParamList, HomeBottomNavigationProp } from './HomeBottomTabNavigator';
 
 export type TeachDiaryTabNavigationProp = CompositeNavigationProp<
   StackNavigationProp<HomeBottomParamList, 'TeachDiaryTab'>,
@@ -34,14 +25,14 @@ export type TeachDiaryTabStackParamList = {
 
 const TeachDiaryTabStack = createStackNavigator<TeachDiaryTabStackParamList>();
 
-const TeachDiaryTabNavigator = (): JSX.Element => {
+const TeachDiaryTabNavigator = () => {
   return (
     <TeachDiaryTabStack.Navigator
-      initialRouteName="TeachDiaryList"
+      initialRouteName='TeachDiaryList'
       screenOptions={DefaultNavigationOptions}
     >
       <TeachDiaryTabStack.Screen
-        name="TeachDiaryList"
+        name='TeachDiaryList'
         component={TeachDiaryListScreenContainer}
         options={{
           ...DefaultSearchBarOptions,
@@ -49,17 +40,14 @@ const TeachDiaryTabNavigator = (): JSX.Element => {
         }}
       />
       <TeachDiaryTabStack.Screen
-        name="TeachDiarySearch"
+        name='TeachDiarySearch'
         component={TeachDiarySearchScreenContainer}
         options={{
           headerShown: false,
           title: I18n.t('teachDiaryList.searchText'),
         }}
       />
-      <TeachDiaryTabStack.Screen
-        name="TeachDiary"
-        component={TeachDiaryScreenContainer}
-      />
+      <TeachDiaryTabStack.Screen name='TeachDiary' component={TeachDiaryScreenContainer} />
       {createCommonNavigator()}
     </TeachDiaryTabStack.Navigator>
   );

@@ -1,24 +1,8 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  ReactNode,
-  useRef,
-} from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  ActivityIndicator,
-  Platform,
-} from 'react-native';
+import React, { useCallback, useState, useEffect, ReactNode, useRef } from 'react';
+import { StyleSheet, ScrollView, View, Text, ActivityIndicator, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import {
-  connectActionSheet,
-  useActionSheet,
-} from '@expo/react-native-action-sheet';
+import { connectActionSheet, useActionSheet } from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
@@ -34,12 +18,7 @@ import {
   HeaderIcon,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/time';
-import {
-  subTextColor,
-  fontSizeS,
-  primaryColor,
-  fontSizeM,
-} from '../styles/Common';
+import { subTextColor, fontSizeS, primaryColor, fontSizeM } from '../styles/Common';
 import { getCorrection } from '../utils/corrections';
 import { Correction } from '../types/correction';
 import Algolia from '../utils/Algolia';
@@ -168,14 +147,14 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
         options,
         cancelButtonIndex: 1,
       },
-      index => {
+      (index) => {
         switch (index) {
           case 0:
             onPressAppShare();
             break;
           default:
         }
-      }
+      },
     );
   }, [onPressAppShare, showActionSheetWithOptions]);
 
@@ -266,10 +245,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as Pick<
         Diary,
-        | 'updatedAt'
-        | 'correctionStatus'
-        | 'correctionStatus2'
-        | 'correctionStatus3'
+        'updatedAt' | 'correctionStatus' | 'correctionStatus2' | 'correctionStatus3'
       >;
       let correctingCorrectedNum: number;
       if (diary.correctionStatus === 'yet') {
@@ -300,9 +276,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       });
 
       //  添削中一覧に追加する
-      const correctingRef = firebase
-        .firestore()
-        .doc(`correctings/${teachDiary.objectID}`);
+      const correctingRef = firebase.firestore().doc(`correctings/${teachDiary.objectID}`);
       batch.set(correctingRef, {
         uid: user.uid,
         correctedNum: correctingCorrectedNum,
@@ -310,9 +284,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       });
 
       //  日記のステータスを添削中に変更する
-      const diaryRef = firebase
-        .firestore()
-        .doc(`diaries/${teachDiary.objectID}`);
+      const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
 
       batch.update(diaryRef, data);
       editTeachDiary(teachDiary.objectID, {
@@ -343,20 +315,16 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
     if (!teachDiary) return;
     navigation.setOptions({
       title: teachDiary.title,
-      // headerRight: (): JSX.Element =>
+      // headerRight: () =>
       //   isDesktopOrLaptopDevice ? (
       //     <TeachDiaryMenu onPressAppShare={onPressAppShare} />
       //   ) : (
       //     <HeaderRight name="dots-horizontal" onPress={onPressMore} />
       //   ),
       // TODO: シェア機能ができてから
-      headerRight: (): JSX.Element | null =>
+      headerRight: () =>
         Platform.OS === 'web' ? null : (
-          <HeaderIcon
-            icon="community"
-            name="dots-horizontal"
-            onPress={onPressMore}
-          />
+          <HeaderIcon icon='community' name='dots-horizontal' onPress={onPressMore} />
         ),
     });
 
@@ -367,7 +335,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
     (uid: string, userName: string): void => {
       navigation.navigate('UserProfile', { userName });
     },
-    [navigation]
+    [navigation],
   );
 
   const isTeachLanguages = (): boolean => {
@@ -453,7 +421,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       <ModalAlertCorrection
         visible={isModalCorrection}
         isLoading={isLoading}
-        animationOut="flash"
+        animationOut='flash'
         teachDiaryLanguage={teachDiary.profile.learnLanguage}
         onPressSubmit={onPressSubmitCorrection}
         onPressClose={(): void => setIsModalCorrection(false)}

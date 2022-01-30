@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const UserPointsBig: React.FC<Props> = ({ points }: Props): JSX.Element => {
+const UserPointsBig: React.FC<Props> = ({ points }: Props) => {
   const text = `${points}P`;
   return (
     <View style={styles.container}>

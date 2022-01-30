@@ -225,7 +225,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route, user }) =>
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: (): JSX.Element =>
+      headerRight: () =>
         isDesktopOrLaptopDevice ? (
           <UserProfileMenu
             isBlocked={isBlocked}
@@ -392,7 +392,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route, user }) =>
   );
 
   const renderDiary: ListRenderItem<Diary> = useCallback(
-    ({ item }): JSX.Element => {
+    ({ item }) => {
       return <DiaryListItem item={item} onPressUser={handlePressUser} onPressItem={onPressItem} />;
     },
     [handlePressUser, onPressItem],

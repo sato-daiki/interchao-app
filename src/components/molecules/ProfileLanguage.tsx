@@ -31,36 +31,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const ProfileLanguage: React.FC<Props> = ({
-  nativeLanguage,
-  learnLanguage,
-  spokenLanguages,
-}): JSX.Element => {
+const ProfileLanguage: React.FC<Props> = ({ nativeLanguage, learnLanguage, spokenLanguages }) => {
   return (
     <>
       <View style={styles.languageContainer}>
-        <MaterialCommunityIcons size={14} color={subTextColor} name="pencil" />
+        <MaterialCommunityIcons size={14} color={subTextColor} name='pencil' />
         <Text style={styles.label}>{I18n.t('profileLanguage.learn')}</Text>
         <Text style={styles.language}>{getLanguage(learnLanguage)}</Text>
       </View>
       <View style={styles.languageContainer}>
-        <MaterialCommunityIcons
-          size={14}
-          color={subTextColor}
-          name="spellcheck"
-        />
+        <MaterialCommunityIcons size={14} color={subTextColor} name='spellcheck' />
         <Text style={styles.label}>{I18n.t('profileLanguage.native')}</Text>
         <Text style={styles.language}>{getLanguage(nativeLanguage)}</Text>
       </View>
       {spokenLanguages ? (
         <View style={styles.languageContainer}>
-          <MaterialCommunityIcons
-            size={14}
-            color={subTextColor}
-            name="comment-multiple-outline"
-          />
+          <MaterialCommunityIcons size={14} color={subTextColor} name='comment-multiple-outline' />
           <Text style={styles.label}>{I18n.t('profileLanguage.spoken')}</Text>
-          {spokenLanguages.map(item => (
+          {spokenLanguages.map((item) => (
             <Text key={item} style={styles.language}>
               {getLanguage(item)}
             </Text>

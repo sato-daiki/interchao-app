@@ -1,11 +1,7 @@
 import React, { useCallback, useLayoutEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import {
-  HeaderText,
-  SmallButtonSubmit,
-  SmallButtonWhite,
-} from '@/components/atoms';
+import { HeaderText, SmallButtonSubmit, SmallButtonWhite } from '@/components/atoms';
 import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
 import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
 
@@ -78,7 +74,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
 
   const headerLeft = useCallback(
     () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
-    [onPressClose]
+    [onPressClose],
   );
 
   const headerRight = useCallback(() => {
@@ -110,7 +106,7 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       title: 'Interchao',
       headerLeft,
       headerRight,
-      headerTitle: (): JSX.Element => <HeaderTitle />,
+      headerTitle: () => <HeaderTitle />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title, isLoadingDraft]);

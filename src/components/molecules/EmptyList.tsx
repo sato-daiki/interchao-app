@@ -30,19 +30,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const EmptyList: React.FC<Props> = ({
-  message,
-  iconName,
-  paddingTop = 64,
-}: Props): JSX.Element => {
+const EmptyList: React.FC<Props> = ({ message, iconName, paddingTop = 64 }: Props) => {
   return (
     <View style={[styles.container, { paddingTop }]}>
       <View style={styles.emptyUpper}>
-        <MaterialCommunityIcons
-          name={iconName}
-          size={50}
-          color={subTextColor}
-        />
+        <MaterialCommunityIcons name={iconName} size={50} color={subTextColor} />
         <Space size={8} />
         <Text style={styles.emptyText}>{message}</Text>
       </View>

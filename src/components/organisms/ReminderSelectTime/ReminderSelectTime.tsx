@@ -5,13 +5,7 @@ import { HeaderButton, LoadingModal, RadioBox } from '@/components/atoms';
 
 import I18n from '@/utils/I18n';
 import { fontSizeL, mainColor, primaryColor } from '@/styles/Common';
-import {
-  CustomTimeInfo,
-  FixDay,
-  FixTimeInfo,
-  ReminderType,
-  User,
-} from '@/types';
+import { CustomTimeInfo, FixDay, FixTimeInfo, ReminderType, User } from '@/types';
 import ReminderSelectTimeFix from '@/components/organisms/ReminderSelectTime/Fix';
 import ReminderSelectTimeCustom from '@/components/organisms/ReminderSelectTime/Custom';
 import { CheckItem } from '@/components/molecules';
@@ -22,9 +16,7 @@ import { useReminderSelectTime } from './useReminderSelectTime';
 import NotficationReminder from '../NotficationReminder';
 
 export interface ReminderSelectTimeProps {
-  navigation:
-    | ReminderSelectTimeOnboardingNavigationProp
-    | ReminderSelectTimeSettingNavigationProp;
+  navigation: ReminderSelectTimeOnboardingNavigationProp | ReminderSelectTimeSettingNavigationProp;
   defaultReminderType: ReminderType;
   defaultNotificationStart: boolean;
   defaultNotificationEnd: boolean;
@@ -118,12 +110,8 @@ const ReminderSelectTime: React.FC<ReminderSelectTimeProps> = ({
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: (): JSX.Element | null => (
-        <HeaderButton
-          title={I18n.t('common.save')}
-          color={mainColor}
-          onPress={onPressDone}
-        />
+      headerRight: () => (
+        <HeaderButton title={I18n.t('common.save')} color={mainColor} onPress={onPressDone} />
       ),
     });
   }, [navigation, onPressDone]);
@@ -172,9 +160,7 @@ const ReminderSelectTime: React.FC<ReminderSelectTimeProps> = ({
         />
       </View>
       <View style={styles.checkContainer}>
-        <Text style={styles.label}>
-          {I18n.t('reminderSelectTime.notificationLable')}
-        </Text>
+        <Text style={styles.label}>{I18n.t('reminderSelectTime.notificationLable')}</Text>
         <CheckItem
           title={I18n.t('reminderSelectTime.notificationStart')}
           checked={notificationStart}

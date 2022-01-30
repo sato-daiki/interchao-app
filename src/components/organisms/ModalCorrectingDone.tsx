@@ -5,13 +5,7 @@ import { GetPoints, FlashLeft, FlashRight } from '@/images';
 
 import I18n from '@/utils/I18n';
 import { Modal } from '@/components/template';
-import {
-  Space,
-  UserPointsBig,
-  SubmitButton,
-  Lottie,
-  Heading,
-} from '@/components/atoms';
+import { Space, UserPointsBig, SubmitButton, Lottie, Heading } from '@/components/atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,7 +57,7 @@ const ModalCorrectingDone: React.FC<Props> = ({
   points,
   getPoints,
   onPressClose,
-}: Props): JSX.Element | null => {
+}: Props) => {
   const [isShowFlash, setIsShowFlash] = useState(false);
   const refLottie = createRef<Lottie>();
 
@@ -109,9 +103,7 @@ const ModalCorrectingDone: React.FC<Props> = ({
                 loop={false}
               />
             </View>
-            <Text style={styles.text}>
-              {I18n.t('modalCorrectingDone.text', { getPoints })}
-            </Text>
+            <Text style={styles.text}>{I18n.t('modalCorrectingDone.text', { getPoints })}</Text>
           </>
         )}
         <Space size={24} />

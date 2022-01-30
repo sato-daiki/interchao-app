@@ -10,29 +10,21 @@ interface Props {
 }
 
 // スマホ版もある
-const UserProfileMenu = ({
-  isBlocked,
-  onPressReport,
-  onPressBlock,
-}: Props): JSX.Element => {
+const UserProfileMenu = ({ isBlocked, onPressReport, onPressBlock }: Props) => {
   return (
     <MenuTemplate>
       <CustumMenuOption
         onSelect={onPressBlock}
-        icon="material"
+        icon='material'
         size={25}
-        name="block"
-        text={
-          isBlocked
-            ? I18n.t('userProfile.unBlocked')
-            : I18n.t('userProfile.blocked')
-        }
+        name='block'
+        text={isBlocked ? I18n.t('userProfile.unBlocked') : I18n.t('userProfile.blocked')}
       />
       <CustumMenuOption
         onSelect={onPressReport}
-        icon="material"
+        icon='material'
         size={25}
-        name="report"
+        name='report'
         text={I18n.t('userProfile.report')}
       />
     </MenuTemplate>

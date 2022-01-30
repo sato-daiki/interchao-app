@@ -63,14 +63,12 @@ const Comment: React.FC<Props> = ({
   onChangeTextComment,
   onClose,
   onPressPublish,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <>
       {!isPublishEnd ? (
         <>
-          <Text style={styles.title}>
-            {I18n.t('modalAppReviewRequest.improveTitle')}
-          </Text>
+          <Text style={styles.title}>{I18n.t('modalAppReviewRequest.improveTitle')}</Text>
           <View style={styles.line} />
           <KeyboardAwareScrollView extraScrollHeight={32}>
             <TextInput
@@ -79,9 +77,9 @@ const Comment: React.FC<Props> = ({
               spellCheck
               autoCorrect
               blurOnSubmit
-              keyboardType="default"
-              returnKeyType="done"
-              underlineColorAndroid="transparent"
+              keyboardType='default'
+              returnKeyType='done'
+              underlineColorAndroid='transparent'
               style={styles.review}
               onChangeText={onChangeTextComment}
             />
@@ -97,9 +95,7 @@ const Comment: React.FC<Props> = ({
         </>
       ) : (
         <>
-          <Text style={styles.thanks}>
-            {I18n.t('modalAppReviewRequest.thanks')}
-          </Text>
+          <Text style={styles.thanks}>{I18n.t('modalAppReviewRequest.thanks')}</Text>
           <Space size={16} />
           <WhiteButton title={I18n.t('common.close')} onPress={onClose} />
         </>

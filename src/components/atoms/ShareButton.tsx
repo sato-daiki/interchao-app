@@ -28,14 +28,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const ShareButton: React.FC<Props> = ({ onPressShare }: Props): JSX.Element => {
+const ShareButton: React.FC<Props> = ({ onPressShare }: Props) => {
   return (
     <Hoverable style={styles.contaner} onPress={onPressShare}>
-      <MaterialCommunityIcons
-        size={24}
-        color={primaryColor}
-        name="share-variant"
-      />
+      <MaterialCommunityIcons size={24} color={primaryColor} name='share-variant' />
       <Text style={styles.title}>{I18n.t('sns.diary')}</Text>
     </Hoverable>
   );

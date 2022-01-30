@@ -30,30 +30,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const Correct = ({
-  isMaxLayoutChange,
-  isMobileDevice,
-  options,
-}: Props): JSX.Element => {
+const Correct = ({ isMaxLayoutChange, isMobileDevice, options }: Props) => {
   const renderLeft = (
     <>
       <View style={styles.row}>
-        <Image source={PointGet} resizeMode="contain" style={styles.icon} />
-        <Title
-          isMobileDevice={isMobileDevice}
-          text={I18n.t('web.correctTitle', options)}
-        />
+        <Image source={PointGet} resizeMode='contain' style={styles.icon} />
+        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.correctTitle', options)} />
       </View>
-      <BodyText
-        isMobileDevice={isMobileDevice}
-        text={I18n.t('web.correctText1', options)}
-      />
+      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.correctText1', options)} />
     </>
   );
 
   const source = getImage('girl');
   const renderRight = source ? (
-    <Image resizeMode="contain" style={styles.image} source={source} />
+    <Image resizeMode='contain' style={styles.image} source={source} />
   ) : (
     <View />
   );

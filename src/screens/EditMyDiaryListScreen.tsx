@@ -128,9 +128,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
   // 第二引数をなしにするのがポイント
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: (): JSX.Element | null => (
-        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
-      ),
+      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -175,7 +173,7 @@ const EditMyDiaryListScreen: React.FC<ScreenType> = ({
   }, []);
 
   const renderItem: ListRenderItem<Diary> = useCallback(
-    ({ item }): JSX.Element => {
+    ({ item }) => {
       return <EditMyDiaryListItem item={item} handlePress={handlePress} />;
     },
     [handlePress],

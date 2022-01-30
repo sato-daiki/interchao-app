@@ -22,7 +22,6 @@ export { default as Icon } from './Icon';
 export { default as LinkText } from './LinkText';
 export { default as LoadingModal } from './LoadingModal';
 // @ts-ignore
-// eslint-disable-next-line import/extensions
 export { default as Lottie } from './Lottie';
 export { default as Note } from './Note';
 export { default as OriginalText } from './OriginalText';

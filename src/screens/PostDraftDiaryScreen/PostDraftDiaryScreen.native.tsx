@@ -4,10 +4,7 @@ import { HeaderText } from '@/components/atoms';
 import { PostDiary } from '@/components/organisms/PostDiary';
 
 import I18n from '@/utils/I18n';
-import {
-  DefaultModalLayoutOptions,
-  DefaultNavigationOptions,
-} from '@/constants/NavigationOptions';
+import { DefaultModalLayoutOptions, DefaultNavigationOptions } from '@/constants/NavigationOptions';
 import { usePostDraftDiary } from './usePostDraftDiary';
 import { ScreenType } from './interfaces';
 
@@ -63,21 +60,12 @@ const PostDraftDiaryScreen: React.FC<ScreenType> = ({
       ...DefaultNavigationOptions,
       ...DefaultModalLayoutOptions,
       title: I18n.t('postDraftDiary.headerTitle'),
-      headerLeft: (): JSX.Element => (
-        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
-      ),
-      headerRight: (): JSX.Element => {
+      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
+      headerRight: () => {
         if (user.points >= 10) {
-          return (
-            <HeaderText
-              text={I18n.t('common.publish')}
-              onPress={onPressPublic}
-            />
-          );
+          return <HeaderText text={I18n.t('common.publish')} onPress={onPressPublic} />;
         }
-        return (
-          <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />
-        );
+        return <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />;
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

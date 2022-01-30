@@ -80,7 +80,7 @@ const FirstView = ({
   onPressStart,
   onPressLogin,
   options,
-}: Props): JSX.Element => {
+}: Props) => {
   const setLeft = (): StyleProp<TextStyle> => {
     return {
       alignSelf: isMaxLayoutChange ? 'flex-start' : 'center',
@@ -96,12 +96,7 @@ const FirstView = ({
 
   return (
     <View style={styles.warapper}>
-      <View
-        style={[
-          styles.container,
-          isMaxLayoutChange ? styles.containerPc : styles.containerSp,
-        ]}
-      >
+      <View style={[styles.container, isMaxLayoutChange ? styles.containerPc : styles.containerSp]}>
         <View style={styles.textContainer}>
           <Text
             style={[

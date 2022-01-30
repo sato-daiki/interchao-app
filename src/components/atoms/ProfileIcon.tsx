@@ -11,12 +11,7 @@ interface Props {
   onPress: () => void;
 }
 
-const ProfileIcon: React.FC<Props> = ({
-  size = 36,
-  photoUrl,
-  nativeLanguage,
-  onPress,
-}: Props): JSX.Element => {
+const ProfileIcon: React.FC<Props> = ({ size = 36, photoUrl, nativeLanguage, onPress }: Props) => {
   const styleIcon = {
     width: size,
     height: size,

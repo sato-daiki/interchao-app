@@ -45,7 +45,7 @@ const ModalDeleteAcount: React.FC<Props> = ({
   onPressDelete2,
   onPressClose,
   onBlur,
-}: Props): JSX.Element | null => {
+}: Props) => {
   if (!isPasswordInput) {
     // 削除の最終確認
     return (
@@ -56,15 +56,9 @@ const ModalDeleteAcount: React.FC<Props> = ({
           <Text style={styles.text}>{I18n.t('deleteAcount.confirmation')}</Text>
           <Space size={32} />
           <View style={styles.button}>
-            <SubmitButton
-              title={I18n.t('deleteAcount.withdrawal')}
-              onPress={onPressDelete1}
-            />
+            <SubmitButton title={I18n.t('deleteAcount.withdrawal')} onPress={onPressDelete1} />
             <Space size={16} />
-            <WhiteButton
-              title={I18n.t('common.cancel')}
-              onPress={onPressClose}
-            />
+            <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
           </View>
         </View>
       </Modal>
@@ -82,12 +76,12 @@ const ModalDeleteAcount: React.FC<Props> = ({
           onChangeText={onChangeText}
           onBlur={onBlur}
           maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
+          placeholder='Password'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           secureTextEntry
-          returnKeyType="done"
+          returnKeyType='done'
           errorMessage={errorMessage}
         />
         <Space size={32} />

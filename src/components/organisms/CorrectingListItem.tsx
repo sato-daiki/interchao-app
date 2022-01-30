@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, TextInput } from 'react-native';
 import * as jsdiff from 'diff';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {
-  fontSizeM,
-  primaryColor,
-  borderLightColor,
-  subTextColor,
-} from '../../styles/Common';
+import { fontSizeM, primaryColor, borderLightColor, subTextColor } from '../../styles/Common';
 import { Space, AutoHeightTextInput, Hoverable } from '../atoms';
 import { Diff, TextInfo } from '../../types';
 import CorrectingCommentNative from './CorrectingCommentNative';
@@ -67,12 +62,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CorrectingListItem: React.FC<Props> = ({
-  item,
-  editText,
-  editFirst,
-  onHideKeyboard,
-}) => {
+const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst, onHideKeyboard }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [fix, setFix] = useState(item.original);
   const [detail, setDetail] = useState('');
@@ -87,7 +77,7 @@ const CorrectingListItem: React.FC<Props> = ({
         diffs: null,
       });
     } else {
-      const newDiff = jsdiff.diffChars(item.original, fix).map(d => {
+      const newDiff = jsdiff.diffChars(item.original, fix).map((d) => {
         return {
           count: d.count,
           added: d.added || null,
@@ -113,19 +103,14 @@ const CorrectingListItem: React.FC<Props> = ({
     onHideKeyboard();
   };
 
-  const renderFix = (): JSX.Element | null => {
+  const renderFix = () => {
     if (!isEdit) {
       return (
         <>
           {!diffs ? null : (
             <>
               <Space size={16} />
-              <CorrectingText
-                isOrigin={false}
-                isMenu={false}
-                text={fix || ''}
-                diffs={diffs}
-              />
+              <CorrectingText isOrigin={false} isMenu={false} text={fix || ''} diffs={diffs} />
             </>
           )}
         </>
@@ -151,11 +136,11 @@ const CorrectingListItem: React.FC<Props> = ({
         multiline
         blurOnSubmit
         autoFocus
-        autoCapitalize="none"
+        autoCapitalize='none'
         spellCheck
         autoCorrect
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
+        underlineColorAndroid='transparent'
+        returnKeyType='done'
         scrollEnabled={false}
         onChangeText={(text: string): void => setFix(text)}
         onBlur={onBlurFix}
@@ -163,7 +148,7 @@ const CorrectingListItem: React.FC<Props> = ({
     );
   };
 
-  const renderComment = (): JSX.Element | null => {
+  const renderComment = () => {
     if (!diffs) return null;
 
     if (Platform.OS === 'web') {
@@ -190,20 +175,11 @@ const CorrectingListItem: React.FC<Props> = ({
           <View style={styles.rowNoEdit}>
             <Text style={styles.text}>{item.original}</Text>
             <View style={styles.pen}>
-              <MaterialCommunityIcons
-                size={28}
-                color={primaryColor}
-                name="pen"
-              />
+              <MaterialCommunityIcons size={28} color={primaryColor} name='pen' />
             </View>
           </View>
         ) : (
-          <CorrectingText
-            isMenu={false}
-            isOrigin
-            text={item.original}
-            diffs={diffs}
-          />
+          <CorrectingText isMenu={false} isOrigin text={item.original} diffs={diffs} />
         )}
         {renderFix()}
       </Hoverable>

@@ -4,12 +4,7 @@ import { split } from 'sentence-splitter';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import {
-  HeaderText,
-  HeaderButton,
-  LoadingModal,
-  Space,
-} from '../components/atoms';
+import { HeaderText, HeaderButton, LoadingModal, Space } from '../components/atoms';
 import { CorrectingHeader, KeyboardHideButton } from '../components/molecules';
 import ModalCorrectingDone from '../components/organisms/ModalCorrectingDone';
 import ModalTimeUp from '../components/organisms/ModalTimeUp';
@@ -118,7 +113,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
     if (!teachDiary) return;
     const splitTexts = split(teachDiary.text);
     const newTextInfos = splitTexts
-      .filter(i => i.raw.trim().length > 0)
+      .filter((i) => i.raw.trim().length > 0)
       .map((item, index) => {
         return {
           rowNumber: index,
@@ -138,15 +133,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
     const f = async (): Promise<void> => {
       if (isLoading) return;
       setIsLoading(true);
-      await onClose(
-        isLoading,
-        teachDiary,
-        setIsLoading,
-        user,
-        editTeachDiary,
-        setUser,
-        navigation
-      );
+      await onClose(isLoading, teachDiary, setIsLoading, user, editTeachDiary, setUser, navigation);
       setIsLoading(false);
       setIsModalConfirmation(false);
     };
@@ -201,7 +188,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
   const onPressSubmitButton = useCallback(() => {
     const f = async (): Promise<void> => {
       if (!teachDiary) return;
-      const comments = textInfos.filter(item => item.diffs !== null);
+      const comments = textInfos.filter((item) => item.diffs !== null);
       if (comments.length === 0) {
         setIsModalNoComment(true);
         return;
@@ -223,16 +210,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
       setIsModalDone(true);
     };
     f();
-  }, [
-    textInfos,
-    teachDiary,
-    isLoading,
-    currentProfile,
-    user,
-    summary,
-    editTeachDiary,
-    setUser,
-  ]);
+  }, [textInfos, teachDiary, isLoading, currentProfile, user, summary, editTeachDiary, setUser]);
 
   /**
    * 左上の閉じるボタンが押下された時の処理
@@ -246,10 +224,8 @@ const CorrectingScreen: React.FC<ScreenType> = ({
    */
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (): JSX.Element => (
-        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
-      ),
-      headerRight: (): JSX.Element | null =>
+      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
+      headerRight: () =>
         isFirstEdit ? (
           <HeaderButton
             title={I18n.t('correcting.titleDone')}
@@ -281,7 +257,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
         setIsLoading,
         editTeachDiary,
         setUser,
-        setIsModalTimeUp
+        setIsModalTimeUp,
       );
     };
     f();
@@ -304,7 +280,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
 
   const editText = useCallback(
     (index: number, info: Info): void => {
-      const newTextInfos = textInfos.map(item => {
+      const newTextInfos = textInfos.map((item) => {
         if (item.rowNumber === index) {
           return {
             ...item,
@@ -315,19 +291,16 @@ const CorrectingScreen: React.FC<ScreenType> = ({
       });
       setTextInfos(newTextInfos);
     },
-    [textInfos]
+    [textInfos],
   );
 
   if (!teachDiary) {
     return null;
   }
 
-  const getPoints = getUsePoints(
-    teachDiary.text.length,
-    teachDiary.profile.learnLanguage
-  );
+  const getPoints = getUsePoints(teachDiary.text.length, teachDiary.profile.learnLanguage);
 
-  const renderSummary = (): JSX.Element | null => {
+  const renderSummary = () => {
     if (!isFirstEdit) return null;
 
     if (Platform.OS === 'web') {
@@ -353,10 +326,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
         <LoadingModal visible={isLoading} />
-        <ModalTimeUp
-          visible={isModalTimeUp}
-          onPressClose={onPressCloseTimeUp}
-        />
+        <ModalTimeUp visible={isModalTimeUp} onPressClose={onPressCloseTimeUp} />
         <ModalCorrectingDone
           visible={isModalDone}
           getPoints={getPoints}
@@ -368,7 +338,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
           isLoading={isLoading}
           title={I18n.t('common.confirmation')}
           message={I18n.t('correcting.deleteAlert')}
-          mainButtonText="OK"
+          mainButtonText='OK'
           onPressMain={async (): Promise<void> => {
             await close();
           }}
@@ -383,7 +353,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
         />
         <KeyboardAwareScrollView
           style={styles.scrollView}
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps='handled'
           extraScrollHeight={32}
         >
           <View style={styles.header}>
@@ -416,10 +386,7 @@ const CorrectingScreen: React.FC<ScreenType> = ({
           <Space size={32} />
         </KeyboardAwareScrollView>
       </View>
-      <KeyboardHideButton
-        isKeyboard={isKeyboard}
-        setIsKeyboard={setIsKeyboard}
-      />
+      <KeyboardHideButton isKeyboard={isKeyboard} setIsKeyboard={setIsKeyboard} />
     </SafeAreaView>
   );
 };

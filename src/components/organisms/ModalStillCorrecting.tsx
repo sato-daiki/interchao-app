@@ -24,25 +24,17 @@ interface Props {
   onPress: () => void;
 }
 
-const ModalStillCorrecting: React.FC<Props> = ({
-  visible,
-  isLoading,
-  onPress,
-}: Props): JSX.Element | null => {
+const ModalStillCorrecting: React.FC<Props> = ({ visible, isLoading, onPress }: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
         <Heading title={I18n.t('common.error')} />
         <Space size={24} />
-        <MaterialIcons name="error" size={64} color={primaryColor} />
+        <MaterialIcons name='error' size={64} color={primaryColor} />
         <Space size={16} />
         <Text style={styles.text}>{I18n.t('modalStillCorrecting.text')}</Text>
         <Space size={32} />
-        <SubmitButton
-          title={I18n.t('common.close')}
-          isLoading={isLoading}
-          onPress={onPress}
-        />
+        <SubmitButton title={I18n.t('common.close')} isLoading={isLoading} onPress={onPress} />
       </View>
     </Modal>
   );

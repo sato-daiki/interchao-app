@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const AddButton: React.FC<Props> = ({ onPress }: Props): JSX.Element => {
+const AddButton: React.FC<Props> = ({ onPress }: Props) => {
   return (
     <View style={styles.container}>
       <Hoverable style={styles.row} onPress={onPress} hoverStyle={styles.hover}>
-        <MaterialCommunityIcons size={24} color={subTextColor} name="plus" />
+        <MaterialCommunityIcons size={24} color={subTextColor} name='plus' />
         <Text style={styles.text}>{I18n.t('selectLanguage.add')}</Text>
       </Hoverable>
     </View>

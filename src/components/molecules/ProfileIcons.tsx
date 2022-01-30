@@ -28,7 +28,7 @@ const ProfileIcons: React.FC<Props> = ({
   correction2,
   correction3,
   onPressUser,
-}: Props): JSX.Element | null => {
+}: Props) => {
   const onPressUser1 = useCallback(() => {
     if (correction) {
       onPressUser(correction.profile.uid, correction.profile.userName);

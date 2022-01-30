@@ -38,42 +38,27 @@ const styles = StyleSheet.create({
   },
 });
 
-const DrawerLabel = ({
-  isMaxLayoutChange,
-  tabName,
-  color,
-  text,
-}: Props): JSX.Element => {
+const DrawerLabel = ({ isMaxLayoutChange, tabName, color, text }: Props) => {
   const [isHover, setIsHover] = useState(false);
 
   const renderIcon = (): ReactNode => {
     if (tabName === 'MyDiaryTab') {
       return (
         <TabIcon
-          name="book-open"
+          name='book-open'
           size={25}
           color={isHover ? mainColor : color}
-          badgeMode="myDiary"
+          badgeMode='myDiary'
         />
       );
     }
     if (tabName === 'TeachDiaryTab') {
       return (
-        <MaterialCommunityIcons
-          name="spellcheck"
-          size={25}
-          color={isHover ? mainColor : color}
-        />
+        <MaterialCommunityIcons name='spellcheck' size={25} color={isHover ? mainColor : color} />
       );
     }
     if (tabName === 'MyPageTab') {
-      return (
-        <MaterialIcons
-          name="person"
-          size={25}
-          color={isHover ? mainColor : color}
-        />
-      );
+      return <MaterialIcons name='person' size={25} color={isHover ? mainColor : color} />;
     }
     return null;
   };
@@ -86,9 +71,7 @@ const DrawerLabel = ({
       onMouseLeave={(): void => setIsHover(false)}
     >
       {renderIcon()}
-      <Text style={[styles.text, { color: isHover ? mainColor : color }]}>
-        {text}
-      </Text>
+      <Text style={[styles.text, { color: isHover ? mainColor : color }]}>{text}</Text>
     </View>
   ) : (
     <View

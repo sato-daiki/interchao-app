@@ -1,11 +1,6 @@
 import React from 'react';
 import { TextInput, StyleProp, TextStyle, StyleSheet } from 'react-native';
-import {
-  fontSizeM,
-  primaryColor,
-  offWhite,
-  borderLightColor,
-} from '../../styles/Common';
+import { fontSizeM, primaryColor, offWhite, borderLightColor } from '../../styles/Common';
 
 interface Props {
   style?: StyleProp<TextStyle>;
@@ -39,7 +34,7 @@ const AutoHeightTextInput: React.FC<Props> = ({
   placeholder,
   onChangeText,
   onBlur,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <TextInput
       style={[styles.textInput, style]}
@@ -48,12 +43,12 @@ const AutoHeightTextInput: React.FC<Props> = ({
       value={value}
       multiline
       blurOnSubmit
-      autoCapitalize="none"
+      autoCapitalize='none'
       spellCheck
       autoCorrect
-      returnKeyType="done"
+      returnKeyType='done'
       scrollEnabled={false}
-      underlineColorAndroid="transparent"
+      underlineColorAndroid='transparent'
       onChangeText={onChangeText}
       onBlur={onBlur}
     />

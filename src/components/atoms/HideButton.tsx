@@ -32,21 +32,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const HideButton: React.FC<Props> = ({
-  hidden,
-  onPress,
-}: Props): JSX.Element => {
+const HideButton: React.FC<Props> = ({ hidden, onPress }: Props) => {
   return (
     <View style={styles.container}>
-      <Hoverable
-        style={styles.style}
-        onPress={onPress}
-        hoverStyle={styles.hover}
-      >
+      <Hoverable style={styles.style} onPress={onPress} hoverStyle={styles.hover}>
         <Text style={styles.hidden}>
-          {hidden
-            ? I18n.t('myDiaryCorrection.show')
-            : I18n.t('myDiaryCorrection.hide')}
+          {hidden ? I18n.t('myDiaryCorrection.show') : I18n.t('myDiaryCorrection.hide')}
         </Text>
       </Hoverable>
     </View>

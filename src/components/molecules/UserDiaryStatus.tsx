@@ -18,18 +18,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const UserDiaryStatus: React.FC<Props> = ({ diary }: Props): JSX.Element => {
-  const {
-    correctionStatus,
-    correctionStatus2,
-    correctionStatus3,
-    firstDiary,
-  } = diary;
-  const status = getUserDiaryStatus(
-    correctionStatus,
-    correctionStatus2,
-    correctionStatus3
-  );
+const UserDiaryStatus: React.FC<Props> = ({ diary }: Props) => {
+  const { correctionStatus, correctionStatus2, correctionStatus3, firstDiary } = diary;
+  const status = getUserDiaryStatus(correctionStatus, correctionStatus2, correctionStatus3);
 
   return (
     <View style={styles.container}>

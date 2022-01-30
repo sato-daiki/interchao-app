@@ -38,7 +38,7 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
   displayed,
   buttonText = I18n.t('tutorialTeachDiaryList.buttonText'),
   onPress = (): void => undefined,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Tutorial
       displayed={displayed}
@@ -48,13 +48,11 @@ const TutorialTeachDiaryList: React.FC<Props> = ({
       onPress={onPress}
     >
       <View style={styles.container}>
-        <Image style={styles.img} source={People} resizeMode="contain" />
+        <Image style={styles.img} source={People} resizeMode='contain' />
         <Space size={24} />
         <Text style={styles.text}>
           {I18n.t('tutorialTeachDiaryList.text1')}
-          <Text style={styles.main}>
-            {I18n.t('tutorialTeachDiaryList.textMainColor')}
-          </Text>
+          <Text style={styles.main}>{I18n.t('tutorialTeachDiaryList.textMainColor')}</Text>
           {I18n.t('tutorialTeachDiaryList.text2')}
         </Text>
       </View>

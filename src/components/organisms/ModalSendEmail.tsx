@@ -22,10 +22,7 @@ interface Props {
   onPressClose: () => void;
 }
 
-const ModalSendEmail: React.FC<Props> = ({
-  visible,
-  onPressClose,
-}: Props): JSX.Element | null => {
+const ModalSendEmail: React.FC<Props> = ({ visible, onPressClose }: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>

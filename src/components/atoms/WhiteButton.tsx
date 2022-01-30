@@ -52,7 +52,7 @@ const WhiteButton: React.FC<Props> = ({
   onPress,
   containerStyle,
   textStyle,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <Hoverable
       style={[styles.contaner, containerStyle]}
@@ -60,7 +60,7 @@ const WhiteButton: React.FC<Props> = ({
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator size='small' />
       ) : (
         <>
           {<View style={styles.icon}>{icon}</View> || undefined}

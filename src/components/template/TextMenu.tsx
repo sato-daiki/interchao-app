@@ -2,13 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-  renderers,
-} from 'react-native-popup-menu';
+import { Menu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
 import I18n from '../../utils/I18n';
 import { clipboard } from '../../styles/Common';
 import ModalSpeech from '../organisms/ModalSpeech';
@@ -50,12 +44,7 @@ const styles = StyleSheet.create({
 
 // 補足
 // ポーズから再生する時と、最初から再生するときの制御を行ったため、少し複雑になっている
-const TextMenu = ({
-  children,
-  displayText,
-  textLanguage,
-  onPressTranslate,
-}: Props): JSX.Element => {
+const TextMenu = ({ children, displayText, textLanguage, onPressTranslate }: Props) => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
 
   const onPressSpeech = (): void => {
@@ -68,30 +57,27 @@ const TextMenu = ({
 
   const copyButton = (
     <MenuOption style={[styles.menu, styles.border]} onSelect={onPressCopy}>
-      <MaterialCommunityIcons size={20} color="white" name="content-copy" />
+      <MaterialCommunityIcons size={20} color='white' name='content-copy' />
       <Text style={styles.menuText}>{I18n.t('common.copy')}</Text>
     </MenuOption>
   );
 
   const translateButton = (
-    <MenuOption
-      style={[styles.menu, styles.border]}
-      onSelect={onPressTranslate}
-    >
-      <MaterialCommunityIcons size={20} color="white" name="translate" />
+    <MenuOption style={[styles.menu, styles.border]} onSelect={onPressTranslate}>
+      <MaterialCommunityIcons size={20} color='white' name='translate' />
       <Text style={styles.menuText}>{I18n.t('common.translation')}</Text>
     </MenuOption>
   );
 
   const speechButton = (
     <MenuOption style={styles.menu} onSelect={onPressSpeech}>
-      <MaterialCommunityIcons size={20} color="white" name="volume-high" />
+      <MaterialCommunityIcons size={20} color='white' name='volume-high' />
       <Text style={styles.menuText}>{I18n.t('common.speech')}</Text>
     </MenuOption>
   );
 
   // AndroidのMenuOptionのonSlectが機能しない為
-  const renderMenuButton = (): JSX.Element => {
+  const renderMenuButton = () => {
     if (Platform.OS === 'ios') {
       return (
         <View style={styles.row}>
@@ -127,9 +113,7 @@ const TextMenu = ({
         }}
       >
         <MenuTrigger triggerOnLongPress>{children}</MenuTrigger>
-        <MenuOptions optionsContainerStyle={styles.menuOptions}>
-          {renderMenuButton()}
-        </MenuOptions>
+        <MenuOptions optionsContainerStyle={styles.menuOptions}>{renderMenuButton()}</MenuOptions>
       </Menu>
     </View>
   );

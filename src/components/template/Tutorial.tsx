@@ -40,17 +40,13 @@ const Tutorial: React.FC<Props> = ({
   buttonText,
   onPress,
   children,
-}: Props): JSX.Element => (
+}: Props) => (
   <Modal visible={!displayed}>
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.line} />
       {children}
-      <SubmitButton
-        title={buttonText}
-        onPress={onPress}
-        isLoading={isLoading}
-      />
+      <SubmitButton title={buttonText} onPress={onPress} isLoading={isLoading} />
     </View>
   </Modal>
 );

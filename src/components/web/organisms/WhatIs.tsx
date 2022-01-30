@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Image, View } from 'react-native';
 import { App } from '../../../images/web';
-import WebTemplate from '../template/WebTemplate';
 import I18n from '../../../utils/I18n';
 import { getImage } from '../../../utils/web';
 import { Title, BodyText } from '../atoms';
+import WebTemplate from '../template/WebTemplate';
 
 interface Props {
   isMaxLayoutChange: boolean;
@@ -32,14 +32,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const WhatIs = ({
-  isMaxLayoutChange,
-  isMobileDevice,
-  options,
-}: Props): JSX.Element | null => {
+const WhatIs = ({ isMaxLayoutChange, isMobileDevice, options }: Props) => {
   const source = getImage('correct');
   const renderLeft = source ? (
-    <Image resizeMode="contain" style={styles.image} source={source} />
+    <Image resizeMode='contain' style={styles.image} source={source} />
   ) : (
     <View />
   );
@@ -47,20 +43,11 @@ const WhatIs = ({
   const renderRight = (
     <>
       <View style={styles.row}>
-        <Image source={App} resizeMode="contain" style={styles.icon} />
-        <Title
-          isMobileDevice={isMobileDevice}
-          text={I18n.t('web.wahtTitle', options)}
-        />
+        <Image source={App} resizeMode='contain' style={styles.icon} />
+        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.wahtTitle', options)} />
       </View>
-      <BodyText
-        isMobileDevice={isMobileDevice}
-        text={I18n.t('web.wahtText1', options)}
-      />
-      <BodyText
-        isMobileDevice={isMobileDevice}
-        text={I18n.t('web.wahtText2', options)}
-      />
+      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.wahtText1', options)} />
+      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.wahtText2', options)} />
     </>
   );
 

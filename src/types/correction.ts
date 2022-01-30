@@ -1,4 +1,5 @@
 import { DisplayProfile } from './diary';
+import { firestore } from 'firebase';
 
 export interface Diff {
   count: number;
@@ -29,5 +30,5 @@ export interface Correction {
   profile: DisplayProfile;
   comments: Comment[];
   summary: string;
-  createdAt: firebase.firestore.FieldValue;
+  createdAt: firestore.FieldValue;
 }

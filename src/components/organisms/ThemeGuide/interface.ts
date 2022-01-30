@@ -37,11 +37,6 @@ export type WordKey = 'example' | 'expression';
 
 export type StyleType = 'bold' | 'p';
 
-export const StyleType = {
-  bold: 'bold',
-  p: 'p',
-};
-
 export interface StyleText {
   key: string;
   text: string;

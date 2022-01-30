@@ -31,7 +31,7 @@ const ModalDiaryCancel: React.FC<Props> = ({
   onPressSave,
   onPressNotSave,
   onPressClose,
-}: Props): JSX.Element | null => (
+}: Props) => (
   <Modal visible={visible}>
     <View style={styles.container}>
       <Heading title={I18n.t('common.confirmation')} />

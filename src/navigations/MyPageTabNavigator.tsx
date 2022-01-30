@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import ReminderSelectDayScreen from '@/screens/ReminderSelectDayScreen';
 import { CustomTimeInfo, FixDay } from '@/types';
@@ -23,10 +20,7 @@ import TutorialListScreenContainer from '../containers/TutorialListScreenContain
 import InquiryScreenContainer from '../containers/InquiryScreenContainer';
 import { DefaultNavigationOptions } from '../constants/NavigationOptions';
 import { CommonStackParamList, createCommonNavigator } from './CommonNavigator';
-import {
-  HomeBottomParamList,
-  HomeBottomNavigationProp,
-} from './HomeBottomTabNavigator';
+import { HomeBottomParamList, HomeBottomNavigationProp } from './HomeBottomTabNavigator';
 
 export type MyPageTabNavigationProp = CompositeNavigationProp<
   StackNavigationProp<HomeBottomParamList, 'MyPageTab'>,
@@ -54,78 +48,75 @@ export type MyPageTabStackParamList = {
 
 const MyPageTabStack = createStackNavigator<MyPageTabStackParamList>();
 
-const MyPageTabNavigator = (): JSX.Element => {
+const MyPageTabNavigator = () => {
   return (
-    <MyPageTabStack.Navigator
-      initialRouteName="MyPage"
-      screenOptions={DefaultNavigationOptions}
-    >
+    <MyPageTabStack.Navigator initialRouteName='MyPage' screenOptions={DefaultNavigationOptions}>
       <MyPageTabStack.Screen
-        name="MyPage"
+        name='MyPage'
         component={MyPageScreenContainer}
         options={{ title: I18n.t('myPage.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="Setting"
+        name='Setting'
         component={SettingScreenContainer}
         options={{ title: I18n.t('setting.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="TutorialList"
+        name='TutorialList'
         component={TutorialListScreenContainer}
         options={{ title: I18n.t('tutorialList.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="Notice"
+        name='Notice'
         component={NoticeScreenContainer}
         options={{ title: I18n.t('notice.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="Inquiry"
+        name='Inquiry'
         component={InquiryScreenContainer}
         options={{ title: I18n.t('inquiry.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="EditEmail"
+        name='EditEmail'
         component={EditEmailScreen}
         options={{ title: I18n.t('editEmail.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="EditPassword"
+        name='EditPassword'
         component={EditPasswordScreen}
         options={{ title: I18n.t('editPassword.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="RegisterEmailPassword"
+        name='RegisterEmailPassword'
         component={RegisterEmailPasswordScreen}
         options={{ title: I18n.t('registerEmailPassword.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="DeleteAcount"
+        name='DeleteAcount'
         component={DeleteAcountScreenContainer}
         options={{ title: I18n.t('deleteAcount.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="ForegetPassword"
+        name='ForegetPassword'
         component={ForegetPasswordScreen}
         options={{ title: I18n.t('foregetPassword.headerTitle') }}
       />
       <MyPageTabStack.Screen
-        name="ReminderInitialSetting"
+        name='ReminderInitialSetting'
         component={ReminderInitialSettingScreen}
         options={{
           title: I18n.t('onboarding.reminderInitial'),
         }}
       />
       <MyPageTabStack.Screen
-        name="ReminderSelectTimeSetting"
+        name='ReminderSelectTimeSetting'
         component={ReminderSelectTimeSettingScreenContainer}
         options={{
           title: I18n.t('onboarding.reminderSelectTime'),
         }}
       />
       <MyPageTabStack.Screen
-        name="ReminderSelectDay"
+        name='ReminderSelectDay'
         component={ReminderSelectDayScreen}
         options={{
           title: I18n.t('onboarding.reminderSelectDay'),

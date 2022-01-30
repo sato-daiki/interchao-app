@@ -1,11 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
+import { primaryColor, fontSizeL, borderLightColor, fontSizeM } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
@@ -54,7 +49,7 @@ const ModalBlock: React.FC<Props> = ({
   userName,
   onPressSubmit,
   onPressClose,
-}: Props): JSX.Element | null => {
+}: Props) => {
   let title = '';
   if (!isBlocked) {
     title = !isSuccess
@@ -89,10 +84,7 @@ const ModalBlock: React.FC<Props> = ({
               onPress={onPressSubmit}
             />
             <Space size={16} />
-            <WhiteButton
-              title={I18n.t('common.cancel')}
-              onPress={onPressClose}
-            />
+            <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
           </>
         ) : (
           <>
@@ -102,10 +94,7 @@ const ModalBlock: React.FC<Props> = ({
                 : I18n.t('modalBlock.unblockedEndMessage')}
             </Text>
             <Space size={32} />
-            <WhiteButton
-              title={I18n.t('common.close')}
-              onPress={onPressClose}
-            />
+            <WhiteButton title={I18n.t('common.close')} onPress={onPressClose} />
           </>
         )}
       </View>

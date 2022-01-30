@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 
 /* screens */
 import SelectLanguageScreenContainer from '@/containers/SelectLanguageScreenContainer';
@@ -15,18 +12,12 @@ import ForegetPasswordScreen from '@/screens/ForegetPasswordScreen';
 import NotFoundScreen from '@/screens/NotFoundScreen';
 import EditCountryScreen from '@/screens/EditCountryScreen';
 
-import {
-  DefaultAuthLayoutOptions,
-  DefaultNavigationOptions,
-} from '@/constants/NavigationOptions';
+import { DefaultAuthLayoutOptions, DefaultNavigationOptions } from '@/constants/NavigationOptions';
 import I18n from '@/utils/I18n';
 import { CountryCode } from '@/types';
 import { RootStackParamList } from './RootNavigator';
 
-export type AuthNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Auth'
->;
+export type AuthNavigationProp = StackNavigationProp<RootStackParamList, 'Auth'>;
 
 export type AuthStackParamList = {
   Initialize: { lang?: string } | undefined;
@@ -44,10 +35,10 @@ export type AuthStackParamList = {
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
-export const AuthNavigator = (): JSX.Element => {
+export const AuthNavigator = () => {
   return (
     <Stack.Navigator
-      initialRouteName="Initialize"
+      initialRouteName='Initialize'
       screenOptions={{
         ...DefaultNavigationOptions,
         cardStyle: {
@@ -56,12 +47,12 @@ export const AuthNavigator = (): JSX.Element => {
       }}
     >
       <Stack.Screen
-        name="Initialize"
+        name='Initialize'
         component={InitializeScreen}
         options={{ headerShown: false, title: 'Interchao' }}
       />
       <Stack.Screen
-        name="SelectLanguage"
+        name='SelectLanguage'
         component={SelectLanguageScreenContainer}
         options={{
           ...DefaultAuthLayoutOptions,
@@ -69,7 +60,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="EditCountry"
+        name='EditCountry'
         component={EditCountryScreen}
         options={{
           ...DefaultAuthLayoutOptions,
@@ -77,7 +68,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="InputUserName"
+        name='InputUserName'
         component={InputUserNameScreenContainer}
         options={{
           ...DefaultAuthLayoutOptions,
@@ -85,7 +76,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="SignIn"
+        name='SignIn'
         component={SignInScreen}
         options={{
           ...DefaultAuthLayoutOptions,
@@ -93,7 +84,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="SignUp"
+        name='SignUp'
         component={SignUpScreenContainer}
         options={{
           ...DefaultAuthLayoutOptions,
@@ -101,7 +92,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="ForegetPassword"
+        name='ForegetPassword'
         component={ForegetPasswordScreen}
         options={{
           ...DefaultAuthLayoutOptions,
@@ -109,7 +100,7 @@ export const AuthNavigator = (): JSX.Element => {
         }}
       />
       <Stack.Screen
-        name="notfound"
+        name='notfound'
         component={NotFoundScreen}
         options={{ headerShown: false, title: '404 NOT FOUND' }}
       />

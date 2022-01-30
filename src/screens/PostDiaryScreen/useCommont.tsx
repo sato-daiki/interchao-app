@@ -12,12 +12,7 @@ interface UseCommon {
   learnLanguage: Language;
 }
 
-export const useCommon = ({
-  navigation,
-  themeTitle,
-  points,
-  learnLanguage,
-}: UseCommon) => {
+export const useCommon = ({ navigation, themeTitle, points, learnLanguage }: UseCommon) => {
   const [isLoadingPublish, setIsLoadingPublish] = useState(false);
   const [isLoadingDraft, setIsLoadingDraft] = useState(false);
   const [isModalAlert, setIsModalAlert] = useState(false);
@@ -35,30 +30,25 @@ export const useCommon = ({
   useEffect(() => {
     // keybordでの戻るを制御する Androidのみ
     const backAction = (): boolean => {
-      Alert.alert(
-        I18n.t('common.confirmation'),
-        I18n.t('modalDiaryCancel.message'),
-        [
-          {
-            text: I18n.t('common.cancel'),
-            style: 'cancel',
+      Alert.alert(I18n.t('common.confirmation'), I18n.t('modalDiaryCancel.message'), [
+        {
+          text: I18n.t('common.cancel'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: (): void => {
+            navigation.navigate('Home', {
+              screen: 'MyDiaryTab',
+              params: { screen: 'MyDiaryList' },
+            });
           },
-          {
-            text: 'OK',
-            onPress: (): void => {
-              navigation.navigate('Home', {
-                screen: 'MyDiaryTab',
-                params: { screen: 'MyDiaryList' },
-              });
-            },
-          },
-        ]
-      );
+        },
+      ]);
       return true;
     };
     BackHandler.addEventListener('hardwareBackPress', backAction);
-    return (): void =>
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    return (): void => BackHandler.removeEventListener('hardwareBackPress', backAction);
   }, [navigation]);
 
   const onPressPublic = useCallback((): void => {
@@ -131,7 +121,7 @@ export const useCommon = ({
       screen: 'MyPageTab',
       params: { screen: 'MyPage' },
     });
-  }, []);
+  }, [navigation]);
 
   return {
     isModalLack,

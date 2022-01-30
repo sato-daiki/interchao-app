@@ -28,28 +28,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const Start = ({
-  isMaxLayoutChange,
-  isMobileDevice,
-  options,
-}: Props): JSX.Element => {
-  const renderRight = (
-    <Image resizeMode="contain" style={styles.image} source={Zenny} />
-  );
+const Start = ({ isMaxLayoutChange, isMobileDevice, options }: Props) => {
+  const renderRight = <Image resizeMode='contain' style={styles.image} source={Zenny} />;
 
   const renderLeft = (
     <>
       <View style={styles.row}>
-        <Image source={Note} resizeMode="contain" style={styles.icon} />
-        <Title
-          isMobileDevice={isMobileDevice}
-          text={I18n.t('web.startTitle', options)}
-        />
+        <Image source={Note} resizeMode='contain' style={styles.icon} />
+        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.startTitle', options)} />
       </View>
-      <BodyText
-        isMobileDevice={isMobileDevice}
-        text={I18n.t('web.startText', options)}
-      />
+      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.startText', options)} />
     </>
   );
 

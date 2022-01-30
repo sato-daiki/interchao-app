@@ -58,10 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SearchDiaryList: React.FC<Props> = ({
-  item,
-  onPressItem,
-}): JSX.Element => {
+const SearchDiaryList: React.FC<Props> = ({ item, onPressItem }) => {
   const { createdAt, themeCategory, themeSubcategory } = item;
   const postDay = getAlgoliaDay(createdAt);
 
@@ -81,21 +78,11 @@ const SearchDiaryList: React.FC<Props> = ({
           themeSubcategory={themeSubcategory}
           title={item.title}
         />
-        <Highlight
-          textStyle={styles.title}
-          attribute="title"
-          numberOfLines={1}
-          hit={item}
-        />
+        <Highlight textStyle={styles.title} attribute='title' numberOfLines={1} hit={item} />
       </View>
       <Space size={8} />
       <View style={styles.content}>
-        <Highlight
-          textStyle={styles.text}
-          attribute="text"
-          numberOfLines={3}
-          hit={item}
-        />
+        <Highlight textStyle={styles.text} attribute='text' numberOfLines={3} hit={item} />
       </View>
     </Hoverable>
   );

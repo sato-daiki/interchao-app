@@ -43,7 +43,7 @@ const MyDiaryListItem = ({
   onPressUser,
   handlePressItem,
   handlePressDelete,
-}: Props): JSX.Element => {
+}: Props) => {
   const onPressItem = useCallback(() => {
     handlePressItem(item);
   }, [handlePressItem, item]);
@@ -53,10 +53,7 @@ const MyDiaryListItem = ({
   }, [handlePressDelete, index, item]);
 
   const renderRightActions = useCallback(
-    (
-      _progress: Animated.AnimatedInterpolation,
-      dragX: Animated.AnimatedInterpolation
-    ): JSX.Element | null => {
+    (_progress: Animated.AnimatedInterpolation, dragX: Animated.AnimatedInterpolation) => {
       if (Platform.OS === 'web') return null;
       const trans = dragX.interpolate({
         inputRange: [-100, 0],
@@ -66,37 +63,27 @@ const MyDiaryListItem = ({
       return (
         <View style={[styles.rightAction]}>
           <Hoverable style={styles.deleteButton} onPress={onPressDelete}>
-            <Animated.Text
-              style={[
-                styles.deleteText,
-                { transform: [{ translateX: trans }] },
-              ]}
-            >
+            <Animated.Text style={[styles.deleteText, { transform: [{ translateX: trans }] }]}>
               {I18n.t('common.delete')}
             </Animated.Text>
           </Hoverable>
         </View>
       );
     },
-    [onPressDelete]
+    [onPressDelete],
   );
 
   const setRef = useCallback(
-    el => {
+    (el) => {
       // eslint-disable-next-line no-param-reassign
       elRefs.current[index] = el;
     },
-    [elRefs, index]
+    [elRefs, index],
   );
 
   return (
     <Swipeable ref={setRef} renderRightActions={renderRightActions}>
-      <DiaryListItem
-        mine
-        item={item}
-        onPressUser={onPressUser}
-        onPressItem={onPressItem}
-      />
+      <DiaryListItem mine item={item} onPressUser={onPressUser} onPressItem={onPressItem} />
     </Swipeable>
   );
 };

@@ -60,63 +60,41 @@ const styles = StyleSheet.create({
   },
 });
 
-const Example = ({
-  isMaxLayoutChange,
-  isMobileDevice,
-  options,
-}: Props): JSX.Element => {
+const Example = ({ isMaxLayoutChange, isMobileDevice, options }: Props) => {
   const renderTopCenter = (
     <>
       <View style={styles.row}>
-        <Image source={Sample} resizeMode="contain" style={styles.icon} />
-        <Title
-          isMobileDevice={isMobileDevice}
-          text={I18n.t('web.exampleTitle', options)}
-        />
+        <Image source={Sample} resizeMode='contain' style={styles.icon} />
+        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.exampleTitle', options)} />
       </View>
-      <BodyText
-        isMobileDevice={isMobileDevice}
-        text={I18n.t('web.exampleText', options)}
-      />
+      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.exampleText', options)} />
     </>
   );
 
   const entry = getImage('entry');
   const renderLeft = entry ? (
     <>
-      <Text style={styles.titleDetail}>
-        {I18n.t('web.exampleDetailTitle1', options)}
-      </Text>
-      <Text style={styles.textDetail}>
-        {I18n.t('web.exampleDetailText1', options)}
-      </Text>
-      <Image resizeMode="contain" source={entry} style={styles.image} />
+      <Text style={styles.titleDetail}>{I18n.t('web.exampleDetailTitle1', options)}</Text>
+      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText1', options)}</Text>
+      <Image resizeMode='contain' source={entry} style={styles.image} />
     </>
   ) : null;
 
   const comment = getImage('comment');
   const renderCenter = comment ? (
     <>
-      <Text style={styles.titleDetail}>
-        {I18n.t('web.exampleDetailTitle2', options)}
-      </Text>
-      <Text style={styles.textDetail}>
-        {I18n.t('web.exampleDetailText2', options)}
-      </Text>
-      <Image resizeMode="contain" source={comment} style={styles.image} />
+      <Text style={styles.titleDetail}>{I18n.t('web.exampleDetailTitle2', options)}</Text>
+      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText2', options)}</Text>
+      <Image resizeMode='contain' source={comment} style={styles.image} />
     </>
   ) : null;
 
   const summary = getImage('summary');
   const renderRight = summary ? (
     <>
-      <Text style={styles.titleDetail}>
-        {I18n.t('web.exampleDetailTitle3', options)}
-      </Text>
-      <Text style={styles.textDetail}>
-        {I18n.t('web.exampleDetailText3', options)}
-      </Text>
-      <Image resizeMode="contain" source={summary} style={styles.image} />
+      <Text style={styles.titleDetail}>{I18n.t('web.exampleDetailTitle3', options)}</Text>
+      <Text style={styles.textDetail}>{I18n.t('web.exampleDetailText3', options)}</Text>
+      <Image resizeMode='contain' source={summary} style={styles.image} />
     </>
   ) : null;
 

@@ -25,7 +25,7 @@ const UserListItem = ({
   nativeLanguage,
   nationalityCode,
   onPressUser,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <View style={styles.container}>
       <ProfileIconHorizontal

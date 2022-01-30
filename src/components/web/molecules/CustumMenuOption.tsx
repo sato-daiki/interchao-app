@@ -2,12 +2,7 @@ import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 import { MenuOption } from 'react-native-popup-menu';
 import { Icon, HoverableView } from '../../atoms';
-import {
-  hoverGray,
-  subTextColor,
-  primaryColor,
-  fontSizeM,
-} from '../../../styles/Common';
+import { hoverGray, subTextColor, primaryColor, fontSizeM } from '../../../styles/Common';
 import { IconType } from '../../atoms/Icon';
 
 interface Props {
@@ -43,7 +38,7 @@ const CustumMenuOption = ({
   textColor = primaryColor,
   iconColor = subTextColor,
   text,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <MenuOption onSelect={onSelect}>
       <HoverableView style={styles.container} hoverStyle={styles.hover}>

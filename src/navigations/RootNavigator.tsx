@@ -35,7 +35,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
   setUser,
   setProfile,
   restoreUid,
-}): JSX.Element => {
+}) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const initNavigation = useCallback(
@@ -58,7 +58,7 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
       }
       if (isLoading) setIsLoading(false);
     },
-    [isLoading, restoreUid, setProfile, setUser]
+    [isLoading, restoreUid, setProfile, setUser],
   );
 
   useEffect(() => {
@@ -71,21 +71,19 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
 
   const renderScreen = useCallback(() => {
     console.log(
-      `[renderScreen] isLoading:${localStatus.isLoading}, onboarding:${localStatus.onboarding}, uid:${localStatus.uid}`
+      `[renderScreen] isLoading:${localStatus.isLoading}, onboarding:${localStatus.onboarding}, uid:${localStatus.uid}`,
     );
     if (localStatus.isLoading) {
-      return <Stack.Screen name="Loading" component={LoadingScreen} />;
+      return <Stack.Screen name='Loading' component={LoadingScreen} />;
     }
     if (localStatus.uid !== null) {
       if (localStatus.onboarding === false && Platform.OS !== 'web') {
-        return (
-          <Stack.Screen name="Onboarding" component={OnboardingNavigator} />
-        );
+        return <Stack.Screen name='Onboarding' component={OnboardingNavigator} />;
       }
-      return <Stack.Screen name="Main" component={MainNavigator} />;
+      return <Stack.Screen name='Main' component={MainNavigator} />;
     }
-    return <Stack.Screen name="Auth" component={AuthNavigator} />;
-  }, [localStatus.isLoading, localStatus.onboarding, localStatus.uid]);
+    return <Stack.Screen name='Auth' component={AuthNavigator} />;
+  }, [Stack, localStatus.isLoading, localStatus.onboarding, localStatus.uid]);
 
   return (
     <Stack.Navigator

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditPasswordScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
+const EditPasswordScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [errorCurrentPassword, setErrorCurrentPassword] = useState('');
