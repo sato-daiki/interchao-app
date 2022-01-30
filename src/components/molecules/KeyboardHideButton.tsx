@@ -22,10 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const KeyboardHideButton: React.FC<Props> = ({
-  isKeyboard,
-  setIsKeyboard,
-}): JSX.Element => {
+const KeyboardHideButton: React.FC<Props> = ({ isKeyboard, setIsKeyboard }) => {
   useEffect(() => {
     // androidはwillShowをサポートしていない。 willじゃないと遅いのでiosのみwillにする
     // hideはTextInputの方で管理しているから親から降りてくる
@@ -33,7 +30,7 @@ const KeyboardHideButton: React.FC<Props> = ({
       Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
       () => {
         setIsKeyboard(true);
-      }
+      },
     );
 
     return (): void => {
@@ -45,11 +42,7 @@ const KeyboardHideButton: React.FC<Props> = ({
     <View style={styles.container}>
       {isKeyboard ? (
         <Hoverable style={styles.keyboard} onPress={Keyboard.dismiss}>
-          <MaterialCommunityIcons
-            size={24}
-            color={mainColor}
-            name="keyboard-close"
-          />
+          <MaterialCommunityIcons size={24} color={mainColor} name='keyboard-close' />
         </Hoverable>
       ) : null}
       {Platform.OS === 'ios' ? <KeyboardSpacer /> : null}

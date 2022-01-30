@@ -1,4 +1,5 @@
 import { Language, CountryCode } from './index';
+import { firestore } from 'firebase';
 
 export interface Reviewer {
   uid: string;
@@ -14,5 +15,5 @@ export interface Review {
   objectID: string;
   rating: number;
   comment: string;
-  createdAt: firebase.firestore.FieldValue;
+  createdAt: firestore.FieldValue;
 }

@@ -47,12 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ReviewListItem = ({
-  item,
-  nativeLanguage,
-  textLanguage,
-  handlePressUser,
-}: Props): JSX.Element => {
+const ReviewListItem = ({ item, nativeLanguage, textLanguage, handlePressUser }: Props) => {
   const { rating, createdAt, comment, reviewer } = item;
 
   const onPressUser = useCallback(() => {

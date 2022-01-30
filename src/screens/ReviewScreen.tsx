@@ -153,10 +153,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as Review;
 
-    const refReview = firebase
-      .firestore()
-      .collection(`reviews`)
-      .doc();
+    const refReview = firebase.firestore().collection(`reviews`).doc();
     batch.set(refReview, newReview);
 
     batch.commit();
@@ -195,12 +192,8 @@ const ReviewScreen: React.FC<ScreenType> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (): JSX.Element => (
-        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
-      ),
-      headerRight: (): JSX.Element => (
-        <HeaderText text={I18n.t('common.sending')} onPress={onPressSubmit} />
-      ),
+      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
+      headerRight: () => <HeaderText text={I18n.t('common.sending')} onPress={onPressSubmit} />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rating, comment]);
@@ -261,7 +254,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
         visible={isModalConfirmation}
         title={I18n.t('common.confirmation')}
         message={I18n.t('review.confirmation')}
-        mainButtonText="OK"
+        mainButtonText='OK'
         onPressMain={onPressMainConfirmation}
         onPressClose={onPressCloseConfirmation}
       />
@@ -272,11 +265,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
         nationalityCode={diary.profile.nationalityCode}
       />
       <Space size={24} />
-      <AirbnbRating
-        showRating={false}
-        defaultRating={0}
-        onFinishRating={onFinishRating}
-      />
+      <AirbnbRating showRating={false} defaultRating={0} onFinishRating={onFinishRating} />
       <Space size={24} />
       <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
         <TextInput
@@ -288,15 +277,12 @@ const ReviewScreen: React.FC<ScreenType> = ({
           numberOfLines={3}
           spellCheck
           autoCorrect
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           style={styles.review}
           onBlur={onBlur}
         />
       </KeyboardAwareScrollView>
-      <KeyboardHideButton
-        isKeyboard={isKeyboard}
-        setIsKeyboard={setIsKeyboard}
-      />
+      <KeyboardHideButton isKeyboard={isKeyboard} setIsKeyboard={setIsKeyboard} />
     </View>
   );
 };

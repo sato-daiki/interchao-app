@@ -26,10 +26,7 @@ interface LocalStatus {
   unreadCorrectionNum?: number;
 }
 
-const getBadgeStatus = (
-  badgeMode: string,
-  localStatus: LocalStatus
-): number => {
+const getBadgeStatus = (badgeMode: string, localStatus: LocalStatus): number => {
   const { unreadCorrectionNum = 0 } = localStatus;
   if (badgeMode === 'myDiary' && unreadCorrectionNum > 0) {
     return unreadCorrectionNum;
@@ -37,18 +34,15 @@ const getBadgeStatus = (
   return 0;
 };
 
-const TabIcon = ({ name, size, color, badgeMode }: Props): JSX.Element => {
-  const localStatus = useSelector(
-    (state: State) => state.rootReducer.localStatus,
-    shallowEqual
-  );
+const TabIcon = ({ name, size, color, badgeMode }: Props) => {
+  const localStatus = useSelector((state: State) => state.rootReducer.localStatus, shallowEqual);
   // check badge show or not
   const badgeNum = getBadgeStatus(badgeMode, localStatus);
   return (
     <View>
       <MaterialCommunityIcons name={name} size={size} color={color} />
       {badgeNum > 0 ? (
-        <Badge containerStyle={styles.badge} status="error" value={badgeNum} />
+        <Badge containerStyle={styles.badge} status='error' value={badgeNum} />
       ) : null}
     </View>
   );

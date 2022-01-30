@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const ThemeGuideIntroduction = ({ params }: Props): JSX.Element => {
+const ThemeGuideIntroduction = ({ params }: Props) => {
   return (
     <View style={styles.container}>
       <Header title={I18n.t('themeGuide.introduction')} />
       <Image source={params.source} style={styles.image} />
       <Text style={styles.text}>{params.text}</Text>
-      <SwipeGuid type="start" />
+      <SwipeGuid type='start' />
     </View>
   );
 };

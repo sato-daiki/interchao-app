@@ -21,9 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CountryNameWithFlag: React.FC<Props> = ({
-  nationalityCode,
-}): JSX.Element => {
+const CountryNameWithFlag: React.FC<Props> = ({ nationalityCode }) => {
   return (
     <View style={styles.container}>
       <Flag code={nationalityCode} size={24} />

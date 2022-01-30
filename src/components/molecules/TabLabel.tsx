@@ -19,12 +19,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const TabLabel = ({ color }: Props): JSX.Element => {
+const TabLabel = ({ color }: Props) => {
   return (
     <View style={styles.container}>
-      <Text style={[styles.text, { color }]}>
-        {I18n.t('mainTab.teachDiary')}
-      </Text>
+      <Text style={[styles.text, { color }]}>{I18n.t('mainTab.teachDiary')}</Text>
     </View>
   );
 };

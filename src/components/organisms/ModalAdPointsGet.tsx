@@ -5,13 +5,7 @@ import { GetPoints, FlashLeft, FlashRight } from '@/images';
 
 import I18n from '@/utils/I18n';
 import { Modal } from '@/components/template';
-import {
-  Space,
-  UserPointsBig,
-  SubmitButton,
-  Lottie,
-  Heading,
-} from '@/components/atoms';
+import { Space, UserPointsBig, SubmitButton, Lottie, Heading } from '@/components/atoms';
 
 const styles = StyleSheet.create({
   container: {
@@ -58,12 +52,7 @@ interface Props {
   onPressClose: () => void;
 }
 
-const ModalAdPointsGet: React.FC<Props> = ({
-  visible,
-  points,
-  getPoints,
-  onPressClose,
-}: Props): JSX.Element | null => {
+const ModalAdPointsGet: React.FC<Props> = ({ visible, points, getPoints, onPressClose }: Props) => {
   const [isShowFlash, setIsShowFlash] = useState(false);
   const refLottie = createRef<Lottie>();
 
@@ -109,9 +98,7 @@ const ModalAdPointsGet: React.FC<Props> = ({
                 loop={false}
               />
             </View>
-            <Text style={styles.text}>
-              {I18n.t('modalAdPointsGet.text', { getPoints })}
-            </Text>
+            <Text style={styles.text}>{I18n.t('modalAdPointsGet.text', { getPoints })}</Text>
           </>
         )}
         <Space size={24} />

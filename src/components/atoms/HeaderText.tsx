@@ -25,11 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderText: React.FC<Props> = ({
-  containerStyle,
-  text,
-  onPress,
-}: Props): JSX.Element => {
+const HeaderText: React.FC<Props> = ({ containerStyle, text, onPress }: Props) => {
   return (
     <Hoverable
       style={[styles.container, containerStyle]}

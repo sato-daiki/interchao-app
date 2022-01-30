@@ -1,12 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ScrollView,
-  Switch,
-  Platform,
-} from 'react-native';
+import { View, StyleSheet, Text, ScrollView, Switch, Platform } from 'react-native';
 import * as Speech from 'expo-speech';
 import { Language } from '@/types';
 import I18n from '@/utils/I18n';
@@ -46,12 +39,7 @@ interface Props {
   onClose: () => void;
 }
 
-const ModalSpeech: React.FC<Props> = ({
-  visible,
-  text,
-  textLanguage,
-  onClose,
-}: Props): JSX.Element | null => {
+const ModalSpeech: React.FC<Props> = ({ visible, text, textLanguage, onClose }: Props) => {
   const [isSlow, setIsSlow] = useState(false);
 
   // 再生中のアイコンを制御
@@ -110,7 +98,7 @@ const ModalSpeech: React.FC<Props> = ({
           <Text style={styles.text}>{text}</Text>
           <Space size={16} />
           <HoverableIcon
-            icon="community"
+            icon='community'
             name={playing ? 'pause' : 'play'}
             size={48}
             hoverBorderRadius={32}
@@ -119,7 +107,7 @@ const ModalSpeech: React.FC<Props> = ({
           />
           <View style={styles.switchContainer}>
             <Switch
-              thumbColor="white"
+              thumbColor='white'
               trackColor={{ false: '#767577', true: '#81b0ff' }}
               onValueChange={(): void => setIsSlow(!isSlow)}
               value={isSlow}

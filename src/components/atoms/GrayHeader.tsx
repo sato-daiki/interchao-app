@@ -1,12 +1,5 @@
 import React, { ReactNode } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { View, Text, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { fontSizeM, primaryColor, offWhite } from '../../styles/Common';
 
 interface Props {
@@ -33,12 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GrayHeader: React.FC<Props> = ({
-  title,
-  icon,
-  containerStyle,
-  titleStyle,
-}: Props): JSX.Element => {
+const GrayHeader: React.FC<Props> = ({ title, icon, containerStyle, titleStyle }: Props) => {
   return (
     <View style={[styles.row, containerStyle]}>
       {<View style={styles.icon}>{icon}</View> || undefined}

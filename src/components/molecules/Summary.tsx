@@ -28,11 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Summary = ({
-  summary,
-  nativeLanguage,
-  textLanguage,
-}: Props): JSX.Element => (
+const Summary = ({ summary, nativeLanguage, textLanguage }: Props) => (
   <View style={styles.container}>
     <Text style={styles.label}>{I18n.t('correcting.summary')}</Text>
     <RichText

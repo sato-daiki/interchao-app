@@ -72,7 +72,7 @@ const ModalVoice: React.FC<Props> = ({
   getPlaybackTimestamp,
   onPlayPausePressed,
   onPressClose,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Modal visible={visible}>
       <View style={styles.container}>
@@ -97,7 +97,7 @@ const ModalVoice: React.FC<Props> = ({
             ) : (
               <HoverableIcon
                 disabled={!isPlaybackAllowed || isLoading}
-                icon="community"
+                icon='community'
                 name={isPlaying ? 'pause' : 'play'}
                 size={56}
                 color={primaryColor}

@@ -1,13 +1,8 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 import { CallerThemeGuide } from '@/screens/SelectThemeSubcategoryScreen/interface';
 import { Diary, ThemeCategory, ThemeSubcategory } from '@/types';
-import HomeBottomTabNavigator, {
-  HomeBottomParamList,
-} from './HomeBottomTabNavigator';
+import HomeBottomTabNavigator, { HomeBottomParamList } from './HomeBottomTabNavigator';
 
 import {
   ModalEditMyDiaryListNavigator,
@@ -36,18 +31,13 @@ import { TeachDiaryTabStackParamList } from './TeachDiaryTabNavigator';
 import { maxMain } from '../styles/Common';
 import { RootStackParamList } from './RootNavigator';
 
-export type MainNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Main'
->;
+export type MainNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
 export type MainStackParamList = {
   Home: {
     screen: keyof HomeBottomParamList;
     params: {
-      screen:
-        | keyof MyDiaryTabStackParamList
-        | keyof TeachDiaryTabStackParamList;
+      screen: keyof MyDiaryTabStackParamList | keyof TeachDiaryTabStackParamList;
     };
   };
   ModalEditMyDiaryList: {
@@ -103,12 +93,12 @@ export type MainStackParamList = {
 
 const MainStack = createStackNavigator<MainStackParamList>();
 
-const MainNavigator = (): JSX.Element => {
+const MainNavigator = () => {
   return (
     <MainStack.Navigator
-      initialRouteName="Home"
-      headerMode="none"
-      mode="modal"
+      initialRouteName='Home'
+      headerMode='none'
+      mode='modal'
       screenOptions={{
         cardStyle: {
           backgroundColor: '#FFFFFF',
@@ -119,38 +109,17 @@ const MainNavigator = (): JSX.Element => {
         },
       }}
     >
-      <MainStack.Screen name="Home" component={HomeBottomTabNavigator} />
-      <MainStack.Screen
-        name="ModalEditMyDiaryList"
-        component={ModalEditMyDiaryListNavigator}
-      />
-      <MainStack.Screen
-        name="ModalSelectDiaryType"
-        component={ModalSelectDiaryTypeNavigator}
-      />
-      <MainStack.Screen
-        name="ModalThemeGuide"
-        component={ModalThemeGuideNavigator}
-      />
-      <MainStack.Screen
-        name="ModalPostDiary"
-        component={ModalPostDiaryNavigator}
-      />
-      <MainStack.Screen
-        name="ModalPostDraftDiary"
-        component={ModalPostDraftDiaryNavigator}
-      />
-      <MainStack.Screen name="ModalReview" component={ModalReviewNavigator} />
-      <MainStack.Screen
-        name="ModalEditMyProfile"
-        component={ModalEditMyProfileNavigator}
-      />
-      <MainStack.Screen
-        name="ModalCorrecting"
-        component={ModalCorrectingNavigator}
-      />
-      <MainStack.Screen name="ModalRecord" component={ModalRecordNavigator} />
-      <MainStack.Screen name="ModalAbout" component={ModalAboutNavigator} />
+      <MainStack.Screen name='Home' component={HomeBottomTabNavigator} />
+      <MainStack.Screen name='ModalEditMyDiaryList' component={ModalEditMyDiaryListNavigator} />
+      <MainStack.Screen name='ModalSelectDiaryType' component={ModalSelectDiaryTypeNavigator} />
+      <MainStack.Screen name='ModalThemeGuide' component={ModalThemeGuideNavigator} />
+      <MainStack.Screen name='ModalPostDiary' component={ModalPostDiaryNavigator} />
+      <MainStack.Screen name='ModalPostDraftDiary' component={ModalPostDraftDiaryNavigator} />
+      <MainStack.Screen name='ModalReview' component={ModalReviewNavigator} />
+      <MainStack.Screen name='ModalEditMyProfile' component={ModalEditMyProfileNavigator} />
+      <MainStack.Screen name='ModalCorrecting' component={ModalCorrectingNavigator} />
+      <MainStack.Screen name='ModalRecord' component={ModalRecordNavigator} />
+      <MainStack.Screen name='ModalAbout' component={ModalAboutNavigator} />
       {/* <MainStack.Screen name="NotFound" component={NotFoundScreen} /> */}
     </MainStack.Navigator>
   );

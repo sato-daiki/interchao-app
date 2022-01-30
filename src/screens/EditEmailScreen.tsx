@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditEmailScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
+const EditEmailScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [isEmailCheckOk, setIsEmailCheckOk] = useState(false);

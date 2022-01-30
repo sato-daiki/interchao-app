@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
+const ModalAppSuggestion = ({ user, setUser }: Props) => {
   const [visible, setVisible] = useState(true);
 
   const isTabletOrMobileDevice = useMediaQuery({
@@ -43,13 +43,10 @@ const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
 
   const onPressClose = useCallback(async () => {
     setVisible(false);
-    await firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    await firebase.firestore().doc(`users/${user.uid}`).update({
+      lastModalAppSuggestionAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
 
     setUser({
       ...user,
@@ -61,17 +58,12 @@ const ModalAppSuggestion = ({ user, setUser }: Props): JSX.Element | null => {
     Platform.OS === 'web' &&
     isTabletOrMobileDevice &&
     visible &&
-    (!user.lastModalAppSuggestionAt ||
-      getIsAfterDay(user.lastModalAppSuggestionAt, 7))
+    (!user.lastModalAppSuggestionAt || getIsAfterDay(user.lastModalAppSuggestionAt, 7))
   ) {
     return (
       <View style={styles.container}>
         <Hoverable style={styles.icon} onPress={onPressClose}>
-          <MaterialCommunityIcons
-            size={28}
-            color="#fff"
-            name="close-circle-outline"
-          />
+          <MaterialCommunityIcons size={28} color='#fff' name='close-circle-outline' />
         </Hoverable>
         <AppDownload isWhite={false} />
       </View>

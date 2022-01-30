@@ -74,19 +74,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const TeachDiaryListItem = ({
-  item,
-  onPressUser,
-  onPressItem,
-}: Props): JSX.Element => {
-  const {
-    createdAt,
-    title,
-    text,
-    profile,
-    themeCategory,
-    themeSubcategory,
-  } = item;
+const TeachDiaryListItem = ({ item, onPressUser, onPressItem }: Props) => {
+  const { createdAt, title, text, profile, themeCategory, themeSubcategory } = item;
   const { photoUrl, nativeLanguage, uid, userName } = profile;
   const postDay = getAlgoliaDay(createdAt);
 
@@ -99,11 +88,7 @@ const TeachDiaryListItem = ({
   }, [onPressUser, uid, userName]);
 
   return (
-    <Hoverable
-      style={styles.container}
-      hoverStyle={styles.hover}
-      onPress={onPressRow}
-    >
+    <Hoverable style={styles.container} hoverStyle={styles.hover} onPress={onPressRow}>
       <ProfileIcon
         photoUrl={photoUrl}
         nativeLanguage={nativeLanguage}
@@ -120,7 +105,7 @@ const TeachDiaryListItem = ({
             themeSubcategory={themeSubcategory}
             title={title}
           />
-          <Text style={styles.text} ellipsizeMode="tail" numberOfLines={3}>
+          <Text style={styles.text} ellipsizeMode='tail' numberOfLines={3}>
             {text}
           </Text>
           <View style={styles.footer}>

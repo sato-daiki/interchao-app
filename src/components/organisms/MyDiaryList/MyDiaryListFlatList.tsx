@@ -1,10 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-  ListRenderItem,
-} from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, ListRenderItem } from 'react-native';
 import { Diary } from '@/types';
 import { GrayHeader } from '@/components/atoms';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -54,15 +49,11 @@ const MyDiaryListFlatList: React.FC<Props> = ({
   }, [isEmpty]);
 
   const listHeaderComponent = useCallback(() => {
-    return (
-      <GrayHeader
-        title={I18n.t('myDiaryList.diaryList', { count: diaryTotalNum })}
-      />
-    );
+    return <GrayHeader title={I18n.t('myDiaryList.diaryList', { count: diaryTotalNum })} />;
   }, [diaryTotalNum]);
 
   const renderItem: ListRenderItem<Diary> = useCallback(
-    ({ item, index }): JSX.Element => {
+    ({ item, index }) => {
       return (
         <MyDiaryListItem
           index={index}
@@ -74,7 +65,7 @@ const MyDiaryListFlatList: React.FC<Props> = ({
         />
       );
     },
-    [elRefs, handlePressDelete, handlePressItem, onPressUser]
+    [elRefs, handlePressDelete, handlePressItem, onPressUser],
   );
 
   const refreshControl = useMemo(() => {

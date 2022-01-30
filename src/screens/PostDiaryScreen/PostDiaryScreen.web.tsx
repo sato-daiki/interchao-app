@@ -3,11 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import PostDiaryWeb from '@/components/organisms/PostDiaryWeb/PostDiaryWeb';
 import HeaderTitle from '@/components/organisms/PostDiaryWeb/HeaderTitle';
-import {
-  HeaderText,
-  SmallButtonSubmit,
-  SmallButtonWhite,
-} from '@/components/atoms';
+import { HeaderText, SmallButtonSubmit, SmallButtonWhite } from '@/components/atoms';
 
 import I18n from '@/utils/I18n';
 import { primaryColor } from '@/styles/Common';
@@ -77,7 +73,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
 
   const headerLeft = useCallback(
     () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
-    [onPressClose]
+    [onPressClose],
   );
 
   const headerRight = useCallback(() => {
@@ -100,9 +96,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
           </View>
         );
       }
-      return (
-        <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />
-      );
+      return <HeaderText text={I18n.t('common.draft')} onPress={onPressDraft} />;
     }
     return null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +107,7 @@ const PostDiaryScreen: React.FC<ScreenType> = ({
       title: 'Interchao',
       headerLeft,
       headerRight,
-      headerTitle: (): JSX.Element => <HeaderTitle />,
+      headerTitle: () => <HeaderTitle />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.points, text, title, isLoadingDraft, isFirstEdit]);

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { Text, StyleSheet, ActivityIndicator, StyleProp, ViewStyle } from 'react-native';
 import { mainColor, fontSizeM } from '../../styles/Common';
 import Hoverable from './Hoverable';
 
@@ -40,7 +34,7 @@ const SmallButtonWhite: React.FC<Props> = ({
   color = mainColor,
   title,
   onPress,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <Hoverable
       style={[styles.contaner, containerStyle, { borderColor: color }]}
@@ -48,7 +42,7 @@ const SmallButtonWhite: React.FC<Props> = ({
       onPress={isLoading || disable ? undefined : onPress}
     >
       {isLoading ? (
-        <ActivityIndicator size="small" />
+        <ActivityIndicator size='small' />
       ) : (
         <Text style={[styles.title, { color }]}>{title}</Text>
       )}

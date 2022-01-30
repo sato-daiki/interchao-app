@@ -46,7 +46,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
   correction,
   onPressUser,
   onPressReview,
-}): JSX.Element => {
+}) => {
   const { profile, comments, summary, createdAt } = correction;
   const [hidden, setHidden] = useState(false);
   const postDate = getAlgoliaDate(createdAt);
@@ -68,7 +68,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
             />
             <Text style={styles.daytext}>{postDate}</Text>
           </View>
-          {comments.map(item => {
+          {comments.map((item) => {
             const { original, fix, detail, diffs, rowNumber } = item;
             return (
               <CorrectionItem
@@ -91,10 +91,7 @@ const MyDiaryCorrection: React.FC<Props> = ({
           ) : null}
           <Space size={32} />
           {isReview !== undefined && !isEditing ? (
-            <MyDiaryCorrectionFooter
-              isReview={isReview}
-              onPress={onPressReview}
-            />
+            <MyDiaryCorrectionFooter isReview={isReview} onPress={onPressReview} />
           ) : null}
         </>
       )}

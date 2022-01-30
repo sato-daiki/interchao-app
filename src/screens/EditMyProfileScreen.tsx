@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, Platform } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -18,12 +18,7 @@ import { KeyboardHideButton } from '@/components/molecules';
 import ModalSpokenLanguages from '@/components/organisms/ModalSpokenLanguages';
 import { ModalConfirm } from '@/components/organisms';
 
-import {
-  borderLightColor,
-  primaryColor,
-  fontSizeM,
-  subTextColor,
-} from '@/styles/Common';
+import { borderLightColor, primaryColor, fontSizeM, subTextColor } from '@/styles/Common';
 import { openCameraRoll, uploadImageAsync } from '@/utils/CameraRoll';
 import firebase from '@/constants/firebase';
 import { Profile, Language, CountryCode } from '@/types';
@@ -46,7 +41,7 @@ export interface Props {
 }
 
 interface DispatchProps {
-  setProfile: (profile: Profile) => {};
+  setProfile: (profile: Profile) => void;
 }
 
 type NavigationProp = CompositeNavigationProp<
@@ -142,11 +137,7 @@ const styles = StyleSheet.create({
 /**
  * マイページ編集画面
  */
-const EditMyProfileScreen: React.FC<ScreenType> = ({
-  profile,
-  setProfile,
-  navigation,
-}) => {
+const EditMyProfileScreen: React.FC<ScreenType> = ({ profile, setProfile, navigation }) => {
   const [name, setName] = useState(profile.name);
   const [userName, setUserName] = useState(profile.userName);
   const [isNative, setIsNative] = useState(false);
@@ -154,15 +145,13 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
   const [isSpoken, setIsSpoken] = useState(false);
   const [nativeLanguage, setNativeLanguage] = useState(profile.nativeLanguage);
   const [learnLanguage, setLearnLanguage] = useState(profile.learnLanguage);
-  const [spokenLanguages, setSpokenLanguages] = useState(
-    profile.spokenLanguages || []
-  );
+  const [spokenLanguages, setSpokenLanguages] = useState(profile.spokenLanguages || []);
   const [introduction, setIntroduction] = useState(profile.introduction);
   const [photoUrl, setPhotoUrl] = useState(profile.photoUrl);
   const [isLoading, setIsLoading] = useState(false);
-  const [nationalityCode, setNationalityCode] = useState<
-    CountryCode | undefined
-  >(profile.nationalityCode);
+  const [nationalityCode, setNationalityCode] = useState<CountryCode | undefined>(
+    profile.nationalityCode,
+  );
   const [isModalError, setIsModalError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isKeyboard, setIsKeyboard] = useState(false);
@@ -174,7 +163,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       nationalityCode,
       learnLanguage,
       nativeLanguage,
-      spokenLanguages
+      spokenLanguages,
     );
     if (!checked.result) {
       setErrorMessage(checked.errorMessage);
@@ -191,10 +180,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       newPhotoUrl = await uploadImageAsync(photoUrl, path, 300);
     }
 
-    const ref = firebase
-      .firestore()
-      .collection('profiles')
-      .doc(profile.uid);
+    const ref = firebase.firestore().collection('profiles').doc(profile.uid);
 
     const profileInfo = {
       name,
@@ -216,6 +202,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       ...profile,
       ...profileInfo,
     });
+    //@ts-ignore
     navigation.navigate('MyPageTab');
   }, [
     introduction,
@@ -238,12 +225,8 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (): JSX.Element => (
-        <HeaderText text={I18n.t('common.close')} onPress={onPressGoBack} />
-      ),
-      headerRight: (): JSX.Element | null => (
-        <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />
-      ),
+      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressGoBack} />,
+      headerRight: () => <HeaderText text={I18n.t('common.done')} onPress={onPressSubmit} />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -299,13 +282,10 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     });
   }, [nationalityCode, navigation]);
 
-  const onPressSubmitLanguagesLearn = useCallback(
-    (language: Language): void => {
-      setLearnLanguage(language);
-      setIsLearn(false);
-    },
-    []
-  );
+  const onPressSubmitLanguagesLearn = useCallback((language: Language): void => {
+    setLearnLanguage(language);
+    setIsLearn(false);
+  }, []);
 
   const onPressCloseLanguagesLearn = useCallback((): void => {
     setIsLearn(false);
@@ -315,13 +295,10 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
     setIsLearn(true);
   }, []);
 
-  const onPressSubmitLanguagesNative = useCallback(
-    (language: Language): void => {
-      setNativeLanguage(language);
-      setIsNative(false);
-    },
-    []
-  );
+  const onPressSubmitLanguagesNative = useCallback((language: Language): void => {
+    setNativeLanguage(language);
+    setIsNative(false);
+  }, []);
 
   const onPressCloseLanguagesNative = useCallback((): void => {
     setIsNative(false);
@@ -336,7 +313,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       setSpokenLanguages([...spokenLanguages, language]);
       setIsSpoken(false);
     },
-    [spokenLanguages]
+    [spokenLanguages],
   );
 
   const onPressCloseLanguagesSpoken = useCallback((): void => {
@@ -372,11 +349,7 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
       />
       <ModalSpokenLanguages
         visible={isSpoken}
-        languages={getTargetLanguages(
-          learnLanguage,
-          nativeLanguage,
-          spokenLanguages
-        )}
+        languages={getTargetLanguages(learnLanguage, nativeLanguage, spokenLanguages)}
         onPressSubmit={onPressSubmitLanguagesSpoken}
         onPressClose={onPressCloseLanguagesSpoken}
       />
@@ -396,41 +369,29 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           <TextInput
             style={styles.textInput}
             value={name || ''}
-            placeholder="name"
+            placeholder='name'
             maxLength={20}
             autoCorrect={false}
             blurOnSubmit
-            keyboardType="default"
+            keyboardType='default'
             spellCheck
-            returnKeyType="done"
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
+            returnKeyType='done'
+            autoCapitalize='none'
+            underlineColorAndroid='transparent'
             onChangeText={onChangeTextName}
           />
         </View>
 
-        <Hoverable
-          style={styles.row}
-          activeOpacity={1}
-          onPress={onPressUserName}
-        >
+        <Hoverable style={styles.row} activeOpacity={1} onPress={onPressUserName}>
           <Text style={[styles.label]}>{I18n.t('editMyProfile.userName')}</Text>
           <Text>{userName}</Text>
         </Hoverable>
 
-        <Hoverable
-          style={styles.row}
-          activeOpacity={1}
-          onPress={onPressOpenLanguagesLearn}
-        >
+        <Hoverable style={styles.row} activeOpacity={1} onPress={onPressOpenLanguagesLearn}>
           <Text style={styles.label}>{I18n.t('editMyProfile.learn')}</Text>
           <Text>{getLanguage(learnLanguage)}</Text>
         </Hoverable>
-        <Hoverable
-          style={styles.row}
-          activeOpacity={1}
-          onPress={onPressOpenLanguagesNative}
-        >
+        <Hoverable style={styles.row} activeOpacity={1} onPress={onPressOpenLanguagesNative}>
           <Text style={styles.label}>{I18n.t('editMyProfile.native')}</Text>
           <Text>{getLanguage(nativeLanguage)}</Text>
         </Hoverable>
@@ -438,45 +399,30 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
         <View style={styles.spokenContainer}>
           <Text style={styles.label}>{I18n.t('editMyProfile.spoken')}</Text>
           <View style={styles.right}>
-            {spokenLanguages.map(item => (
+            {spokenLanguages.map((item) => (
               <View style={styles.spokenRow} key={item}>
                 <Text style={styles.spoken}>{getLanguage(item)}</Text>
                 <Hoverable
                   style={styles.trash}
                   onPress={(): void => {
-                    setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+                    setSpokenLanguages(spokenLanguages.filter((s) => s !== item));
                   }}
                 >
-                  <MaterialCommunityIcons
-                    size={20}
-                    color={primaryColor}
-                    name="trash-can-outline"
-                  />
+                  <MaterialCommunityIcons size={20} color={primaryColor} name='trash-can-outline' />
                 </Hoverable>
               </View>
             ))}
 
             {spokenLanguages.length < getLanguageNum() - 2 ? (
-              <Hoverable
-                style={styles.addRow}
-                onPress={onPressOpenLanguagesSpoken}
-              >
-                <MaterialCommunityIcons
-                  size={24}
-                  color={subTextColor}
-                  name="plus"
-                />
-                <Text style={styles.addText}>
-                  {I18n.t('selectLanguage.add')}
-                </Text>
+              <Hoverable style={styles.addRow} onPress={onPressOpenLanguagesSpoken}>
+                <MaterialCommunityIcons size={24} color={subTextColor} name='plus' />
+                <Text style={styles.addText}>{I18n.t('selectLanguage.add')}</Text>
               </Hoverable>
             ) : null}
           </View>
         </View>
         <Hoverable style={styles.row} onPress={onOpenCountryPicker}>
-          <Text style={styles.label}>
-            {I18n.t('selectLanguage.nationality')}
-          </Text>
+          <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
           {nationalityCode ? (
             <CountryNameWithFlag nationalityCode={nationalityCode} />
           ) : (
@@ -493,15 +439,12 @@ const EditMyProfileScreen: React.FC<ScreenType> = ({
           numberOfLines={3}
           spellCheck
           autoCorrect
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           onBlur={onBlurIntroduction}
         />
         <Space size={32} />
       </KeyboardAwareScrollView>
-      <KeyboardHideButton
-        isKeyboard={isKeyboard}
-        setIsKeyboard={setIsKeyboard}
-      />
+      <KeyboardHideButton isKeyboard={isKeyboard} setIsKeyboard={setIsKeyboard} />
     </View>
   );
 };

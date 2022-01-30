@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const UserProfileHeader = ({ profile, userReview }: Props): JSX.Element => {
+const UserProfileHeader = ({ profile, userReview }: Props) => {
   return (
     <View style={styles.profileContainer}>
       <ProfileIconHorizontal
@@ -39,9 +39,7 @@ const UserProfileHeader = ({ profile, userReview }: Props): JSX.Element => {
       />
       <Space size={16} />
       {profile.name ? <Text style={styles.name}>{profile.name}</Text> : null}
-      {userReview ? (
-        <ScoreStar score={userReview.score} reviewNum={userReview.reviewNum} />
-      ) : null}
+      {userReview ? <ScoreStar score={userReview.score} reviewNum={userReview.reviewNum} /> : null}
       <Space size={8} />
       <Text style={styles.introduction}>{profile.introduction}</Text>
       <ProfileLanguage

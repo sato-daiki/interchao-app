@@ -1,5 +1,7 @@
+import { firestore } from 'firebase';
+
 export interface BlockUser {
   blockerUid: string;
   blockeeUid: string;
-  createdAt: firebase.firestore.FieldValue;
+  createdAt: firestore.FieldValue;
 }

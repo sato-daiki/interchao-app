@@ -29,11 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const LanguageRadioBox: React.FC<Props> = ({
-  label,
-  value,
-  onPress,
-}: Props): JSX.Element => {
+const LanguageRadioBox: React.FC<Props> = ({ label, value, onPress }: Props) => {
   return (
     <>
       <Text style={styles.label}>{label}</Text>

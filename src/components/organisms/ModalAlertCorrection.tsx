@@ -2,12 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Animation, CustomAnimation } from 'react-native-animatable';
-import {
-  primaryColor,
-  fontSizeL,
-  borderLightColor,
-  fontSizeM,
-} from '../../styles/Common';
+import { primaryColor, fontSizeL, borderLightColor, fontSizeM } from '../../styles/Common';
 import { Modal } from '../template';
 import { SubmitButton, WhiteButton, Space } from '../atoms';
 import I18n from '../../utils/I18n';
@@ -62,7 +57,7 @@ const ModalAlertCorrection: React.FC<Props> = ({
   teachDiaryLanguage,
   onPressSubmit,
   onPressClose,
-}: Props): JSX.Element | null => {
+}: Props) => {
   return (
     <Modal visible={visible} animationOut={animationOut}>
       <View style={styles.container}>
@@ -70,7 +65,7 @@ const ModalAlertCorrection: React.FC<Props> = ({
         <View style={styles.line} />
         <MaterialCommunityIcons
           style={styles.icon}
-          name="pencil-lock"
+          name='pencil-lock'
           size={64}
           color={primaryColor}
         />

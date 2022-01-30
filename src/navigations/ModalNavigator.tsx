@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
 
-import {
-  DefaultNavigationOptions,
-  DefaultModalLayoutOptions,
-} from '@/constants/NavigationOptions';
+import { DefaultNavigationOptions, DefaultModalLayoutOptions } from '@/constants/NavigationOptions';
 import I18n from '@/utils/I18n';
 import { CountryCode, Diary, ThemeCategory, ThemeSubcategory } from '@/types';
 
@@ -106,53 +100,30 @@ export type ModalEditMyProfileStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalEditMyProfile'
 >;
-export type ModalReviewStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalReview'
->;
+export type ModalReviewStackNavigationProp = StackNavigationProp<MainStackParamList, 'ModalReview'>;
 export type ModalCorrectingStackNavigationProp = StackNavigationProp<
   MainStackParamList,
   'ModalCorrecting'
 >;
-export type ModaRecordStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalRecord'
->;
-export type ModalAboutStackNavigationProp = StackNavigationProp<
-  MainStackParamList,
-  'ModalAbout'
->;
+export type ModaRecordStackNavigationProp = StackNavigationProp<MainStackParamList, 'ModalRecord'>;
+export type ModalAboutStackNavigationProp = StackNavigationProp<MainStackParamList, 'ModalAbout'>;
 
-const ModalEditMyDiaryListStack = createStackNavigator<
-  ModalEditMyDiaryListStackParamList
->();
-const ModalSelectDiaryTypeStack = createStackNavigator<
-  ModalSelectDiaryTypeStackParamList
->();
-const ModalThemeGuideStack = createStackNavigator<
-  ModalThemeGuideStackParamList
->();
-const ModalPostDiaryStack = createStackNavigator<
-  ModalPostDiaryStackParamList
->();
-const ModalPostDraftDiaryStack = createStackNavigator<
-  ModalPostDraftDiaryStackParamList
->();
+const ModalEditMyDiaryListStack = createStackNavigator<ModalEditMyDiaryListStackParamList>();
+const ModalSelectDiaryTypeStack = createStackNavigator<ModalSelectDiaryTypeStackParamList>();
+const ModalThemeGuideStack = createStackNavigator<ModalThemeGuideStackParamList>();
+const ModalPostDiaryStack = createStackNavigator<ModalPostDiaryStackParamList>();
+const ModalPostDraftDiaryStack = createStackNavigator<ModalPostDraftDiaryStackParamList>();
 const ModalReviewStack = createStackNavigator<ModalReviewStackParamList>();
-const ModalEditMyProfileStack = createStackNavigator<
-  ModalEditMyProfileStackParamList
->();
-const ModalCorrectingStack = createStackNavigator<
-  ModalCorrectingStackParamList
->();
+const ModalEditMyProfileStack = createStackNavigator<ModalEditMyProfileStackParamList>();
+const ModalCorrectingStack = createStackNavigator<ModalCorrectingStackParamList>();
 const ModalRecordStack = createStackNavigator<ModalRecordStackParamList>();
 const ModalAboutStack = createStackNavigator<ModalAboutStackParamList>();
 
-export const ModalEditMyDiaryListNavigator = (): JSX.Element => {
+export const ModalEditMyDiaryListNavigator = () => {
   return (
-    <ModalEditMyDiaryListStack.Navigator initialRouteName="EditMyDiaryList">
+    <ModalEditMyDiaryListStack.Navigator initialRouteName='EditMyDiaryList'>
       <ModalEditMyDiaryListStack.Screen
-        name="EditMyDiaryList"
+        name='EditMyDiaryList'
         component={EditMyDiaryListScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -163,11 +134,11 @@ export const ModalEditMyDiaryListNavigator = (): JSX.Element => {
     </ModalEditMyDiaryListStack.Navigator>
   );
 };
-export const ModalSelectDiaryTypeNavigator = (): JSX.Element => {
+export const ModalSelectDiaryTypeNavigator = () => {
   return (
-    <ModalSelectDiaryTypeStack.Navigator initialRouteName="SelectDiaryType">
+    <ModalSelectDiaryTypeStack.Navigator initialRouteName='SelectDiaryType'>
       <ModalSelectDiaryTypeStack.Screen
-        name="SelectDiaryType"
+        name='SelectDiaryType'
         component={SelectDiaryTypeScreen}
         options={{
           ...DefaultNavigationOptions,
@@ -176,7 +147,7 @@ export const ModalSelectDiaryTypeNavigator = (): JSX.Element => {
         }}
       />
       <ModalSelectDiaryTypeStack.Screen
-        name="SelectThemeSubcategory"
+        name='SelectThemeSubcategory'
         component={SelectThemeSubcategoryScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -187,14 +158,11 @@ export const ModalSelectDiaryTypeNavigator = (): JSX.Element => {
     </ModalSelectDiaryTypeStack.Navigator>
   );
 };
-export const ModalThemeGuideNavigator = (): JSX.Element => {
+export const ModalThemeGuideNavigator = () => {
   return (
-    <ModalThemeGuideStack.Navigator
-      initialRouteName="ThemeGuide"
-      headerMode="none"
-    >
+    <ModalThemeGuideStack.Navigator initialRouteName='ThemeGuide' headerMode='none'>
       <ModalThemeGuideStack.Screen
-        name="ThemeGuide"
+        name='ThemeGuide'
         component={ThemeGuideScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -204,11 +172,11 @@ export const ModalThemeGuideNavigator = (): JSX.Element => {
     </ModalThemeGuideStack.Navigator>
   );
 };
-export const ModalPostDiaryNavigator = (): JSX.Element => {
+export const ModalPostDiaryNavigator = () => {
   return (
-    <ModalPostDiaryStack.Navigator initialRouteName="PostDiary">
+    <ModalPostDiaryStack.Navigator initialRouteName='PostDiary'>
       <ModalPostDiaryStack.Screen
-        name="PostDiary"
+        name='PostDiary'
         component={PostDiaryScreenContainer}
         // optionはweb/nativeで違うのでscreen側で設定する
       />
@@ -216,11 +184,11 @@ export const ModalPostDiaryNavigator = (): JSX.Element => {
   );
 };
 
-export const ModalPostDraftDiaryNavigator = (): JSX.Element => {
+export const ModalPostDraftDiaryNavigator = () => {
   return (
-    <ModalPostDraftDiaryStack.Navigator initialRouteName="PostDraftDiary">
+    <ModalPostDraftDiaryStack.Navigator initialRouteName='PostDraftDiary'>
       <ModalPostDraftDiaryStack.Screen
-        name="PostDraftDiary"
+        name='PostDraftDiary'
         component={PostDraftDiaryScreenContainer}
         // optionはweb/nativeで違うのでscreen側で設定する
       />
@@ -228,11 +196,11 @@ export const ModalPostDraftDiaryNavigator = (): JSX.Element => {
   );
 };
 
-export const ModalReviewNavigator = (): JSX.Element => {
+export const ModalReviewNavigator = () => {
   return (
-    <ModalReviewStack.Navigator initialRouteName="Review">
+    <ModalReviewStack.Navigator initialRouteName='Review'>
       <ModalReviewStack.Screen
-        name="Review"
+        name='Review'
         component={ReviewScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -244,10 +212,10 @@ export const ModalReviewNavigator = (): JSX.Element => {
   );
 };
 
-export const ModalEditMyProfileNavigator = (): JSX.Element => {
+export const ModalEditMyProfileNavigator = () => {
   return (
     <ModalEditMyProfileStack.Navigator
-      initialRouteName="EditMyProfile"
+      initialRouteName='EditMyProfile'
       screenOptions={{
         cardStyle: {
           backgroundColor: '#FFFFFF',
@@ -255,7 +223,7 @@ export const ModalEditMyProfileNavigator = (): JSX.Element => {
       }}
     >
       <ModalEditMyProfileStack.Screen
-        name="EditMyProfile"
+        name='EditMyProfile'
         component={EditMyProfileScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -264,7 +232,7 @@ export const ModalEditMyProfileNavigator = (): JSX.Element => {
         }}
       />
       <ModalEditMyProfileStack.Screen
-        name="EditUserName"
+        name='EditUserName'
         component={EditUserNameScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -273,7 +241,7 @@ export const ModalEditMyProfileNavigator = (): JSX.Element => {
         }}
       />
       <ModalEditMyProfileStack.Screen
-        name="EditCountry"
+        name='EditCountry'
         component={EditCountryScreen}
         options={{
           ...DefaultNavigationOptions,
@@ -285,11 +253,11 @@ export const ModalEditMyProfileNavigator = (): JSX.Element => {
   );
 };
 
-export const ModalCorrectingNavigator = (): JSX.Element => {
+export const ModalCorrectingNavigator = () => {
   return (
-    <ModalCorrectingStack.Navigator initialRouteName="Correcting">
+    <ModalCorrectingStack.Navigator initialRouteName='Correcting'>
       <ModalCorrectingStack.Screen
-        name="Correcting"
+        name='Correcting'
         component={CorrectingScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -301,11 +269,11 @@ export const ModalCorrectingNavigator = (): JSX.Element => {
   );
 };
 
-export const ModalRecordNavigator = (): JSX.Element => {
+export const ModalRecordNavigator = () => {
   return (
-    <ModalRecordStack.Navigator initialRouteName="Record">
+    <ModalRecordStack.Navigator initialRouteName='Record'>
       <ModalRecordStack.Screen
-        name="Record"
+        name='Record'
         component={RecordScreenContainer}
         options={{
           ...DefaultNavigationOptions,
@@ -317,11 +285,11 @@ export const ModalRecordNavigator = (): JSX.Element => {
   );
 };
 
-export const ModalAboutNavigator = (): JSX.Element => {
+export const ModalAboutNavigator = () => {
   return (
-    <ModalAboutStack.Navigator initialRouteName="About">
+    <ModalAboutStack.Navigator initialRouteName='About'>
       <ModalAboutStack.Screen
-        name="About"
+        name='About'
         component={AboutScreen}
         options={{
           ...DefaultNavigationOptions,

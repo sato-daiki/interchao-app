@@ -1,11 +1,5 @@
 import React, { useCallback } from 'react';
-import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { StyleSheet, View, SafeAreaView, StyleProp, ViewStyle } from 'react-native';
 import {
   DrawerItemList,
   DrawerItem,
@@ -25,11 +19,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CustomDrawerContent = ({
-  isMaxLayoutChange,
-  navigation,
-  ...props
-}: Props): JSX.Element => {
+const CustomDrawerContent = ({ isMaxLayoutChange, navigation, ...props }: Props) => {
   const containerStyle = {
     alignItems: isMaxLayoutChange ? 'flex-start' : 'center',
   } as StyleProp<ViewStyle>;
@@ -53,24 +43,15 @@ const CustomDrawerContent = ({
     <SafeAreaView style={styles.safeAreaView}>
       <View style={containerStyle}>
         <DrawerItem
-          label={(): JSX.Element => (
-            <DrawerLogo isMaxLayoutChange={isMaxLayoutChange} />
-          )}
+          label={() => <DrawerLogo isMaxLayoutChange={isMaxLayoutChange} />}
           onPress={onPressHome}
         />
 
-        <DrawerItemList
-          itemStyle={itemStyle}
-          navigation={navigation}
-          {...props}
-        />
+        <DrawerItemList itemStyle={itemStyle} navigation={navigation} {...props} />
 
         <DrawerItem
-          label={(): JSX.Element => (
-            <DrawerPostButton
-              isMaxLayoutChange={isMaxLayoutChange}
-              onPress={onPressPost}
-            />
+          label={() => (
+            <DrawerPostButton isMaxLayoutChange={isMaxLayoutChange} onPress={onPressPost} />
           )}
           onPress={onPressPost}
         />

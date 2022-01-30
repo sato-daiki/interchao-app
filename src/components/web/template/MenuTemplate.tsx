@@ -1,10 +1,5 @@
 import React, { ReactNode } from 'react';
-import {
-  Menu,
-  MenuOptions,
-  MenuTrigger,
-  renderers,
-} from 'react-native-popup-menu';
+import { Menu, MenuOptions, MenuTrigger, renderers } from 'react-native-popup-menu';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { HeaderIcon } from '../../atoms';
 
@@ -20,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MenuTemplate = ({ children }: Props): JSX.Element => {
+const MenuTemplate = ({ children }: Props) => {
   return (
     <Menu
       renderer={renderers.Popover}
@@ -33,7 +28,7 @@ const MenuTemplate = ({ children }: Props): JSX.Element => {
           TriggerTouchableComponent: TouchableOpacity,
         }}
       >
-        <HeaderIcon icon="community" name="dots-horizontal" size={28} />
+        <HeaderIcon icon='community' name='dots-horizontal' size={28} />
       </MenuTrigger>
       <MenuOptions
         customStyles={{

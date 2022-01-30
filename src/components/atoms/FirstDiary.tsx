@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const FirstDiary = (): JSX.Element => (
+const FirstDiary = () => (
   <View style={styles.container}>
-    <MaterialCommunityIcons size={14} color={softRed} name="star" />
+    <MaterialCommunityIcons size={14} color={softRed} name='star' />
     <Text style={styles.text}>{I18n.t('firstDiary.first')}</Text>
   </View>
 );

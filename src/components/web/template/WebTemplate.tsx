@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { ReactNode } from 'react';
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import { maxLayoutChange, offWhite } from '../../../styles/Common';
@@ -56,7 +55,7 @@ const WebTemplate = ({
   renderLeft,
   renderCenter,
   renderRight,
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <View style={[styles.warapper, warapper]}>
       <View

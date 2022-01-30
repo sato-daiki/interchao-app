@@ -51,9 +51,7 @@ const SelectDiaryTypeScreen: React.FC<ScreenType> = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: (): JSX.Element | null => (
-        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
-      ),
+      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

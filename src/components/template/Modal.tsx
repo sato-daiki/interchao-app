@@ -44,21 +44,12 @@ const Modal1: React.FC<Props> = ({
   animationIn = 'zoomIn',
   animationOut = 'zoomOut',
   children,
-}: Props): JSX.Element | null => {
+}: Props) => {
   if (Platform.OS === 'web') {
     return (
       <View style={styles.container}>
-        <ModalWeb
-          isVisible={visible}
-          animationIn={animationIn}
-          animationOut={animationOut}
-        >
-          <View
-            style={[
-              styles.modalWeb,
-              disablePadding ? styles.padding0 : styles.padding32,
-            ]}
-          >
+        <ModalWeb isVisible={visible} animationIn={animationIn} animationOut={animationOut}>
+          <View style={[styles.modalWeb, disablePadding ? styles.padding0 : styles.padding32]}>
             {children}
           </View>
         </ModalWeb>
@@ -67,11 +58,7 @@ const Modal1: React.FC<Props> = ({
   }
   return (
     <View style={styles.container}>
-      <Modal
-        isVisible={visible}
-        animationIn={animationIn}
-        animationOut={animationOut}
-      >
+      <Modal isVisible={visible} animationIn={animationIn} animationOut={animationOut}>
         <View style={styles.modal}>{children}</View>
       </Modal>
     </View>

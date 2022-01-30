@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  StyleProp,
-  TextStyle,
-  TextInputProps,
-} from 'react-native';
+import { StyleSheet, TextInput, StyleProp, TextStyle, TextInputProps } from 'react-native';
 import { fontSizeM, primaryColor, borderLightColor } from '@/styles/Common';
 import I18n from '@/utils/I18n';
 
@@ -42,16 +36,16 @@ const TextInputText: React.FC<Props> = ({
   style,
   maxLength,
   ...props
-}: Props): JSX.Element => {
+}: Props) => {
   return (
     <TextInput
       style={[styles.textInput, style]}
       value={value}
       placeholder={I18n.t('postDiaryComponent.textPlaceholder')}
-      underlineColorAndroid="transparent"
+      underlineColorAndroid='transparent'
       multiline
       autoCorrect={false}
-      keyboardType="default"
+      keyboardType='default'
       spellCheck
       onChangeText={onChangeText}
       onFocus={onFocus}

@@ -155,7 +155,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
     [],
   );
 
-  const renderArrow = useCallback((direction: 'left' | 'right'): JSX.Element => {
+  const renderArrow = useCallback((direction: 'left' | 'right') => {
     return (
       <HoverableIcon
         icon='community'
@@ -199,11 +199,13 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         )}
       </View>
       <Calendar
+        //@ts-ignore
         markedDates={markedDates}
         markingType='multi-dot'
         onDayPress={onDayPress}
         renderArrow={renderArrow}
         renderHeader={renderHeader}
+        //@ts-ignore
         theme={custumTheme}
       />
       {targetDayDiaries.length > 0 ? (

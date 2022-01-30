@@ -1,10 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import {
-  ViewStyle,
-  StyleProp,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import { ViewStyle, StyleProp, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 type Props = {
   style?: StyleProp<ViewStyle>;

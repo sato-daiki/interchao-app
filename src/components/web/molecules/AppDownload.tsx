@@ -1,23 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { StyleSheet, View, Image, Text, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import * as Linking from 'expo-linking';
 import I18n from '../../../utils/I18n';
 import { GooglePlayBadge, Appstore } from '../../../images/web/index';
-import {
-  fontSizeL,
-  fontSizeM,
-  mainColor,
-  offWhite,
-  primaryColor,
-} from '../../../styles/Common';
+import { fontSizeL, fontSizeM, mainColor, offWhite, primaryColor } from '../../../styles/Common';
 import { Hoverable } from '../../atoms';
 
 interface Props {
@@ -57,16 +43,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppDownload = ({
-  isWhite,
-  containerStyle,
-  options,
-}: Props): JSX.Element => {
+const AppDownload = ({ isWhite, containerStyle, options }: Props) => {
   const styleClor = { color: isWhite ? primaryColor : '#fff' } as TextStyle;
   const onPressGoogle = (): void => {
-    Linking.openURL(
-      'https://play.google.com/store/apps/details?id=app.interchao'
-    );
+    Linking.openURL('https://play.google.com/store/apps/details?id=app.interchao');
   };
 
   const onPressApple = (): void => {
@@ -81,22 +61,14 @@ const AppDownload = ({
         containerStyle,
       ]}
     >
-      <Text style={[styles.title, styleClor]}>
-        {I18n.t('modalAppSuggestion.title', options)}
-      </Text>
-      <Text style={[styles.text, styleClor]}>
-        {I18n.t('modalAppSuggestion.text', options)}
-      </Text>
+      <Text style={[styles.title, styleClor]}>{I18n.t('modalAppSuggestion.title', options)}</Text>
+      <Text style={[styles.text, styleClor]}>{I18n.t('modalAppSuggestion.text', options)}</Text>
       <View style={styles.row}>
         <Hoverable onPress={onPressGoogle}>
-          <Image
-            resizeMode="contain"
-            style={styles.image}
-            source={GooglePlayBadge}
-          />
+          <Image resizeMode='contain' style={styles.image} source={GooglePlayBadge} />
         </Hoverable>
         <Hoverable onPress={onPressApple}>
-          <Image resizeMode="contain" style={styles.image} source={Appstore} />
+          <Image resizeMode='contain' style={styles.image} source={Appstore} />
         </Hoverable>
       </View>
     </View>
