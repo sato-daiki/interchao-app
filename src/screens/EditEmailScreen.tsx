@@ -3,11 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import {
-  emailInputError,
-  emailValidate,
-  emaillExistCheck,
-} from '../utils/common';
+import { emailInputError, emailValidate, emaillExistCheck } from '../utils/common';
 import firebase from '../constants/firebase';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
@@ -70,21 +66,13 @@ const EditEmailScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
       try {
         const { currentUser } = firebase.auth();
         if (!currentUser || !currentUser.email) return;
-        const credential = firebase.auth.EmailAuthProvider.credential(
-          currentUser.email,
-          password
-        );
+        const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
         setIsLoading(true);
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.updateEmail(email);
         navigation.goBack();
-      } catch (err) {
-        emailInputError(
-          err,
-          setErrorPassword,
-          setErrorEmail,
-          clearErrorMessage
-        );
+      } catch (err: any) {
+        emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
         setIsLoading(false);
       }
       setIsLoading(false);
@@ -136,12 +124,12 @@ const EditEmailScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
           onChangeText={(text: string): void => setEmail(text)}
           onBlur={onBlurEmail}
           maxLength={50}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
+          placeholder='Email'
+          keyboardType='email-address'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
+          underlineColorAndroid='transparent'
+          returnKeyType='done'
           isLoading={isEmailLoading}
           isCheckOk={isEmailCheckOk}
           errorMessage={errorEmail}
@@ -153,12 +141,12 @@ const EditEmailScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
           onChangeText={(text: string): void => setPassword(text)}
           onBlur={onBlurPassword}
           maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
+          placeholder='Password'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           secureTextEntry
-          returnKeyType="done"
+          returnKeyType='done'
           errorMessage={errorPassword}
         />
         <Space size={32} />

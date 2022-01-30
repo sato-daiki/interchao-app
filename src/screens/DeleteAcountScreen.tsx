@@ -93,7 +93,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
           // メールアドレスを登録しているユーザの場合→パスワード入力に切り替える
           setIsPasswordInput(true);
         }
-      } catch (err) {
+      } catch (err: any) {
         setIsLoading(false);
         alert({ err });
       }
@@ -108,15 +108,12 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       try {
         const { currentUser } = firebase.auth();
         if (!currentUser || !currentUser.email) return;
-        const credential = firebase.auth.EmailAuthProvider.credential(
-          currentUser.email,
-          password
-        );
+        const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
         setIsLoading(true);
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.delete();
         signOut();
-      } catch (err) {
+      } catch (err: any) {
         setIsLoading(false);
         const errorCode = err.code;
         if (errorCode === 'auth/wrong-password') {
@@ -159,10 +156,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       />
       <View style={styles.main}>
         <Text style={styles.text}>{I18n.t('deleteAcount.text')}</Text>
-        <Hoverable
-          style={styles.deleteButton}
-          onPress={(): void => setIsModal(true)}
-        >
+        <Hoverable style={styles.deleteButton} onPress={(): void => setIsModal(true)}>
           <Text style={styles.delete}>{I18n.t('deleteAcount.withdrawal')}</Text>
         </Hoverable>
       </View>

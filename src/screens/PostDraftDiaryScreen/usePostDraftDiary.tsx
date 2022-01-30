@@ -13,10 +13,7 @@ import {
   getThemeDiaries,
 } from '@/utils/diary';
 import { alert } from '@/utils/ErrorAlert';
-import {
-  PostDraftDiaryNavigationProp,
-  PostDraftDiaryRouteProp,
-} from './interfaces';
+import { PostDraftDiaryNavigationProp, PostDraftDiaryRouteProp } from './interfaces';
 import { useCommon } from '../PostDiaryScreen/useCommont';
 
 interface UsePostDraftDiary {
@@ -97,13 +94,12 @@ export const usePostDraftDiary = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, text, title, user.diaryPosted]
+    [profile, text, title, user.diaryPosted],
   );
 
   const onPressDraft = useCallback(async (): Promise<void> => {
     Keyboard.dismiss();
-    if (isInitialLoading || isLoadingDraft || isLoadingPublish || isModalLack)
-      return;
+    if (isInitialLoading || isLoadingDraft || isLoadingPublish || isModalLack) return;
     try {
       if (!item || !item.objectID) return;
 
@@ -128,7 +124,7 @@ export const usePostDraftDiary = ({
         screen: 'MyDiaryTab',
         params: { screen: 'MyDiaryList' },
       });
-    } catch (err) {
+    } catch (err: any) {
       setIsLoadingDraft(false);
       alert({ err });
     }
@@ -155,20 +151,14 @@ export const usePostDraftDiary = ({
     const diary = getDiary('publish');
     const usePoints = getUsePoints(text.length, profile.learnLanguage);
     const newPoints = user.points - usePoints;
-    const runningDays = getRunningDays(
-      user.runningDays,
-      user.lastDiaryPostedAt
-    );
-    const runningWeeks = getRunningWeeks(
-      user.runningWeeks,
-      user.lastDiaryPostedAt
-    );
+    const runningDays = getRunningDays(user.runningDays, user.lastDiaryPostedAt);
+    const runningWeeks = getRunningWeeks(user.runningWeeks, user.lastDiaryPostedAt);
 
     const message = getPublishMessage(
       user.runningDays,
       user.runningWeeks,
       runningDays,
-      runningWeeks
+      runningWeeks,
     );
 
     let { themeDiaries } = user;
@@ -177,13 +167,13 @@ export const usePostDraftDiary = ({
         user.themeDiaries,
         item.objectID,
         item.themeCategory,
-        item.themeSubcategory
+        item.themeSubcategory,
       );
     }
 
     await firebase
       .firestore()
-      .runTransaction(async transaction => {
+      .runTransaction(async (transaction) => {
         const diaryRef = firebase.firestore().doc(`diaries/${item.objectID}`);
         transaction.update(diaryRef, diary);
 
@@ -211,7 +201,7 @@ export const usePostDraftDiary = ({
         }
         transaction.update(refUser, updateUser);
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoadingPublish(false);
         alert({ err });
       });
@@ -261,17 +251,17 @@ export const usePostDraftDiary = ({
   ]);
 
   const onChangeTextTitle = useCallback(
-    txt => {
+    (txt) => {
       setTitle(txt);
     },
-    [setTitle]
+    [setTitle],
   );
 
   const onChangeTextText = useCallback(
-    txt => {
+    (txt) => {
       setText(txt);
     },
-    [setText]
+    [setText],
   );
 
   return {
