@@ -177,6 +177,25 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser
     setIsModalAdPointsGet(false);
   }, []);
 
+  const renderButton = useCallback(() => {
+    if (Platform.OS === 'web') return null;
+
+    if (isActiveAdPointsGet) {
+      return (
+        <SmallButtonWhite
+          disable={!isActiveAdPointsGet}
+          color={primaryColor}
+          title={I18n.t('myPage.adGetPoints', { points: 10 })}
+          onPress={onPressAdPointGet}
+        />
+      );
+    }
+
+    return (
+      <Text style={styles.timeOut}>{I18n.t('myPage.timeOut', { activeHour: activeHour })}</Text>
+    );
+  }, [activeHour, isActiveAdPointsGet, onPressAdPointGet]);
+
   return (
     <ScrollView style={styles.container}>
       <ModalAdPointsGet
@@ -203,18 +222,7 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser
         <Text style={styles.introduction}>{profile.introduction}</Text>
         <View style={styles.row}>
           <UserPoints points={user.points} />
-          {Platform.OS === 'web' ? null : isActiveAdPointsGet ? (
-            <SmallButtonWhite
-              disable={!isActiveAdPointsGet}
-              color={primaryColor}
-              title={I18n.t('myPage.adGetPoints', { points: 10 })}
-              onPress={onPressAdPointGet}
-            />
-          ) : (
-            <Text style={styles.timeOut}>
-              {I18n.t('myPage.timeOut', { activeHour: activeHour })}
-            </Text>
-          )}
+          {renderButton()}
         </View>
         <Space size={8} />
         <ProfileLanguage
