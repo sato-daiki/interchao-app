@@ -98,7 +98,7 @@ const web = {
   exampleDetailText3: '',
   startTitle: 'Start by writing a journal entry for free',
   startText:
-    'By registering for a free account, you can receive 100 pts (10 journal entry’s worth). Hurry and write a journal entry so you can have it corrected!',
+    'By registering for a free account, you can receive 30 pts (3 journal entry’s worth). Hurry and write a journal entry so you can have it corrected!',
   operator: 'Operator',
 };
 
@@ -150,6 +150,7 @@ const errorMessage = {
     '{{usePoint}} points are needed to publish an entry with {{textLength}} characters. You can earn more points by correcting entries.',
   exceedingCharacter:
     'Exceeding maximum character count. Maximum number of characters:{{textLength}}',
+  video: 'An error occurred during video playback',
 };
 
 const app = {
@@ -274,6 +275,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: 'My Page',
   editButton: 'Edit',
+  adGetPoints: 'Earn {{points}} points by watching video ads',
+  timeOut: 'Time to see the next video ad {{activeHour}}',
 };
 
 const notice = {
@@ -582,6 +585,11 @@ const modalBlock = {
   unblockedEndMessage: 'You can block them anytime from their profile.',
 };
 
+const modalAdPointsGet = {
+  title: 'Earn points',
+  text: 'Thank you for watching the video. Earn {{getPoints}} points.',
+};
+
 const modalCorrectingDone = {
   title: 'Complete Corrections',
   text:
@@ -603,9 +611,10 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: 'Not Enough Points',
   text:
-    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry.\n\nDrafts can be saved without needing to use points.',
+    'You don’t have enough points! 10 points are needed to publish an entry {{learnCharacters}} characters long. \n\nYou can earn 10 points by correcting a journal entry or watching video ads.\n\nDrafts can be saved without needing to use points.',
   submit: 'Continue',
   close: 'Look for Entries to Correct',
+  watchAd: 'Watch video ads',
 };
 
 const modalSendEmail = {
@@ -983,6 +992,7 @@ const en = {
   modalAlertPublish,
   modalAppReviewRequest,
   modalBlock,
+  modalAdPointsGet,
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,

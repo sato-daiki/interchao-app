@@ -125,6 +125,14 @@ export const useCommon = ({
     });
   }, [navigation]);
 
+  const onPressWatchAdModalLack = useCallback(() => {
+    setIsModalLack(false);
+    navigation.navigate('Home', {
+      screen: 'MyPageTab',
+      params: { screen: 'MyPage' },
+    });
+  }, []);
+
   return {
     isModalLack,
     isModalCancel,
@@ -153,5 +161,6 @@ export const useCommon = ({
     onClosePostDiary,
     onPressNotSave,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
   };
 };

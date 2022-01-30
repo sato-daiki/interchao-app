@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-  useMemo,
-} from 'react';
+import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -15,10 +9,7 @@ import {
 } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import {
-  connectActionSheet,
-  useActionSheet,
-} from '@expo/react-native-action-sheet';
+import { connectActionSheet, useActionSheet } from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 
@@ -32,25 +23,14 @@ import { EmptyDiary } from '@/components/molecules';
 import { Space, GrayHeader, HeaderIcon } from '@/components/atoms';
 
 import firebase from '@/constants/firebase';
-import {
-  Diary,
-  Profile,
-  UserReview,
-  Review,
-  BlockUser,
-  Report,
-  User,
-} from '@/types';
+import { Diary, Profile, UserReview, Review, BlockUser, Report, User } from '@/types';
 import { getProfile, getUid } from '@/utils/profile';
 import Algolia from '@/utils/Algolia';
 import { checkBlockee, checkBlocker } from '@/utils/blockUser';
 import { getUserReview } from '@/utils/userReview';
 import I18n from '@/utils/I18n';
 import { alert } from '@/utils/ErrorAlert';
-import {
-  CommonStackParamList,
-  CommonNavigationProp,
-} from '@/navigations/CommonNavigator';
+import { CommonStackParamList, CommonNavigationProp } from '@/navigations/CommonNavigator';
 
 export interface Props {
   user: User;
@@ -77,17 +57,12 @@ const styles = StyleSheet.create({
 
 const HIT_PER_PAGE = 20;
 
-const keyExtractor = (item: Diary | Review, index: number): string =>
-  String(index);
+const keyExtractor = (item: Diary | Review, index: number): string => String(index);
 
 /**
  * ユーザページ
  */
-const UserProfileScreen: React.FC<ScreenType> = ({
-  navigation,
-  route,
-  user,
-}) => {
+const UserProfileScreen: React.FC<ScreenType> = ({ navigation, route, user }) => {
   const { showActionSheetWithOptions } = useActionSheet();
   const [isLoading, setIsLoading] = useState(false);
   const [isBlockSuccess, setIsBlockSuccess] = useState(false);
@@ -135,7 +110,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
 
       setDiaries(res.hits as Diary[]);
       setDiaryTotalNum(res.nbHits);
-    } catch (err) {
+    } catch (err: any) {
       setLoadingDiary(false);
       setRefreshing(false);
       alert({ err });
@@ -206,7 +181,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
           page.current = nextPage;
           readingNext.current = false;
         }
-      } catch (err) {
+      } catch (err: any) {
         readingNext.current = false;
         alert({ err });
       }
@@ -225,9 +200,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
 
   const onPressMore = useCallback(() => {
     const options = [
-      isBlocked
-        ? I18n.t('userProfile.unBlocked')
-        : I18n.t('userProfile.blocked'),
+      isBlocked ? I18n.t('userProfile.unBlocked') : I18n.t('userProfile.blocked'),
       I18n.t('userProfile.report'),
       I18n.t('common.cancel'),
     ];
@@ -236,7 +209,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         options,
         cancelButtonIndex: 2,
       },
-      index => {
+      (index) => {
         switch (index) {
           case 0:
             onPressBlock();
@@ -246,7 +219,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
             break;
           default:
         }
-      }
+      },
     );
   }, [isBlocked, onPressBlock, onPressReport, showActionSheetWithOptions]);
 
@@ -260,11 +233,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
             onPressBlock={onPressBlock}
           />
         ) : (
-          <HeaderIcon
-            icon="community"
-            name="dots-horizontal"
-            onPress={onPressMore}
-          />
+          <HeaderIcon icon='community' name='dots-horizontal' onPress={onPressMore} />
         ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -287,10 +256,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       blockeeUid: profile.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     } as BlockUser;
-    await firebase
-      .firestore()
-      .collection(`blockUsers`)
-      .add(newBlockUser);
+    await firebase.firestore().collection('blockUsers').add(newBlockUser);
     setIsBlockSuccess(true);
     setIsLoading(false);
     setIsBlocked(true);
@@ -304,13 +270,13 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     // １データしか存在しない
     const users = await firebase
       .firestore()
-      .collection(`blockUsers`)
+      .collection('blockUsers')
       .where('blockerUid', '==', user.uid)
       .where('blockeeUid', '==', profile.uid)
       .get();
 
     const batch = firebase.firestore().batch();
-    users.forEach(doc => {
+    users.forEach((doc) => {
       batch.delete(doc.ref);
     });
     await batch.commit();
@@ -332,7 +298,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       setIsLoading(true);
       await firebase
         .firestore()
-        .collection(`reports`)
+        .collection('reports')
         .add({
           uid: user.uid,
           targetUid: profile.uid,
@@ -342,14 +308,14 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       setIsLoading(false);
       setIsReportSuccess(true);
     },
-    [profile, user.uid]
+    [profile, user.uid],
   );
 
   const handlePressUser = useCallback(
     (uid: string, userName: string) => {
       navigation.navigate('UserProfile', { userName });
     },
-    [navigation]
+    [navigation],
   );
 
   const onPressItem = useCallback(
@@ -360,7 +326,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
         userName: item.profile.userName,
       });
     },
-    [navigation]
+    [navigation],
   );
 
   const onPressCloseReport = useCallback(() => {
@@ -371,8 +337,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
     setIsModalBlock(false);
   }, []);
 
-  const listEmptyDiaryComponent =
-    loadingDiary || refreshing ? null : <EmptyDiary />;
+  const listEmptyDiaryComponent = loadingDiary || refreshing ? null : <EmptyDiary />;
 
   const listHeaderDiaryComponent = useMemo(
     () => (
@@ -394,9 +359,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
           handlePressUser={handlePressUser}
           onPressMoreReview={onPressMoreReview}
         />
-        <GrayHeader
-          title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })}
-        />
+        <GrayHeader title={I18n.t('userProfile.diaryList', { count: diaryTotalNum })} />
       </>
     ),
     [
@@ -408,7 +371,7 @@ const UserProfileScreen: React.FC<ScreenType> = ({
       refreshing,
       route.params.userName,
       userReview,
-    ]
+    ],
   );
 
   const listFooterDiaryComponent = useMemo(
@@ -420,25 +383,19 @@ const UserProfileScreen: React.FC<ScreenType> = ({
           <Space size={16} />
         </>
       ) : null,
-    [loadingDiary, refreshing]
+    [loadingDiary, refreshing],
   );
 
   const refreshControl = useMemo(
     () => <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />,
-    [onRefresh, refreshing]
+    [onRefresh, refreshing],
   );
 
   const renderDiary: ListRenderItem<Diary> = useCallback(
     ({ item }): JSX.Element => {
-      return (
-        <DiaryListItem
-          item={item}
-          onPressUser={handlePressUser}
-          onPressItem={onPressItem}
-        />
-      );
+      return <DiaryListItem item={item} onPressUser={handlePressUser} onPressItem={onPressItem} />;
     },
-    [handlePressUser, onPressItem]
+    [handlePressUser, onPressItem],
   );
 
   return (

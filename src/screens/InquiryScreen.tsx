@@ -9,13 +9,7 @@ import firebase from '../constants/firebase';
 import { Profile, Inquiry as InquiryType } from '../types';
 import I18n from '../utils/I18n';
 import { emailValidate } from '../utils/common';
-import {
-  primaryColor,
-  fontSizeM,
-  fontSizeL,
-  borderLightColor,
-  offWhite,
-} from '../styles/Common';
+import { primaryColor, fontSizeM, fontSizeL, borderLightColor, offWhite } from '../styles/Common';
 import { alert } from '../utils/ErrorAlert';
 import { ModalConfirm } from '../components/organisms';
 import {
@@ -137,7 +131,7 @@ const InquiryScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
       try {
         await firebase
           .firestore()
-          .collection(`inquiries`)
+          .collection('inquiries')
           .add({
             uid: profile.uid,
             userName: profile.userName,
@@ -148,7 +142,7 @@ const InquiryScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
           } as InquiryType);
         setIsLoading(false);
         setIsSuccess(true);
-      } catch (err) {
+      } catch (err: any) {
         alert({ err });
         setIsLoading(false);
         setIsSuccess(false);
@@ -180,12 +174,12 @@ const InquiryScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
             value={email}
             onChangeText={(text: string): void => setEmail(text)}
             maxLength={50}
-            placeholder="Enter your email address"
-            keyboardType="email-address"
-            autoCapitalize="none"
+            placeholder='Enter your email address'
+            keyboardType='email-address'
+            autoCapitalize='none'
             autoCorrect={false}
-            underlineColorAndroid="transparent"
-            returnKeyType="done"
+            underlineColorAndroid='transparent'
+            returnKeyType='done'
           />
           <Text style={styles.label}>{I18n.t('inquiry.message')}</Text>
           <TextInput
@@ -194,17 +188,14 @@ const InquiryScreen: React.FC<ScreenType> = ({ navigation, profile }) => {
             value={message}
             onChangeText={(text: string): void => setMessage(text)}
             maxLength={500}
-            placeholder="Enter your message"
+            placeholder='Enter your message'
             spellCheck
             autoCorrect
-            underlineColorAndroid="transparent"
-            returnKeyType="done"
+            underlineColorAndroid='transparent'
+            returnKeyType='done'
           />
           <Space size={32} />
-          <SubmitButton
-            title={I18n.t('common.sending')}
-            onPress={onPressSend}
-          />
+          <SubmitButton title={I18n.t('common.sending')} onPress={onPressSend} />
         </View>
       ) : (
         <View style={styles.successContainer}>

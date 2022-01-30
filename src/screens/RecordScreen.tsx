@@ -7,12 +7,7 @@ import * as Font from 'expo-font';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import firebase from '../constants/firebase';
-import {
-  HeaderText,
-  HoverableIcon,
-  LoadingModal,
-  SmallButtonWhite,
-} from '../components/atoms';
+import { HeaderText, HoverableIcon, LoadingModal, SmallButtonWhite } from '../components/atoms';
 import { Diary, Profile } from '../types';
 import I18n from '../utils/I18n';
 import {
@@ -255,9 +250,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     }
   };
 
-  private updateScreenForRecordingStatus = (
-    status: Audio.RecordingStatus
-  ): void => {
+  private updateScreenForRecordingStatus = (status: Audio.RecordingStatus): void => {
     const { isLoading } = this.state;
     if (status.canRecord) {
       this.setState({
@@ -319,13 +312,13 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     }
     try {
       await this.recording.stopAndUnloadAsync();
-    } catch (error) {
+    } catch (error: any) {
       // On Android, calling stop before any data has been collected results in
       // an EAUDIONODATA error. This means no audio data has been written to
       // the output file is invalid.
       if (error.code === 'EAUDIONODATA') {
         console.log(
-          `Stop was called too quickly, no data has yet been received (${error.message})`
+          `Stop was called too quickly, no data has yet been received (${error.message})`,
         );
       } else {
         console.log('STOP ERROR: ', error.code, error.name, error.message);
@@ -354,7 +347,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
         rate,
         shouldCorrectPitch,
       },
-      this.updateScreenForSoundStatus
+      this.updateScreenForSoundStatus,
     );
 
     this.sound = sound;
@@ -397,9 +390,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     }
   };
 
-  private onSeekSliderSlidingComplete = async (
-    value: number
-  ): Promise<void> => {
+  private onSeekSliderSlidingComplete = async (value: number): Promise<void> => {
     const { soundDuration } = this.state;
     if (this.sound != null) {
       this.isSeeking = false;
@@ -439,9 +430,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     const { soundPosition, soundDuration } = this.state;
 
     if (this.sound != null && soundPosition != null && soundDuration != null) {
-      return `${this.getMMSSFromMillis(
-        soundPosition
-      )} / ${this.getMMSSFromMillis(soundDuration)}`;
+      return `${this.getMMSSFromMillis(soundPosition)} / ${this.getMMSSFromMillis(soundDuration)}`;
     }
     return '';
   };
@@ -472,13 +461,10 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
     }
     const path = `voices/${profile.uid}/${diary.objectID}`;
     const voiceUrl = await uploadStorageAsync(path, info.uri);
-    await firebase
-      .firestore()
-      .doc(`diaries/${diary.objectID}`)
-      .update({
-        voiceUrl,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    await firebase.firestore().doc(`diaries/${diary.objectID}`).update({
+      voiceUrl,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     editDiary(diary.objectID, {
       ...diary,
       voiceUrl,
@@ -505,13 +491,10 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       this.sound = null;
     }
 
-    await firebase
-      .firestore()
-      .doc(`diaries/${diary.objectID}`)
-      .update({
-        voiceUrl: null,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    await firebase.firestore().doc(`diaries/${diary.objectID}`).update({
+      voiceUrl: null,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     editDiary(diary.objectID, {
       ...diary,
       voiceUrl: null,
@@ -555,9 +538,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
       }
 
       if (soundDuration && soundDuration / 1000 >= 120) {
-        return (
-          <Text style={styles.notSaveText}>{I18n.t('record.notSave')}</Text>
-        );
+        return <Text style={styles.notSaveText}>{I18n.t('record.notSave')}</Text>;
       }
       return (
         <SmallButtonWhite
@@ -580,7 +561,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
           visible={isModaleVoiceDelete}
           title={I18n.t('common.confirmation')}
           message={I18n.t('record.confirmMessage')}
-          mainButtonText="OK"
+          mainButtonText='OK'
           onPressMain={this.onPressVoiceDelete}
           onPressClose={(): void => {
             this.setState({ isModaleVoiceDelete: false });
@@ -607,13 +588,11 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
                 thumbTintColor={primaryColor}
                 disabled={!isPlaybackAllowed || isLoading}
               />
-              <Text style={styles.timestampText}>
-                {this.getPlaybackTimestamp()}
-              </Text>
+              <Text style={styles.timestampText}>{this.getPlaybackTimestamp()}</Text>
               <View style={styles.playButtonContainer}>
                 <HoverableIcon
                   disabled={!isPlaybackAllowed || isLoading}
-                  icon="community"
+                  icon='community'
                   name={isPlaying ? 'pause' : 'play'}
                   size={56}
                   color={primaryColor}
@@ -627,7 +606,7 @@ export default class RecordScreen extends React.Component<ScreenType, State> {
           <View style={styles.recordButtonContainer}>
             <HoverableIcon
               disabled={isLoading}
-              icon="community"
+              icon='community'
               name={isRecording ? 'stop' : 'record'}
               size={64}
               color={softRed}

@@ -3,20 +3,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
-import {
-  emailInputError,
-  emailValidate,
-  emaillExistCheck,
-} from '../utils/common';
+import { emailInputError, emailValidate, emaillExistCheck } from '../utils/common';
 import firebase from '../constants/firebase';
 import { CheckTextInput } from '../components/molecules';
 import { Space, SubmitButton, LoadingModal } from '../components/atoms';
-import {
-  primaryColor,
-  fontSizeM,
-  fontSizeL,
-  subTextColor,
-} from '../styles/Common';
+import { primaryColor, fontSizeM, fontSizeL, subTextColor } from '../styles/Common';
 import I18n from '../utils/I18n';
 import {
   MyPageTabStackParamList,
@@ -62,9 +53,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({
-  navigation,
-}): JSX.Element => {
+const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({ navigation }): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
 
@@ -95,13 +84,8 @@ const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({
 
         setIsLoading(false);
         navigation.navigate('MyPage');
-      } catch (err) {
-        emailInputError(
-          err,
-          setErrorPassword,
-          setErrorEmail,
-          clearErrorMessage
-        );
+      } catch (err: any) {
+        emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
         setIsLoading(false);
       }
       setIsLoading(false);
@@ -155,45 +139,37 @@ const RegisterEmailPasswordScreen: React.FC<ScreenType> = ({
     <KeyboardAwareScrollView style={styles.container}>
       <View style={styles.main}>
         <LoadingModal visible={isLoading} />
-        <Text style={styles.title}>
-          {I18n.t('registerEmailPassword.title')}
-        </Text>
-        <Text style={styles.subText}>
-          {I18n.t('registerEmailPassword.subText')}
-        </Text>
-        <Text style={styles.label}>
-          {I18n.t('registerEmailPassword.email')}
-        </Text>
+        <Text style={styles.title}>{I18n.t('registerEmailPassword.title')}</Text>
+        <Text style={styles.subText}>{I18n.t('registerEmailPassword.subText')}</Text>
+        <Text style={styles.label}>{I18n.t('registerEmailPassword.email')}</Text>
         <CheckTextInput
           value={email}
           onChangeText={(text: string): void => setEmail(text)}
           onBlur={onBlurEmail}
           maxLength={50}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
+          placeholder='Email'
+          keyboardType='email-address'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
-          returnKeyType="done"
+          underlineColorAndroid='transparent'
+          returnKeyType='done'
           isLoading={isEmailLoading}
           isCheckOk={isEmailCheckOk}
           errorMessage={errorEmail}
         />
         <Space size={16} />
-        <Text style={styles.label}>
-          {I18n.t('registerEmailPassword.password')}
-        </Text>
+        <Text style={styles.label}>{I18n.t('registerEmailPassword.password')}</Text>
         <CheckTextInput
           value={password}
           onChangeText={(text: string): void => setPassword(text)}
           onBlur={onBlurPassword}
           maxLength={20}
-          placeholder="Password"
-          autoCapitalize="none"
+          placeholder='Password'
+          autoCapitalize='none'
           autoCorrect={false}
-          underlineColorAndroid="transparent"
+          underlineColorAndroid='transparent'
           secureTextEntry
-          returnKeyType="done"
+          returnKeyType='done'
           isCheckOk={isPasswordCheckOk}
           errorMessage={errorPassword}
         />

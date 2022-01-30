@@ -40,8 +40,7 @@ const web = {
   firstViewStart: '立即加入 Interchao',
   wahtTitle: 'What is Interchao?',
   wahtText1: 'Interchao是可以免费互相学习 日文、英文、中文、韩文的应用程式.',
-  wahtText2:
-    '有母语者为你批改日记. 相反的你也可以使用自己的母语来批改其他人的日记',
+  wahtText2: '有母语者为你批改日记. 相反的你也可以使用自己的母语来批改其他人的日记',
   whyTitle: '写作的理由',
   whyText: '书写文章是学习语言最好的方法',
   whyCnatText1: '「How are you?」',
@@ -67,8 +66,7 @@ const web = {
   exampleDetailTitle3: '总结',
   exampleDetailText3: '最后获得总评',
   startTitle: '先来免费写日记吧​',
-  startText:
-    '安装应用程式可以获得100pt（10篇日记）. 赶快来写日记让人帮你批改吧！',
+  startText: '安装应用程式可以获得30pt（3篇日记）. 赶快来写日记让人帮你批改吧！',
   operator: 'Operator',
 };
 
@@ -114,6 +112,7 @@ const errorMessage = {
   lackPointsText:
     '您需要{{usePoint}}个积分才能发布{{textLength}}个字符的日记。可以通过批改日记来累积积分',
   exceedingCharacter: '超过最大字符数。最大字符数:{{textLength}}',
+  video: '视频播放过程中出现错误',
 };
 const app = {
   updateTitle: '最新版本已经发布',
@@ -133,8 +132,7 @@ const correcting = {
 
 const deleteAcount = {
   headerTitle: '关于账户注销',
-  text:
-    '账户注销后所发布的日记信息将被完全删除并且无法恢复。\n\n如果您仍要账户注销，请点击下面的按钮账户注销。',
+  text: '账户注销后所发布的日记信息将被完全删除并且无法恢复。\n\n如果您仍要账户注销，请点击下面的按钮账户注销。',
   withdrawal: '账户注销',
   confirmation: '确定要删除吗？',
 };
@@ -233,6 +231,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: '我的页面',
   editButton: '编辑',
+  adGetPoints: '通过观看视频广告赚取 {{points}} 积分',
+  timeOut: '是时候看下一个视频广告了 {{activeHour}}',
 };
 
 const notice = {
@@ -254,8 +254,7 @@ const onboarding = {
 };
 
 const reminderInitial = {
-  text:
-    '重要的是要养成学习习惯。让我们固定时间来学习。您可以设置一个提醒，以便在您开始学习时得到通知。',
+  text: '重要的是要养成学习习惯。让我们固定时间来学习。您可以设置一个提醒，以便在您开始学习时得到通知。',
   submit: '组',
 };
 
@@ -274,8 +273,7 @@ const reminderSelectTime = {
   notificationStartBody: '让我们今天努力吧！',
   notificationEndTitle: '结束时间',
   notificationEndBody: '做得好！',
-  notficationAlert:
-    '提醒功能不起作用，因为通知设置已关闭。从您的设备设置中打开Interchao通知。',
+  notficationAlert: '提醒功能不起作用，因为通知设置已关闭。从您的设备设置中打开Interchao通知。',
 };
 
 const reminderSelectDay = {
@@ -330,8 +328,7 @@ const selectLanguage = {
   change: '更改',
   nationalityCodeAlert: '请选择国籍',
   sameLanguageAlert: '请为 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
-  sameSpokenAlert:
-    '请为 "您会说的其他语言" 和 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
+  sameSpokenAlert: '请为 "您会说的其他语言" 和 "您想学习的语言" 和 "你说的语言" 选择另一种语言',
   add: '添加',
 };
 
@@ -506,8 +503,7 @@ const modalAppReviewRequest = {
   title: '感谢您对Interchao的支持',
   improveTitle: '感谢您在改善Interchao功能方面的合作',
   text: '感谢您使用Interchao。请让我们知道您对进一步改进的想法',
-  thanks:
-    '感谢您的评论。我们将使用它进行改进。我们期待您对Interchao的持续支持。',
+  thanks: '感谢您的评论。我们将使用它进行改进。我们期待您对Interchao的持续支持。',
   improve: '写下您要改善的地方',
   review: '评论',
   notYet: '以后写',
@@ -522,12 +518,16 @@ const modalBlock = {
   unblockedSuccess: '已取消拉黑{{userName}}',
   blockedMessage:
     '对方将无法在Interchao找到你的个人主页，帖子或快拍。对方不会收到自己被拉黑的通知。',
-  unblockedMessage:
-    '对方可以在Interchao向你发送关注请求了。对方不会收到自己已被取消拉黑的通知。',
+  unblockedMessage: '对方可以在Interchao向你发送关注请求了。对方不会收到自己已被取消拉黑的通知。',
   blockedButton: '拉黑',
   unblockedButton: '取消拉黑',
   blockedEndMessage: '你可以随时前往用户的个人主页取消拉黑对方。',
   unblockedEndMessage: '你可以随时前往用户的个人主页拉黑他们。',
+};
+
+const modalAdPointsGet = {
+  title: '赚取积分',
+  text: '感谢您观看视频。获得 10 积分',
 };
 
 const modalCorrectingDone = {
@@ -548,10 +548,10 @@ const modalDiaryCancel = {
 
 const modalLackPoint = {
   title: '积分不足',
-  text:
-    '积分不足。发布日记每{{learnCharacters}}个字符需要10个积分。\n\n批改日记，将获取10个积分。\n\n保存草稿可以不消耗积分。',
+  text: '积分不足。发布日记每{{learnCharacters}}个字符需要10个积分。\n\n批改日记，将获取10个积分。保存草稿可以不消耗积分\n\n或者您可以通过观看视频广告获得 10 积分',
   submit: '继续',
   close: '查找要批改的日记',
+  watchAd: '观看视频广告',
 };
 
 const modalSendEmail = {
@@ -612,15 +612,13 @@ const teachDiaryCorrection = {
 const tutorialPoints = {
   title: '积分',
   buttonText: '开始',
-  text:
-    '发布日记需要10个积分起。\n评论将可以获得至少10个积分。\n\n消耗和获得的积分因字符数和语言而不同',
+  text: '发布日记需要10个积分起。\n评论将可以获得至少10个积分。\n\n消耗和获得的积分因字符数和语言而不同',
 };
 
 const tutorialPostDiary = {
   title: '如何写日记',
   buttonText: '开始',
-  text:
-    '试着用{{learnLanguage}}写日记吧。每{{learnCharacters}}个字符需要10个积分。\n\n发布日记的话，可能会有母语者批改您的日记！？让我们互相教外语吧！',
+  text: '试着用{{learnLanguage}}写日记吧。每{{learnCharacters}}个字符需要10个积分。\n\n发布日记的话，可能会有母语者批改您的日记！？让我们互相教外语吧！',
 };
 
 const tutorialTeachDiaryList = {
@@ -915,6 +913,7 @@ const zh = {
   modalAlertPublish,
   modalAppReviewRequest,
   modalBlock,
+  modalAdPointsGet,
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,

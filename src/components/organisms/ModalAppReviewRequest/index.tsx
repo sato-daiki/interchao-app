@@ -45,24 +45,19 @@ const ModalAppReviewRequest: React.FC<Props> = ({
 
   const updateUserAppReviewState = useCallback(
     async (appReviewState: AppReviewState) => {
-      await firebase
-        .firestore()
-        .doc(`users/${profile.uid}`)
-        .update({
-          appReviewState,
-          updated: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+      await firebase.firestore().doc(`users/${profile.uid}`).update({
+        appReviewState,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
       updateAppReviewState(appReviewState);
     },
-    [profile.uid, updateAppReviewState]
+    [profile.uid, updateAppReviewState],
   );
 
   const onPressOk = useCallback(() => {
     if (Platform.OS !== 'web' && rating >= 4) {
       if (Platform.OS === 'ios') {
-        Linking.openURL(
-          `https://apps.apple.com/app/apple-store/id1510150748?action=write-review`
-        );
+        Linking.openURL('https://apps.apple.com/app/apple-store/id1510150748?action=write-review');
       } else if (Platform.OS === 'android') {
         StoreReview.requestReview();
       }
@@ -87,7 +82,7 @@ const ModalAppReviewRequest: React.FC<Props> = ({
     try {
       await updateUserAppReviewState('never');
       setIsLoading(false);
-    } catch (err) {
+    } catch (err: any) {
       alert({ err });
       setIsLoading(false);
     }
@@ -100,7 +95,7 @@ const ModalAppReviewRequest: React.FC<Props> = ({
     try {
       await firebase
         .firestore()
-        .collection(`inquiries`)
+        .collection('inquiries')
         .add({
           uid: profile.uid,
           userName: profile.userName,
@@ -114,7 +109,7 @@ const ModalAppReviewRequest: React.FC<Props> = ({
 
       setIsLoading(false);
       setIsPublishEnd(true);
-    } catch (err) {
+    } catch (err: any) {
       alert({ err });
       setIsLoading(false);
     }

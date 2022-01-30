@@ -69,6 +69,7 @@ export const usePostDiary = ({
     onClosePostDiary,
     onPressNotSave,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
   } = useCommon({
     navigation,
     themeTitle,
@@ -104,7 +105,7 @@ export const usePostDiary = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       };
     },
-    [profile, user.diaryPosted, title, text, themeCategory, themeSubcategory]
+    [profile, user.diaryPosted, title, text, themeCategory, themeSubcategory],
   );
 
   const onPressDraft = useCallback(async (): Promise<void> => {
@@ -113,10 +114,7 @@ export const usePostDiary = ({
     try {
       setIsLoadingDraft(true);
       const diary = getDiary('draft');
-      const diaryRef = await firebase
-        .firestore()
-        .collection('diaries')
-        .add(diary);
+      const diaryRef = await firebase.firestore().collection('diaries').add(diary);
       // reduxに追加
       addDiary({
         objectID: diaryRef.id,
@@ -129,7 +127,7 @@ export const usePostDiary = ({
         screen: 'MyDiaryTab',
         params: { screen: 'MyDiaryList' },
       });
-    } catch (err) {
+    } catch (err: any) {
       alert({ err });
       setIsLoadingDraft(false);
     }
@@ -150,19 +148,13 @@ export const usePostDiary = ({
     const diary = getDiary('publish');
     const usePoints = getUsePoints(text.length, profile.learnLanguage);
     const newPoints = user.points - usePoints;
-    const runningDays = getRunningDays(
-      user.runningDays,
-      user.lastDiaryPostedAt
-    );
-    const runningWeeks = getRunningWeeks(
-      user.runningWeeks,
-      user.lastDiaryPostedAt
-    );
+    const runningDays = getRunningDays(user.runningDays, user.lastDiaryPostedAt);
+    const runningWeeks = getRunningWeeks(user.runningWeeks, user.lastDiaryPostedAt);
     const message = getPublishMessage(
       user.runningDays,
       user.runningWeeks,
       runningDays,
-      runningWeeks
+      runningWeeks,
     );
     let diaryId = '';
     let themeDiaries = user.themeDiaries || null;
@@ -170,12 +162,9 @@ export const usePostDiary = ({
     // 日記の更新とpointsの整合性をとるためtransactionを使う
     await firebase
       .firestore()
-      .runTransaction(async transaction => {
+      .runTransaction(async (transaction) => {
         // diariesの更新
-        const refDiary = firebase
-          .firestore()
-          .collection('diaries')
-          .doc();
+        const refDiary = firebase.firestore().collection('diaries').doc();
         diaryId = refDiary.id;
         transaction.set(refDiary, diary);
 
@@ -185,7 +174,7 @@ export const usePostDiary = ({
             user.themeDiaries,
             diaryId,
             themeCategory,
-            themeSubcategory
+            themeSubcategory,
           );
         }
         const refUser = firebase.firestore().doc(`users/${user.uid}`);
@@ -212,7 +201,7 @@ export const usePostDiary = ({
         }
         transaction.update(refUser, updateUser);
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoadingPublish(false);
         alert({ err });
       });
@@ -256,13 +245,10 @@ export const usePostDiary = ({
 
   const onPressTutorial = useCallback(async (): Promise<void> => {
     setIsTutorialLoading(true);
-    await firebase
-      .firestore()
-      .doc(`users/${user.uid}`)
-      .update({
-        tutorialPostDiary: true,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
+    await firebase.firestore().doc(`users/${user.uid}`).update({
+      tutorialPostDiary: true,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     setUser({
       ...user,
       tutorialPostDiary: true,
@@ -271,19 +257,19 @@ export const usePostDiary = ({
   }, [setUser, user]);
 
   const onChangeTextTitle = useCallback(
-    txt => {
+    (txt) => {
       if (!isFirstEdit) setIsFirstEdit(true);
       setTitle(txt);
     },
-    [isFirstEdit, setTitle]
+    [isFirstEdit, setTitle],
   );
 
   const onChangeTextText = useCallback(
-    txt => {
+    (txt) => {
       if (!isFirstEdit) setIsFirstEdit(true);
       setText(txt);
     },
-    [isFirstEdit, setText]
+    [isFirstEdit, setText],
   );
 
   return {
@@ -302,6 +288,7 @@ export const usePostDiary = ({
     publishMessage,
     onPressSubmitModalLack,
     onPressCloseModalLack,
+    onPressWatchAdModalLack,
     onPressCloseModalPublish,
     onPressCloseModalCancel,
     onClosePostDiary,

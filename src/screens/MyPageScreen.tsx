@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import TopReviewList from '@/components/organisms/TopReviewList';
-import { primaryColor, fontSizeM } from '../styles/Common';
+import { primaryColor, fontSizeM, subTextColor, fontSizeS } from '../styles/Common';
+import firebase from '@/constants/firebase';
 import { Profile, UserReview, User } from '../types';
 import {
   ProfileIconHorizontal,
@@ -12,21 +13,26 @@ import {
   ScoreStar,
   UserPoints,
   HeaderIcon,
+  LoadingModal,
 } from '../components/atoms';
-import {
-  ProfileLanguage,
-  ProfileNationalityCode,
-} from '../components/molecules';
+import { ProfileLanguage, ProfileNationalityCode } from '../components/molecules';
 import { getUserReview } from '../utils/userReview';
 import I18n from '../utils/I18n';
 import {
   MyPageTabStackParamList,
   MyPageTabNavigationProp,
 } from '../navigations/MyPageTabNavigator';
+import ModalAdPointsGet from '@/components/organisms/ModalAdPointsGet';
+import { useAdMobRewarded } from './hooks/useAdMobRewarded';
+import { checkHourDiff, getActiveHour } from '@/utils/time';
 
 export interface Props {
   profile: Profile;
   user: User;
+}
+
+interface DispatchProps {
+  setUser: (user: User) => void;
 }
 
 type MyPageNavigationProp = CompositeNavigationProp<
@@ -36,7 +42,8 @@ type MyPageNavigationProp = CompositeNavigationProp<
 
 type ScreenType = {
   navigation: MyPageNavigationProp;
-} & Props;
+} & Props &
+  DispatchProps;
 
 const styles = StyleSheet.create({
   container: {
@@ -65,20 +72,66 @@ const styles = StyleSheet.create({
     lineHeight: fontSizeM * 1.3,
     paddingBottom: 16,
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  timeOut: {
+    fontSize: fontSizeS,
+    lineHeight: fontSizeS * 1.3,
+    color: subTextColor,
+  },
 });
+
+const CHECK_HOUR = 3;
 
 /**
  * マイページ
  */
-const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
+const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user, setUser }) => {
   const [userReview, setUserReview] = useState<UserReview | null>();
+  const [isModalAdPointsGet, setIsModalAdPointsGet] = useState(false);
+
+  const isActiveAdPointsGet = useMemo(() => {
+    return checkHourDiff(user.lastWatchAdAt, CHECK_HOUR);
+  }, [user.lastWatchAdAt]);
+
+  const activeHour = useMemo(() => {
+    return getActiveHour(user.lastWatchAdAt, CHECK_HOUR);
+  }, [user.lastWatchAdAt]);
+
+  const handleDidEarnReward = useCallback(async () => {
+    // 広告をみた人が実行できる処理
+    await firebase
+      .firestore()
+      .doc(`users/${user.uid}`)
+      .update({
+        points: user.points + 10,
+        lastWatchAdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    setUser({
+      ...user,
+      points: user.points + 10,
+      lastWatchAdAt: firebase.firestore.Timestamp.now(),
+    });
+    setIsModalAdPointsGet(true);
+  }, [setUser, user]);
+
+  const { isLoading, showAdReward } = useAdMobRewarded({
+    handleDidEarnReward,
+  });
+  const onPressAdPointGet = useCallback(() => {
+    showAdReward();
+  }, [showAdReward]);
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: (): JSX.Element => (
         <HeaderIcon
-          icon="material"
-          name="settings"
+          icon='material'
+          name='settings'
           onPress={(): void => navigation.navigate('Setting')}
         />
       ),
@@ -110,18 +163,29 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
     (uid: string, userName: string) => {
       navigation.navigate('UserProfile', { userName });
     },
-    [navigation]
+    [navigation],
   );
 
-  const onPressMoreReview = useCallback((): void => {
+  const onPressMoreReview = useCallback(() => {
     if (!profile) return;
     navigation.push('ReviewList', {
       userName: profile.userName,
     });
   }, [navigation, profile]);
 
+  const onPressCloseAdPointsGet = useCallback(() => {
+    setIsModalAdPointsGet(false);
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
+      <ModalAdPointsGet
+        visible={isModalAdPointsGet}
+        points={user.points}
+        getPoints={10}
+        onPressClose={onPressCloseAdPointsGet}
+      />
+      <LoadingModal visible={isLoading} text='loading' />
       <View style={styles.main}>
         <View style={styles.header}>
           <ProfileIconHorizontal
@@ -129,21 +193,27 @@ const MyPageScreen: React.FC<ScreenType> = ({ navigation, profile, user }) => {
             photoUrl={profile.photoUrl}
             nativeLanguage={profile.nativeLanguage}
           />
-          <SmallButtonWhite
-            title={I18n.t('myPage.editButton')}
-            onPress={onPressEdit}
-          />
+          <SmallButtonWhite title={I18n.t('myPage.editButton')} onPress={onPressEdit} />
         </View>
         {profile.name ? <Text style={styles.name}>{profile.name}</Text> : null}
         {userReview ? (
-          <ScoreStar
-            score={userReview.score}
-            reviewNum={userReview.reviewNum}
-          />
+          <ScoreStar score={userReview.score} reviewNum={userReview.reviewNum} />
         ) : null}
         <Space size={8} />
         <Text style={styles.introduction}>{profile.introduction}</Text>
-        <UserPoints points={user.points} />
+        <View style={styles.row}>
+          <UserPoints points={user.points} />
+          {isActiveAdPointsGet ? (
+            <SmallButtonWhite
+              disable={!isActiveAdPointsGet}
+              color={primaryColor}
+              title={I18n.t('myPage.adGetPoints', { points: 10 })}
+              onPress={onPressAdPointGet}
+            />
+          ) : (
+            <Text style={styles.timeOut}>{I18n.t('myPage.timeOut', { activeHour })}</Text>
+          )}
+        </View>
         <Space size={8} />
         <ProfileLanguage
           nativeLanguage={profile.nativeLanguage}

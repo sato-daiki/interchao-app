@@ -73,7 +73,7 @@ const web = {
   exampleDetailText3: '마지막으로 종합적인 평가를 받습니다',
   startTitle: '먼저 무료로 일기를 써 보세요',
   startText:
-    '앱 설치시 100pt(일기 10일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
+    '앱 설치시 30pt(일기 3일분)를 증정합니다<. 일기를 써서 첨삭 지도를 받아봅시다!',
   operator: 'Operator',
 };
 
@@ -124,6 +124,7 @@ const errorMessage = {
     '글자수{{textLength}인 일기를 업로드하려면 {{usePoint}}포인트가 필요합니다. 포인트는 일기를 첨삭하면 얻을 수 있습니다.',
   exceedingCharacter:
     '최대 문자 수를 초과합니다. 최대 문자 수 : {{textLength}}',
+  video: '동영상을 재생하는 중에 오류가 발생했습니다',
 };
 const app = {
   updateTitle: '최신버전으로 이용가능합니다',
@@ -243,6 +244,8 @@ const myDiarySerch = {
 const myPage = {
   headerTitle: '마이 페이지',
   editButton: '편집하기',
+  adGetPoints: '동영상 광고를 보고 {{points}}점 획득',
+  timeOut: '다음 동영상 광고를 볼 수 있는 시간 {{activeHour}}',
 };
 
 const notice = {
@@ -546,6 +549,11 @@ const modalBlock = {
   unblockedEndMessage: '상대방의 프로필에서 언제든지 차단할 수 있습니다.',
 };
 
+const modalAdPointsGet = {
+  title: '포인트 획득',
+  text: '동영상 시청에 감사드립니다. {{getPoints}}포인트 획득.',
+};
+
 const modalCorrectingDone = {
   title: '첨삭 완료',
   text: '첨삭 감사합니다. {{getPoints}}포인트 획득.',
@@ -565,9 +573,10 @@ const modalDiaryCancel = {
 const modalLackPoint = {
   title: '포인트 부족',
   text:
-    '포인트가 부족합니다. 일기를 업로드하려면 {{learnCharacters}}글자마다 10포인트가 필요합니다.\n\n임시보관함에서는 포인트 사용없이 저장할 수 있습니다.',
+    '포인트가 부족합니다. 일기를 업로드하려면 {{learnCharacters}}글자마다 10포인트가 필요합니다. 임시보관함에서는 포인트 사용없이 저장할 수 있습니다.\n\n또는 동영상 광고를 보면 10점이 적립됩니다.',
   submit: '계속하기',
   close: '첨삭이 필요한 일기 찾기',
+  watchAd: '동영상 광고 보기',
 };
 
 const modalSendEmail = {
@@ -939,6 +948,7 @@ const ko = {
   modalAlertPublish,
   modalAppReviewRequest,
   modalBlock,
+  modalAdPointsGet,
   modalCorrectingDone,
   modalDeleteAcount,
   modalDiaryCancel,

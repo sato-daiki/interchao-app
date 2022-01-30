@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View, Text, RefreshControl } from 'react-native';
-import { CalendarTheme, DateObject } from 'react-native-calendars';
 import * as Localization from 'expo-localization';
 
 import { Diary } from '@/types';
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const custumTheme: CalendarTheme = {
+const custumTheme = {
   todayTextColor: mainColor,
   selectedDayBackgroundColor: mainColor,
   dayTextColor: primaryColor,
@@ -115,7 +114,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
   handlePressDelete,
 }) => {
   const [selectedDay, setSelectedDay] = useState<string | null>(
-    getAlgoliaDay(new Date(), 'YYYY-MM-DD')
+    getAlgoliaDay(new Date(), 'YYYY-MM-DD'),
   );
   const [targetDayDiaries, setTargetDayDiaries] = useState<Diary[]>([]);
 
@@ -137,42 +136,35 @@ const MyDiaryListCalendar: React.FC<Props> = ({
 
   useEffect(() => {
     const newDiaries = diaries.filter(
-      item =>
-        getAlgoliaDay(item.publishedAt || item.createdAt, 'YYYY-MM-DD') ===
-        selectedDay
+      (item) => getAlgoliaDay(item.publishedAt || item.createdAt, 'YYYY-MM-DD') === selectedDay,
     );
     setTargetDayDiaries(newDiaries);
   }, [diaries, selectedDay]);
 
   const onDayPress = useCallback(
-    (date: DateObject) => {
+    (date) => {
       setSelectedDay(date.dateString);
     },
-    [setSelectedDay]
+    [setSelectedDay],
   );
 
   const renderHeader = useCallback(
-    date => (
-      <Text style={styles.header}>
-        {date.toString(code === 'ja' ? 'yyyy年M月' : 'MM yyyy')}
-      </Text>
+    (date) => (
+      <Text style={styles.header}>{date.toString(code === 'ja' ? 'yyyy年M月' : 'MM yyyy')}</Text>
     ),
-    []
+    [],
   );
 
-  const renderArrow = useCallback(
-    (direction: 'left' | 'right'): JSX.Element => {
-      return (
-        <HoverableIcon
-          icon="community"
-          name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
-          size={32}
-          color={mainColor}
-        />
-      );
-    },
-    []
-  );
+  const renderArrow = useCallback((direction: 'left' | 'right'): JSX.Element => {
+    return (
+      <HoverableIcon
+        icon='community'
+        name={direction === 'left' ? 'chevron-left' : 'chevron-right'}
+        size={32}
+        color={mainColor}
+      />
+    );
+  }, []);
 
   const refreshControl = useMemo(() => {
     return <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />;
@@ -190,31 +182,25 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         handlePressDelete={handlePressDelete}
       />
     ));
-  }, [
-    elRefs,
-    handlePressDelete,
-    handlePressItem,
-    onPressUser,
-    targetDayDiaries,
-  ]);
+  }, [elRefs, handlePressDelete, handlePressItem, onPressUser, targetDayDiaries]);
 
   return (
     <ScrollView style={styles.container} refreshControl={refreshControl}>
       <View style={styles.statusContainer}>
         {useMemo(
           () =>
-            status.map(s => (
+            status.map((s) => (
               <View key={s.id} style={styles.row}>
                 <View style={[styles.dot, { backgroundColor: s.color }]} />
                 <Text style={styles.statusText}>{s.text}</Text>
               </View>
             )),
-          []
+          [],
         )}
       </View>
       <Calendar
         markedDates={markedDates}
-        markingType="multi-dot"
+        markingType='multi-dot'
         onDayPress={onDayPress}
         renderArrow={renderArrow}
         renderHeader={renderHeader}
@@ -224,9 +210,7 @@ const MyDiaryListCalendar: React.FC<Props> = ({
         renderTargetDayDiaries
       ) : (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>
-            {I18n.t('myDiaryList.emptyDiary')}
-          </Text>
+          <Text style={styles.emptyText}>{I18n.t('myDiaryList.emptyDiary')}</Text>
         </View>
       )}
     </ScrollView>
