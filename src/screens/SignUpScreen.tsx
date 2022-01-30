@@ -106,7 +106,7 @@ const SignUpScreen: React.FC<ScreenType> = ({
         tutorialTeachDiaryList: false,
         tutorialCorrectiong: false,
         onboarding: false,
-        points: 100,
+        points: 30,
         expoPushToken: null,
         correctingObjectID: null,
         correctingCorrectedNum: null,
