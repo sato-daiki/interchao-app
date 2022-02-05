@@ -34,7 +34,13 @@
     "android": {
       "package": "app.interchao",
       "versionCode": 2010300,
-      "permissions": ["CAMERA", "NOTIFICATIONS", "CAMERA", "CAMERA_ROLL", "AUDIO_RECORDING"],
+      "permissions": [
+        "CAMERA",
+        "NOTIFICATIONS",
+        "CAMERA",
+        "CAMERA_ROLL",
+        "AUDIO_RECORDING"
+      ],
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/foreground.png",
@@ -91,8 +97,8 @@
           "measurementId": "G-VV6Y43CCFX"
         }
       },
-      "revision": 0,
-      "webRevision": 0
+      "revision": 1,
+      "webRevision": 1
     },
     "hooks": {
       "postPublish": [
