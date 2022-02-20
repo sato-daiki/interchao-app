@@ -105,7 +105,7 @@
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
-            "organization": "interchao",
+            "organization": "daiki-app",
             "project": "interchao",
             "authToken": "6f0a4cc11e0c499da179389d6db64e5fb59183af8da44f0e9ed70e12dd246ba2"
           }
