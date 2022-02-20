@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Platform } from 'react-native';
-import { AdMobBanner, setTestDeviceIDAsync } from 'expo-ads-admob';
+import {
+  AdMobBanner,
+  setTestDeviceIDAsync,
+  requestPermissionsAsync,
+} from 'expo-ads-admob';
 
 const styles = StyleSheet.create({
   adMobBanner: {
@@ -14,9 +18,20 @@ const ANDROID_AD_UNIT_ID = 'ca-app-pub-0770181536572634/3113100884';
 
 const BottomBanner: React.FC = () => {
   const [loadingAdmobError, setLoadingAdmobError] = useState(false);
+  const [isPermission, setIsPermission] = useState(false);
 
   useEffect(() => {
-    setTestDeviceIDAsync('EMULATOR');
+    const f = async () => {
+      const { status } = await requestPermissionsAsync();
+      console.log('status', status);
+      if (status !== 'granted') {
+        setIsPermission(false);
+      } else {
+        setIsPermission(true);
+      }
+      await setTestDeviceIDAsync('EMULATOR');
+    };
+    f();
   }, []);
 
   const onErrorLoadingAdMob = useCallback(() => {
@@ -32,11 +47,11 @@ const BottomBanner: React.FC = () => {
       return (
         <View style={styles.adMobBanner}>
           <AdMobBanner
-            bannerSize="banner"
+            bannerSize='banner'
             adUnitID={
               Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID
             }
-            servePersonalizedAds
+            servePersonalizedAds={isPermission}
             onDidFailToReceiveAdWithError={onErrorLoadingAdMob}
           />
         </View>
@@ -44,7 +59,7 @@ const BottomBanner: React.FC = () => {
     }
 
     return null;
-  }, [loadingAdmobError, onErrorLoadingAdMob]);
+  }, [isPermission, loadingAdmobError, onErrorLoadingAdMob]);
 
   return <View>{renderAds()}</View>;
 };
