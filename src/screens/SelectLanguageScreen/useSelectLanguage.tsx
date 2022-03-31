@@ -25,12 +25,12 @@ const initNativeLanguage = (code: string): Language => {
   if (code === 'ja') {
     return 'ja';
   }
-  if (code === 'zh') {
-    return 'zh';
-  }
-  if (code === 'ko') {
-    return 'ko';
-  }
+  // if (code === 'zh') {
+  //   return 'zh';
+  // }
+  // if (code === 'ko') {
+  //   return 'ko';
+  // }
   return 'en';
 };
 
@@ -38,12 +38,12 @@ const initCountryCode = (code: string): CountryCode | undefined => {
   if (code === 'ja') {
     return 'JP';
   }
-  if (code === 'zh') {
-    return 'CN';
-  }
-  if (code === 'ko') {
-    return 'KR';
-  }
+  // if (code === 'zh') {
+  //   return 'CN';
+  // }
+  // if (code === 'ko') {
+  //   return 'KR';
+  // }
   return undefined;
 };
 
@@ -54,10 +54,10 @@ export const useSelectLanguage = ({
 }: Props) => {
   const code = Localization.locale.split('-')[0];
   const [learnLanguage, setLearnLanguage] = useState<Language>(
-    initLearnLanguage(code)
+    initLearnLanguage(code),
   );
   const [nativeLanguage, setNativeLanguage] = useState<Language>(
-    initNativeLanguage(code)
+    initNativeLanguage(code),
   );
   const [spokenLanguages, setSpokenLanguages] = useState<Language[]>([]);
   // 初期値はiPhoneの設定を取得して設定しておく
@@ -82,7 +82,7 @@ export const useSelectLanguage = ({
       nationalityCode,
       learnLanguage,
       nativeLanguage,
-      spokenLanguages
+      spokenLanguages,
     );
     if (!checked.result) {
       setErrorMessage(checked.errorMessage);
@@ -115,7 +115,7 @@ export const useSelectLanguage = ({
       }
       setSpokenVisible(false);
     },
-    [spokenLanguages]
+    [spokenLanguages],
   );
 
   const onOpenCountry = useCallback((): void => {
@@ -139,9 +139,9 @@ export const useSelectLanguage = ({
 
   const onPressDeleteSpokenLanguages = useCallback(
     (item: Language): void => {
-      setSpokenLanguages(spokenLanguages.filter(s => s !== item));
+      setSpokenLanguages(spokenLanguages.filter((s) => s !== item));
     },
-    [spokenLanguages]
+    [spokenLanguages],
   );
 
   const onPressAdd = useCallback((): void => {

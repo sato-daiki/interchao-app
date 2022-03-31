@@ -29,7 +29,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const LanguageRadioBox: React.FC<Props> = ({ label, value, onPress }: Props) => {
+const LanguageRadioBox: React.FC<Props> = ({
+  label,
+  value,
+  onPress,
+}: Props) => {
   return (
     <>
       <Text style={styles.label}>{label}</Text>
@@ -50,7 +54,7 @@ const LanguageRadioBox: React.FC<Props> = ({ label, value, onPress }: Props) => 
             onPress={(): void => onPress('en')}
           />
         </View>
-        <View style={styles.radioBox}>
+        {/* <View style={styles.radioBox}>
           <RadioBox
             checked={value === 'zh'}
             color={mainColor}
@@ -65,7 +69,7 @@ const LanguageRadioBox: React.FC<Props> = ({ label, value, onPress }: Props) => 
             text={I18n.t('language.ko')}
             onPress={(): void => onPress('ko')}
           />
-        </View>
+        </View> */}
       </View>
     </>
   );
