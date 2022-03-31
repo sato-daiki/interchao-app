@@ -26,12 +26,13 @@ const common = {
 
 // web
 const helmet = {
-  keyword: '英語,中国語,簡体字,韓国語,語学学習,勉強,学習,日記,言語交換,添削,外国語',
+  keyword:
+    '英語,中国語,簡体字,韓国語,語学学習,勉強,学習,日記,言語交換,添削,外国語',
   description:
-    '日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+    '日本語、英語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
   ogTitle: 'Interchao-ネイティブに日記を添削してもらえるアプリ',
   ogDescription:
-    '日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
+    '日本語、英語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
 };
 
 const web = {
@@ -39,7 +40,8 @@ const web = {
   firstViewSubTitle: 'ネイティブに日記を添削してもらえるアプリ',
   firstViewStart: 'Interchaoを始めよう',
   wahtTitle: 'What is Interchao?',
-  wahtText1: 'Interchaoとは日本語、英語、中国語、韓国語を無料で勉強することができる相互学習アプリ',
+  wahtText1:
+    'Interchaoとは日本語、英語を無料で勉強することができる相互学習アプリ',
   wahtText2:
     'あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう',
   whyTitle: '書くことが必要な理由',
@@ -70,7 +72,8 @@ const web = {
   exampleDetailTitle3: '日記の総評​​',
   exampleDetailText3: '最後に総評をもらいました',
   startTitle: 'さっそく始めてみよう',
-  startText: 'アプリインストールで30pt（3日記分）が貰えます。早速日記を書いて添削してもらおう！',
+  startText:
+    'アプリインストールで30pt（3日記分）が貰えます。早速日記を書いて添削してもらおう！',
   operator: '運営者',
 };
 
@@ -95,19 +98,25 @@ const errorMessage = {
   weakPassword: 'パスワードは6桁以上で入力してください',
   userNotFound: 'メールアドレスが存在しません',
   emailAlreadyInUse: 'このメールアドレスはすでに登録されています',
-  tooManyRequests: 'エラーの数が一定数を超えました。時間をおいてから再度お試しください',
+  tooManyRequests:
+    'エラーの数が一定数を超えました。時間をおいてから再度お試しください',
   network: '通信エラーが発生しました。時間をおいて再度お試し下さい。',
   defaultError: 'エラーが発生しました。{{message}}',
   emptyUserName: 'ユーザーネームを入力してください',
-  invalidUserName: 'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません',
+  invalidUserName:
+    'ユーザーネームは半角英数字と_（アンダーバー）と.（ピリオド）以外使えません',
   initialUserName: '先頭の文字は半角英数字以外使えません',
-  userNameAlreadyInUse: 'すでにこのユーザーネームを使用しているユーザーがいます',
+  userNameAlreadyInUse:
+    'すでにこのユーザーネームを使用しているユーザーがいます',
   notFound: 'ページが開けません。エラーが発生しました',
   cantLogout: 'メールアドレスが登録されていないため、ログアウトできません。',
   invalidRaiting: '星は1〜5で入力してください',
-  correctionAlready: 'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
-  deleteTargetUser: 'このページは開けません。対象のユーザは削除された可能性があります。',
-  deleteTargetPage: 'このページは開けません。対象のページは削除された可能性があります。',
+  correctionAlready:
+    'この日記は他の人が添削を始めました。他の日記を再度検索ください。',
+  deleteTargetUser:
+    'このページは開けません。対象のユーザは削除された可能性があります。',
+  deleteTargetPage:
+    'このページは開けません。対象のページは削除された可能性があります。',
   emptyTitile: 'タイトルが入力されていません',
   emptyText: '本文が入力されていません',
   emptyEmail: 'メールアドレスが入力されていません',
@@ -115,7 +124,8 @@ const errorMessage = {
   lackPointsTitle: 'ポイント不足',
   lackPointsText:
     '文字数{{textLength}}の日記を投稿するには{{usePoint}}ポイントが必要です。ポイントは日記を添削することで溜めることができます',
-  exceedingCharacter: '文字数オーバーです。{{textLength}}以下で投稿してください',
+  exceedingCharacter:
+    '文字数オーバーです。{{textLength}}以下で投稿してください',
   video: '動画再生においてエラーが発生しました',
 };
 const app = {
@@ -308,7 +318,8 @@ const postDraftDiary = {
 const registerEmailPassword = {
   headerTitle: 'メールアドレス/パスワード登録',
   title: 'メールアドレスとパスワードを入力してください',
-  subText: '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
+  subText:
+    '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
   email: 'メールアドレス',
   password: 'パスワード（６ケタ以上）',
 };
@@ -335,7 +346,8 @@ const selectLanguage = {
   change: '変更する',
   nationalityCodeAlert: '国籍を選択してください',
   sameLanguageAlert: '"学びたい言語"と"話せる言語"は別の言語を選択してください',
-  sameSpokenAlert: '"学びたい言語"と"話せる言語"と"その他の話せる言語"は別の言語を選択してください',
+  sameSpokenAlert:
+    '"学びたい言語"と"話せる言語"と"その他の話せる言語"は別の言語を選択してください',
   add: '追加する',
 };
 
@@ -366,7 +378,8 @@ const signIn = {
 const signUp = {
   headerTitle: 'メールアドレス登録',
   title: 'メールアドレスとパスワードを入力してください',
-  subText: '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
+  subText:
+    '機種変更時などのデータの引き継ぎに必要になります。あとでも登録できます。',
   email: 'メールアドレス',
   password: 'パスワード（６ケタ以上）',
 };
@@ -501,7 +514,8 @@ const modalAlertPublish = {
   submit: '投稿する',
   publish: '日記が公開されました',
   share: '公開した日記を\nみんなに教えてあげましょう',
-  first: '初回の投稿おつかれさまです\n添削を待ちましょう！\n明日からも頑張りましょう',
+  first:
+    '初回の投稿おつかれさまです\n添削を待ちましょう！\n明日からも頑張りましょう',
   runningDays: '{{runningDays}}日連続の投稿です\n素晴らしい！',
   runningWeeks: '{{runningWeeks}}週連続の投稿です\nこれからも継続しましょう',
   good: '投稿おつかれさまです\n明日も頑張りましょう！',
@@ -531,7 +545,8 @@ const modalBlock = {
     'ブロックを解除すると、この人はあなたのプロフィールや日記を見ることができるようになります。ブロックが解除されたことは、相手に通知されません。',
   blockedButton: 'ブロックする',
   unblockedButton: 'ブロックを解除',
-  blockedEndMessage: 'ブロックした相手のプロフィールから、いつでもブロックを解除できます。',
+  blockedEndMessage:
+    'ブロックした相手のプロフィールから、いつでもブロックを解除できます。',
   unblockedEndMessage: '相手のプロフィールからいつでもブロックができます。',
 };
 
@@ -637,7 +652,8 @@ const tutorialTeachDiaryList = {
   buttonText: '始める',
   text1:
     'あなたが話せる言語の日記一覧です。1つの日記につき最大3人まで添削が可能です。\n\nステータスが',
-  text2: 'の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
+  text2:
+    'の日記を優先的に添削お願いします。添削すると10ポイントが手に入ります。',
   textMainColor: '未添削',
 };
 
@@ -674,8 +690,10 @@ const selectDiaryType = {
   recommend: 'おススメ',
   titleFree: '自由作文',
   titleTheme: 'テーマ作文',
-  textFree: '日記、今日話せなかったこと、好きな映画。自由テーマで書きましょう。',
-  textTheme: 'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
+  textFree:
+    '日記、今日話せなかったこと、好きな映画。自由テーマで書きましょう。',
+  textTheme:
+    'お題に沿って文章を書きましょう。書きたいことが思いつかない場合はおすすめ。',
 };
 
 const firstList = {
@@ -713,7 +731,8 @@ const selfIntroduction = {
   expression4: '趣味',
   example1: '田中はなといいます。はなと呼んでください。',
   example2: '私は神奈川で生まれて東京で育ちました。',
-  example3: '私はインターチャオでマーケティングディレクターとして働いています。',
+  example3:
+    '私はインターチャオでマーケティングディレクターとして働いています。',
   example4: '私はギターを弾くのが好きです。',
   wordTitle: '自己紹介で使える表現一覧',
   word1: 'お会いできて嬉しいです。',
@@ -798,7 +817,8 @@ const study = {
 };
 
 const dream = {
-  introduction: 'あなたは将来何になりたいですか？\n\n今日は将来の夢や目標を書いてみましょう。',
+  introduction:
+    'あなたは将来何になりたいですか？\n\n今日は将来の夢や目標を書いてみましょう。',
   expression1: '将来の夢',
   expression2: '過去の体験',
   expression3: '夢を通じて実現したい事',

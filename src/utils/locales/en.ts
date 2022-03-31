@@ -48,12 +48,12 @@ const shortDay = {
 
 // web
 const helmet = {
-  keyword: 'Japanese, Chinese, Korean, study, correct, free, diary, entry, language exchange',
+  keyword: 'Japanese, study, correct, free, diary, entry, language exchange',
   description:
-    'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
+    'Interchao is a free, interactive language learning application for Japanese and English learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
   ogTitle: 'Interchao Interactive language learning app',
   ogDescription:
-    'Interchao is a free, interactive language learning application for Japanese, English, Chinese, and Korean learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
+    'Interchao is a free, interactive language learning application for Japanese and English learners. Your journal entry will be read and marked by native speakers. Let’s mark others’ diary as a native teacher as a return!',
 };
 
 const web = {
@@ -62,23 +62,26 @@ const web = {
   firstViewStart: 'Join Interchao today.',
   wahtTitle: 'What is Interchao?',
   wahtText1:
-    'Interchao is a free, interactive language learning app for Japanese, English, Chinese, and Korean learners.',
+    'Interchao is a free, interactive language learning app for Japanese and English learners.',
   wahtText2:
     'Your journal entry will be read and marked by native speakers. Let’s mark others’ journal entry as a native teacher as a return!',
   whyTitle: 'Why is it necessary to write?',
   whyText: 'Writing is the optimal language learning method',
   whyCnatText1: '「最近調子はどうですか？」',
   whyCnatText2: '「絶好調です。あなたは？」',
-  whyCnatText3: '「元気です...(Oh no, I can’t keep the conversation going...)」',
+  whyCnatText3:
+    '「元気です...(Oh no, I can’t keep the conversation going...)」',
   reasonTitle1: 'You can’t speak more than what you can write',
   reasonText11: 'You can’t talk what you cannot pen down.',
   reasonText12: 'Writing is a training for speaking.',
   reasonTitle2: 'Make your articles checked by native speakers',
-  reasonText21: 'Since you have written down something, you want to know if there were mistakes.',
+  reasonText21:
+    'Since you have written down something, you want to know if there were mistakes.',
   reasonText22:
     'Are the words and grammar correct? Are you making sense? Let’s have your articles checked by native speakers!',
   reasonTitle3: 'Write in your own words',
-  reasonText31: 'Textbooks and scripts from movies are sometimes not applicable in our daily life.',
+  reasonText31:
+    'Textbooks and scripts from movies are sometimes not applicable in our daily life.',
   reasonText32:
     'Through outputting something in your own words, you are able to learn in a practical way.',
   correctTitle: 'Correct entries to get points',
@@ -119,15 +122,18 @@ const errorMessage = {
   weakPassword: 'Please enter a password with at least 6 digits',
   userNotFound: 'This email address does not exist.',
   emailAlreadyInUse: 'This email address is already registered',
-  tooManyRequests: 'You have made too many failed attempts. Please try again later.',
+  tooManyRequests:
+    'You have made too many failed attempts. Please try again later.',
   network: 'There has been a network error.',
   defaultError: 'There is an error. {{message}}',
   emptyUserName: 'Please enter a username.',
-  invalidUserName: 'Only alphanumeric characters, _ (the underbar), and . (period) can be used.',
+  invalidUserName:
+    'Only alphanumeric characters, _ (the underbar), and . (period) can be used.',
   initialUserName: 'The first character must be an alphanumeric character.',
   userNameAlreadyInUse: 'This username has already been taken.',
   notFound: 'This page cannot be opened. There is an error.',
-  cantLogout: 'Because you have not registered an email address, you cannot logout.',
+  cantLogout:
+    'Because you have not registered an email address, you cannot logout.',
   invalidRaiting: 'Please rate between 1~5.',
   correctionAlready:
     'Someone else has started correcting this entry. Please search for another entry.',
@@ -155,7 +161,8 @@ const app = {
 const correcting = {
   headerTitle: 'Correct',
   header: 'List of corrections by others',
-  deleteAlert: 'All of your corrections will be deleted. Would you like to proceed?',
+  deleteAlert:
+    'All of your corrections will be deleted. Would you like to proceed?',
   titleDone: 'Publish',
   nothing: 'No fix',
   summary: 'Summary',
@@ -213,7 +220,8 @@ const foregetPassword = {
   headerTitle: 'Change Password',
   email: 'Email',
   title: 'Please enter your email address.',
-  subText: 'We will send a URL to your email address for you to change your password.',
+  subText:
+    'We will send a URL to your email address for you to change your password.',
 };
 
 const initialize = {
@@ -234,8 +242,10 @@ const myDiary = {
   confirmMessage: 'Are you sure you want to delete this journal entry?',
   posted: 'Posted',
   fairCopy: 'Fair Copy',
-  closeAlert: 'Any edits that have not been saved will be lost. Would you like to exit?',
-  permissionAudio: 'You must enable audio recording permissions in order to use this function',
+  closeAlert:
+    'Any edits that have not been saved will be lost. Would you like to exit?',
+  permissionAudio:
+    'You must enable audio recording permissions in order to use this function',
   voiceTitle: 'Read Out Loud',
   myVoice: 'Listen to Your Recorded Voice',
   machine: "Listen to Machine's Voice",
@@ -335,7 +345,8 @@ const postDraftDiary = {
 const registerEmailPassword = {
   headerTitle: 'Register Email and Password',
   title: 'Please enter your email address and password',
-  subText: 'You will need this data when switching devices. You can also register at a later time.',
+  subText:
+    'You will need this data when switching devices. You can also register at a later time.',
   email: 'Email Address',
   password: 'Password (6 or more characters)',
 };
@@ -348,7 +359,8 @@ const reviewList = {
 const review = {
   headerTitle: 'Review',
   placeholder: 'Comment (Optional)',
-  confirmation: 'The draft of your review will be deleted. Would you like to proceed?',
+  confirmation:
+    'The draft of your review will be deleted. Would you like to proceed?',
 };
 
 const selectLanguage = {
@@ -395,7 +407,8 @@ const signIn = {
 const signUp = {
   headerTitle: 'Email Registration',
   title: 'Please enter your email address and password.',
-  subText: 'You will need this data when switching devices. You can also register at a later time.',
+  subText:
+    'You will need this data when switching devices. You can also register at a later time.',
   email: 'Email Address',
   password: 'Password (6 or more characters)',
 };
@@ -499,7 +512,8 @@ const inquiry = {
   email: 'Email Address',
   message: 'Message',
   title: 'Thank you for your inquiry.',
-  thanks: 'We will reply to you within a few days. Please kindly wait for a moment.',
+  thanks:
+    'We will reply to you within a few days. Please kindly wait for a moment.',
 };
 
 // organisms
@@ -539,7 +553,8 @@ const modalAlertPublish = {
 
 const modalAppReviewRequest = {
   title: 'Thank you for your support of Interchao',
-  improveTitle: 'We kindly ask for your cooperation in improving the functionality of Interchao',
+  improveTitle:
+    'We kindly ask for your cooperation in improving the functionality of Interchao',
   text: 'Thank you for using Interchao. Please let us know what you think for further improvement',
   thanks:
     'Thank you for your comment. We will use it for improvement. We look forward to your continued support of Interchao',
@@ -582,7 +597,8 @@ const modalDeleteAcount = {
 };
 
 const modalDiaryCancel = {
-  message: 'Any edits that have not been saved will be lost. Would you like to exit?',
+  message:
+    'Any edits that have not been saved will be lost. Would you like to exit?',
   button: 'Save as a Draft',
 };
 
@@ -675,7 +691,8 @@ const tutorialTeachDiaryList = {
 // util
 const cameraRoll = {
   permitTitle: 'Access permission is needed.',
-  permitMessage: 'You must give Interchao permission to access your photo library.',
+  permitMessage:
+    'You must give Interchao permission to access your photo library.',
   permitHowTo: 'How to Change Settings',
 };
 
@@ -734,7 +751,8 @@ const themeGuide = {
   expression: 'Expressions',
   example: 'Example sentences',
   word: 'Words',
-  guideEndText: "This is the end of the slide.\nLet's actually write a sentence!",
+  guideEndText:
+    "This is the end of the slide.\nLet's actually write a sentence!",
 };
 
 const selfIntroduction = {
@@ -768,7 +786,8 @@ const hobby = {
   expression2: 'hobby name, How did you start your hobby?',
   expression3: 'about the future',
   example1: 'My hobby is running.',
-  example2: 'The reason I started running was that I participated in a full Marathon.',
+  example2:
+    'The reason I started running was that I participated in a full Marathon.',
   example3: 'I want to continue with this kind of exercise.',
   wordTitle: 'Hobby list',
   word1: 'shopping',
