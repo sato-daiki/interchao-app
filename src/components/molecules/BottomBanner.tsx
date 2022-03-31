@@ -47,7 +47,7 @@ const BottomBanner: React.FC = () => {
       return (
         <View style={styles.adMobBanner}>
           <AdMobBanner
-            bannerSize='banner'
+            bannerSize='smartBannerPortrait'
             adUnitID={
               Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID
             }

@@ -28,7 +28,7 @@ interface Status {
 export const getUserDiaryStatus = (
   correctionStatus: CorrectionStatus,
   correctionStatus2: CorrectionStatus | undefined,
-  correctionStatus3: CorrectionStatus | undefined
+  correctionStatus3: CorrectionStatus | undefined,
 ): Status | null => {
   // 0添削の場合
   if (correctionStatus === 'yet') {
@@ -99,7 +99,8 @@ export const getMyDiaryStatus = (diary: Diary): Status | null => {
   return MY_STATUS.done;
 };
 
-export const allLanguage: Language[] = ['ja', 'en', 'zh', 'ko'];
+// export const allLanguage: Language[] = ['ja', 'en', 'zh', 'ko'];
+export const allLanguage: Language[] = ['ja', 'en'];
 
 export const getLanguageNum = (): number => {
   return allLanguage.length;
@@ -109,9 +110,9 @@ export const getLanguageNum = (): number => {
 export const getTargetLanguages = (
   learnLanguage,
   nativeLanguage,
-  spokenLanguages
+  spokenLanguages,
 ): Language[] => {
-  return allLanguage.filter(item => {
+  return allLanguage.filter((item) => {
     if (item === learnLanguage || item === nativeLanguage) return false;
     if (spokenLanguages) {
       for (let i = 0; i <= spokenLanguages.length; i += 1) {
@@ -164,7 +165,7 @@ export const getExceptUser = (uids: string[]): string => {
 
 export const getFillterLanguages = (
   nativeLanguage: Language,
-  spokenLanguages: Language[] | null | undefined
+  spokenLanguages: Language[] | null | undefined,
 ): string => {
   let fillterText = `(profile.learnLanguage: ${nativeLanguage}`;
   if (spokenLanguages) {
@@ -189,7 +190,7 @@ export const getDisplayProfile = (profile: Profile): DisplayProfile => {
 
 export const updateUnread = async (
   objectID: string,
-  data: DataCorrectionStatus | null
+  data: DataCorrectionStatus | null,
 ): Promise<void> => {
   await firebase
     .firestore()
@@ -207,7 +208,7 @@ export const getMaxPostText = (learnLanguage: Language): number => {
 
 export const getUsePoints = (
   length: number,
-  learnLanguage: Language
+  learnLanguage: Language,
 ): number => {
   const basePoints = getBasePoints(learnLanguage);
   return Math.ceil(length / basePoints) * 10;
@@ -217,17 +218,17 @@ export const getThemeDiaries = (
   themeDiaries: ThemeDiary[] | undefined | null,
   objectID: string,
   themeCategory: ThemeCategory,
-  themeSubcategory: ThemeSubcategory
+  themeSubcategory: ThemeSubcategory,
 ): ThemeDiary[] => {
   const findThemeDiary = themeDiaries?.find(
-    themeDiary =>
+    (themeDiary) =>
       themeDiary.themeCategory === themeCategory &&
-      themeDiary.themeSubcategory === themeSubcategory
+      themeDiary.themeSubcategory === themeSubcategory,
   );
 
   if (findThemeDiary && themeDiaries) {
     // 同一テーマを投稿した場合
-    const newThemeDiaries = themeDiaries.map(themeDiary => {
+    const newThemeDiaries = themeDiaries.map((themeDiary) => {
       if (
         themeDiary.themeCategory === themeCategory &&
         themeDiary.themeSubcategory === themeSubcategory
@@ -258,7 +259,7 @@ export const getThemeDiaries = (
 
 export const getRunningDays = (
   runningDays: number | undefined,
-  lastDiaryPostedAt: firestore.Timestamp | null | undefined
+  lastDiaryPostedAt: firestore.Timestamp | null | undefined,
 ): number => {
   // 初投稿の場合
   if (!lastDiaryPostedAt || !runningDays) return 1;
@@ -287,7 +288,7 @@ export const getRunningDays = (
 
 export const getRunningWeeks = (
   runningWeeks: number | undefined,
-  lastDiaryPostedAt: firestore.Timestamp | null | undefined
+  lastDiaryPostedAt: firestore.Timestamp | null | undefined,
 ): number => {
   // 初回の場合
   if (!lastDiaryPostedAt || !runningWeeks) return 1;
@@ -314,7 +315,7 @@ export const getPublishMessage = (
   beforeDays: number | null | undefined,
   beforeWeeks: number | null | undefined,
   afterDays: number,
-  afterWeeks: number
+  afterWeeks: number,
 ): string | null => {
   if (beforeDays === 0) {
     // 初回（0の場合もこっちに入る）
@@ -340,7 +341,7 @@ export const checkBeforePost = (
   title: string,
   text: string,
   points: number,
-  learnLanguage: Language
+  learnLanguage: Language,
 ): { result: boolean; errorMessage: string } => {
   if (!title) {
     return { result: false, errorMessage: I18n.t('errorMessage.emptyTitile') };
@@ -390,7 +391,7 @@ type Data =
 export const updateYet = async (
   objectID: string,
   uid: string,
-  data: DataCorrectionStatus | null
+  data: DataCorrectionStatus | null,
 ): Promise<void> => {
   const batch = firebase.firestore().batch();
   batch.update(firebase.firestore().doc(`diaries/${objectID}`), {
@@ -413,7 +414,7 @@ export const checkSelectLanguage = (
   nationalityCode: CountryCode | null | undefined,
   learnLanguage: Language,
   nativeLanguage: Language,
-  spokenLanguages: Language[]
+  spokenLanguages: Language[],
 ): { result: boolean; errorMessage: string } => {
   if (!nationalityCode) {
     return {
