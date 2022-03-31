@@ -95,7 +95,7 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
         mainButtonText={I18n.t('common.close')}
         onPressMain={onPressCloseError}
       />
-      <ModalSpokenLanguages
+      {/* <ModalSpokenLanguages
         visible={spokenVisible}
         languages={getTargetLanguages(
           learnLanguage,
@@ -104,7 +104,7 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
         )}
         onPressSubmit={onPressSpokenLanguages}
         onPressClose={onPressCloseSpoken}
-      />
+      /> */}
       <Text style={styles.title}>{I18n.t('selectLanguage.title')}</Text>
       <LanguageRadioBox
         label={I18n.t('selectLanguage.learn')}
@@ -118,16 +118,18 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
         onPress={onPressNativeLanguage}
       />
       <Space size={16} />
+
+      {/*  2022/3/31 言語を日本語と英語に一旦絞る
       <Text style={styles.label}>{I18n.t('selectLanguage.spoken')}</Text>
-      {spokenLanguages.map(item => (
+      {spokenLanguages.map((item) => (
         <View style={styles.rowSpoken} key={item}>
           <Text style={styles.spoken}>{getLanguage(item)}</Text>
           <HoverableIcon
-            icon="community"
+            icon='community'
             size={22}
             hoverBorderRadius={32}
             color={primaryColor}
-            name="trash-can-outline"
+            name='trash-can-outline'
             style={styles.trash}
             onPress={(): void => onPressDeleteSpokenLanguages(item)}
           />
@@ -137,7 +139,7 @@ const SelectLanguageScreen: React.FC<ScreenType> = ({
         <AddButton onPress={onPressAdd} />
       ) : null}
 
-      <Space size={24} />
+      <Space size={24} /> */}
       <Text style={styles.label}>{I18n.t('selectLanguage.nationality')}</Text>
 
       {Platform.OS === 'web' ? (
