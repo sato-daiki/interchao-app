@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, Platform, TextInput } from 'react-native';
 import * as jsdiff from 'diff';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { fontSizeM, primaryColor, borderLightColor, subTextColor } from '../../styles/Common';
+import {
+  fontSizeM,
+  primaryColor,
+  borderLightColor,
+  subTextColor,
+} from '../../styles/Common';
 import { Space, AutoHeightTextInput, Hoverable } from '../atoms';
 import { Diff, TextInfo } from '../../types';
 import CorrectingCommentNative from './CorrectingCommentNative';
@@ -27,7 +32,7 @@ interface Props {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     paddingVertical: 16,
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -62,13 +67,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst, onHideKeyboard }) => {
+const CorrectingListItem: React.FC<Props> = ({
+  item,
+  editText,
+  editFirst,
+  onHideKeyboard,
+}) => {
   const [isEdit, setIsEdit] = useState(false);
   const [fix, setFix] = useState(item.original);
   const [detail, setDetail] = useState('');
   const [diffs, setDiffs] = useState<Diff[] | null>(null);
 
-  const onBlurFix = (): void => {
+  const onBlurFix = useCallback((): void => {
     if (item.original === fix) {
       // 変更がない場合は初期化
       setDiffs(null);
@@ -94,24 +104,33 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst, onHide
     }
     setIsEdit(false);
     onHideKeyboard();
-  };
+  }, [editFirst, editText, fix, item.original, onHideKeyboard]);
 
-  const onBlurDetail = (): void => {
+  const onPressEdit = useCallback((): void => {
+    setIsEdit(true);
+  }, []);
+
+  const onBlurDetail = useCallback((): void => {
     editText({
       detail,
     });
     onHideKeyboard();
-  };
+  }, [detail, editText, onHideKeyboard]);
 
-  const renderFix = () => {
+  const renderFix = useCallback(() => {
     if (!isEdit) {
       return (
         <>
           {!diffs ? null : (
-            <>
+            <Hoverable onPress={onPressEdit}>
               <Space size={16} />
-              <CorrectingText isOrigin={false} isMenu={false} text={fix || ''} diffs={diffs} />
-            </>
+              <CorrectingText
+                isOrigin={false}
+                isMenu={false}
+                text={fix || ''}
+                diffs={diffs}
+              />
+            </Hoverable>
           )}
         </>
       );
@@ -123,7 +142,8 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst, onHide
           style={styles.textInputWeb}
           defaultValue={item.original}
           value={fix}
-          onChangeText={(text: string): void => setFix(text)}
+          autoFocus
+          onChangeText={setFix}
           onBlur={onBlurFix}
         />
       );
@@ -142,50 +162,54 @@ const CorrectingListItem: React.FC<Props> = ({ item, editText, editFirst, onHide
         underlineColorAndroid='transparent'
         returnKeyType='done'
         scrollEnabled={false}
-        onChangeText={(text: string): void => setFix(text)}
+        onChangeText={setFix}
         onBlur={onBlurFix}
       />
     );
-  };
+  }, [diffs, fix, isEdit, item.original, onBlurFix, onPressEdit]);
 
-  const renderComment = () => {
+  const renderComment = useCallback(() => {
     if (!diffs) return null;
 
     if (Platform.OS === 'web') {
-      return (
-        <CorrectingCommentWeb
-          detail={detail}
-          onChangeText={(text: string): void => setDetail(text)}
-        />
-      );
+      return <CorrectingCommentWeb detail={detail} onChangeText={setDetail} />;
     }
     return (
       <CorrectingCommentNative
         detail={detail}
         onBlurDetail={onBlurDetail}
-        onChangeText={(text: string): void => setDetail(text)}
+        onChangeText={setDetail}
       />
     );
-  };
+  }, [detail, diffs, onBlurDetail]);
 
   return (
     <View style={styles.container}>
-      <Hoverable onPress={(): void => setIsEdit(true)}>
+      <Hoverable onPress={onPressEdit}>
         {!diffs ? (
           <View style={styles.rowNoEdit}>
             <Text style={styles.text}>{item.original}</Text>
             <View style={styles.pen}>
-              <MaterialCommunityIcons size={28} color={primaryColor} name='pen' />
+              <MaterialCommunityIcons
+                size={28}
+                color={primaryColor}
+                name='pen'
+              />
             </View>
           </View>
         ) : (
-          <CorrectingText isMenu={false} isOrigin text={item.original} diffs={diffs} />
+          <CorrectingText
+            isMenu={false}
+            isOrigin
+            text={item.original}
+            diffs={diffs}
+          />
         )}
-        {renderFix()}
       </Hoverable>
+      {renderFix()}
       {renderComment()}
     </View>
   );
 };
 
-export default CorrectingListItem;
+export default React.memo(CorrectingListItem);
