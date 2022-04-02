@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-// import whyDidYouRender from '@welldone-software/why-did-you-render';
+import React from 'react';
 import { LogBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
@@ -11,7 +10,6 @@ import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 
 import Loading from '@/screens/LoadingScreen';
 
-import { initAnalytics } from '@/utils/Analytics';
 import { configureStore } from '@/stores/Store';
 import { firebaseConfig } from '@/constants/firebase';
 import * as Sentry from 'sentry-expo';
@@ -46,10 +44,6 @@ const linking = {
 } as LinkingOptions;
 
 const App = () => {
-  useEffect(() => {
-    initAnalytics();
-  }, []);
-
   return (
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
