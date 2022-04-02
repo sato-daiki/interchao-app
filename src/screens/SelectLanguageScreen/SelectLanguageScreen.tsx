@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingHorizontal: 16,
     paddingTop: 32,
+    alignItems: Platform.OS === 'web' ? 'center' : 'flex-start',
   },
   title: {
     color: primaryColor,

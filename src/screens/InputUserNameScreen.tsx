@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Space, SubmitButton } from '@/components/atoms';
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingHorizontal: 16,
     paddingTop: 32,
+    alignItems: Platform.OS === 'web' ? 'center' : 'flex-start',
   },
   title: {
     color: primaryColor,
