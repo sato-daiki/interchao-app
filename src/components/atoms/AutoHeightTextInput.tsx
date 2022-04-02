@@ -1,6 +1,11 @@
 import React from 'react';
 import { TextInput, StyleProp, TextStyle, StyleSheet } from 'react-native';
-import { fontSizeM, primaryColor, offWhite, borderLightColor } from '../../styles/Common';
+import {
+  fontSizeM,
+  primaryColor,
+  offWhite,
+  borderLightColor,
+} from '../../styles/Common';
 
 interface Props {
   style?: StyleProp<TextStyle>;
