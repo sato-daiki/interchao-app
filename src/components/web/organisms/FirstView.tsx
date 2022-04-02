@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, StyleSheet, Text, StyleProp, TextStyle } from 'react-native';
 import {
   maxLayoutChange,
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 'auto',
     marginRight: 'auto',
+    paddingBottom: 80,
   },
   textContainer: {
     alignItems: 'center',
@@ -81,22 +82,27 @@ const FirstView = ({
   onPressLogin,
   options,
 }: Props) => {
-  const setLeft = (): StyleProp<TextStyle> => {
+  const leftStyle = useMemo((): StyleProp<TextStyle> => {
     return {
       alignSelf: isMaxLayoutChange ? 'flex-start' : 'center',
       textAlign: isMaxLayoutChange ? 'left' : 'center',
     };
-  };
+  }, [isMaxLayoutChange]);
 
-  const setRight = (): StyleProp<TextStyle> => {
+  const rightStyle = useMemo((): StyleProp<TextStyle> => {
     return {
       alignSelf: isMaxLayoutChange ? 'flex-start' : 'center',
     };
-  };
+  }, [isMaxLayoutChange]);
 
   return (
     <View style={styles.warapper}>
-      <View style={[styles.container, isMaxLayoutChange ? styles.containerPc : styles.containerSp]}>
+      <View
+        style={[
+          styles.container,
+          isMaxLayoutChange ? styles.containerPc : styles.containerSp,
+        ]}
+      >
         <View style={styles.textContainer}>
           <Text
             style={[
@@ -105,7 +111,7 @@ const FirstView = ({
                 fontSize: getSize(isMobileDevice, fontSizeTitle),
                 lineHeight: getSize(isMobileDevice, fontSizeTitle) * 1.3,
               },
-              setLeft(),
+              leftStyle,
             ]}
           >
             {I18n.t('web.firstViewTitle', options)}
@@ -117,7 +123,7 @@ const FirstView = ({
                 fontSize: getSize(isMobileDevice, fontSizeLL),
                 lineHeight: getSize(isMobileDevice, fontSizeLL) * 1.3,
               },
-              setLeft(),
+              leftStyle,
             ]}
           >
             {I18n.t('web.firstViewSubTitle', options)}
@@ -133,7 +139,7 @@ const FirstView = ({
                   fontSize: getSize(isMobileDevice, fontSizeL),
                   lineHeight: getSize(isMobileDevice, fontSizeL) * 1.3,
                 },
-                setRight(),
+                rightStyle,
               ]}
             >
               {I18n.t('web.firstViewStart', options)}

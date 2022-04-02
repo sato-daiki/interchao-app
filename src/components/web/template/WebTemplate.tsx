@@ -37,9 +37,13 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
-  partContainer: {
+  partContainerPc: {
     alignItems: 'center',
     flex: 1,
+    paddingHorizontal: 16,
+  },
+  partContainerSp: {
+    alignItems: 'center',
     paddingHorizontal: 16,
   },
 });
@@ -73,7 +77,9 @@ const WebTemplate = ({
         {renderLeft ? (
           <View
             style={[
-              styles.partContainer,
+              isMaxLayoutChange
+                ? styles.partContainerPc
+                : styles.partContainerSp,
               { paddingBottom: !isMaxLayoutChange && leftTop ? 32 : 0 },
               leftContainer,
             ]}
@@ -84,7 +90,9 @@ const WebTemplate = ({
         {renderCenter ? (
           <View
             style={[
-              styles.partContainer,
+              isMaxLayoutChange
+                ? styles.partContainerPc
+                : styles.partContainerSp,
               { paddingBottom: !isMaxLayoutChange ? 32 : 0 },
               centerContainer,
             ]}
@@ -95,7 +103,9 @@ const WebTemplate = ({
         {renderRight ? (
           <View
             style={[
-              styles.partContainer,
+              isMaxLayoutChange
+                ? styles.partContainerPc
+                : styles.partContainerSp,
               { paddingBottom: !isMaxLayoutChange && !leftTop ? 32 : 0 },
               rightContainer,
             ]}
