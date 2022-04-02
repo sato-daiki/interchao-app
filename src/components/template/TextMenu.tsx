@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
-import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Menu, MenuOptions, MenuOption, MenuTrigger, renderers } from 'react-native-popup-menu';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  renderers,
+} from 'react-native-popup-menu';
 import I18n from '../../utils/I18n';
 import { clipboard } from '../../styles/Common';
 import ModalSpeech from '../organisms/ModalSpeech';
@@ -44,7 +50,12 @@ const styles = StyleSheet.create({
 
 // 補足
 // ポーズから再生する時と、最初から再生するときの制御を行ったため、少し複雑になっている
-const TextMenu = ({ children, displayText, textLanguage, onPressTranslate }: Props) => {
+const TextMenu = ({
+  children,
+  displayText,
+  textLanguage,
+  onPressTranslate,
+}: Props) => {
   const [visibleSpeech, setVisibleSpeech] = useState(false);
 
   const onPressSpeech = (): void => {
@@ -63,7 +74,10 @@ const TextMenu = ({ children, displayText, textLanguage, onPressTranslate }: Pro
   );
 
   const translateButton = (
-    <MenuOption style={[styles.menu, styles.border]} onSelect={onPressTranslate}>
+    <MenuOption
+      style={[styles.menu, styles.border]}
+      onSelect={onPressTranslate}
+    >
       <MaterialCommunityIcons size={20} color='white' name='translate' />
       <Text style={styles.menuText}>{I18n.t('common.translation')}</Text>
     </MenuOption>
@@ -113,7 +127,9 @@ const TextMenu = ({ children, displayText, textLanguage, onPressTranslate }: Pro
         }}
       >
         <MenuTrigger triggerOnLongPress>{children}</MenuTrigger>
-        <MenuOptions optionsContainerStyle={styles.menuOptions}>{renderMenuButton()}</MenuOptions>
+        <MenuOptions optionsContainerStyle={styles.menuOptions}>
+          {renderMenuButton()}
+        </MenuOptions>
       </Menu>
     </View>
   );

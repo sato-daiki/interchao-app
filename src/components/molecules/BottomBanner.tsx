@@ -22,6 +22,7 @@ const BottomBanner: React.FC = () => {
 
   useEffect(() => {
     const f = async () => {
+      if (Platform.OS === 'web') return;
       const { status } = await requestPermissionsAsync();
       console.log('status', status);
       if (status !== 'granted') {
