@@ -1,6 +1,6 @@
 import firebase from '../constants/firebase';
 import { getDisplayProfile, getUsePoints, updateYet } from './diary';
-import { track, events } from './Analytics';
+import { logAnalytics, events } from './Analytics';
 import {
   Diary,
   Profile,
@@ -44,7 +44,7 @@ type DataCorrection =
 
 export const getDataCorrectionStatus = (
   correctingCorrectedNum: number | null,
-  correctionStatus: CorrectionStatus
+  correctionStatus: CorrectionStatus,
 ): DataCorrectionStatus | null => {
   if (correctingCorrectedNum === 1) {
     return { correctionStatus };
@@ -60,7 +60,7 @@ export const getDataCorrectionStatus = (
 
 export const getDataCorrection = (
   correctingCorrectedNum: number | null,
-  newCorrection
+  newCorrection,
 ): DataCorrection | null => {
   if (correctingCorrectedNum === 1) {
     return { correction: newCorrection };
@@ -83,20 +83,17 @@ export const updateDone = async ({
   editTeachDiary,
   setUser,
 }: UpdateDoneProps): Promise<void> => {
-  await firebase.firestore().runTransaction(async transaction => {
+  await firebase.firestore().runTransaction(async (transaction) => {
     const displayProfile = getDisplayProfile(currentProfile);
     const getPoints = getUsePoints(
       teachDiary.text.length,
-      teachDiary.profile.learnLanguage
+      teachDiary.profile.learnLanguage,
     );
     const newPoints = user.points + getPoints;
     if (!teachDiary.objectID) return;
 
     //  correctionsの更新
-    const correctionRef = firebase
-      .firestore()
-      .collection('corrections')
-      .doc();
+    const correctionRef = firebase.firestore().collection('corrections').doc();
 
     transaction.set(correctionRef, {
       objectID: teachDiary.objectID,
@@ -114,12 +111,12 @@ export const updateDone = async ({
     const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
     const dataStatus = getDataCorrectionStatus(
       user.correctingCorrectedNum,
-      'unread'
+      'unread',
     );
 
     const dataCorrection = getDataCorrection(
       user.correctingCorrectedNum,
-      newCorrection
+      newCorrection,
     );
 
     transaction.update(diaryRef, {
@@ -143,12 +140,7 @@ export const updateDone = async ({
       .doc(`correctings/${teachDiary.objectID}`);
     transaction.delete(correctingRef);
 
-    track(events.CREATED_CORRECTION, {
-      objectID: teachDiary.objectID,
-      getPoints,
-      commentNum: comments.length,
-      summaryCharacters: summary.length,
-    });
+    logAnalytics(events.CREATED_CORRECTION);
 
     // reduxに追加
     editTeachDiary(teachDiary.objectID, {
@@ -171,7 +163,7 @@ export const onUpdateTimeUp = async (
   setIsLoading: Function,
   editTeachDiary: (objectID: string, data: Diary) => void,
   setUser: Function,
-  setIsModalTimeUp: Function
+  setIsModalTimeUp: Function,
 ): Promise<void> => {
   if (!teachDiary.objectID) return;
   setIsLoading(true);
@@ -202,7 +194,7 @@ export const onClose = (
   user,
   editTeachDiary,
   setUser,
-  navigation
+  navigation,
 ): void => {
   if (isLoading || !teachDiary.objectID) return;
   setIsLoading(true);
