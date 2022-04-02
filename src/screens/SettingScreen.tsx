@@ -13,7 +13,7 @@ import {
 } from '../styles/Common';
 import { OptionItem } from '../components/molecules';
 import { Space, Hoverable } from '../components/atoms';
-import { track, events } from '../utils/Analytics';
+import { logAnalytics, events } from '../utils/Analytics';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
 import { appShare, getVersionText } from '../utils/common';
@@ -80,7 +80,12 @@ const styles = StyleSheet.create({
 /**
  * 設定画面ページ
  */
-const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOut }) => {
+const SettingScreen: React.FC<ScreenType> = ({
+  navigation,
+  user,
+  profile,
+  signOut,
+}) => {
   const { currentUser } = firebase.auth();
   const [isModalError, setIsModalError] = useState(false);
 
@@ -92,7 +97,7 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOu
         setIsModalError(true);
         return;
       }
-      track(events.SIGN_OUT);
+      logAnalytics(events.SIGN_OUT);
       signOut();
     } catch (err: any) {
       alert({ err });
@@ -108,7 +113,10 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOu
   }, [navigation, user.reminder]);
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerStyle}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainerStyle}
+    >
       <ModalConfirm
         visible={isModalError}
         title={I18n.t('common.confirmation')}
@@ -118,7 +126,10 @@ const SettingScreen: React.FC<ScreenType> = ({ navigation, user, profile, signOu
       />
       <Text style={styles.title}>{I18n.t('setting.title')}</Text>
       {Platform.OS !== 'web' && (
-        <OptionItem title={I18n.t('setting.reminder')} onPress={onPressReminder} />
+        <OptionItem
+          title={I18n.t('setting.reminder')}
+          onPress={onPressReminder}
+        />
       )}
       <OptionItem
         title={I18n.t('setting.notice')}

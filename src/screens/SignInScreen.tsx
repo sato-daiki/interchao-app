@@ -4,14 +4,22 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { CheckTextInput } from '@/components/molecules';
-import { LoadingModal, Space, SubmitButton, LinkText } from '@/components/atoms';
+import {
+  LoadingModal,
+  Space,
+  SubmitButton,
+  LinkText,
+} from '@/components/atoms';
 
 import { primaryColor, fontSizeM } from '@/styles/Common';
 import firebase from '@/constants/firebase';
 import { emailInputError, emailValidate } from '@/utils/common';
-import { track, events } from '@/utils/Analytics';
+import { logAnalytics, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
-import { AuthNavigationProp, AuthStackParamList } from '@/navigations/AuthNavigator';
+import {
+  AuthNavigationProp,
+  AuthStackParamList,
+} from '@/navigations/AuthNavigator';
 import { CompositeNavigationProp } from '@react-navigation/native';
 
 export type NavigationProp = CompositeNavigationProp<
@@ -59,7 +67,7 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
   const [errorPassword, setErrorPassword] = useState('');
 
   useEffect((): void => {
-    track(events.OPENED_SIGN_IN);
+    logAnalytics(events.OPENED_SIGN_IN);
   }, []);
 
   const clearErrorMessage = (): void => {
@@ -71,9 +79,11 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
     setIsLoading(true);
     clearErrorMessage();
     try {
-      const credent = await firebase.auth().signInWithEmailAndPassword(email, password);
+      const credent = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password);
       if (credent.user) {
-        track(events.SIGN_IN);
+        logAnalytics(events.SIGN_IN);
       }
     } catch (err: any) {
       emailInputError(err, setErrorPassword, setErrorEmail, clearErrorMessage);
@@ -148,7 +158,12 @@ const SignInScreen: React.FC<ScreenType> = ({ navigation }) => {
         <SubmitButton
           title={I18n.t('signIn.login')}
           onPress={onPressLogin}
-          disable={errorEmail !== '' || errorPassword !== '' || email === '' || password === ''}
+          disable={
+            errorEmail !== '' ||
+            errorPassword !== '' ||
+            email === '' ||
+            password === ''
+          }
         />
         <Space size={16} />
         <View style={styles.row}>

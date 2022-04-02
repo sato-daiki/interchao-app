@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { maxLayoutChange } from '../../styles/Common';
-import { track, events } from '../../utils/Analytics';
+import { logAnalytics, events } from '../../utils/Analytics';
 import { AppDownload, Fotter, Header } from '../web/molecules';
 import FirstView from '../web/organisms/FirstView';
 import WhatIs from '../web/organisms/WhatIs';
@@ -35,9 +35,15 @@ const styles = StyleSheet.create({
 /**
  * 概要：ログインしていないユーザの立ち上げ画面
  */
-const Lp: React.FC<Props> = ({ isAbout, onPressHeader, onPressStart, onPressLogin, options }) => {
+const Lp: React.FC<Props> = ({
+  isAbout,
+  onPressHeader,
+  onPressStart,
+  onPressLogin,
+  options,
+}) => {
   useEffect((): void => {
-    track(events.OPENED_INITIALIZE);
+    logAnalytics(events.OPENED_INITIALIZE);
   }, []);
 
   // PCのサイズの時（ブラウザの横サイズ）
@@ -64,7 +70,9 @@ const Lp: React.FC<Props> = ({ isAbout, onPressHeader, onPressStart, onPressLogi
             isMobileDevice={isMobileDevice}
             options={options}
           />
-          {isTabletOrMobileDevice && !isAbout ? <AppDownload isWhite options={options} /> : null}
+          {isTabletOrMobileDevice && !isAbout ? (
+            <AppDownload isWhite options={options} />
+          ) : null}
           <WhatIs
             isMaxLayoutChange={isMaxLayoutChange}
             isMobileDevice={isMobileDevice}

@@ -7,7 +7,7 @@ import { LinkText, SubmitButton } from '@/components/atoms';
 import { AuthStackParamList } from '@/navigations/AuthNavigator';
 import { fontSizeM, primaryColor } from '@/styles/Common';
 import { LogoVercitacl } from '@/images';
-import { track, events } from '@/utils/Analytics';
+import { logAnalytics, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
 
 type ScreenType = StackScreenProps<AuthStackParamList, 'Initialize'>;
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
  */
 const InitializeScreen: React.FC<ScreenType> = ({ navigation }) => {
   useEffect((): void => {
-    track(events.OPENED_INITIALIZE);
+    logAnalytics(events.OPENED_INITIALIZE);
   }, []);
 
   const onPressSignIn = useCallback((): void => {
