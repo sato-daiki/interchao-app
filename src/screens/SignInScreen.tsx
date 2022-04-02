@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     color: primaryColor,
     fontSize: fontSizeM,
     paddingBottom: 6,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   forgetText: {
     color: primaryColor,

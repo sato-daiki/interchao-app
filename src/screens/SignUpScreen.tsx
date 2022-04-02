@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFF',
-    alignItems: Platform.OS === 'web' ? 'center' : 'flex-start',
   },
   main: {
     flex: 1,
@@ -75,17 +74,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 16,
     lineHeight: fontSizeL * 1.3,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   subText: {
     color: subTextColor,
     fontSize: fontSizeM,
     paddingBottom: 16,
     lineHeight: fontSizeM * 1.3,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
   label: {
     color: primaryColor,
     fontSize: fontSizeM,
     paddingBottom: 6,
+    textAlign: Platform.OS === 'web' ? 'center' : 'left',
   },
 });
 
