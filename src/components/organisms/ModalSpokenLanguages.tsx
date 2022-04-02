@@ -57,12 +57,12 @@ const ModalSpokenLanguages: React.FC<Props> = ({
           selectedValue={value || languages[0]}
           onValueChange={onValueChange}
         >
-          {languages.map(item => (
+          {languages.map((item) => (
             <Picker.Item key={item} label={getLanguage(item)} value={item} />
           ))}
         </Picker>
         {Platform.OS === 'ios' ? null : <Space size={16} />}
-        <SubmitButton title="OK" onPress={onPress} />
+        <SubmitButton title='OK' onPress={onPress} />
         <Space size={16} />
         <WhiteButton title={I18n.t('common.cancel')} onPress={onPressClose} />
       </View>
