@@ -31,7 +31,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ProfileLanguage: React.FC<Props> = ({ nativeLanguage, learnLanguage, spokenLanguages }) => {
+const ProfileLanguage: React.FC<Props> = ({
+  nativeLanguage,
+  learnLanguage,
+  spokenLanguages,
+}) => {
   return (
     <>
       <View style={styles.languageContainer}>
@@ -40,11 +44,15 @@ const ProfileLanguage: React.FC<Props> = ({ nativeLanguage, learnLanguage, spoke
         <Text style={styles.language}>{getLanguage(learnLanguage)}</Text>
       </View>
       <View style={styles.languageContainer}>
-        <MaterialCommunityIcons size={14} color={subTextColor} name='spellcheck' />
+        <MaterialCommunityIcons
+          size={14}
+          color={subTextColor}
+          name='spellcheck'
+        />
         <Text style={styles.label}>{I18n.t('profileLanguage.native')}</Text>
         <Text style={styles.language}>{getLanguage(nativeLanguage)}</Text>
       </View>
-      {spokenLanguages ? (
+      {/* {spokenLanguages ? (
         <View style={styles.languageContainer}>
           <MaterialCommunityIcons size={14} color={subTextColor} name='comment-multiple-outline' />
           <Text style={styles.label}>{I18n.t('profileLanguage.spoken')}</Text>
@@ -54,7 +62,7 @@ const ProfileLanguage: React.FC<Props> = ({ nativeLanguage, learnLanguage, spoke
             </Text>
           ))}
         </View>
-      ) : null}
+      ) : null} */}
     </>
   );
 };
