@@ -134,55 +134,46 @@ const CorrectingScreen: React.FC<ScreenType> = ({
   /**
    * 閉じる処理
    */
-  const close = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (isLoading) return;
-      setIsLoading(true);
-      await onClose(
-        isLoading,
-        teachDiary,
-        setIsLoading,
-        user,
-        editTeachDiary,
-        setUser,
-        navigation,
-      );
-      setIsLoading(false);
-      setIsModalConfirmation(false);
-    };
-    f();
+  const close = useCallback(async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    await onClose(
+      isLoading,
+      teachDiary,
+      setIsLoading,
+      user,
+      editTeachDiary,
+      setUser,
+      navigation,
+    );
+    setIsLoading(false);
+    setIsModalConfirmation(false);
   }, [editTeachDiary, isLoading, navigation, setUser, teachDiary, user]);
 
-  const getNewProfile = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!teachDiary) return;
-      const newProfile = await getProfile(teachDiary.profile.uid);
-      if (newProfile) {
-        setTargetProfile(newProfile);
-      }
-      setIsProfileLoading(false);
-    };
-    f();
+  const getNewProfile = useCallback(async () => {
+    if (!teachDiary) return;
+    const newProfile = await getProfile(teachDiary.profile.uid);
+    if (newProfile) {
+      setTargetProfile(newProfile);
+    }
+    setIsProfileLoading(false);
   }, [teachDiary]);
 
-  const getNewCorrection = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!teachDiary) return;
-      if (teachDiary.correction) {
-        const newCorrection = await getCorrection(teachDiary.correction.id);
-        if (newCorrection) {
-          setCorrection(newCorrection);
-        }
+  const getNewCorrection = useCallback(async () => {
+    if (!teachDiary) return;
+    if (teachDiary.correction) {
+      const newCorrection = await getCorrection(teachDiary.correction.id);
+      if (newCorrection) {
+        setCorrection(newCorrection);
       }
-      if (teachDiary.correction2) {
-        const newCorrection = await getCorrection(teachDiary.correction2.id);
-        if (newCorrection) {
-          setCorrection2(newCorrection);
-        }
+    }
+    if (teachDiary.correction2) {
+      const newCorrection = await getCorrection(teachDiary.correction2.id);
+      if (newCorrection) {
+        setCorrection2(newCorrection);
       }
-      setIsCorrectionLoading(false);
-    };
-    f();
+    }
+    setIsCorrectionLoading(false);
   }, [teachDiary]);
 
   useEffect(() => {
@@ -198,31 +189,28 @@ const CorrectingScreen: React.FC<ScreenType> = ({
   /**
    * 完了する
    */
-  const onPressSubmitButton = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!teachDiary) return;
-      const comments = textInfos.filter((item) => item.diffs !== null);
-      if (comments.length === 0) {
-        setIsModalNoComment(true);
-        return;
-      }
-      if (isLoading) return;
-      setIsLoading(true);
+  const onPressSubmitButton = useCallback(async () => {
+    if (!teachDiary) return;
+    const comments = textInfos.filter((item) => item.diffs !== null);
+    if (comments.length === 0) {
+      setIsModalNoComment(true);
+      return;
+    }
+    if (isLoading) return;
+    setIsLoading(true);
 
-      await updateDone({
-        summary,
-        teachDiary,
-        currentProfile,
-        user,
-        comments,
-        editTeachDiary,
-        setUser,
-      });
+    await updateDone({
+      summary,
+      teachDiary,
+      currentProfile,
+      user,
+      comments,
+      editTeachDiary,
+      setUser,
+    });
 
-      setIsLoading(false);
-      setIsModalDone(true);
-    };
-    f();
+    setIsLoading(false);
+    setIsModalDone(true);
   }, [
     textInfos,
     teachDiary,
