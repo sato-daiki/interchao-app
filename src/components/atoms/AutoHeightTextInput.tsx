@@ -1,6 +1,11 @@
 import React from 'react';
 import { TextInput, StyleProp, TextStyle, StyleSheet } from 'react-native';
-import { fontSizeM, primaryColor, offWhite, borderLightColor } from '../../styles/Common';
+import {
+  fontSizeM,
+  primaryColor,
+  offWhite,
+  borderLightColor,
+} from '../../styles/Common';
 
 interface Props {
   style?: StyleProp<TextStyle>;
@@ -9,6 +14,7 @@ interface Props {
   placeholder?: string;
   onChangeText: (text: string) => void;
   onBlur?: () => void;
+  autoFocus?: boolean;
 }
 
 const styles = StyleSheet.create({
@@ -34,6 +40,7 @@ const AutoHeightTextInput: React.FC<Props> = ({
   placeholder,
   onChangeText,
   onBlur,
+  autoFocus = false,
 }: Props) => {
   return (
     <TextInput
@@ -43,12 +50,13 @@ const AutoHeightTextInput: React.FC<Props> = ({
       value={value}
       multiline
       blurOnSubmit
+      autoFocus={autoFocus}
       autoCapitalize='none'
       spellCheck
       autoCorrect
+      underlineColorAndroid='transparent'
       returnKeyType='done'
       scrollEnabled={false}
-      underlineColorAndroid='transparent'
       onChangeText={onChangeText}
       onBlur={onBlur}
     />

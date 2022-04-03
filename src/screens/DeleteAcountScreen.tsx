@@ -11,7 +11,7 @@ import {
   borderLightColor,
   softRed,
 } from '../styles/Common';
-import { track, events } from '../utils/Analytics';
+import { logAnalytics, events } from '../utils/Analytics';
 import ModalDeleteAcount from '../components/organisms/ModalDeleteAcount';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
@@ -98,7 +98,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
         alert({ err });
       }
       setIsLoading(false);
-      track(events.DELETED_USER);
+      logAnalytics(events.DELETED_USER);
     };
     f();
   }, [signOut]);
@@ -108,7 +108,10 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       try {
         const { currentUser } = firebase.auth();
         if (!currentUser || !currentUser.email) return;
-        const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, password);
+        const credential = firebase.auth.EmailAuthProvider.credential(
+          currentUser.email,
+          password,
+        );
         setIsLoading(true);
         await currentUser.reauthenticateWithCredential(credential);
         await currentUser.delete();
@@ -123,7 +126,7 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
           alert({ err });
         }
       }
-      track(events.DELETED_USER);
+      logAnalytics(events.DELETED_USER);
       setIsLoading(false);
     };
     f();
@@ -156,7 +159,10 @@ const DeleteAcountScreen: React.FC<ScreenType> = ({ signOut }) => {
       />
       <View style={styles.main}>
         <Text style={styles.text}>{I18n.t('deleteAcount.text')}</Text>
-        <Hoverable style={styles.deleteButton} onPress={(): void => setIsModal(true)}>
+        <Hoverable
+          style={styles.deleteButton}
+          onPress={(): void => setIsModal(true)}
+        >
           <Text style={styles.delete}>{I18n.t('deleteAcount.withdrawal')}</Text>
         </Hoverable>
       </View>

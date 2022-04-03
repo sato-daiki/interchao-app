@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 import { Space, SubmitButton } from '@/components/atoms';
@@ -17,7 +17,7 @@ import {
   checkTypeUserName,
   checkInitialUserName,
 } from '@/utils/profile';
-import { track, events } from '@/utils/Analytics';
+import { logAnalytics, events } from '@/utils/Analytics';
 import I18n from '@/utils/I18n';
 import {
   AuthNavigationProp,
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingHorizontal: 16,
     paddingTop: 32,
+    alignItems: Platform.OS === 'web' ? 'center' : 'flex-start',
   },
   title: {
     color: primaryColor,
@@ -74,7 +75,7 @@ const InputUserNameScreen: React.FC<ScreenType> = ({
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect((): void => {
-    track(events.OPENED_INPUT_USER_NAME);
+    logAnalytics(events.OPENED_INPUT_USER_NAME);
   }, []);
 
   const onChangeText = useCallback(async (text: string): Promise<void> => {
@@ -140,11 +141,11 @@ const InputUserNameScreen: React.FC<ScreenType> = ({
         value={userName}
         onChangeText={onChangeText}
         maxLength={20}
-        placeholder="username"
-        autoCapitalize="none"
+        placeholder='username'
+        autoCapitalize='none'
         autoCorrect={false}
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
+        underlineColorAndroid='transparent'
+        returnKeyType='done'
         isLoading={isUserNameLoading}
         isCheckOk={isUserNameCheckOk}
         errorMessage={errorMessage}

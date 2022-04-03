@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-// import whyDidYouRender from '@welldone-software/why-did-you-render';
+import React from 'react';
 import { LogBox, StatusBar, Platform } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import * as Linking from 'expo-linking';
@@ -7,16 +6,10 @@ import { Provider } from 'react-redux';
 import firebase from 'firebase';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { MenuProvider } from 'react-native-popup-menu';
-import {
-  LinkingOptions,
-  NavigationContainer,
-  NavigationContainerRef,
-} from '@react-navigation/native';
-import * as Analytics from 'expo-firebase-analytics';
+import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 
 import Loading from '@/screens/LoadingScreen';
 
-import { initAnalytics } from '@/utils/Analytics';
 import { configureStore } from '@/stores/Store';
 import { firebaseConfig } from '@/constants/firebase';
 import * as Sentry from 'sentry-expo';
@@ -51,53 +44,13 @@ const linking = {
 } as LinkingOptions;
 
 const App = () => {
-  const routeNameRef = React.useRef<string | undefined | null>(null);
-  const navigationRef = React.useRef<NavigationContainerRef | null>(null);
-
-  if (__DEV__) {
-    // whyDidYouRender(React, {
-    //   trackAllPureComponents: true,
-    // });
-  }
-
-  const onReady = (): void => {
-    routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name;
-  };
-
-  const onStateChange = (): void => {
-    const previousRouteName = routeNameRef.current;
-    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
-
-    if (previousRouteName !== currentRouteName) {
-      // The line below uses the expo-firebase-analytics tracker
-      // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
-      // Change this line to use another Mobile analytics SDK
-      console.log('[ScreenName]', currentRouteName);
-      if (!__DEV__) {
-        Analytics.setCurrentScreen(currentRouteName);
-      }
-    }
-
-    // Save the current route name for later comparision
-    routeNameRef.current = currentRouteName;
-  };
-
-  useEffect(() => {
-    initAnalytics();
-  }, []);
-
   return (
     <Provider store={store}>
       <PersistGate loading={<Loading />} persistor={persistor}>
         <StatusBar barStyle='dark-content' />
         <ActionSheetProvider>
           <MenuProvider>
-            <NavigationContainer
-              ref={navigationRef}
-              linking={linking}
-              onStateChange={onStateChange}
-              onReady={onReady}
-            >
+            <NavigationContainer linking={linking}>
               <RootNavigatorContainer />
             </NavigationContainer>
           </MenuProvider>

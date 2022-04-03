@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
 import { getUser } from '@/utils/user';
 import { getProfile } from '@/utils/profile';
-import { setAnalyticsUser } from '@/utils/Analytics';
 import { Profile, User, LocalStatus } from '@/types';
 
 import LoadingScreen from '@/screens/LoadingScreen';
@@ -49,9 +48,6 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
           setUser(newUser);
           setProfile(newProfile);
           restoreUid(authUser.uid, newUser.onboarding);
-
-          // Amplitudeに登録
-          setAnalyticsUser(newUser, newProfile);
         }
       } else {
         restoreUid(null, false);
@@ -78,7 +74,9 @@ const RootNavigator: React.FC<Props & DispatchProps> = ({
     }
     if (localStatus.uid !== null) {
       if (localStatus.onboarding === false && Platform.OS !== 'web') {
-        return <Stack.Screen name='Onboarding' component={OnboardingNavigator} />;
+        return (
+          <Stack.Screen name='Onboarding' component={OnboardingNavigator} />
+        );
       }
       return <Stack.Screen name='Main' component={MainNavigator} />;
     }

@@ -44,10 +44,19 @@ const WhatIs = ({ isMaxLayoutChange, isMobileDevice, options }: Props) => {
     <>
       <View style={styles.row}>
         <Image source={App} resizeMode='contain' style={styles.icon} />
-        <Title isMobileDevice={isMobileDevice} text={I18n.t('web.wahtTitle', options)} />
+        <Title
+          isMobileDevice={isMobileDevice}
+          text={I18n.t('web.wahtTitle', options)}
+        />
       </View>
-      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.wahtText1', options)} />
-      <BodyText isMobileDevice={isMobileDevice} text={I18n.t('web.wahtText2', options)} />
+      <BodyText
+        isMobileDevice={isMobileDevice}
+        text={I18n.t('web.wahtText1', options)}
+      />
+      <BodyText
+        isMobileDevice={isMobileDevice}
+        text={I18n.t('web.wahtText2', options)}
+      />
     </>
   );
 

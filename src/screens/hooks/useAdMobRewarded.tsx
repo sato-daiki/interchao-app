@@ -15,12 +15,17 @@ const ANDROID_AD_UNIT_ID = 'ca-app-pub-0770181536572634/7603547919';
 export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    if (Platform.OS === 'web') return;
+
     const f = async () => {
       AdMobRewarded.addEventListener(
         'rewardedVideoUserDidEarnReward',
         rewardedVideoUserDidEarnReward,
       );
-      AdMobRewarded.addEventListener('rewardedVideoDidFailToLoad', rewardedVideoDidFailToLoad);
+      AdMobRewarded.addEventListener(
+        'rewardedVideoDidFailToLoad',
+        rewardedVideoDidFailToLoad,
+      );
     };
 
     f();
@@ -48,7 +53,9 @@ export const useAdMobRewarded = ({ handleDidEarnReward }: Props) => {
     setIsLoading(true);
     try {
       await setTestDeviceIDAsync('EMULATOR');
-      await AdMobRewarded.setAdUnitID(Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID);
+      await AdMobRewarded.setAdUnitID(
+        Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID,
+      );
       await AdMobRewarded.requestAdAsync();
       await AdMobRewarded.showAdAsync();
     } catch (err: any) {

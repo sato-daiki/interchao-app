@@ -58,12 +58,17 @@ const ModalAppSuggestion = ({ user, setUser }: Props) => {
     Platform.OS === 'web' &&
     isTabletOrMobileDevice &&
     visible &&
-    (!user.lastModalAppSuggestionAt || getIsAfterDay(user.lastModalAppSuggestionAt, 7))
+    (!user.lastModalAppSuggestionAt ||
+      getIsAfterDay(user.lastModalAppSuggestionAt, 7))
   ) {
     return (
       <View style={styles.container}>
         <Hoverable style={styles.icon} onPress={onPressClose}>
-          <MaterialCommunityIcons size={28} color='#fff' name='close-circle-outline' />
+          <MaterialCommunityIcons
+            size={28}
+            color='#fff'
+            name='close-circle-outline'
+          />
         </Hoverable>
         <AppDownload isWhite={false} />
       </View>

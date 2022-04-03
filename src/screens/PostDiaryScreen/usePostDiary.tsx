@@ -11,7 +11,7 @@ import {
   getPublishMessage,
   getThemeDiaries,
 } from '@/utils/diary';
-import { track, events } from '@/utils/Analytics';
+import { logAnalytics, events } from '@/utils/Analytics';
 import { alert } from '@/utils/ErrorAlert';
 import { ModalPostDiaryStackParamList } from '@/navigations/ModalNavigator';
 import { RouteProp } from '@react-navigation/native';
@@ -114,7 +114,10 @@ export const usePostDiary = ({
     try {
       setIsLoadingDraft(true);
       const diary = getDiary('draft');
-      const diaryRef = await firebase.firestore().collection('diaries').add(diary);
+      const diaryRef = await firebase
+        .firestore()
+        .collection('diaries')
+        .add(diary);
       // reduxに追加
       addDiary({
         objectID: diaryRef.id,
@@ -122,7 +125,7 @@ export const usePostDiary = ({
       });
       setIsLoadingDraft(false);
       setIsModalAlert(false);
-      track(events.CREATED_DIARY, { diaryStatus: 'draft' });
+      logAnalytics(events.CREATED_DIARY);
       navigation.navigate('Home', {
         screen: 'MyDiaryTab',
         params: { screen: 'MyDiaryList' },
@@ -148,8 +151,14 @@ export const usePostDiary = ({
     const diary = getDiary('publish');
     const usePoints = getUsePoints(text.length, profile.learnLanguage);
     const newPoints = user.points - usePoints;
-    const runningDays = getRunningDays(user.runningDays, user.lastDiaryPostedAt);
-    const runningWeeks = getRunningWeeks(user.runningWeeks, user.lastDiaryPostedAt);
+    const runningDays = getRunningDays(
+      user.runningDays,
+      user.lastDiaryPostedAt,
+    );
+    const runningWeeks = getRunningWeeks(
+      user.runningWeeks,
+      user.lastDiaryPostedAt,
+    );
     const message = getPublishMessage(
       user.runningDays,
       user.runningWeeks,
@@ -205,11 +214,7 @@ export const usePostDiary = ({
         setIsLoadingPublish(false);
         alert({ err });
       });
-    track(events.CREATED_DIARY, {
-      usePoints,
-      characters: text.length,
-      diaryStatus: 'publish',
-    });
+    logAnalytics(events.CREATED_DIARY);
     // reduxに追加
     addDiary({
       objectID: diaryId,

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import * as Localization from 'expo-localization';
 import { Language, CountryCode, Profile } from '@/types';
-import { track, events } from '@/utils/Analytics';
+import { logAnalytics, events } from '@/utils/Analytics';
 
 import { checkSelectLanguage } from '@/utils/diary';
 import { SelectLanguageNavigationProp } from './interface';
@@ -74,7 +74,7 @@ export const useSelectLanguage = ({
   }, []);
 
   useEffect((): void => {
-    track(events.OPENED_SELECT_LANGUAGE);
+    logAnalytics(events.OPENED_SELECT_LANGUAGE);
   }, []);
 
   const onPressNext = useCallback((): void => {

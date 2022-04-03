@@ -10,7 +10,7 @@ import { KeyboardHideButton, UserListItem } from '../components/molecules';
 import { Diary, LocalStatus, Profile, Review, Reviewer, User } from '../types';
 import firebase from '../constants/firebase';
 import I18n from '../utils/I18n';
-import { track, events } from '../utils/Analytics';
+import { logAnalytics, events } from '../utils/Analytics';
 import { ModalConfirm } from '../components/organisms';
 import {
   ModalReviewStackParamList,
@@ -157,11 +157,7 @@ const ReviewScreen: React.FC<ScreenType> = ({
     batch.set(refReview, newReview);
 
     batch.commit();
-    track(events.CREATED_REVIEW, {
-      objectID: diary.objectID,
-      characters: comment.length,
-      rating,
-    });
+    logAnalytics(events.CREATED_REVIEW);
     editDiary(diary.objectID, {
       ...diary,
       ...data,
@@ -192,8 +188,12 @@ const ReviewScreen: React.FC<ScreenType> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />,
-      headerRight: () => <HeaderText text={I18n.t('common.sending')} onPress={onPressSubmit} />,
+      headerLeft: () => (
+        <HeaderText text={I18n.t('common.close')} onPress={onPressClose} />
+      ),
+      headerRight: () => (
+        <HeaderText text={I18n.t('common.sending')} onPress={onPressSubmit} />
+      ),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rating, comment]);
@@ -265,7 +265,11 @@ const ReviewScreen: React.FC<ScreenType> = ({
         nationalityCode={diary.profile.nationalityCode}
       />
       <Space size={24} />
-      <AirbnbRating showRating={false} defaultRating={0} onFinishRating={onFinishRating} />
+      <AirbnbRating
+        showRating={false}
+        defaultRating={0}
+        onFinishRating={onFinishRating}
+      />
       <Space size={24} />
       <KeyboardAwareScrollView style={styles.keyboardAwareScrollView}>
         <TextInput
@@ -282,7 +286,10 @@ const ReviewScreen: React.FC<ScreenType> = ({
           onBlur={onBlur}
         />
       </KeyboardAwareScrollView>
-      <KeyboardHideButton isKeyboard={isKeyboard} setIsKeyboard={setIsKeyboard} />
+      <KeyboardHideButton
+        isKeyboard={isKeyboard}
+        setIsKeyboard={setIsKeyboard}
+      />
     </View>
   );
 };

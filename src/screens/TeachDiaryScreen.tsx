@@ -1,8 +1,24 @@
-import React, { useCallback, useState, useEffect, ReactNode, useRef } from 'react';
-import { StyleSheet, ScrollView, View, Text, ActivityIndicator, Platform } from 'react-native';
+import React, {
+  useCallback,
+  useState,
+  useEffect,
+  ReactNode,
+  useRef,
+} from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
-import { connectActionSheet, useActionSheet } from '@expo/react-native-action-sheet';
+import {
+  connectActionSheet,
+  useActionSheet,
+} from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
@@ -18,15 +34,14 @@ import {
   HeaderIcon,
 } from '../components/atoms';
 import { getAlgoliaDate } from '../utils/time';
-import { subTextColor, fontSizeS, primaryColor, fontSizeM } from '../styles/Common';
+import { subTextColor, fontSizeS, fontSizeM } from '../styles/Common';
 import { getCorrection } from '../utils/corrections';
 import { Correction } from '../types/correction';
 import Algolia from '../utils/Algolia';
 import I18n from '../utils/I18n';
 import { getProfile } from '../utils/profile';
-import { track, events } from '../utils/Analytics';
+import { logAnalytics, events } from '../utils/Analytics';
 import Corrections from '../components/organisms/Corrections';
-import RichText from '../components/organisms/RichText';
 import { appShare, diaryShare } from '../utils/common';
 import {
   TeachDiaryTabStackParamList,
@@ -245,7 +260,10 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
         updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
       } as Pick<
         Diary,
-        'updatedAt' | 'correctionStatus' | 'correctionStatus2' | 'correctionStatus3'
+        | 'updatedAt'
+        | 'correctionStatus'
+        | 'correctionStatus2'
+        | 'correctionStatus3'
       >;
       let correctingCorrectedNum: number;
       if (diary.correctionStatus === 'yet') {
@@ -276,7 +294,9 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       });
 
       //  添削中一覧に追加する
-      const correctingRef = firebase.firestore().doc(`correctings/${teachDiary.objectID}`);
+      const correctingRef = firebase
+        .firestore()
+        .doc(`correctings/${teachDiary.objectID}`);
       batch.set(correctingRef, {
         uid: user.uid,
         correctedNum: correctingCorrectedNum,
@@ -284,7 +304,9 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       });
 
       //  日記のステータスを添削中に変更する
-      const diaryRef = firebase.firestore().doc(`diaries/${teachDiary.objectID}`);
+      const diaryRef = firebase
+        .firestore()
+        .doc(`diaries/${teachDiary.objectID}`);
 
       batch.update(diaryRef, data);
       editTeachDiary(teachDiary.objectID, {
@@ -293,7 +315,7 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       });
 
       batch.commit();
-      track(events.CREATED_CORRECTING);
+      logAnalytics(events.CREATED_CORRECTING);
       setIsModalCorrection(false);
       navigation.navigate('ModalCorrecting', {
         screen: 'Correcting',
@@ -324,7 +346,11 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
       // TODO: シェア機能ができてから
       headerRight: () =>
         Platform.OS === 'web' ? null : (
-          <HeaderIcon icon='community' name='dots-horizontal' onPress={onPressMore} />
+          <HeaderIcon
+            icon='community'
+            name='dots-horizontal'
+            onPress={onPressMore}
+          />
         ),
     });
 

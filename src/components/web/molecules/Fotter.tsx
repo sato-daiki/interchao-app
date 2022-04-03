@@ -62,7 +62,7 @@ const Fotter = () => {
     <View style={styles.warapper}>
       <View style={[styles.container]}>
         <View style={styles.row}>
-          <Text style={styles.textSmall}>©2020 Interchao</Text>
+          <Text style={styles.textSmall}>©2022 Interchao</Text>
           <View style={styles.right}>
             <Hoverable onPress={onPressEnglishBlog}>
               <Text style={styles.textMiddle}>English Blog</Text>
@@ -74,7 +74,11 @@ const Fotter = () => {
               <Text style={styles.textMiddle}>{I18n.t('web.operator')}</Text>
             </Hoverable>
             <Hoverable onPress={onPressTwitter}>
-              <MaterialCommunityIcons size={28} color={offWhite} name='twitter' />
+              <MaterialCommunityIcons
+                size={28}
+                color={offWhite}
+                name='twitter'
+              />
             </Hoverable>
           </View>
         </View>
