@@ -117,6 +117,16 @@ const CorrectingListItem: React.FC<Props> = ({
     onHideKeyboard();
   }, [detail, editText, onHideKeyboard]);
 
+  const onChangeTextComment = useCallback(
+    (value): void => {
+      setDetail(value);
+      editText({
+        detail: value,
+      });
+    },
+    [editText],
+  );
+
   const renderFix = useCallback(() => {
     if (!isEdit) {
       return (
@@ -172,16 +182,21 @@ const CorrectingListItem: React.FC<Props> = ({
     if (!diffs) return null;
 
     if (Platform.OS === 'web') {
-      return <CorrectingCommentWeb detail={detail} onChangeText={setDetail} />;
+      return (
+        <CorrectingCommentWeb
+          detail={detail}
+          onChangeText={onChangeTextComment}
+        />
+      );
     }
     return (
       <CorrectingCommentNative
         detail={detail}
-        onBlurDetail={onBlurDetail}
+        onBlur={onBlurDetail}
         onChangeText={setDetail}
       />
     );
-  }, [detail, diffs, onBlurDetail]);
+  }, [detail, diffs, onBlurDetail, onChangeTextComment]);
 
   return (
     <View style={styles.container}>
