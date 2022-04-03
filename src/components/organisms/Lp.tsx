@@ -102,7 +102,7 @@ const Lp: React.FC<Props> = ({
           {isTabletOrMobileDevice && !isAbout ? (
             <AppDownload isWhite={false} options={options} />
           ) : null}
-          <Fotter />
+          <Fotter isMobileDevice={isMobileDevice} />
         </View>
       </SafeAreaView>
     </ScrollView>
