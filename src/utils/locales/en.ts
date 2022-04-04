@@ -50,10 +50,10 @@ const shortDay = {
 const helmet = {
   keyword: 'Japanese, study, correct, free, diary, entry, language exchange',
   description:
-    'Interchao is a free, interactive language learning application for Japanese and English learners. Your journal entry will be read and marked by Japanese. Let’s mark English diary as an English teacher as a return!',
+    'Interchao is a free, interactive language learning application for Japanese and English learners. Your journal entry will be read and marked by Japanese speakers. Let’s mark English diary as an English teacher as a return!',
   ogTitle: 'Interchao - Japanese learning',
   ogDescription:
-    'Interchao is a free, interactive language learning application for Japanese and English learners. Your journal entry will be read and marked by Japanese. Let’s mark English diary as an English teacher as a return!',
+    'Interchao is a free, interactive language learning application for Japanese and English learners. Your journal entry will be read and marked by Japanese speakers. Let’s mark English diary as an English teacher as a return!',
 };
 
 const web = {
@@ -64,7 +64,7 @@ const web = {
   wahtText1:
     'Interchao is a free, interactive language learning app for Japanese and English learners.',
   wahtText2:
-    'Your journal entry will be read and marked by Japanese. Let’s mark English journal entry as an English teacher as a return!',
+    'Your journal entry will be read and marked by Japanese speakers. Let’s mark English journal entry as an English teacher as a return!',
   whyTitle: 'Why is it necessary to write?',
   whyText: 'Writing is the optimal language learning method',
   whyCnatText1: '「最近調子はどうですか？」',
@@ -74,11 +74,11 @@ const web = {
   reasonTitle1: 'You can’t speak more than what you can write',
   reasonText11: 'You can’t talk what you cannot pen down.',
   reasonText12: 'Writing is a training for speaking.',
-  reasonTitle2: 'Make your articles checked by Japanese',
+  reasonTitle2: 'Make your articles checked by Japanese speakers',
   reasonText21:
     'Since you have written down something, you want to know if there were mistakes.',
   reasonText22:
-    'Are the words and grammar correct? Are you making sense? Let’s have your articles checked by Japanese!',
+    'Are the words and grammar correct? Are you making sense? Let’s have your articles checked by Japanese speakers!',
   reasonTitle3: 'Write in your own words',
   reasonText31:
     'Textbooks and scripts from movies are sometimes not applicable in our daily life.',
@@ -675,7 +675,7 @@ const tutorialPoints = {
 const tutorialPostDiary = {
   title: 'How to Write a Journal Entry',
   buttonText: 'Begin',
-  text: 'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by Japanese! If you correct journal entries written in languages you can speak, you will get 10 points. Let’s teach each other languages!',
+  text: 'Try writing a journal entry in {{learnLanguage}}. 10 points are needed for {{learnCharacters}} characters.\n\nAfter publishing your journal entry, it will be corrected by Japanese speakers! If you correct journal entries written in languages you can speak, you will get 10 points. Let’s teach each other languages!',
 };
 
 const tutorialTeachDiaryList = {
