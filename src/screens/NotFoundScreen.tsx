@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useMediaQuery } from 'react-responsive';
+
 import {
   primaryColor,
   fontSizeM,
@@ -55,6 +57,10 @@ const styles = StyleSheet.create({
  * 添削中
  */
 const NotFoundScreen: React.FC<ScreenType> = ({ navigation }) => {
+  const isMobileDevice = useMediaQuery({
+    maxDeviceWidth: 768,
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <Header
@@ -76,9 +82,7 @@ const NotFoundScreen: React.FC<ScreenType> = ({ navigation }) => {
           </Hoverable>
         </View>
       </View>
-      <Fotter />
+      <Fotter isMobileDevice={isMobileDevice} />
     </SafeAreaView>
   );
 };
-
-export default NotFoundScreen;
