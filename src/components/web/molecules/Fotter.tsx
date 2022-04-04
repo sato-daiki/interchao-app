@@ -6,6 +6,10 @@ import { maxLayoutChange, offBlack, offWhite } from '../../../styles/Common';
 import { Hoverable } from '../../atoms';
 import I18n from '../../../utils/I18n';
 
+interface Props {
+  isMobileDevice: boolean;
+}
+
 const styles = StyleSheet.create({
   warapper: {
     width: '100%',
@@ -25,7 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   right: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
     alignItems: 'center',
   },
   textSmall: {
@@ -35,13 +39,14 @@ const styles = StyleSheet.create({
   },
   textMiddle: {
     marginRight: 16,
+    marginBottom: 8,
     fontSize: 16,
     color: offWhite,
     alignSelf: 'center',
   },
 });
 
-const Fotter = () => {
+const Fotter = ({ isMobileDevice }: Props) => {
   const onPressEnglishBlog = useCallback((): void => {
     Linking.openURL('https://interchao.medium.com/');
   }, []);
@@ -63,7 +68,12 @@ const Fotter = () => {
       <View style={[styles.container]}>
         <View style={styles.row}>
           <Text style={styles.textSmall}>©2022 Interchao</Text>
-          <View style={styles.right}>
+          <View
+            style={[
+              styles.right,
+              { flexDirection: isMobileDevice ? 'column' : 'row' },
+            ]}
+          >
             <Hoverable onPress={onPressEnglishBlog}>
               <Text style={styles.textMiddle}>English Blog</Text>
             </Hoverable>
@@ -78,6 +88,7 @@ const Fotter = () => {
                 size={28}
                 color={offWhite}
                 name='twitter'
+                style={{ marginBottom: 8 }}
               />
             </Hoverable>
           </View>

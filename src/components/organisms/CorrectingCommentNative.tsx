@@ -7,7 +7,7 @@ import { Hoverable } from '../atoms';
 
 interface Props {
   detail: string;
-  onBlurDetail: () => void;
+  onBlur: () => void;
   onChangeText: (text: string) => void;
 }
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 
 const CorrectingCommentNative: React.FC<Props> = ({
   detail,
-  onBlurDetail,
+  onBlur,
   onChangeText,
 }) => {
   const refDetail = useRef<TextInput | null>(null);
@@ -46,7 +46,7 @@ const CorrectingCommentNative: React.FC<Props> = ({
           if (refDetail.current) refDetail.current.focus();
         }}
       >
-        <MaterialCommunityIcons size={22} color={subTextColor} name="plus" />
+        <MaterialCommunityIcons size={22} color={subTextColor} name='plus' />
         <Text style={styles.detailLabel}>{I18n.t('commentCard.detail')}</Text>
       </Hoverable>
       <TextInput
@@ -55,13 +55,13 @@ const CorrectingCommentNative: React.FC<Props> = ({
         value={detail}
         multiline
         blurOnSubmit
-        autoCapitalize="none"
+        autoCapitalize='none'
         spellCheck
         autoCorrect
-        underlineColorAndroid="transparent"
-        returnKeyType="done"
+        underlineColorAndroid='transparent'
+        returnKeyType='done'
         scrollEnabled={false}
-        onBlur={onBlurDetail}
+        onBlur={onBlur}
         onChangeText={onChangeText}
       />
     </>

@@ -21,7 +21,10 @@ import {
 } from '@expo/react-native-action-sheet';
 import ViewShot from 'react-native-view-shot';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { CompositeNavigationProp } from '@react-navigation/native';
+import {
+  CompositeNavigationProp,
+  useFocusEffect,
+} from '@react-navigation/native';
 import firebase from '../constants/firebase';
 import { Diary, User, Profile } from '../types';
 import { DiaryTitleAndText, UserDiaryStatus } from '../components/molecules';
@@ -139,10 +142,6 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
 
   const viewShotRef = useRef<ViewShot | null>(null);
 
-  const isDesktopOrLaptopDevice = useMediaQuery({
-    minDeviceWidth: 1224,
-  });
-
   const onPressAppShare = useCallback(() => {
     const f = async (): Promise<void> => {
       if (viewShotRef?.current?.capture) {
@@ -211,13 +210,14 @@ const TeachDiaryScreen: React.FC<ScreenType> = ({
     f();
   }, [teachDiary]);
 
-  useEffect(() => {
-    const f = async (): Promise<void> => {
-      // プロフィールを取得
-      await Promise.all([getNewProfile(), getNewCorrection()]);
-    };
-    f();
-  }, [getNewCorrection, getNewProfile]);
+  useFocusEffect(
+    useCallback(() => {
+      const f = async (): Promise<void> => {
+        await Promise.all([getNewProfile(), getNewCorrection()]);
+      };
+      f();
+    }, [getNewCorrection, getNewProfile]),
+  );
 
   const onPressSubmitCorrection = useCallback(() => {
     const f = async (): Promise<void> => {
