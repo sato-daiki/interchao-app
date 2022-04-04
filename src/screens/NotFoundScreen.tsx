@@ -86,3 +86,5 @@ const NotFoundScreen: React.FC<ScreenType> = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
+export default NotFoundScreen;
