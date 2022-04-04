@@ -53,12 +53,6 @@
       }
     },
     "web": {
-      "name": "Interchao - Language Learning",
-      "shortName": "Interchao",
-      "lang": "en",
-      "startUrl": "https://interchao.app",
-      "themeColor": "#ffffff",
-      "description": "Interchaoとは日本語、英語を無料で勉強することができる相互学習アプリ。あなたが書いた日記をネイティブにチェックしてもらえます。代わりにあなたがネイティブの言語を先生としてチェックしてあげましょう",
       "config": {
         "firebase": {
           "apiKey": "AIzaSyDysrApwcn1GCRyjA_rhecZlQICmhR4poU",
