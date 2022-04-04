@@ -73,14 +73,15 @@ webRevision を上げる。（基本はアプリと合わせたいが、web の�
 ## 2.ビルド
 
 ```
-npx expo-optimize
-expo build:web --no-pwa
+1: npx expo-optimize
+2: expo build:web --no-pwa
 ```
 
 ### デプロイ
 
 ```
-firebase deploy --only hosting -P product
+1: web-build/index.htmlのdescriptionを手動で消す
+2: firebase deploy --only hosting -P product
 ```
 
 ### デプロイ（検証）
