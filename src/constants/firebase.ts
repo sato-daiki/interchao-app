@@ -1,10 +1,10 @@
 import firebase from 'firebase';
 import '@firebase/firestore';
 import Constants from 'expo-constants';
-//@ts-ignore
 import {
   PRODUCTION_FIREBASE_API_KEY,
   DEVELOPMENT_FIREBASE_API_KEY,
+  //@ts-ignore
 } from '@env';
 
 const isProduction = !__DEV__;
