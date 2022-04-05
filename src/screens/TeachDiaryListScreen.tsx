@@ -1,11 +1,23 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl, Platform, ListRenderItem } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  Platform,
+  ListRenderItem,
+} from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import Algolia from '../utils/Algolia';
-import { GrayHeader, LoadingModal, HeaderIcon } from '../components/atoms';
+import {
+  GrayHeader,
+  LoadingModal,
+  HeaderIcon,
+  Layout,
+} from '../components/atoms';
 import { Diary, Profile, User } from '../types';
 import TeachDiaryListItem from '../components/organisms/TeachDiaryListItem';
 import { EmptyList } from '../components/molecules';
@@ -87,7 +99,10 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <SearchBarButton title={I18n.t('teachDiaryList.searchText')} onPress={onPressSearch} />
+        <SearchBarButton
+          title={I18n.t('teachDiaryList.searchText')}
+          onPress={onPressSearch}
+        />
       ),
       // headerRight: () =>
       //   isDesktopOrLaptopDevice ? (
@@ -107,42 +122,44 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getNewDiary = useCallback(() => {
-    const f = async (): Promise<void> => {
-      try {
-        // ブロック一覧を取得する
-        const blockerUids = await getBlockers(user.uid);
-        const blockeeUids = await getBlockees(user.uid);
-        const uids = blockerUids.concat(blockeeUids);
+  const getNewDiary = useCallback(async () => {
+    try {
+      // ブロック一覧を取得する
+      const blockerUids = await getBlockers(user.uid);
+      const blockeeUids = await getBlockees(user.uid);
+      const uids = blockerUids.concat(blockeeUids);
 
-        const index = await Algolia.getDiaryIndex();
-        await Algolia.setSettings(index);
+      const index = await Algolia.getDiaryIndex();
+      await Algolia.setSettings(index);
 
-        const fillterUids = getExceptUser(uids);
-        const fillterLanguages = getFillterLanguages(
-          profile.nativeLanguage,
-          profile.spokenLanguages,
-        );
+      const fillterUids = getExceptUser(uids);
+      const fillterLanguages = getFillterLanguages(
+        profile.nativeLanguage,
+        profile.spokenLanguages,
+      );
 
-        filters.current = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
+      filters.current = `${fillterLanguages} AND NOT hidden: true AND diaryStatus: publish ${fillterUids}`;
 
-        const res = await index.search('', {
-          filters: filters.current || undefined,
-          page: 0,
-          hitsPerPage: HIT_PER_PAGE,
-        });
+      const res = await index.search('', {
+        filters: filters.current || undefined,
+        page: 0,
+        hitsPerPage: HIT_PER_PAGE,
+      });
 
-        // reduxで保持
-        setTeachDiaries(res.hits as Diary[]);
-      } catch (err: any) {
-        setIsLoading(false);
-        setRefreshing(false);
-        alert({ err });
-      }
+      // reduxで保持
+      setTeachDiaries(res.hits as Diary[]);
+    } catch (err: any) {
       setIsLoading(false);
-    };
-    f();
-  }, [profile.nativeLanguage, profile.spokenLanguages, setTeachDiaries, user.uid]);
+      setRefreshing(false);
+      alert({ err });
+    }
+    setIsLoading(false);
+  }, [
+    profile.nativeLanguage,
+    profile.spokenLanguages,
+    setTeachDiaries,
+    user.uid,
+  ]);
 
   // 初期データの取得
   useEffect(() => {
@@ -152,44 +169,38 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     f();
   }, [getNewDiary]);
 
-  const onRefresh = useCallback(() => {
-    const f = async (): Promise<void> => {
-      setRefreshing(true);
-      await getNewDiary();
-      setRefreshing(false);
-    };
-    f();
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await getNewDiary();
+    setRefreshing(false);
   }, [getNewDiary]);
 
-  const loadNextPage = useCallback(() => {
-    const f = async (): Promise<void> => {
-      if (!readingNext.current && !readAllResults.current && filters.current) {
-        try {
-          const nextPage = page.current + 1;
-          readingNext.current = true;
+  const loadNextPage = useCallback(async () => {
+    if (!readingNext.current && !readAllResults.current && filters.current) {
+      try {
+        const nextPage = page.current + 1;
+        readingNext.current = true;
 
-          const index = await Algolia.getDiaryIndex();
-          const res = await index.search('', {
-            filters: filters.current,
-            page: nextPage,
-            hitsPerPage: HIT_PER_PAGE,
-          });
+        const index = await Algolia.getDiaryIndex();
+        const res = await index.search('', {
+          filters: filters.current,
+          page: nextPage,
+          hitsPerPage: HIT_PER_PAGE,
+        });
 
-          if (res.hits.length === 0) {
-            readAllResults.current = true;
-            readingNext.current = false;
-          } else {
-            setTeachDiaries([...teachDiaries, ...(res.hits as Diary[])]);
-            page.current = nextPage;
-            readingNext.current = false;
-          }
-        } catch (err: any) {
+        if (res.hits.length === 0) {
+          readAllResults.current = true;
           readingNext.current = false;
-          alert({ err });
+        } else {
+          setTeachDiaries([...teachDiaries, ...(res.hits as Diary[])]);
+          page.current = nextPage;
+          readingNext.current = false;
         }
+      } catch (err: any) {
+        readingNext.current = false;
+        alert({ err });
       }
-    };
-    f();
+    }
   }, [setTeachDiaries, teachDiaries]);
 
   const onPressItem = useCallback(
@@ -203,20 +214,17 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
     [navigation],
   );
 
-  const onPressTutorial = useCallback((): void => {
-    const f = async (): Promise<void> => {
-      setIsTutorialLoading(true);
-      await firebase.firestore().doc(`users/${user.uid}`).update({
-        tutorialTeachDiaryList: true,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      setUser({
-        ...user,
-        tutorialTeachDiaryList: true,
-      });
-      setIsTutorialLoading(false);
-    };
-    f();
+  const onPressTutorial = useCallback(async () => {
+    setIsTutorialLoading(true);
+    await firebase.firestore().doc(`users/${user.uid}`).update({
+      tutorialTeachDiaryList: true,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+    setUser({
+      ...user,
+      tutorialTeachDiaryList: true,
+    });
+    setIsTutorialLoading(false);
   }, [setUser, user]);
 
   const onPressUser = useCallback(
@@ -228,7 +236,13 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
 
   const renderItem: ListRenderItem<Diary> = useCallback(
     ({ item }) => {
-      return <TeachDiaryListItem item={item} onPressUser={onPressUser} onPressItem={onPressItem} />;
+      return (
+        <TeachDiaryListItem
+          item={item}
+          onPressUser={onPressUser}
+          onPressItem={onPressItem}
+        />
+      );
     },
     [onPressItem, onPressUser],
   );
@@ -240,32 +254,40 @@ const TeachDiaryListScreen: React.FC<ScreenType> = ({
 
   const listEmptyComponent =
     !isLoading && !refreshing && teachDiaries.length < 1 ? (
-      <EmptyList message={I18n.t('teachDiaryList.empty')} iconName='book-open-variant' />
+      <EmptyList
+        message={I18n.t('teachDiaryList.empty')}
+        iconName='book-open-variant'
+      />
     ) : null;
+
   return (
-    <View style={styles.container}>
-      <TeachDiaryListMenu
-        isMenu={isMenu}
-        nativeLanguage={profile.nativeLanguage}
-        onClose={(): void => setIsMenu(false)}
-      />
-      <LoadingModal visible={isLoading} />
-      <TutorialTeachDiaryList
-        isLoading={isTutorialLoading}
-        displayed={user.tutorialTeachDiaryList}
-        onPress={onPressTutorial}
-      />
-      <FlatList
-        data={teachDiaries}
-        keyExtractor={keyExtractor}
-        refreshing={refreshing}
-        renderItem={renderItem}
-        ListHeaderComponent={listHeaderComponent}
-        ListEmptyComponent={listEmptyComponent}
-        onEndReached={loadNextPage}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      />
-    </View>
+    <Layout disableScroll showBottomAd>
+      <View style={styles.container}>
+        <TeachDiaryListMenu
+          isMenu={isMenu}
+          nativeLanguage={profile.nativeLanguage}
+          onClose={(): void => setIsMenu(false)}
+        />
+        <LoadingModal visible={isLoading} />
+        <TutorialTeachDiaryList
+          isLoading={isTutorialLoading}
+          displayed={user.tutorialTeachDiaryList}
+          onPress={onPressTutorial}
+        />
+        <FlatList
+          data={teachDiaries}
+          keyExtractor={keyExtractor}
+          refreshing={refreshing}
+          renderItem={renderItem}
+          ListHeaderComponent={listHeaderComponent}
+          ListEmptyComponent={listEmptyComponent}
+          onEndReached={loadNextPage}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      </View>
+    </Layout>
   );
 };
 

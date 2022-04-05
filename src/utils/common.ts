@@ -27,7 +27,8 @@ export const emaillExistCheck = async (email: string): Promise<boolean> => {
   const providers = await firebase.auth().fetchSignInMethodsForEmail(email);
   if (
     providers.findIndex(
-      (p) => p === firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
+      (p) =>
+        p === firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
     ) !== -1
   ) {
     return true;
@@ -110,7 +111,10 @@ export const getVersionText = (): string => {
   return versionText;
 };
 
-export const diaryShare = async (nativeLanguage: Language, imageUrl: string): Promise<void> => {
+export const diaryShare = async (
+  nativeLanguage: Language,
+  imageUrl: string,
+): Promise<void> => {
   const shareUrl = encodeURI(url);
   const message = `#Interchao ${shareUrl}`;
   if (Platform.OS === 'ios') {
@@ -135,10 +139,14 @@ export const appShare = async (nativeLanguage: Language): Promise<void> => {
 
 export const twitterShare = async (nativeLanguage: Language): Promise<void> => {
   const shareMessage = encodeURI(url);
-  Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`);
+  Linking.openURL(
+    `https://www.facebook.com/sharer/sharer.php?u=${shareMessage}`,
+  );
 };
 
-export const facebookShare = async (nativeLanguage: Language): Promise<void> => {
+export const facebookShare = async (
+  nativeLanguage: Language,
+): Promise<void> => {
   const shareMessage = encodeURI(url);
   Linking.canOpenURL('twitter://post')
     .then(() => {
@@ -158,7 +166,12 @@ interface EachOS {
   other?: number | string | undefined;
 }
 
-export const getEachOS = ({ ios, android, web, other }: EachOS): number | string | undefined => {
+export const getEachOS = ({
+  ios,
+  android,
+  web,
+  other,
+}: EachOS): number | string | undefined => {
   if (Platform.OS === 'ios') {
     return ios;
   }
@@ -172,7 +185,10 @@ export const getEachOS = ({ ios, android, web, other }: EachOS): number | string
 };
 
 // 何日前かをチェックする
-export const getIsAfterDay = (targetAt: firestore.Timestamp, days: number): boolean => {
+export const getIsAfterDay = (
+  targetAt: firestore.Timestamp,
+  days: number,
+): boolean => {
   try {
     const dt = new Date();
     dt.setDate(dt.getDate() - days);
@@ -183,7 +199,9 @@ export const getIsAfterDay = (targetAt: firestore.Timestamp, days: number): bool
 };
 
 export const getDateToStrDay = (targetDay: Date): string => {
-  return `${targetDay.getFullYear()}${targetDay.getMonth() + 1}${targetDay.getDate()}`;
+  return `${targetDay.getFullYear()}${
+    targetDay.getMonth() + 1
+  }${targetDay.getDate()}`;
 };
 
 export const getLastMonday = (targetDay: Date): string => {
