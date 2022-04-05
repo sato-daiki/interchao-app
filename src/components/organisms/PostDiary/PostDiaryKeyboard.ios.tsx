@@ -77,7 +77,7 @@ const PostDiaryKeyboard: React.FC<PostDiaryKeyboardProps> = ({
             <MaterialCommunityIcons
               size={24}
               color={mainColor}
-              name="keyboard-close"
+              name='keyboard-close'
             />
           </Hoverable>
         </Animated.View>

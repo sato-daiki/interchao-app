@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl, ListRenderItem } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ListRenderItem,
+} from 'react-native';
 import { firestore } from 'firebase';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
@@ -10,7 +16,10 @@ import ReviewListItem from '../components/organisms/ReviewListItem';
 import { EmptyReview } from '../components/molecules';
 import I18n from '../utils/I18n';
 import { alert } from '../utils/ErrorAlert';
-import { CommonStackParamList, CommonNavigationProp } from '../navigations/CommonNavigator';
+import {
+  CommonStackParamList,
+  CommonNavigationProp,
+} from '../navigations/CommonNavigator';
 import { getUid } from '../utils/profile';
 
 export interface Props {
@@ -40,7 +49,11 @@ const HIT_PER_PAGE = 20;
 
 const keyExtractor = (item: Review, index: number): string => String(index);
 
-const ReviewListScreen: React.FC<ScreenType> = ({ navigation, route, profile }) => {
+const ReviewListScreen: React.FC<ScreenType> = ({
+  navigation,
+  route,
+  profile,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -95,7 +108,11 @@ const ReviewListScreen: React.FC<ScreenType> = ({ navigation, route, profile }) 
           return;
         }
         readingNext.current = true;
-        const nextReviews = await getReviews(targetUid, lastVisible.current, HIT_PER_PAGE);
+        const nextReviews = await getReviews(
+          targetUid,
+          lastVisible.current,
+          HIT_PER_PAGE,
+        );
 
         if (nextReviews.length === 0) {
           readAllResults.current = true;
@@ -121,7 +138,9 @@ const ReviewListScreen: React.FC<ScreenType> = ({ navigation, route, profile }) 
 
   const listEmptyComponent = isLoading || refreshing ? null : <EmptyReview />;
 
-  const listHeaderComponent = <GrayHeader title={I18n.t('reviewList.reviewList')} />;
+  const listHeaderComponent = (
+    <GrayHeader title={I18n.t('reviewList.reviewList')} />
+  );
 
   const renderItem: ListRenderItem<Review> = useCallback(
     ({ item }) => {
@@ -147,7 +166,9 @@ const ReviewListScreen: React.FC<ScreenType> = ({ navigation, route, profile }) 
         ListHeaderComponent={listHeaderComponent}
         ListEmptyComponent={listEmptyComponent}
         onEndReached={loadNextPage}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

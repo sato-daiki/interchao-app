@@ -95,11 +95,18 @@ export const getShortDaysName = (days: (number | undefined)[]): string => {
   return text.slice(0, -1);
 };
 
-export const addDay = (day: Date, num: DurationInputArg1, unit: DurationInputArg2): Date => {
+export const addDay = (
+  day: Date,
+  num: DurationInputArg1,
+  unit: DurationInputArg2,
+): Date => {
   return moment(day).add(num, unit).toDate();
 };
 
-export const checkHourDiff = (date: firebase.firestore.Timestamp | null, hour: number): boolean => {
+export const checkHourDiff = (
+  date: firebase.firestore.Timestamp | null,
+  hour: number,
+): boolean => {
   if (!date) return true;
   const dateTo = moment(new Date());
   const dateFrom = moment(date.toDate());

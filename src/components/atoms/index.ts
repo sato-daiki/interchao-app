@@ -44,3 +44,4 @@ export { default as TimeBox } from './TimeBox';
 export { default as UserPoints } from './UserPoints';
 export { default as UserPointsBig } from './UserPointsBig';
 export { default as WhiteButton } from './WhiteButton';
+export * from './Layout';

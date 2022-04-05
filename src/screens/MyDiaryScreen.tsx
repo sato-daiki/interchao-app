@@ -3,14 +3,22 @@ import { StyleSheet, View, Dimensions, Platform } from 'react-native';
 import '@expo/match-media';
 import { useMediaQuery } from 'react-responsive';
 import { TabView } from 'react-native-tab-view';
-import { connectActionSheet, useActionSheet } from '@expo/react-native-action-sheet';
+import {
+  connectActionSheet,
+  useActionSheet,
+} from '@expo/react-native-action-sheet';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CompositeNavigationProp } from '@react-navigation/native';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 
 import { ModalConfirm } from '@/components/organisms';
-import { LoadingModal, HeaderIcon, HeaderText, DefaultHeaderBack } from '@/components/atoms';
+import {
+  LoadingModal,
+  HeaderIcon,
+  HeaderText,
+  DefaultHeaderBack,
+} from '@/components/atoms';
 import MyDiaryMenu from '@/components/web/organisms/MyDiaryMenu';
 import Posted from '@/components/organisms/Posted';
 import FairCopy from '@/components/organisms/FairCopy';
@@ -25,6 +33,7 @@ import {
   MyDiaryTabStackParamList,
 } from '@/navigations/MyDiaryTabNavigator';
 import I18n from '@/utils/I18n';
+import BottomBanner from '@/components/molecules/BottomBanner';
 
 export interface Props {
   error: boolean;
@@ -91,7 +100,9 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isFirstEdit, setIsFirstEdit] = useState(false);
   const [isModalConfirmation, setIsModalConfirmation] = useState(false); // 閉じる押した時
-  const [fairCopyTitle, setFairCopyTitle] = useState<string>(initFairCopyTitle());
+  const [fairCopyTitle, setFairCopyTitle] = useState<string>(
+    initFairCopyTitle(),
+  );
   const [fairCopyText, setFairCopyText] = useState<string>(initFairCopyText());
 
   const [index, setIndex] = useState(0);
@@ -196,10 +207,18 @@ const MyDiaryScreen: React.FC<ScreenType> = ({
         if (isDesktopOrLaptopDevice) {
           return <MyDiaryMenu onPressDeleteMenu={onPressDeleteMenu} />;
         }
-        return <HeaderIcon icon='community' name='dots-horizontal' onPress={onPressMore} />;
+        return (
+          <HeaderIcon
+            icon='community'
+            name='dots-horizontal'
+            onPress={onPressMore}
+          />
+        );
       }
       if (index === 1) {
-        return <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />;
+        return (
+          <HeaderText text={I18n.t('common.edit')} onPress={onPressEdit} />
+        );
       }
       return <View />;
     }
