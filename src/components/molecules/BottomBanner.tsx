@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Platform } from 'react-native';
-import {
-  AdMobBanner,
-  setTestDeviceIDAsync,
-  requestPermissionsAsync,
-} from 'expo-ads-admob';
+// import {
+//   AdMobBanner,
+//   setTestDeviceIDAsync,
+//   requestPermissionsAsync,
+// } from 'expo-ads-admob';
 
 const styles = StyleSheet.create({
   adMobBanner: {
@@ -22,15 +22,15 @@ const BottomBanner: React.FC = () => {
 
   useEffect(() => {
     const f = async () => {
-      if (Platform.OS === 'web') return;
-      const { status } = await requestPermissionsAsync();
-      console.log('status', status);
-      if (status !== 'granted') {
-        setIsPermission(false);
-      } else {
-        setIsPermission(true);
-      }
-      await setTestDeviceIDAsync('EMULATOR');
+      // if (Platform.OS === 'web') return;
+      // const { status } = await requestPermissionsAsync();
+      // console.log('status', status);
+      // if (status !== 'granted') {
+      //   setIsPermission(false);
+      // } else {
+      //   setIsPermission(true);
+      // }
+      // await setTestDeviceIDAsync('EMULATOR');
     };
     f();
   }, []);
@@ -47,14 +47,14 @@ const BottomBanner: React.FC = () => {
     if (!loadingAdmobError) {
       return (
         <View style={styles.adMobBanner}>
-          <AdMobBanner
+          {/* <AdMobBanner
             bannerSize='smartBannerPortrait'
             adUnitID={
               Platform.OS === 'ios' ? IOS_AD_UNIT_ID : ANDROID_AD_UNIT_ID
             }
             servePersonalizedAds={isPermission}
             onDidFailToReceiveAdWithError={onErrorLoadingAdMob}
-          />
+          /> */}
         </View>
       );
     }

@@ -12,7 +12,6 @@ import Loading from '@/screens/LoadingScreen';
 
 import { configureStore } from '@/stores/Store';
 import { firebaseConfig } from '@/constants/firebase';
-import * as Sentry from 'sentry-expo';
 
 import RootNavigatorContainer from '@/containers/RootNavigatorContainer';
 import { getConfig } from '@/navigations/root';
@@ -24,13 +23,6 @@ if (Platform.OS !== 'web') {
 }
 
 const { store, persistor } = configureStore();
-
-// エラー監視
-Sentry.init({
-  dsn: 'https://95ddcc469fab4a40be49d130bc3e71ed@o380775.ingest.sentry.io/5207104',
-  enableInExpoDevelopment: true,
-  debug: false,
-});
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
