@@ -26,10 +26,7 @@
       "bundleIdentifier": "app.interchao",
       "googleServicesFile": "./GoogleService-Info.plist",
       "appStoreUrl": "https://itunes.apple.com/jp/app/id1510150748",
-      "buildNumber": "2020100",
-      "config": {
-        "googleMobileAdsAppId": "ca-app-pub-0770181536572634~7787198288"
-      }
+      "buildNumber": "2020100"
     },
     "android": {
       "package": "app.interchao",
@@ -47,10 +44,7 @@
         "backgroundColor": "#fff"
       },
       "playStoreUrl": "https://play.google.com/store/apps/details?id=app.interchao",
-      "useNextNotificationsApi": true,
-      "config": {
-        "googleMobileAdsAppId": "ca-app-pub-0770181536572634~9333866636"
-      }
+      "useNextNotificationsApi": true
     },
     "web": {
       "config": {
@@ -100,7 +94,18 @@
         {
           "photosPermission": "The app accesses your photos"
         }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
+        }
       ]
     ]
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-0770181536572634~9333866636",
+    "ios_app_id": "ca-app-pub-0770181536572634~7787198288",
+    "delay_app_measurement_init": true
   }
 }
