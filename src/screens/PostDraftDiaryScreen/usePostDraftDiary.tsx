@@ -17,7 +17,7 @@ import {
   PostDraftDiaryNavigationProp,
   PostDraftDiaryRouteProp,
 } from './interfaces';
-import { useCommon } from '../PostDiaryScreen/useCommont';
+import { useCommon } from '../PostDiaryScreen/useCommon';
 
 interface UsePostDraftDiary {
   user: User;

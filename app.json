@@ -43,8 +43,7 @@
         "foregroundImage": "./assets/images/foreground.png",
         "backgroundColor": "#fff"
       },
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=app.interchao",
-      "useNextNotificationsApi": true
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=app.interchao"
     },
     "web": {
       "config": {

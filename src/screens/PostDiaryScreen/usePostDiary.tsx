@@ -16,7 +16,7 @@ import { alert } from '@/utils/ErrorAlert';
 import { ModalPostDiaryStackParamList } from '@/navigations/ModalNavigator';
 import { RouteProp } from '@react-navigation/native';
 import { PostDiaryNavigationProp } from './interfaces';
-import { useCommon } from './useCommont';
+import { useCommon } from './useCommon';
 
 interface UsePostDiary {
   navigation: PostDiaryNavigationProp;
