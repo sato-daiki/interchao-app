@@ -25,6 +25,8 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+dev_GoogleService-Info.plist
+
 # Gradle
 /build/
 /RNTester/android/app/build/
