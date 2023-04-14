@@ -27,6 +27,7 @@ project.xcworkspace
 
 dev_GoogleService-Info.plist
 GoogleService-Info.plist
+app.json
 
 # Gradle
 /build/
